@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <dirent.h>
+#include <stdbool.h>
 
-
-char **cfm_list_dirs(char *path, int *size){
+char **cfm_list_basic(char *path, int *size,char* type){
 
     DIR *dir;
     struct dirent *entry;
@@ -26,7 +26,21 @@ char **cfm_list_dirs(char *path, int *size){
             continue;
         }
         //means is a directory
-        if (entry->d_type == DT_DIR) {
+        bool add = false;
+        
+        if (strcmp(type,"file") == 0 && entry->d_type == DT_REG) {
+            add = true;
+        }
+
+        if (strcmp(type,"dir") == 0 && entry->d_type == DT_DIR) {
+            add = true;
+        }
+
+        if (strcmp(type,"all") == 0) {
+            add = true;
+        }
+        
+        if (add) {
             
             //reallocates memory for the array
             dirs =  (char **)realloc(dirs, (i + 1) * sizeof(char *));
