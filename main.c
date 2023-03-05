@@ -7,7 +7,7 @@
 
 int main(int argc, char *argv[]){
     int size;
-    char **files = dtw_list_files_recursively("exemple", &size);
+    char **files = dtw_list_files_recursively("/home/jurandi/Documentos/Aurora", &size);
     for(int i = 0; i < size; i++){
         printf("%s\n", files[i]);
     }
