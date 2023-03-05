@@ -1,3 +1,4 @@
+#pragma once
 #include "extras.c"
 #include "monodimension_listage.c"
 
