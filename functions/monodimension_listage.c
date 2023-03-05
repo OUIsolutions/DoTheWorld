@@ -1,10 +1,12 @@
+#pragma once
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <dirent.h>
 #include <stdbool.h>
 
-char **cfm_list_basic(char *path, int *size,char* type){
+
+char **cfm_list_basic(char *path, int *size,char* type,bool concat_path){
 
     DIR *dir;
     struct dirent *entry;
@@ -42,14 +44,25 @@ char **cfm_list_basic(char *path, int *size,char* type){
         
         if (add) {
             
+            
             //reallocates memory for the array
             dirs =  (char **)realloc(dirs, (i + 1) * sizeof(char *));
             
-            //allocates memory for the directory
-            dirs[i] = malloc((strlen(entry->d_name) + 1) * sizeof(char));
-            
-            //adds the directory to the array
-            strcpy(dirs[i], entry->d_name);
+            if(concat_path){
+                //allocates memory for the directory
+                dirs[i] = malloc((strlen(path) + strlen(entry->d_name) + 2) * sizeof(char));
+                
+                //adds the directory to the array
+                sprintf(dirs[i], "%s/%s", path, entry->d_name);
+            }
+            else{
+                //allocates memory for the directory
+                dirs[i] = malloc((strlen(entry->d_name) + 1) * sizeof(char));
+                
+                //adds the directory to the array
+                strcpy(dirs[i], entry->d_name);
+            }
+
             i++;
         }
     }
