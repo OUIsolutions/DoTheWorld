@@ -6,7 +6,7 @@
 #include <stdbool.h>
 
 
-char **cfm_list_basic(char *path, int *size,char* type,bool concat_path){
+char **dtw_list_basic(char *path, int *size,char* type,bool concat_path){
 
     DIR *dir;
     struct dirent *entry;

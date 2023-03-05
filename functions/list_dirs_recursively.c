@@ -1,16 +1,17 @@
 #include "extras.c"
 #include "monodimension_listage.c"
 
-char ** cfm_list_dirs_recursively(char *path, int *size){
+
+char ** dtw_list_dirs_recursively(char *path, int *size){
         
         int actual_size = 0;    
-        char **dirs = cfm_list_basic(path,&actual_size, "dir",true);
+        char **dirs = dtw_list_basic(path,&actual_size, "dir",true);
 
         int i = 0;
         while(i < actual_size){
                 int size_of_sub_dirs;
                 
-                char **sub_dirs = cfm_list_basic(dirs[i],&size_of_sub_dirs,"dir",true);
+                char **sub_dirs = dtw_list_basic(dirs[i],&size_of_sub_dirs,"dir",true);
                 
                 //realocate memory with the new size
                 dirs = realloc(dirs, (actual_size + size_of_sub_dirs) * sizeof(char*));                
@@ -23,7 +24,7 @@ char ** cfm_list_dirs_recursively(char *path, int *size){
 
                 actual_size += size_of_sub_dirs;
              
-                cfm_free_string_array(sub_dirs,size_of_sub_dirs);
+                dtw_free_string_array(sub_dirs,size_of_sub_dirs);
                 i++;
                 
         }
