@@ -13,17 +13,7 @@ char ** dtw_list_dirs_recursively(char *path, int *size){
                 
                 char **sub_dirs = dtw_list_basic(dirs[i],&size_of_sub_dirs,"dir",true);
                 
-                //realocate memory with the new size
-                dirs = realloc(dirs, (actual_size + size_of_sub_dirs) * sizeof(char*));                
-
-                //merge the dirs with the sub_dirs
-                for(int j = 0; j < size_of_sub_dirs; j++){       
-                        dirs[actual_size + j] = malloc(strlen(sub_dirs[j]) + 1);
-                        strcpy(dirs[actual_size + j], sub_dirs[j]);
-                }        
-
-                actual_size += size_of_sub_dirs;
-             
+                dtw_append_string_array_in_other(&dirs,&actual_size,sub_dirs,size_of_sub_dirs);
                 dtw_free_string_array(sub_dirs,size_of_sub_dirs);
                 i++;
                 
