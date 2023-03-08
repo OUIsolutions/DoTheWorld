@@ -1,5 +1,3 @@
-#pragma once
-#include "monodimension_listage.c"
 
 
 // {%from "functions/monodimension_listage.c" import monodimension_listage%}

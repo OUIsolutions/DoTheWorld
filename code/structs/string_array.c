@@ -1,4 +1,3 @@
-#include "../imports.c"
 
 //{% macro create_string_array() %}
 struct DtwStringArray {

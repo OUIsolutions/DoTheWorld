@@ -1,6 +1,4 @@
-#pragma once
-#include "../structs/string_array.c"
-#include "../imports.c"
+
 
 //{% macro monodimension_listage() %}
 //Included in code/functions/montidimension_listage.c
