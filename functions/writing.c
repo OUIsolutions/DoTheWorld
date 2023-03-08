@@ -23,6 +23,20 @@ void dtw_create_dir_recursively(char *path){
 }
 
 
-void create_file_recursively(char *path,char *content){
-    
+void dtw_create_file_recursively(char *path,char *content){
+    for(int i = strlen(path)-1;i > 0;i--){
+        if(path[i] == '/'){
+            char *dir_path = malloc(i);
+            strncpy(dir_path,path,i);
+            
+            dtw_create_dir_recursively(dir_path);
+            free(dir_path);
+        
+            break;
+        }
+    }
+    FILE *file = fopen(path,"w");
+    fprintf(file,"%s",content);
+    fclose(file);
+
 }
