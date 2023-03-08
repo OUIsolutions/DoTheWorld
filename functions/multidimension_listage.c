@@ -19,21 +19,18 @@ struct DtwStringArray * dtw_list_dirs_recursively(char *path){
 
 }
 
-/*
+
 struct DtwStringArray *  dtw_list_files_recursively(char *path){
 
-    char **dirs = dtw_list_dirs_recursively(path, size);
-    char **files = calloc(1, sizeof(char *));
-    int sub_files_size = 0;
-    for(int i = 0; i < *size; i++){
-      int current_sub_files_size;
-      char **sub_files = dtw_list_basic(dirs[i], &current_sub_files_size, "file", true);
-
-      dtw_append_string_array_in_other(&files, &sub_files_size, sub_files, current_sub_files_size);
-       
-    }
+    struct DtwStringArray *dirs = dtw_list_dirs_recursively(path);
     
-    dtw_free_string_array(dirs, *size);
-    *size = sub_files_size;
+    struct  DtwStringArray *files = dtw_create_string_array();
+    
+    for(int i = 0; i < dirs->size; i++){
+        struct DtwStringArray *sub_files = dtw_list_basic(dirs->strings[i],"file",true);
+        dtw_append_string_array(files,sub_files);
+        dtw_free_string_array(sub_files);
+    }
+    dtw_free_string_array(dirs);
     return files;
-}*/
+}
