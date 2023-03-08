@@ -6,10 +6,10 @@ struct DtwStringArray {
 }; // End the structure with a semicolon
 
 struct DtwStringArray * dtw_create_string_array(){
-    struct DtwStringArray *self = malloc(sizeof(struct DtwStringArray));
+    struct DtwStringArray *self = (struct DtwStringArray*)malloc(sizeof(struct DtwStringArray));
     self->size = 0;
     self->iterator = 0;
-    self->strings = malloc(0);
+    self->strings = (char**)malloc(0);
     return self;
 }
 
@@ -17,8 +17,8 @@ struct DtwStringArray * dtw_create_string_array(){
 // Function prototypes
 void dtw_add_string(struct DtwStringArray *self, char *string){
     self->size++;
-    self->strings = realloc(self->strings, self->size * sizeof(char *));
-    self->strings[self->size - 1] = malloc(strlen(string) + 1);
+    self->strings =  (char**)realloc(self->strings, self->size * sizeof(char *));
+    self->strings[self->size - 1] = (char*)malloc(strlen(string) + 1);
     strcpy(self->strings[self->size - 1], string);
 }
 

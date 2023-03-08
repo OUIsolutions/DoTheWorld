@@ -3,11 +3,11 @@
 
 void dtw_create_dir_recursively(char *path){
     bool check = mkdir(path, 0777);
-    char * current_path = malloc(0);
+    char * current_path =  (char*)malloc(0);
     for(int i=0;i < strlen(path);i++){
         
         if(path[i] == '/' && i != strlen(path) - 1){
-            current_path = realloc(current_path,i);
+            current_path = (char*)realloc(current_path,i);
             strncpy(current_path,path,i);
             mkdir(current_path, 0777);
         }
@@ -21,7 +21,10 @@ void dtw_create_dir_recursively(char *path){
 void dtw_create_file_recursively(char *path,char *content){
     for(int i = strlen(path)-1;i > 0;i--){
         if(path[i] == '/'){
-            char *dir_path = malloc(i);
+            //make these work in c++
+            
+            char *dir_path =(char*)malloc(i);
+
             strncpy(dir_path,path,i);
             
             dtw_create_dir_recursively(dir_path);

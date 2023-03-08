@@ -2,7 +2,7 @@
 
 
 
-bool verify_if_add(char *type, int d_type){
+bool verify_if_add(const char *type, int d_type){
     if (strcmp(type,"file") == 0 && d_type == DT_REG) {
         return true;
     }
@@ -23,7 +23,7 @@ bool verify_if_skip(struct dirent *entry){
         return false;
 }
 
-struct DtwStringArray * list_basic(char *path,char* type,bool concat_path){
+struct DtwStringArray * list_basic(const char *path,const char* type,bool concat_path){
 
     DIR *dir;
     struct dirent *entry;
@@ -49,7 +49,7 @@ struct DtwStringArray * list_basic(char *path,char* type,bool concat_path){
             
             if(concat_path){
                 //allocates memory for the directory
-                char *generated_dir = malloc(strlen(path) + strlen(entry->d_name) + 2);
+                char *generated_dir = (char*)malloc(strlen(path) + strlen(entry->d_name) + 2);
                 sprintf(generated_dir, "%s/%s", path, entry->d_name);
                 dtw_add_string(dirs, generated_dir);
                 free(generated_dir);

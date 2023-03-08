@@ -1,7 +1,7 @@
 
 
 
-struct DtwStringArray * dtw_list_dirs_recursively(char *path){
+struct DtwStringArray * dtw_list_dirs_recursively(const char *path){
         //{%include"functions/monodimension_listage.c"%}
         struct  DtwStringArray *dirs  = list_basic(path, "dir", true);
         int i = 0;
@@ -18,7 +18,7 @@ struct DtwStringArray * dtw_list_dirs_recursively(char *path){
 }
 
 
-struct DtwStringArray *  dtw_list_files_recursively(char *path){
+struct DtwStringArray *  dtw_list_files_recursively(const char *path){
     //{%include"functions/monodimension_listage.c"%}
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(path);
     
