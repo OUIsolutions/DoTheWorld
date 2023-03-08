@@ -1,10 +1,9 @@
 #pragma once
 #include "../structs/string_array.c"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <dirent.h>
-#include <stdbool.h>
+#include "../imports.c"
+
+//{% macro monodimension_listage() %}
+
 
 bool verify_if_add(char *type, int d_type){
     if (strcmp(type,"file") == 0 && d_type == DT_REG) {
@@ -72,3 +71,4 @@ struct DtwStringArray * dtw_list_basic(char *path,char* type,bool concat_path){
 
     return dirs;
 }
+//{%endmacro%}

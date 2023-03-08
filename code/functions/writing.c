@@ -1,10 +1,5 @@
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "../imports.c"
 
 void dtw_create_dir_recursively(char *path){
     bool check = mkdir(path, 0777);

@@ -1,9 +1,7 @@
-#include "functions/listage_wrappers.c"
-#include "functions/writing.c"
-
+#include "doTheWorld.c"
 int main(int argc, char *argv[]){
     
-    dtw_create_file_recursively("a/b/c/mateus/teste.txt","teste");
-    
+    struct DtwStringArray *dirs = dtw_list_dirs("exemple",true);
+    dtw_represent_string_array(dirs);
 
 }

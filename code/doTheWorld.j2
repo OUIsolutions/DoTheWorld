@@ -1,0 +1,6 @@
+
+{%include"imports.c"%}
+{% from "structs/string_array.c" import create_string_array %}
+{{create_string_array()}}
+{% from "functions/listage_wrappers.c" import create_wrappers %}
+{{create_wrappers()}}
