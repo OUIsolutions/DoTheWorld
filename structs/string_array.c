@@ -21,6 +21,11 @@ void dtw_add_string(struct DtwStringArray *self, char *string){
     self->strings[self->size - 1] = malloc(strlen(string) + 1);
     strcpy(self->strings[self->size - 1], string);
 }
+void dtw_append_string_array(struct DtwStringArray *self, struct DtwStringArray *other){
+    for(int i = 0; i < other->size; i++){
+        dtw_add_string(self, other->strings[i]);
+    }
+}
 
 void dtw_represent_string_array(struct DtwStringArray *self){
     for(int i = 0; i < self->size; i++){
@@ -28,9 +33,10 @@ void dtw_represent_string_array(struct DtwStringArray *self){
     }
 }
 void dtw_free_string_array(struct DtwStringArray *self){
-    free(self->strings);
     for(int i = 0; i < self->size; i++){
         free(self->strings[i]);
     }
+    free(self->strings);
+
     free(self);
 }

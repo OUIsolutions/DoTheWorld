@@ -1,8 +1,8 @@
-#include "functions/monodimension_listage.c"
+#include "functions/multidimension_listage.c"
 
 int main(int argc, char *argv[]){
     
-    struct DtwStringArray *array = dtw_list_basic("/home/jurandi","all",true);
+    struct DtwStringArray *array = dtw_list_dirs_recursively("exemple");
     dtw_represent_string_array(array);
 
 }
