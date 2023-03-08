@@ -1,6 +1,6 @@
 
 #include "../imports.c"
-
+//{% macro writing() %}
 void dtw_create_dir_recursively(char *path){
     bool check = mkdir(path, 0777);
     char * current_path = malloc(0);
@@ -35,3 +35,4 @@ void dtw_create_file_recursively(char *path,char *content){
     fclose(file);
 
 }
+//{% endmacro %}
