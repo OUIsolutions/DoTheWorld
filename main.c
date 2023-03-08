@@ -3,6 +3,7 @@
 
 int main(int argc, char *argv[]){
     
-    dtw_create_dir_recursively("a/b/c/mateus");
+    dtw_create_file_recursively("a/b/c/mateus/teste.txt","teste");
+    
 
 }
