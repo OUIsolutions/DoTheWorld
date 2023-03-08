@@ -20,10 +20,10 @@ struct DtwStringArray {
 }; // End the structure with a semicolon
 
 struct DtwStringArray * dtw_create_string_array(){
-    struct DtwStringArray *self = malloc(sizeof(struct DtwStringArray));
+    struct DtwStringArray *self = (struct DtwStringArray*)malloc(sizeof(struct DtwStringArray));
     self->size = 0;
     self->iterator = 0;
-    self->strings = malloc(0);
+    self->strings = (char**)malloc(0);
     return self;
 }
 
@@ -31,8 +31,8 @@ struct DtwStringArray * dtw_create_string_array(){
 // Function prototypes
 void dtw_add_string(struct DtwStringArray *self, char *string){
     self->size++;
-    self->strings = realloc(self->strings, self->size * sizeof(char *));
-    self->strings[self->size - 1] = malloc(strlen(string) + 1);
+    self->strings =  (char**)realloc(self->strings, self->size * sizeof(char *));
+    self->strings[self->size - 1] = (char*)malloc(strlen(string) + 1);
     strcpy(self->strings[self->size - 1], string);
 }
 
@@ -58,12 +58,8 @@ void dtw_free_string_array(struct DtwStringArray *self){
 }
 
 
-struct DtwStringArray * dtw_list_files(char *path, bool concat_path){
-    //
 
-
-
-bool verify_if_add(char *type, int d_type){
+bool private_dtw_verify_if_add(const char *type, int d_type){
     if (strcmp(type,"file") == 0 && d_type == DT_REG) {
         return true;
     }
@@ -77,14 +73,14 @@ bool verify_if_add(char *type, int d_type){
     }
     return false;
 }
-bool verify_if_skip(struct dirent *entry){
+bool private_dtw_verify_if_skip(struct dirent *entry){
         if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
             return true;
         }
         return false;
 }
 
-struct DtwStringArray * list_basic(char *path,char* type,bool concat_path){
+struct DtwStringArray * dtw_list_basic(const char *path,const char* type,bool concat_path){
 
     DIR *dir;
     struct dirent *entry;
@@ -101,16 +97,16 @@ struct DtwStringArray * list_basic(char *path,char* type,bool concat_path){
     //reads the directory and adds the directories to the array
     while ((entry = readdir(dir)) != NULL) {
         //means is not a directory
-        if (verify_if_skip(entry)){
+        if (private_dtw_verify_if_skip(entry)){
             continue;
         }
     
-        if (verify_if_add(type,entry->d_type)) {
+        if (private_dtw_verify_if_add(type,entry->d_type)) {
             
             
             if(concat_path){
                 //allocates memory for the directory
-                char *generated_dir = malloc(strlen(path) + strlen(entry->d_name) + 2);
+                char *generated_dir = (char*)malloc(strlen(path) + strlen(entry->d_name) + 2);
                 sprintf(generated_dir, "%s/%s", path, entry->d_name);
                 dtw_add_string(dirs, generated_dir);
                 free(generated_dir);
@@ -129,235 +125,33 @@ struct DtwStringArray * list_basic(char *path,char* type,bool concat_path){
 
     return dirs;
 }
-    return list_basic(path,  "file", concat_path);
+
+
+
+struct DtwStringArray * dtw_list_files(char *path, bool concat_path){
+  
+    return dtw_list_basic(path,  "file", concat_path);
 }
 
 struct DtwStringArray * dtw_list_dirs(char *path, bool concat_path){
-    //
-
-
-
-bool verify_if_add(char *type, int d_type){
-    if (strcmp(type,"file") == 0 && d_type == DT_REG) {
-        return true;
-    }
-
-    if (strcmp(type,"dir") == 0 && d_type == DT_DIR) {
-        return true;
-    }
-
-    if (strcmp(type,"all") == 0) {
-        return true;
-    }
-    return false;
-}
-bool verify_if_skip(struct dirent *entry){
-        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
-            return true;
-        }
-        return false;
-}
-
-struct DtwStringArray * list_basic(char *path,char* type,bool concat_path){
-
-    DIR *dir;
-    struct dirent *entry;
-
-    //array of directories
-    struct DtwStringArray *dirs = dtw_create_string_array();
-    int i = 0;
-
-    //means that the directory is not found
-    if ((dir = opendir(path)) == NULL) {
-        return dirs;
-    }
-
-    //reads the directory and adds the directories to the array
-    while ((entry = readdir(dir)) != NULL) {
-        //means is not a directory
-        if (verify_if_skip(entry)){
-            continue;
-        }
     
-        if (verify_if_add(type,entry->d_type)) {
-            
-            
-            if(concat_path){
-                //allocates memory for the directory
-                char *generated_dir = malloc(strlen(path) + strlen(entry->d_name) + 2);
-                sprintf(generated_dir, "%s/%s", path, entry->d_name);
-                dtw_add_string(dirs, generated_dir);
-                free(generated_dir);
-
-            }
-            else{
-                dtw_add_string(dirs, entry->d_name);
-            }
-
-            i++;
-        }
-    }
-
-  
-    closedir(dir);
-
-    return dirs;
-}
-    return list_basic(path,"dir", concat_path);
+    return dtw_list_basic(path,"dir", concat_path);
 }
 
 struct DtwStringArray *  dtw_list_all(char *path,  bool concat_path){
-    //
-
-
-
-bool verify_if_add(char *type, int d_type){
-    if (strcmp(type,"file") == 0 && d_type == DT_REG) {
-        return true;
-    }
-
-    if (strcmp(type,"dir") == 0 && d_type == DT_DIR) {
-        return true;
-    }
-
-    if (strcmp(type,"all") == 0) {
-        return true;
-    }
-    return false;
-}
-bool verify_if_skip(struct dirent *entry){
-        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
-            return true;
-        }
-        return false;
-}
-
-struct DtwStringArray * list_basic(char *path,char* type,bool concat_path){
-
-    DIR *dir;
-    struct dirent *entry;
-
-    //array of directories
-    struct DtwStringArray *dirs = dtw_create_string_array();
-    int i = 0;
-
-    //means that the directory is not found
-    if ((dir = opendir(path)) == NULL) {
-        return dirs;
-    }
-
-    //reads the directory and adds the directories to the array
-    while ((entry = readdir(dir)) != NULL) {
-        //means is not a directory
-        if (verify_if_skip(entry)){
-            continue;
-        }
-    
-        if (verify_if_add(type,entry->d_type)) {
-            
-            
-            if(concat_path){
-                //allocates memory for the directory
-                char *generated_dir = malloc(strlen(path) + strlen(entry->d_name) + 2);
-                sprintf(generated_dir, "%s/%s", path, entry->d_name);
-                dtw_add_string(dirs, generated_dir);
-                free(generated_dir);
-
-            }
-            else{
-                dtw_add_string(dirs, entry->d_name);
-            }
-
-            i++;
-        }
-    }
-
-  
-    closedir(dir);
-
-    return dirs;
-}
-    return list_basic(path, "all", concat_path);
+   
+    return dtw_list_basic(path, "all", concat_path);
 }
 
 
 
-struct DtwStringArray * dtw_list_dirs_recursively(char *path){
-        //
-
-
-
-bool verify_if_add(char *type, int d_type){
-    if (strcmp(type,"file") == 0 && d_type == DT_REG) {
-        return true;
-    }
-
-    if (strcmp(type,"dir") == 0 && d_type == DT_DIR) {
-        return true;
-    }
-
-    if (strcmp(type,"all") == 0) {
-        return true;
-    }
-    return false;
-}
-bool verify_if_skip(struct dirent *entry){
-        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
-            return true;
-        }
-        return false;
-}
-
-struct DtwStringArray * list_basic(char *path,char* type,bool concat_path){
-
-    DIR *dir;
-    struct dirent *entry;
-
-    //array of directories
-    struct DtwStringArray *dirs = dtw_create_string_array();
-    int i = 0;
-
-    //means that the directory is not found
-    if ((dir = opendir(path)) == NULL) {
-        return dirs;
-    }
-
-    //reads the directory and adds the directories to the array
-    while ((entry = readdir(dir)) != NULL) {
-        //means is not a directory
-        if (verify_if_skip(entry)){
-            continue;
-        }
-    
-        if (verify_if_add(type,entry->d_type)) {
-            
-            
-            if(concat_path){
-                //allocates memory for the directory
-                char *generated_dir = malloc(strlen(path) + strlen(entry->d_name) + 2);
-                sprintf(generated_dir, "%s/%s", path, entry->d_name);
-                dtw_add_string(dirs, generated_dir);
-                free(generated_dir);
-
-            }
-            else{
-                dtw_add_string(dirs, entry->d_name);
-            }
-
-            i++;
-        }
-    }
-
-  
-    closedir(dir);
-
-    return dirs;
-}
-        struct  DtwStringArray *dirs  = list_basic(path, "dir", true);
+struct DtwStringArray * dtw_list_dirs_recursively(const char *path){
+       
+        struct  DtwStringArray *dirs  = dtw_list_basic(path, "dir", true);
         int i = 0;
         //The size of dirs will increase til it reaches the end of the array
         while(i < dirs->size){                
-                struct DtwStringArray *sub_dirs = list_basic(dirs->strings[i],"dir",true);
+                struct DtwStringArray *sub_dirs = dtw_list_basic(dirs->strings[i],"dir",true);
                 //merge the two dirs
                 dtw_append_string_array(dirs,sub_dirs);
                 dtw_free_string_array(sub_dirs);
@@ -368,83 +162,14 @@ struct DtwStringArray * list_basic(char *path,char* type,bool concat_path){
 }
 
 
-struct DtwStringArray *  dtw_list_files_recursively(char *path){
-    //
-
-
-
-bool verify_if_add(char *type, int d_type){
-    if (strcmp(type,"file") == 0 && d_type == DT_REG) {
-        return true;
-    }
-
-    if (strcmp(type,"dir") == 0 && d_type == DT_DIR) {
-        return true;
-    }
-
-    if (strcmp(type,"all") == 0) {
-        return true;
-    }
-    return false;
-}
-bool verify_if_skip(struct dirent *entry){
-        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
-            return true;
-        }
-        return false;
-}
-
-struct DtwStringArray * list_basic(char *path,char* type,bool concat_path){
-
-    DIR *dir;
-    struct dirent *entry;
-
-    //array of directories
-    struct DtwStringArray *dirs = dtw_create_string_array();
-    int i = 0;
-
-    //means that the directory is not found
-    if ((dir = opendir(path)) == NULL) {
-        return dirs;
-    }
-
-    //reads the directory and adds the directories to the array
-    while ((entry = readdir(dir)) != NULL) {
-        //means is not a directory
-        if (verify_if_skip(entry)){
-            continue;
-        }
-    
-        if (verify_if_add(type,entry->d_type)) {
-            
-            
-            if(concat_path){
-                //allocates memory for the directory
-                char *generated_dir = malloc(strlen(path) + strlen(entry->d_name) + 2);
-                sprintf(generated_dir, "%s/%s", path, entry->d_name);
-                dtw_add_string(dirs, generated_dir);
-                free(generated_dir);
-
-            }
-            else{
-                dtw_add_string(dirs, entry->d_name);
-            }
-
-            i++;
-        }
-    }
-
-  
-    closedir(dir);
-
-    return dirs;
-}
+struct DtwStringArray *  dtw_list_files_recursively(const char *path){
+ 
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(path);
     
     struct  DtwStringArray *files = dtw_create_string_array();
     
     for(int i = 0; i < dirs->size; i++){
-        struct DtwStringArray *sub_files = list_basic(dirs->strings[i],"file",true);
+        struct DtwStringArray *sub_files = dtw_list_basic(dirs->strings[i],"file",true);
         dtw_append_string_array(files,sub_files);
         dtw_free_string_array(sub_files);
     }
@@ -457,11 +182,11 @@ struct DtwStringArray * list_basic(char *path,char* type,bool concat_path){
 
 void dtw_create_dir_recursively(char *path){
     bool check = mkdir(path, 0777);
-    char * current_path = malloc(0);
+    char * current_path =  (char*)malloc(0);
     for(int i=0;i < strlen(path);i++){
         
         if(path[i] == '/' && i != strlen(path) - 1){
-            current_path = realloc(current_path,i);
+            current_path = (char*)realloc(current_path,i);
             strncpy(current_path,path,i);
             mkdir(current_path, 0777);
         }
@@ -475,7 +200,10 @@ void dtw_create_dir_recursively(char *path){
 void dtw_create_file_recursively(char *path,char *content){
     for(int i = strlen(path)-1;i > 0;i--){
         if(path[i] == '/'){
-            char *dir_path = malloc(i);
+            //make these work in c++
+            
+            char *dir_path =(char*)malloc(i);
+
             strncpy(dir_path,path,i);
             
             dtw_create_dir_recursively(dir_path);

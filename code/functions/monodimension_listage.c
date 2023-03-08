@@ -1,8 +1,7 @@
 
 
 
-
-bool verify_if_add(const char *type, int d_type){
+bool private_dtw_verify_if_add(const char *type, int d_type){
     if (strcmp(type,"file") == 0 && d_type == DT_REG) {
         return true;
     }
@@ -16,14 +15,14 @@ bool verify_if_add(const char *type, int d_type){
     }
     return false;
 }
-bool verify_if_skip(struct dirent *entry){
+bool private_dtw_verify_if_skip(struct dirent *entry){
         if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
             return true;
         }
         return false;
 }
 
-struct DtwStringArray * list_basic(const char *path,const char* type,bool concat_path){
+struct DtwStringArray * dtw_list_basic(const char *path,const char* type,bool concat_path){
 
     DIR *dir;
     struct dirent *entry;
@@ -40,11 +39,11 @@ struct DtwStringArray * list_basic(const char *path,const char* type,bool concat
     //reads the directory and adds the directories to the array
     while ((entry = readdir(dir)) != NULL) {
         //means is not a directory
-        if (verify_if_skip(entry)){
+        if (private_dtw_verify_if_skip(entry)){
             continue;
         }
     
-        if (verify_if_add(type,entry->d_type)) {
+        if (private_dtw_verify_if_add(type,entry->d_type)) {
             
             
             if(concat_path){
@@ -68,3 +67,4 @@ struct DtwStringArray * list_basic(const char *path,const char* type,bool concat
 
     return dirs;
 }
+
