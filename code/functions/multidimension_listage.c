@@ -1,9 +1,8 @@
 
 
-// {%from "functions/monodimension_listage.c" import monodimension_listage%}
-//{% macro multidimension_listage() %}
+
 struct DtwStringArray * dtw_list_dirs_recursively(char *path){
-        //{{monodimension_listage()}}
+        //{%include"functions/monodimension_listage.c"%}
         struct  DtwStringArray *dirs  = list_basic(path, "dir", true);
         int i = 0;
         //The size of dirs will increase til it reaches the end of the array
@@ -20,7 +19,7 @@ struct DtwStringArray * dtw_list_dirs_recursively(char *path){
 
 
 struct DtwStringArray *  dtw_list_files_recursively(char *path){
-    //{{monodimension_listage()}}
+    //{%include"functions/monodimension_listage.c"%}
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(path);
     
     struct  DtwStringArray *files = dtw_create_string_array();
@@ -34,4 +33,3 @@ struct DtwStringArray *  dtw_list_files_recursively(char *path){
     return files;
 }
 
-//{% endmacro %}

@@ -1,7 +1,5 @@
-#include "doTheWorldDevUsage.c"
+#include "doTheWorld.c"
 int main(int argc, char *argv[]){
-    
-    struct DtwStringArray *dirs = dtw_list_dirs("exemple",true);
-    dtw_represent_string_array(dirs);
 
+    dtw_create_file_recursively("a/b/c/teste.txt","vai tomar no cu porra");
 }

@@ -1,7 +1,6 @@
 
 
-//{% macro monodimension_listage() %}
-//Included in code/functions/montidimension_listage.c
+
 
 bool verify_if_add(char *type, int d_type){
     if (strcmp(type,"file") == 0 && d_type == DT_REG) {
@@ -69,6 +68,3 @@ struct DtwStringArray * list_basic(char *path,char* type,bool concat_path){
 
     return dirs;
 }
-//End of //Included in code/functions/montidimension_listage.c
-
-//{%endmacro%}

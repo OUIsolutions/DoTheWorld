@@ -1,5 +1,4 @@
 
-//{% macro create_string_array() %}
 struct DtwStringArray {
   int size;         
   int iterator;
@@ -43,4 +42,3 @@ void dtw_free_string_array(struct DtwStringArray *self){
 
     free(self);
 }
-//{% endmacro %}
