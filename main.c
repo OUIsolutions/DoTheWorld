@@ -1,8 +1,8 @@
 #include "functions/listage_wrappers.c"
+#include "functions/writing.c"
 
 int main(int argc, char *argv[]){
     
-    struct DtwStringArray *array = dtw_list_dirs("exemple",true);
-    dtw_represent_string_array(array);
+    dtw_create_dir_recursively("a/b/c/mateus");
 
 }
