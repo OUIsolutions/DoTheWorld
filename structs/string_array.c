@@ -1,18 +1,31 @@
-
+#include <stdio.h>
+#include <stdlib.h>
 struct DtwStringArray {
   int size;         
   char **strings;       
 }; // End the structure with a semicolon
 
-// Function prototypes
-void dtw_add_string(struct DtwStringArray *array, char *string){
-    array->size++;
-    array->strings = realloc(array->strings, array->size * sizeof(char *));
-    array->strings[array->size - 1] = string;
+struct DtwStringArray * dtw_create_string_array(){
+    struct DtwStringArray *self = malloc(sizeof(struct DtwStringArray));
+    self->size = 0;
+    self->strings = malloc(0);
+    return self;
 }
 
-void dtw_represent_string_array(struct DtwStringArray *array){
-    for(int i = 0; i < array->size; i++){
-        printf("%s", array->strings[i]);
+
+// Function prototypes
+void dtw_add_string(struct DtwStringArray *self, char *string){
+    self->size++;
+    self->strings = realloc(self->strings, self->size * sizeof(char *));
+    self->strings[self->size - 1] = string;
+}
+
+void dtw_represent_string_array(struct DtwStringArray *self){
+    for(int i = 0; i < self->size; i++){
+        printf("%s\n", self->strings[i]);
     }
+}
+void dtw_free_string_array(struct DtwStringArray *self){
+    free(self->strings);
+    free(self);
 }
