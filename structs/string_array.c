@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 struct DtwStringArray {
   int size;         
   char **strings;       
@@ -17,7 +18,8 @@ struct DtwStringArray * dtw_create_string_array(){
 void dtw_add_string(struct DtwStringArray *self, char *string){
     self->size++;
     self->strings = realloc(self->strings, self->size * sizeof(char *));
-    self->strings[self->size - 1] = string;
+    self->strings[self->size - 1] = malloc(strlen(string) + 1);
+    strcpy(self->strings[self->size - 1], string);
 }
 
 void dtw_represent_string_array(struct DtwStringArray *self){
@@ -27,5 +29,8 @@ void dtw_represent_string_array(struct DtwStringArray *self){
 }
 void dtw_free_string_array(struct DtwStringArray *self){
     free(self->strings);
+    for(int i = 0; i < self->size; i++){
+        free(self->strings[i]);
+    }
     free(self);
 }
