@@ -1,74 +1,73 @@
 #pragma once
+#include "../structs/string_array.c"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <dirent.h>
 #include <stdbool.h>
 
+bool verify_if_add(char *type, int d_type){
+    if (strcmp(type,"file") == 0 && d_type == DT_REG) {
+        return true;
+    }
 
-char **dtw_list_basic(char *path, int *size,char* type,bool concat_path){
+    if (strcmp(type,"dir") == 0 && d_type == DT_DIR) {
+        return true;
+    }
+
+    if (strcmp(type,"all") == 0) {
+        return true;
+    }
+    return false;
+}
+bool verify_if_skip(struct dirent *entry){
+        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+            return true;
+        }
+        return false;
+}
+
+struct DtwStringArray * dtw_list_basic(char *path,char* type,bool concat_path){
 
     DIR *dir;
     struct dirent *entry;
 
     //array of directories
-    char **dirs = calloc(1, sizeof(char *));
+    struct DtwStringArray *dirs = dtw_create_string_array();
     int i = 0;
 
     //means that the directory is not found
     if ((dir = opendir(path)) == NULL) {
-        *size = 0;
-        return NULL;
+        return dirs;
     }
 
     //reads the directory and adds the directories to the array
     while ((entry = readdir(dir)) != NULL) {
         //means is not a directory
-        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+        if (verify_if_skip(entry)){
             continue;
         }
-        //means is a directory
-        bool add = false;
-        
-        if (strcmp(type,"file") == 0 && entry->d_type == DT_REG) {
-            add = true;
-        }
-
-        if (strcmp(type,"dir") == 0 && entry->d_type == DT_DIR) {
-            add = true;
-        }
-
-        if (strcmp(type,"all") == 0) {
-            add = true;
-        }
-        
-        if (add) {
+    
+        if (verify_if_add(type,entry->d_type)) {
             
-            
-            //reallocates memory for the array
-            dirs =  (char **)realloc(dirs, (i + 1) * sizeof(char *));
             
             if(concat_path){
                 //allocates memory for the directory
-                dirs[i] = malloc((strlen(path) + strlen(entry->d_name) + 2) * sizeof(char));
-                
-                //adds the directory to the array
-                sprintf(dirs[i], "%s/%s", path, entry->d_name);
+                char *generated_dir = malloc(strlen(path) + strlen(entry->d_name) + 2);
+                sprintf(generated_dir, "%s/%s", path, entry->d_name);
+                dtw_add_string(dirs, generated_dir);
+                free(generated_dir);
+
             }
             else{
-                //allocates memory for the directory
-                dirs[i] = malloc((strlen(entry->d_name) + 1) * sizeof(char));
-                
-                //adds the directory to the array
-                strcpy(dirs[i], entry->d_name);
+                dtw_add_string(dirs, entry->d_name);
             }
 
             i++;
         }
     }
 
-    //adds the size of the array
-    *size = i;
+  
     closedir(dir);
 
     return dirs;
