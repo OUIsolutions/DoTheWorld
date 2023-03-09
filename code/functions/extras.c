@@ -25,7 +25,7 @@ void dtw_create_dir_recursively(char *path){
 }
 
 
-int  dtw_create_file_recursively(char *path,unsigned char *content){
+bool  dtw_write_file_recursively(char *path,unsigned char *content,int size){
     
     for(int i = strlen(path)-1;i > 0;i--){
         if(path[i] == '\\' || path[i] == '/'){
@@ -43,12 +43,20 @@ int  dtw_create_file_recursively(char *path,unsigned char *content){
     }
     FILE *file = fopen(path,"wb");
     if(file == NULL){
-        return -1;
+        return false;
     }
-    fwrite(content, sizeof(unsigned char),strlen(content), file);
-    fclose(file);
 
+    if(size != 0){
+           //its not possible to determine an binary length
+          fwrite(content, sizeof(unsigned char),size, file);
+    }
+    else{
+        fwrite(content, sizeof(unsigned char),strlen(content), file);
+    }
+    fclose(file);
+    return true;
 }
+
 
 char * dtw_load_file_content(char * path){
     FILE *file = fopen(path,"rb");
@@ -61,14 +69,16 @@ char * dtw_load_file_content(char * path){
     unsigned char *content = (unsigned char*)malloc(size +1);
     fread(content,1,size,file);
     //Detect if binary
-    bool binary = false;
+    printf("size: %d",size);
+    bool is_binary = false;
     for(int i = 0; i < size; i++){
         if(content[i] == 0){
-            binary = true;
+            is_binary = true;
             break;
         }
     }
-    if(!binary){
+
+    if(is_binary == false){
             content[size] = '\0';
     }
 

@@ -13,8 +13,7 @@ struct DtwTreePart{
 };
 
 void dtw_set_tree_part_content(struct DtwTreePart *self, char *content,bool set_time){
-    self->content = (char*)realloc(self->content,strlen(content) + 1);
-    
+    self->content = (char*)realloc(self->content,strlen(content) + 1);  
     uint8_t hash[32];
     calc_sha_256(hash,content,strlen(content));
     self->sha256 = (char*)realloc(self->sha256,65);
@@ -55,6 +54,7 @@ struct  DtwTreePart * dtw_create_tree_part(char *path){
   
     return self;
 }
+
 
 void dtw_represent_tree_part(struct DtwTreePart *self){
     printf("-------------------------------------------\n");
