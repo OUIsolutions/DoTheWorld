@@ -1,5 +1,10 @@
 {
     "files.associations": {
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "stat.h": "c",
+        "windows.h": "c",
+        "types.h": "c",
+        "wchar.h": "c",
+        "string.h": "c"
     }
 }

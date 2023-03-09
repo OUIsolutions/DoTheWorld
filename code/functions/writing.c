@@ -1,5 +1,5 @@
 
-
+#ifdef __linux__
 
 void dtw_create_dir_recursively(char *path){
     bool check = mkdir(path, 0777);
@@ -16,7 +16,11 @@ void dtw_create_dir_recursively(char *path){
     
     mkdir(path, 0777);
 }
-
+#elif _WIN32
+void dtw_create_dir_recursively(char *path){
+    CreateDirectory(path,NULL);
+}
+#endif
 
 void dtw_create_file_recursively(char *path,char *content){
     for(int i = strlen(path)-1;i > 0;i--){

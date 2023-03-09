@@ -1,5 +1,13 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
 
-
+#ifdef __linux__
+  #include <dirent.h>
+  #include <sys/types.h>
+  #include <sys/stat.h>
+  #include <unistd.h>
 
 bool private_dtw_verify_if_add(const char *type, int d_type){
     if (strcmp(type,"file") == 0 && d_type == DT_REG) {
@@ -68,3 +76,4 @@ struct DtwStringArray * dtw_list_basic(const char *path,const char* type,bool co
     return dirs;
 }
 
+#endif

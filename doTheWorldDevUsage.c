@@ -3,7 +3,8 @@
 
 #include "code/imports.c"
 #include "code/structs/string_array.c"
-#include "code/functions/monodimension_listage.c"
+#include "code/functions/monodimension_listage_linux.c"
+#include "code/functions/monodimension_listage_win32.c"
 #include "code/functions/multidimension_listage.c"
 #include "code/functions/listage_wrappers.c"
 #include "code/functions/writing.c"
