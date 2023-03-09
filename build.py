@@ -11,8 +11,7 @@ with open('doTheWorld.c','w') as f:
 result  =system('g++ main.c')
 if result == 0:
     print('Compilation successful')
-    print("Executing the program\n")
-    system('./a.out')
+  
 else:
     print('Compilation failed')
 

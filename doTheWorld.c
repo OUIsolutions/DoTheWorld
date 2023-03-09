@@ -6,12 +6,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <dirent.h>
 #include <stdbool.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <unistd.h>
 
+#ifdef __linux__
+  #include <dirent.h>
+  #include <unistd.h>
+#elif _WIN32
+  #include <windows.h>
+  #include <tchar.h>
+  #include <wchar.h>
+  #include <locale.h>
+  #include <direct.h>
+#endif
 
 struct DtwStringArray {
   int size;         
@@ -57,7 +65,84 @@ void dtw_free_string_array(struct DtwStringArray *self){
     free(self);
 }
 
+#ifdef _WIN32
+#define FILETYPE 32
 
+
+bool private_dtw_verify_if_add(const char *type, WIN32_FIND_DATAA entry){
+    
+    if (strcmp(type,"file") == 0 && entry.dwFileAttributes == FILETYPE) {
+        return true;
+    }
+
+    if (strcmp(type,"dir") == 0 && entry.dwFileAttributes != FILETYPE){
+        return true;
+    }
+
+    if (strcmp(type,"all") == 0) {
+        return true;
+    }
+    
+    return false;
+}
+
+bool private_dtw_verify_if_skip(WIN32_FIND_DATAA *entry){
+    if (strcmp(entry->cFileName, ".") == 0 || strcmp(entry->cFileName, "..") == 0) {
+        return true;
+    }
+    return false;
+}
+
+struct DtwStringArray * dtw_list_basic(const char *path, const char* type, bool concat_path){
+
+    WIN32_FIND_DATAA file_data;
+    HANDLE file_handle;
+    char search_path[MAX_PATH];
+
+    //array of directories
+    struct DtwStringArray *dirs = dtw_create_string_array();
+    int i = 0;
+
+    // build the search path string
+    snprintf(search_path, MAX_PATH, "%s\\*", path);
+
+    // try to open the directory
+    if ((file_handle = FindFirstFileA(search_path, &file_data)) == INVALID_HANDLE_VALUE) {
+        return dirs;
+    }
+
+    do {
+        // skip "." and ".." directories
+        if (private_dtw_verify_if_skip(&file_data)){
+            continue;
+        }
+
+        // verify if it's a file or directory
+        if (private_dtw_verify_if_add(type, file_data)) {
+            
+            if(concat_path){
+                // allocate memory for the directory
+                char *generated_dir = (char*)malloc(strlen(path) + strlen(file_data.cFileName) + 2);
+                sprintf(generated_dir, "%s\\%s", path, file_data.cFileName);
+                dtw_add_string(dirs, generated_dir);
+                free(generated_dir);
+            }
+            else{
+                dtw_add_string(dirs, file_data.cFileName);
+            }
+
+            i++;
+        }
+    } while (FindNextFileA(file_handle, &file_data) != 0);
+
+    FindClose(file_handle);
+
+    return dirs;
+}
+#endif
+
+
+#ifdef __linux__
 
 bool private_dtw_verify_if_add(const char *type, int d_type){
     if (strcmp(type,"file") == 0 && d_type == DT_REG) {
@@ -126,6 +211,7 @@ struct DtwStringArray * dtw_list_basic(const char *path,const char* type,bool co
     return dirs;
 }
 
+#endif
 
 
 struct DtwStringArray * dtw_list_files(char *path, bool concat_path){
@@ -142,7 +228,6 @@ struct DtwStringArray *  dtw_list_all(char *path,  bool concat_path){
    
     return dtw_list_basic(path, "all", concat_path);
 }
-
 
 
 struct DtwStringArray * dtw_list_dirs_recursively(const char *path){
@@ -178,32 +263,40 @@ struct DtwStringArray *  dtw_list_files_recursively(const char *path){
 }
 
 
-
+#ifdef __linux__
+#define create_dir(path) mkdir(path,0777)
+#elif _WIN32
+#define create_dir(path) _mkdir(path)
+#endif
 
 void dtw_create_dir_recursively(char *path){
-    bool check = mkdir(path, 0777);
+    bool check = create_dir(path);
     char * current_path =  (char*)malloc(0);
+
     for(int i=0;i < strlen(path);i++){
-        
-        if(path[i] == '/' && i != strlen(path) - 1){
+        if(path[i] == '\\'  || path[i] == '/'   && i != strlen(path) - 1){
             current_path = (char*)realloc(current_path,i);
+            current_path[i] = '\0';
+
             strncpy(current_path,path,i);
-            mkdir(current_path, 0777);
+            create_dir(current_path);
         }
     }
+
     free(current_path);
     
-    mkdir(path, 0777);
+    create_dir(path);
 }
 
 
 void dtw_create_file_recursively(char *path,char *content){
+    
     for(int i = strlen(path)-1;i > 0;i--){
-        if(path[i] == '/'){
+        if(path[i] == '\\' || path[i] == '/'){
             //make these work in c++
-            
+    
             char *dir_path =(char*)malloc(i);
-
+            dir_path[i] = '\0';
             strncpy(dir_path,path,i);
             
             dtw_create_dir_recursively(dir_path);
