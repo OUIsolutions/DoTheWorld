@@ -1,8 +1,9 @@
 #include "code/doTheWorldDevUsage.c"
 
 int main(int argc, char *argv[]){
-  struct DtwTreePart *tree = dtw_create_tree_part("README.md",true);
-  dtw_represent_tree_part(tree);
-  dtw_free_tree_part(tree);
+  unsigned char *content = dtw_load_file_content("build.py");
+  printf("%s",content);
+  dtw_create_file_recursively("deer2",content);
+  free(content);
   
 }

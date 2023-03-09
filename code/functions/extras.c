@@ -25,7 +25,7 @@ void dtw_create_dir_recursively(char *path){
 }
 
 
-void dtw_create_file_recursively(char *path,char *content){
+int  dtw_create_file_recursively(char *path,unsigned char *content){
     
     for(int i = strlen(path)-1;i > 0;i--){
         if(path[i] == '\\' || path[i] == '/'){
@@ -41,24 +41,39 @@ void dtw_create_file_recursively(char *path,char *content){
             break;
         }
     }
-    FILE *file = fopen(path,"w");
-    fprintf(file,"%s",content);
+    FILE *file = fopen(path,"wb");
+    if(file == NULL){
+        return -1;
+    }
+    fwrite(content, sizeof(unsigned char),strlen(content), file);
     fclose(file);
 
 }
 
 char * dtw_load_file_content(char * path){
     FILE *file = fopen(path,"rb");
+    if(file == NULL){
+        return NULL;
+    }
     fseek(file,0,SEEK_END);
     long size = ftell(file);
     fseek(file,0,SEEK_SET);
-    unsigned char *content = (char*)malloc(size+1);
-    fread(content,size,1,file);
+    unsigned char *content = (unsigned char*)malloc(size +1);
+    fread(content,1,size,file);
+    //Detect if binary
+    bool binary = false;
+    for(int i = 0; i < size; i++){
+        if(content[i] == 0){
+            binary = true;
+            break;
+        }
+    }
+    if(!binary){
+            content[size] = '\0';
+    }
+
+
     fclose(file);
-    //remove trash
-
-    content[size] = '\0';
-
     return content;
 }
 

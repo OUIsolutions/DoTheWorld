@@ -6,7 +6,7 @@ exemple
 *.ko
 *.obj
 *.elf
-
+deer2.jpg
 # Linker output
 *.ilk
 *.map
