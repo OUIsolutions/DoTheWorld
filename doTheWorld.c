@@ -20,6 +20,9 @@
   #include <locale.h>
   #include <direct.h>
 #endif
+#define DTW_FILE_TYPE 1
+#define DTW_FOLDER_TYPE 2
+#define DTW_ALL_TYPE 3
 
 struct DtwStringArray {
   int size;         
@@ -66,20 +69,20 @@ void dtw_free_string_array(struct DtwStringArray *self){
 }
 
 #ifdef _WIN32
-#define FILETYPE 32
 
 
-bool private_dtw_verify_if_add(const char *type, WIN32_FIND_DATAA entry){
-    
-    if (strcmp(type,"file") == 0 && entry.dwFileAttributes == FILETYPE) {
+bool private_dtw_verify_if_add(const int expected_type, WIN32_FIND_DATAA entry){
+    #define WIN32_FILETYPE 32
+
+    if (expected_type == DTW_FILE_TYPE && entry.dwFileAttributes == WIN32_FILETYPE) {
         return true;
     }
 
-    if (strcmp(type,"dir") == 0 && entry.dwFileAttributes != FILETYPE){
+    if (expected_type == DTW_FOLDER_TYPE && entry.dwFileAttributes != WIN32_FILETYPE){
         return true;
     }
 
-    if (strcmp(type,"all") == 0) {
+    if (expected_type == DTW_ALL_TYPE) {
         return true;
     }
     
@@ -93,7 +96,7 @@ bool private_dtw_verify_if_skip(WIN32_FIND_DATAA *entry){
     return false;
 }
 
-struct DtwStringArray * dtw_list_basic(const char *path, const char* type, bool concat_path){
+struct DtwStringArray * dtw_list_basic(const char *path,int type, bool concat_path){
 
     WIN32_FIND_DATAA file_data;
     HANDLE file_handle;
@@ -144,16 +147,16 @@ struct DtwStringArray * dtw_list_basic(const char *path, const char* type, bool 
 
 #ifdef __linux__
 
-bool private_dtw_verify_if_add(const char *type, int d_type){
-    if (strcmp(type,"file") == 0 && d_type == DT_REG) {
+bool private_dtw_verify_if_add(const int type, int d_type){
+    if (expected_type == DTW_FILE_TYPE  && d_type == DT_REG) {
         return true;
     }
 
-    if (strcmp(type,"dir") == 0 && d_type == DT_DIR) {
+    if (expected_type == DTW_FOLDER_TYPE && d_type == DT_DIR) {
         return true;
     }
 
-    if (strcmp(type,"all") == 0) {
+    if (expected_type == DTW_ALL_TYPE == 0) {
         return true;
     }
     return false;
@@ -165,7 +168,7 @@ bool private_dtw_verify_if_skip(struct dirent *entry){
         return false;
 }
 
-struct DtwStringArray * dtw_list_basic(const char *path,const char* type,bool concat_path){
+struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool concat_path){
 
     DIR *dir;
     struct dirent *entry;
@@ -186,7 +189,7 @@ struct DtwStringArray * dtw_list_basic(const char *path,const char* type,bool co
             continue;
         }
     
-        if (private_dtw_verify_if_add(type,entry->d_type)) {
+        if (private_dtw_verify_if_add(expected_type,entry->d_type)) {
             
             
             if(concat_path){
@@ -216,27 +219,31 @@ struct DtwStringArray * dtw_list_basic(const char *path,const char* type,bool co
 
 struct DtwStringArray * dtw_list_files(char *path, bool concat_path){
   
-    return dtw_list_basic(path,  "file", concat_path);
+    return dtw_list_basic(path,  DTW_FILE_TYPE, concat_path);
 }
 
 struct DtwStringArray * dtw_list_dirs(char *path, bool concat_path){
     
-    return dtw_list_basic(path,"dir", concat_path);
+    return dtw_list_basic(path,DTW_FOLDER_TYPE, concat_path);
 }
 
 struct DtwStringArray *  dtw_list_all(char *path,  bool concat_path){
    
-    return dtw_list_basic(path, "all", concat_path);
+    return dtw_list_basic(path, DTW_ALL_TYPE, concat_path);
 }
 
 
 struct DtwStringArray * dtw_list_dirs_recursively(const char *path){
        
-        struct  DtwStringArray *dirs  = dtw_list_basic(path, "dir", true);
+        struct  DtwStringArray *dirs  = dtw_list_basic(path,DTW_FOLDER_TYPE, true);
         int i = 0;
         //The size of dirs will increase til it reaches the end of the array
         while(i < dirs->size){                
-                struct DtwStringArray *sub_dirs = dtw_list_basic(dirs->strings[i],"dir",true);
+                struct DtwStringArray *sub_dirs = dtw_list_basic(
+                    dirs->strings[i],
+                    DTW_FOLDER_TYPE,
+                    true
+                    );
                 //merge the two dirs
                 dtw_append_string_array(dirs,sub_dirs);
                 dtw_free_string_array(sub_dirs);
@@ -254,7 +261,7 @@ struct DtwStringArray *  dtw_list_files_recursively(const char *path){
     struct  DtwStringArray *files = dtw_create_string_array();
     
     for(int i = 0; i < dirs->size; i++){
-        struct DtwStringArray *sub_files = dtw_list_basic(dirs->strings[i],"file",true);
+        struct DtwStringArray *sub_files = dtw_list_basic(dirs->strings[i],DTW_FILE_TYPE,true);
         dtw_append_string_array(files,sub_files);
         dtw_free_string_array(sub_files);
     }

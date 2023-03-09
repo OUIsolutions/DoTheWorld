@@ -1,19 +1,19 @@
 
 #ifdef _WIN32
-#define FILETYPE 32
 
 
-bool private_dtw_verify_if_add(const char *type, WIN32_FIND_DATAA entry){
-    
-    if (strcmp(type,"file") == 0 && entry.dwFileAttributes == FILETYPE) {
+bool private_dtw_verify_if_add(const int expected_type, WIN32_FIND_DATAA entry){
+    #define WIN32_FILETYPE 32
+
+    if (expected_type == DTW_FILE_TYPE && entry.dwFileAttributes == WIN32_FILETYPE) {
         return true;
     }
 
-    if (strcmp(type,"dir") == 0 && entry.dwFileAttributes != FILETYPE){
+    if (expected_type == DTW_FOLDER_TYPE && entry.dwFileAttributes != WIN32_FILETYPE){
         return true;
     }
 
-    if (strcmp(type,"all") == 0) {
+    if (expected_type == DTW_ALL_TYPE) {
         return true;
     }
     
@@ -27,7 +27,7 @@ bool private_dtw_verify_if_skip(WIN32_FIND_DATAA *entry){
     return false;
 }
 
-struct DtwStringArray * dtw_list_basic(const char *path, const char* type, bool concat_path){
+struct DtwStringArray * dtw_list_basic(const char *path,int type, bool concat_path){
 
     WIN32_FIND_DATAA file_data;
     HANDLE file_handle;

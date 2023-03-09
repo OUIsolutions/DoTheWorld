@@ -5,6 +5,14 @@
         "windows.h": "c",
         "types.h": "c",
         "wchar.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "constants.h": "c",
+        "array": "c",
+        "compare": "c",
+        "functional": "c",
+        "ratio": "c",
+        "tuple": "c",
+        "type_traits": "c",
+        "utility": "c"
     }
 }

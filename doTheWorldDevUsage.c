@@ -1,7 +1,8 @@
 //Warning : This is a dev version, it is not optimized and may not work properly
 // Do not use it in production, use the release version "doTheWorld.c" instead
 
-#include "code/imports.c"
+#include "code/imports.h"
+#include "code/constants.h"
 #include "code/structs/string_array.c"
 #include "code/functions/monodimension_listage_linux.c"
 #include "code/functions/monodimension_listage_win32.c"
