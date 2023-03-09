@@ -4,21 +4,24 @@
 #include <stdbool.h>
 
 #ifdef _WIN32
+#define FILETYPE 32
 
 #include <windows.h>
 
-bool private_dtw_verify_if_add(const char *type, DWORD d_type){
-    if (strcmp(type,"file") == 0 && d_type == FILE_ATTRIBUTE_NORMAL) {
+bool private_dtw_verify_if_add(const char *type, WIN32_FIND_DATAA entry){
+    
+    if (strcmp(type,"file") == 0 && entry.dwFileAttributes == FILETYPE) {
         return true;
     }
 
-    if (strcmp(type,"dir") == 0 && d_type == FILE_ATTRIBUTE_DIRECTORY) {
+    if (strcmp(type,"dir") == 0 && entry.dwFileAttributes != FILETYPE){
         return true;
     }
 
     if (strcmp(type,"all") == 0) {
         return true;
     }
+    
     return false;
 }
 
@@ -54,8 +57,8 @@ struct DtwStringArray * dtw_list_basic(const char *path, const char* type, bool 
         }
 
         // verify if it's a file or directory
-        if (private_dtw_verify_if_add(type, file_data.dwFileAttributes)) {
-
+        if (private_dtw_verify_if_add(type, file_data)) {
+            
             if(concat_path){
                 // allocate memory for the directory
                 char *generated_dir = (char*)malloc(strlen(path) + strlen(file_data.cFileName) + 2);
