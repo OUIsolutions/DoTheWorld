@@ -1,12 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
 
 #ifdef _WIN32
 #define FILETYPE 32
 
-#include <windows.h>
 
 bool private_dtw_verify_if_add(const char *type, WIN32_FIND_DATAA entry){
     

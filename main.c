@@ -1,7 +1,9 @@
 #include "doTheWorldDevUsage.c"
 int main(int argc, char *argv[]){
-  char *teste;
-    dtw_create_file_recursively("teste\\a\\b\\teste.txt","teste");
 
+    struct DtwStringArray * teste = dtw_list_dirs_recursively(
+      "C:\\Users\\USER\\OneDrive\\Documentos\\GitHub\\DoTheWorld"
+    );
+    dtw_represent_string_array(teste);
     printf("\n");
 }

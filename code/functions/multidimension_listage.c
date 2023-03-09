@@ -1,6 +1,5 @@
 
 
-
 struct DtwStringArray * dtw_list_dirs_recursively(const char *path){
        
         struct  DtwStringArray *dirs  = dtw_list_basic(path, "dir", true);
