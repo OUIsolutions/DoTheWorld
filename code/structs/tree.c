@@ -42,9 +42,11 @@ struct  DtwTreePart * dtw_create_tree_part(char *path,bool load_content){
 }
 
 void dtw_represent_tree_part(struct DtwTreePart *self){
+    printf("-------------------------------------------\n");
     printf("Path: %s\n", self->path);
     printf("SHA256: %s\n", self->sha256);
-    printf("Content:\n%s\n", self->content);
+    printf("Content:\n%s", self->content);
+
 }
 
 void dtw_free_tree_part(struct DtwTreePart *self){
