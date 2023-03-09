@@ -52,7 +52,7 @@ char * dtw_load_file_content(char * path){
     fseek(file,0,SEEK_END);
     long size = ftell(file);
     fseek(file,0,SEEK_SET);
-    char *content = (char*)malloc(size+1);
+    unsigned char *content = (char*)malloc(size+1);
     fread(content,size,1,file);
     fclose(file);
     //remove trash
