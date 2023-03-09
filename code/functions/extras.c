@@ -46,3 +46,19 @@ void dtw_create_file_recursively(char *path,char *content){
     fclose(file);
 
 }
+
+char * dtw_load_file_content(char * path){
+    FILE *file = fopen(path,"rb");
+    fseek(file,0,SEEK_END);
+    long size = ftell(file);
+    fseek(file,0,SEEK_SET);
+    char *content = (char*)malloc(size+1);
+    fread(content,size,1,file);
+    fclose(file);
+    //remove trash
+
+    content[size] = '\0';
+
+    return content;
+}
+
