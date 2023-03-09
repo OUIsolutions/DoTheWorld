@@ -6,6 +6,7 @@ struct DtwTreePart{
     unsigned char *content;
     unsigned int last_modification_in_unix;
     unsigned int size;
+    bool binary;
     bool ignore_all;
     bool ignore_content;
 
@@ -13,6 +14,7 @@ struct DtwTreePart{
 
 void dtw_set_tree_part_content(struct DtwTreePart *self, char *content,bool set_time){
     self->content = (char*)realloc(self->content,strlen(content) + 1);
+    
     uint8_t hash[32];
     calc_sha_256(hash,content,strlen(content));
     self->sha256 = (char*)realloc(self->sha256,65);
@@ -30,7 +32,8 @@ void dtw_set_tree_part_content(struct DtwTreePart *self, char *content,bool set_
 }
 
 void dtw_load_tree_part_content(struct DtwTreePart *self, char *path){
-    char *content = dtw_load_file_content(path);
+
+    unsigned char *content = dtw_load_file_content(path);
     dtw_set_tree_part_content(self,content,false);
     struct stat info;
     stat(path,&info);
@@ -38,7 +41,7 @@ void dtw_load_tree_part_content(struct DtwTreePart *self, char *path){
     free(content);
 }
 
-struct  DtwTreePart * dtw_create_tree_part(char *path,bool load_content){
+struct  DtwTreePart * dtw_create_tree_part(char *path){
     struct DtwTreePart *self = (struct DtwTreePart*)malloc(sizeof(struct DtwTreePart));
     self->size = 0;
     self->path = (char*)malloc(strlen(path) + 1);
@@ -49,9 +52,7 @@ struct  DtwTreePart * dtw_create_tree_part(char *path,bool load_content){
     self->size = 0;
     self->ignore_all = false;
     self->ignore_content = false;
-    if(load_content){
-        dtw_load_tree_part_content(self,path);
-    }   
+  
     return self;
 }
 
@@ -68,7 +69,7 @@ void dtw_represent_tree_part(struct DtwTreePart *self){
     printf("Last modification: %s\n", s);
 
     free(tm);
-    
+
     printf("Content:\n%s", self->content);
 
 }
