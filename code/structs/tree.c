@@ -32,7 +32,7 @@ void dtw_set_tree_part_content(struct DtwTreePart *self, char *content,bool set_
 
 void dtw_load_tree_part_content(struct DtwTreePart *self, char *path){
 
-    unsigned char *content = dtw_load_file_content(path);
+    unsigned char *content = dtw_load_file_content(path,self->size,self->binary);
     dtw_set_tree_part_content(self,content,false);
     struct stat info;
     stat(path,&info);

@@ -5,6 +5,8 @@
 #define create_dir(path) _mkdir(path)
 #endif
 
+
+
 void dtw_create_dir_recursively(char *path){
     bool check = create_dir(path);
     char * current_path =  (char*)malloc(0);
@@ -25,7 +27,7 @@ void dtw_create_dir_recursively(char *path){
 }
 
 
-bool  dtw_write_file_recursively(char *path,unsigned char *content,int size){
+bool dtw_write_binary_recursively(char *path,unsigned char *content,int size){
     
     for(int i = strlen(path)-1;i > 0;i--){
         if(path[i] == '\\' || path[i] == '/'){
@@ -46,44 +48,31 @@ bool  dtw_write_file_recursively(char *path,unsigned char *content,int size){
         return false;
     }
 
-    if(size != 0){
-           //its not possible to determine an binary length
-          fwrite(content, sizeof(unsigned char),size, file);
-    }
-    else{
-        fwrite(content, sizeof(unsigned char),strlen(content), file);
-    }
+    fwrite(content, sizeof(unsigned char),size, file);
+    
     fclose(file);
     return true;
 }
 
 
-char * dtw_load_file_content(char * path,int *size,bool *is_binary){
+char *dtw_load_any_content(char * path,int *size,bool *is_binary){
     FILE *file = fopen(path,"rb");
     if(file == NULL){
         return NULL;
     }
     fseek(file,0,SEEK_END);
-    size = ftell(file);
+    *size = ftell(file);
     fseek(file,0,SEEK_SET);
-    unsigned char *content = (unsigned char*)malloc(size +1);
-    fread(content,1,size,file);
-    //Detect if binary
-    printf("size: %d",size);
-    is_binary = false;
+    unsigned char *content = (unsigned char*)malloc(*size +1);
+    fread(content,1,*size,file);
 
-    for(int i = 0; i < size; i++){
+    *is_binary = false;
+    for(int i = 0;i < *size;i++){
         if(content[i] == 0){
-            is_binary = true;
+            *is_binary = true;
             break;
         }
     }
-
-    if(is_binary == false){
-            content[*size] = '\0';
-    }
-
-
     fclose(file);
     return content;
 }

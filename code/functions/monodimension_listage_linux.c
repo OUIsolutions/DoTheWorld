@@ -2,7 +2,7 @@
 
 #ifdef __linux__
 
-bool private_dtw_verify_if_add(const int type, int d_type){
+bool private_dtw_verify_if_add(const int expected_type, int d_type){
     if (expected_type == DTW_FILE_TYPE  && d_type == DT_REG) {
         return true;
     }
