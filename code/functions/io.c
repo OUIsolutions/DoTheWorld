@@ -84,20 +84,22 @@ char *dtw_load_binary_contnt(char * path,int *size){
 }
 
 
-bool dtw_write_any_content(char *path,unsigned char *content,int size){
+bool dtw_write_any_content(char *path,unsigned char *content,int size,bool create_dirs_if_not_exists){
     
-    for(int i = strlen(path)-1;i > 0;i--){
-        if(path[i] == '\\' || path[i] == '/'){
-            //make these work in c++
-    
-            char *dir_path =(char*)malloc(i);
-            dir_path[i] = '\0';
-            strncpy(dir_path,path,i);
-            
-            dtw_create_dir_recursively(dir_path);
-            free(dir_path);
+    if(create_dirs_if_not_exists){
+        for(int i = strlen(path)-1;i > 0;i--){
+            if(path[i] == '\\' || path[i] == '/'){
+                //make these work in c++
         
-            break;
+                char *dir_path =(char*)malloc(i);
+                dir_path[i] = '\0';
+                strncpy(dir_path,path,i);
+                
+                dtw_create_dir_recursively(dir_path);
+                free(dir_path);
+            
+                break;
+            }
         }
     }
     FILE *file = fopen(path,"wb");
@@ -111,6 +113,6 @@ bool dtw_write_any_content(char *path,unsigned char *content,int size){
     return true;
 }
 
-bool dtw_write_string_file_content(char *path,unsigned char *content){
-    return dtw_write_any_content(path,content,strlen(content));
+bool dtw_write_string_file_content(char *path,unsigned char *content,bool create_dirs_if_not_exists){
+    return dtw_write_any_content(path,content,strlen(content),create_dirs_if_not_exists);
 }
