@@ -27,7 +27,7 @@ void dtw_create_dir_recursively(char *path){
 }
 
 
-bool dtw_write_binary_recursively(char *path,unsigned char *content,int size){
+bool dtw_write_any_content(char *path,unsigned char *content,int size){
     
     for(int i = strlen(path)-1;i > 0;i--){
         if(path[i] == '\\' || path[i] == '/'){
