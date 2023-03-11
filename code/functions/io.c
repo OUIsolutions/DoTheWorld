@@ -27,6 +27,63 @@ void dtw_create_dir_recursively(char *path){
 }
 
 
+
+char *dtw_load_any_content(char * path,int *size,bool *is_binary){
+    FILE *file = fopen(path,"rb");
+    if(file == NULL){
+        return NULL;
+    }
+    fseek(file,0,SEEK_END);
+    *size = ftell(file);
+    fseek(file,0,SEEK_SET);
+    unsigned char *content = (unsigned char*)malloc(*size +1);
+    fread(content,1,*size,file);
+
+    *is_binary = false;
+    for(int i = 0;i < *size;i++){
+        if(content[i] == 0){
+            *is_binary = true;
+            break;
+        }
+    }
+    if(!*is_binary){
+        content[*size] = '\0';
+    }
+
+    fclose(file);
+    return content;
+}
+
+char *dtw_load_string_file_content(char * path){
+    FILE *file = fopen(path,"rb");
+    if(file == NULL){
+        return NULL;
+    }
+    fseek(file,0,SEEK_END);
+    int size = ftell(file);
+    fseek(file,0,SEEK_SET);
+    char *content = (char*)malloc(size +1);
+    fread(content,1,size,file);
+    content[size] = '\0';
+    fclose(file);
+    return content;
+}
+
+char *dtw_load_binary_contnt(char * path,int *size){
+    FILE *file = fopen(path,"rb");
+    if(file == NULL){
+        return NULL;
+    }
+    fseek(file,0,SEEK_END);
+    *size = ftell(file);
+    fseek(file,0,SEEK_SET);
+    char *content = (char*)malloc(*size);
+    fread(content,1,*size,file);
+    fclose(file);
+    return content;
+}
+
+
 bool dtw_write_any_content(char *path,unsigned char *content,int size){
     
     for(int i = strlen(path)-1;i > 0;i--){
@@ -54,26 +111,6 @@ bool dtw_write_any_content(char *path,unsigned char *content,int size){
     return true;
 }
 
-
-char *dtw_load_any_content(char * path,int *size,bool *is_binary){
-    FILE *file = fopen(path,"rb");
-    if(file == NULL){
-        return NULL;
-    }
-    fseek(file,0,SEEK_END);
-    *size = ftell(file);
-    fseek(file,0,SEEK_SET);
-    unsigned char *content = (unsigned char*)malloc(*size +1);
-    fread(content,1,*size,file);
-
-    *is_binary = false;
-    for(int i = 0;i < *size;i++){
-        if(content[i] == 0){
-            *is_binary = true;
-            break;
-        }
-    }
-    fclose(file);
-    return content;
+bool dtw_write_string_file_content(char *path,unsigned char *content){
+    return dtw_write_any_content(path,content,strlen(content));
 }
-
