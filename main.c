@@ -1,12 +1,9 @@
+
 #include "code/doTheWorldDevUsage.c"
 
-int main(int argc, char *argv[])
-{
-
-    int size;
-    bool is_binary;
-    char *teste = dtw_load_string_file_content("README.md");
-    printf("content: %s", teste);
-    dtw_write_string_file_content("teste/vvv/xxx/xx/x/teste.txt", teste, true);
-    free(teste);
+int main(int argc, char *argv[]){
+   struct DtwTreePart *tree = dtw_create_tree_part("README.md",true);
+   dtw_set_tree_part_string_content(tree, "Hello World!sss", 0);
+   dtw_implement_tree_part(tree);
+   dtw_represent_tree_part(tree);
 }
