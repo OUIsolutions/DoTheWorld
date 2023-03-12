@@ -58,6 +58,7 @@ struct DtwStringArray *  dtw_list_files_recursively(const char *path){
 }
 
 struct DtwStringArray * dtw_list_all_recursively(const char *path,bool add_end_bar_to_dir){
+    printf("executou\n");
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,false);
     
     struct DtwStringArray *all = dtw_constructor_string_array();
