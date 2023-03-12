@@ -27,7 +27,6 @@ void dtw_create_dir_recursively(char *path){
 }
 
 
-
 void dtw_remove_any(char* path) {
 
     if(remove(path) == 0){
@@ -50,7 +49,6 @@ void dtw_remove_any(char* path) {
     dirs->delete(dirs);
     
 }
-
 
 
 char *dtw_load_any_content(const char * path,int *size,bool *is_binary){
@@ -172,3 +170,7 @@ void dtw_copy_any(char* src_path, char* dest_path,bool merge) {
     }
 }
 
+void dtw_move_any(char* src_path, char* dest_path,bool merge) {
+    dtw_copy_any(src_path,dest_path,merge);
+    dtw_remove_any(src_path);
+}
