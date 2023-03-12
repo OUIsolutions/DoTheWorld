@@ -49,8 +49,7 @@ bool dtw_ends_with(const char *string, const char *suffix){
     return false;
 }
 
-char *dtw_replace_string(const char *target, const char *old_element, const char *new_element) {
-
+char *private_dtw_replace_string_once(const char *target, const char *old_element, const char *new_element) {
 
     char *pos = strstr(target, old_element);
     if (pos != NULL) {
@@ -69,6 +68,8 @@ char *dtw_replace_string(const char *target, const char *old_element, const char
         strcpy(result + (pos - target) + size_of_new_element, pos + size_of_old_element);
 
         return result;
+
+        
     }
 
     // If the old substring is not found, return a copy of the original string
@@ -77,6 +78,17 @@ char *dtw_replace_string(const char *target, const char *old_element, const char
     return result;
 }
 
+char* dtw_replace_string(const char *target, const char *old_element, const char *new_element) {
+    char *result = (char *)malloc(strlen(target) + 1);
+    strcpy(result, target);
+    char *temp = NULL;
+    while (strstr(result, old_element) != NULL) {
+        temp = private_dtw_replace_string_once(result, old_element, new_element);
+        free(result);
+        result = temp;
+    }
+    return result;
+}
 
 char *dtw_change_beginning_of_string(const char *target,int size, const char *new_element) {
     char *result = (char *)malloc(strlen(target) + size + 1);

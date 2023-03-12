@@ -6,6 +6,8 @@
 
 int main(int argc, char *argv[]){
     
-
+    const char *frase = "eai beleza , ta tudo certo? beleza";
+    char * nova = dtw_replace_string(frase, "beleza", "legal");
+    printf("%s", nova);
 
 }
