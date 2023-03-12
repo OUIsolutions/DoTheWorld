@@ -51,17 +51,27 @@ void dtw_remove_any(char* path) {
     
 }
 
-void dtw_copy_any(char* src_path, char* dest_path) {
+void dtw_copy_any(char* src_path, char* dest_path,bool merge) {
 
+    if(!merge){
+        dtw_remove_any(dest_path);
+    }
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(src_path,true);
     int size = dirs->size;
     int size_to_remove = strlen(src_path);
-    int size_to_add = strlen(dest_path);
     for(int i = 0; i < size; i++){
-        //remove the src_path from the dir path
-        
-    
+        char *new_dir = dtw_change_beginning_of_string(dirs->strings[i],size_to_remove,dest_path);
+        dtw_create_dir_recursively(new_dir);
+        free(new_dir);
     }   
+    dirs->delete(dirs);
+    struct DwtStringArray *files = dtw_list_files_recursively(src_path);
+    size = files->size;
+    for(int i = 0; i < size; i++){
+        char *new_file = dtw_change_beginning_of_string(files->strings[i],size_to_remove,dest_path);
+        dtw_wr
+        free(new_file);
+    }
 }
 
 
