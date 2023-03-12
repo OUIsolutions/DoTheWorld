@@ -3,13 +3,26 @@ struct DtwStringArray {
   int size;         
   int iterator;
   char **strings;       
+  void (*add_string)(struct DtwStringArray *self, char *string);
+  void (*append_string_array)(struct DtwStringArray *self, struct DtwStringArray *other);
+  void (*represent_string_array)(struct DtwStringArray *self);
+  void (*delete)(struct DtwStringArray *self);
 }; // End the structure with a semicolon
+void dtw_add_string(struct DtwStringArray *self, char *string);
+void dtw_append_string_array(struct DtwStringArray *self, struct DtwStringArray *other);
+void dtw_represent_string_array(struct DtwStringArray *self);
+void dtw_delete_string_array(struct DtwStringArray *self);
 
-struct DtwStringArray * dtw_create_string_array(){
+
+struct DtwStringArray * dtw_constructor_string_array(){
     struct DtwStringArray *self = (struct DtwStringArray*)malloc(sizeof(struct DtwStringArray));
     self->size = 0;
     self->iterator = 0;
     self->strings = (char**)malloc(0);
+    self->add_string = dtw_add_string;
+    self->append_string_array = dtw_append_string_array;
+    self->represent_string_array = dtw_represent_string_array;
+    self->delete = dtw_delete_string_array;
     return self;
 }
 
@@ -34,7 +47,7 @@ void dtw_represent_string_array(struct DtwStringArray *self){
         printf("%s\n", self->strings[i]);
     }
 }
-void dtw_free_string_array(struct DtwStringArray *self){
+void dtw_delete_string_array(struct DtwStringArray *self){
     for(int i = 0; i < self->size; i++){
         free(self->strings[i]);
     }

@@ -29,7 +29,7 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
     struct dirent *entry;
 
     //array of directories
-    struct DtwStringArray *dirs = dtw_create_string_array();
+    struct DtwStringArray *dirs = dtw_constructor_string_array();
     int i = 0;
 
     //means that the directory is not found
@@ -51,12 +51,14 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
                 //allocates memory for the directory
                 char *generated_dir = (char*)malloc(strlen(path) + strlen(entry->d_name) + 2);
                 sprintf(generated_dir, "%s/%s", path, entry->d_name);
-                dtw_add_string(dirs, generated_dir);
+                
+                dirs->add_string(dirs, generated_dir);
                 free(generated_dir);
 
             }
             else{
-                dtw_add_string(dirs, entry->d_name);
+                dirs->add_string(dirs, entry->d_name);
+                
             }
 
             i++;

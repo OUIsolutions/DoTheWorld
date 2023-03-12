@@ -34,7 +34,7 @@ struct DtwStringArray * dtw_list_basic(const char *path,int type, bool concat_pa
     char search_path[MAX_PATH];
 
     //array of directories
-    struct DtwStringArray *dirs = dtw_create_string_array();
+    struct DtwStringArray *dirs = dtw_constructor_string_array();
     int i = 0;
 
     // build the search path string
@@ -58,11 +58,13 @@ struct DtwStringArray * dtw_list_basic(const char *path,int type, bool concat_pa
                 // allocate memory for the directory
                 char *generated_dir = (char*)malloc(strlen(path) + strlen(file_data.cFileName) + 2);
                 sprintf(generated_dir, "%s\\%s", path, file_data.cFileName);
-                dtw_add_string(dirs, generated_dir);
+                dirs->add_string(dirs, generated_dir);
+            
                 free(generated_dir);
             }
             else{
-                dtw_add_string(dirs, file_data.cFileName);
+                dirs->add_string(dirs, file_data.cFileName);
+            
             }
 
             i++;
