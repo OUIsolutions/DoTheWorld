@@ -1,7 +1,7 @@
 
 struct DtwStringArray {
   int size;         
-  int iterator;
+
   char **strings;       
   void (*add_string)(struct DtwStringArray *self, char *string);
   void (*merge_string_array)(struct DtwStringArray *self, struct DtwStringArray *other);
@@ -18,7 +18,7 @@ void private_dtw_delete_string_array(struct DtwStringArray *self);
 struct DtwStringArray * dtw_constructor_string_array(){
     struct DtwStringArray *self = (struct DtwStringArray*)malloc(sizeof(struct DtwStringArray));
     self->size = 0;
-    self->iterator = 0;
+
     self->strings = (char**)malloc(0);
     self->add_string = private_dtw_add_string;
     self->merge_string_array = private_dtw_merge_string_array;

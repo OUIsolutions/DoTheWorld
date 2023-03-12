@@ -26,36 +26,32 @@ void dtw_create_dir_recursively(char *path){
     create_dir(path);
 }
 
+
+
 void dtw_remove_any(char* path) {
-    DIR* directory = opendir(path);
-    struct dirent* entry;
-    //check if value is an file 
-    if(directory == NULL){
-        remove(path);
-        return;
+    
+    struct DtwStringArray *files = dtw_list_files_recursively(path);
+    int size = files->size;
+    for(int i = 0; i < size; i++){
+        remove(files->strings[i]);
     }
+    files->delete(files);
 
-    while ((entry = readdir(directory)) != NULL) {
-        char child_path[FILENAME_MAX];
-        snprintf(child_path, FILENAME_MAX, "%s/%s", path, entry->d_name);
 
-        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
-            continue;
-        }
-   
-        if (entry->d_type == DT_DIR) {
-            dtw_remove_any(child_path);
-            rmdir(child_path);
-        } else {
-         
-            remove(child_path);
-        }
+    struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,true);
+    size = dirs->size;
+    for(int i = 0; i < size; i++){
+        printf("valor: %s\n",dirs->strings[i]);
     }
-
-    closedir(directory);
-    remove(path);
+    dirs->delete(dirs);
+    
 }
 
+void dtw_copy_any(char* src_path, char* dest_path) {
+
+    
+    
+}
 
 
 char *dtw_load_any_content(const char * path,int *size,bool *is_binary){

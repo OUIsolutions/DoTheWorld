@@ -27,7 +27,7 @@ bool private_dtw_verify_if_skip(WIN32_FIND_DATAA *entry){
     return false;
 }
 
-struct DtwStringArray * dtw_list_basic(const char *path,int type, bool concat_path){
+struct DtwStringArray * dtw_list_basic(const char *path,int type, bool concat_path, bool add_bar_to_dir){
 
     WIN32_FIND_DATAA file_data;
     HANDLE file_handle;
@@ -71,6 +71,17 @@ struct DtwStringArray * dtw_list_basic(const char *path,int type, bool concat_pa
         }
     } while (FindNextFileA(file_handle, &file_data) != 0);
 
+        if(expected_type == DTW_FOLDER_TYPE && add_bar_to_dir){
+        for(int i = 0; i < dirs->size; i++){
+            char *dir = dirs->strings[i];
+            char *new_dir = (char*)malloc(strlen(dir) + 1);
+            //concat '/' to the end of the directory
+            sprintf(new_dir, "%s/", dir);
+            free(dirs->strings[i]);
+            dirs->strings[i] = new_dir;
+        }
+    }
+    
     FindClose(file_handle);
 
     return dirs;
