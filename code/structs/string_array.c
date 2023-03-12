@@ -3,13 +3,13 @@ struct DtwStringArray {
   int size;         
 
   char **strings;       
-  void (*add_string)(struct DtwStringArray *self, char *string);
+  void (*add_string)(struct DtwStringArray *self,const char *string);
   void (*merge_string_array)(struct DtwStringArray *self, struct DtwStringArray *other);
   void (*represent)(struct DtwStringArray *self);
   void (*delete)(struct DtwStringArray *self);
 }; // End the structure with a semicolon
 
-void private_dtw_add_string(struct DtwStringArray *self, char *string);
+void private_dtw_add_string(struct DtwStringArray *self,const char *string);
 void private_dtw_merge_string_array(struct DtwStringArray *self, struct DtwStringArray *other);
 void private_dtw_represent_string_array(struct DtwStringArray *self);
 void private_dtw_delete_string_array(struct DtwStringArray *self);
@@ -29,7 +29,7 @@ struct DtwStringArray * dtw_constructor_string_array(){
 
 
 // Function prototypes
-void private_dtw_add_string(struct DtwStringArray *self, char *string){
+void private_dtw_add_string(struct DtwStringArray *self,const char *string){
     self->size++;
     self->strings =  (char**)realloc(self->strings, self->size * sizeof(char *));
     self->strings[self->size - 1] = (char*)malloc(strlen(string) + 1);

@@ -29,6 +29,10 @@ void dtw_create_dir_recursively(char *path){
 
 
 void dtw_remove_any(char* path) {
+
+    if(remove(path) == 0){
+        return;
+    }
     
     struct DtwStringArray *files = dtw_list_files_recursively(path);
     int size = files->size;
@@ -41,7 +45,7 @@ void dtw_remove_any(char* path) {
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,true);
     size = dirs->size;
     for(int i = 0; i < size; i++){
-        printf("valor: %s\n",dirs->strings[i]);
+        printf("%s\n",dirs->strings[i]);
     }
     dirs->delete(dirs);
     
