@@ -53,8 +53,17 @@ void dtw_remove_any(char* path) {
 
 void dtw_copy_any(char* src_path, char* dest_path) {
 
+    struct DtwStringArray *dirs = dtw_list_dirs_recursively(src_path,true);
+    int size = dirs->size;
+    int size_to_remove = strlen(src_path);
+    int size_to_add = strlen(dest_path);
+    for(int i = 0; i < size; i++){
+        //remove the src_path from the dir path
+ 
     
+    }   
 }
+
 
 
 char *dtw_load_any_content(const char * path,int *size,bool *is_binary){
