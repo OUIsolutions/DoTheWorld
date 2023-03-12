@@ -13,6 +13,8 @@
         "ratio": "c",
         "tuple": "c",
         "type_traits": "c",
-        "utility": "c"
+        "utility": "c",
+        "string_view": "c",
+        "initializer_list": "c"
     }
 }
