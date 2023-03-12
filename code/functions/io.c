@@ -44,8 +44,8 @@ void dtw_remove_any(char* path) {
 
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,true);
     size = dirs->size;
-    for(int i = 0; i < size; i++){
-        printf("%s\n",dirs->strings[i]);
+    for(int i = dirs->size -1; i >=0; i--){
+        remove(dirs->strings[i]);
     }
     dirs->delete(dirs);
     
