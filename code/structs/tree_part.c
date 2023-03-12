@@ -6,9 +6,9 @@ struct DtwTreePart{
     char *name;
     char *extension;
     char *content;
+    char *sha_256;
     unsigned int last_modification_in_unix;
     unsigned int size;
-    char *sha_256;
     bool binary;
     bool ignore;
 };
@@ -22,12 +22,7 @@ void dtw_set_tree_part_any_content(struct DtwTreePart *self,char *content,int si
 struct DtwTreePart *dtw_create_tree_part(const char *path, bool load_content, bool set_sha_256){
     struct DtwTreePart *self = (struct DtwTreePart *)malloc(sizeof(struct DtwTreePart));
     
-    self->full_path = (char *)malloc(0);
-    self->path = (char *)malloc(0);
-    self->full_name = (char *)malloc(0);
-    self->name = (char *)malloc(0);
-    self->extension = (char *)malloc(0);
-    self->content = (char *)malloc(0);
+    self->full_path = (char *)malloc(1);
 
     self->size = 0;
     self->last_modification_in_unix = 0;
@@ -51,7 +46,7 @@ void dtw_set_tree_part_path(struct DtwTreePart *self,const char *path){
 void dtw_load_tree_part_content_from_file(struct DtwTreePart *self,const char *path,bool set_sha_256){
         int size;
         bool is_binary;
-
+        free(self->content);
         char *content = dtw_load_any_content(path, &size, &is_binary);
         if (content != NULL){
             // get last modification time
@@ -139,10 +134,7 @@ void dtw_represent_tree_part(struct DtwTreePart *self){
 
     printf("-------------------------------------------\n");
     printf("Full Path: %s\n", self->full_path);
-    printf("Path: %s\n", self->path);
-    printf("Full Name: %s\n", self->full_name);
-    printf("Name: %s\n", self->name);
-    printf("Extension: %s\n", self->extension);
+
     printf("Size: %d\n", self->size);
     printf("Binary: %s\n", self->binary ? "true" : "false");
     printf("Ignore: %s\n", self->ignore ? "true" : "false");
@@ -157,10 +149,8 @@ void dtw_represent_tree_part(struct DtwTreePart *self){
 
 void dtw_free_tree_part(struct DtwTreePart *self){
     free(self->full_path);
-    free(self->path);
-    free(self->full_name);
-    free(self->name);
-    free(self->extension);
+
+    free(self->sha_256);
     free(self->content);
     free(self);
 }
