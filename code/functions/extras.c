@@ -52,30 +52,25 @@ bool dtw_ends_with(const char *string, const char *suffix){
 char *private_dtw_replace_string_once(const char *target, const char *old_element, const char *new_element) {
 
     char *pos = strstr(target, old_element);
-    if (pos != NULL) {
-        int size_of_old_element = strlen(old_element);
-        int size_of_new_element = strlen(new_element);
-        // Allocate memory for the new string
-        char *result = (char *)malloc(strlen(target) + size_of_new_element - size_of_old_element + 1);
 
-        // Copy the part of the original string before the old substring
-        strncpy(result, target, pos - target);
+    int size_of_old_element = strlen(old_element);
+    int size_of_new_element = strlen(new_element);
+    // Allocate memory for the new string
+    char *result = (char *)malloc(strlen(target) + size_of_new_element - size_of_old_element + 1);
 
-        // Copy the new substring to the result string
-        strcpy(result + (pos - target), new_element);
+    // Copy the part of the original string before the old substring
+    strncpy(result, target, pos - target);
 
-        // Copy the rest of the original string after the old substring
-        strcpy(result + (pos - target) + size_of_new_element, pos + size_of_old_element);
+    // Copy the new substring to the result string
+    strcpy(result + (pos - target), new_element);
 
-        return result;
+    // Copy the rest of the original string after the old substring
+    strcpy(result + (pos - target) + size_of_new_element, pos + size_of_old_element);
 
-        
-    }
-
-    // If the old substring is not found, return a copy of the original string
-    char *result = (char *)malloc(strlen(target) + 1);
-    strcpy(result, target);
     return result;
+
+    
+
 }
 
 char* dtw_replace_string(const char *target, const char *old_element, const char *new_element) {
