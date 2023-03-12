@@ -36,7 +36,7 @@ char *dtw_load_any_content(char * path,int *size,bool *is_binary){
     fseek(file,0,SEEK_END);
     *size = ftell(file);
     fseek(file,0,SEEK_SET);
-    unsigned char *content = (unsigned char*)malloc(*size +1);
+    char *content = (char*)malloc(*size +1);
     fread(content,1,*size,file);
 
     *is_binary = false;
@@ -84,7 +84,7 @@ char *dtw_load_binary_contnt(char * path,int *size){
 }
 
 
-bool dtw_write_any_content(char *path,unsigned char *content,int size,bool create_dirs_if_not_exists){
+bool dtw_write_any_content(char *path,char *content,int size,bool create_dirs_if_not_exists){
     //Iterate through the path and create directories if they don't exist
     if(create_dirs_if_not_exists){
         for(int i = strlen(path)-1;i > 0;i--){
@@ -107,12 +107,12 @@ bool dtw_write_any_content(char *path,unsigned char *content,int size,bool creat
         return false;
     }
 
-    fwrite(content, sizeof(unsigned char),size, file);
+    fwrite(content, sizeof(char),size, file);
     
     fclose(file);
     return true;
 }
 
-bool dtw_write_string_file_content(char *path,unsigned char *content,bool create_dirs_if_not_exists){
+bool dtw_write_string_file_content(char *path,char *content,bool create_dirs_if_not_exists){
     return dtw_write_any_content(path,content,strlen(content),create_dirs_if_not_exists);
 }

@@ -1,7 +1,7 @@
 
 struct DtwTreePart{
     char *full_path;
-    unsigned char *content;
+    char *content;
     unsigned int last_modification_in_unix;
     unsigned int size;
     char *sha_256;
