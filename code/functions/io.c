@@ -51,29 +51,6 @@ void dtw_remove_any(char* path) {
     
 }
 
-void dtw_copy_any(char* src_path, char* dest_path,bool merge) {
-
-    if(!merge){
-        dtw_remove_any(dest_path);
-    }
-    struct DtwStringArray *dirs = dtw_list_dirs_recursively(src_path,true);
-    int size = dirs->size;
-    int size_to_remove = strlen(src_path);
-    for(int i = 0; i < size; i++){
-        char *new_dir = dtw_change_beginning_of_string(dirs->strings[i],size_to_remove,dest_path);
-        dtw_create_dir_recursively(new_dir);
-        free(new_dir);
-    }   
-    dirs->delete(dirs);
-    struct DwtStringArray *files = dtw_list_files_recursively(src_path);
-    size = files->size;
-    for(int i = 0; i < size; i++){
-        char *new_file = dtw_change_beginning_of_string(files->strings[i],size_to_remove,dest_path);
-        dtw_wr
-        free(new_file);
-    }
-}
-
 
 
 char *dtw_load_any_content(const char * path,int *size,bool *is_binary){
@@ -167,3 +144,31 @@ bool dtw_write_any_content(const char *path,char *content,int size,bool create_d
 bool dtw_write_string_file_content(const char *path,char *content,bool create_dirs_if_not_exists){
     return dtw_write_any_content(path,content,strlen(content),create_dirs_if_not_exists);
 }
+
+void dtw_copy_any(char* src_path, char* dest_path,bool merge) {
+
+    if(!merge){
+        dtw_remove_any(dest_path);
+    }
+    struct DtwStringArray *dirs = dtw_list_dirs_recursively(src_path,true);
+    int size = dirs->size;
+    int size_to_remove = strlen(src_path);
+    for(int i = 0; i < size; i++){
+        char *new_dir = dtw_change_beginning_of_string(dirs->strings[i],size_to_remove,dest_path);
+        dtw_create_dir_recursively(new_dir);
+        free(new_dir);
+    }   
+    dirs->delete(dirs);
+    struct DtwStringArray *files = dtw_list_files_recursively(src_path);
+    size = files->size;
+    for(int i = 0; i < size; i++){
+        int file_size;
+        bool is_binary;
+        char *content = dtw_load_any_content(files->strings[i],&file_size,&is_binary);
+        char *new_file = dtw_change_beginning_of_string(files->strings[i],size_to_remove,dest_path);
+        dtw_write_any_content(new_file,content,file_size,false);
+        free(content);
+        free(new_file);
+    }
+}
+
