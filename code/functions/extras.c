@@ -32,4 +32,19 @@ char * dtw_get_file_last_motification_in_string(const char *path){
 }
 
 
+bool dtw_starts_with(const char *string, const char *prefix){
+    if(strncmp(string, prefix, strlen(prefix)) == 0){
+        return true;
+    }
+    return false;
+}
 
+bool dtw_ends_with(const char *string, const char *suffix){
+    if(strlen(string) < strlen(suffix)){
+        return false;
+    }
+    if(strcmp(string + strlen(string) - strlen(suffix), suffix) == 0){
+        return true;
+    }
+    return false;
+}

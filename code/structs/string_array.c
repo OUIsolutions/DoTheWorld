@@ -4,13 +4,13 @@ struct DtwStringArray {
   int iterator;
   char **strings;       
   void (*add_string)(struct DtwStringArray *self, char *string);
-  void (*append_string_array)(struct DtwStringArray *self, struct DtwStringArray *other);
+  void (*merge_string_array)(struct DtwStringArray *self, struct DtwStringArray *other);
   void (*represent)(struct DtwStringArray *self);
   void (*delete)(struct DtwStringArray *self);
 }; // End the structure with a semicolon
 
 void private_dtw_add_string(struct DtwStringArray *self, char *string);
-void private_dtw_append_string_array(struct DtwStringArray *self, struct DtwStringArray *other);
+void private_dtw_merge_string_array(struct DtwStringArray *self, struct DtwStringArray *other);
 void private_dtw_represent_string_array(struct DtwStringArray *self);
 void private_dtw_delete_string_array(struct DtwStringArray *self);
 
@@ -21,7 +21,7 @@ struct DtwStringArray * dtw_constructor_string_array(){
     self->iterator = 0;
     self->strings = (char**)malloc(0);
     self->add_string = private_dtw_add_string;
-    self->append_string_array = private_dtw_append_string_array;
+    self->merge_string_array = private_dtw_merge_string_array;
     self->represent= private_dtw_represent_string_array;
     self->delete = private_dtw_delete_string_array;
     return self;
@@ -36,7 +36,8 @@ void private_dtw_add_string(struct DtwStringArray *self, char *string){
     strcpy(self->strings[self->size - 1], string);
 }
 
-void private_dtw_append_string_array(struct DtwStringArray *self, struct DtwStringArray *other){
+
+void private_dtw_merge_string_array(struct DtwStringArray *self, struct DtwStringArray *other){
     for(int i = 0; i < other->size; i++){
         private_dtw_add_string(self, other->strings[i]);
     }

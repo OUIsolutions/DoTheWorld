@@ -27,7 +27,6 @@ void dtw_create_dir_recursively(char *path){
 }
 
 
-
 char *dtw_load_any_content(const char * path,int *size,bool *is_binary){
     FILE *file = fopen(path,"rb");
     if(file == NULL){
@@ -54,6 +53,7 @@ char *dtw_load_any_content(const char * path,int *size,bool *is_binary){
     return content;
 }
 
+
 char *dtw_load_string_file_content(const char * path){
     FILE *file = fopen(path,"rb");
     if(file == NULL){
@@ -68,6 +68,7 @@ char *dtw_load_string_file_content(const char * path){
     fclose(file);
     return content;
 }
+
 
 char *dtw_load_binary_contnt(const char * path,int *size){
     FILE *file = fopen(path,"rb");
@@ -112,6 +113,7 @@ bool dtw_write_any_content(const char *path,char *content,int size,bool create_d
     fclose(file);
     return true;
 }
+
 
 bool dtw_write_string_file_content(const char *path,char *content,bool create_dirs_if_not_exists){
     return dtw_write_any_content(path,content,strlen(content),create_dirs_if_not_exists);
