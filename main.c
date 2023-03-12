@@ -2,13 +2,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include "code/structs/path.c"
+#include "code/doTheWorldDevUsage.c"
 
 int main(int argc, char *argv[]){
-    
-    struct DtwPath *path = dtw_constructor_path("/home/andres/Documentos/teste.c");
-    path->set_name(path, "teste123");
-    path->set_extension(path, "txt");
-    path->represent(path);
-    path->delete(path);
+    /*
+    dtw_write_string_file_content("exemple/a/b/teste.txt","teste",true);
+    dtw_write_string_file_content("exemple/a/b/teste2.txt","teste2",true);
+    dtw_write_string_file_content("exemple/a/b/teste3.txt","teste3",true);
+    dtw_write_string_file_content("exemple/a/b/teste4.txt","teste4",true);
+    */
+    dtw_remove_any("exemple");
+
 }

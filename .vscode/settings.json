@@ -18,6 +18,7 @@
         "initializer_list": "c",
         "sha-256.h": "c",
         "stdint.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "stdbool.h": "c"
     }
 }
