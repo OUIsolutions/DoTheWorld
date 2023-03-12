@@ -85,7 +85,7 @@ char *dtw_load_binary_contnt(char * path,int *size){
 
 
 bool dtw_write_any_content(char *path,unsigned char *content,int size,bool create_dirs_if_not_exists){
-    
+    //Iterate through the path and create directories if they don't exist
     if(create_dirs_if_not_exists){
         for(int i = strlen(path)-1;i > 0;i--){
             if(path[i] == '\\' || path[i] == '/'){

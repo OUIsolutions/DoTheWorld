@@ -2,7 +2,7 @@
 
 #ifdef __linux__
 
-bool private_dtw_verify_if_add(const int expected_type, int d_type){
+bool dtw_verify_if_add(const int expected_type, int d_type){
     if (expected_type == DTW_FILE_TYPE  && d_type == DT_REG) {
         return true;
     }
@@ -16,7 +16,7 @@ bool private_dtw_verify_if_add(const int expected_type, int d_type){
     }
     return false;
 }
-bool private_dtw_verify_if_skip(struct dirent *entry){
+bool dtw_verify_if_skip(struct dirent *entry){
         if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
             return true;
         }
@@ -40,11 +40,11 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
     //reads the directory and adds the directories to the array
     while ((entry = readdir(dir)) != NULL) {
         //means is not a directory
-        if (private_dtw_verify_if_skip(entry)){
+        if (dtw_verify_if_skip(entry)){
             continue;
         }
     
-        if (private_dtw_verify_if_add(expected_type,entry->d_type)) {
+        if (dtw_verify_if_add(expected_type,entry->d_type)) {
             
             
             if(concat_path){
