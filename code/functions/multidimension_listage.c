@@ -1,6 +1,6 @@
 
 
-struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool add_bar_to_dir){
+struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool add_end_bar_to_dir){
 
         struct  DtwStringArray *dirs  = dtw_constructor_string_array();
         //verify if the path is a directory
@@ -26,7 +26,7 @@ struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool add_bar_
         //unsifth path in dirs 
         
         
-        if(add_bar_to_dir){
+        if(add_end_bar_to_dir){
         for(int i = 0; i < dirs->size; i++){
                 char *dir = dirs->strings[i];
                 char *new_dir = (char*)malloc(strlen(dir) + 1);
@@ -57,13 +57,13 @@ struct DtwStringArray *  dtw_list_files_recursively(const char *path){
     return files;
 }
 
-struct DtwStringArray * dtw_list_all_recursively(const char *path,bool add_bar_to_dir){
+struct DtwStringArray * dtw_list_all_recursively(const char *path,bool add_end_bar_to_dir){
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,false);
     
     struct DtwStringArray *all = dtw_constructor_string_array();
     
     for(int i = 0; i < dirs->size; i++){
-        if(add_bar_to_dir){
+        if(add_end_bar_to_dir){
             char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 1);
             sprintf(formated_dir,"%s/",dirs->strings[i]);
             all->add_string(all,formated_dir);

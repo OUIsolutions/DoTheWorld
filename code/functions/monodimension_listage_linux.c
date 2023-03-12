@@ -24,7 +24,7 @@ bool private_dtw_verify_if_skip(struct dirent *entry){
         return false;
 }
 
-struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool concat_path,bool add_bar_to_dir){
+struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool concat_path,bool add_end_bar_to_dir){
 
     DIR *dir;
     struct dirent *entry;
@@ -66,7 +66,7 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
         }
     }
 
-    if(expected_type == DTW_FOLDER_TYPE && add_bar_to_dir){
+    if(expected_type == DTW_FOLDER_TYPE && add_end_bar_to_dir){
         for(int i = 0; i < dirs->size; i++){
             char *dir = dirs->strings[i];
             char *new_dir = (char*)malloc(strlen(dir) + 1);
