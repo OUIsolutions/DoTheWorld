@@ -59,7 +59,7 @@ void dtw_copy_any(char* src_path, char* dest_path) {
     int size_to_add = strlen(dest_path);
     for(int i = 0; i < size; i++){
         //remove the src_path from the dir path
- 
+        
     
     }   
 }

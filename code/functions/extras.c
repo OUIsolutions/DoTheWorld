@@ -76,3 +76,12 @@ char *dtw_replace_string(const char *target, const char *old_element, const char
     strcpy(result, target);
     return result;
 }
+
+
+char *dtw_change_beginning_of_string(const char *target,int size, const char *new_element) {
+    char *result = (char *)malloc(strlen(target) + size + 1);
+    strcpy(result, new_element);
+    strcat(result, target + size);
+    return result;
+}
+
