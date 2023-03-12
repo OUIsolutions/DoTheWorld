@@ -7,6 +7,8 @@
 #include "functions/extras.c"
 #include "structs/string_array.c"
 #include "structs/tree_part.c"
+#include "functions/monodimension_listage_linux.c"
+#include "functions/monodimension_listage_win32.c"
 #include "functions/multidimension_listage.c"
 #include "functions/listage_wrappers.c"
 

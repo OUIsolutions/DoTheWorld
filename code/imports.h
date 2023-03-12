@@ -1,3 +1,5 @@
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,6 +8,7 @@
 #include <sys/stat.h>
 #include <time.h>
 #include "dependencies/sha-256.c"
+
 
 #ifdef __linux__
   #include <dirent.h>

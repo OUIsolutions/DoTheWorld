@@ -71,7 +71,7 @@ void dtw_set_tree_part_any_content(
     // calc sha25
     if (set_sha_256){
         free(self->sha_256);
-        self->sha_256 = dtw_generate_content_sha_from_any(content, size);
+        //self->sha_256 = dtw_generate_content_sha_from_any(content, size);
     }
     if (size == 0){
         self->size = strlen(content);
