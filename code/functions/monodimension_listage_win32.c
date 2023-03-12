@@ -2,7 +2,7 @@
 #ifdef _WIN32
 
 
-bool dtw_private_verify_if_add(const int expected_type, WIN32_FIND_DATAA entry){
+bool private_dtw_verify_if_add(const int expected_type, WIN32_FIND_DATAA entry){
     #define WIN32_FILETYPE 32
 
     if (expected_type == DTW_FILE_TYPE && entry.dwFileAttributes == WIN32_FILETYPE) {
@@ -20,7 +20,7 @@ bool dtw_private_verify_if_add(const int expected_type, WIN32_FIND_DATAA entry){
     return false;
 }
 
-bool dtw_verify_if_skip(WIN32_FIND_DATAA *entry){
+bool private_dtw_verify_if_skip(WIN32_FIND_DATAA *entry){
     if (strcmp(entry->cFileName, ".") == 0 || strcmp(entry->cFileName, "..") == 0) {
         return true;
     }
@@ -47,12 +47,12 @@ struct DtwStringArray * dtw_list_basic(const char *path,int type, bool concat_pa
 
     do {
         // skip "." and ".." directories
-        if (dtw_verify_if_skip(&file_data)){
+        if (private_dtw_verify_if_skip(&file_data)){
             continue;
         }
 
         // verify if it's a file or directory
-        if (dtw_private_verify_if_add(type, file_data)) {
+        if (private_dtw_verify_if_add(type, file_data)) {
             
             if(concat_path){
                 // allocate memory for the directory
