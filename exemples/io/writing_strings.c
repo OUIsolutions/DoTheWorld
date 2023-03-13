@@ -6,5 +6,5 @@ int main(int argc, char *argv[]){
   
   bool result = dtw_write_string_file_content("teste/test.txt","Hello World!");
   printf("result: %s\n",result ? "true" : "false");
-
+  return 0;
 }
