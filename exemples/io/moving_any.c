@@ -10,7 +10,7 @@ int main(int argc, char *argv[]){
   dtw_move_any("../exemple_folder","exemple_folder_copy",merge);
   
   //| you can use move_any to move a file
-  dtw_move_any("../exemple_folder_copy/deer.jpg","deer.jpg",false);
+  dtw_move_any("exemple_folder_copy/deer.jpg","deer.jpg",false);
 
   return 0;
 }
