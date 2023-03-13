@@ -4,7 +4,7 @@
 
 int main(int argc, char *argv[]){
  
-  const char *path = "writing_any.c";
+  const char *path = "exemple_folder/deer.jpg";
   int size;
   bool is_binary;
   //load any file, is useful if you don't know if the file is binary or not
