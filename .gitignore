@@ -6,6 +6,7 @@ exemple
 *.ko
 *.obj
 *.elf
+teste
 deer2.jpg
 teste.py
 # Linker output

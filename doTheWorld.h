@@ -1197,7 +1197,7 @@ char *dtw_load_binary_content(const char * path,int *size){
 }
 
 
-bool dtw_write_any_content(const char *path,char *content,int size){
+bool dtw_write_any_content(const char *path,const char *content,int size){
     //Iterate through the path and create directories if they don't exist
     
     for(int i = strlen(path)-1;i > 0;i--){
