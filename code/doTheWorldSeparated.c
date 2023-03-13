@@ -1,9 +1,7 @@
-//Warning : This is a dev version, it is not optimized and may not work properly
-// Do not use it in production, use the release version "doTheWorld.c" instead
-
 #include "imports.h"
 #include "constants.h"
 #include "structs/string_array.c"
+#include "structs/path.c"
 #include "functions/extras.c"
 
 #include "functions/monodimension_listage_linux.c"

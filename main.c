@@ -6,6 +6,7 @@
 
 int main(int argc, char *argv[]){
 
-    struct DtwStringArray * path = dtw_list_all_recursively("code",true);
-    printf("%i",path->size);
+   struct DtwPath *path = dtw_constructor_path("/home/andres/DoTheWorld.c");
+   path->represent(path);
+
 }
