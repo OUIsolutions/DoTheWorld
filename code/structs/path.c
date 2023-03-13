@@ -84,7 +84,12 @@ bool private_dtw_path_changed(struct DtwPath *self){
 char * private_dtw_get_full_name(struct DtwPath *self){
     char *full_name = (char *)malloc(strlen(self->name) + strlen(self->extension) +1);
     //concat the name and extension with / 
-    sprintf(full_name, "%s.%s", self->name, self->extension);
+    //if the extension is empty, then the full name is just the name
+    if(strcmp(self->extension, "") == 0){
+        sprintf(full_name, "%s", self->name);
+    }else{
+        sprintf(full_name, "%s.%s", self->name, self->extension);
+    }
     return full_name;
 }
 char * private_dtw_get_name(struct DtwPath *self){
@@ -98,7 +103,14 @@ char * private_dtw_get_extension(struct DtwPath *self){
 char * private_dtw_get_full_path(struct DtwPath *self){
     char *full_path = (char *)malloc(strlen(self->dir) + strlen(self->name) + strlen(self->extension) +3);
     //concat the path, name and extension with / 
-    sprintf(full_path, "%s/%s.%s", self->dir, self->name, self->extension);
+    char *full_name = self->get_full_name(self);
+    //if the dir is empty, then the full path is just the full name
+    if(strcmp(self->dir, "") == 0){
+        sprintf(full_path, "%s", full_name);
+    }else{
+        sprintf(full_path, "%s/%s", self->dir, full_name);
+    }
+    free(full_name);
     return full_path;
 }
 
@@ -140,9 +152,12 @@ void private_dtw_set_full_name(struct DtwPath * self, const char * full_name){
             strcpy(extension, full_name + i + 1);
             self->set_extension(self, extension);
             free(extension);
-            break;
+            return;
         }
     }
+    //means there is no .
+    self->set_name(self, full_name);
+
 }
 void private_dtw_set_full_path(struct DtwPath *self, const char *ful_path) {
 
@@ -165,10 +180,11 @@ void private_dtw_set_full_path(struct DtwPath *self, const char *ful_path) {
             strcpy(name, ful_path + i + 1);
             self->set_full_name(self, name);
             free(name);
-            break;
+            return;
         }
-
     }
+    self->set_full_name(self, ful_path);
+
 }
 
 
