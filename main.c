@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[]){
 
-   struct DtwPath *path = dtw_constructor_path("teste/a.py");
-   path->represent(path);
+  struct DtwTreePart *tree_part = dtw_tree_part_constructor("deer.jpgaa",true);
+  tree_part->represent(tree_part);
 
 }

@@ -20,6 +20,7 @@
         "stdint.h": "c",
         "stdlib.h": "c",
         "stdbool.h": "c",
-        "dotheworldseparated.h": "c"
+        "dotheworldseparated.h": "c",
+        "cstdlib": "c"
     }
 }
