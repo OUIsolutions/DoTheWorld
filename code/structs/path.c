@@ -1,11 +1,12 @@
 
 struct DtwPath {
+    char *first_full_path;
     char *dir;
     char *name;
     char *extension;
 
     //Getters
-
+    bool  (*changed)(struct DtwPath *self);
     char *(*get_full_name) (struct DtwPath *self);
     char *(*get_name) (struct DtwPath *self);
     char *(*get_extension) (struct DtwPath *self);
@@ -25,7 +26,7 @@ struct DtwPath {
 
 
 };
-
+bool  private_dtw_path_changed(struct DtwPath *self);
 char *private_dtw_get_full_name(struct DtwPath *self);
 char *private_dtw_get_name(struct DtwPath *self);
 char *private_dtw_get_extension(struct DtwPath *self);
@@ -50,7 +51,7 @@ struct DtwPath * dtw_constructor_path( const char *ful_path) {
     self->name = (char *)malloc(0);
     self->extension = (char *)malloc(0);
 
-
+    self->changed = private_dtw_path_changed;
     self->get_full_name =private_dtw_get_full_name;
     self->get_name = private_dtw_get_name;
     self->get_extension = private_dtw_get_extension;
@@ -69,10 +70,16 @@ struct DtwPath * dtw_constructor_path( const char *ful_path) {
     self->delete = private_dtw_destructor_path;
 
     self->set_full_path(self, ful_path);
+    self->first_full_path = self->get_full_path(self);
 
     return self;
 }
-
+bool private_dtw_path_changed(struct DtwPath *self){
+    if(strcmp(self->first_full_path, self->get_full_path(self)) == 0){
+        return false;
+    }
+    return true;
+}
 
 char * private_dtw_get_full_name(struct DtwPath *self){
     char *full_name = (char *)malloc(strlen(self->name) + strlen(self->extension) +1);
@@ -167,6 +174,7 @@ void private_dtw_set_full_path(struct DtwPath *self, const char *ful_path) {
 
 void private_dtw_represent_path(struct DtwPath *self){
     printf("Full Path: %s\n", self->get_full_path(self));
+    printf("Changed: %s\n", self->changed(self) ? "true" : "false");
     printf("Dir: %s\n", self->get_dir(self));
     printf("Full Name: %s\n", self->get_full_name(self));
     printf("Name: %s\n", self->get_name(self));
@@ -176,8 +184,10 @@ void private_dtw_represent_path(struct DtwPath *self){
 
 
 void private_dtw_destructor_path(struct DtwPath *self) {
+    free(self->first_full_path);
     free(self->dir);
     free(self->name);
     free(self->extension);
+    free(self);
 }
 

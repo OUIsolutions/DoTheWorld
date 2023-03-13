@@ -7,6 +7,7 @@
 int main(int argc, char *argv[]){
 
    struct DtwPath *path = dtw_constructor_path("/home/andres/DoTheWorld.c");
+   path->set_full_name(path, "DoTheWorldd.c");
    path->represent(path);
 
 }
