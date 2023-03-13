@@ -14,5 +14,6 @@ int main(int argc, char *argv[]){
   }
   printf("size: %d\n",size);
   printf("content: %s\n",content);
+  free(content);
   return 0;
 }
