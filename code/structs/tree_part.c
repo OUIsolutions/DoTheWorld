@@ -28,7 +28,7 @@ void private_dtw_represent_tree_part(struct DtwTreePart *self);
 void private_dtw_tree_part_destructor(struct DtwTreePart *self);
 
 
-struct DtwTreePart * dtw_tree_part_constructordtw_tree_part_constructor(const char *full_path,bool load_content){
+struct DtwTreePart * dtw_tree_part_constructor(const char *full_path,bool load_content){
     struct DtwTreePart *self = (struct DtwTreePart *)malloc(sizeof(struct DtwTreePart));
     self->path = dtw_constructor_path(full_path);
     self->content_exist = false;

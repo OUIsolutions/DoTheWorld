@@ -1,5 +1,5 @@
 
-#include "code/doTheWorldSeparated.c"
+#include "code/doTheWorldSeparated.h"
 
 int main(int argc, char *argv[]){
 

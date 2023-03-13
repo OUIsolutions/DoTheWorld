@@ -1,4 +1,7 @@
 #include "imports.h"
+#include "dependencies/sha-256.h"
+#include "dependencies/sha-256.c"
+
 #include "constants.h"
 #include "structs/string_array.c"
 #include "structs/path.c"

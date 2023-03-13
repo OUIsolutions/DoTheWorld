@@ -7,8 +7,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <time.h>
-#include "dependencies/sha-256.h"
-#include "dependencies/sha-256.c"
+
 
 
 #ifdef __linux__
