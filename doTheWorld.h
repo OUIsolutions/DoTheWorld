@@ -1167,7 +1167,7 @@ char *dtw_load_any_content(const char * path,int *size,bool *is_binary){
 
 
 char *dtw_load_string_file_content(const char * path){
-    FILE *file = fopen(path,"rb");
+    FILE *file = fopen(path,"r");
     if(file == NULL){
         return NULL;
     }
