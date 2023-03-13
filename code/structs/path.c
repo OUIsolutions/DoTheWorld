@@ -120,26 +120,32 @@ char * private_dtw_get_dir(struct DtwPath *self){
 
 
 void private_dtw_set_extension(struct DtwPath *self, const char *extension){
-
+    if(strcmp(extension, "") == 0){
+        return;
+    }
     self->extension = (char *)realloc(self->extension, strlen(extension));
     strcpy(self->extension, extension);
 }
 
 
 void private_dtw_set_name(struct DtwPath * self, const char * name){
-
+    if(strcmp(name, "") == 0){
+        return;
+    }
     self->name = (char *)realloc(self->name, strlen(name));
     strcpy(self->name, name);
 }
 
 void private_dtw_set_dir(struct DtwPath *self, const char *path){
-
+    if(strcmp(path, "") == 0){
+        return;
+    }
     self->dir = (char *)realloc(self->dir, strlen(path));
     strcpy(self->dir, path);
 }
 
 void private_dtw_set_full_name(struct DtwPath * self, const char * full_name){
- 
+    
     for(int i = 0; i < strlen(full_name); i++){
         if(full_name[i] == '.'){
             char *name = (char *)malloc(i);
@@ -155,9 +161,8 @@ void private_dtw_set_full_name(struct DtwPath * self, const char * full_name){
             return;
         }
     }
-    //means there is no .
     self->set_name(self, full_name);
-
+    
 }
 void private_dtw_set_full_path(struct DtwPath *self, const char *ful_path) {
 

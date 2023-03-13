@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[]){
 
-   struct DtwPath *path = dtw_constructor_path("teste/teste.c");
+   struct DtwPath *path = dtw_constructor_path("teste/a.py");
    path->represent(path);
 
 }
