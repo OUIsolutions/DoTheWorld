@@ -3,5 +3,8 @@
 
 int main(int argc, char *argv[]){
 
-   dtw_move_any("README.md","README2.md",true);
+    struct DtwTreePart *tree = dtw_tree_part_constructor("README.md",false);
+    tree->set_string_content(tree,"Hello World!");
+    tree->represent(tree);
+
 }
