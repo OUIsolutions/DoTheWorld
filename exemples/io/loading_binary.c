@@ -4,7 +4,7 @@
 
 int main(int argc, char *argv[]){
  
-  const char *path = "exemple_folder/deer.jpg";
+  const char *path = "../exemple_folder/deer.jpg";
   int size;
   //load a binary file content
   const char *content = dtw_load_binary_content(path,&size);
