@@ -2,7 +2,7 @@
 struct DtwTreePart{
     
     struct DtwPath *path;
-    bool content_exist;
+    bool content_exist_in_memory;
     long last_modification_time;
     bool content_exist_in_hardware;
     bool is_binary;
@@ -35,7 +35,7 @@ void private_dtw_auto_implement_tre_part(struct DtwTreePart *self);
 struct DtwTreePart * dtw_tree_part_constructor(const char *full_path,bool load_content){
     struct DtwTreePart *self = (struct DtwTreePart *)malloc(sizeof(struct DtwTreePart));
     self->path = dtw_constructor_path(full_path);
-    self->content_exist = false;
+    self->content_exist_in_memory = false;
     self->content_exist_in_hardware = false;
     self->is_binary = false;
     self->hawdware_content_sha = (char *)malloc(0);
@@ -60,7 +60,7 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *full_path,bool load_c
 
 
 void private_dtw_set_any_content(struct DtwTreePart *self,const char *content,int content_size,bool is_binary,bool set_last_modification_time){
-    self->content_exist = true;
+    self->content_exist_in_memory = true;
     self->is_binary = is_binary;
     self->content = (char *)realloc(self->content,content_size);
     memcpy(self->content,content,content_size);
@@ -85,7 +85,7 @@ void private_dtw_load_content_from_hardware(struct DtwTreePart *self){
     self->content = dtw_load_any_content(full_path,&size,&is_binary);
     
     if(self->content != NULL){
-        self->content_exist = true;
+        self->content_exist_in_memory = true;
         self->is_binary = is_binary;
         self->content_size = size;
         self->last_modification_time = dtw_get_file_last_motification_in_unix(full_path);
@@ -96,7 +96,7 @@ void private_dtw_load_content_from_hardware(struct DtwTreePart *self){
     free(full_path);
 }
 char *private_dtw_get_content_sha(struct DtwTreePart *self){
-    if(self->content_exist){
+    if(self->content_exist_in_memory){
         return dtw_generate_sha_from_string(self->content);
     }
     return NULL;
@@ -112,8 +112,8 @@ void private_dtw_represent_tree_part(struct DtwTreePart *self){
     char *full_path = self->path->get_full_path(self->path);
     printf("------------------------------------------------------------\n");
     printf("Path: %s\n",full_path);
-    printf("Content Exist: %s\n",self->content_exist ? "true" : "false");
-    if(self->content_exist == true || self->content_exist_in_hardware == true){
+    printf("Content Exist: %s\n",self->content_exist_in_memory ? "true" : "false");
+    if(self->content_exist_in_memory == true || self->content_exist_in_hardware == true){
         
         char *last_moditication_in_string = self->last_modification_time_in_string(self);
 
@@ -123,7 +123,7 @@ void private_dtw_represent_tree_part(struct DtwTreePart *self){
         printf("Last Modification Time: %s\n",last_moditication_in_string);
         printf("Content Size: %d\n",self->content_size);
         printf("Hardware SHA: %s\n",self->hawdware_content_sha);    
-        if(self->content_exist == true){
+        if(self->content_exist_in_memory == true){
             char *content_sha = self->get_content_sha(self);
             printf("Content SHA:  %s\n",content_sha);
             printf ("Content: %s\n",self->content);
@@ -147,7 +147,7 @@ void private_dtw_auto_implement_tre_part(struct DtwTreePart *self){
 }
 
 void private_dtw_free_content(struct DtwTreePart *self){
-    self->content_exist = false;
+    self->content_exist_in_memory = false;
     self->content = (char *)realloc(self->content,0);
 }
 void private_dtw_tree_part_destructor(struct DtwTreePart *self){
