@@ -92,3 +92,14 @@ char *dtw_change_beginning_of_string(const char *target,int size, const char *ne
     return result;
 }
 
+
+void private_dtw_add_end_bar_to_dirs_string_array(struct DtwStringArray * dirs){
+    for(int i = 0; i < dirs->size; i++){
+        if(!dtw_ends_with(dirs->strings[i], "/")){
+             char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 2);
+             sprintf(formated_dir,"%s/",dirs->strings[i]);
+             dirs->set_value(dirs,i,formated_dir);
+             free(formated_dir);
+        }
+    }
+}
