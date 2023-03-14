@@ -211,7 +211,6 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
 
     struct DtwStringArray *files = dtw_list_files_recursively(src_path);
     size = files->size;
-
     for(int i = 0; i < size; i++){
         int file_size;
         bool is_binary;
@@ -222,7 +221,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
         free(new_file);
     }
 
-    files->delete_string_array(files);
+    //files->delete_string_array(files);
     
     return true;
     

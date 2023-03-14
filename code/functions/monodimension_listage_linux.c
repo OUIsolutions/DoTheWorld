@@ -67,14 +67,8 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
     }
 
     if(expected_type == DTW_FOLDER_TYPE && add_end_bar_to_dir){
-        for(int i = 0; i < dirs->size; i++){
-            char *dir = dirs->strings[i];
-            char *new_dir = (char*)malloc(strlen(dir) + 1);
-            //concat '/' to the end of the directory
-            sprintf(new_dir, "%s/", dir);
-            free(dirs->strings[i]);
-            dirs->strings[i] = new_dir;
-        }
+        private_dtw_add_end_bar_to_dirs_string_array(dirs);
+        
     }
     closedir(dir);
 
