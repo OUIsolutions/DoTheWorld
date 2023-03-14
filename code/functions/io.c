@@ -54,6 +54,7 @@ void dtw_remove_any(char* path) {
 char *dtw_load_any_content(const char * path,int *size,bool *is_binary){
     FILE *file = fopen(path,"rb");
     if(file == NULL){
+        free(file);
         return NULL;
     }
     fseek(file,0,SEEK_END);

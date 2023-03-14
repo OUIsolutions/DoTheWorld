@@ -60,6 +60,7 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *full_path,bool load_c
 
 
 void private_dtw_set_any_content(struct DtwTreePart *self,const char *content,int content_size,bool is_binary,bool set_last_modification_time){
+    self->free_content(self);
     self->content_exist_in_memory = true;
     self->is_binary = is_binary;
     self->content = (char *)realloc(self->content,content_size);
@@ -73,6 +74,7 @@ void private_dtw_set_any_content(struct DtwTreePart *self,const char *content,in
 
 void private_dtw_set_string_content(struct DtwTreePart *self,const char *content){
     self->set_any_content(self,content,strlen(content),false,true);
+    self->content[self->content_size] = '\0';
 }
 void private_dtw_set_binary_content(struct DtwTreePart *self,const char *content,int content_size){
     self->set_any_content(self,content,content_size,true,true);
@@ -82,18 +84,20 @@ void private_dtw_load_content_from_hardware(struct DtwTreePart *self){
     int size;
     bool is_binary;
     char *full_path = self->path->get_full_path(self->path);
-    self->content = dtw_load_any_content(full_path,&size,&is_binary);
-    
-    if(self->content != NULL){
-        self->content_exist_in_memory = true;
-        self->is_binary = is_binary;
-        self->content_size = size;
-        self->last_modification_time = dtw_get_file_last_motification_in_unix(full_path);
-        self->content_exist_in_hardware = true;
-        free(self->hawdware_content_sha);
-        self->hawdware_content_sha = dtw_generate_sha_from_string(self->content);
+    if(dtw_entity_type(full_path) != DTW_FILE_TYPE){
+        free(full_path);
+        return;
     }
+    self->content = dtw_load_any_content(full_path,&size,&is_binary);
+    self->content_exist_in_memory = true;
+    self->is_binary = is_binary;
+    self->content_size = size;
+    self->last_modification_time = dtw_get_file_last_motification_in_unix(full_path);
+    self->content_exist_in_hardware = true;
+    free(self->hawdware_content_sha);
+    self->hawdware_content_sha = dtw_generate_sha_from_string(self->content);
     free(full_path);
+    
 }
 char *private_dtw_get_content_sha(struct DtwTreePart *self){
     if(self->content_exist_in_memory){
@@ -112,7 +116,7 @@ void private_dtw_represent_tree_part(struct DtwTreePart *self){
     char *full_path = self->path->get_full_path(self->path);
     printf("------------------------------------------------------------\n");
     printf("Path: %s\n",full_path);
-    printf("Content Exist: %s\n",self->content_exist_in_memory ? "true" : "false");
+    printf("Content Exist in Memory: %s\n",self->content_exist_in_memory ? "true" : "false");
     if(self->content_exist_in_memory == true || self->content_exist_in_hardware == true){
         
         char *last_moditication_in_string = self->last_modification_time_in_string(self);
