@@ -1095,7 +1095,7 @@ struct DtwStringArray *  dtw_list_all(char *path,  bool concat_path, bool add_en
 
 
 
-void dtw_create_dir_recursively(char *path){
+void dtw_create_dir(char *path){
     bool check = create_dir(path);
     char * current_path =  (char*)malloc(0);
     int size_path = strlen(path);
@@ -1207,7 +1207,7 @@ bool dtw_write_any_content(const char *path,const char *content,int size){
             dir_path[i] = '\0';
             strncpy(dir_path,path,i);
             
-            dtw_create_dir_recursively(dir_path);
+            dtw_create_dir(dir_path);
             free(dir_path);
         
             break;
@@ -1274,7 +1274,7 @@ bool dtw_copy_any(char* src_path, char* dest_path,bool merge) {
     int size_to_remove = strlen(src_path);
     for(int i = 0; i < size; i++){
         char *new_dir = dtw_change_beginning_of_string(dirs->strings[i],size_to_remove,dest_path);
-        dtw_create_dir_recursively(new_dir);
+        dtw_create_dir(new_dir);
         free(new_dir);
     }   
     dirs->delete(dirs);
