@@ -7,27 +7,29 @@
 
 
 
-void dtw_create_dir(char *path){
+void dtw_create_dir(const char *path){
     bool check = create_dir(path);
-    char * current_path =  (char*)malloc(0);
+  
     int size_path = strlen(path);
     for(int i=0;i <  size_path;i++){
         if(path[i] == '\\'  || path[i] == '/'   && i != size_path - 1){
-            current_path = (char*)realloc(current_path,i);
+            
+            char * current_path = (char*)malloc(i + 1);
             current_path[i] = '\0';
-            //set current path at i position
             strncpy(current_path,path,i);
+          
             create_dir(current_path);
+            free(current_path);
         }
     }
 
-    free(current_path);
+
     
     create_dir(path);
 }
 
 
-void dtw_remove_any(char* path) {
+void dtw_remove_any(const char* path) {
 
     if(remove(path) == 0){
         return;
@@ -165,9 +167,9 @@ int dtw_entity_type(const char *path){
     return NOT_FOUND;
 }
 
-bool dtw_copy_any(char* src_path, char* dest_path,bool merge) {
+bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
 
-    //verify if is an file 
+    //verify if is an file
 
     int type = dtw_entity_type(src_path);
     if(type == NOT_FOUND){
@@ -184,19 +186,27 @@ bool dtw_copy_any(char* src_path, char* dest_path,bool merge) {
         return result;
     }
     //means is an directory
-    
 
+    //remove the previous directory if merge is false
     if(!merge){
         dtw_remove_any(dest_path);
     }
+    //creating dirs
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(src_path,true);
+    
     int size = dirs->size;
     int size_to_remove = strlen(src_path);
+
+ 
+    
     for(int i = 0; i < size; i++){
+        
         char *new_dir = dtw_change_beginning_of_string(dirs->strings[i],size_to_remove,dest_path);
+
         dtw_create_dir(new_dir);
-        free(new_dir);
+        //free(new_dir);
     }   
+    return true;
     dirs->delete_string_array(dirs);
     struct DtwStringArray *files = dtw_list_files_recursively(src_path);
     size = files->size;
@@ -209,8 +219,11 @@ bool dtw_copy_any(char* src_path, char* dest_path,bool merge) {
         free(content);
         free(new_file);
     }
+
     files->delete_string_array(files);
+    
     return true;
+    
 }
 
 void dtw_move_any(char* src_path, char* dest_path,bool merge) {
