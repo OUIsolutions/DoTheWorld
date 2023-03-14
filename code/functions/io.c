@@ -202,14 +202,16 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
     for(int i = 0; i < size; i++){
         
         char *new_dir = dtw_change_beginning_of_string(dirs->strings[i],size_to_remove,dest_path);
-
         dtw_create_dir(new_dir);
-        //free(new_dir);
-    }   
-    return true;
+        free(new_dir);
+    }
+    
     dirs->delete_string_array(dirs);
+    
+
     struct DtwStringArray *files = dtw_list_files_recursively(src_path);
     size = files->size;
+
     for(int i = 0; i < size; i++){
         int file_size;
         bool is_binary;

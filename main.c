@@ -2,5 +2,9 @@
 #include "code/doTheWorldSeparated.h"
 
 int main(int argc, char *argv[]){
-    dtw_copy_any("code", "code2", false);
+    const char *path ="exemples";
+    struct DtwStringArray *array = dtw_list_all_recursively(path,true);
+
+    array->represent(array);
+    array->delete_string_array(array);
 }

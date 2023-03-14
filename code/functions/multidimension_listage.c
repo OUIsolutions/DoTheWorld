@@ -65,9 +65,11 @@ struct DtwStringArray * dtw_list_all_recursively(const char *path,bool add_end_b
     
     for(int i = 0; i < dirs->size; i++){
         if(add_end_bar_to_dir){
-            char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 1);
+   
+            char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 2);
             sprintf(formated_dir,"%s/",dirs->strings[i]);
             all->add_string(all,formated_dir);
+            free(formated_dir);
         }
         else{
             all->add_string(all,dirs->strings[i]);
@@ -75,6 +77,7 @@ struct DtwStringArray * dtw_list_all_recursively(const char *path,bool add_end_b
 
         struct DtwStringArray *sub_files = dtw_list_basic(dirs->strings[i],DTW_FILE_TYPE,true,false);
         all->merge_string_array(all,sub_files);
+        sub_files->delete_string_array(sub_files);
     }
     dirs->delete_string_array(dirs);
     return all;
