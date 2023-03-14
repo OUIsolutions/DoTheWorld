@@ -38,7 +38,7 @@ void dtw_remove_any(char* path) {
     for(int i = 0; i < size; i++){
         remove(files->strings[i]);
     }
-    files->delete(files);
+    files->delete_string_array(files);
 
 
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,true);
@@ -46,7 +46,7 @@ void dtw_remove_any(char* path) {
     for(int i = dirs->size -1; i >=0; i--){
         remove(dirs->strings[i]);
     }
-    dirs->delete(dirs);
+    dirs->delete_string_array(dirs);
     
 }
 
@@ -132,7 +132,7 @@ bool dtw_write_any_content(const char *path,const char *content,int size){
    
         return false;
     }
-
+    
     fwrite(content, sizeof(char),size, file);
     
     fclose(file);
@@ -141,7 +141,14 @@ bool dtw_write_any_content(const char *path,const char *content,int size){
 
 
 bool dtw_write_string_file_content(const char *path,char *content){
-    return dtw_write_any_content(path,content,strlen(content));
+    int size;
+    if(content == NULL){
+        size = 0;
+    }
+    else{
+        size = strlen(content);
+    }
+    return dtw_write_any_content(path,content,size);
 }
 
 int dtw_entity_type(const char *path){
@@ -190,7 +197,7 @@ bool dtw_copy_any(char* src_path, char* dest_path,bool merge) {
         dtw_create_dir(new_dir);
         free(new_dir);
     }   
-    dirs->delete(dirs);
+    dirs->delete_string_array(dirs);
     struct DtwStringArray *files = dtw_list_files_recursively(src_path);
     size = files->size;
     for(int i = 0; i < size; i++){
@@ -202,7 +209,7 @@ bool dtw_copy_any(char* src_path, char* dest_path,bool merge) {
         free(content);
         free(new_file);
     }
-    files->delete(files);
+    files->delete_string_array(files);
     return true;
 }
 

@@ -22,7 +22,7 @@ struct DtwPath {
     void (*set_full_name) (struct DtwPath *self, const char *full_name);
     void (*set_full_path) (struct DtwPath *self, const char *full_path);
     void (*represent)(struct DtwPath *self);
-    void (*delete) (struct DtwPath *self);
+    void (*delete_path) (struct DtwPath *self);
 
 
 };
@@ -67,7 +67,7 @@ struct DtwPath * dtw_constructor_path( const char *ful_path) {
     self->set_full_path = private_dtw_set_full_path;
 
     self->represent = private_dtw_represent_path;
-    self->delete = private_dtw_destructor_path;
+    self->delete_path = private_dtw_destructor_path;
 
     self->set_full_path(self, ful_path);
     self->first_full_path = self->get_full_path(self);

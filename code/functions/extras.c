@@ -51,7 +51,7 @@ bool dtw_ends_with(const char *string, const char *suffix){
 
 char *private_dtw_replace_string_once(const char *target, const char *old_element, const char *new_element) {
 
-    char *pos = strstr(target, old_element);
+    const char *pos = strstr(target, old_element);
 
     int size_of_old_element = strlen(old_element);
     int size_of_new_element = strlen(new_element);

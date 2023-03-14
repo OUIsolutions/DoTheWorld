@@ -21,7 +21,7 @@ struct DtwTreePart{
     void(*represent)(struct DtwTreePart *self);
     void(*hardware_remove)(struct DtwTreePart *self);
     void(*hardware_write)(struct DtwTreePart *self);
-    void (*delete)(struct DtwTreePart *self);
+    void (*delete_tree_part)(struct DtwTreePart *self);
 };
 char *private_dtw_get_content_sha(struct DtwTreePart *self);
 char *private_dtw_last_modification_time_in_string(struct DtwTreePart *self);
@@ -55,7 +55,7 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *full_path,bool load_c
     self->represent = private_dtw_represent_tree_part;
     self->hardware_remove = private_dtw_hardware_remove;
     
-    self->delete = private_dtw_tree_part_destructor;
+    self->delete_tree_part = private_dtw_tree_part_destructor;
 
     if(load_content){
         self->load_content_from_hardware(self);
@@ -160,7 +160,7 @@ void private_dtw_free_content(struct DtwTreePart *self){
     self->content = (char *)realloc(self->content,0);
 }
 void private_dtw_tree_part_destructor(struct DtwTreePart *self){
-    self->path->delete(self->path);
+    self->path->delete_path(self->path);
     free(self->hawdware_content_sha);
     free(self->content);
     free(self);

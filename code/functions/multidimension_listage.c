@@ -20,7 +20,7 @@ struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool add_end_
                     );
                 //merge the two dirs
                 dirs->merge_string_array(dirs,sub_dirs);
-                sub_dirs->delete(sub_dirs);
+                sub_dirs->delete_string_array(sub_dirs);
                 i++;
         }
         //unsifth path in dirs 
@@ -51,9 +51,9 @@ struct DtwStringArray *  dtw_list_files_recursively(const char *path){
     for(int i = 0; i < dirs->size; i++){
         struct DtwStringArray *sub_files = dtw_list_basic(dirs->strings[i],DTW_FILE_TYPE,true,false);
         files->merge_string_array(files,sub_files);
-        sub_files->delete(sub_files);
+        sub_files->delete_string_array(sub_files);
     }
-    dirs->delete(dirs);
+    dirs->delete_string_array(dirs);
     return files;
 }
 
@@ -76,6 +76,6 @@ struct DtwStringArray * dtw_list_all_recursively(const char *path,bool add_end_b
         struct DtwStringArray *sub_files = dtw_list_basic(dirs->strings[i],DTW_FILE_TYPE,true,false);
         all->merge_string_array(all,sub_files);
     }
-    dirs->delete(dirs);
+    dirs->delete_string_array(dirs);
     return all;
 }
