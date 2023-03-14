@@ -20,6 +20,7 @@ struct DtwTreePart{
     void (*free_content)(struct DtwTreePart *self);
     void(*represent)(struct DtwTreePart *self);
     void(*hardware_remove)(struct DtwTreePart *self);
+    void(*hardware_write)(struct DtwTreePart *self);
     void (*delete)(struct DtwTreePart *self);
 };
 char *private_dtw_get_content_sha(struct DtwTreePart *self);
@@ -53,6 +54,7 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *full_path,bool load_c
     self->free_content = private_dtw_free_content;
     self->represent = private_dtw_represent_tree_part;
     self->hardware_remove = private_dtw_hardware_remove;
+    
     self->delete = private_dtw_tree_part_destructor;
 
     if(load_content){
