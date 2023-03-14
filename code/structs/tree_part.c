@@ -5,6 +5,7 @@ struct DtwTreePart{
     bool content_exist_in_memory;
     long last_modification_time;
     bool content_exist_in_hardware;
+    bool ignore;
     bool is_binary;
     char *hawdware_content_sha;
     char *content;
@@ -18,7 +19,7 @@ struct DtwTreePart{
     void (*load_content_from_hardware)(struct DtwTreePart *self);
     void (*free_content)(struct DtwTreePart *self);
     void(*represent)(struct DtwTreePart *self);
-    void(*auto_implement)(struct DtwTreePart *self);
+    void(*hardware_remove)(struct DtwTreePart *self);
     void (*delete)(struct DtwTreePart *self);
 };
 char *private_dtw_get_content_sha(struct DtwTreePart *self);
@@ -29,8 +30,9 @@ void private_dtw_set_binary_content(struct DtwTreePart *self,const char *content
 void private_dtw_load_content_from_hardware(struct DtwTreePart *self);
 void private_dtw_free_content(struct DtwTreePart *self);
 void private_dtw_represent_tree_part(struct DtwTreePart *self);
+void private_dtw_hardware_remove(struct DtwTreePart *self);
 void private_dtw_tree_part_destructor(struct DtwTreePart *self);
-void private_dtw_auto_implement_tre_part(struct DtwTreePart *self);
+
 
 struct DtwTreePart * dtw_tree_part_constructor(const char *full_path,bool load_content){
     struct DtwTreePart *self = (struct DtwTreePart *)malloc(sizeof(struct DtwTreePart));
@@ -38,6 +40,7 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *full_path,bool load_c
     self->content_exist_in_memory = false;
     self->content_exist_in_hardware = false;
     self->is_binary = false;
+    self->ignore = false;
     self->hawdware_content_sha = (char *)malloc(0);
     self->content = (char *)malloc(0);
     self->content_size = 0;
@@ -49,7 +52,7 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *full_path,bool load_c
     self->last_modification_time_in_string = private_dtw_last_modification_time_in_string;
     self->free_content = private_dtw_free_content;
     self->represent = private_dtw_represent_tree_part;
-    self->auto_implement = private_dtw_auto_implement_tre_part;
+    self->hardware_remove = private_dtw_hardware_remove;
     self->delete = private_dtw_tree_part_destructor;
 
     if(load_content){
@@ -134,20 +137,20 @@ void private_dtw_represent_tree_part(struct DtwTreePart *self){
             free(content_sha);
         }
         
-;
-        
         free(last_moditication_in_string);
     }
     free(full_path);
 
 }
 
-void private_dtw_auto_implement_tre_part(struct DtwTreePart *self){
+void private_dtw_hardware_remove(struct DtwTreePart *self){
+     if(self->ignore == true){
+        return;
+     }
+    char *full_path = self->path->get_full_path(self->path);
+    dtw_remove_any(full_path);
+    free(full_path);
     
-    
-  
-
-   
 }
 
 void private_dtw_free_content(struct DtwTreePart *self){
