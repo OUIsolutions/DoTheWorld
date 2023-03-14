@@ -29,7 +29,7 @@ struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool add_end_
         if(add_end_bar_to_dir){
         for(int i = 0; i < dirs->size; i++){
                 //concat / to the end of the path
-                char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 1);
+                char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 2);
                 sprintf(formated_dir,"%s/",dirs->strings[i]);
                 dirs->set_value(dirs,i,formated_dir);
                 free(formated_dir);
