@@ -44,11 +44,10 @@ void private_dtw_add_path_from_hardware(struct DtwTree *self, char *full_path,bo
     for(int i = 0; i < path_array->size; i++){
         const char *current_path = path_array->strings[i];
         printf("current path: %s\n",current_path);
-        
         struct DtwPath *path = dtw_constructor_path(current_path);
         path->represent(path);
         path->delete_path(path);
-        return;
+        
     }
 
     path_array->delete_string_array(path_array);

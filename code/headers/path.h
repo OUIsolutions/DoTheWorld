@@ -4,7 +4,9 @@ struct DtwPath {
     char *dir;
     char *name;
     char *extension;
-
+    bool dir_exists;
+    bool name_exists;
+    bool extension_exists;
     //Getters
     bool  (*changed)(struct DtwPath *self);
     char *(*get_full_name) (struct DtwPath *self);
