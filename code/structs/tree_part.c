@@ -19,8 +19,8 @@ struct DtwTreePart{
     void (*load_content_from_hardware)(struct DtwTreePart *self);
     void (*free_content)(struct DtwTreePart *self);
     void(*represent)(struct DtwTreePart *self);
-    void(*hardware_remove)(struct DtwTreePart *self);
-    void(*hardware_write)(struct DtwTreePart *self);
+    bool(*hardware_remove)(struct DtwTreePart *self);
+    bool(*hardware_write)(struct DtwTreePart *self);
     void (*delete_tree_part)(struct DtwTreePart *self);
 };
 char *private_dtw_get_content_sha(struct DtwTreePart *self);
@@ -31,7 +31,8 @@ void private_dtw_set_binary_content(struct DtwTreePart *self,const char *content
 void private_dtw_load_content_from_hardware(struct DtwTreePart *self);
 void private_dtw_free_content(struct DtwTreePart *self);
 void private_dtw_represent_tree_part(struct DtwTreePart *self);
-void private_dtw_hardware_remove(struct DtwTreePart *self);
+bool private_dtw_hardware_remove(struct DtwTreePart *self);
+bool private_dtw_hardware_write(struct DtwTreePart *self);
 void private_dtw_tree_part_destructor(struct DtwTreePart *self);
 
 
@@ -54,7 +55,7 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *full_path,bool load_c
     self->free_content = private_dtw_free_content;
     self->represent = private_dtw_represent_tree_part;
     self->hardware_remove = private_dtw_hardware_remove;
-    
+    self->hardware_write = private_dtw_hardware_write;
     self->delete_tree_part = private_dtw_tree_part_destructor;
 
     if(load_content){
@@ -145,14 +146,36 @@ void private_dtw_represent_tree_part(struct DtwTreePart *self){
 
 }
 
-void private_dtw_hardware_remove(struct DtwTreePart *self){
+bool private_dtw_hardware_remove(struct DtwTreePart *self){
      if(self->ignore == true){
-        return;
+        return false;
      }
     char *full_path = self->path->get_full_path(self->path);
     dtw_remove_any(full_path);
     free(full_path);
-    
+    return true;
+}
+bool private_dtw_hardware_write(struct DtwTreePart *self){
+    if(self->ignore == true){
+        return false;
+    }
+    //means that the content not exist in memory
+    if(self->content_exist_in_memory == false){
+        char *full_path = self->path->get_full_path(self->path);
+        char *name = self->path->get_full_name(self->path);
+        if(strcmp(name,"") == 0){
+            dtw_create_dir_recursively(full_path);
+          
+        }
+        else{
+            dtw_write_string_file_content(full_path,NULL);
+        }
+        free(full_path);
+        free(name);
+        return true;
+    }
+    return true;
+  
 }
 
 void private_dtw_free_content(struct DtwTreePart *self){
