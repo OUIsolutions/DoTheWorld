@@ -1,14 +1,14 @@
 
 #ifdef __linux__
-#define create_dir(path) mkdir(path,0777)
+#define dtw_create_dir(path) mkdir(path,0777)
 #elif _WIN32
-#define create_dir(path) _mkdir(path)
+#define dtw_create_dir(path) _mkdir(path)
 #endif
 
 
 
-void dtw_create_dir(const char *path){
-    bool check = create_dir(path);
+void dtw_create_dir_recursively(const char *path){
+    bool check = dtw_create_dir(path);
   
     int size_path = strlen(path);
     for(int i=0;i <  size_path;i++){
@@ -18,14 +18,14 @@ void dtw_create_dir(const char *path){
             current_path[i] = '\0';
             strncpy(current_path,path,i);
           
-            create_dir(current_path);
+            dtw_create_dir(current_path);
             free(current_path);
         }
     }
 
 
     
-    create_dir(path);
+    dtw_create_dir(path);
 }
 
 
@@ -122,7 +122,7 @@ bool dtw_write_any_content(const char *path,const char *content,int size){
             dir_path[i] = '\0';
             strncpy(dir_path,path,i);
             
-            dtw_create_dir(dir_path);
+            dtw_create_dir_recursively(dir_path);
             free(dir_path);
         
             break;
@@ -200,7 +200,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
     for(int i = 0; i < size; i++){
         
         char *new_path_dir = dtw_change_beginning_of_string(dirs->strings[i],src_path_size,dest_path);
-        dtw_create_dir(new_path_dir);
+        dtw_create_dir_recursively(new_path_dir);
         free(new_path_dir);
     }
     dirs->delete_string_array(dirs);

@@ -5,9 +5,6 @@ int main(int argc, char *argv[]){
     //char *path2 = dtw_change_beginning_of_string("/home/teste",5,"/dev");
     //printf("%s\n",path2);
     //free(path2);
-    struct DtwStringArray *dirs = dtw_list_all_recursively("code",true);
-    dirs->represent(dirs);
-    dirs->delete_string_array(dirs);
-
+    dtw_create_dir_recursively("teste/a/b");
     return 0;
 }
