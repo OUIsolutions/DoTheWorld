@@ -1,6 +1,6 @@
 
 
-struct DtwPath * dtw_constructor_path( const char *ful_path) {
+struct DtwPath * dtw_constructor_path( const char *full_path) {
     struct DtwPath *self = (struct DtwPath *)malloc(sizeof(struct DtwPath));
 
     self->dir = (char *)malloc(0);
@@ -25,9 +25,9 @@ struct DtwPath * dtw_constructor_path( const char *ful_path) {
     self->represent = private_dtw_represent_path;
     self->delete_path = private_dtw_destructor_path;
 
-    self->set_full_path(self, ful_path);
+    self->set_full_path(self, full_path);
     self->first_full_path = self->get_full_path(self);
-
+    
     return self;
 }
 bool private_dtw_path_changed(struct DtwPath *self){
@@ -37,50 +37,87 @@ bool private_dtw_path_changed(struct DtwPath *self){
     return true;
 }
 
+
+char * private_dtw_get_name(struct DtwPath *self){
+    if(strcmp(self->name, "") == 0){
+        return NULL;
+    }
+    return self->name;
+}
+char * private_dtw_get_extension(struct DtwPath *self){
+    if(strcmp(self->extension, "") == 0){
+        return NULL;
+    }
+    return self->extension;
+}
+
 char * private_dtw_get_full_name(struct DtwPath *self){
     char *full_name = (char *)malloc(strlen(self->name) + strlen(self->extension) +1);
     //concat the name and extension with / 
     //if the extension is empty, then the full name is just the name
-    if(strcmp(self->extension, "") == 0){
-        sprintf(full_name, "%s", self->name);
-    }else{
-        sprintf(full_name, "%s.%s", self->name, self->extension);
+    char *extension = self->get_extension(self);
+    char *name = self->get_name(self);
+
+    if(extension == NULL && name != NULL){
+        sprintf(full_name, "%s",name);
+    }
+    
+    if(extension != NULL &&  name == NULL){
+        sprintf(full_name, "%s",extension);
+    }
+
+    if(extension != NULL && name != NULL){
+        sprintf(full_name, "%s.%s",name, extension);
+    }
+    if(extension == NULL && name == NULL){
+        free(full_name);
+        return NULL;
     }
     return full_name;
-}
-char * private_dtw_get_name(struct DtwPath *self){
-    return self->name;
-}
-char * private_dtw_get_extension(struct DtwPath *self){
-    return self->extension;
-}
 
+
+}
+char * private_dtw_get_dir(struct DtwPath *self){
+    if(strcmp(self->dir, "") == 0){
+        return NULL;
+    }
+    return self->dir;
+}
 
 char * private_dtw_get_full_path(struct DtwPath *self){
     char *full_path = (char *)malloc(strlen(self->dir) + strlen(self->name) + strlen(self->extension) +3);
     //concat the path, name and extension with / 
     char *full_name = self->get_full_name(self);
-    //if the dir is empty, then the full path is just the full name
-    if(strcmp(self->dir, "") == 0){
-        sprintf(full_path, "%s", full_name);
-    }else{
-        sprintf(full_path, "%s/%s", self->dir, full_name);
+    char *dir = self->get_dir(self);
+
+    if(full_name != NULL && dir != NULL){
+        sprintf(full_path, "%s",dir);
+    }
+    if(full_name != NULL && dir != NULL){
+        sprintf(full_path, "%s/%s",dir, full_name);
+    }
+    if(full_name == NULL && dir != NULL){
+        sprintf(full_path, "%s",dir);
+    }
+    if(full_name == NULL && dir == NULL){
+        free(full_name);
+        free(full_path);
+        return NULL;
     }
     free(full_name);
     return full_path;
 }
 
-char * private_dtw_get_dir(struct DtwPath *self){
-    return self->dir;
-}
 
 
 void private_dtw_set_extension(struct DtwPath *self, const char *extension){
     if(strcmp(extension, "") == 0){
         return;
     }
-    self->extension = (char *)realloc(self->extension, strlen(extension));
+    int extension_size = strlen(extension);
+    self->extension = (char *)realloc(self->extension, extension_size);
     strcpy(self->extension, extension);
+    self->extension[extension_size] = '\0';
 }
 
 
@@ -88,17 +125,13 @@ void private_dtw_set_name(struct DtwPath * self, const char * name){
     if(strcmp(name, "") == 0){
         return;
     }
-    self->name = (char *)realloc(self->name, strlen(name));
+    int name_size = strlen(name);
+    self->name = (char *)realloc(self->name, name_size);
     strcpy(self->name, name);
+    self->name[name_size] = '\0';
 }
 
-void private_dtw_set_dir(struct DtwPath *self, const char *path){
-    if(strcmp(path, "") == 0){
-        return;
-    }
-    self->dir = (char *)realloc(self->dir, strlen(path));
-    strcpy(self->dir, path);
-}
+
 
 void private_dtw_set_full_name(struct DtwPath * self, const char * full_name){
     
@@ -120,10 +153,23 @@ void private_dtw_set_full_name(struct DtwPath * self, const char * full_name){
     self->set_name(self, full_name);
     
 }
+
+
+void private_dtw_set_dir(struct DtwPath *self, const char *path){
+    if(strcmp(path, "") == 0){
+        return;
+    }
+    int path_size = strlen(path);
+    self->dir = (char *)realloc(self->dir, path_size+1);
+    strcpy(self->dir, path);
+    self->dir[path_size] = '\0';
+}
+
 void private_dtw_set_full_path(struct DtwPath *self, const char *ful_path) {
 
     
     int full_path_size = strlen(ful_path);
+
     //lopos in n
     for(int i = full_path_size ;i >0; i--){
    
@@ -133,8 +179,8 @@ void private_dtw_set_full_path(struct DtwPath *self, const char *ful_path) {
             //substr the path from the start to the current position
             strncpy(path, ful_path, i);
             self->set_dir(self, path);
-            free(path);
 
+            free(path);
 
             //substr the name from the current position to the end
             char *name = (char *)malloc(full_path_size - i);
@@ -150,12 +196,21 @@ void private_dtw_set_full_path(struct DtwPath *self, const char *ful_path) {
 
 
 void private_dtw_represent_path(struct DtwPath *self){
-    printf("Full Path: %s\n", self->get_full_path(self));
+    char  *full_path = self->get_full_path(self);
+    char *full_name = self->get_full_name(self);
+    char *dir = self->get_dir(self);
+    char *name = self->get_name(self);
+    char *extension = self->get_extension(self);
+    printf("First Full Path: %s\n", self->first_full_path);
+    printf("Full Path: %s\n", full_path  ? full_path : "NULL");
     printf("Changed: %s\n", self->changed(self) ? "true" : "false");
-    printf("Dir: %s\n", self->get_dir(self));
-    printf("Full Name: %s\n", self->get_full_name(self));
-    printf("Name: %s\n", self->get_name(self));
-    printf("Extension: %s\n", self->get_extension(self));
+    printf("Dir: %s\n", dir ? dir : "NULL");
+    printf("Full Name: %s\n", full_name ? full_name : "NULL");
+    printf("Name: %s\n", name ? name : "NULL");
+    printf("Extension: %s\n", extension ? extension : "NULL");
+    free(full_path);
+    free(full_name);
+    
 }
 
 

@@ -25,6 +25,7 @@ void private_dtw_add_string(struct DtwStringArray *self,const char *string){
     self->size++;
     self->strings =  (char**)realloc(self->strings, self->size * sizeof(char *));
     self->strings[self->size - 1] = (char*)malloc(strlen(string) + 1);
+    self->strings[self->size - 1][strlen(string)] = '\0';
     strcpy(self->strings[self->size - 1], string);
 }
 

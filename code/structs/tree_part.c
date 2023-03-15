@@ -24,6 +24,7 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *full_path,bool load_c
     self->delete_tree_part = private_dtw_tree_part_destructor;
     self->copy_tree_part = private_dtw_copy_tree;
     if(load_content){
+        
         self->load_content_from_hardware(self);
         if(preserve_content == false){
             self->free_content(self);

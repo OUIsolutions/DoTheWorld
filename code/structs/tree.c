@@ -42,9 +42,19 @@ void private_dtw_add_path_from_hardware(struct DtwTree *self, char *full_path,bo
     
     struct DtwStringArray *path_array = dtw_list_all_recursively(full_path, true);
     for(int i = 0; i < path_array->size; i++){
-        struct DtwTreePart *tree_part = dtw_tree_part_constructor(full_path,load_content, preserve_content);
-        self->add_tree_part_by_reference(self, tree_part);
+        const char *current_path = path_array->strings[i];
+        printf("current path: %s\n",current_path);
+        
+        struct DtwPath *path = dtw_constructor_path(current_path);
+        if(path->get_full_name(path)!= NULL){
+            printf("null path");
+   
+        }
+        path->delete_path(path);
+        return;
     }
+
+    path_array->delete_string_array(path_array);
 
 }
  
