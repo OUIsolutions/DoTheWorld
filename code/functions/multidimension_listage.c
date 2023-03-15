@@ -4,9 +4,12 @@ struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool add_end_
 
         struct  DtwStringArray *dirs  = dtw_constructor_string_array();
         //verify if the path is a directory
-        if( opendir(path)== NULL){
+        DIR *dir = opendir(path);
+        if( dir == NULL){
                 return dirs;
         }
+        closedir(dir);
+        
         dirs->add_string(dirs,path);
 
         int i = 0;
@@ -22,6 +25,7 @@ struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool add_end_
                 dirs->merge_string_array(dirs,sub_dirs);
                 sub_dirs->delete_string_array(sub_dirs);
                 i++;
+                return dirs;
         }
         //unsifth path in dirs 
         
