@@ -112,7 +112,7 @@ char *private_dtw_last_modification_time_in_string(struct DtwTreePart *self){
 void private_dtw_represent_tree_part(struct DtwTreePart *self){
     char *full_path = self->path->get_full_path(self->path);
     printf("------------------------------------------------------------\n");
-    printf("Path: %s\n",full_path);
+    self->path->represent(self->path);
     printf("Content Exist in Memory: %s\n",self->content_exist_in_memory ? "true" : "false");
     if(self->content_exist_in_memory == true || self->content_exist_in_hardware == true){
         

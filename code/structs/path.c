@@ -48,13 +48,18 @@ char * private_dtw_get_name(struct DtwPath *self){
     if(self->name_exists == false){
         return NULL;
     }
-    return self->name;
+    char *name = (char *)malloc(strlen(self->name) + 1);
+    strcpy(name, self->name);
+
+    return name;
 }
 char * private_dtw_get_extension(struct DtwPath *self){
     if(self->extension_exists == false){
         return NULL;
     }
-    return self->extension;
+    char *extension = (char *)malloc(strlen(self->extension) + 1);
+    strcpy(extension, self->extension);
+    return extension;
 }
 
 char * private_dtw_get_full_name(struct DtwPath *self){
@@ -83,7 +88,9 @@ char * private_dtw_get_dir(struct DtwPath *self){
     if(self->dir_exists == false){
         return NULL;
     }
-    return self->dir;
+    char *dir = (char *)malloc(strlen(self->dir) + 1);
+    strcpy(dir, self->dir);
+    return dir;
 }
 
 char * private_dtw_get_full_path(struct DtwPath *self){
@@ -99,22 +106,25 @@ char * private_dtw_get_full_path(struct DtwPath *self){
     if(FULL_NAME_EXIST && DIR_EXIST){
         char *full_path = (char *)malloc(strlen(full_name) + strlen(dir) + 2);
         sprintf(full_path, "%s/%s",dir,full_name);
+        free(dir);
         free(full_name);
         return full_path;
     }
     if(FULL_NAME_EXIST && DIR_NOT_EXIST){
         char *full_path = (char *)malloc(strlen(full_name) + 1);
         sprintf(full_path, "%s",full_name);
+        free(dir);
         free(full_name);
         return full_path;
     }
     if(FULL_NAME_NOT_EXIST && DIR_EXIST){
         char *full_path = (char *)malloc(strlen(dir) + 1);
         sprintf(full_path, "%s",dir);
+        free(dir);
         free(full_name);
         return full_path;
     }
-
+    free(dir);
     free(full_name);
     return NULL;
 }
@@ -224,11 +234,15 @@ void private_dtw_represent_path(struct DtwPath *self){
     bool changed = self->changed(self);
     printf("First Full Path: %s\n", self->first_full_path ? self->first_full_path : "NULL");
     printf("Full Path: %s\n", full_path  ? full_path : "NULL");
-    printf("Changed: %s\n", changed ? "true" : "false");
+    printf("Path Changed: %s\n", changed ? "true" : "false");
     printf("Dir: %s\n", dir ? dir : "NULL");
     printf("Full Name: %s\n", full_name ? full_name : "NULL");
     printf("Name: %s\n", name ? name : "NULL");
     printf("Extension: %s\n", extension ? extension : "NULL");
+
+    free(dir);
+    free(name);
+    free(extension);
     free(full_path);
     free(full_name);
     
