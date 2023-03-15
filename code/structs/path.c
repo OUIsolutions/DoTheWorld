@@ -3,9 +3,9 @@
 struct DtwPath * dtw_constructor_path( const char *full_path) {
     struct DtwPath *self = (struct DtwPath *)malloc(sizeof(struct DtwPath));
 
-    self->dir = (char *)malloc(1);
-    self->name = (char *)malloc(1);
-    self->extension = (char *)malloc(1);
+    self->dir = (char *)malloc(0);
+    self->name = (char *)malloc(0);
+    self->extension = (char *)malloc(0);
     self->dir_exists = false;
     self->name_exists = false;
     self->extension_exists = false;
@@ -140,6 +140,7 @@ void private_dtw_set_name(struct DtwPath * self, const char * name){
     self->name_exists = true;
     int name_size = strlen(name);
     self->name = (char *)realloc(self->name, name_size +1);
+    printf("name->%s\n", name);
     strcpy(self->name, name);
     self->name[name_size] = '\0';
 }
@@ -149,26 +150,28 @@ void private_dtw_set_name(struct DtwPath * self, const char * name){
 void private_dtw_set_full_name(struct DtwPath * self, const char * full_name){
     self->name_exists = false;
     self->extension_exists = false;
-    for(int i = 0; i < strlen(full_name); i++){
+
+    int full_name_size = strlen(full_name);
+    for(int i = 0; i < full_name_size; i++){
         if(full_name[i] == '.'){
-            char *name = (char *)malloc(i+1);
-            //substr the name from the start to the current position
-            strncpy(name, full_name, i);
-            name[i] = '\0';
+            int name_size = i;
+            int extension_size = full_name_size - i - 1;
+
+            char *name = (char *)malloc(name_size + 1);
+            strncpy(name, full_name, name_size);
+            name[name_size] = '\0';
             self->set_name(self, name);
             free(name);
-            //substr the extension from the current position to the end
-            char *extension = (char *)malloc(strlen(full_name)+1);
-            strcpy(extension, full_name + i + 1);
-            extension[strlen(full_name) - i] = '\0';
+
+            char *extension = (char *)malloc(extension_size + 1);
+            strncpy(extension, full_name + i + 1, extension_size);
+            extension[extension_size] = '\0';
             self->set_extension(self, extension);
             free(extension);
             return;
         }
     }
-    //set dir as empty
     self->set_name(self, full_name);
-    
 }
 
 
@@ -190,30 +193,25 @@ void private_dtw_set_full_path(struct DtwPath *self, const char *ful_path) {
     
     int full_path_size = strlen(ful_path);
   
-    //lopos in n
-    for(int i = full_path_size ;i >0; i--){
-   
+    for(int i = full_path_size - 1; i >= 0; i--){
         if(ful_path[i] == '/' || ful_path[i] == '\\'){
             
-            char *path = (char *)malloc(full_path_size + 1);
-            //substr the path from the start to the current position
+            char *path = (char *)malloc(i + 1);
             strncpy(path, ful_path, i);
-            path[i+1] = '\0';
+            path[i] = '\0';
             self->set_dir(self, path);
             free(path);
 
-            //substr the name from the current position to the end
-            char *name = (char *)malloc(full_path_size + 1);
-            strcpy(name, ful_path + i + 1);
-            name[full_path_size - i] = '\0';
-            self->set_full_name(self, name);
-            free(name);
+            char *full_name = (char *)malloc(full_path_size - i);
+            strcpy(full_name, ful_path + i + 1);
+            full_name[full_path_size - i - 1] = '\0';
+            self->set_full_name(self, full_name);
+            free(full_name);
             return;
         }
     }
 
     self->set_full_name(self, ful_path);
-
 }
 
 

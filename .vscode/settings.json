@@ -23,7 +23,8 @@
         "dotheworldseparated.h": "c",
         "cstdlib": "c",
         "dotheworld.h": "c",
-        "tree.h": "c"
+        "tree.h": "c",
+        "typeinfo": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

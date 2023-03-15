@@ -30,6 +30,8 @@ void private_dtw_delete_tree(struct DtwTree *self){
     for(int i = 0; i < self->size; i++){
         self->tree_parts[i]->delete_tree_part(self->tree_parts[i]);
     }
+    free(self->tree_parts);
+    
     free(self);
 }
 
@@ -49,7 +51,6 @@ void private_dtw_add_path_from_hardware(struct DtwTree *self, char *full_path,bo
             preserve_content
         );
         self->add_tree_part_by_reference(self, tree_part);
-        
     }
 
     path_array->delete_string_array(path_array);

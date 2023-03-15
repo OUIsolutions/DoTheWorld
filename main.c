@@ -7,10 +7,15 @@ int main(int argc, char *argv[]){
     //free(path2);
     //struct DtwTreePart *tree_part = dtw_tree_part_constructor("README.md",true,true);
     //tree_part->path->represent(tree_part->path);
-    
+    /*
+    struct DtwTreePart *part = dtw_tree_part_constructor("README.md",true,true);
+    part->represent(part);
+    part->delete_tree_part(part);
+    return 0;
+    */
     struct DtwTree *tree = dtw_tree_constructor();
     tree->add_path_from_hardware(tree,"code",true,true);
+     tree->add_path_from_hardware(tree,"exmples",true,true);
     tree->represent(tree);
-    return 0;
-   
+    tree->delete_tree(tree);
 }
