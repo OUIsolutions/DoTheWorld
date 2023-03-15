@@ -10,6 +10,7 @@ struct  DtwTree * dtw_tree_constructor(){
     self->delete_tree = private_dtw_delete_tree;
     self->represent = private_dtw_represent_tree;
     self->add_path_from_hardware = private_dtw_add_path_from_hardware;
+    self->dumps_tree_json = private_dtw_dumps_tree_json;
     return self;
 }
 
@@ -60,3 +61,52 @@ void private_dtw_add_path_from_hardware(struct DtwTree *self, char *path,bool lo
 
 }
  
+char * private_dtw_dumps_tree_json(struct DtwTree *tree,bool preserve_content,bool preserve_path_atributes,bool preserve_hadware_data,bool generate_sha256){
+    cJSON *json_array = cJSON_CreateArray();
+    for(int i = 0; i < tree->size; i++){
+       
+        cJSON *json_tree_part = cJSON_CreateObject();
+        struct DtwTreePart *tree_part = tree->tree_parts[i];
+        char *path_string = tree_part->path->get_path(tree_part->path);
+        char *dir_string = tree_part->path->get_dir(tree_part->path);
+        char *full_name_string = tree_part->path->get_full_name(tree_part->path);
+        char *name_string = tree_part->path->get_name(tree_part->path);
+        char *extension_string = tree_part->path->get_extension(tree_part->path);
+
+        cJSON_AddItemToObject(
+            json_tree_part, 
+            "path", 
+            cJSON_CreateString(path_string)
+        );
+        cJSON_AddItemToObject(
+            json_tree_part, 
+            "dir", 
+            cJSON_CreateString(dir_string)
+        );
+        cJSON_AddItemToObject(
+            json_tree_part, 
+            "full_name", 
+            cJSON_CreateString(full_name_string)
+        );
+        cJSON_AddItemToObject(
+            json_tree_part, 
+            "name", 
+            cJSON_CreateString(name_string)
+        );
+        cJSON_AddItemToObject(
+            json_tree_part, 
+            "extension", 
+            cJSON_CreateString(extension_string)
+        );
+        //Add json_tree_part  
+        cJSON_AddItemToArray(json_array,json_tree_part);
+        free(path_string);
+        free(dir_string);
+        free(full_name_string);
+        free(name_string);
+        free(extension_string);
+    }
+    char *json_string = cJSON_Print(json_array);
+    cJSON_Delete(json_array);
+    return json_string;
+}

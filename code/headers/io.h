@@ -18,7 +18,7 @@ char *dtw_load_binary_content(const char * path,int *size);
 
 
 bool dtw_write_any_content(const char *path,const char *content,int size);
-bool dtw_write_string_file_content(const char *path,char *content);
+bool dtw_write_string_file_content(const char *path,const char *content);
 int dtw_entity_type(const char *path);
 
 #ifdef __cplusplus
