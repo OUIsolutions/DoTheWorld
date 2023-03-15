@@ -13,3 +13,5 @@
 #include "functions/listage_wrappers.c"
 #include "functions/io.c"
 #include "structs/tree_part.c"
+
+#include "structs/tree.c"
