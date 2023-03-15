@@ -46,10 +46,7 @@ void private_dtw_add_path_from_hardware(struct DtwTree *self, char *full_path,bo
         printf("current path: %s\n",current_path);
         
         struct DtwPath *path = dtw_constructor_path(current_path);
-        if(path->get_full_name(path)!= NULL){
-            printf("null path");
-   
-        }
+        path->represent(path);
         path->delete_path(path);
         return;
     }

@@ -7,6 +7,7 @@ struct DtwPath * dtw_constructor_path( const char *full_path) {
     self->name = (char *)malloc(0);
     self->extension = (char *)malloc(0);
 
+
     self->changed = private_dtw_path_changed;
     self->get_full_name =private_dtw_get_full_name;
     self->get_name = private_dtw_get_name;
@@ -89,21 +90,25 @@ char * private_dtw_get_full_path(struct DtwPath *self){
     //concat the path, name and extension with / 
     char *full_name = self->get_full_name(self);
     char *dir = self->get_dir(self);
-
-    if(full_name != NULL && dir != NULL){
+    #define FULL_NAME_EXIST full_name != NULL
+    #define FULL_NAME_NOT_EXIST full_name == NULL
+    #define DIR_EXIST dir != NULL
+    #define DIR_NOT_EXIST dir == NULL
+    if(FULL_NAME_EXIST && DIR_EXIST){
+        sprintf(full_path, "%s/%s",dir,full_name);
+    }
+    if(FULL_NAME_EXIST && DIR_NOT_EXIST){
+        sprintf(full_path, "%s",full_name);
+    }
+    if(FULL_NAME_NOT_EXIST && DIR_EXIST){
         sprintf(full_path, "%s",dir);
     }
-    if(full_name != NULL && dir != NULL){
-        sprintf(full_path, "%s/%s",dir, full_name);
-    }
-    if(full_name == NULL && dir != NULL){
-        sprintf(full_path, "%s",dir);
-    }
-    if(full_name == NULL && dir == NULL){
-        free(full_name);
+    if(FULL_NAME_NOT_EXIST && DIR_NOT_EXIST){
         free(full_path);
+        free(full_name);
         return NULL;
     }
+
     free(full_name);
     return full_path;
 }
@@ -169,7 +174,7 @@ void private_dtw_set_full_path(struct DtwPath *self, const char *ful_path) {
 
     
     int full_path_size = strlen(ful_path);
-
+  
     //lopos in n
     for(int i = full_path_size ;i >0; i--){
    
@@ -179,7 +184,6 @@ void private_dtw_set_full_path(struct DtwPath *self, const char *ful_path) {
             //substr the path from the start to the current position
             strncpy(path, ful_path, i);
             self->set_dir(self, path);
-
             free(path);
 
             //substr the name from the current position to the end
@@ -190,6 +194,7 @@ void private_dtw_set_full_path(struct DtwPath *self, const char *ful_path) {
             return;
         }
     }
+
     self->set_full_name(self, ful_path);
 
 }
@@ -201,7 +206,7 @@ void private_dtw_represent_path(struct DtwPath *self){
     char *dir = self->get_dir(self);
     char *name = self->get_name(self);
     char *extension = self->get_extension(self);
-    printf("First Full Path: %s\n", self->first_full_path);
+    printf("First Full Path: %s\n", self->first_full_path ? self->first_full_path : "NULL");
     printf("Full Path: %s\n", full_path  ? full_path : "NULL");
     printf("Changed: %s\n", self->changed(self) ? "true" : "false");
     printf("Dir: %s\n", dir ? dir : "NULL");
