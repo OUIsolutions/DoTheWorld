@@ -1,7 +1,7 @@
 
 
 
-struct DtwTreePart * dtw_tree_part_constructor(const char *full_path,bool load_content){
+struct DtwTreePart * dtw_tree_part_constructor(const char *full_path,bool load_content,bool preserve_content){
     struct DtwTreePart *self = (struct DtwTreePart *)malloc(sizeof(struct DtwTreePart));
     self->path = dtw_constructor_path(full_path);
     self->content_exist_in_memory = false;
@@ -25,6 +25,9 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *full_path,bool load_c
     self->copy_tree_part = private_dtw_copy_tree;
     if(load_content){
         self->load_content_from_hardware(self);
+        if(preserve_content == false){
+            self->free_content(self);
+        }
     }
     return self;
 }
@@ -32,7 +35,7 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *full_path,bool load_c
 struct  DtwTreePart * private_dtw_copy_tree(struct DtwTreePart *self){
     char *full_path = self->path->get_full_path(self->path);
 
-    struct DtwTreePart *new_tree_part = dtw_tree_part_constructor(full_path,false);
+    struct DtwTreePart *new_tree_part = dtw_tree_part_constructor(full_path,false,false);
     free(full_path);
 
     new_tree_part->content_exist_in_memory = self->content_exist_in_memory;

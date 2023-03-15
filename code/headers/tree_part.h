@@ -40,4 +40,4 @@ struct DtwTreePart * private_dtw_copy_tree(struct DtwTreePart *self);
 
 
 
-struct DtwTreePart * dtw_tree_part_constructor(const char *full_path,bool load_content);
+struct DtwTreePart * dtw_tree_part_constructor(const char *full_path,bool load_content,bool preserve_content);
