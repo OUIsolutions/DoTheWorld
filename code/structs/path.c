@@ -3,10 +3,12 @@
 struct DtwPath * dtw_constructor_path( const char *full_path) {
     struct DtwPath *self = (struct DtwPath *)malloc(sizeof(struct DtwPath));
 
-    self->dir = (char *)malloc(0);
-    self->name = (char *)malloc(0);
-    self->extension = (char *)malloc(0);
-
+    self->dir = (char *)malloc(1);
+    self->dir[0] = '\0';
+    self->name = (char *)malloc(1);
+    self->name[0] = '\0';
+    self->extension = (char *)malloc(1);
+    self->extension[0] = '\0';
 
     self->changed = private_dtw_path_changed;
     self->get_full_name =private_dtw_get_full_name;
@@ -155,6 +157,7 @@ void private_dtw_set_full_name(struct DtwPath * self, const char * full_name){
             return;
         }
     }
+    //set dir as empty
     self->set_name(self, full_name);
     
 }
@@ -183,13 +186,17 @@ void private_dtw_set_full_path(struct DtwPath *self, const char *ful_path) {
             char *path = (char *)malloc(i);
             //substr the path from the start to the current position
             strncpy(path, ful_path, i);
+            path[i] = '\0';
             self->set_dir(self, path);
+           
             free(path);
 
             //substr the name from the current position to the end
             char *name = (char *)malloc(full_path_size - i);
             strcpy(name, ful_path + i + 1);
+            name[full_path_size - i] = '\0';
             self->set_full_name(self, name);
+                
             free(name);
             return;
         }
