@@ -164,14 +164,14 @@ int dtw_entity_type(const char *path){
             return DTW_FOLDER_TYPE;
         }
     }
-    return NOT_FOUND;
+    return DTW_NOT_FOUND;
 }
 
 bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
 
     //verify if is an file
     int type = dtw_entity_type(src_path);
-    if(type == NOT_FOUND){
+    if(type == DTW_NOT_FOUND){
         return false;
     }
 

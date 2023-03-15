@@ -154,6 +154,13 @@ bool private_dtw_hardware_write(struct DtwTreePart *self){
     if(self->content_exist_in_memory == false){
         char *path = self->path->get_path(self->path);
         char *name = self->path->get_full_name(self->path);
+        int entity_type = dtw_entity_type(path);
+        if(entity_type != DTW_NOT_FOUND){
+            free(path);
+            free(name);
+            return false;
+        }
+        
         if(strcmp(name,"") == 0){
             dtw_create_dir_recursively(path);
           
@@ -168,6 +175,10 @@ bool private_dtw_hardware_write(struct DtwTreePart *self){
     char *path = self->path->get_path(self->path);
 
     dtw_write_any_content(path,self->content,self->content_size);
+    free(self->hawdware_content_sha);
+    self->hawdware_content_sha = dtw_generate_sha_from_string(self->content);
+    self->content_exist_in_hardware = true;
+
     free(path);
     return true;
   

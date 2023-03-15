@@ -3,11 +3,16 @@
 
 int main(int argc, char *argv[]){
  
-    struct DtwTree *tree = dtw_tree_constructor();
-    tree->add_path_from_hardware(tree,"code",true,false);
-    const char *data = tree->dumps_tree_json(tree,true,true,true,true);
-    dtw_write_string_file_content("code.json",data);
-    tree->delete_tree(tree);
+    struct DtwTreePart *tree_part = dtw_tree_part_constructor(
+        "README.md",
+        false,
+        true
+    );
+    //tree_part->set_string_content(tree_part,"aaaa");
+    bool result = tree_part->hardware_write(tree_part);
+    printf("result: %d\n",result);
+    tree_part->represent(tree_part);
+    tree_part->delete_tree_part(tree_part);
 
     
 
