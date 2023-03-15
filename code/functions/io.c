@@ -214,10 +214,6 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
         bool is_binary;
         char *content = dtw_load_any_content(files->strings[i],&file_size,&is_binary);
         char *new_path = dtw_change_beginning_of_string(files->strings[i],src_path_size,dest_path);
-        printf("----------------------------\n");
-        printf("old_path:%s\n",files->strings[i]);
-        printf("start size:%i\n",src_path_size);
-        printf("new_path:%s\n",new_path);
 
         dtw_write_any_content(new_path,content,file_size);
         free(content);
