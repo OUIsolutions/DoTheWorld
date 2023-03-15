@@ -20,8 +20,11 @@ struct DtwTreePart{
     void (*load_content_from_hardware)(struct DtwTreePart *self);
     void (*free_content)(struct DtwTreePart *self);
     void(*represent)(struct DtwTreePart *self);
+    
     bool(*hardware_remove)(struct DtwTreePart *self);
     bool(*hardware_write)(struct DtwTreePart *self);
+    bool(*hardware_modify)(struct DtwTreePart *self);
+
     void (*delete_tree_part)(struct DtwTreePart *self);
     struct DtwTreePart *(*copy_tree_part)(struct DtwTreePart *self);
 };
@@ -35,6 +38,8 @@ void private_dtw_free_content(struct DtwTreePart *self);
 void private_dtw_represent_tree_part(struct DtwTreePart *self);
 bool private_dtw_hardware_remove(struct DtwTreePart *self);
 bool private_dtw_hardware_write(struct DtwTreePart *self);
+bool private_dtw_hardware_modify(struct DtwTreePart *self);
+
 void private_dtw_tree_part_destructor(struct DtwTreePart *self);
 struct DtwTreePart * private_dtw_copy_tree(struct DtwTreePart *self);
 

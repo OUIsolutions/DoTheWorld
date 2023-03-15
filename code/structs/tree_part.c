@@ -21,6 +21,7 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_conten
     self->represent = private_dtw_represent_tree_part;
     self->hardware_remove = private_dtw_hardware_remove;
     self->hardware_write = private_dtw_hardware_write;
+    self->hardware_modify = private_dtw_hardware_modify;
     self->delete_tree_part = private_dtw_tree_part_destructor;
     self->copy_tree_part = private_dtw_copy_tree;
     if(load_content){
@@ -146,6 +147,7 @@ bool private_dtw_hardware_remove(struct DtwTreePart *self){
     free(path);
     return true;
 }
+
 bool private_dtw_hardware_write(struct DtwTreePart *self){
     if(self->ignore == true){
         return false;
@@ -184,7 +186,57 @@ bool private_dtw_hardware_write(struct DtwTreePart *self){
   
 }
 
+bool private_dtw_hardware_modify(struct DtwTreePart *self){
+    if(self->ignore == true){
+        return false;
+    }
+    bool changed_path = self->path->changed(self->path);
 
+    
+    if(changed_path == true && self->content_exist_in_memory == false){
+        char *old_path = self->path->first_path;
+        char *new_path = self->path->get_path(self->path);
+        dtw_move_any(old_path,new_path,true);
+        free(new_path);
+        return true;
+    }
+    bool write = false;
+
+    if(changed_path == true && self->content_exist_in_memory == true ){
+        char *old_path = self->path->first_path;
+        dtw_remove_any(old_path);
+        write = true;
+    }
+
+    if(changed_path== false && self->content_exist_in_memory == true ){
+    
+        if(self->content_exist_in_hardware == true){
+            char *hardware_sha = self->hawdware_content_sha;
+            char *memory_sha = self->get_content_sha(self);
+            if(strcmp(hardware_sha,memory_sha) != 0){
+                write = true;
+            }
+        }
+        else{
+            write = true;
+        }
+    }
+
+    if(write){
+        char *path = self->path->get_path(self->path);
+        dtw_write_any_content(
+            path,
+            self->content,
+            self->content_size
+        );
+        free(self->hawdware_content_sha);
+        self->hawdware_content_sha = dtw_generate_sha_from_string(self->content);
+        self->content_exist_in_hardware = true;
+        free(path);
+        return true;
+    }
+    return false;
+}
 
 void private_dtw_free_content(struct DtwTreePart *self){
     self->content_exist_in_memory = false;
