@@ -4,6 +4,7 @@ struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool add_end_
 
         struct  DtwStringArray *dirs  = dtw_constructor_string_array();
         //verify if the path is a directory
+        
         DIR *dir = opendir(path);
         if( dir == NULL){
                 return dirs;
