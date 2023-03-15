@@ -14,11 +14,11 @@ int main(int argc, char *argv[]){
 
     struct DtwTree *full = dtw_tree_constructor();
 
-    full->add_tree_part_by_copy(full,tree);
-    full->add_tree_part_by_copy(full,tree2);
+    full->add_tree_part_by_referene(full,tree);
+    full->add_tree_part_by_referene(full,tree2);
     
-    tree->delete_tree_part(tree);
-    tree2->delete_tree_part(tree2);
+    //tree->delete_tree_part(tree);
+    //tree2->delete_tree_part(tree2);
 
     full->represent(full);
     return 0;
