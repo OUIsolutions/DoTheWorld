@@ -1,9 +1,9 @@
 
 
 
-struct DtwTreePart * dtw_tree_part_constructor(const char *full_path,bool load_content,bool preserve_content){
+struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_content,bool preserve_content){
     struct DtwTreePart *self = (struct DtwTreePart *)malloc(sizeof(struct DtwTreePart));
-    self->path = dtw_constructor_path(full_path);
+    self->path = dtw_constructor_path(path);
     self->content_exist_in_memory = false;
     self->content_exist_in_hardware = false;
     self->is_binary = false;
@@ -34,10 +34,10 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *full_path,bool load_c
 }
 
 struct  DtwTreePart * private_dtw_copy_tree(struct DtwTreePart *self){
-    char *full_path = self->path->get_full_path(self->path);
+    char *path = self->path->get_path(self->path);
 
-    struct DtwTreePart *new_tree_part = dtw_tree_part_constructor(full_path,false,false);
-    free(full_path);
+    struct DtwTreePart *new_tree_part = dtw_tree_part_constructor(path,false,false);
+    free(path);
 
     new_tree_part->content_exist_in_memory = self->content_exist_in_memory;
     new_tree_part->content_exist_in_hardware = self->content_exist_in_hardware;
@@ -80,20 +80,20 @@ void private_dtw_set_binary_content(struct DtwTreePart *self,const char *content
 void private_dtw_load_content_from_hardware(struct DtwTreePart *self){
     int size;
     bool is_binary;
-    char *full_path = self->path->get_full_path(self->path);
-    if(dtw_entity_type(full_path) != DTW_FILE_TYPE){
-        free(full_path);
+    char *path = self->path->get_path(self->path);
+    if(dtw_entity_type(path) != DTW_FILE_TYPE){
+        free(path);
         return;
     }
-    self->content = dtw_load_any_content(full_path,&size,&is_binary);
+    self->content = dtw_load_any_content(path,&size,&is_binary);
     self->content_exist_in_memory = true;
     self->is_binary = is_binary;
     self->content_size = size;
-    self->last_modification_time = dtw_get_file_last_motification_in_unix(full_path);
+    self->last_modification_time = dtw_get_file_last_motification_in_unix(path);
     self->content_exist_in_hardware = true;
     free(self->hawdware_content_sha);
     self->hawdware_content_sha = dtw_generate_sha_from_string(self->content);
-    free(full_path);
+    free(path);
     
 }
 char *private_dtw_get_content_sha(struct DtwTreePart *self){
@@ -110,7 +110,7 @@ char *private_dtw_last_modification_time_in_string(struct DtwTreePart *self){
 
 
 void private_dtw_represent_tree_part(struct DtwTreePart *self){
-    char *full_path = self->path->get_full_path(self->path);
+    char *path = self->path->get_path(self->path);
     printf("------------------------------------------------------------\n");
     self->path->represent(self->path);
     printf("Content Exist in Memory: %s\n",self->content_exist_in_memory ? "true" : "false");
@@ -133,7 +133,7 @@ void private_dtw_represent_tree_part(struct DtwTreePart *self){
         
         free(last_moditication_in_string);
     }
-    free(full_path);
+    free(path);
 
 }
 
@@ -141,9 +141,9 @@ bool private_dtw_hardware_remove(struct DtwTreePart *self){
      if(self->ignore == true){
         return false;
      }
-    char *full_path = self->path->get_full_path(self->path);
-    dtw_remove_any(full_path);
-    free(full_path);
+    char *path = self->path->get_path(self->path);
+    dtw_remove_any(path);
+    free(path);
     return true;
 }
 bool private_dtw_hardware_write(struct DtwTreePart *self){
@@ -152,23 +152,23 @@ bool private_dtw_hardware_write(struct DtwTreePart *self){
     }
     //means that the content not exist in memory
     if(self->content_exist_in_memory == false){
-        char *full_path = self->path->get_full_path(self->path);
+        char *path = self->path->get_path(self->path);
         char *name = self->path->get_full_name(self->path);
         if(strcmp(name,"") == 0){
-            dtw_create_dir_recursively(full_path);
+            dtw_create_dir_recursively(path);
           
         }
         else{
-            dtw_write_string_file_content(full_path,NULL);
+            dtw_write_string_file_content(path,NULL);
         }
-        free(full_path);
+        free(path);
         free(name);
         return true;
     }
-    char *full_path = self->path->get_full_path(self->path);
+    char *path = self->path->get_path(self->path);
 
-    dtw_write_any_content(full_path,self->content,self->content_size);
-    free(full_path);
+    dtw_write_any_content(path,self->content,self->content_size);
+    free(path);
     return true;
   
 }

@@ -16,7 +16,7 @@ int main(int argc, char *argv[]){
     part->delete_tree_part(part);
     return 0;
     */
-    
+    /*
     struct DtwTree *tree = dtw_tree_constructor();
     tree->add_path_from_hardware(tree,"code",true,false);
     tree->add_path_from_hardware(tree,"exemples",true,false);
@@ -24,10 +24,10 @@ int main(int argc, char *argv[]){
     tree->delete_tree(tree);
 
     
-    /*
+    */
     struct DtwPath *path = dtw_constructor_path("/home/teste.c");
     path->represent(path);
     path->delete_path(path);
-    */
+    
 
 }
