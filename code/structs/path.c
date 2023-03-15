@@ -140,7 +140,7 @@ void private_dtw_set_name(struct DtwPath * self, const char * name){
     self->name_exists = true;
     int name_size = strlen(name);
     self->name = (char *)realloc(self->name, name_size +1);
-    printf("name->%s\n", name);
+   
     strcpy(self->name, name);
     self->name[name_size] = '\0';
 }

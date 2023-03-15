@@ -98,6 +98,7 @@ char *dtw_change_beginning_of_string(const char *target,int start_element_to_rem
 }
 
 
+
 void private_dtw_add_end_bar_to_dirs_string_array(struct DtwStringArray * dirs){
     for(int i = 0; i < dirs->size; i++){
         if(!dtw_ends_with(dirs->strings[i], "/")){

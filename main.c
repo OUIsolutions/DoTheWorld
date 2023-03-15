@@ -14,8 +14,8 @@ int main(int argc, char *argv[]){
     return 0;
     */
     struct DtwTree *tree = dtw_tree_constructor();
-    tree->add_path_from_hardware(tree,"code",true,true);
-     tree->add_path_from_hardware(tree,"examples",true,true);
-    tree->represent(tree);
+    tree->add_path_from_hardware(tree,"code",true,false);
+    tree->add_path_from_hardware(tree,"exemples",true,false);
+  
     tree->delete_tree(tree);
 }
