@@ -1,7 +1,9 @@
 
-
+#ifdef __cplusplus
+struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool add_end_bar_to_dir=true){
+#else 
 struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool add_end_bar_to_dir){
-
+#endif
         struct  DtwStringArray *dirs  = dtw_constructor_string_array();
         //verify if the path is a directory
         
@@ -54,9 +56,11 @@ struct DtwStringArray *  dtw_list_files_recursively(const char *path){
     dirs->delete_string_array(dirs);
     return files;
 }
-
+#ifdef __cplusplus
+struct DtwStringArray * dtw_list_all_recursively(const char *path,bool add_end_bar_to_dir=true){
+#else 
 struct DtwStringArray * dtw_list_all_recursively(const char *path,bool add_end_bar_to_dir){
-
+#endif
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,false);
     
     struct DtwStringArray *all = dtw_constructor_string_array();
