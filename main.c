@@ -8,8 +8,7 @@ int main(int argc, char *argv[]){
     //struct DtwTreePart *tree_part = dtw_tree_part_constructor("README.md",true,true);
     //tree_part->path->represent(tree_part->path);
     
-    struct DtwTree *tree = dtw_tree_constructor();
-    tree->add_path_from_hardware(tree,"code",true,true);
+    struct DtwTreePart *tree_part = dtw_tree_part_constructor("README.md");
     return 0;
    
 }
