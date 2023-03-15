@@ -6,8 +6,9 @@ int main(int argc, char *argv[]){
     //printf("%s\n",path2);
     //free(path2);
     struct DtwTreePart *tree = dtw_tree_part_constructor(
-        "testex/",false
+        "testex/.a",false
     );
+    tree->set_string_content(tree,"teste");
     tree->represent(tree);
     tree->hardware_write(tree);
     tree->delete_tree_part(tree);

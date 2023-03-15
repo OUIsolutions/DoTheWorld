@@ -174,6 +174,10 @@ bool private_dtw_hardware_write(struct DtwTreePart *self){
         free(name);
         return true;
     }
+    char *full_path = self->path->get_full_path(self->path);
+
+    dtw_write_any_content(full_path,self->content,self->content_size);
+    free(full_path);
     return true;
   
 }
