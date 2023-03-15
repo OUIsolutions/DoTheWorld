@@ -4,6 +4,7 @@ struct  DtwTree{
     struct DtwTreePart **tree_parts;
     void (*add_tree_part_by_copy)(struct DtwTree *self, struct DtwTreePart *tree_part);
     void (*add_tree_part_by_referene)(struct DtwTree *self, struct DtwTreePart *tree_part);
+    void(*load_path)(struct DtwTree *self, char *path);
     void (*delete_tree)(struct DtwTree *self);
     void(*represent)(struct DtwTree *self);
 };
@@ -36,6 +37,7 @@ void private_dtw_add_tree_part_reference(struct DtwTree *self, struct DtwTreePar
     self->tree_parts =  (struct DtwTreePart**)realloc(self->tree_parts, self->size * sizeof(struct DtwTreePart *));
     self->tree_parts[self->size - 1] = tree_part;
 }
+
 
 void private_dtw_delete_tree(struct DtwTree *self){
     for(int i = 0; i < self->size; i++){
