@@ -456,31 +456,40 @@ struct DtwStringArray {
   int size;         
 
   char **strings;       
+  void (*set_value)(struct DtwStringArray *self,int index,const char *value);
   void (*add_string)(struct DtwStringArray *self,const char *string);
   void (*merge_string_array)(struct DtwStringArray *self, struct DtwStringArray *other);
   void (*represent)(struct DtwStringArray *self);
-  void (*delete)(struct DtwStringArray *self);
+  void (*delete_string_array)(struct DtwStringArray *self);
 }; // End the structure with a semicolon
 
 void private_dtw_add_string(struct DtwStringArray *self,const char *string);
 void private_dtw_merge_string_array(struct DtwStringArray *self, struct DtwStringArray *other);
 void private_dtw_represent_string_array(struct DtwStringArray *self);
 void private_dtw_delete_string_array(struct DtwStringArray *self);
-
+void private_dtw_set_value(struct DtwStringArray *self,int index,const char *value);
 
 struct DtwStringArray * dtw_constructor_string_array(){
     struct DtwStringArray *self = (struct DtwStringArray*)malloc(sizeof(struct DtwStringArray));
     self->size = 0;
 
-    self->strings = (char**)malloc(0);
+    self->strings = (char**)malloc(1);
     self->add_string = private_dtw_add_string;
+    self->set_value = private_dtw_set_value;
     self->merge_string_array = private_dtw_merge_string_array;
     self->represent= private_dtw_represent_string_array;
-    self->delete = private_dtw_delete_string_array;
+    self->delete_string_array = private_dtw_delete_string_array;
     return self;
 }
 
-
+void private_dtw_set_value(struct DtwStringArray *self,int index,const char *value){
+    if(index < self->size && index >= 0){
+        int size = strlen(value);
+        self->strings[index] = (char*)realloc(self->strings[index], size + 1);
+        self->strings[index][size] = '\0';
+        strcpy(self->strings[index], value);
+    }
+}
 // Function prototypes
 void private_dtw_add_string(struct DtwStringArray *self,const char *string){
     self->size++;
@@ -492,7 +501,7 @@ void private_dtw_add_string(struct DtwStringArray *self,const char *string){
 
 void private_dtw_merge_string_array(struct DtwStringArray *self, struct DtwStringArray *other){
     for(int i = 0; i < other->size; i++){
-        private_dtw_add_string(self, other->strings[i]);
+        self->add_string(self, other->strings[i]);
     }
 }
 
@@ -507,7 +516,6 @@ void private_dtw_delete_string_array(struct DtwStringArray *self){
         free(self->strings[i]);
     }
     free(self->strings);
-
     free(self);
 }
 
@@ -534,7 +542,7 @@ struct DtwPath {
     void (*set_full_name) (struct DtwPath *self, const char *full_name);
     void (*set_full_path) (struct DtwPath *self, const char *full_path);
     void (*represent)(struct DtwPath *self);
-    void (*delete) (struct DtwPath *self);
+    void (*delete_path) (struct DtwPath *self);
 
 
 };
@@ -579,7 +587,7 @@ struct DtwPath * dtw_constructor_path( const char *ful_path) {
     self->set_full_path = private_dtw_set_full_path;
 
     self->represent = private_dtw_represent_path;
-    self->delete = private_dtw_destructor_path;
+    self->delete_path = private_dtw_destructor_path;
 
     self->set_full_path(self, ful_path);
     self->first_full_path = self->get_full_path(self);
@@ -777,7 +785,7 @@ bool dtw_ends_with(const char *string, const char *suffix){
 
 char *private_dtw_replace_string_once(const char *target, const char *old_element, const char *new_element) {
 
-    char *pos = strstr(target, old_element);
+    const char *pos = strstr(target, old_element);
 
     int size_of_old_element = strlen(old_element);
     int size_of_new_element = strlen(new_element);
@@ -811,13 +819,29 @@ char* dtw_replace_string(const char *target, const char *old_element, const char
     return result;
 }
 
-char *dtw_change_beginning_of_string(const char *target,int size, const char *new_element) {
-    char *result = (char *)malloc(strlen(target) + size + 1);
+char *dtw_change_beginning_of_string(const char *target,int start_element_to_remove_size, const char *new_element) {
+    int target_size = strlen(target);
+    int new_element_size = strlen(new_element);
+    char *result = (char *)malloc(target_size- start_element_to_remove_size + new_element_size   +2);
     strcpy(result, new_element);
-    strcat(result, target + size);
+    char *new_target = (char *)malloc(target_size - start_element_to_remove_size + 2);
+    strcpy(new_target, target + start_element_to_remove_size);
+    strcat(result, new_target);
+    free(new_target);
     return result;
 }
 
+
+void private_dtw_add_end_bar_to_dirs_string_array(struct DtwStringArray * dirs){
+    for(int i = 0; i < dirs->size; i++){
+        if(!dtw_ends_with(dirs->strings[i], "/")){
+             char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 2);
+             sprintf(formated_dir,"%s/",dirs->strings[i]);
+             dirs->set_value(dirs,i,formated_dir);
+             free(formated_dir);
+        }
+    }
+}
 
 
 #ifdef _WIN32
@@ -977,14 +1001,8 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
     }
 
     if(expected_type == DTW_FOLDER_TYPE && add_end_bar_to_dir){
-        for(int i = 0; i < dirs->size; i++){
-            char *dir = dirs->strings[i];
-            char *new_dir = (char*)malloc(strlen(dir) + 1);
-            //concat '/' to the end of the directory
-            sprintf(new_dir, "%s/", dir);
-            free(dirs->strings[i]);
-            dirs->strings[i] = new_dir;
-        }
+        private_dtw_add_end_bar_to_dirs_string_array(dirs);
+        
     }
     closedir(dir);
 
@@ -1014,21 +1032,14 @@ struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool add_end_
                     );
                 //merge the two dirs
                 dirs->merge_string_array(dirs,sub_dirs);
-                sub_dirs->delete(sub_dirs);
+                sub_dirs->delete_string_array(sub_dirs);
                 i++;
         }
         //unsifth path in dirs 
         
         
         if(add_end_bar_to_dir){
-        for(int i = 0; i < dirs->size; i++){
-                char *dir = dirs->strings[i];
-                char *new_dir = (char*)malloc(strlen(dir) + 1);
-                //concat '/' to the end of the directory
-                sprintf(new_dir, "%s/", dir);
-                free(dirs->strings[i]);
-                dirs->strings[i] = new_dir;
-            }
+            private_dtw_add_end_bar_to_dirs_string_array(dirs);
         }
 
         return dirs;
@@ -1045,9 +1056,9 @@ struct DtwStringArray *  dtw_list_files_recursively(const char *path){
     for(int i = 0; i < dirs->size; i++){
         struct DtwStringArray *sub_files = dtw_list_basic(dirs->strings[i],DTW_FILE_TYPE,true,false);
         files->merge_string_array(files,sub_files);
-        sub_files->delete(sub_files);
+        sub_files->delete_string_array(sub_files);
     }
-    dirs->delete(dirs);
+    dirs->delete_string_array(dirs);
     return files;
 }
 
@@ -1059,9 +1070,11 @@ struct DtwStringArray * dtw_list_all_recursively(const char *path,bool add_end_b
     
     for(int i = 0; i < dirs->size; i++){
         if(add_end_bar_to_dir){
-            char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 1);
+   
+            char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 2);
             sprintf(formated_dir,"%s/",dirs->strings[i]);
             all->add_string(all,formated_dir);
+            free(formated_dir);
         }
         else{
             all->add_string(all,dirs->strings[i]);
@@ -1069,8 +1082,9 @@ struct DtwStringArray * dtw_list_all_recursively(const char *path,bool add_end_b
 
         struct DtwStringArray *sub_files = dtw_list_basic(dirs->strings[i],DTW_FILE_TYPE,true,false);
         all->merge_string_array(all,sub_files);
+        sub_files->delete_string_array(sub_files);
     }
-    dirs->delete(dirs);
+    dirs->delete_string_array(dirs);
     return all;
 }
 
@@ -1095,27 +1109,29 @@ struct DtwStringArray *  dtw_list_all(char *path,  bool concat_path, bool add_en
 
 
 
-void dtw_create_dir(char *path){
+void dtw_create_dir(const char *path){
     bool check = create_dir(path);
-    char * current_path =  (char*)malloc(0);
+  
     int size_path = strlen(path);
     for(int i=0;i <  size_path;i++){
         if(path[i] == '\\'  || path[i] == '/'   && i != size_path - 1){
-            current_path = (char*)realloc(current_path,i);
+            
+            char * current_path = (char*)malloc(i + 1);
             current_path[i] = '\0';
-            //set current path at i position
             strncpy(current_path,path,i);
+          
             create_dir(current_path);
+            free(current_path);
         }
     }
 
-    free(current_path);
+
     
     create_dir(path);
 }
 
 
-void dtw_remove_any(char* path) {
+void dtw_remove_any(const char* path) {
 
     if(remove(path) == 0){
         return;
@@ -1126,7 +1142,7 @@ void dtw_remove_any(char* path) {
     for(int i = 0; i < size; i++){
         remove(files->strings[i]);
     }
-    files->delete(files);
+    files->delete_string_array(files);
 
 
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,true);
@@ -1134,7 +1150,7 @@ void dtw_remove_any(char* path) {
     for(int i = dirs->size -1; i >=0; i--){
         remove(dirs->strings[i]);
     }
-    dirs->delete(dirs);
+    dirs->delete_string_array(dirs);
     
 }
 
@@ -1142,6 +1158,7 @@ void dtw_remove_any(char* path) {
 char *dtw_load_any_content(const char * path,int *size,bool *is_binary){
     FILE *file = fopen(path,"rb");
     if(file == NULL){
+        free(file);
         return NULL;
     }
     fseek(file,0,SEEK_END);
@@ -1219,7 +1236,7 @@ bool dtw_write_any_content(const char *path,const char *content,int size){
    
         return false;
     }
-
+    
     fwrite(content, sizeof(char),size, file);
     
     fclose(file);
@@ -1228,7 +1245,14 @@ bool dtw_write_any_content(const char *path,const char *content,int size){
 
 
 bool dtw_write_string_file_content(const char *path,char *content){
-    return dtw_write_any_content(path,content,strlen(content));
+    int size;
+    if(content == NULL){
+        size = 0;
+    }
+    else{
+        size = strlen(content);
+    }
+    return dtw_write_any_content(path,content,size);
 }
 
 int dtw_entity_type(const char *path){
@@ -1245,9 +1269,9 @@ int dtw_entity_type(const char *path){
     return NOT_FOUND;
 }
 
-bool dtw_copy_any(char* src_path, char* dest_path,bool merge) {
+bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
 
-    //verify if is an file 
+    //verify if is an file
 
     int type = dtw_entity_type(src_path);
     if(type == NOT_FOUND){
@@ -1264,33 +1288,46 @@ bool dtw_copy_any(char* src_path, char* dest_path,bool merge) {
         return result;
     }
     //means is an directory
-    
 
+    //remove the previous directory if merge is false
     if(!merge){
         dtw_remove_any(dest_path);
     }
+    //creating dirs
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(src_path,true);
+    
     int size = dirs->size;
-    int size_to_remove = strlen(src_path);
+    int src_path_size = strlen(src_path);
+    return true;
+ 
     for(int i = 0; i < size; i++){
-        char *new_dir = dtw_change_beginning_of_string(dirs->strings[i],size_to_remove,dest_path);
-        dtw_create_dir(new_dir);
-        free(new_dir);
-    }   
-    dirs->delete(dirs);
+        
+        char *new_path_dir = dtw_change_beginning_of_string(dirs->strings[i],src_path_size,dest_path);
+        dtw_create_dir(new_path_dir);
+        free(new_path_dir);
+    }
+    dirs->delete_string_array(dirs);
+    
+
     struct DtwStringArray *files = dtw_list_files_recursively(src_path);
-    size = files->size;
-    for(int i = 0; i < size; i++){
+   
+    for(int i = 0; i < files->size; i++){
         int file_size;
         bool is_binary;
         char *content = dtw_load_any_content(files->strings[i],&file_size,&is_binary);
-        char *new_file = dtw_change_beginning_of_string(files->strings[i],size_to_remove,dest_path);
-        dtw_write_any_content(new_file,content,file_size);
+        char *new_path = dtw_change_beginning_of_string(files->strings[i],src_path_size,dest_path);
+
+        dtw_write_any_content(new_path,content,file_size);
         free(content);
-        free(new_file);
+        free(new_path);
+
+       
     }
-    files->delete(files);
+
+    files->delete_string_array(files);
+    
     return true;
+    
 }
 
 void dtw_move_any(char* src_path, char* dest_path,bool merge) {
@@ -1301,12 +1338,14 @@ void dtw_move_any(char* src_path, char* dest_path,bool merge) {
 struct DtwTreePart{
     
     struct DtwPath *path;
-    bool content_exist;
+    bool content_exist_in_memory;
     long last_modification_time;
     bool content_exist_in_hardware;
+    bool ignore;
     bool is_binary;
     char *hawdware_content_sha;
     char *content;
+
     int content_size;
     char *(*get_content_sha)(struct DtwTreePart *self);
     char *(*last_modification_time_in_string)(struct DtwTreePart *self);
@@ -1314,8 +1353,11 @@ struct DtwTreePart{
     void (*set_string_content)(struct DtwTreePart *self,const char *content);
     void (*set_binary_content)(struct DtwTreePart *self,const char *content,int content_size);
     void (*load_content_from_hardware)(struct DtwTreePart *self);
+    void (*free_content)(struct DtwTreePart *self);
     void(*represent)(struct DtwTreePart *self);
-    void (*delete)(struct DtwTreePart *self);
+    void(*hardware_remove)(struct DtwTreePart *self);
+    void(*hardware_write)(struct DtwTreePart *self);
+    void (*delete_tree_part)(struct DtwTreePart *self);
 };
 char *private_dtw_get_content_sha(struct DtwTreePart *self);
 char *private_dtw_last_modification_time_in_string(struct DtwTreePart *self);
@@ -1323,16 +1365,19 @@ void private_dtw_set_any_content(struct DtwTreePart *self,const char *content,in
 void private_dtw_set_string_content(struct DtwTreePart *self,const char *content);
 void private_dtw_set_binary_content(struct DtwTreePart *self,const char *content,int content_size);
 void private_dtw_load_content_from_hardware(struct DtwTreePart *self);
+void private_dtw_free_content(struct DtwTreePart *self);
 void private_dtw_represent_tree_part(struct DtwTreePart *self);
+void private_dtw_hardware_remove(struct DtwTreePart *self);
 void private_dtw_tree_part_destructor(struct DtwTreePart *self);
 
 
 struct DtwTreePart * dtw_tree_part_constructor(const char *full_path,bool load_content){
     struct DtwTreePart *self = (struct DtwTreePart *)malloc(sizeof(struct DtwTreePart));
     self->path = dtw_constructor_path(full_path);
-    self->content_exist = false;
+    self->content_exist_in_memory = false;
     self->content_exist_in_hardware = false;
     self->is_binary = false;
+    self->ignore = false;
     self->hawdware_content_sha = (char *)malloc(0);
     self->content = (char *)malloc(0);
     self->content_size = 0;
@@ -1342,8 +1387,12 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *full_path,bool load_c
     self->set_binary_content = private_dtw_set_binary_content;
     self->get_content_sha = private_dtw_get_content_sha;
     self->last_modification_time_in_string = private_dtw_last_modification_time_in_string;
+    self->free_content = private_dtw_free_content;
     self->represent = private_dtw_represent_tree_part;
-    self->delete = private_dtw_tree_part_destructor;
+    self->hardware_remove = private_dtw_hardware_remove;
+    
+    self->delete_tree_part = private_dtw_tree_part_destructor;
+
     if(load_content){
         self->load_content_from_hardware(self);
     }
@@ -1352,7 +1401,8 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *full_path,bool load_c
 
 
 void private_dtw_set_any_content(struct DtwTreePart *self,const char *content,int content_size,bool is_binary,bool set_last_modification_time){
-    self->content_exist = true;
+    self->free_content(self);
+    self->content_exist_in_memory = true;
     self->is_binary = is_binary;
     self->content = (char *)realloc(self->content,content_size);
     memcpy(self->content,content,content_size);
@@ -1365,6 +1415,7 @@ void private_dtw_set_any_content(struct DtwTreePart *self,const char *content,in
 
 void private_dtw_set_string_content(struct DtwTreePart *self,const char *content){
     self->set_any_content(self,content,strlen(content),false,true);
+    self->content[self->content_size] = '\0';
 }
 void private_dtw_set_binary_content(struct DtwTreePart *self,const char *content,int content_size){
     self->set_any_content(self,content,content_size,true,true);
@@ -1374,19 +1425,23 @@ void private_dtw_load_content_from_hardware(struct DtwTreePart *self){
     int size;
     bool is_binary;
     char *full_path = self->path->get_full_path(self->path);
-    char *content = dtw_load_any_content(full_path,&size,&is_binary);
-    
-    if(content != NULL){
-        self->set_any_content(self,content,size,is_binary,false);
-        self->last_modification_time = dtw_get_file_last_motification_in_unix(full_path);
-        self->content_exist_in_hardware = true;
-        free(self->hawdware_content_sha);
-        self->hawdware_content_sha = dtw_generate_sha_from_string(content);
+    if(dtw_entity_type(full_path) != DTW_FILE_TYPE){
+        free(full_path);
+        return;
     }
+    self->content = dtw_load_any_content(full_path,&size,&is_binary);
+    self->content_exist_in_memory = true;
+    self->is_binary = is_binary;
+    self->content_size = size;
+    self->last_modification_time = dtw_get_file_last_motification_in_unix(full_path);
+    self->content_exist_in_hardware = true;
+    free(self->hawdware_content_sha);
+    self->hawdware_content_sha = dtw_generate_sha_from_string(self->content);
     free(full_path);
+    
 }
 char *private_dtw_get_content_sha(struct DtwTreePart *self){
-    if(self->content_exist){
+    if(self->content_exist_in_memory){
         return dtw_generate_sha_from_string(self->content);
     }
     return NULL;
@@ -1396,13 +1451,15 @@ char *private_dtw_last_modification_time_in_string(struct DtwTreePart *self){
     return dtw_convert_unix_time_to_string(self->last_modification_time);
 }
 
+
+
 void private_dtw_represent_tree_part(struct DtwTreePart *self){
     char *full_path = self->path->get_full_path(self->path);
     printf("------------------------------------------------------------\n");
     printf("Path: %s\n",full_path);
-    printf("Content Exist: %s\n",self->content_exist ? "true" : "false");
-    if(self->content_exist){
-        char *content_sha = self->get_content_sha(self);
+    printf("Content Exist in Memory: %s\n",self->content_exist_in_memory ? "true" : "false");
+    if(self->content_exist_in_memory == true || self->content_exist_in_hardware == true){
+        
         char *last_moditication_in_string = self->last_modification_time_in_string(self);
 
         printf("Content Exist In Hardware: %s\n",self->content_exist_in_hardware ? "true" : "false");
@@ -1410,16 +1467,36 @@ void private_dtw_represent_tree_part(struct DtwTreePart *self){
         printf("Last Modification Time in Unix: %li\n",self->last_modification_time);
         printf("Last Modification Time: %s\n",last_moditication_in_string);
         printf("Content Size: %d\n",self->content_size);
-        printf("Content SHA: %s\n",self->hawdware_content_sha);    
-        printf ("Content: %s\n",self->content);
-        free(content_sha);
+        printf("Hardware SHA: %s\n",self->hawdware_content_sha);    
+        if(self->content_exist_in_memory == true){
+            char *content_sha = self->get_content_sha(self);
+            printf("Content SHA:  %s\n",content_sha);
+            printf ("Content: %s\n",self->content);
+            free(content_sha);
+        }
+        
         free(last_moditication_in_string);
     }
     free(full_path);
 
 }
+
+void private_dtw_hardware_remove(struct DtwTreePart *self){
+     if(self->ignore == true){
+        return;
+     }
+    char *full_path = self->path->get_full_path(self->path);
+    dtw_remove_any(full_path);
+    free(full_path);
+    
+}
+
+void private_dtw_free_content(struct DtwTreePart *self){
+    self->content_exist_in_memory = false;
+    self->content = (char *)realloc(self->content,0);
+}
 void private_dtw_tree_part_destructor(struct DtwTreePart *self){
-    self->path->delete(self->path);
+    self->path->delete_path(self->path);
     free(self->hawdware_content_sha);
     free(self->content);
     free(self);

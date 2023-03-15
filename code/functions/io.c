@@ -196,7 +196,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
     
     int size = dirs->size;
     int src_path_size = strlen(src_path);
-
+    return true;
  
     for(int i = 0; i < size; i++){
         
@@ -208,7 +208,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
     
 
     struct DtwStringArray *files = dtw_list_files_recursively(src_path);
-    
+   
     for(int i = 0; i < files->size; i++){
         int file_size;
         bool is_binary;
