@@ -34,7 +34,7 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_conten
 }
 
 struct  DtwTreePart * private_dtw_copy_tree(struct DtwTreePart *self){
-    char *path = self->path->get_full_path(self->path);
+    char *path = self->path->get_path(self->path);
 
     struct DtwTreePart *new_tree_part = dtw_tree_part_constructor(path,false,false);
     free(path);
@@ -80,7 +80,7 @@ void private_dtw_set_binary_content(struct DtwTreePart *self,const char *content
 void private_dtw_load_content_from_hardware(struct DtwTreePart *self){
     int size;
     bool is_binary;
-    char *path = self->path->get_full_path(self->path);
+    char *path = self->path->get_path(self->path);
     if(dtw_entity_type(path) != DTW_FILE_TYPE){
         free(path);
         return;
@@ -110,7 +110,7 @@ char *private_dtw_last_modification_time_in_string(struct DtwTreePart *self){
 
 
 void private_dtw_represent_tree_part(struct DtwTreePart *self){
-    char *path = self->path->get_full_path(self->path);
+    char *path = self->path->get_path(self->path);
     printf("------------------------------------------------------------\n");
     self->path->represent(self->path);
     printf("Content Exist in Memory: %s\n",self->content_exist_in_memory ? "true" : "false");
@@ -141,7 +141,7 @@ bool private_dtw_hardware_remove(struct DtwTreePart *self){
      if(self->ignore == true){
         return false;
      }
-    char *path = self->path->get_full_path(self->path);
+    char *path = self->path->get_path(self->path);
     dtw_remove_any(path);
     free(path);
     return true;
@@ -152,7 +152,7 @@ bool private_dtw_hardware_write(struct DtwTreePart *self){
     }
     //means that the content not exist in memory
     if(self->content_exist_in_memory == false){
-        char *path = self->path->get_full_path(self->path);
+        char *path = self->path->get_path(self->path);
         char *name = self->path->get_full_name(self->path);
         if(strcmp(name,"") == 0){
             dtw_create_dir_recursively(path);
@@ -165,7 +165,7 @@ bool private_dtw_hardware_write(struct DtwTreePart *self){
         free(name);
         return true;
     }
-    char *path = self->path->get_full_path(self->path);
+    char *path = self->path->get_path(self->path);
 
     dtw_write_any_content(path,self->content,self->content_size);
     free(path);
