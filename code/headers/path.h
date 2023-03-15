@@ -40,7 +40,7 @@ void private_dtw_set_name(struct DtwPath * self, const char * name);
 void private_dtw_set_dir(struct DtwPath *self, const char *path);
 
 void private_dtw_set_full_name(struct DtwPath * self, const char * full_name);
-void private_dtw_set_path(struct DtwPath *self, const char *ful_path);
+void private_dtw_set_path(struct DtwPath *self, const char *path);
 
 void private_dtw_represent_path(struct DtwPath *self);
 void private_dtw_destructor_path(struct DtwPath *self);

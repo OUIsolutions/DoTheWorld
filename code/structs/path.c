@@ -196,24 +196,24 @@ void private_dtw_set_dir(struct DtwPath *self, const char *path){
     self->dir[path_size] = '\0';
 }
 
-void private_dtw_set_path(struct DtwPath *self, const char *ful_path) {
+void private_dtw_set_path(struct DtwPath *self, const char *path) {
     self->dir_exists = false;
     self->name_exists = false;
     self->extension_exists = false;
     
-    int path_size = strlen(ful_path);
+    int path_size = strlen(path);
   
     for(int i = path_size - 1; i >= 0; i--){
-        if(ful_path[i] == '/' || ful_path[i] == '\\'){
+        if(path[i] == '/' || path[i] == '\\'){
             
             char *path = (char *)malloc(i + 1);
-            strncpy(path, ful_path, i);
+            strncpy(path, path, i);
             path[i] = '\0';
             self->set_dir(self, path);
             free(path);
 
             char *full_name = (char *)malloc(path_size - i);
-            strcpy(full_name, ful_path + i + 1);
+            strcpy(full_name, path + i + 1);
             full_name[path_size - i - 1] = '\0';
             self->set_full_name(self, full_name);
             free(full_name);
@@ -221,7 +221,7 @@ void private_dtw_set_path(struct DtwPath *self, const char *ful_path) {
         }
     }
 
-    self->set_full_name(self, ful_path);
+    self->set_full_name(self, path);
 }
 
 
