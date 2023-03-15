@@ -1,5 +1,5 @@
 
-#include "code/doTheWorldSeparated.c"
+#include "doTheWorld.c"
 
 int main(int argc, char *argv[]){
     //char *path2 = dtw_change_beginning_of_string("/home/teste",5,"/dev");

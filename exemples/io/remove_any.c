@@ -1,6 +1,6 @@
 
 
-#include "../../doTheWorld.h"
+#include "../../doTheWorld.c"
 
 int main(int argc, char *argv[]){
   //| remove any will delete anything you passs to it
