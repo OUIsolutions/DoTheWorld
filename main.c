@@ -1,10 +1,11 @@
 
-#include "code/doTheWorldSeparated.h"
+#include "code/doTheWorldSeparated.c"
 
 int main(int argc, char *argv[]){
     //char *path2 = dtw_change_beginning_of_string("/home/teste",5,"/dev");
     //printf("%s\n",path2);
     //free(path2);
+    /*
     struct DtwTreePart *tree = dtw_tree_part_constructor("teste.txt",false);
     tree->set_string_content(tree,"teste");
 
@@ -22,4 +23,8 @@ int main(int argc, char *argv[]){
 
     full->represent(full);
     return 0;
+    */
+    struct DtwStringArray *dirs = dtw_list_all_recursively("code",false);
+    dirs->represent(dirs);
+    dirs->delete_string_array(dirs);
 }

@@ -167,11 +167,8 @@ int dtw_entity_type(const char *path){
     return NOT_FOUND;
 }
 
-#ifdef __cplusplus
-    bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge=false) {
-#else
-    bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
-#endif 
+bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
+
     //verify if is an file
     int type = dtw_entity_type(src_path);
     if(type == NOT_FOUND){
