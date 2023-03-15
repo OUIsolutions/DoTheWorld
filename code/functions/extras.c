@@ -85,9 +85,8 @@ char* dtw_replace_string(const char *target, const char *old_element, const char
     return result;
 }
 
-char *dtw_change_beginning_of_string(const char *target,const char*start_element_to_remove, const char *new_element) {
+char *dtw_change_beginning_of_string(const char *target,int start_element_to_remove_size, const char *new_element) {
     int target_size = strlen(target);
-    int start_element_to_remove_size = strlen(start_element_to_remove);
     int new_element_size = strlen(new_element);
     char *result = (char *)malloc(target_size- start_element_to_remove_size + new_element_size   +2);
     strcpy(result, new_element);

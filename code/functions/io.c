@@ -195,16 +195,15 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(src_path,true);
     
     int size = dirs->size;
-
+    int src_path_size = strlen(src_path);
 
  
     for(int i = 0; i < size; i++){
         
-        char *new_path_dir = dtw_change_beginning_of_string(dirs->strings[i],src_path,dest_path);
+        char *new_path_dir = dtw_change_beginning_of_string(dirs->strings[i],src_path_size,dest_path);
         dtw_create_dir(new_path_dir);
         free(new_path_dir);
     }
-
     dirs->delete_string_array(dirs);
     
 
@@ -214,11 +213,11 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
         int file_size;
         bool is_binary;
         char *content = dtw_load_any_content(files->strings[i],&file_size,&is_binary);
-        char *new_path = dtw_change_beginning_of_string(files->strings[i],src_path,dest_path);
-        //printf("----------------------------\n");
-        //printf("old_path:%s\n",files->strings[i]);
-        //printf("old start:%s\n",src_path);
-        //printf("new_path:%s\n",new_path);
+        char *new_path = dtw_change_beginning_of_string(files->strings[i],src_path_size,dest_path);
+        printf("----------------------------\n");
+        printf("old_path:%s\n",files->strings[i]);
+        printf("start size:%i\n",src_path_size);
+        printf("new_path:%s\n",new_path);
 
         dtw_write_any_content(new_path,content,file_size);
         free(content);
