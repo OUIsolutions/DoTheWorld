@@ -1,169 +1,69 @@
 [{
-		"path":	"exemples",
-		"dir":	"exemples"
+		"path":	"exemples"
 	}, {
-		"path":	"exemples/io",
-		"dir":	"exemples/io"
+		"path":	"exemples/io"
 	}, {
 		"path":	"exemples/io/loading_any.c",
-		"dir":	"exemples/io",
-		"full_name":	"loading_any.c",
-		"name":	"loading_any",
-		"extension":	"c",
-		"hardware_sha256":	"8964b832811ca99fe2d037d0162b3ede9fc6a0cbad6af2a2d9d546fa9772507d",
-		"last_modification_in_unix":	1678857590,
-		"hardware_content_size":	528,
-		"last_modification":	"2023-03-15 02:19:50",
-		"content":	"\n\n#include \"../../doTheWorld.c\"\n\nint main(int argc, char *argv[]){\n \n  const char *path = \"../exemple_folder/deer.jpg\";\n  int size;\n  bool is_binary;\n  //load any file, is useful if you don't know if the file is binary or not\n  const char *content = dtw_load_any_content(path,&size,&is_binary);\n  if(content == NULL){\n    printf(\"error oppening %s\\n\",path);\n    return 1;\n  }\n  printf(\"size: %d\\n\",size);\n  printf(\"is_binary: %s\\n\",is_binary ? \"true\" : \"false\");\n  printf(\"content: %s\\n\",content);\n  free(content);\n  return 0;\n}",
-		"content_sha256":	"8964b832811ca99fe2d037d0162b3ede9fc6a0cbad6af2a2d9d546fa9772507d",
-		"content_size":	528
+		"content_size":	528,
+		"is_binary":	false,
+		"content":	"\n\n#include \"../../doTheWorld.c\"\n\nint main(int argc, char *argv[]){\n \n  const char *path = \"../exemple_folder/deer.jpg\";\n  int size;\n  bool is_binary;\n  //load any file, is useful if you don't know if the file is binary or not\n  const char *content = dtw_load_any_content(path,&size,&is_binary);\n  if(content == NULL){\n    printf(\"error oppening %s\\n\",path);\n    return 1;\n  }\n  printf(\"size: %d\\n\",size);\n  printf(\"is_binary: %s\\n\",is_binary ? \"true\" : \"false\");\n  printf(\"content: %s\\n\",content);\n  free(content);\n  return 0;\n}"
 	}, {
 		"path":	"exemples/io/entity_type.c",
-		"dir":	"exemples/io",
-		"full_name":	"entity_type.c",
-		"name":	"entity_type",
-		"extension":	"c",
-		"hardware_sha256":	"cc27049c0e7609977420d2cee0c3d8fda042dd5244df915d24a957e59e549001",
-		"last_modification_in_unix":	1678857583,
-		"hardware_content_size":	578,
-		"last_modification":	"2023-03-15 02:19:43",
-		"content":	"\n\n#include \"../../doTheWorld.c\"\n\nint main(int argc, char *argv[]){\n  \n  //| entity_type return the type of the entity\n  //| it can be:\n  //| DTW_FILE = 1\n  //| DTW_FOLDER = 2\n  //| DTW_NOT_FOUND = -1\n  const char *not_exist = \"not_exist\";\n  short type = dtw_entity_type(not_exist);\n  printf(\"%s is a %i\\n\",not_exist,type);\n\n  const char *file = \"../exemple_folder/deer.jpg\";\n  type = dtw_entity_type(file);\n  printf(\"%s is a %i\\n\",file,type);\n\n  const char *folder = \"../exemple_folder\";\n  type = dtw_entity_type(folder);\n  printf(\"%s is a %i\\n\",folder,type);\n\n  \n\n  return 0;\n}",
-		"content_sha256":	"cc27049c0e7609977420d2cee0c3d8fda042dd5244df915d24a957e59e549001",
-		"content_size":	578
+		"content_size":	578,
+		"is_binary":	false,
+		"content":	"\n\n#include \"../../doTheWorld.c\"\n\nint main(int argc, char *argv[]){\n  \n  //| entity_type return the type of the entity\n  //| it can be:\n  //| DTW_FILE = 1\n  //| DTW_FOLDER = 2\n  //| DTW_NOT_FOUND = -1\n  const char *not_exist = \"not_exist\";\n  short type = dtw_entity_type(not_exist);\n  printf(\"%s is a %i\\n\",not_exist,type);\n\n  const char *file = \"../exemple_folder/deer.jpg\";\n  type = dtw_entity_type(file);\n  printf(\"%s is a %i\\n\",file,type);\n\n  const char *folder = \"../exemple_folder\";\n  type = dtw_entity_type(folder);\n  printf(\"%s is a %i\\n\",folder,type);\n\n  \n\n  return 0;\n}"
 	}, {
 		"path":	"exemples/io/loading_binary.c",
-		"dir":	"exemples/io",
-		"full_name":	"loading_binary.c",
-		"name":	"loading_binary",
-		"extension":	"c",
-		"hardware_sha256":	"0d2f9380d0b0ce1a640c713d5af2bf24e0811b9526f95b7018dbefd0336f3483",
-		"last_modification_in_unix":	1678857592,
-		"hardware_content_size":	399,
-		"last_modification":	"2023-03-15 02:19:52",
-		"content":	"\n\n#include \"../../doTheWorld.c\"\n\nint main(int argc, char *argv[]){\n \n  const char *path = \"../exemple_folder/deer.jpg\";\n  int size;\n  //load a binary file content\n  const char *content = dtw_load_binary_content(path,&size);\n  if(content == NULL){\n    printf(\"error oppening %s\\n\",path);\n    return 1;\n  }\n  printf(\"size: %d\\n\",size);\n  printf(\"content: %s\\n\",content);\n  free(content);\n  return 0;\n}",
-		"content_sha256":	"0d2f9380d0b0ce1a640c713d5af2bf24e0811b9526f95b7018dbefd0336f3483",
-		"content_size":	399
+		"content_size":	399,
+		"is_binary":	false,
+		"content":	"\n\n#include \"../../doTheWorld.c\"\n\nint main(int argc, char *argv[]){\n \n  const char *path = \"../exemple_folder/deer.jpg\";\n  int size;\n  //load a binary file content\n  const char *content = dtw_load_binary_content(path,&size);\n  if(content == NULL){\n    printf(\"error oppening %s\\n\",path);\n    return 1;\n  }\n  printf(\"size: %d\\n\",size);\n  printf(\"content: %s\\n\",content);\n  free(content);\n  return 0;\n}"
 	}, {
 		"path":	"exemples/io/moving_any.c",
-		"dir":	"exemples/io",
-		"full_name":	"moving_any.c",
-		"name":	"moving_any",
-		"extension":	"c",
-		"hardware_sha256":	"bdac69ed0ce8fd43b28db0fd74daeda5da1662780dd9c469ec0e5afb38a64ae7",
-		"last_modification_in_unix":	1678857600,
-		"hardware_content_size":	407,
-		"last_modification":	"2023-03-15 02:20:00",
-		"content":	"\n\n#include \"../../doTheWorld.c\"\n\nint main(int argc, char *argv[]){\n  //| if you set merge to true,\n  //| the content of the folder will be merged \n  //| with the content of the destination folder\n  bool merge = false;\n  dtw_move_any(\"../exemple_folder\",\"exemple_folder_copy\",merge);\n  \n  //| you can use move_any to move a file\n  dtw_move_any(\"exemple_folder_copy/deer.jpg\",\"deer.jpg\",false);\n\n  return 0;\n}",
-		"content_sha256":	"bdac69ed0ce8fd43b28db0fd74daeda5da1662780dd9c469ec0e5afb38a64ae7",
-		"content_size":	407
+		"content_size":	407,
+		"is_binary":	false,
+		"content":	"\n\n#include \"../../doTheWorld.c\"\n\nint main(int argc, char *argv[]){\n  //| if you set merge to true,\n  //| the content of the folder will be merged \n  //| with the content of the destination folder\n  bool merge = false;\n  dtw_move_any(\"../exemple_folder\",\"exemple_folder_copy\",merge);\n  \n  //| you can use move_any to move a file\n  dtw_move_any(\"exemple_folder_copy/deer.jpg\",\"deer.jpg\",false);\n\n  return 0;\n}"
 	}, {
 		"path":	"exemples/io/writing_any.c",
-		"dir":	"exemples/io",
-		"full_name":	"writing_any.c",
-		"name":	"writing_any",
-		"extension":	"c",
-		"hardware_sha256":	"32ccdd1272ea193d26586898d2ac6032d7e6e4d21d5a462e922237d14d738b7c",
-		"last_modification_in_unix":	1678857606,
-		"hardware_content_size":	534,
-		"last_modification":	"2023-03-15 02:20:06",
-		"content":	"\n#include \"../../doTheWorld.c\"\n\nint main(int argc, char *argv[]){\n\n  //load the beer image\n  const char *deer_path = \"../exemple_folder/deer.jpg\";\n  int deer_size;\n  char *content = dtw_load_binary_content(deer_path,&deer_size);\n  //use these functions for binary files\n  if(content == NULL){\n    printf(\"error oppening %s\\n\",deer_path);\n    return 1;\n  }\n  printf(\"size: %d\\n\",deer_size);\n\n  bool result = dtw_write_any_content(\"exemple/deer.jpg\",content,deer_size);\n  printf(\"result: %s\\n\",result ? \"true\" : \"false\");\n  return 0;\n}\n",
-		"content_sha256":	"32ccdd1272ea193d26586898d2ac6032d7e6e4d21d5a462e922237d14d738b7c",
-		"content_size":	534
+		"content_size":	534,
+		"is_binary":	false,
+		"content":	"\n#include \"../../doTheWorld.c\"\n\nint main(int argc, char *argv[]){\n\n  //load the beer image\n  const char *deer_path = \"../exemple_folder/deer.jpg\";\n  int deer_size;\n  char *content = dtw_load_binary_content(deer_path,&deer_size);\n  //use these functions for binary files\n  if(content == NULL){\n    printf(\"error oppening %s\\n\",deer_path);\n    return 1;\n  }\n  printf(\"size: %d\\n\",deer_size);\n\n  bool result = dtw_write_any_content(\"exemple/deer.jpg\",content,deer_size);\n  printf(\"result: %s\\n\",result ? \"true\" : \"false\");\n  return 0;\n}\n"
 	}, {
 		"path":	"exemples/io/create_dir.c",
-		"dir":	"exemples/io",
-		"full_name":	"create_dir.c",
-		"name":	"create_dir",
-		"extension":	"c",
-		"hardware_sha256":	"6067a0c091bf21f5913348dfbcd18ffa17df4fee97a7e275bf3a4baf28be75be",
-		"last_modification_in_unix":	1678857582,
-		"hardware_content_size":	221,
-		"last_modification":	"2023-03-15 02:19:42",
-		"content":	"\n\n#include \"../../doTheWorld.c\"\n\nint main(int argc, char *argv[]){\n\n  //| it will create dirs recursively\n  dtw_create_dir(\"exemple/a/b\");\n  dtw_create_dir(\"exemple/a/b/c\");\n  dtw_create_dir(\"exemple/a/c/\");\n  return 0;\n}",
-		"content_sha256":	"6067a0c091bf21f5913348dfbcd18ffa17df4fee97a7e275bf3a4baf28be75be",
-		"content_size":	221
+		"content_size":	221,
+		"is_binary":	false,
+		"content":	"\n\n#include \"../../doTheWorld.c\"\n\nint main(int argc, char *argv[]){\n\n  //| it will create dirs recursively\n  dtw_create_dir(\"exemple/a/b\");\n  dtw_create_dir(\"exemple/a/b/c\");\n  dtw_create_dir(\"exemple/a/c/\");\n  return 0;\n}"
 	}, {
 		"path":	"exemples/io/writing_strings.c",
-		"dir":	"exemples/io",
-		"full_name":	"writing_strings.c",
-		"name":	"writing_strings",
-		"extension":	"c",
-		"hardware_sha256":	"722c357efffdc16067ae02d11ea64155b67701ac1a56ea0a89ac28c493a8f7f9",
-		"last_modification_in_unix":	1678857613,
-		"hardware_content_size":	272,
-		"last_modification":	"2023-03-15 02:20:13",
-		"content":	"#include \"../../doTheWorld.c\"\nint main(int argc, char *argv[]){\n  // Write a string to a file the path is auto created\n  \n  bool result = dtw_write_string_file_content(\"exemple/a/test.txt\",\"Hello World!\");\n  printf(\"result: %s\\n\",result ? \"true\" : \"false\");\n  return 0;\n}\n",
-		"content_sha256":	"722c357efffdc16067ae02d11ea64155b67701ac1a56ea0a89ac28c493a8f7f9",
-		"content_size":	272
+		"content_size":	272,
+		"is_binary":	false,
+		"content":	"#include \"../../doTheWorld.c\"\nint main(int argc, char *argv[]){\n  // Write a string to a file the path is auto created\n  \n  bool result = dtw_write_string_file_content(\"exemple/a/test.txt\",\"Hello World!\");\n  printf(\"result: %s\\n\",result ? \"true\" : \"false\");\n  return 0;\n}\n"
 	}, {
 		"path":	"exemples/io/loading_string.c",
-		"dir":	"exemples/io",
-		"full_name":	"loading_string.c",
-		"name":	"loading_string",
-		"extension":	"c",
-		"hardware_sha256":	"6141b225215db2942d5ac2d6580e13abdfc241d25b87aca3b87943b99d50f98a",
-		"last_modification_in_unix":	1678857594,
-		"hardware_content_size":	357,
-		"last_modification":	"2023-03-15 02:19:54",
-		"content":	"\n\n#include \"../../doTheWorld.c\"\n\nint main(int argc, char *argv[]){\n  //load a string file content\n  const char *path = \"../exemple_folder/a/test.txt\";\n  const char *content = dtw_load_string_file_content(path);\n  if(content == NULL){\n    printf(\"error oppening %s\\n\",path);\n    return 1;\n  }\n  printf(\"content: %s\\n\",content);\n  free(content);\n  return 0;\n}",
-		"content_sha256":	"6141b225215db2942d5ac2d6580e13abdfc241d25b87aca3b87943b99d50f98a",
-		"content_size":	357
+		"content_size":	357,
+		"is_binary":	false,
+		"content":	"\n\n#include \"../../doTheWorld.c\"\n\nint main(int argc, char *argv[]){\n  //load a string file content\n  const char *path = \"../exemple_folder/a/test.txt\";\n  const char *content = dtw_load_string_file_content(path);\n  if(content == NULL){\n    printf(\"error oppening %s\\n\",path);\n    return 1;\n  }\n  printf(\"content: %s\\n\",content);\n  free(content);\n  return 0;\n}"
 	}, {
 		"path":	"exemples/io/copying_any.c",
-		"dir":	"exemples/io",
-		"full_name":	"copying_any.c",
-		"name":	"copying_any",
-		"extension":	"c",
-		"hardware_sha256":	"ed8d0de9fdf979c4d079b584f0f343813366fa9e05fd5d261280a0abd600b70f",
-		"last_modification_in_unix":	1678857578,
-		"hardware_content_size":	402,
-		"last_modification":	"2023-03-15 02:19:38",
-		"content":	"\n\n#include \"../../doTheWorld.c\"\n\nint main(int argc, char *argv[]){\n  //| if you set merge to true,\n  //| the content of the folder will be merged \n  //| with the content of the destination folder\n  bool merge = false;\n  dtw_copy_any(\"../exemple_folder\",\"exemple_folder_copy\",merge);\n\n  //| you can use copy_any to copy a file\n  dtw_copy_any(\"../exemple_folder/deer.jpg\",\"deer.jpg\",false);\n  return 0;\n}",
-		"content_sha256":	"ed8d0de9fdf979c4d079b584f0f343813366fa9e05fd5d261280a0abd600b70f",
-		"content_size":	402
+		"content_size":	402,
+		"is_binary":	false,
+		"content":	"\n\n#include \"../../doTheWorld.c\"\n\nint main(int argc, char *argv[]){\n  //| if you set merge to true,\n  //| the content of the folder will be merged \n  //| with the content of the destination folder\n  bool merge = false;\n  dtw_copy_any(\"../exemple_folder\",\"exemple_folder_copy\",merge);\n\n  //| you can use copy_any to copy a file\n  dtw_copy_any(\"../exemple_folder/deer.jpg\",\"deer.jpg\",false);\n  return 0;\n}"
 	}, {
 		"path":	"exemples/io/remove_any.c",
-		"dir":	"exemples/io",
-		"full_name":	"remove_any.c",
-		"name":	"remove_any",
-		"extension":	"c",
-		"hardware_sha256":	"b00fb4bc27cb085644710f2ff4e3d143b7af19ed33e41c32abdeba80735a3048",
-		"last_modification_in_unix":	1678857603,
-		"hardware_content_size":	315,
-		"last_modification":	"2023-03-15 02:20:03",
-		"content":	"\n\n#include \"../../doTheWorld.c\"\n\nint main(int argc, char *argv[]){\n  //| remove any will delete anything you passs to it\n\n  //| if you pass a file, it will delete it\n  dtw_remove_any(\"../exemple_folder/deer.jpg\");\n\n  //| if you pass a folder, it will delete it\n  dtw_remove_any(\"../exemple_folder/a\");\n  return 0;\n}",
-		"content_sha256":	"b00fb4bc27cb085644710f2ff4e3d143b7af19ed33e41c32abdeba80735a3048",
-		"content_size":	315
+		"content_size":	315,
+		"is_binary":	false,
+		"content":	"\n\n#include \"../../doTheWorld.c\"\n\nint main(int argc, char *argv[]){\n  //| remove any will delete anything you passs to it\n\n  //| if you pass a file, it will delete it\n  dtw_remove_any(\"../exemple_folder/deer.jpg\");\n\n  //| if you pass a folder, it will delete it\n  dtw_remove_any(\"../exemple_folder/a\");\n  return 0;\n}"
 	}, {
-		"path":	"exemples/listage",
-		"dir":	"exemples/listage"
+		"path":	"exemples/listage"
 	}, {
 		"path":	"exemples/listage/list_files.c",
-		"dir":	"exemples/listage",
-		"full_name":	"list_files.c",
-		"name":	"list_files",
-		"extension":	"c",
-		"hardware_sha256":	"ec976685c7f2227bc60600d5d0474c63fddcbe790a61eb075c3af8c1ec41b37b",
-		"last_modification_in_unix":	1678857621,
-		"hardware_content_size":	88,
-		"last_modification":	"2023-03-15 02:20:21",
-		"content":	"\n\n#include \"../../doTheWorld.c\"\n\nint main(int argc, char *argv[]){\n    \n\n    return 0;\n}",
-		"content_sha256":	"ec976685c7f2227bc60600d5d0474c63fddcbe790a61eb075c3af8c1ec41b37b",
-		"content_size":	88
+		"content_size":	88,
+		"is_binary":	false,
+		"content":	"\n\n#include \"../../doTheWorld.c\"\n\nint main(int argc, char *argv[]){\n    \n\n    return 0;\n}"
 	}, {
-		"path":	"exemples/exemple_folder",
-		"dir":	"exemples/exemple_folder"
+		"path":	"exemples/exemple_folder"
 	}, {
 		"path":	"exemples/exemple_folder/deer.jpg",
-		"dir":	"exemples/exemple_folder",
-		"full_name":	"deer.jpg",
-		"name":	"deer",
-		"extension":	"jpg",
-		"hardware_sha256":	"ba4f25bf16ba4be6bc7d3276fafeb67f9eb3c5df042bc3a405e1af15b921eed7",
-		"last_modification_in_unix":	1678753025,
-		"hardware_content_size":	477800,
-		"last_modification":	"2023-03-13 21:17:05",
-		"content":	"ÿØÿà",
-		"content_sha256":	"ba4f25bf16ba4be6bc7d3276fafeb67f9eb3c5df042bc3a405e1af15b921eed7",
-		"content_size":	477800
+		"content_size":	477800,
+		"is_binary":	true,
+		"content":	"ÿØÿà"
 	}]

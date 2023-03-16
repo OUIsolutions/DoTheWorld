@@ -62,7 +62,7 @@ void private_dtw_add_path_from_hardware(struct DtwTree *self,const char *path,bo
 
 }
  
-char * private_dtw_dumps_tree_json(struct DtwTree *self,bool preserve_content,bool preserve_path_atributes,bool preserve_hadware_data,bool preserve_content_data,bool minify){
+char * private_dtw_dumps_tree_json(struct DtwTree *self,bool preserve_content,bool preserve_path_atributes,bool preserve_hadware_data,bool generate_content_sha,bool minify){
     
     cJSON *json_array = cJSON_CreateArray();
     for(int i = 0; i < self->size; i++){
@@ -143,28 +143,40 @@ char * private_dtw_dumps_tree_json(struct DtwTree *self,bool preserve_content,bo
 
             
         }
+
+        if(generate_content_sha && tree_part->content_exist_in_memory){
+            char *content_sha = tree_part->get_content_sha(tree_part);
+
+            cJSON_AddItemToObject(
+                json_tree_part, 
+                "content_sha256", 
+                cJSON_CreateString(content_sha)
+            );
+
+            free(content_sha);
+        }
+
         if(preserve_content && tree_part->content_exist_in_memory){
-                
+
+            cJSON_AddItemToObject(
+                json_tree_part, 
+                "content_size", 
+                cJSON_CreateNumber(tree_part->content_size)
+            );
+
+            cJSON_AddItemToObject(
+                json_tree_part, 
+                "is_binary", 
+                cJSON_CreateBool(tree_part->is_binary)
+            );  
+
             cJSON_AddItemToObject(
                 json_tree_part, 
                 "content", 
                 cJSON_CreateString(tree_part->content)
             );
         }
-        if(preserve_content_data && tree_part->content_exist_in_memory){
-            char *content_sha = tree_part->get_content_sha(tree_part);
-            cJSON_AddItemToObject(
-                json_tree_part, 
-                "content_sha256", 
-                cJSON_CreateString(content_sha)
-            );
-            cJSON_AddItemToObject(
-                json_tree_part, 
-                "content_size", 
-                cJSON_CreateNumber(tree_part->content_size)
-            );
-            free(content_sha);
-        }
+
         //Add json_tree_part  
         cJSON_AddItemToArray(json_array,json_tree_part);
         free(path_string);
