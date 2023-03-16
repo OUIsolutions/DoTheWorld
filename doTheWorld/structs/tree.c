@@ -14,6 +14,7 @@ struct  DtwTree * dtw_tree_constructor(){
     return self;
 }
 
+
 void private_dtw_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_part){
     self->size++;
     self->tree_parts =  (struct DtwTreePart**)realloc(self->tree_parts, self->size * sizeof(struct DtwTreePart *));
@@ -61,52 +62,99 @@ void private_dtw_add_path_from_hardware(struct DtwTree *self,const char *path,bo
 
 }
  
-char * private_dtw_dumps_tree_json(struct DtwTree *tree,bool preserve_content,bool preserve_path_atributes,bool preserve_hadware_data,bool generate_sha256){
+char * private_dtw_dumps_tree_json(struct DtwTree *self,bool preserve_content,bool preserve_path_atributes,bool preserve_hadware_data,bool generate_content_sha256,bool minify){
+    
     cJSON *json_array = cJSON_CreateArray();
-    for(int i = 0; i < tree->size; i++){
+    for(int i = 0; i < self->size; i++){
        
         cJSON *json_tree_part = cJSON_CreateObject();
-        struct DtwTreePart *tree_part = tree->tree_parts[i];
+        struct DtwTreePart *tree_part = self->tree_parts[i];
         char *path_string = tree_part->path->get_path(tree_part->path);
-        char *dir_string = tree_part->path->get_dir(tree_part->path);
-        char *full_name_string = tree_part->path->get_full_name(tree_part->path);
-        char *name_string = tree_part->path->get_name(tree_part->path);
-        char *extension_string = tree_part->path->get_extension(tree_part->path);
+        
 
         cJSON_AddItemToObject(
             json_tree_part, 
             "path", 
             cJSON_CreateString(path_string)
         );
-        cJSON_AddItemToObject(
-            json_tree_part, 
-            "dir", 
-            cJSON_CreateString(dir_string)
-        );
-        cJSON_AddItemToObject(
-            json_tree_part, 
-            "full_name", 
-            cJSON_CreateString(full_name_string)
-        );
-        cJSON_AddItemToObject(
-            json_tree_part, 
-            "name", 
-            cJSON_CreateString(name_string)
-        );
-        cJSON_AddItemToObject(
-            json_tree_part, 
-            "extension", 
-            cJSON_CreateString(extension_string)
-        );
+        
+        
+        
+        if(preserve_path_atributes == true){
+
+                char *dir_string = tree_part->path->get_dir(tree_part->path);
+                char *full_name_string = tree_part->path->get_full_name(tree_part->path);
+                char *name_string = tree_part->path->get_name(tree_part->path);
+                char *extension_string = tree_part->path->get_extension(tree_part->path);    
+
+                cJSON_AddItemToObject(
+                    json_tree_part, 
+                    "dir", 
+                    cJSON_CreateString(dir_string)
+                );
+                cJSON_AddItemToObject(
+                    json_tree_part, 
+                    "full_name", 
+                    cJSON_CreateString(full_name_string)
+                );
+                cJSON_AddItemToObject(
+                    json_tree_part, 
+                    "name", 
+                    cJSON_CreateString(name_string)
+                );
+                cJSON_AddItemToObject(
+                    json_tree_part, 
+                    "extension", 
+                    cJSON_CreateString(extension_string)
+                );
+
+                free(dir_string);
+                free(full_name_string);
+                free(name_string);
+                free(extension_string);
+        }
+
+
+        if(preserve_hadware_data== true && tree_part->content_exist_in_hardware){
+            cJSON_AddItemToObject(
+                json_tree_part, 
+                "hardware_sha256", 
+                cJSON_CreateString(tree_part->hawdware_content_sha)
+            );
+            cJSON_AddItemToObject(
+                json_tree_part, 
+                "last_modification_in_unix", 
+                cJSON_CreateNumber(tree_part->last_modification_time)
+            );
+            char *last_modification_string =dtw_convert_unix_time_to_string(tree_part->last_modification_time);
+            cJSON_AddItemToObject(
+                json_tree_part, 
+                "last_modification", 
+                cJSON_CreateString(last_modification_string)
+            );
+            free(last_modification_string);
+
+            
+        }
+        if(preserve_content && tree_part->content_exist_in_memory){
+            cJSON_AddItemToObject(
+                json_tree_part, 
+                "content", 
+                cJSON_CreateString(tree_part->content)
+            );
+        }
+
         //Add json_tree_part  
         cJSON_AddItemToArray(json_array,json_tree_part);
         free(path_string);
-        free(dir_string);
-        free(full_name_string);
-        free(name_string);
-        free(extension_string);
+
     }
+    
     char *json_string = cJSON_Print(json_array);
+    //set ident to 4 spaces
+    if(minify == true){
+        cJSON_Minify(json_string);
+    }
     cJSON_Delete(json_array);
     return json_string;
 }
