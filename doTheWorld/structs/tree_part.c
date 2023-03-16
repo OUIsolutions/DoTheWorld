@@ -11,6 +11,7 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_conten
     self->hawdware_content_sha = (char *)malloc(0);
     self->content = (char *)malloc(0);
     self->content_size = 0;
+    self->hardware_content_size = 0;
     self->load_content_from_hardware = private_dtw_load_content_from_hardware;
     self->set_any_content = private_dtw_set_any_content;
     self->set_string_content = private_dtw_set_string_content;
@@ -57,7 +58,7 @@ struct  DtwTreePart * private_dtw_copy_tree(struct DtwTreePart *self){
 }
 
 
-void private_dtw_set_any_content(struct DtwTreePart *self,const char *content,int content_size,bool is_binary,bool set_last_modification_time){
+void private_dtw_set_any_content(struct DtwTreePart *self,const char *content,int content_size,bool is_binary){
     self->free_content(self);
     self->content_exist_in_memory = true;
     self->is_binary = is_binary;
@@ -65,17 +66,15 @@ void private_dtw_set_any_content(struct DtwTreePart *self,const char *content,in
     memcpy(self->content,content,content_size);
     self->content_size = content_size;
 
-    if(set_last_modification_time){
-        self->last_modification_time = time(NULL);
-    }
+
 }
 
 void private_dtw_set_string_content(struct DtwTreePart *self,const char *content){
-    self->set_any_content(self,content,strlen(content),false,true);
+    self->set_any_content(self,content,strlen(content),false);
     self->content[self->content_size] = '\0';
 }
 void private_dtw_set_binary_content(struct DtwTreePart *self,const char *content,int content_size){
-    self->set_any_content(self,content,content_size,true,true);
+    self->set_any_content(self,content,content_size,true);
 }
 
 void private_dtw_load_content_from_hardware(struct DtwTreePart *self){
@@ -90,6 +89,7 @@ void private_dtw_load_content_from_hardware(struct DtwTreePart *self){
     self->content_exist_in_memory = true;
     self->is_binary = is_binary;
     self->content_size = size;
+    self->hardware_content_size = size;
     self->last_modification_time = dtw_get_file_last_motification_in_unix(path);
     self->content_exist_in_hardware = true;
     free(self->hawdware_content_sha);
