@@ -194,7 +194,7 @@ bool private_dtw_hardware_modify(struct DtwTreePart *self){
 
     
     if(changed_path == true && self->content_exist_in_memory == false){
-        char *old_path = self->path->first_path;
+        char *old_path = self->path->original_path;
         char *new_path = self->path->get_path(self->path);
         dtw_move_any(old_path,new_path,true);
         free(new_path);
@@ -203,7 +203,7 @@ bool private_dtw_hardware_modify(struct DtwTreePart *self){
     bool write = false;
 
     if(changed_path == true && self->content_exist_in_memory == true ){
-        char *old_path = self->path->first_path;
+        char *old_path = self->path->original_path;
         dtw_remove_any(old_path);
         write = true;
     }

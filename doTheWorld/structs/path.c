@@ -29,13 +29,13 @@ struct DtwPath * dtw_constructor_path( const char *path) {
     self->delete_path = private_dtw_destructor_path;
 
     self->set_path(self, path);
-    self->first_path = self->get_path(self);
+    self->original_path = self->get_path(self);
     
     return self;
 }
 bool private_dtw_path_changed(struct DtwPath *self){
     char *path = self->get_path(self);
-    if(strcmp(self->first_path,path ) == 0){
+    if(strcmp(self->original_path,path ) == 0){
         free(path);
         return false;
     }
@@ -224,7 +224,21 @@ void private_dtw_set_path(struct DtwPath *self, const char *target_path) {
     self->set_full_name(self, target_path);
 }
 
+void private_dtw_add_start_dir(struct DtwPath *self, const char *start_dir){
 
+    char *dir = self->get_dir(self);
+    //concat the path, with start_dir at beguining
+    if(dir != NULL){
+        char *path = (char *)malloc(strlen(dir) + strlen(start_dir) + 2);
+        sprintf(path, "%s/%s",start_dir,dir);
+        self->set_dir(self, path);
+        free(path);
+        free(dir);
+    }
+}
+void private_dtw_add_end_dir(struct DtwPath *self, const char *end_dir){
+    
+}
 void private_dtw_represent_path(struct DtwPath *self){
     char  *path = self->get_path(self);
     char *full_name = self->get_full_name(self);
@@ -232,7 +246,7 @@ void private_dtw_represent_path(struct DtwPath *self){
     char *name = self->get_name(self);
     char *extension = self->get_extension(self);
     bool changed = self->changed(self);
-    printf("First Path: %s\n", self->first_path ? self->first_path : "NULL");
+    printf("First Path: %s\n", self->original_path ? self->original_path : "NULL");
     printf("Path: %s\n", path  ? path : "NULL");
     printf("Path Changed: %s\n", changed ? "true" : "false");
     printf("Dir: %s\n", dir ? dir : "NULL");
@@ -251,7 +265,7 @@ void private_dtw_represent_path(struct DtwPath *self){
 
 
 void private_dtw_destructor_path(struct DtwPath *self) {
-    free(self->first_path);
+    free(self->original_path);
     free(self->dir);
     free(self->name);
     free(self->extension);

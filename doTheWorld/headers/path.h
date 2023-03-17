@@ -1,6 +1,6 @@
 
 struct DtwPath {
-    char *first_path;
+    char *original_path;
     char *dir;
     char *name;
     char *extension;
@@ -23,6 +23,10 @@ struct DtwPath {
     void (*set_dir) (struct DtwPath *self, const char *path);
     void (*set_full_name) (struct DtwPath *self, const char *full_name);
     void (*set_path) (struct DtwPath *self, const char *target_path);
+    
+    void (*add_start_dir)(struct DtwPath *self, const char *start_dir);
+    void (*add_end_dir)(struct DtwPath *self, const char *end_dir);
+
     void (*represent)(struct DtwPath *self);
     void (*delete_path) (struct DtwPath *self);
 
@@ -41,6 +45,9 @@ void private_dtw_set_dir(struct DtwPath *self, const char *path);
 
 void private_dtw_set_full_name(struct DtwPath * self, const char * full_name);
 void private_dtw_set_path(struct DtwPath *self, const char *target_path);
+
+void private_dtw_add_start_dir(struct DtwPath *self, const char *start_dir);
+void private_dtw_add_end_dir(struct DtwPath *self, const char *end_dir);
 
 void private_dtw_represent_path(struct DtwPath *self);
 void private_dtw_destructor_path(struct DtwPath *self);

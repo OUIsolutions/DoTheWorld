@@ -86,12 +86,13 @@ char * private_dtw_dumps_tree_json(struct DtwTree *self,bool preserve_content,bo
                 char *full_name_string = tree_part->path->get_full_name(tree_part->path);
                 char *name_string = tree_part->path->get_name(tree_part->path);
                 char *extension_string = tree_part->path->get_extension(tree_part->path);    
-                
-                cJSON_AddItemToObject(
-                    json_tree_part, 
-                    "first_path", 
-                    cJSON_CreateString(tree_part->path->first_path)
-                );
+                if(tree_part->path->original_path != path_string){
+                    cJSON_AddItemToObject(
+                        json_tree_part, 
+                        "original_path", 
+                        cJSON_CreateString(tree_part->path->original_path)
+                    );
+                }
 
                 cJSON_AddItemToObject(
                     json_tree_part, 
