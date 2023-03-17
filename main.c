@@ -15,8 +15,11 @@ void load_and_dump_string(){
 int main(int argc, char *argv[]){
     
 
-    struct DtwPath *path = dtw_path_constructor("/home/alex/Projects/teste.c");
-
+    struct DtwPath *path = dtw_constructor_path("/home/alex/Projects/teste.c");
+    char *full_path = path->get_path(path);
+    printf("%s",full_path);
+    free(full_path);
+    path->delete_path(path);
 
 
     //char *content_json = tree->dumps_json_tree(tree,false,false,false,false,false);

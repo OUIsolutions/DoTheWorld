@@ -137,8 +137,8 @@ void private_dtw_set_extension(struct DtwPath *self, const char *extension){
         return;
     }
     self->extension_exists = true;
-    int extension_size = strlen(extension) +1;
-    self->extension = (char *)realloc(self->extension, extension_size);
+    int extension_size = strlen(extension);
+    self->extension = (char *)realloc(self->extension, extension_size+2);
     strcpy(self->extension, extension);
     self->extension[extension_size] = '\0';
 }
