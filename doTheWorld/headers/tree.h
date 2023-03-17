@@ -6,7 +6,7 @@ struct  DtwTree{
     void (*add_tree_part_by_reference)(struct DtwTree *self, struct DtwTreePart *tree_part);
     void (*add_path_from_hardware)(struct DtwTree *self,const char *path,bool load_content, bool preserve_content);
     void (*loads_json_tree)(struct DtwTree *self,const char *content);
-    char *(*dumps_json_tree)(struct DtwTree *self,bool preserve_content,bool preserve_path_atributes,bool preserve_hadware_data,bool preserve_content_data,bool minify);
+    char *(*dumps_json_tree)(struct DtwTree *self,bool preserve_content,bool preserve_path_atributes,bool preserve_hadware_data,bool preserve_content_data,bool minify); 
     void (*delete_tree)(struct DtwTree *self);
     void (*represent)(struct DtwTree *self);
 };
@@ -17,6 +17,16 @@ void private_dtw_delete_tree(struct DtwTree *self);
 void private_dtw_represent_tree(struct DtwTree *self);
 void private_dtw_add_path_from_hardware(struct DtwTree *self,const char *path,bool load_content, bool preserve_content);
 void private_dtw_loads_json_tree(struct DtwTree *self,const char *content);
+#ifdef __cplusplus
+char * private_dtw_dumps_tree_json(
+    struct DtwTree *self,
+    bool preserve_content=true,
+    bool preserve_path_atributes=true,
+    bool preserve_hadware_data=false,
+    bool preserve_content_data=true,
+    bool minify=false);
+#else 
 char * private_dtw_dumps_tree_json(struct DtwTree *self,bool preserve_content,bool preserve_path_atributes,bool preserve_hadware_data,bool preserve_content_data,bool minify);
+#endif
 struct  DtwTree * dtw_tree_constructor();
 
