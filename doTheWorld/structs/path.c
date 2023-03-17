@@ -237,6 +237,7 @@ void private_dtw_add_start_dir(struct DtwPath *self, const char *start_dir){
         free(dir);
     }
 }
+
 void private_dtw_add_end_dir(struct DtwPath *self, const char *end_dir){
     char *dir = self->get_dir(self);
     //concat the path, with start_dir at beguining
