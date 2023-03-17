@@ -19,17 +19,9 @@ int main(int argc, char *argv[]){
     char *code = tree->dumps_json_tree(tree,true,true,true,true,false);
     dtw_write_string_file_content("code.json",code);
     */
-    load_and_dump_string();
+    //load_and_dump_string();
 
-    /*
-    for (int i = 0; i < tree->size; i++){
-        struct DtwTreePart *part = tree->tree_parts[i];
-        char *dir = part->path->get_dir(part->path);
-        char *new_dir = dtw_replace_string(dir,"doTheWorld","doTheWorld2");
-        part->path->set_dir(part->path,new_dir);
-        free(new_dir);
-        free(dir);
-    }
-    */
+   
+    
     
 }
