@@ -168,12 +168,22 @@ char * private_dtw_dumps_tree_json(struct DtwTree *self,bool preserve_content,bo
                 "is_binary", 
                 cJSON_CreateBool(tree_part->is_binary)
             );  
-
-            cJSON_AddItemToObject(
-                json_tree_part, 
-                "content", 
-                cJSON_CreateString(tree_part->content)
-            );
+            if(tree_part->is_binary == false){
+                cJSON_AddItemToObject(
+                    json_tree_part, 
+                    "content", 
+                    cJSON_CreateString(tree_part->content)
+                );
+            }
+            else{
+                char *content_base64 = base64_encode(tree_part->content, tree_part->content_size);
+                cJSON_AddItemToObject(
+                    json_tree_part, 
+                    "content", 
+                    cJSON_CreateString(content_base64)
+                );  
+                free(content_base64);
+            }
         }
 
         //Add json_tree_part  

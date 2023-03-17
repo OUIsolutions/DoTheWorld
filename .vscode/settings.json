@@ -25,7 +25,8 @@
         "dotheworld.h": "c",
         "tree.h": "c",
         "typeinfo": "c",
-        "monodimension_listage_win32.h": "c"
+        "monodimension_listage_win32.h": "c",
+        "base64.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
