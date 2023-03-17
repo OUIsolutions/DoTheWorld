@@ -1,4 +1,6 @@
 
+#define DTW_IS_BINARY true
+#define DTW_IS_NOT_BINARY false
 struct DtwTreePart{
     
     struct DtwPath *path;

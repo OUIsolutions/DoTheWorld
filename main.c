@@ -18,8 +18,15 @@ void load_and_dump_string(){
 
 void load_hardware_and_dump_string(){
     struct DtwTree *tree = dtw_tree_constructor();
-    tree->add_path_from_hardware(tree,"exemples",true,true);
-    char *generated =tree->dumps_json_tree(tree,true,true,true,true,false);
+    tree->add_path_from_hardware(tree,"exemples",DTW_LOAD_CONTENT,DTW_PRESERVE_CONTENT);
+    char *generated =tree->dumps_json_tree(
+        tree,
+        DTW_PRESERVE_CONTENT,
+        DTW_PRESERVE_PATH_ATRIBUTES,
+        DTW_PRESERVE_HARDWARE_DATA,
+        DTW_PRESERVE_CONTENT_DATA,
+        DTW_NOT_MINIFY
+        );
     dtw_write_string_file_content("exemples.json",generated);
     free(generated);
     tree->delete_tree(tree);
@@ -27,7 +34,7 @@ void load_hardware_and_dump_string(){
 
 int main(int argc, char *argv[]){
     
-    load_hardware_and_dump_string();
+    load_and_dump_string();
 
     return 0;
 }
