@@ -10,8 +10,6 @@ void load_and_dump_string(){
         path->add_start_dir(path,"exemples2");
         part->hardware_write(part);
     }
-
-
     
     tree->delete_tree(tree);
     free(code);
