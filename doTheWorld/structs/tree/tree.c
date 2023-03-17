@@ -45,7 +45,7 @@ void private_dtw_represent_tree(struct DtwTree *self){
 }
 void private_dtw_add_path_from_hardware(struct DtwTree *self,const char *path,bool load_content, bool preserve_content){
     
-    struct DtwStringArray *path_array = dtw_list_all_recursively(path, true);
+    struct DtwStringArray *path_array = dtw_list_all_recursively(path);
     for(int i = 0; i < path_array->size; i++){
         const char *current_path = path_array->strings[i];
 

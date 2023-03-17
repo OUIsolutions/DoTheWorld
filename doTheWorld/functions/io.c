@@ -43,7 +43,7 @@ void dtw_remove_any(const char* path) {
     files->delete_string_array(files);
 
 
-    struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,true);
+    struct DtwStringArray *dirs = dtw_list_dirs_recursively(path);
     size = dirs->size;
     for(int i = dirs->size -1; i >=0; i--){
         remove(dirs->strings[i]);
@@ -191,7 +191,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
         dtw_remove_any(dest_path);
     }
     //creating dirs
-    struct DtwStringArray *dirs = dtw_list_dirs_recursively(src_path,true);
+    struct DtwStringArray *dirs = dtw_list_dirs_recursively(src_path);
     
     int size = dirs->size;
     int src_path_size = strlen(src_path);

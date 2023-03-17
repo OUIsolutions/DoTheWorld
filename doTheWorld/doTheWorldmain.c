@@ -26,6 +26,7 @@
 #include "functions/multidimension_listage.c"
 #include "structs/path.c"
 #include "structs/string_array.c"
-#include "structs/tree_part.c"
+#include "structs/tree_part/tree_part.c"
+#include "structs/tree_part/hardware_tree_part.c"
 #include "structs/tree/tree.c"
 #include "structs/tree/json_tree.c"

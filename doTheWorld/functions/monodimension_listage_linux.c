@@ -24,7 +24,7 @@ bool private_dtw_verify_if_skip(struct dirent *entry){
         return false;
 }
 
-struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool concat_path,bool add_end_bar_to_dir){
+struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool concat_path){
 
     DIR *dir;
     struct dirent *entry;
@@ -51,7 +51,14 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
             if(concat_path){
                 //allocates memory for the directory
                 char *generated_dir = (char*)malloc(strlen(path) + strlen(entry->d_name) + 2);
-                sprintf(generated_dir, "%s/%s", path, entry->d_name);
+                if(path[strlen(path) - 1] == '/'){
+                    sprintf(generated_dir, "%s%s", path, entry->d_name);
+                }
+                else{
+                    sprintf(generated_dir, "%s/%s", path, entry->d_name);
+                }
+
+                
                 
                 dirs->add_string(dirs, generated_dir);
                 free(generated_dir);
@@ -66,9 +73,8 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
         }
     }
 
-    if(expected_type == DTW_FOLDER_TYPE && add_end_bar_to_dir){
-        private_dtw_add_end_bar_to_dirs_string_array(dirs);
-        
+    if(expected_type == DTW_FOLDER_TYPE){
+        private_dtw_add_end_bar_to_dirs_string_array(dirs);   
     }
     closedir(dir);
 
