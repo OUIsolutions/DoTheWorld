@@ -25,13 +25,18 @@ void private_dtw_loads_json_tree(struct DtwTree *self,const char *content){
             false
         );
         if(original_path != NULL){
-            part->path->original_path = original_path->valuestring;
+            part->path->original_path = (char *)malloc(strlen(original_path->valuestring)+1);
+            strcpy(part->path->original_path,original_path->valuestring);
         }
+
         if(hardware_sha != NULL){
             part->content_exist_in_hardware = true;
-            part->hawdware_content_sha = hardware_sha->valuestring;
+            part->hawdware_content_sha = "nada";
+            //strcpy(part->hawdware_content_sha,hardware_sha->valuestring);
+
         }
-        
+
+
 
         if(hardware_content_size != NULL){
             part->content_exist_in_hardware = true;
@@ -61,7 +66,6 @@ void private_dtw_loads_json_tree(struct DtwTree *self,const char *content){
                 part->set_any_content(part,decoded,out_size,part->is_binary);
                 free(decoded);
             }
-
             part->set_any_content(part,content->valuestring,part->content_size,part->is_binary);
         }
         self->add_tree_part_by_reference(self,part);
