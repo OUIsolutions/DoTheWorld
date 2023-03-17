@@ -15,9 +15,12 @@ void load_and_dump_string(){
 int main(int argc, char *argv[]){
     
 
-    DtwStringArray 
+    struct DtwPath *path = dtw_path_constructor("/home/alex/Projects/teste.c");
 
-    //char *content_json = tree->dumps_json_tree(tree,true,true,true,true,false);
+
+
+    //char *content_json = tree->dumps_json_tree(tree,false,false,false,false,false);
     //dtw_write_string_file_content("code.json",content_json);
-    
+    //tree->delete_tree(tree);
+    //free(content_json);
 }

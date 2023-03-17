@@ -25,7 +25,7 @@ struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool add_end_
                 dirs->merge_string_array(dirs,sub_dirs);
                 sub_dirs->delete_string_array(sub_dirs);
                 i++;
-                return dirs;
+               
         }
         //unsifth path in dirs 
         
