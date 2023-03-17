@@ -485,6 +485,12 @@ CJSON_PUBLIC(void) cJSON_free(void *object);
 #endif
 
 #endif
+
+const char base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+char *dtw_base64_encode(const char *data, size_t input_length);
+
+char *dtw_base64_decode(const char *data, size_t input_length, size_t *output_length);
 #define DTW_FILE_TYPE 1
 #define DTW_FOLDER_TYPE 2
 #define DTW_ALL_TYPE 3
@@ -522,7 +528,7 @@ char *private_dtw_replace_string_once(const char *target, const char *old_elemen
 char* dtw_replace_string(const char *target, const char *old_element, const char *new_element);
 
 
-char *dtw_change_beginning_of_string(const char *target,int start_element_to_remove_size, const char *new_element);
+char *private_dtw_change_beginning_of_string(const char *target,int start_element_to_remove_size, const char *new_element);
 
 
 
@@ -605,7 +611,7 @@ struct DtwStringArray * dtw_list_all_recursively(const char *path,bool add_end_b
 #endif
 
 struct DtwPath {
-    char *first_path;
+    char *original_path;
     char *dir;
     char *name;
     char *extension;
@@ -628,6 +634,10 @@ struct DtwPath {
     void (*set_dir) (struct DtwPath *self, const char *path);
     void (*set_full_name) (struct DtwPath *self, const char *full_name);
     void (*set_path) (struct DtwPath *self, const char *target_path);
+    
+    void (*add_start_dir)(struct DtwPath *self, const char *start_dir);
+    void (*add_end_dir)(struct DtwPath *self, const char *end_dir);
+
     void (*represent)(struct DtwPath *self);
     void (*delete_path) (struct DtwPath *self);
 
@@ -647,6 +657,9 @@ void private_dtw_set_dir(struct DtwPath *self, const char *path);
 void private_dtw_set_full_name(struct DtwPath * self, const char * full_name);
 void private_dtw_set_path(struct DtwPath *self, const char *target_path);
 
+void private_dtw_add_start_dir(struct DtwPath *self, const char *start_dir);
+void private_dtw_add_end_dir(struct DtwPath *self, const char *end_dir);
+
 void private_dtw_represent_path(struct DtwPath *self);
 void private_dtw_destructor_path(struct DtwPath *self);
 
@@ -657,6 +670,7 @@ struct DtwTreePart{
     
     struct DtwPath *path;
     bool content_exist_in_memory;
+    int  hardware_content_size; 
     long last_modification_time;
     bool content_exist_in_hardware;
     bool ignore;
@@ -668,7 +682,7 @@ struct DtwTreePart{
 
     char *(*get_content_sha)(struct DtwTreePart *self);
     char *(*last_modification_time_in_string)(struct DtwTreePart *self);
-    void (*set_any_content)(struct DtwTreePart *self,const char *content,int content_size,bool is_binary,bool set_last_modification_time);
+    void (*set_any_content)(struct DtwTreePart *self,const char *content,int content_size,bool is_binary);
     void (*set_string_content)(struct DtwTreePart *self,const char *content);
     void (*set_binary_content)(struct DtwTreePart *self,const char *content,int content_size);
     void (*load_content_from_hardware)(struct DtwTreePart *self);
@@ -684,7 +698,7 @@ struct DtwTreePart{
 };
 char *private_dtw_get_content_sha(struct DtwTreePart *self);
 char *private_dtw_last_modification_time_in_string(struct DtwTreePart *self);
-void private_dtw_set_any_content(struct DtwTreePart *self,const char *content,int content_size,bool is_binary,bool set_last_modification_time);
+void private_dtw_set_any_content(struct DtwTreePart *self,const char *content,int content_size,bool is_binary);
 void private_dtw_set_string_content(struct DtwTreePart *self,const char *content);
 void private_dtw_set_binary_content(struct DtwTreePart *self,const char *content,int content_size);
 void private_dtw_load_content_from_hardware(struct DtwTreePart *self);
@@ -697,8 +711,6 @@ bool private_dtw_hardware_modify(struct DtwTreePart *self);
 void private_dtw_tree_part_destructor(struct DtwTreePart *self);
 struct DtwTreePart * private_dtw_copy_tree(struct DtwTreePart *self);
 
-
-
 struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_content,bool preserve_content);
 
 struct  DtwTree{
@@ -707,7 +719,8 @@ struct  DtwTree{
     void (*add_tree_part_by_copy)(struct DtwTree *self, struct DtwTreePart *tree_part);
     void (*add_tree_part_by_reference)(struct DtwTree *self, struct DtwTreePart *tree_part);
     void (*add_path_from_hardware)(struct DtwTree *self,const char *path,bool load_content, bool preserve_content);
-    char *(*dumps_tree_json)(struct DtwTree *tree,bool preserve_content,bool preserve_path_atributes,bool preserve_hadware_data,bool generate_sha256);
+    void (*loads_json_tree)(struct DtwTree *self,const char *content);
+    char *(*dumps_json_tree)(struct DtwTree *self,bool preserve_content,bool preserve_path_atributes,bool preserve_hadware_data,bool preserve_content_data,bool minify);
     void (*delete_tree)(struct DtwTree *self);
     void (*represent)(struct DtwTree *self);
 };
@@ -717,7 +730,8 @@ void private_dtw_add_tree_part_reference(struct DtwTree *self, struct DtwTreePar
 void private_dtw_delete_tree(struct DtwTree *self);
 void private_dtw_represent_tree(struct DtwTree *self);
 void private_dtw_add_path_from_hardware(struct DtwTree *self,const char *path,bool load_content, bool preserve_content);
-char * private_dtw_dumps_tree_json(struct DtwTree *tree,bool preserve_content,bool preserve_path_atributes,bool preserve_hadware_data,bool generate_sha256);
+void private_dtw_loads_json_tree(struct DtwTree *self,const char *content);
+char * private_dtw_dumps_tree_json(struct DtwTree *self,bool preserve_content,bool preserve_path_atributes,bool preserve_hadware_data,bool preserve_content_data,bool minify);
 struct  DtwTree * dtw_tree_constructor();
 
 
@@ -4126,6 +4140,72 @@ CJSON_PUBLIC(void) cJSON_free(void *object)
     global_hooks.deallocate(object);
 }
 
+char *dtw_base64_encode(const char *data, size_t input_length) {
+    size_t output_length = 4 * ((input_length + 2) / 3);
+
+    char *encoded_data = (char *)malloc(output_length + 1);
+
+    if (encoded_data == NULL) return NULL;
+
+    size_t i, j;
+    for (i = 0, j = 0; i < input_length; ) {
+        unsigned char b0 = i < input_length ? data[i++] : 0;
+        unsigned char b1 = i < input_length ? data[i++] : 0;
+        unsigned char b2 = i < input_length ? data[i++] : 0;
+
+        unsigned char b = b0 >> 2;
+        encoded_data[j++] = base64_table[b];
+
+        b = (b0 << 4) & 0x3F;
+        b |= b1 >> 4;
+        encoded_data[j++] = base64_table[b];
+
+        b = (b1 << 2) & 0x3F;
+        b |= b2 >> 6;
+        encoded_data[j++] = i <= input_length + 1 ? base64_table[b] : '=';
+
+        b = b2 & 0x3F;
+        encoded_data[j++] = i <= input_length ? base64_table[b] : '=';
+    }
+
+    encoded_data[j] = '\0';
+    return encoded_data;
+}
+
+
+char *dtw_base64_decode(const char *data, size_t input_length, size_t *output_length) {
+    if (input_length % 4 != 0) return NULL;
+
+    *output_length = input_length / 4 * 3;
+    if (data[input_length - 1] == '=') (*output_length)--;
+    if (data[input_length - 2] == '=') (*output_length)--;
+
+    char *decoded_data = (char*) malloc(*output_length);
+    if (decoded_data == NULL) return NULL;
+
+    size_t i, j;
+    for (i = 0, j = 0; i < input_length; ) {
+        unsigned char b0 = data[i] == '=' ? 0 & i++ : strchr(base64_table, data[i++]) - base64_table;
+        unsigned char b1 = data[i] == '=' ? 0 & i++ : strchr(base64_table, data[i++]) - base64_table;
+        unsigned char b2 = data[i] == '=' ? 0 & i++ : strchr(base64_table, data[i++]) - base64_table;
+        unsigned char b3 = data[i] == '=' ? 0 & i++ : strchr(base64_table, data[i++]) - base64_table;
+
+        unsigned char b = (b0 << 2) | (b1 >> 4);
+        decoded_data[j++] = b;
+
+        if (j < *output_length) {
+            b = (b1 << 4) | (b2 >> 2);
+            decoded_data[j++] = b;
+        }
+        if (j < *output_length) {
+            b = (b2 << 6) | b3;
+            decoded_data[j++] = b;
+        }
+    }
+
+    return decoded_data;
+}
+
 char * dtw_generate_sha_from_file(const char *path){
     return calc_sha_256_from_file_returning_string(path);
 }
@@ -4212,7 +4292,7 @@ char* dtw_replace_string(const char *target, const char *old_element, const char
     return result;
 }
 
-char *dtw_change_beginning_of_string(const char *target,int start_element_to_remove_size, const char *new_element) {
+char *private_dtw_change_beginning_of_string(const char *target,int start_element_to_remove_size, const char *new_element) {
     int target_size = strlen(target);
     int new_element_size = strlen(new_element);
     char *result = (char *)malloc(target_size- start_element_to_remove_size + new_element_size   +2);
@@ -4436,7 +4516,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
 
     for(int i = 0; i < size; i++){
         
-        char *new_path_dir = dtw_change_beginning_of_string(dirs->strings[i],src_path_size,dest_path);
+        char *new_path_dir = private_dtw_change_beginning_of_string(dirs->strings[i],src_path_size,dest_path);
         dtw_create_dir_recursively(new_path_dir);
         free(new_path_dir);
     }
@@ -4449,7 +4529,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
         int file_size;
         bool is_binary;
         char *content = dtw_load_any_content(files->strings[i],&file_size,&is_binary);
-        char *new_path = dtw_change_beginning_of_string(files->strings[i],src_path_size,dest_path);
+        char *new_path = private_dtw_change_beginning_of_string(files->strings[i],src_path_size,dest_path);
 
         dtw_write_any_content(new_path,content,file_size);
         free(content);
@@ -4754,18 +4834,19 @@ struct DtwPath * dtw_constructor_path( const char *path) {
     self->set_dir = private_dtw_set_dir;
     self->set_full_name = private_dtw_set_full_name;
     self->set_path = private_dtw_set_path;
-
-    self->represent = private_dtw_represent_path;
+    self->add_start_dir = private_dtw_add_start_dir;
+    self->add_end_dir = private_dtw_add_end_dir;
+    self->represent = private_dtw_represent_path;   
     self->delete_path = private_dtw_destructor_path;
 
     self->set_path(self, path);
-    self->first_path = self->get_path(self);
+    self->original_path = self->get_path(self);
     
     return self;
 }
 bool private_dtw_path_changed(struct DtwPath *self){
     char *path = self->get_path(self);
-    if(strcmp(self->first_path,path ) == 0){
+    if(strcmp(self->original_path,path ) == 0){
         free(path);
         return false;
     }
@@ -4954,6 +5035,32 @@ void private_dtw_set_path(struct DtwPath *self, const char *target_path) {
     self->set_full_name(self, target_path);
 }
 
+void private_dtw_add_start_dir(struct DtwPath *self, const char *start_dir){
+
+    char *dir = self->get_dir(self);
+    //concat the path, with start_dir at beguining
+    if(dir != NULL){
+        char *path = (char *)malloc(strlen(dir) + strlen(start_dir) + 2);
+        sprintf(path, "%s/%s",start_dir,dir);
+        self->set_dir(self, path);
+        free(path);
+        free(dir);
+    }
+}
+
+void private_dtw_add_end_dir(struct DtwPath *self, const char *end_dir){
+    char *dir = self->get_dir(self);
+    //concat the path, with start_dir at beguining
+    if(dir != NULL){
+        char *path = (char *)malloc(strlen(dir) + strlen(end_dir) + 2);
+        sprintf(path, "%s/%s",dir,end_dir);
+        self->set_dir(self, path);
+        free(path);
+        free(dir);
+    }
+}
+
+  
 
 void private_dtw_represent_path(struct DtwPath *self){
     char  *path = self->get_path(self);
@@ -4962,7 +5069,7 @@ void private_dtw_represent_path(struct DtwPath *self){
     char *name = self->get_name(self);
     char *extension = self->get_extension(self);
     bool changed = self->changed(self);
-    printf("First Path: %s\n", self->first_path ? self->first_path : "NULL");
+    printf("First Path: %s\n", self->original_path ? self->original_path : "NULL");
     printf("Path: %s\n", path  ? path : "NULL");
     printf("Path Changed: %s\n", changed ? "true" : "false");
     printf("Dir: %s\n", dir ? dir : "NULL");
@@ -4981,7 +5088,7 @@ void private_dtw_represent_path(struct DtwPath *self){
 
 
 void private_dtw_destructor_path(struct DtwPath *self) {
-    free(self->first_path);
+    free(self->original_path);
     free(self->dir);
     free(self->name);
     free(self->extension);
@@ -5052,6 +5159,7 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_conten
     self->hawdware_content_sha = (char *)malloc(0);
     self->content = (char *)malloc(0);
     self->content_size = 0;
+    self->hardware_content_size = 0;
     self->load_content_from_hardware = private_dtw_load_content_from_hardware;
     self->set_any_content = private_dtw_set_any_content;
     self->set_string_content = private_dtw_set_string_content;
@@ -5098,7 +5206,7 @@ struct  DtwTreePart * private_dtw_copy_tree(struct DtwTreePart *self){
 }
 
 
-void private_dtw_set_any_content(struct DtwTreePart *self,const char *content,int content_size,bool is_binary,bool set_last_modification_time){
+void private_dtw_set_any_content(struct DtwTreePart *self,const char *content,int content_size,bool is_binary){
     self->free_content(self);
     self->content_exist_in_memory = true;
     self->is_binary = is_binary;
@@ -5106,17 +5214,15 @@ void private_dtw_set_any_content(struct DtwTreePart *self,const char *content,in
     memcpy(self->content,content,content_size);
     self->content_size = content_size;
 
-    if(set_last_modification_time){
-        self->last_modification_time = time(NULL);
-    }
+
 }
 
 void private_dtw_set_string_content(struct DtwTreePart *self,const char *content){
-    self->set_any_content(self,content,strlen(content),false,true);
+    self->set_any_content(self,content,strlen(content),false);
     self->content[self->content_size] = '\0';
 }
 void private_dtw_set_binary_content(struct DtwTreePart *self,const char *content,int content_size){
-    self->set_any_content(self,content,content_size,true,true);
+    self->set_any_content(self,content,content_size,true);
 }
 
 void private_dtw_load_content_from_hardware(struct DtwTreePart *self){
@@ -5131,6 +5237,7 @@ void private_dtw_load_content_from_hardware(struct DtwTreePart *self){
     self->content_exist_in_memory = true;
     self->is_binary = is_binary;
     self->content_size = size;
+    self->hardware_content_size = size;
     self->last_modification_time = dtw_get_file_last_motification_in_unix(path);
     self->content_exist_in_hardware = true;
     free(self->hawdware_content_sha);
@@ -5235,7 +5342,7 @@ bool private_dtw_hardware_modify(struct DtwTreePart *self){
 
     
     if(changed_path == true && self->content_exist_in_memory == false){
-        char *old_path = self->path->first_path;
+        char *old_path = self->path->original_path;
         char *new_path = self->path->get_path(self->path);
         dtw_move_any(old_path,new_path,true);
         free(new_path);
@@ -5244,7 +5351,7 @@ bool private_dtw_hardware_modify(struct DtwTreePart *self){
     bool write = false;
 
     if(changed_path == true && self->content_exist_in_memory == true ){
-        char *old_path = self->path->first_path;
+        char *old_path = self->path->original_path;
         dtw_remove_any(old_path);
         write = true;
     }
@@ -5301,9 +5408,11 @@ struct  DtwTree * dtw_tree_constructor(){
     self->delete_tree = private_dtw_delete_tree;
     self->represent = private_dtw_represent_tree;
     self->add_path_from_hardware = private_dtw_add_path_from_hardware;
-    self->dumps_tree_json = private_dtw_dumps_tree_json;
+    self->loads_json_tree = private_dtw_loads_json_tree;
+    self->dumps_json_tree = private_dtw_dumps_tree_json;
     return self;
 }
+
 
 void private_dtw_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_part){
     self->size++;
@@ -5351,53 +5460,226 @@ void private_dtw_add_path_from_hardware(struct DtwTree *self,const char *path,bo
     path_array->delete_string_array(path_array);
 
 }
- 
-char * private_dtw_dumps_tree_json(struct DtwTree *tree,bool preserve_content,bool preserve_path_atributes,bool preserve_hadware_data,bool generate_sha256){
+
+
+
+
+void private_dtw_loads_json_tree(struct DtwTree *self,const char *content){
+    //load json
+    cJSON *json_tree = cJSON_Parse(content);
+    int size = cJSON_GetArraySize(json_tree);
+    for(int i = 0; i < size; i++){
+
+        cJSON *json_tree_part = cJSON_GetArrayItem(json_tree, i);
+        cJSON *path = cJSON_GetObjectItemCaseSensitive(json_tree_part, "path");
+        cJSON *original_path = cJSON_GetObjectItemCaseSensitive(json_tree_part, "original_path");
+        cJSON *hardware_sha = cJSON_GetObjectItemCaseSensitive(json_tree_part, "hardware_sha256");
+        cJSON *hardware_content_size = cJSON_GetObjectItemCaseSensitive(json_tree_part, "hardware_content_size");
+        cJSON *last_modification_in_unix_time = cJSON_GetObjectItemCaseSensitive(json_tree_part, "last_modification_in_unix_time");
+        cJSON *content_size = cJSON_GetObjectItemCaseSensitive(json_tree_part, "content_size");
+        cJSON *is_binary = cJSON_GetObjectItemCaseSensitive(json_tree_part, "is_binary");
+        cJSON *content = cJSON_GetObjectItemCaseSensitive(json_tree_part, "content");
+
+        
+        struct DtwTreePart *part = dtw_tree_part_constructor(
+            path->valuestring,
+            false,
+            false
+        );
+        if(original_path != NULL){
+            part->path->original_path = (char *)realloc(part->path->original_path,strlen(original_path->valuestring)+1);
+            strcpy(part->path->original_path,original_path->valuestring);
+        }
+
+        if(hardware_sha != NULL){
+            part->content_exist_in_hardware = true;
+            part->hawdware_content_sha = (char *)realloc(part->hawdware_content_sha,strlen(hardware_sha->valuestring)+1);
+            strcpy(part->hawdware_content_sha,hardware_sha->valuestring);
+            
+        }
+
+        if(hardware_content_size != NULL){
+            part->content_exist_in_hardware = true;
+            part->hardware_content_size = hardware_content_size->valueint;
+        }
+        
+        if(last_modification_in_unix_time != NULL){
+            part->last_modification_time = last_modification_in_unix_time->valueint;
+        }
+    
+        if(is_binary != NULL){
+            part->is_binary = is_binary->valueint;
+        }
+        
+        if(content_size != NULL){
+            part->content_size = content_size->valueint;
+        }
+
+        if(content != NULL){
+            part->content_exist_in_memory = true;
+            if(!content_size){
+                part->content_size = strlen(content->valuestring);
+            }
+            if(part->is_binary){
+                size_t out_size;
+                char *decoded =dtw_base64_decode(content->valuestring,part->content_size,&out_size);
+                part->set_any_content(part,decoded,out_size,part->is_binary);
+                free(decoded);
+            }
+            part->set_any_content(part,content->valuestring,part->content_size,part->is_binary);
+        }
+        self->add_tree_part_by_reference(self,part);
+        
+    }
+    cJSON_Delete(json_tree);
+}
+
+char * private_dtw_dumps_tree_json(struct DtwTree *self,bool preserve_content,bool preserve_path_atributes,bool preserve_hadware_data,bool preserve_content_data,bool minify){
+    
     cJSON *json_array = cJSON_CreateArray();
-    for(int i = 0; i < tree->size; i++){
+    for(int i = 0; i < self->size; i++){
        
         cJSON *json_tree_part = cJSON_CreateObject();
-        struct DtwTreePart *tree_part = tree->tree_parts[i];
+        struct DtwTreePart *tree_part = self->tree_parts[i];
         char *path_string = tree_part->path->get_path(tree_part->path);
-        char *dir_string = tree_part->path->get_dir(tree_part->path);
-        char *full_name_string = tree_part->path->get_full_name(tree_part->path);
-        char *name_string = tree_part->path->get_name(tree_part->path);
-        char *extension_string = tree_part->path->get_extension(tree_part->path);
+        
 
         cJSON_AddItemToObject(
             json_tree_part, 
             "path", 
             cJSON_CreateString(path_string)
         );
-        cJSON_AddItemToObject(
-            json_tree_part, 
-            "dir", 
-            cJSON_CreateString(dir_string)
-        );
-        cJSON_AddItemToObject(
-            json_tree_part, 
-            "full_name", 
-            cJSON_CreateString(full_name_string)
-        );
-        cJSON_AddItemToObject(
-            json_tree_part, 
-            "name", 
-            cJSON_CreateString(name_string)
-        );
-        cJSON_AddItemToObject(
-            json_tree_part, 
-            "extension", 
-            cJSON_CreateString(extension_string)
-        );
+        
+        
+        
+        if(preserve_path_atributes == true){
+
+                char *dir_string = tree_part->path->get_dir(tree_part->path);
+                char *full_name_string = tree_part->path->get_full_name(tree_part->path);
+                char *name_string = tree_part->path->get_name(tree_part->path);
+                char *extension_string = tree_part->path->get_extension(tree_part->path);    
+                if(tree_part->path->original_path != path_string){
+                    cJSON_AddItemToObject(
+                        json_tree_part, 
+                        "original_path", 
+                        cJSON_CreateString(tree_part->path->original_path)
+                    );
+                }
+
+                cJSON_AddItemToObject(
+                    json_tree_part, 
+                    "dir", 
+                    cJSON_CreateString(dir_string)
+                );
+                
+                cJSON_AddItemToObject(
+                    json_tree_part, 
+                    "full_name", 
+                    cJSON_CreateString(full_name_string)
+                );
+                
+                cJSON_AddItemToObject(
+                    json_tree_part, 
+                    "name", 
+                    cJSON_CreateString(name_string)
+                );
+                
+                cJSON_AddItemToObject(
+                    json_tree_part, 
+                    "extension", 
+                    cJSON_CreateString(extension_string)
+                );
+
+                free(dir_string);
+                free(full_name_string);
+                free(name_string);
+                free(extension_string);
+        }
+
+
+        if(preserve_hadware_data== true && tree_part->content_exist_in_hardware){
+            cJSON_AddItemToObject(
+                json_tree_part, 
+                "hardware_sha256", 
+                cJSON_CreateString(tree_part->hawdware_content_sha)
+            );
+            cJSON_AddItemToObject(
+                json_tree_part, 
+                "last_modification_in_unix", 
+                cJSON_CreateNumber(tree_part->last_modification_time)
+            );
+
+            cJSON_AddItemToObject(
+                json_tree_part, 
+                "hardware_content_size", 
+                cJSON_CreateNumber(tree_part->hardware_content_size)
+            );
+            char *last_modification_string =tree_part->last_modification_time_in_string(tree_part);
+            cJSON_AddItemToObject(
+                json_tree_part, 
+                "last_modification", 
+                cJSON_CreateString(last_modification_string)
+            );
+            
+            free(last_modification_string);
+
+            
+        }
+
+        if(preserve_content_data && tree_part->content_exist_in_memory){
+            char *content_sha = tree_part->get_content_sha(tree_part);
+            cJSON_AddItemToObject(
+                json_tree_part, 
+                "content_size", 
+                cJSON_CreateNumber(tree_part->content_size)
+            );
+
+            cJSON_AddItemToObject(
+                json_tree_part, 
+                "content_sha256", 
+                cJSON_CreateString(content_sha)
+            );
+
+            free(content_sha);
+        }
+
+        if(preserve_content && tree_part->content_exist_in_memory){
+
+            cJSON_AddItemToObject(
+                json_tree_part, 
+                "is_binary", 
+                cJSON_CreateBool(tree_part->is_binary)
+            );  
+            if(tree_part->is_binary == false){
+                cJSON_AddItemToObject(
+                    json_tree_part, 
+                    "content", 
+                    cJSON_CreateString(tree_part->content)
+                );
+            }
+            else{
+                char *content_base64 = dtw_base64_encode(tree_part->content, tree_part->content_size);
+                cJSON_AddItemToObject(
+                    json_tree_part, 
+                    "content", 
+                    cJSON_CreateString(content_base64)
+                );  
+                free(content_base64);
+            }
+        }
+       
+
         //Add json_tree_part  
         cJSON_AddItemToArray(json_array,json_tree_part);
         free(path_string);
-        free(dir_string);
-        free(full_name_string);
-        free(name_string);
-        free(extension_string);
+
     }
+    
     char *json_string = cJSON_Print(json_array);
+    //set ident to 4 spaces
+    if(minify == true){
+        cJSON_Minify(json_string);
+    }
     cJSON_Delete(json_array);
     return json_string;
 }

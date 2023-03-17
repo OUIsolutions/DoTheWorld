@@ -30,6 +30,7 @@ SOFTWARE.
 {%include "headers/imports.h"%}
 {%include "headers/sha-256.h"%}
 {%include "headers/cJSON.h"%}
+{%include "headers/base64.h"%}
 {%include "headers/constants.h"%}
 {%include "headers/string_array.h"%}
 {%include "headers/extras.h"%}
@@ -44,6 +45,7 @@ SOFTWARE.
 {%include "headers/tree.h"%}
 {%include "dependencies/sha-256.c"%}
 {%include "dependencies/cJSON.c"%}
+{%include "functions/base64.c"%}
 {%include "functions/extras.c"%}
 {%include "functions/io.c"%}
 {%include "functions/listage_wrappers.c"%}
@@ -53,4 +55,5 @@ SOFTWARE.
 {%include "structs/path.c"%}
 {%include "structs/string_array.c"%}
 {%include "structs/tree_part.c"%}
-{%include "structs/tree.c"%}
+{%include "structs/tree/tree.c"%}
+{%include "structs/tree/json_tree.c"%}
