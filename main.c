@@ -1,24 +1,33 @@
 
 #include "doTheWorld/doTheWorldmain.c"
 void load_and_dump_string(){
-
     struct DtwTree *tree = dtw_tree_constructor();
-    char *code = dtw_load_string_file_content("code.json");
+    char *code = dtw_load_string_file_content("exemples.json");
     tree->loads_json_tree(tree, code);
-    char *generated =tree->dumps_json_tree(tree,true,true,true,true,false);
-    dtw_write_string_file_content("generated.json",generated);
-    free(generated);
+    for (int i = 0; i < tree->size; i++){
+        struct DtwTreePart *part = tree->tree_parts[i];
+        struct DtwPath *path = part->path;
+        path->add_start_dir(path,"exemples2");
+        part->hardware_write(part);
+    }
+
+
+    
+    tree->delete_tree(tree);
     free(code);
 }
 
+void load_hardware_and_dump_string(){
+    struct DtwTree *tree = dtw_tree_constructor();
+    tree->add_path_from_hardware(tree,"exemples",true,true);
+    char *generated =tree->dumps_json_tree(tree,true,true,true,true,false);
+    dtw_write_string_file_content("exemples.json",generated);
+    free(generated);
+    tree->delete_tree(tree);
+}
 
 int main(int argc, char *argv[]){
     
-
-    struct DtwTree *tree = dtw_tree_constructor();
-    tree->add_path_from_hardware(tree,"",true,true);
-    char *content_json = tree->dumps_json_tree(tree,true,true,true,true,false);
-    dtw_write_string_file_content("code.json",content_json);
-    tree->delete_tree(tree);
-    free(content_json);
+    load_and_dump_string();
+    return 0;
 }
