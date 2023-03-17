@@ -2,6 +2,7 @@
 *.d
 exemple
 # Object files
+*.json
 *.o
 *.ko
 *.obj
