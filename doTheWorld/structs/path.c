@@ -24,8 +24,9 @@ struct DtwPath * dtw_constructor_path( const char *path) {
     self->set_dir = private_dtw_set_dir;
     self->set_full_name = private_dtw_set_full_name;
     self->set_path = private_dtw_set_path;
-
-    self->represent = private_dtw_represent_path;
+    self->add_start_dir = private_dtw_add_start_dir;
+    self->add_end_dir = private_dtw_add_end_dir;
+    self->represent = private_dtw_represent_path;   
     self->delete_path = private_dtw_destructor_path;
 
     self->set_path(self, path);
@@ -237,8 +238,19 @@ void private_dtw_add_start_dir(struct DtwPath *self, const char *start_dir){
     }
 }
 void private_dtw_add_end_dir(struct DtwPath *self, const char *end_dir){
-    
+    char *dir = self->get_dir(self);
+    //concat the path, with start_dir at beguining
+    if(dir != NULL){
+        char *path = (char *)malloc(strlen(dir) + strlen(end_dir) + 2);
+        sprintf(path, "%s/%s",dir,end_dir);
+        self->set_dir(self, path);
+        free(path);
+        free(dir);
+    }
 }
+
+  
+
 void private_dtw_represent_path(struct DtwPath *self){
     char  *path = self->get_path(self);
     char *full_name = self->get_full_name(self);
