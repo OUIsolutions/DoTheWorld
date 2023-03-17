@@ -11,7 +11,7 @@ void private_dtw_loads_json_tree(struct DtwTree *self,const char *content){
         cJSON *json_tree_part = cJSON_GetArrayItem(json_tree, i);
         cJSON *path = cJSON_GetObjectItemCaseSensitive(json_tree_part, "path");
         cJSON *original_path = cJSON_GetObjectItemCaseSensitive(json_tree_part, "original_path");
-        cJSON *hardware_sha = cJSON_GetObjectItemCaseSensitive(json_tree_part, "hardware_sha");
+        cJSON *hardware_sha = cJSON_GetObjectItemCaseSensitive(json_tree_part, "hardware_sha256");
         cJSON *hardware_content_size = cJSON_GetObjectItemCaseSensitive(json_tree_part, "hardware_content_size");
         cJSON *last_modification_in_unix_time = cJSON_GetObjectItemCaseSensitive(json_tree_part, "last_modification_in_unix_time");
         cJSON *content_size = cJSON_GetObjectItemCaseSensitive(json_tree_part, "content_size");
@@ -25,18 +25,16 @@ void private_dtw_loads_json_tree(struct DtwTree *self,const char *content){
             false
         );
         if(original_path != NULL){
-            part->path->original_path = (char *)malloc(strlen(original_path->valuestring)+1);
+            part->path->original_path = (char *)realloc(part->path->original_path,strlen(original_path->valuestring)+1);
             strcpy(part->path->original_path,original_path->valuestring);
         }
 
         if(hardware_sha != NULL){
             part->content_exist_in_hardware = true;
-            part->hawdware_content_sha = "nada";
-            //strcpy(part->hawdware_content_sha,hardware_sha->valuestring);
-
+            part->hawdware_content_sha = (char *)realloc(part->hawdware_content_sha,strlen(hardware_sha->valuestring)+1);
+            strcpy(part->hawdware_content_sha,hardware_sha->valuestring);
+            
         }
-
-
 
         if(hardware_content_size != NULL){
             part->content_exist_in_hardware = true;
