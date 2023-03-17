@@ -15,7 +15,7 @@
 #include "headers/tree.h"
 #include "dependencies/sha-256.c"
 #include "dependencies/cJSON.c"
-#include "dependencies/base64.c"
+#include "functions/base64.c"
 #include "functions/extras.c"
 #include "functions/io.c"
 #include "functions/listage_wrappers.c"

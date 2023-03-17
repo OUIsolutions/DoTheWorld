@@ -1,5 +1,5 @@
 
-char *base64_encode(const char *data, size_t input_length) {
+char *dtw_base64_encode(const char *data, size_t input_length) {
     size_t output_length = 4 * ((input_length + 2) / 3);
 
     char *encoded_data = (char *)malloc(output_length + 1);
@@ -31,7 +31,7 @@ char *base64_encode(const char *data, size_t input_length) {
     return encoded_data;
 }
 
-unsigned char *base64_decode(const char *data, size_t input_length, size_t *output_length) {
+unsigned char *dtw_base64_decode(const char *data, size_t input_length, size_t *output_length) {
     if (input_length % 4 != 0) return NULL;
 
     *output_length = input_length / 4 * 3;

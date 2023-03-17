@@ -176,7 +176,7 @@ char * private_dtw_dumps_tree_json(struct DtwTree *self,bool preserve_content,bo
                 );
             }
             else{
-                char *content_base64 = base64_encode(tree_part->content, tree_part->content_size);
+                char *content_base64 = dtw_base64_encode(tree_part->content, tree_part->content_size);
                 cJSON_AddItemToObject(
                     json_tree_part, 
                     "content", 
