@@ -45,24 +45,31 @@ bool private_dtw_hardware_write(struct DtwTreePart *self){
     if(self->content_exist_in_memory == false){
         char *path = self->path->get_path(self->path);
         char *name = self->path->get_full_name(self->path);
+        char *dir = self->path->get_dir(self->path);
         int entity_type = dtw_entity_type(path);
-               
-        if(entity_type != DTW_NOT_FOUND){
-            free(path);
-            free(name);
-            return false;
-        }
-        
-        if(strcmp(name,"") == 0){
-            dtw_create_dir_recursively(path);
+ 
+        if(entity_type== DTW_NOT_FOUND){
+      
+            if(dir != NULL && name == NULL){
+                dtw_create_dir_recursively(dir);
           
+            }
+            if(name != NULL){
+                dtw_create_dir_recursively(dir);
+          
+            }
+    
         }
-        else{
 
-            dtw_write_string_file_content(path,NULL);
+        if(path!=NULL){
+            free(path);
         }
-        free(path);
-        free(name);
+        if(dir!=NULL){
+            free(dir);
+        }
+        if(name!=NULL){
+            free(name);
+        }
         return true;
     }
     char *path = self->path->get_path(self->path);
