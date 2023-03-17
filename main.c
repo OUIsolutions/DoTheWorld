@@ -13,13 +13,13 @@ void load_and_dump_string(){
 
 
 int main(int argc, char *argv[]){
- 
-    /*
+    
+
+    struct DtwTree *tree = dtw_tree_constructor();
     tree->add_path_from_hardware(tree,"doTheWorld",true,true);
-    char *code = tree->dumps_json_tree(tree,true,true,true,true,false);
-    dtw_write_string_file_content("code.json",code);
-    */
-    //load_and_dump_string();
+    char *content_json = tree->dumps_json_tree(tree,true,true,true,true,true);
+    dtw_write_string_file_content("code.json",content_json);
+
 
    
     

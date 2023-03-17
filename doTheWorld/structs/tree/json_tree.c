@@ -205,6 +205,7 @@ char * private_dtw_dumps_tree_json(struct DtwTree *self,bool preserve_content,bo
                 free(content_base64);
             }
         }
+       
 
         //Add json_tree_part  
         cJSON_AddItemToArray(json_array,json_tree_part);

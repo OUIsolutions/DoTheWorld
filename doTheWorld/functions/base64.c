@@ -32,14 +32,14 @@ char *dtw_base64_encode(const char *data, size_t input_length) {
 }
 
 
-unsigned char *dtw_base64_decode(const char *data, size_t input_length, size_t *output_length) {
+char *dtw_base64_decode(const char *data, size_t input_length, size_t *output_length) {
     if (input_length % 4 != 0) return NULL;
 
     *output_length = input_length / 4 * 3;
     if (data[input_length - 1] == '=') (*output_length)--;
     if (data[input_length - 2] == '=') (*output_length)--;
 
-    unsigned char *decoded_data = (unsigned char*) malloc(*output_length);
+    char *decoded_data = (char*) malloc(*output_length);
     if (decoded_data == NULL) return NULL;
 
     size_t i, j;
