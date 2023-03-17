@@ -198,7 +198,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
 
     for(int i = 0; i < size; i++){
         
-        char *new_path_dir = dtw_change_beginning_of_string(dirs->strings[i],src_path_size,dest_path);
+        char *new_path_dir = private_dtw_change_beginning_of_string(dirs->strings[i],src_path_size,dest_path);
         dtw_create_dir_recursively(new_path_dir);
         free(new_path_dir);
     }
@@ -211,7 +211,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
         int file_size;
         bool is_binary;
         char *content = dtw_load_any_content(files->strings[i],&file_size,&is_binary);
-        char *new_path = dtw_change_beginning_of_string(files->strings[i],src_path_size,dest_path);
+        char *new_path = private_dtw_change_beginning_of_string(files->strings[i],src_path_size,dest_path);
 
         dtw_write_any_content(new_path,content,file_size);
         free(content);

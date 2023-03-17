@@ -27,6 +27,5 @@
         "typeinfo": "c",
         "monodimension_listage_win32.h": "c",
         "base64.h": "c"
-    },
-    "C_Cpp.errorSquiggles": "disabled"
+    }
 }

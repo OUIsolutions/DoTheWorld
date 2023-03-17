@@ -31,6 +31,7 @@ char *dtw_base64_encode(const char *data, size_t input_length) {
     return encoded_data;
 }
 
+
 unsigned char *dtw_base64_decode(const char *data, size_t input_length, size_t *output_length) {
     if (input_length % 4 != 0) return NULL;
 
