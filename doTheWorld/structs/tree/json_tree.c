@@ -12,6 +12,7 @@ void private_dtw_loads_json_tree(struct DtwTree *self,const char *content){
         cJSON *path = cJSON_GetObjectItemCaseSensitive(json_tree_part, "path");
         cJSON *original_path = cJSON_GetObjectItemCaseSensitive(json_tree_part, "original_path");
         cJSON *hardware_sha = cJSON_GetObjectItemCaseSensitive(json_tree_part, "hardware_sha");
+        cJSON *hardware_content_size = cJSON_GetObjectItemCaseSensitive(json_tree_part, "hardware_content_size");
         cJSON *last_modification_in_unix_time = cJSON_GetObjectItemCaseSensitive(json_tree_part, "last_modification_in_unix_time");
         cJSON *content_size = cJSON_GetObjectItemCaseSensitive(json_tree_part, "content_size");
         cJSON *is_binary = cJSON_GetObjectItemCaseSensitive(json_tree_part, "is_binary");
@@ -27,15 +28,43 @@ void private_dtw_loads_json_tree(struct DtwTree *self,const char *content){
             part->path->original_path = original_path->valuestring;
         }
         if(hardware_sha != NULL){
+            part->content_exist_in_hardware = true;
             part->hawdware_content_sha = hardware_sha->valuestring;
         }
+        
+
+        if(hardware_content_size != NULL){
+            part->content_exist_in_hardware = true;
+            part->hardware_content_size = hardware_content_size->valueint;
+        }
+        
         if(last_modification_in_unix_time != NULL){
             part->last_modification_time = last_modification_in_unix_time->valueint;
         }
+    
+        if(is_binary != NULL){
+            part->is_binary = is_binary->valueint;
+        }
         
-        
+        if(content_size != NULL){
+            part->content_size = content_size->valueint;
+        }
 
+        if(content != NULL){
+            part->content_exist_in_memory = true;
+            if(!content_size){
+                part->content_size = strlen(content->valuestring);
+            }
+            if(part->is_binary){
+                size_t out_size;
+                char *decoded =dtw_base64_decode(content->valuestring,part->content_size,&out_size);
+                part->set_any_content(part,decoded,out_size,part->is_binary);
+                free(decoded);
+            }
 
+            part->set_any_content(part,content->valuestring,part->content_size,part->is_binary);
+        }
+        self->add_tree_part_by_reference(self,part);
         
     }
     cJSON_Delete(json_tree);
