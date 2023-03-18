@@ -28,6 +28,9 @@ void private_dtw_free_tree(struct DtwTree *self);
 void private_dtw_represent_tree(struct DtwTree *self);
 void private_dtw_add_path_from_hardware(struct DtwTree *self,const char *path,bool load_content, bool preserve_content);
 void private_dtw_loads_json_tree(struct DtwTree *self,const char *content);
+
+void private_dtw_hardware_write_tree(struct DtwTree *self);
+void private_dtw_hardware_commit_tree(struct DtwTree *self);
 #ifdef __cplusplus
 char * private_dtw_dumps_tree_json(
     struct DtwTree *self,
@@ -39,7 +42,6 @@ char * private_dtw_dumps_tree_json(
 #else 
 char * private_dtw_dumps_tree_json(struct DtwTree *self,bool preserve_content,bool preserve_path_atributes,bool preserve_hadware_data,bool preserve_content_data,bool minify);
 #endif
-void private_dtw_hardware_write_tree(struct DtwTree *self);
-void private_dtw_hardware_commit_tree(struct DtwTree *self);
+
 struct  DtwTree * dtw_tree_constructor();
 

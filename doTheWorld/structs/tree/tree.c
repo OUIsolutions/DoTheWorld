@@ -18,6 +18,7 @@ struct  DtwTree * dtw_tree_constructor(){
 }
 
 
+
 void private_dtw_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_part){
     self->size++;
     self->tree_parts =  (struct DtwTreePart**)realloc(self->tree_parts, self->size * sizeof(struct DtwTreePart *));

@@ -3,7 +3,12 @@
 void load_and_dump_file(){
     struct DtwTree *tree = dtw_tree_constructor();
     char *code = dtw_load_string_file_content("exemples.json");
+    struct DtwJsonError *error = dtw_validate_json_tree(code);
     
+    if(error->code != JSON_ERROR_CODE_OK){
+        printf("Error: %s at position %d",error->message,error->position);
+
+    }
     tree->loads_json_tree(tree, code);
     
     for (int i = 0; i < tree->size; i++){
@@ -38,8 +43,6 @@ void load_hardware_and_dump_string(){
 
 int main(int argc, char *argv[]){
     
-    char *current_dir = dtw_get_current_dir();
-    printf("current dir : %s",current_dir);
-    free(current_dir);
+    load_and_dump_file();
     return 0;
 }

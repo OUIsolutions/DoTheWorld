@@ -12,6 +12,7 @@
 #include "headers/monodimension_listage_win32.h"
 #include "headers/multidimension_listage.h"
 #include "headers/path.h"
+#include "headers/json_error.h"
 #include "headers/tree_part.h"
 #include "headers/tree.h"
 #include "dependencies/sha-256.c"
@@ -29,4 +30,6 @@
 #include "structs/tree_part/tree_part.c"
 #include "structs/tree_part/hardware_tree_part.c"
 #include "structs/tree/tree.c"
+#include "structs/json_error.c"
+
 #include "structs/tree/json_tree.c"

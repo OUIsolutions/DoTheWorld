@@ -1,7 +1,5 @@
 
 
-
-
 void private_dtw_loads_json_tree(struct DtwTree *self,const char *content){
     //load json
     cJSON *json_tree = cJSON_Parse(content);
