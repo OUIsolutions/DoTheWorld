@@ -17,7 +17,7 @@ void load_and_dump_file(){
         struct DtwTreePart *part = tree->tree_parts[i];
         part->hardware_commit(part);
     }
-    tree->delete_tree(tree);
+    tree->free_tree(tree);
     free(code);
     
 }
@@ -35,7 +35,7 @@ void load_hardware_and_dump_string(){
         );
     dtw_write_string_file_content("exemples.json",generated);
     free(generated);
-    tree->delete_tree(tree);
+    tree->free_tree(tree);
 }
 
 
