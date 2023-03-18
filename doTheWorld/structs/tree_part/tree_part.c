@@ -121,15 +121,15 @@ void private_dtw_represent_tree_part(struct DtwTreePart *self){
     printf("------------------------------------------------------------\n");
     self->path->represent(self->path);
     printf("Content Exist in Memory: %s\n",self->content_exist_in_memory ? "true" : "false");
-
+    printf("Ignore: %s\n",self->ignore ? "true" : "false");
+    
     if(self->content_exist_in_memory == true || self->content_exist_in_hardware == true){
         
         char *last_moditication_in_string = self->last_modification_time_in_string(self);
 
         printf("Content Exist In Hardware: %s\n",self->content_exist_in_hardware ? "true" : "false");
         printf("Is Binary: %s\n",self->is_binary ? "true" : "false");
-        
-
+   
         
         printf("Content Size: %li\n",self->content_size);
         if(self->content_exist_in_hardware == true){
