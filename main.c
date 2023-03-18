@@ -3,12 +3,10 @@
 void load_and_dump_file(){
     struct DtwTree *tree = dtw_tree_constructor();
     char *code = dtw_load_string_file_content("exemples.json");
-    struct DtwJsonError *error = dtw_validate_json_tree(code);
+    //struct DtwJsonError *error = dtw_validate_json_tree(code);
     
-    if(error->code != JSON_ERROR_CODE_OK){
-        printf("Error: %s at position %d",error->message,error->position);
-
-    }
+   
+    
     tree->loads_json_tree(tree, code);
     
     for (int i = 0; i < tree->size; i++){
