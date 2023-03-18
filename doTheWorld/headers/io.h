@@ -14,6 +14,8 @@ void dtw_create_dir_recursively(const char *path);
 
 void dtw_remove_any(const char* path);
 
+char *dtw_get_current_dir();
+
 
 unsigned char *dtw_load_any_content(const char * path,int *size,bool *is_binary);
 char *dtw_load_string_file_content(const char * path);

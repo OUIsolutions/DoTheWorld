@@ -28,6 +28,15 @@ void dtw_create_dir_recursively(const char *path){
     dtw_create_dir(path);
 }
 
+char *dtw_get_current_dir(){
+    char *path = (char*)malloc(1024);
+    getcwd(path,1024);
+    char*path_with_bar = (char*)malloc(strlen(path) + 2);
+    sprintf(path_with_bar,"%s/",path);
+    free(path);
+    return path_with_bar;
+}
+
 
 void dtw_remove_any(const char* path) {
 

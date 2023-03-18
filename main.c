@@ -37,7 +37,9 @@ void load_hardware_and_dump_string(){
 
 
 int main(int argc, char *argv[]){
-    load_hardware_and_dump_string();
-    load_and_dump_file();
+    
+    char *current_dir = dtw_get_current_dir();
+    printf("current dir : %s",current_dir);
+    free(current_dir);
     return 0;
 }
