@@ -40,6 +40,7 @@ struct DtwTreePart{
     bool(*hardware_remove)(struct DtwTreePart *self,bool set_as_action);
     bool(*hardware_write)(struct DtwTreePart *self,bool set_as_action);
     bool(*hardware_modify)(struct DtwTreePart *self,bool set_as_action);
+    bool(*hardware_commit)(struct DtwTreePart *self);
 
     void (*delete_tree_part)(struct DtwTreePart *self);
     struct DtwTreePart *(*copy_tree_part)(struct DtwTreePart *self);
@@ -55,9 +56,17 @@ void private_dtw_set_binary_content(struct DtwTreePart *self,const char *content
 void private_dtw_load_content_from_hardware(struct DtwTreePart *self);
 void private_dtw_free_content(struct DtwTreePart *self);
 void private_dtw_represent_tree_part(struct DtwTreePart *self);
+#ifdef __cplusplus
+bool private_dtw_hardware_remove(struct DtwTreePart *self,bool set_as_action=true);
+bool private_dtw_hardware_write(struct DtwTreePart *self,bool set_as_action=true);
+bool private_dtw_hardware_modify(struct DtwTreePart *self,bool set_as_action=true);
+#else
 bool private_dtw_hardware_remove(struct DtwTreePart *self,bool set_as_action);
 bool private_dtw_hardware_write(struct DtwTreePart *self,bool set_as_action);
 bool private_dtw_hardware_modify(struct DtwTreePart *self,bool set_as_action);
+#endif
+
+bool private_dtw_hardware_commit(struct DtwTreePart *self);
 
 void private_dtw_tree_part_destructor(struct DtwTreePart *self);
 struct DtwTreePart * private_dtw_copy_tree(struct DtwTreePart *self);

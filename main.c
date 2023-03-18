@@ -34,12 +34,12 @@ void load_hardware_and_dump_string(){
 */
 #include "doTheWorld/headers/imports.h"
 #include "doTheWorld/headers/sha-256.h"
+#include "doTheWorld/headers/string_array.h"
 #include "doTheWorld/headers/string_functions.h"
 #include "doTheWorld/headers/extras.h"
 
 
 #include "doTheWorld/headers/io.h"
-#include "doTheWorld/headers/string_array.h"
 #include "doTheWorld/dependencies/sha-256.c"
 
 #include "doTheWorld/headers/monodimension_listage_linux.h"

@@ -145,4 +145,18 @@ bool private_dtw_hardware_modify(struct DtwTreePart *self,bool set_as_action){
     }
     return false;
 }
-
+bool private_dtw_hardware_commit(struct DtwTreePart *self){
+    if(self->ignore == true){
+        return false;
+    }
+    if(self->pending_action == DTW_REMOVE){
+        return self->hardware_remove(self,DTW_EXECUTE_NOW);
+    }
+    if(self->pending_action == DTW_WRITE){
+        return self->hardware_write(self,DTW_EXECUTE_NOW);
+    }
+    if(self->pending_action == DTW_MODIFY){
+        return self->hardware_modify(self,DTW_EXECUTE_NOW);
+    }
+    return false;
+}
