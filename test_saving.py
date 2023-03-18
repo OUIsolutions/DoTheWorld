@@ -1,13 +1,10 @@
-#!/usr/bin/env python3
-
-
 import json 
 import base64
 with open("exemples.json") as f:
     data = json.load(f)
 
 for d in data:
-    if d.get('is_bin/ary'):
+
         full_name = d.get('full_name')
         name = d.get('name')
         if name != 'deer':

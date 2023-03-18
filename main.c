@@ -34,7 +34,6 @@ void load_hardware_and_dump_string(){
 
 int main(int argc, char *argv[]){
     
-    load_and_dump_string();
-
+    load_hardware_and_dump_string();
     return 0;
 }

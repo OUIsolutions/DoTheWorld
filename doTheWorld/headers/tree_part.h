@@ -1,19 +1,20 @@
 
 #define DTW_IS_BINARY true
 #define DTW_IS_NOT_BINARY false
+
 struct DtwTreePart{
     
     struct DtwPath *path;
     bool content_exist_in_memory;
-    int  hardware_content_size; 
+    size_t  hardware_content_size; 
     long last_modification_time;
     bool content_exist_in_hardware;
     bool ignore;
     bool is_binary;
     char *hawdware_content_sha;
-    char *content;
+    unsigned char *content;
 
-    int content_size;
+    size_t content_size;
 
     char *(*get_content_sha)(struct DtwTreePart *self);
     char *(*last_modification_time_in_string)(struct DtwTreePart *self);
