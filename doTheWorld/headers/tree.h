@@ -9,6 +9,8 @@
 #define DTW_PRESERVE_CONTENT_DATA  true
 #define DTW_COPY_CONTENT  true 
 #define DTW_PASS_BY_REFERENCE  false
+#define DTW_CONSIDER_IGNORE  true
+#define DTW_NOT_CONSIDER_IGNORE  false
 
 struct  DtwTree{
     int size;
@@ -50,7 +52,8 @@ struct  DtwTree{
         bool preserve_path_atributes,
         bool preserve_hadware_data,
         bool preserve_content_data,
-        bool minify
+        bool minify,
+        bool consider_igonore
     ); 
     void (*free_tree)(struct DtwTree *self);
     void (*represent)(struct DtwTree *self);
@@ -100,9 +103,19 @@ char * private_dtw_dumps_tree_json(
     bool preserve_path_atributes=true,
     bool preserve_hadware_data=false,
     bool preserve_content_data=true,
-    bool minify=false);
+    bool minify=false,
+    bool consider_igonore=false
+    );
 #else 
-char * private_dtw_dumps_tree_json(struct DtwTree *self,bool preserve_content,bool preserve_path_atributes,bool preserve_hadware_data,bool preserve_content_data,bool minify);
+char * private_dtw_dumps_tree_json(
+    struct DtwTree *self,
+    bool preserve_content,
+    bool preserve_path_atributes,
+    bool preserve_hadware_data,
+    bool preserve_content_data,
+    bool minify,
+    bool consider_igonore
+    );
 #endif
 
 struct  DtwTree * dtw_tree_constructor();

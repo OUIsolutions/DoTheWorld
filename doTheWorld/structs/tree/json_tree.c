@@ -85,7 +85,7 @@ void private_dtw_loads_json_tree(struct DtwTree *self,const char *content){
     cJSON_Delete(json_tree);
 }
 
-char * private_dtw_dumps_tree_json(struct DtwTree *self,bool preserve_content,bool preserve_path_atributes,bool preserve_hadware_data,bool preserve_content_data,bool minify){
+char * private_dtw_dumps_tree_json(struct DtwTree *self,bool preserve_content,bool preserve_path_atributes,bool preserve_hadware_data,bool preserve_content_data,bool minify,bool consider_ignore){
     
     cJSON *json_array = cJSON_CreateArray();
     for(int i = 0; i < self->size; i++){
@@ -93,6 +93,10 @@ char * private_dtw_dumps_tree_json(struct DtwTree *self,bool preserve_content,bo
         cJSON *json_tree_part = cJSON_CreateObject();
         struct DtwTreePart *tree_part = self->tree_parts[i];
         char *path_string = tree_part->path->get_path(tree_part->path);
+        if(consider_ignore == DTW_NOT_CONSIDER_IGNORE && tree_part->ignore){
+            continue;
+        }
+        
         if(tree_part->ignore){
             cJSON_AddItemToObject(
                 json_tree_part, 

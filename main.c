@@ -17,8 +17,9 @@ int main(int argc, char *argv[]){
         DTW_PRESERVE_PATH_ATRIBUTES,
         DTW_PRESERVE_HARDWARE_DATA,
         DTW_PRESERVE_CONTENT_DATA,
-        DTW_NOT_MINIFY
-        );
+        DTW_NOT_MINIFY,
+        DTW_NOT_CONSIDER_IGNORE
+    );
 
     dtw_write_string_file_content("exemples.json",json_string);
     
