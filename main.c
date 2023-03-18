@@ -62,6 +62,13 @@ void load_hardware_and_dump_string(){
 #include "doTheWorld/structs/tree_part/hardware_tree_part.c"
 int main(int argc, char *argv[]){
 
-  
+    struct DtwTreePart *part = dtw_tree_part_constructor(
+        "README.md",
+        DTW_LOAD_CONTENT,
+        DTW_PRESERVE_CONTENT
+    );
+    part->set_string_content(part,"Hello World");
+    part->hardware_modify(part,DTW_EXECUTE_NOW);
+    //part->hardware_commit(part);
     return 0;
 }

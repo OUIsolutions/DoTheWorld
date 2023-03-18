@@ -1,8 +1,4 @@
 
-#define DTW_NOT_LOAD_CONTENT  false 
-#define DTW_LOAD_CONTENT  true
-#define DTW_NOT_PRESERVE_CONTENT  false
-#define DTW_PRESERVE_CONTENT  true
 #define DTW_NOT_MINIFY  false
 #define DTW_MINIFY  true
 #define DTW_NOT_PRESERVE_PATH_ATRIBUTES  false
