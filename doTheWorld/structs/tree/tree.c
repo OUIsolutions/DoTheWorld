@@ -6,6 +6,7 @@ struct  DtwTree * dtw_tree_constructor(){
     self->size = 0;
     self->tree_parts = (struct DtwTreePart**)malloc(1);
     self->add_tree_part_by_copy = private_dtw_add_tree_part_copy;
+    self->get_sub_tree = private_dtw_get_sub_tree;
     self->add_tree_part_by_reference = private_dtw_add_tree_part_reference;
     self->free_tree = private_dtw_free_tree;
     self->represent = private_dtw_represent_tree;
@@ -17,7 +18,18 @@ struct  DtwTree * dtw_tree_constructor(){
     self->hardware_commit_tree = private_dtw_hardware_commit_tree;
     return self;
 }
-
+struct DtwTree *private_dtw_get_sub_tree(struct DtwTree *self,const char *path){
+    struct DtwTree *sub_tree = dtw_tree_constructor();
+    for(int i = 0; i < self->size; i++){
+        struct DtwTreePart *tree_part = self->tree_parts[i];
+        char *current_path = tree_part->path->get_path(tree_part->path);
+        if(dtw_starts_with(current_path,path)){
+            sub_tree->add_tree_part_by_copy(sub_tree,tree_part);
+        }
+        free(current_path);
+    }
+    return sub_tree;
+}
 void private_dtw_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_part){
     self->size++;
     self->tree_parts =  (struct DtwTreePart**)realloc(self->tree_parts, self->size * sizeof(struct DtwTreePart *));
@@ -39,6 +51,7 @@ void private_dtw_represent_tree(struct DtwTree *self){
 }
 void private_dtw_add_tree_parts_from_string_array(struct DtwTree *self,struct DtwStringArray *paths,bool load_content,bool preserve_content){
     for(int i = 0; i < paths->size; i++){
+
         const char *current_path = paths->strings[i];
         struct DtwTreePart *tree_part = dtw_tree_part_constructor(
             current_path,

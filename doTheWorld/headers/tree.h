@@ -25,6 +25,12 @@ struct  DtwTree{
         bool load_content,
         bool preserve_content
     );
+    
+    struct DtwTree *(*get_sub_tree)(
+        struct DtwTree *self,
+        const char *path
+    );
+
     void (*add_tree_from_hardware)(
         struct DtwTree *self,
         const char *path,
@@ -48,7 +54,10 @@ struct  DtwTree{
     void (*hardware_write_tree)(struct DtwTree *self);
     void (*hardware_commit_tree)(struct DtwTree *self);
 };
-
+struct DtwTree *private_dtw_get_sub_tree(
+    struct DtwTree *self,
+    const char *path
+);
 void private_dtw_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_part);
 void private_dtw_add_tree_part_reference(struct DtwTree *self, struct DtwTreePart *tree_part);
 void private_dtw_free_tree(struct DtwTree *self);
