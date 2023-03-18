@@ -75,12 +75,12 @@ struct  DtwTreePart * private_dtw_copy_tree(struct DtwTreePart *self){
     return new_tree_part;
 }
 
+void private_dtw_set_any_content(struct DtwTreePart *self,unsigned char *content,int content_size,bool is_binary){
 
-void private_dtw_set_any_content(struct DtwTreePart *self,const char *content,int content_size,bool is_binary){
     self->free_content(self);
     self->content_exist_in_memory = true;
     self->is_binary = is_binary;
-    self->content = (unsigned char *)realloc(self->content,content_size);
+    self->content = (unsigned char *)realloc(self->content,content_size+2);
     memcpy(self->content,content,content_size);
     self->content_size = content_size;
 
@@ -88,10 +88,17 @@ void private_dtw_set_any_content(struct DtwTreePart *self,const char *content,in
 }
 
 void private_dtw_set_string_content(struct DtwTreePart *self,const char *content){
-    self->set_any_content(self,content,strlen(content),false);
+    self->set_any_content(
+        self,
+        (unsigned char*)content,
+        strlen(content),
+        false
+    );
+    
     self->content[self->content_size] = '\0';
 }
-void private_dtw_set_binary_content(struct DtwTreePart *self,const char *content,int content_size){
+
+void private_dtw_set_binary_content(struct DtwTreePart *self,unsigned char *content,int content_size){
     self->set_any_content(self,content,content_size,true);
 }
 

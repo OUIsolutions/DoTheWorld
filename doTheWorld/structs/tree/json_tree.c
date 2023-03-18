@@ -60,11 +60,16 @@ void private_dtw_loads_json_tree(struct DtwTree *self,const char *content){
             }
             if(part->is_binary){
                 size_t out_size;
-                char *decoded =dtw_base64_decode(content->valuestring,part->content_size,&out_size);
+                unsigned char *decoded =dtw_base64_decode(
+                    (unsigned char*)content->valuestring,
+                    part->content_size,&out_size
+                );
                 part->set_binary_content(part,decoded,out_size);
                 free(decoded);
             }
-            part->set_any_content(part,content->valuestring,part->content_size,part->is_binary);
+           else{
+                part->set_string_content(part,content->valuestring);
+           } 
         }
         self->add_tree_part_by_reference(self,part);
         
@@ -192,15 +197,16 @@ char * private_dtw_dumps_tree_json(struct DtwTree *self,bool preserve_content,bo
                 cJSON_AddItemToObject(
                     json_tree_part, 
                     "content", 
-                    cJSON_CreateString(tree_part->content)
+                    cJSON_CreateString(tree_part->get_content_string_by_reference(tree_part))
                 );
             }
             else{
-                char *content_base64 = dtw_base64_encode(tree_part->content, tree_part->content_size);
+                unsigned char *content_base64 = dtw_base64_encode(tree_part->content, tree_part->content_size);
+                char *content_base64_string = (char *)content_base64;
                 cJSON_AddItemToObject(
                     json_tree_part, 
                     "content", 
-                    cJSON_CreateString(content_base64)
+                    cJSON_CreateString(content_base64_string)
                 );  
                 free(content_base64);
             }

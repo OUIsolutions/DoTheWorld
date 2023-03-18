@@ -29,14 +29,7 @@ void private_dtw_add_tree_part_reference(struct DtwTree *self, struct DtwTreePar
 }
 
 
-void private_dtw_delete_tree(struct DtwTree *self){
-    for(int i = 0; i < self->size; i++){
-        self->tree_parts[i]->delete_tree_part(self->tree_parts[i]);
-    }
-    free(self->tree_parts);
-    
-    free(self);
-}
+
 
 void private_dtw_represent_tree(struct DtwTree *self){
     for(int i = 0; i < self->size; i++){
@@ -61,4 +54,12 @@ void private_dtw_add_path_from_hardware(struct DtwTree *self,const char *path,bo
 
     path_array->delete_string_array(path_array);
 
+}
+void private_dtw_delete_tree(struct DtwTree *self){
+    for(int i = 0; i < self->size; i++){
+        self->tree_parts[i]->delete_tree_part(self->tree_parts[i]);
+    }
+    
+    free(self->tree_parts);
+    free(self);
 }

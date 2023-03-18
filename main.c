@@ -1,19 +1,22 @@
-/*
+
 #include "doTheWorld/doTheWorldmain.c"
 void load_and_dump_string(){
     struct DtwTree *tree = dtw_tree_constructor();
     char *code = dtw_load_string_file_content("exemples.json");
+    
     tree->loads_json_tree(tree, code);
+    
     for (int i = 0; i < tree->size; i++){
         struct DtwTreePart *part = tree->tree_parts[i];
         struct DtwPath *path = part->path;
         path->add_start_dir(path,"exemples2");
-        part->hardware_write(part);
-      
+        part->hardware_write(part,DTW_SET_AS_ACTION);
+        
     }
     
     tree->delete_tree(tree);
     free(code);
+    
 }
 
 void load_hardware_and_dump_string(){
@@ -31,45 +34,15 @@ void load_hardware_and_dump_string(){
     free(generated);
     tree->delete_tree(tree);
 }
-*/
-#include "doTheWorld/headers/imports.h"
-#include "doTheWorld/headers/sha-256.h"
-#include "doTheWorld/headers/string_array.h"
-#include "doTheWorld/headers/string_functions.h"
-#include "doTheWorld/headers/extras.h"
 
 
-#include "doTheWorld/headers/io.h"
-#include "doTheWorld/dependencies/sha-256.c"
-
-#include "doTheWorld/headers/monodimension_listage_linux.h"
-#include "doTheWorld/headers/monodimension_listage_win32.h"
-#include "doTheWorld/headers/multidimension_listage.h"
-#include "doTheWorld/headers/path.h"
-#include "doTheWorld/headers/tree_part.h"
-
-
-
-#include "doTheWorld/functions/monodimension_listage_linux.c"
-#include "doTheWorld/functions/monodimension_listage_win32.c"
-#include "doTheWorld/functions/multidimension_listage.c"
-#include "doTheWorld/functions/io.c"
-#include "doTheWorld/functions/string_functions.c"
-#include "doTheWorld/functions/extras.c"
-#include "doTheWorld/structs/string_array.c"
-#include "doTheWorld/structs/path.c"
-#include "doTheWorld/structs/tree_part/tree_part.c"
-#include "doTheWorld/structs/tree_part/hardware_tree_part.c"
 int main(int argc, char *argv[]){
-
     struct DtwTreePart *part = dtw_tree_part_constructor(
         "README.md",
         DTW_LOAD_CONTENT,
         DTW_PRESERVE_CONTENT
     );
-    part->set_string_content(part,"Hello World");
-    part->hardware_modify(part,DTW_EXECUTE_NOW);
-    //part->hardware_commit(part);
-    printf("%s\n",part->get_content_string_by_reference(part));
+    part->set_string_content(part,"# Hello World");
+    part->delete_tree_part(part);
     return 0;
 }
