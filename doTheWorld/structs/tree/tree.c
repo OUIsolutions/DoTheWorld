@@ -14,10 +14,13 @@ struct  DtwTree * dtw_tree_constructor(){
     self->add_tree_from_hardware = private_dtw_add_tree_from_hardware;
     self->loads_json_tree = private_dtw_loads_json_tree;
     self->dumps_json_tree = private_dtw_dumps_tree_json;
+    self->hardware_remove = private_dtw_hardware_remove;
     self->hardware_write_tree = private_dtw_hardware_write_tree;
     self->hardware_commit_tree = private_dtw_hardware_commit_tree;
     return self;
 }
+
+
 struct DtwTree *private_dtw_get_sub_tree(struct DtwTree *self,const char *path,bool copy_content){
     struct DtwTree *sub_tree = dtw_tree_constructor();
     for(int i = 0; i < self->size; i++){
@@ -36,6 +39,8 @@ struct DtwTree *private_dtw_get_sub_tree(struct DtwTree *self,const char *path,b
     }
     return sub_tree;
 }
+
+
 void private_dtw_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_part){
     self->size++;
     self->tree_parts =  (struct DtwTreePart**)realloc(self->tree_parts, self->size * sizeof(struct DtwTreePart *));
@@ -55,6 +60,7 @@ void private_dtw_represent_tree(struct DtwTree *self){
         self->tree_parts[i]->represent(self->tree_parts[i]);
     }
 }
+
 void private_dtw_add_tree_parts_from_string_array(struct DtwTree *self,struct DtwStringArray *paths,bool load_content,bool preserve_content){
     for(int i = 0; i < paths->size; i++){
 
@@ -67,6 +73,8 @@ void private_dtw_add_tree_parts_from_string_array(struct DtwTree *self,struct Dt
         self->add_tree_part_by_reference(self, tree_part);
     }
 }
+
+
 void private_dtw_add_tree_from_hardware(struct DtwTree *self,const char *path,bool load_content, bool preserve_content){
     
     struct DtwStringArray *path_array = dtw_list_all_recursively(path);
@@ -74,6 +82,7 @@ void private_dtw_add_tree_from_hardware(struct DtwTree *self,const char *path,bo
     path_array->free_string_array(path_array);
 
 }
+
 void private_dtw_free_tree(struct DtwTree *self){
     for(int i = 0; i < self->size; i++){
         self->tree_parts[i]->free_tree_part(self->tree_parts[i]);
@@ -82,12 +91,18 @@ void private_dtw_free_tree(struct DtwTree *self){
     free(self->tree_parts);
     free(self);
 }
+void private_dtw_hardware_remove(struct DtwTree *self){
+    for(int i = 0; i < self->size; i++){
+        self->tree_parts[i]->hardware_remove(self->tree_parts[i],DTW_EXECUTE_NOW);
+    }
+}
 
 void private_dtw_hardware_write_tree(struct DtwTree *self){
     for(int i = 0; i < self->size; i++){
         self->tree_parts[i]->hardware_write(self->tree_parts[i],DTW_EXECUTE_NOW);
     }
 }
+
 void private_dtw_hardware_commit_tree(struct DtwTree *self){
     for(int i = 0; i < self->size; i++){
         self->tree_parts[i]->hardware_commit(self->tree_parts[i]);

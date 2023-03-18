@@ -54,9 +54,11 @@ struct  DtwTree{
     ); 
     void (*free_tree)(struct DtwTree *self);
     void (*represent)(struct DtwTree *self);
+    void (*hardware_remove)(struct DtwTree *self);
     void (*hardware_write_tree)(struct DtwTree *self);
     void (*hardware_commit_tree)(struct DtwTree *self);
 };
+
 #ifdef __cplusplus
 struct DtwTree *private_dtw_get_sub_tree(
     struct DtwTree *self,
@@ -87,9 +89,10 @@ void private_dtw_add_tree_from_hardware(
     bool preserve_content
 );
 void private_dtw_loads_json_tree(struct DtwTree *self,const char *content);
-
+void private_dtw_hardware_remove(struct DtwTree *self);
 void private_dtw_hardware_write_tree(struct DtwTree *self);
 void private_dtw_hardware_commit_tree(struct DtwTree *self);
+
 #ifdef __cplusplus
 char * private_dtw_dumps_tree_json(
     struct DtwTree *self,
