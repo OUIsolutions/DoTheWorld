@@ -1,6 +1,15 @@
 
 #define DTW_IS_BINARY true
 #define DTW_IS_NOT_BINARY false
+#define DTW_IGNORE true
+#define DTW_NOT_IGNORE false
+
+#define DTW_SET_AS_ACTION true
+#define DTW_EXECUTE_NOW false
+
+#define DTW_MODIFY 1
+#define DTW_WRITE 2
+#define DTW_REMOVE 3
 
 struct DtwTreePart{
     
@@ -13,6 +22,7 @@ struct DtwTreePart{
     bool is_binary;
     char *hawdware_content_sha;
     unsigned char *content;
+    int pending_action;
 
     size_t content_size;
     char *(*get_content_string_by_reference)(struct DtwTreePart *self);
@@ -27,9 +37,9 @@ struct DtwTreePart{
     void (*free_content)(struct DtwTreePart *self);
     void(*represent)(struct DtwTreePart *self);
     
-    bool(*hardware_remove)(struct DtwTreePart *self);
-    bool(*hardware_write)(struct DtwTreePart *self);
-    bool(*hardware_modify)(struct DtwTreePart *self);
+    bool(*hardware_remove)(struct DtwTreePart *self,bool set_as_action);
+    bool(*hardware_write)(struct DtwTreePart *self,bool set_as_action);
+    bool(*hardware_modify)(struct DtwTreePart *self,bool set_as_action);
 
     void (*delete_tree_part)(struct DtwTreePart *self);
     struct DtwTreePart *(*copy_tree_part)(struct DtwTreePart *self);
@@ -45,9 +55,9 @@ void private_dtw_set_binary_content(struct DtwTreePart *self,const char *content
 void private_dtw_load_content_from_hardware(struct DtwTreePart *self);
 void private_dtw_free_content(struct DtwTreePart *self);
 void private_dtw_represent_tree_part(struct DtwTreePart *self);
-bool private_dtw_hardware_remove(struct DtwTreePart *self);
-bool private_dtw_hardware_write(struct DtwTreePart *self);
-bool private_dtw_hardware_modify(struct DtwTreePart *self);
+bool private_dtw_hardware_remove(struct DtwTreePart *self,bool set_as_action);
+bool private_dtw_hardware_write(struct DtwTreePart *self,bool set_as_action);
+bool private_dtw_hardware_modify(struct DtwTreePart *self,bool set_as_action);
 
 void private_dtw_tree_part_destructor(struct DtwTreePart *self);
 struct DtwTreePart * private_dtw_copy_tree(struct DtwTreePart *self);

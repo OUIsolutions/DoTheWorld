@@ -27,20 +27,27 @@ void private_dtw_load_content_from_hardware(struct DtwTreePart *self){
 
 
 
-bool private_dtw_hardware_remove(struct DtwTreePart *self){
+bool private_dtw_hardware_remove(struct DtwTreePart *self,bool set_as_action){
      if(self->ignore == true){
         return false;
      }
+     if(set_as_action){
+        self->pending_action = DTW_REMOVE;
+     }
+
     char *path = self->path->get_path(self->path);
     dtw_remove_any(path);
     free(path);
     return true;
 }
 
-bool private_dtw_hardware_write(struct DtwTreePart *self){
+bool private_dtw_hardware_write(struct DtwTreePart *self,bool set_as_action){
     if(self->ignore == true){
         return false;
     }
+    if(set_as_action){
+        self->pending_action = DTW_WRITE;
+    }   
     //means that the content not exist in memory
     if(self->content_exist_in_memory == false){
         char *path = self->path->get_path(self->path);
@@ -84,9 +91,12 @@ bool private_dtw_hardware_write(struct DtwTreePart *self){
   
 }
 
-bool private_dtw_hardware_modify(struct DtwTreePart *self){
+bool private_dtw_hardware_modify(struct DtwTreePart *self,bool set_as_action){
     if(self->ignore == true){
         return false;
+    }
+    if(set_as_action){
+        self->pending_action = DTW_MODIFY;
     }
     bool changed_path = self->path->changed(self->path);
 

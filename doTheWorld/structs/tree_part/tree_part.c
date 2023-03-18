@@ -8,6 +8,7 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_conten
     self->content_exist_in_hardware = false;
     self->is_binary = false;
     self->ignore = false;
+    self->pending_action = 0;
     self->hawdware_content_sha = (char *)malloc(0);
     self->content = (unsigned char *)malloc(0);
     self->content_size = 0;
