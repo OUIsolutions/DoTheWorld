@@ -8,7 +8,7 @@ struct DtwStringArray * dtw_constructor_string_array(){
     self->set_value = private_dtw_set_value;
     self->merge_string_array = private_dtw_merge_string_array;
     self->represent= private_dtw_represent_string_array;
-    self->delete_string_array = private_dtw_delete_string_array;
+    self->free_string_array = private_dtw_free_string_array;
     return self;
 }
 
@@ -42,7 +42,7 @@ void private_dtw_represent_string_array(struct DtwStringArray *self){
         printf("%s\n", self->strings[i]);
     }
 }
-void private_dtw_delete_string_array(struct DtwStringArray *self){
+void private_dtw_free_string_array(struct DtwStringArray *self){
     for(int i = 0; i < self->size; i++){
         free(self->strings[i]);
     }

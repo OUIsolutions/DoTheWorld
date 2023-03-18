@@ -27,7 +27,7 @@ struct DtwPath * dtw_constructor_path( const char *path) {
     self->add_start_dir = private_dtw_add_start_dir;
     self->add_end_dir = private_dtw_add_end_dir;
     self->represent = private_dtw_represent_path;   
-    self->delete_path = private_dtw_destructor_path;
+    self->free_path = private_dtw_destructor_path;
 
     self->set_path(self, path);
     self->original_path = self->get_path(self);

@@ -55,12 +55,12 @@ void private_dtw_add_path_from_hardware(struct DtwTree *self,const char *path,bo
         
     }
 
-    path_array->delete_string_array(path_array);
+    path_array->free_string_array(path_array);
 
 }
 void private_dtw_free_tree(struct DtwTree *self){
     for(int i = 0; i < self->size; i++){
-        self->tree_parts[i]->delete_tree_part(self->tree_parts[i]);
+        self->tree_parts[i]->free_tree_part(self->tree_parts[i]);
     }
     
     free(self->tree_parts);

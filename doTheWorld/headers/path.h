@@ -28,7 +28,7 @@ struct DtwPath {
     void (*add_end_dir)(struct DtwPath *self, const char *end_dir);
 
     void (*represent)(struct DtwPath *self);
-    void (*delete_path) (struct DtwPath *self);
+    void (*free_path) (struct DtwPath *self);
 
 
 };
