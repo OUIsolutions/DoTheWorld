@@ -18,13 +18,19 @@ struct  DtwTree * dtw_tree_constructor(){
     self->hardware_commit_tree = private_dtw_hardware_commit_tree;
     return self;
 }
-struct DtwTree *private_dtw_get_sub_tree(struct DtwTree *self,const char *path){
+struct DtwTree *private_dtw_get_sub_tree(struct DtwTree *self,const char *path,bool copy_content){
     struct DtwTree *sub_tree = dtw_tree_constructor();
     for(int i = 0; i < self->size; i++){
         struct DtwTreePart *tree_part = self->tree_parts[i];
         char *current_path = tree_part->path->get_path(tree_part->path);
         if(dtw_starts_with(current_path,path)){
-            sub_tree->add_tree_part_by_copy(sub_tree,tree_part);
+            if(copy_content){
+                sub_tree->add_tree_part_by_copy(sub_tree,tree_part->copy_tree_part(tree_part));
+            }
+            else{
+                sub_tree->add_tree_part_by_reference(sub_tree,tree_part);
+
+            }
         }
         free(current_path);
     }

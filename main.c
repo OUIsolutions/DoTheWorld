@@ -39,9 +39,8 @@ int main(int argc, char *argv[]){
     
     struct DtwTree *tree = dtw_tree_constructor();
     tree->add_tree_from_hardware(tree,"exemples",DTW_LOAD_CONTENT,DTW_PRESERVE_CONTENT);
-    struct DtwTree *sub_tree = tree->get_sub_tree(tree,"exemples/io");
+    struct DtwTree *sub_tree = tree->get_sub_tree(tree,"exemples/io",DTW_PASS_BY_REFERENCE);
     sub_tree->represent(sub_tree);
-    sub_tree->free_tree(sub_tree);
     tree->free_tree(tree);
     return 0;
 }

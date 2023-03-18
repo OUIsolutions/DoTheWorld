@@ -7,6 +7,8 @@
 #define DTW_PRESERVE_HARDWARE_DATA  true
 #define DTW_NOT_PRESERVE_CONTENT_DATA  false
 #define DTW_PRESERVE_CONTENT_DATA  true
+#define DTW_COPY_CONTENT  true 
+#define DTW_PASS_BY_REFERENCE  false
 
 struct  DtwTree{
     int size;
@@ -28,7 +30,8 @@ struct  DtwTree{
     
     struct DtwTree *(*get_sub_tree)(
         struct DtwTree *self,
-        const char *path
+        const char *path,
+        bool copy_content
     );
 
     void (*add_tree_from_hardware)(
@@ -54,10 +57,19 @@ struct  DtwTree{
     void (*hardware_write_tree)(struct DtwTree *self);
     void (*hardware_commit_tree)(struct DtwTree *self);
 };
+#ifdef __cplusplus
 struct DtwTree *private_dtw_get_sub_tree(
     struct DtwTree *self,
-    const char *path
+    const char *path,
+    bool copy_content=false
 );
+#else 
+struct DtwTree *private_dtw_get_sub_tree(
+    struct DtwTree *self,
+    const char *path,
+    bool copy_content
+);
+#endif
 void private_dtw_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_part);
 void private_dtw_add_tree_part_reference(struct DtwTree *self, struct DtwTreePart *tree_part);
 void private_dtw_free_tree(struct DtwTree *self);
