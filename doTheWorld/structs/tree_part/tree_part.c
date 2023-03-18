@@ -127,7 +127,9 @@ void private_dtw_represent_tree_part(struct DtwTreePart *self){
 
         printf("Content Exist In Hardware: %s\n",self->content_exist_in_hardware ? "true" : "false");
         printf("Is Binary: %s\n",self->is_binary ? "true" : "false");
-    
+        
+
+        
         printf("Content Size: %li\n",self->content_size);
         if(self->content_exist_in_hardware == true){
             printf("Last Modification Time in Unix: %li\n",self->last_modification_time);
