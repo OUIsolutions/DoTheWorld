@@ -13,7 +13,6 @@ struct  DtwTree * dtw_tree_constructor(){
     self->loads_json_tree = private_dtw_loads_json_tree;
     self->dumps_json_tree = private_dtw_dumps_tree_json;
     self->hardware_write_tree = private_dtw_hardware_write_tree;
-    self->hardware_remove_delete_tree = private_dtw_hardware_remove_tree;
     self->hardware_commit_tree = private_dtw_hardware_commit_tree;
     return self;
 }
@@ -75,10 +74,5 @@ void private_dtw_hardware_write_tree(struct DtwTree *self){
 void private_dtw_hardware_commit_tree(struct DtwTree *self){
     for(int i = 0; i < self->size; i++){
         self->tree_parts[i]->hardware_commit(self->tree_parts[i]);
-    }
-}
-void private_dtw_hardware_remove_tree(struct DtwTree *self){
-    for(int i = 0; i < self->size; i++){
-        self->tree_parts[i]->hardware_remove(self->tree_parts[i],DTW_EXECUTE_NOW);
     }
 }

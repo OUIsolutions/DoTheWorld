@@ -19,7 +19,6 @@ struct  DtwTree{
     void (*free_tree)(struct DtwTree *self);
     void (*represent)(struct DtwTree *self);
     void (*hardware_write_tree)(struct DtwTree *self);
-    void (*hardware_remove_delete_tree)(struct DtwTree *self);
     void (*hardware_commit_tree)(struct DtwTree *self);
 };
 
@@ -41,7 +40,6 @@ char * private_dtw_dumps_tree_json(
 char * private_dtw_dumps_tree_json(struct DtwTree *self,bool preserve_content,bool preserve_path_atributes,bool preserve_hadware_data,bool preserve_content_data,bool minify);
 #endif
 void private_dtw_hardware_write_tree(struct DtwTree *self);
-void private_dtw_hardware_remove_tree(struct DtwTree *self);
 void private_dtw_hardware_commit_tree(struct DtwTree *self);
 struct  DtwTree * dtw_tree_constructor();
 
