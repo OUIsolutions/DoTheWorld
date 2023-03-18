@@ -32,6 +32,7 @@
         "string_functions.h": "c",
         "io.h": "c",
         "monodimension_listage_linux.h": "c",
-        "multidimension_listage.h": "c"
+        "multidimension_listage.h": "c",
+        "tree_part.h": "c"
     }
 }

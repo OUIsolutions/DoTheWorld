@@ -20,7 +20,7 @@ void private_dtw_load_content_from_hardware(struct DtwTreePart *self){
     self->last_modification_time = dtw_get_file_last_motification_in_unix(path);
     self->content_exist_in_hardware = true;
     free(self->hawdware_content_sha);
-    self->hawdware_content_sha = dtw_generate_sha_from_string(self->content);
+    self->hawdware_content_sha = dtw_generate_sha_from_string((const char*)self->content);
     free(path);
     
 }
@@ -76,7 +76,7 @@ bool private_dtw_hardware_write(struct DtwTreePart *self){
 
     dtw_write_any_content(path,self->content,self->content_size);
     free(self->hawdware_content_sha);
-    self->hawdware_content_sha = dtw_generate_sha_from_string(self->content);
+    self->hawdware_content_sha = dtw_generate_sha_from_string((const char  *)self->content);
     self->content_exist_in_hardware = true;
 
     free(path);
@@ -128,7 +128,7 @@ bool private_dtw_hardware_modify(struct DtwTreePart *self){
             self->content_size
         );
         free(self->hawdware_content_sha);
-        self->hawdware_content_sha = dtw_generate_sha_from_string(self->content);
+        self->hawdware_content_sha = dtw_generate_sha_from_string((const char *)self->content);
         self->content_exist_in_hardware = true;
         free(path);
         return true;

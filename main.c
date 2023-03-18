@@ -45,6 +45,8 @@ void load_hardware_and_dump_string(){
 #include "doTheWorld/headers/monodimension_listage_linux.h"
 #include "doTheWorld/headers/monodimension_listage_win32.h"
 #include "doTheWorld/headers/multidimension_listage.h"
+#include "doTheWorld/headers/path.h"
+#include "doTheWorld/headers/tree_part.h"
 
 
 
@@ -55,8 +57,9 @@ void load_hardware_and_dump_string(){
 #include "doTheWorld/functions/string_functions.c"
 #include "doTheWorld/functions/extras.c"
 #include "doTheWorld/structs/string_array.c"
-
-
+#include "doTheWorld/structs/path.c"
+#include "doTheWorld/structs/tree_part/tree_part.c"
+#include "doTheWorld/structs/tree_part/hardware_tree_part.c"
 int main(int argc, char *argv[]){
 
   

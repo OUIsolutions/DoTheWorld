@@ -104,7 +104,7 @@ void private_dtw_represent_tree_part(struct DtwTreePart *self){
         printf("Is Binary: %s\n",self->is_binary ? "true" : "false");
         printf("Last Modification Time in Unix: %li\n",self->last_modification_time);
         printf("Last Modification Time: %s\n",last_moditication_in_string);
-        printf("Content Size: %d\n",self->content_size);
+        printf("Content Size: %li\n",self->content_size);
         printf("Hardware SHA: %s\n",self->hawdware_content_sha);    
         if(self->content_exist_in_memory == true){
             char *content_sha = self->get_content_sha(self);
@@ -122,7 +122,7 @@ void private_dtw_represent_tree_part(struct DtwTreePart *self){
 
 void private_dtw_free_content(struct DtwTreePart *self){
     self->content_exist_in_memory = false;
-    self->content = (char *)realloc(self->content,0);
+    self->content = (unsigned char *)realloc(self->content,0);
 }
 void private_dtw_tree_part_destructor(struct DtwTreePart *self){
     self->path->delete_path(self->path);
