@@ -127,10 +127,13 @@ void private_dtw_represent_tree_part(struct DtwTreePart *self){
 
         printf("Content Exist In Hardware: %s\n",self->content_exist_in_hardware ? "true" : "false");
         printf("Is Binary: %s\n",self->is_binary ? "true" : "false");
-        printf("Last Modification Time in Unix: %li\n",self->last_modification_time);
-        printf("Last Modification Time: %s\n",last_moditication_in_string);
+    
         printf("Content Size: %li\n",self->content_size);
-        printf("Hardware SHA: %s\n",self->hawdware_content_sha);    
+        if(self->content_exist_in_hardware == true){
+            printf("Last Modification Time in Unix: %li\n",self->last_modification_time);
+            printf("Last Modification Time: %s\n",last_moditication_in_string);
+            printf("Hardware SHA: %s\n",self->hawdware_content_sha);
+        }
         if(self->content_exist_in_memory == true){
             char *content_sha = self->get_content_sha(self);
             printf("Content SHA:  %s\n",content_sha);

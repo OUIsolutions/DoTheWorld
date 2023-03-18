@@ -9,17 +9,10 @@ void load_and_dump_file(){
         json_error->free_json_error(json_error);
         return;
     }
-
+    json_error->free_json_error(json_error);
     tree->loads_json_tree(tree, code);
-    
-    for (int i = 0; i < tree->size; i++){
-        struct DtwTreePart *part = tree->tree_parts[i];
-        struct DtwPath *path = part->path;
-        path->add_start_dir(path,"exemples2");
-        part->hardware_write(part,DTW_SET_AS_ACTION);
-        
-    }
-    tree->hardware_commit_tree(tree);
+    tree->hardware_write_tree(tree);
+    tree->represent(tree);
     tree->free_tree(tree);
     free(code);
     

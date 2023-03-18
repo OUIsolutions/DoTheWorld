@@ -39,6 +39,7 @@ bool private_dtw_hardware_remove(struct DtwTreePart *self,bool set_as_action){
     char *path = self->path->get_path(self->path);
     dtw_remove_any(path);
     free(path);
+    self->content_exist_in_hardware = false;
     return true;
 }
 
@@ -87,6 +88,8 @@ bool private_dtw_hardware_write(struct DtwTreePart *self,bool set_as_action){
     free(self->hawdware_content_sha);
     self->hawdware_content_sha = dtw_generate_sha_from_string((const char  *)self->content);
     self->content_exist_in_hardware = true;
+    int now = time(NULL);
+    self->last_modification_time = now;
 
     free(path);
     return true;
@@ -143,6 +146,9 @@ bool private_dtw_hardware_modify(struct DtwTreePart *self,bool set_as_action){
         free(self->hawdware_content_sha);
         self->hawdware_content_sha = dtw_generate_sha_from_string((const char *)self->content);
         self->content_exist_in_hardware = true;
+        int now = time(NULL);
+        self->last_modification_time = now;
+
         free(path);
         return true;
     }
