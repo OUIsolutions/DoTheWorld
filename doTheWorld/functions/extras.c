@@ -40,7 +40,7 @@ const char * private_dtw_convert_action_to_string(short action){
         case DTW_MODIFY:
             return "modify";
     }
-    return "none";
+    return NULL;
 }
 
 short private_dtw_convert_string_to_action(const char *action){

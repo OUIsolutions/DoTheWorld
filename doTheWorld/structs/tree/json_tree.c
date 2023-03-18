@@ -93,12 +93,13 @@ char * private_dtw_dumps_tree_json(struct DtwTree *self,bool preserve_content,bo
         cJSON *json_tree_part = cJSON_CreateObject();
         struct DtwTreePart *tree_part = self->tree_parts[i];
         char *path_string = tree_part->path->get_path(tree_part->path);
-        
-        cJSON_AddItemToObject(
-            json_tree_part, 
-            "ignore", 
-            cJSON_CreateBool(tree_part->ignore)
-        );
+        if(tree_part->ignore){
+            cJSON_AddItemToObject(
+                json_tree_part, 
+                "ignore", 
+                cJSON_CreateBool(true)
+            );
+        }
 
         cJSON_AddItemToObject(
             json_tree_part, 
@@ -227,11 +228,13 @@ char * private_dtw_dumps_tree_json(struct DtwTree *self,bool preserve_content,bo
        
         //adding action 
         const char *action_string = private_dtw_convert_action_to_string(tree_part->pending_action);
-        cJSON_AddItemToObject(
-            json_tree_part, 
-            "pending_action", 
-            cJSON_CreateString(action_string)
-        );
+        if(action_string != NULL){
+            cJSON_AddItemToObject(
+                json_tree_part, 
+                "pending_action", 
+                cJSON_CreateString(action_string)
+            );
+        } 
         //Add json_tree_part  
         cJSON_AddItemToArray(json_array,json_tree_part);
         free(path_string);
