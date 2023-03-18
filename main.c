@@ -1,6 +1,6 @@
 
 #include "doTheWorld/doTheWorldmain.c"
-void load_and_dump_string(){
+void load_and_dump_file(){
     struct DtwTree *tree = dtw_tree_constructor();
     char *code = dtw_load_string_file_content("exemples.json");
     
@@ -40,6 +40,7 @@ void load_hardware_and_dump_string(){
 
 
 int main(int argc, char *argv[]){
-    load_and_dump_string();
+    load_hardware_and_dump_string();
+    load_and_dump_file();
     return 0;
 }
