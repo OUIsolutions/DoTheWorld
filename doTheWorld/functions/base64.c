@@ -39,7 +39,7 @@ unsigned char *dtw_base64_decode(unsigned char *data, size_t input_length, size_
     if (data[input_length - 1] == '=') (*output_length)--;
     if (data[input_length - 2] == '=') (*output_length)--;
 
-    char *decoded_data = (char*) malloc(*output_length);
+    unsigned char *decoded_data = (unsigned char*) malloc(*output_length);
     if (decoded_data == NULL) return NULL;
 
     size_t i, j;

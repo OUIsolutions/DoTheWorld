@@ -9,7 +9,7 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_conten
     self->is_binary = false;
     self->ignore = false;
     self->hawdware_content_sha = (char *)malloc(0);
-    self->content = (char *)malloc(0);
+    self->content = (unsigned char *)malloc(0);
     self->content_size = 0;
     self->hardware_content_size = 0;
     self->load_content_from_hardware = private_dtw_load_content_from_hardware;
@@ -50,7 +50,7 @@ struct  DtwTreePart * private_dtw_copy_tree(struct DtwTreePart *self){
 
     new_tree_part->hawdware_content_sha = (char *)malloc(strlen(self->hawdware_content_sha)+1);
     strcpy(new_tree_part->hawdware_content_sha,self->hawdware_content_sha);
-    new_tree_part->content = (char *)malloc(self->content_size);
+    new_tree_part->content = (unsigned char *)malloc(self->content_size);
     memcpy(new_tree_part->content,self->content,self->content_size);
 
     
@@ -62,7 +62,7 @@ void private_dtw_set_any_content(struct DtwTreePart *self,const char *content,in
     self->free_content(self);
     self->content_exist_in_memory = true;
     self->is_binary = is_binary;
-    self->content = (char *)realloc(self->content,content_size);
+    self->content = (unsigned char *)realloc(self->content,content_size);
     memcpy(self->content,content,content_size);
     self->content_size = content_size;
 
@@ -80,7 +80,7 @@ void private_dtw_set_binary_content(struct DtwTreePart *self,const char *content
 
 char *private_dtw_get_content_sha(struct DtwTreePart *self){
     if(self->content_exist_in_memory){
-        return dtw_generate_sha_from_string(self->content);
+        return dtw_generate_sha_from_string((char *)self->content);
     }
     return NULL;
 }

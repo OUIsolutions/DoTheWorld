@@ -26,6 +26,12 @@
         "tree.h": "c",
         "typeinfo": "c",
         "monodimension_listage_win32.h": "c",
-        "base64.h": "c"
+        "base64.h": "c",
+        "imports.h": "c",
+        "extras.h": "c",
+        "string_functions.h": "c",
+        "io.h": "c",
+        "monodimension_listage_linux.h": "c",
+        "multidimension_listage.h": "c"
     }
 }

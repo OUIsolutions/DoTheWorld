@@ -1,4 +1,4 @@
-
+/*
 #include "doTheWorld/doTheWorldmain.c"
 void load_and_dump_string(){
     struct DtwTree *tree = dtw_tree_constructor();
@@ -31,9 +31,34 @@ void load_hardware_and_dump_string(){
     free(generated);
     tree->delete_tree(tree);
 }
+*/
+#include "doTheWorld/headers/imports.h"
+#include "doTheWorld/headers/sha-256.h"
+#include "doTheWorld/headers/string_functions.h"
+#include "doTheWorld/headers/extras.h"
+
+
+#include "doTheWorld/headers/io.h"
+#include "doTheWorld/headers/string_array.h"
+#include "doTheWorld/dependencies/sha-256.c"
+
+#include "doTheWorld/headers/monodimension_listage_linux.h"
+#include "doTheWorld/headers/monodimension_listage_win32.h"
+#include "doTheWorld/headers/multidimension_listage.h"
+
+
+
+#include "doTheWorld/functions/monodimension_listage_linux.c"
+#include "doTheWorld/functions/monodimension_listage_win32.c"
+#include "doTheWorld/functions/multidimension_listage.c"
+#include "doTheWorld/functions/io.c"
+#include "doTheWorld/functions/string_functions.c"
+#include "doTheWorld/functions/extras.c"
+#include "doTheWorld/structs/string_array.c"
+
 
 int main(int argc, char *argv[]){
-    
-    load_hardware_and_dump_string();
+
+  
     return 0;
 }

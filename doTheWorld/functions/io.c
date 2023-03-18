@@ -53,7 +53,7 @@ void dtw_remove_any(const char* path) {
 }
 
 
-char *dtw_load_any_content(const char * path,int *size,bool *is_binary){
+unsigned char *dtw_load_any_content(const char * path,int *size,bool *is_binary){
     FILE *file = fopen(path,"rb");
     if(file == NULL){
         free(file);
@@ -62,7 +62,7 @@ char *dtw_load_any_content(const char * path,int *size,bool *is_binary){
     fseek(file,0,SEEK_END);
     *size = ftell(file);
     fseek(file,0,SEEK_SET);
-    char *content = (char*)malloc(*size +1);
+    unsigned char *content = (unsigned char*)malloc(*size +1);
     fread(content,1,*size,file);
 
     *is_binary = false;
@@ -97,7 +97,7 @@ char *dtw_load_string_file_content(const char * path){
 }
 
 
-char *dtw_load_binary_content(const char * path,int *size){
+unsigned char *dtw_load_binary_content(const char * path,int *size){
     FILE *file = fopen(path,"rb");
     if(file == NULL){
         return NULL;
@@ -105,14 +105,14 @@ char *dtw_load_binary_content(const char * path,int *size){
     fseek(file,0,SEEK_END);
     *size = ftell(file);
     fseek(file,0,SEEK_SET);
-    char *content = (char*)malloc(*size);
+    unsigned char *content = (unsigned char*)malloc(*size);
     fread(content,1,*size,file);
     fclose(file);
     return content;
 }
 
 
-bool dtw_write_any_content(const char *path,const char *content,int size){
+bool dtw_write_any_content(const char *path,unsigned  char *content,int size){
     //Iterate through the path and create directories if they don't exist
     
     for(int i = strlen(path)-1;i > 0;i--){
@@ -150,7 +150,7 @@ bool dtw_write_string_file_content(const char *path,const char *content){
     else{
         size = strlen(content);
     }
-    return dtw_write_any_content(path,content,size);
+    return dtw_write_any_content(path,(unsigned char*)content,size);
 }
 
 int dtw_entity_type(const char *path){
@@ -179,7 +179,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
     
         int size;
         bool is_binary;
-        char *content = dtw_load_any_content(src_path,&size,&is_binary);
+        unsigned char *content = dtw_load_any_content(src_path,&size,&is_binary);
         bool result =  dtw_write_any_content(dest_path,content,size);
         free(content);
         return result;
@@ -210,7 +210,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
     for(int i = 0; i < files->size; i++){
         int file_size;
         bool is_binary;
-        char *content = dtw_load_any_content(files->strings[i],&file_size,&is_binary);
+        unsigned char *content = dtw_load_any_content(files->strings[i],&file_size,&is_binary);
         char *new_path = private_dtw_change_beginning_of_string(files->strings[i],src_path_size,dest_path);
 
         dtw_write_any_content(new_path,content,file_size);
