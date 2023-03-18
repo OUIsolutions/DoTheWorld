@@ -13,10 +13,7 @@ void load_and_dump_file(){
         part->hardware_write(part,DTW_SET_AS_ACTION);
         
     }
-    for(int i = 0; i < tree->size; i++){
-        struct DtwTreePart *part = tree->tree_parts[i];
-        part->hardware_commit(part);
-    }
+    tree->hardware_commit_tree(tree);
     tree->free_tree(tree);
     free(code);
     
