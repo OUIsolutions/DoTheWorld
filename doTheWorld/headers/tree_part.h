@@ -15,6 +15,8 @@ struct DtwTreePart{
     unsigned char *content;
 
     size_t content_size;
+    char *(*get_content_string_by_reference)(struct DtwTreePart *self);
+    unsigned char *(*get_content_binary_by_reference)(struct DtwTreePart *self);
 
     char *(*get_content_sha)(struct DtwTreePart *self);
     char *(*last_modification_time_in_string)(struct DtwTreePart *self);
@@ -32,6 +34,9 @@ struct DtwTreePart{
     void (*delete_tree_part)(struct DtwTreePart *self);
     struct DtwTreePart *(*copy_tree_part)(struct DtwTreePart *self);
 };
+
+char *private_dtw_get_content_string_by_reference(struct DtwTreePart *self);
+unsigned char *private_dtw_get_content_binary_by_reference(struct DtwTreePart *self);
 char *private_dtw_get_content_sha(struct DtwTreePart *self);
 char *private_dtw_last_modification_time_in_string(struct DtwTreePart *self);
 void private_dtw_set_any_content(struct DtwTreePart *self,const char *content,int content_size,bool is_binary);

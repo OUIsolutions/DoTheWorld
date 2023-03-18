@@ -34,6 +34,20 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_conten
     }
     return self;
 }
+char *private_dtw_get_content_string_by_reference(struct DtwTreePart *self){
+    if(self->content_exist_in_memory == true){
+        return (char *)self->content;
+    }
+    return NULL;
+}
+
+unsigned char *private_dtw_get_content_binary_by_reference(struct DtwTreePart *self){
+    if(self->content_exist_in_memory == true){
+        return self->content;
+    }
+    return NULL;
+}
+
 
 struct  DtwTreePart * private_dtw_copy_tree(struct DtwTreePart *self){
     char *path = self->path->get_path(self->path);
