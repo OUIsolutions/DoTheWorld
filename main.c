@@ -13,7 +13,10 @@ void load_and_dump_string(){
         part->hardware_write(part,DTW_SET_AS_ACTION);
         
     }
-    
+    for(int i = 0; i < tree->size; i++){
+        struct DtwTreePart *part = tree->tree_parts[i];
+        part->hardware_commit(part);
+    }
     tree->delete_tree(tree);
     free(code);
     
@@ -37,12 +40,6 @@ void load_hardware_and_dump_string(){
 
 
 int main(int argc, char *argv[]){
-    struct DtwTreePart *part = dtw_tree_part_constructor(
-        "README.md",
-        DTW_LOAD_CONTENT,
-        DTW_PRESERVE_CONTENT
-    );
-    part->set_string_content(part,"# Hello World");
-    part->delete_tree_part(part);
+    load_and_dump_string();
     return 0;
 }
