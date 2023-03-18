@@ -20,7 +20,7 @@ void load_and_dump_file(){
 
 void load_hardware_and_dump_string(){
     struct DtwTree *tree = dtw_tree_constructor();
-    tree->add_path_from_hardware(tree,"exemples",DTW_LOAD_CONTENT,DTW_PRESERVE_CONTENT);
+    tree->add_tree_from_hardware(tree,"exemples",DTW_LOAD_CONTENT,DTW_PRESERVE_CONTENT);
     char *generated =tree->dumps_json_tree(
         tree,
         DTW_PRESERVE_CONTENT,
@@ -37,6 +37,12 @@ void load_hardware_and_dump_string(){
 
 int main(int argc, char *argv[]){
     
-    load_and_dump_file();
+    struct DtwStringArray *paths = dtw_constructor_string_array();
+    paths->add_string(paths,"exemples/exemple_folder/deer.jpg");
+    paths->add_string(paths,"exemples/io/copying_any.c");
+    paths->add_string(paths,"exemples/io/remove_any.c");
+    struct DtwTree *tree = dtw_tree_constructor();
+    tree->add_tree_parts_from_string_array(tree,paths,DTW_LOAD_CONTENT,DTW_PRESERVE_CONTENT);
+    tree->represent(tree);
     return 0;
 }
