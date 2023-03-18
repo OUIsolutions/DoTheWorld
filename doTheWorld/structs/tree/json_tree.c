@@ -15,7 +15,7 @@ void private_dtw_loads_json_tree(struct DtwTree *self,const char *content){
         cJSON *content_size = cJSON_GetObjectItemCaseSensitive(json_tree_part, "content_size");
         cJSON *is_binary = cJSON_GetObjectItemCaseSensitive(json_tree_part, "is_binary");
         cJSON *content = cJSON_GetObjectItemCaseSensitive(json_tree_part, "content");
-
+        cJSON *pending_action = cJSON_GetObjectItemCaseSensitive(json_tree_part, "pending_action");
         
         struct DtwTreePart *part = dtw_tree_part_constructor(
             path->valuestring,
@@ -69,6 +69,12 @@ void private_dtw_loads_json_tree(struct DtwTree *self,const char *content){
                 part->set_string_content(part,content->valuestring);
            } 
         }
+        if(pending_action != NULL){
+            part->pending_action = private_dtw_convert_string_to_action(
+                pending_action->valuestring
+            );
+        }
+
         self->add_tree_part_by_reference(self,part);
         
     }
@@ -84,7 +90,12 @@ char * private_dtw_dumps_tree_json(struct DtwTree *self,bool preserve_content,bo
         struct DtwTreePart *tree_part = self->tree_parts[i];
         char *path_string = tree_part->path->get_path(tree_part->path);
         
-
+        cJSON_AddItemToObject(
+            json_tree_part, 
+            "ignore", 
+            cJSON_CreateBool(tree_part->ignore)
+        );
+        
         cJSON_AddItemToObject(
             json_tree_part, 
             "path", 
@@ -210,7 +221,13 @@ char * private_dtw_dumps_tree_json(struct DtwTree *self,bool preserve_content,bo
             }
         }
        
-
+        //adding action 
+        const char *action_string = private_dtw_convert_action_to_string(tree_part->pending_action);
+        cJSON_AddItemToObject(
+            json_tree_part, 
+            "pending_action", 
+            cJSON_CreateString(action_string)
+        );
         //Add json_tree_part  
         cJSON_AddItemToArray(json_array,json_tree_part);
         free(path_string);
