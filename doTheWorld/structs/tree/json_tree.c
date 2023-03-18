@@ -70,7 +70,8 @@ void private_dtw_loads_json_tree(struct DtwTree *self,const char *content){
                 part->set_string_content(part,content->valuestring);
            } 
         }
-        if(pending_action != NULL){
+        if(pending_action != NULL &&  pending_action->valuestring){
+    
             part->pending_action = private_dtw_convert_string_to_action(
                 pending_action->valuestring
             );

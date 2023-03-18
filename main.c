@@ -24,7 +24,14 @@ int main(int argc, char *argv[]){
 
     dtw_write_string_file_content("exemples.json",json_string);
     */
+    
     char *json_string = dtw_load_string_file_content("exemples.json");
+    struct DtWJsonError *json_error = dtw_validate_json_tree(json_string);
+    if(json_error->code != DTW_JSON_ERROR_CODE_OK){
+        printf("JSON ERROR: %s on %i",json_error->menssage,json_error->position);
+        return 1;
+    }
+   
     tree->loads_json_tree(tree,json_string);
     tree->represent(tree);
     
