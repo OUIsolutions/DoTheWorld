@@ -31,7 +31,30 @@ char * dtw_get_file_last_motification_in_string(const char *path){
     return last_modification_in_string;
 }
 
+const char * private_dtw_convert_action_to_string(short action){
+    switch (action){
+        case DTW_REMOVE:
+            return "remove";
+        case DTW_WRITE:
+            return "write";
+        case DTW_MODIFY:
+            return "modify";
+    }
+    return "none";
+}
 
+short private_dtw_convert_string_to_action(const char *action){
+    if(strcmp(action,"remove") == 0){
+        return DTW_REMOVE;
+    }
+    if(strcmp(action,"write") == 0){
+        return DTW_WRITE;
+    }
+    if(strcmp(action,"modify") == 0){
+        return DTW_MODIFY;
+    }
+    return -1;
+}
 
 void private_dtw_add_end_bar_to_dirs_string_array(struct DtwStringArray * dirs){
     for(int i = 0; i < dirs->size; i++){

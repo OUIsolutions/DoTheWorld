@@ -121,6 +121,7 @@ void private_dtw_represent_tree_part(struct DtwTreePart *self){
     printf("------------------------------------------------------------\n");
     self->path->represent(self->path);
     printf("Content Exist in Memory: %s\n",self->content_exist_in_memory ? "true" : "false");
+
     if(self->content_exist_in_memory == true || self->content_exist_in_hardware == true){
         
         char *last_moditication_in_string = self->last_modification_time_in_string(self);
@@ -136,6 +137,7 @@ void private_dtw_represent_tree_part(struct DtwTreePart *self){
             printf("Last Modification Time: %s\n",last_moditication_in_string);
             printf("Hardware SHA: %s\n",self->hawdware_content_sha);
         }
+
         if(self->content_exist_in_memory == true){
             char *content_sha = self->get_content_sha(self);
             printf("Content SHA:  %s\n",content_sha);
@@ -145,6 +147,8 @@ void private_dtw_represent_tree_part(struct DtwTreePart *self){
         
         free(last_moditication_in_string);
     }
+    const char *action = private_dtw_convert_action_to_string(self->pending_action);
+    printf("Pending Action: %s\n",action);
     free(path);
 
 }
