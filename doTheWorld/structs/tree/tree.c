@@ -17,14 +17,13 @@ struct  DtwTree * dtw_tree_constructor(){
     return self;
 }
 
-
-
 void private_dtw_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_part){
     self->size++;
     self->tree_parts =  (struct DtwTreePart**)realloc(self->tree_parts, self->size * sizeof(struct DtwTreePart *));
     self->tree_parts[self->size - 1] = tree_part->copy_tree_part(tree_part);
        
 }
+
 void private_dtw_add_tree_part_reference(struct DtwTree *self, struct DtwTreePart *tree_part){
     self->size++;
     self->tree_parts =  (struct DtwTreePart**)realloc(self->tree_parts, self->size * sizeof(struct DtwTreePart *));
@@ -32,13 +31,12 @@ void private_dtw_add_tree_part_reference(struct DtwTree *self, struct DtwTreePar
 }
 
 
-
-
 void private_dtw_represent_tree(struct DtwTree *self){
     for(int i = 0; i < self->size; i++){
         self->tree_parts[i]->represent(self->tree_parts[i]);
     }
 }
+
 void private_dtw_add_path_from_hardware(struct DtwTree *self,const char *path,bool load_content, bool preserve_content){
     
     struct DtwStringArray *path_array = dtw_list_all_recursively(path);

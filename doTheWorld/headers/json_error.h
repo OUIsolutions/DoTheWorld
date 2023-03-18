@@ -13,5 +13,5 @@ struct DtWJsonError {
 
 };
 struct DtWJsonError * private_dtw_json_error_constructor();
-struct DtWJsonError * dtw_validate_json_tree(struct DtWJsonError*self, char *content);
+struct DtWJsonError * dtw_validate_json_tree(char *content);
 void private_free_json_error(struct DtWJsonError *self);

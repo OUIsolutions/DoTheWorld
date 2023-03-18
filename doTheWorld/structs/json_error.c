@@ -8,7 +8,7 @@ struct DtWJsonError * private_dtw_json_error_constructor(){
 }
 
 
-struct DtWJsonError * dtw_validate_json_tree(struct DtWJsonError*self, char *content){
+struct DtWJsonError * dtw_validate_json_tree(char *content){
  
     struct DtWJsonError *json_error = private_dtw_json_error_constructor();
     cJSON *json_tree = cJSON_Parse(content);
