@@ -13,6 +13,8 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_conten
     self->content = (unsigned char *)malloc(0);
     self->content_size = 0;
     self->hardware_content_size = 0;
+    self->get_content_string_by_reference = private_dtw_get_content_string_by_reference;
+    self->get_content_binary_by_reference = private_dtw_get_content_binary_by_reference;
     self->load_content_from_hardware = private_dtw_load_content_from_hardware;
     self->set_any_content = private_dtw_set_any_content;
     self->set_string_content = private_dtw_set_string_content;

@@ -70,5 +70,6 @@ int main(int argc, char *argv[]){
     part->set_string_content(part,"Hello World");
     part->hardware_modify(part,DTW_EXECUTE_NOW);
     //part->hardware_commit(part);
+    printf("%s\n",part->get_content_string_by_reference(part));
     return 0;
 }
