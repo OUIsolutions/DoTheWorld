@@ -1,4 +1,4 @@
-
+from sys import argv
 from os import system
 
 formated = ''
@@ -27,13 +27,15 @@ with open('doTheWorld/doTheWorldMain.c','r') as f:
 with open('doTheWorld.c','w') as f:
     f.write(formated)
 
-#make an gcc and c++ copilation 
-result_c = system('gcc main.c ')
-if result_c != 0:
-    print('gcc failed')
+if 'copile' in argv:
 
-result_cpp = system('g++ main.c ')
-if result_cpp != 0:
-    print('g++ failed')
+    #make an gcc and c++ copilation 
+    result_c = system('gcc main.c ')
+    if result_c != 0:
+        print('gcc failed')
 
-print('Compilation finished')
+    result_cpp = system('g++ main.c ')
+    if result_cpp != 0:
+        print('g++ failed')
+
+    print('Compilation finished')
