@@ -40,7 +40,7 @@ char *dtw_get_current_dir(){
 
 
 void dtw_remove_any(const char* path) {
-
+    //means is an file
     if(remove(path) == 0){
         return;
     }
@@ -56,10 +56,14 @@ void dtw_remove_any(const char* path) {
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(path);
     size = dirs->size;
     for(int i = dirs->size -1; i >=0; i--){
-        remove(dirs->strings[i]);
+        rmdir(dirs->strings[i]);
     }
     dirs->free_string_array(dirs);
-    remove(path);
+    //remove / to the path 
+    
+    
+   
+ 
 }
 
 
