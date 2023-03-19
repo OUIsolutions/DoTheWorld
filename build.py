@@ -7,7 +7,7 @@ def format_path(path:str) -> str:
     CHARS_TO_REMOVE = ['"','\n']
     for char in CHARS_TO_REMOVE:
         path = path.replace(char,'')
-    return f'doTheWorld//{path}'
+    return f'doTheWorld/{path}'
 
 with open('doTheWorld/doTheWorldMain.c','r') as f:
     
