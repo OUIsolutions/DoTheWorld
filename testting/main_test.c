@@ -1,5 +1,5 @@
 
-#include "../doTheWorld.c"
+#include "../doTheWorld/doTheWorldMain.c"
 #include "io_testing.c"
 
 

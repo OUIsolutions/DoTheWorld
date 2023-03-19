@@ -59,7 +59,7 @@ void dtw_remove_any(const char* path) {
         remove(dirs->strings[i]);
     }
     dirs->free_string_array(dirs);
-    
+    remove(path);
 }
 
 
