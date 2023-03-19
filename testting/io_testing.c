@@ -1,7 +1,7 @@
 
 
 bool  test_io_operations(){
-    puts("Testing io operations");
+    puts("Testing io operations--------------------------------------------");
     //testing create dir------------------------------------------------------- 
     dtw_create_dir("test");
     int entity_type = dtw_entity_type("test");
@@ -131,4 +131,5 @@ bool  test_io_operations(){
         return false;
     }
     dtw_remove_any("test2");
+    return true;
 }

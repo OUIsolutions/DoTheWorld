@@ -9,9 +9,18 @@ struct DtwStringArray * dtw_constructor_string_array(){
     self->merge_string_array = private_dtw_merge_string_array;
     self->represent= private_dtw_represent_string_array;
     self->free_string_array = private_dtw_free_string_array;
+    self->find_position = private_dtw_find_position;
     return self;
 }
 
+int private_dtw_find_position(struct DtwStringArray *self,const char *string){
+    for(int i = 0; i < self->size; i++){
+        if(strcmp(self->strings[i], string) == 0){
+            return i;
+        }
+    }
+    return -1;
+}
 void private_dtw_set_value(struct DtwStringArray *self,int index,const char *value){
     if(index < self->size && index >= 0){
         int size = strlen(value);
