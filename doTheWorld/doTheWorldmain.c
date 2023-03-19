@@ -1,5 +1,4 @@
 #include "headers/imports.h"
-
 #include "headers/string_array.h"
 #include "headers/sha-256.h"
 #include "headers/base64.h"
@@ -8,8 +7,7 @@
 #include "headers/string_functions.h"
 #include "headers/io.h"
 #include "headers/listage_wrappers.h"
-#include "headers/monodimension_listage_linux.h"
-#include "headers/monodimension_listage_win32.h"
+#include "headers/monodimension_listage_all.h"
 #include "headers/multidimension_listage.h"
 #include "headers/path.h"
 #include "headers/json_error.h"
@@ -31,5 +29,4 @@
 #include "structs/tree_part/hardware_tree_part.c"
 #include "structs/tree/tree.c"
 #include "structs/json_error.c"
-
 #include "structs/tree/json_tree.c"

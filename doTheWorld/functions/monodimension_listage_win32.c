@@ -27,7 +27,7 @@ bool private_dtw_verify_if_skip(WIN32_FIND_DATAA *entry){
     return false;
 }
 
-struct DtwStringArray * dtw_list_basic(const char *path,int type, bool concat_path, bool add_end_bar_to_dir){
+struct DtwStringArray *  dtw_list_basic(const char *path,int expected_type,bool concat_path){
 
     WIN32_FIND_DATAA file_data;
     HANDLE file_handle;
@@ -52,7 +52,7 @@ struct DtwStringArray * dtw_list_basic(const char *path,int type, bool concat_pa
         }
 
         // verify if it's a file or directory
-        if (private_dtw_verify_if_add(type, file_data)) {
+        if (private_dtw_verify_if_add(expected_type, file_data)) {
             
             if(concat_path){
                 // allocate memory for the directory
@@ -71,16 +71,9 @@ struct DtwStringArray * dtw_list_basic(const char *path,int type, bool concat_pa
         }
     } while (FindNextFileA(file_handle, &file_data) != 0);
 
-        if(expected_type == DTW_FOLDER_TYPE && add_end_bar_to_dir){
-        for(int i = 0; i < dirs->size; i++){
-            char *dir = dirs->strings[i];
-            char *new_dir = (char*)malloc(strlen(dir) + 1);
-            //concat '/' to the end of the directory
-            sprintf(new_dir, "%s/", dir);
-            free(dirs->strings[i]);
-            dirs->strings[i] = new_dir;
+        if(expected_type == DTW_FOLDER_TYPE){
+            private_dtw_add_end_bar_to_dirs_string_array(dirs);   
         }
-    }
     
     FindClose(file_handle);
 

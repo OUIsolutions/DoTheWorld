@@ -4,11 +4,11 @@ struct DtwStringArray * dtw_list_dirs_recursively(const char *path){
         struct  DtwStringArray *dirs  = dtw_constructor_string_array();
         //verify if the path is a directory
         
-        DIR *dir = opendir(path);
-        if( dir == NULL){
+        int entity_type = dtw_entity_type(path);
+        if(entity_type != DTW_FOLDER_TYPE){
                 return dirs;
         }
-        closedir(dir);
+      
         
         dirs->add_string(dirs,path);
 

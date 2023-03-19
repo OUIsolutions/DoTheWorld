@@ -19,7 +19,13 @@ long int dtw_get_file_last_motification_in_unix(const char *path){
 
 char * dtw_convert_unix_time_to_string(long int unix_time){
     struct tm * timeinfo;
-    timeinfo = localtime(&unix_time);
+    #ifdef _WIN32
+        //get timeinfo from windows
+        time_t rawtime = unix_time;
+        timeinfo = localtime(&rawtime);
+    #else
+        timeinfo = localtime(&unix_time);
+    #endif
     char *time_string = (char *)malloc(100);
     strftime(time_string, 100, "%Y-%m-%d %H:%M:%S", timeinfo);
     return time_string;
