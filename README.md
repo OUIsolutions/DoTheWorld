@@ -52,7 +52,7 @@ int main(int argc, char *argv[]){
 if you are not sure what data type a file is you can call the function **dtw_load_any_content**
 
 ~~~cpp
-#include "../../doTheWorld.c"
+#include "doTheWorld.c"
 
 int main(int argc, char *argv[]){
  
@@ -60,7 +60,7 @@ int main(int argc, char *argv[]){
   int size;
   bool is_binary;
   //load any file, is useful if you don't know if the file is binary or not
-  char *content = dtw_load_any_content(path,&size,&is_binary);
+  unsigned char *content = dtw_load_any_content(path,&size,&is_binary);
   if(content == NULL){
     printf("error oppening %s\n",path);
     return 1;
@@ -76,14 +76,14 @@ if you are sure the file is a binary , call the function **dtw_load_binary_conte
 ~~~cpp
 
 
-#include "../../doTheWorld.c"
+#include "doTheWorld.c"
 
 int main(int argc, char *argv[]){
  
   const char *path = "../exemple_folder/deer.jpg";
   int size;
   //load a binary file content
-  char *content = dtw_load_binary_content(path,&size);
+  unsigned char *content = dtw_load_binary_content(path,&size);
   if(content == NULL){
     printf("error oppening %s\n",path);
     return 1;
@@ -95,3 +95,6 @@ int main(int argc, char *argv[]){
 }
 
 ~~~
+
+##### Writing strings
+
