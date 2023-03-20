@@ -220,3 +220,17 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
+
+as the same as copying files , you alson can merge 
+~~~cpp
+
+#include "doTheWorld.c"
+
+int main(int argc, char *argv[]){
+
+  dtw_write_string_file_content("exemple_folder2/exemple_file.txt","Hello World !");
+  dtw_move_any("exemple_folder","exemple_folder2",DTW_MERGE);
+
+  return 0;
+}
+~~~
