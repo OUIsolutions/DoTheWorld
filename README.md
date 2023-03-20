@@ -14,8 +14,8 @@ int main(int argc, char *argv[]){
 }
 ~~~
 #### Lite Version
-You alson can download the **doTheWorldLite.c** file and use it, these version dont 
-have suport to json trees , witch means , all json functions wont work here 
+You alson can download the **doTheWorldLite.c** file and use it, these version does not  
+have suport to json trees, witch means, all json functions wont work here 
 
 ~~~cpp
 
@@ -40,6 +40,12 @@ int main(int argc, char *argv[]){
 }
 
 ~~~
+### Used Dependencies
+DoTheWorld includes all self dependecies in the single file, so you dont need to care about it, but if you will use one of these librarys, dont include it in your code to avoid circular imports 
+**cJson** from https://github.com/DaveGamble/cJSON
+**sha-256** from https://github.com/amosnier/sha-2
+
+
 ### IO Operations
 
 
