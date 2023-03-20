@@ -12,8 +12,10 @@ struct  DtwTree * dtw_tree_constructor(){
     self->represent = private_dtw_represent_tree;
     self->add_tree_parts_from_string_array = private_dtw_add_tree_parts_from_string_array;
     self->add_tree_from_hardware = private_dtw_add_tree_from_hardware;
+    //{%if not  lite %}
     self->loads_json_tree = private_dtw_loads_json_tree;
     self->dumps_json_tree = private_dtw_dumps_tree_json;
+    //{%endif%}
     self->hardware_remove_tree = private_dtw_hardware_remove_tree;
     self->hardware_write_tree = private_dtw_hardware_write_tree;
     self->hardware_commit_tree = private_dtw_hardware_commit_tree;

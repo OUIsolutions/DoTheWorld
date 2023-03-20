@@ -51,7 +51,6 @@ SOFTWARE.
   #include <direct.h>
 #endif
 
-
 struct DtwStringArray {
   int size;         
 
@@ -71,7 +70,6 @@ void private_dtw_free_string_array(struct DtwStringArray *self);
 void private_dtw_set_value(struct DtwStringArray *self,int index,const char *value);
 
 struct DtwStringArray * dtw_constructor_string_array();
-
 #ifndef SHA_256_H
 #define SHA_256_H
 
@@ -216,6 +214,7 @@ unsigned char *dtw_base64_encode(unsigned char *data, size_t input_length);
 
 
 unsigned char *dtw_base64_decode(unsigned char *data, size_t input_length, size_t *output_length);
+
 /*
   Copyright (c) 2009-2017 Dave Gamble and cJSON contributors
 
@@ -517,6 +516,8 @@ CJSON_PUBLIC(void) cJSON_free(void *object);
 
 #endif
 
+
+
 char * dtw_generate_sha_from_file(const char *path);
 char * dtw_generate_sha_from_string(const char *string);
 long int dtw_get_file_last_motification_in_unix(const char *path);
@@ -531,7 +532,6 @@ bool dtw_ends_with(const char *string, const char *suffix);
 char *private_dtw_replace_string_once(const char *target, const char *old_element, const char *new_element);
 char* dtw_replace_string(const char *target, const char *old_element, const char *new_element);
 char *private_dtw_change_beginning_of_string(const char *target,int start_element_to_remove_size, const char *new_element);
-
 
 #define DTW_FILE_TYPE 1
 #define DTW_FOLDER_TYPE 2
@@ -606,7 +606,6 @@ struct DtwStringArray *  dtw_list_files_recursively(const char *path);
 
 
 struct DtwStringArray * dtw_list_all_recursively(const char *path);
-
 
 struct DtwPath {
     char *original_path;
@@ -804,6 +803,7 @@ struct  DtwTree{
         bool load_content,
         bool preserve_content
     );
+    //
     void (*loads_json_tree)(
         struct DtwTree *self,
         const char *content
@@ -817,6 +817,7 @@ struct  DtwTree{
         bool minify,
         bool consider_igonore
     ); 
+    //
     void (*free_tree)(struct DtwTree *self);
     void (*represent)(struct DtwTree *self);
     void (*hardware_remove_tree)(struct DtwTree *self);
@@ -853,11 +854,13 @@ void private_dtw_add_tree_from_hardware(
     bool load_content,
     bool preserve_content
 );
+//
 void private_dtw_loads_json_tree(struct DtwTree *self,const char *content);
+//
 void private_dtw_hardware_remove_tree(struct DtwTree *self);
 void private_dtw_hardware_write_tree(struct DtwTree *self);
 void private_dtw_hardware_commit_tree(struct DtwTree *self);
-
+//
 #ifdef __cplusplus
 char * private_dtw_dumps_tree_json(
     struct DtwTree *self,
@@ -879,9 +882,8 @@ char * private_dtw_dumps_tree_json(
     bool consider_igonore
     );
 #endif
-
+//
 struct  DtwTree * dtw_tree_constructor();
-
 
 
 
@@ -1169,6 +1171,7 @@ char * calc_sha_256_from_file_returning_string(const char *filename)
 	return hash_string;
 
 }
+
 /*
   Copyright (c) 2009-2017 Dave Gamble and cJSON contributors
 
@@ -4289,6 +4292,7 @@ CJSON_PUBLIC(void) cJSON_free(void *object)
     global_hooks.deallocate(object);
 }
 
+
 unsigned char *dtw_base64_encode(unsigned char *data, size_t input_length){
     size_t output_length = 4 * ((input_length + 2) / 3);
 
@@ -4507,7 +4511,6 @@ char *private_dtw_change_beginning_of_string(const char *target,int start_elemen
     free(new_target);
     return result;
 }
-
 
 
 
@@ -4759,7 +4762,6 @@ void dtw_move_any(const char* src_path, const char* dest_path,bool merge) {
 }
 
 
-
 struct DtwStringArray * dtw_list_files(const char *path, bool concat_path){
     return dtw_list_basic(path,  DTW_FILE_TYPE, concat_path);
 }
@@ -4771,7 +4773,6 @@ struct DtwStringArray * dtw_list_dirs(const char *path, bool concat_path){
 struct DtwStringArray *  dtw_list_all(const char *path,  bool concat_path){
     return dtw_list_basic(path, DTW_ALL_TYPE, concat_path);
 }
-
 
 
 #ifdef __linux__
@@ -5329,7 +5330,6 @@ void private_dtw_destructor_path(struct DtwPath *self) {
 }
 
 
-
 struct DtwStringArray * dtw_constructor_string_array(){
     struct DtwStringArray *self = (struct DtwStringArray*)malloc(sizeof(struct DtwStringArray));
     self->size = 0;
@@ -5389,7 +5389,6 @@ void private_dtw_free_string_array(struct DtwStringArray *self){
     free(self->strings);
     free(self);
 }
-
 
 
 
@@ -5556,7 +5555,6 @@ void private_dtw_tree_part_destructor(struct DtwTreePart *self){
     free(self->content);
     free(self);
 }
-
 
 
 
@@ -5731,7 +5729,6 @@ bool private_dtw_hardware_commit(struct DtwTreePart *self){
 
 
 
-
 struct  DtwTree * dtw_tree_constructor(){
     struct DtwTree *self = (struct DtwTree*)malloc(sizeof(struct DtwTree));
     self->size = 0;
@@ -5743,8 +5740,10 @@ struct  DtwTree * dtw_tree_constructor(){
     self->represent = private_dtw_represent_tree;
     self->add_tree_parts_from_string_array = private_dtw_add_tree_parts_from_string_array;
     self->add_tree_from_hardware = private_dtw_add_tree_from_hardware;
+    //
     self->loads_json_tree = private_dtw_loads_json_tree;
     self->dumps_json_tree = private_dtw_dumps_tree_json;
+    //
     self->hardware_remove_tree = private_dtw_hardware_remove_tree;
     self->hardware_write_tree = private_dtw_hardware_write_tree;
     self->hardware_commit_tree = private_dtw_hardware_commit_tree;
