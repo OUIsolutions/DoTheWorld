@@ -64,15 +64,23 @@ short private_dtw_convert_string_to_action(const char *action){
 
 void private_dtw_add_end_bar_to_dirs_string_array(struct DtwStringArray * dirs){
     for(int i = 0; i < dirs->size; i++){
-        if(!dtw_ends_with(dirs->strings[i], "/")){
-             char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 3);
-             #ifdef _WIN32
-                 sprintf(formated_dir,"%s\\\0",dirs->strings[i]);
-            #else
-                 sprintf(formated_dir,"%s/",dirs->strings[i]);
-            #endif
-             dirs->set_value(dirs,i,formated_dir);
-             free(formated_dir);
-        }
+        #ifdef _WIN32
+            if(!dtw_ends_with(dirs->strings[i], "\\")){
+                char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 3); 
+                sprintf(formated_dir,"%s\\\0",dirs->strings[i]);
+                dirs->set_value(dirs,i,formated_dir);
+                free(formated_dir);
+            }
+        #else
+            if(!dtw_ends_with(dirs->strings[i], "/")){
+                char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 3);
+                sprintf(formated_dir,"%s/\0",dirs->strings[i]);
+                dirs->set_value(dirs,i,formated_dir);
+                free(formated_dir);
+            }
+        #endif
+       
+            
+              
     }
 }

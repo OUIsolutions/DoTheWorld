@@ -3,7 +3,7 @@ struct DtwStringArray * dtw_list_dirs_recursively(const char *path){
 
         struct  DtwStringArray *dirs  = dtw_constructor_string_array();
         //verify if the path is a directory
-        
+    
         int entity_type = dtw_entity_type(path);
         if(entity_type != DTW_FOLDER_TYPE){
                 return dirs;
@@ -11,7 +11,7 @@ struct DtwStringArray * dtw_list_dirs_recursively(const char *path){
       
         
         dirs->add_string(dirs,path);
-
+        private_dtw_add_end_bar_to_dirs_string_array(dirs);
         int i = 0;
         //The size of dirs will increase til it reaches the end of the array
         while(i < dirs->size){                
@@ -29,8 +29,7 @@ struct DtwStringArray * dtw_list_dirs_recursively(const char *path){
         //unsifth path in dirs 
         
         
-        private_dtw_add_end_bar_to_dirs_string_array(dirs);
-        
+      
 
         return dirs;
 }
@@ -60,11 +59,27 @@ struct DtwStringArray * dtw_list_all_recursively(const char *path){
     struct DtwStringArray *all = dtw_constructor_string_array();
     
     for(int i = 0; i < dirs->size; i++){
-     
-        char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 2);
-        sprintf(formated_dir,"%s/",dirs->strings[i]);
-        all->add_string(all,formated_dir);
-        free(formated_dir);
+        #ifdef _WIN32
+            if(!dtw_ends_with(dirs->strings[i], "\\")){
+                char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 2); 
+                sprintf(formated_dir,"%s\\",dirs->strings[i]);
+                all->add_string(all,formated_dir);
+                free(formated_dir);
+            }
+            else{
+                all->add_string(all,dirs->strings[i]);
+            }
+        #else
+            if(!dtw_ends_with(dirs->strings[i], "/")){
+                char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 2);
+                sprintf(formated_dir,"%s/",dirs->strings[i]);
+                all->add_string(all,formated_dir);
+                free(formated_dir);
+            }
+            else{
+                all->add_string(all,dirs->strings[i]);
+            }
+        #endif
     
         struct DtwStringArray *sub_files = dtw_list_basic(dirs->strings[i],DTW_FILE_TYPE,true);
         all->merge_string_array(all,sub_files);
