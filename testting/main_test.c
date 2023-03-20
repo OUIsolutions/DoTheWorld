@@ -1,8 +1,8 @@
 
 #include "../doTheWorld/doTheWorldMain.c"
 #include "io_testing.c"
-#include "monodimension_listage_testing.c"
-
+#include "monodimension_listage_testting.c"
+#include "multidimension_listage_testting.c"
 
 int main(int argc, char *argv[]){
     
@@ -20,5 +20,13 @@ int main(int argc, char *argv[]){
         puts("Some monodimension listage tests failed");
         return 1;
     }
+    bool multidimension_listage = test_multidimension_listage();
+    if(multidimension_listage){
+        puts("All multidimension listage tests passed");
+    }else{
+        puts("Some multidimension listage tests failed");
+        return 1;
+    }
+    
     return 0;
 }
