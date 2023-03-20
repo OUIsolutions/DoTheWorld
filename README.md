@@ -150,5 +150,31 @@ int main(int argc, char *argv[]){
   dtw_create_dir_recursively("a/b/c/");
   return 0;
 }
-~~~~
-##### Copying Things 
+~~~
+#####  Copying Things 
+With the function **dtw_copy_any** you can copy either files or folders to one position to anoter position 
+##### Copying files
+~~~cpp
+
+
+#include "doTheWorld.c"
+
+int main(int argc, char *argv[]){
+
+  dtw_copy_any("exemple_folder/deer.jpg","deer.jpg",DTW_NOT_MERGE);
+  return 0;
+}
+~~~
+##### Copying folders
+~~~cpp
+
+#include "doTheWorld.c"
+
+int main(int argc, char *argv[]){
+
+  dtw_copy_any("exemple_folder","exemple_folder2",DTW_NOT_MERGE);
+  return 0;
+}
+~~~
+also you can coping merger , to merge the content in the folder with the target
+
