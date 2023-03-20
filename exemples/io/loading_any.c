@@ -8,7 +8,7 @@ int main(int argc, char *argv[]){
   int size;
   bool is_binary;
   //load any file, is useful if you don't know if the file is binary or not
-  const char *content = dtw_load_any_content(path,&size,&is_binary);
+  char *content = dtw_load_any_content(path,&size,&is_binary);
   if(content == NULL){
     printf("error oppening %s\n",path);
     return 1;

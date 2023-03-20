@@ -27,8 +27,8 @@ int main(int argc, char *argv[]){
 ~~~
 ### IO Operations
 
-#### Reading data
-##### Reading string
+
+##### Reading strings
 if you are sure that the content you are going to read is not binary you can call the function **dtw_load_string_file_content**
 ~~~cpp
 
@@ -47,4 +47,51 @@ int main(int argc, char *argv[]){
   free(content);
   return 0;
 }
+~~~
+##### Reading Any
+if you are not sure what data type a file is you can call the function **dtw_load_any_content**
+
+~~~cpp
+#include "../../doTheWorld.c"
+
+int main(int argc, char *argv[]){
+ 
+  const char *path = "../exemple_folder/deer.jpg";
+  int size;
+  bool is_binary;
+  //load any file, is useful if you don't know if the file is binary or not
+  char *content = dtw_load_any_content(path,&size,&is_binary);
+  if(content == NULL){
+    printf("error oppening %s\n",path);
+    return 1;
+  }
+  printf("size: %d\n",size);
+  printf("is_binary: %s\n",is_binary ? "true" : "false");
+  printf("content: %s\n",content);
+  free(content);
+  return 0;
+}
+~~~
+if you are sure the file is a binary , call the function **dtw_load_binary_content**
+~~~cpp
+
+
+#include "../../doTheWorld.c"
+
+int main(int argc, char *argv[]){
+ 
+  const char *path = "../exemple_folder/deer.jpg";
+  int size;
+  //load a binary file content
+  char *content = dtw_load_binary_content(path,&size);
+  if(content == NULL){
+    printf("error oppening %s\n",path);
+    return 1;
+  }
+  printf("size: %d\n",size);
+  printf("content: %s\n",content);
+  free(content);
+  return 0;
+}
+
 ~~~
