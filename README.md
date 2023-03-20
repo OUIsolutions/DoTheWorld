@@ -193,3 +193,30 @@ int main(int argc, char *argv[]){
 You can move either folders or files with **dtw_move_any** function 
 
 ##### Moving Files
+~~~cpp
+
+#include "doTheWorld.c"
+
+int main(int argc, char *argv[]){
+
+
+  dtw_move_any("exemple_folder/deer.jpg","deer.jpg",DTW_NOT_MERGE);
+
+  return 0;
+}
+~~~
+
+##### Moving Folders
+~~~cpp
+
+
+#include "doTheWorld.c"
+
+int main(int argc, char *argv[]){
+
+
+  dtw_move_any("exemple_folder","exemple_folder2",DTW_NOT_MERGE);
+
+  return 0;
+}
+~~~
