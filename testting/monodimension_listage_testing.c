@@ -5,9 +5,13 @@ bool test_monodimension_listage(){
     puts("Testing monodimension listage-------------------------------------");
     puts("Testing dtw_list_basic");
     struct DtwStringArray *expected_first  = dtw_constructor_string_array();
+    #ifdef _WIN32
     expected_first->add_string(expected_first, "static\\deer.jpg");
     expected_first->add_string(expected_first, "static\\exemple.txt");
-    
+    #else
+    expected_first->add_string(expected_first, "static/deer.jpg");
+    expected_first->add_string(expected_first, "static/exemple.txt");
+    #endif
     struct DtwStringArray *list = dtw_list_basic("static",DTW_FILE_TYPE,DTW_CONCAT_PATH);
   
     
@@ -24,6 +28,7 @@ bool test_monodimension_listage(){
     expected_first->free_string_array(expected_first);
 
     struct DtwStringArray *expected_second  = dtw_constructor_string_array();
+    
     expected_second->add_string(expected_second, "deer.jpg");
     expected_second->add_string(expected_second, "exemple.txt");
 
@@ -40,11 +45,15 @@ bool test_monodimension_listage(){
     expected_second->free_string_array(expected_second);
   
     struct DtwStringArray *expected_third  = dtw_constructor_string_array();
+    #ifdef _WIN32
     expected_third->add_string(expected_third, "static\\a/");
     expected_third->add_string(expected_third, "static\\b/");
-
+    #else
+    expected_third->add_string(expected_third, "static/a/");
+    expected_third->add_string(expected_third, "static/b/");
+    #endif
     struct DtwStringArray *list3 = dtw_list_basic("static",DTW_FOLDER_TYPE,DTW_CONCAT_PATH);
-    
+
     for (int i = 0; i < expected_third->size; i++){   
         int index = list3->find_position(list3,expected_third->strings[i]);
         if(index == -1){
@@ -57,8 +66,14 @@ bool test_monodimension_listage(){
     expected_third->free_string_array(expected_third);
 
     struct DtwStringArray *expected_fourth  = dtw_constructor_string_array();
+    #ifdef _WIN32
+    expected_fourth->add_string(expected_fourth, "a\\");
+    expected_fourth->add_string(expected_fourth, "b\\");
+    #else
     expected_fourth->add_string(expected_fourth, "a/");
     expected_fourth->add_string(expected_fourth, "b/");
+    #endif
+
     struct DtwStringArray *list4 = dtw_list_basic("static",DTW_FOLDER_TYPE,DTW_NOT_CONCAT_PATH);
     for (int i = 0; i < expected_fourth->size; i++){   
         int index = list4->find_position(list4,expected_fourth->strings[i]);
