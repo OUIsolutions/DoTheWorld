@@ -56,11 +56,24 @@ struct DtwStringArray *  dtw_list_basic(const char *path,int expected_type,bool 
             
             if(concat_path){
                 // allocate memory for the directory
-                char *generated_dir = (char*)malloc(strlen(path) + strlen(file_data.cFileName) + 2);
-                sprintf(generated_dir, "%s\\%s", path, file_data.cFileName);
-                dirs->add_string(dirs, generated_dir);
-            
-                free(generated_dir);
+                if(path[strlen(path) - 1] == '\\' || path[strlen(path) - 1] == '/'){
+                    char *generated_dir = (char*)malloc(strlen(path) + strlen(file_data.cFileName) + 1);
+                    sprintf(generated_dir, "%s%s", path, file_data.cFileName);
+                    dirs->add_string(dirs, generated_dir);
+                    free(generated_dir);
+                }
+                else{
+                    char *generated_dir = (char*)malloc(strlen(path) + strlen(file_data.cFileName) + 2);
+                    #ifdef _WIN32
+                        sprintf(generated_dir, "%s\\%s", path, file_data.cFileName);
+                    #else
+                        sprintf(generated_dir, "%s/%s", path, file_data.cFileName);
+                    #endif
+                    dirs->add_string(dirs, generated_dir);
+                    free(generated_dir);
+                }
+                
+    
             }
             else{
                 dirs->add_string(dirs, file_data.cFileName);

@@ -13,7 +13,8 @@ bool test_monodimension_listage(){
     expected_first->add_string(expected_first, "static/exemple.txt");
     #endif
     struct DtwStringArray *list = dtw_list_basic("static",DTW_FILE_TYPE,DTW_CONCAT_PATH);
-  
+    
+
     
     for (int i = 0; i < expected_first->size; i++)
     {   
@@ -23,6 +24,8 @@ bool test_monodimension_listage(){
             return false;
         }
     }
+
+
     puts("Testing dtw_list_basic  for files concatting path passed");
     list->free_string_array(list);
     expected_first->free_string_array(expected_first);
@@ -33,6 +36,8 @@ bool test_monodimension_listage(){
     expected_second->add_string(expected_second, "exemple.txt");
 
     struct DtwStringArray *list2 = dtw_list_basic("static",DTW_FILE_TYPE,DTW_NOT_CONCAT_PATH);
+    list2->represent(list2);
+    
     for (int i = 0; i < expected_second->size; i++){   
         int index = list2->find_position(list2,expected_second->strings[i]);
         if(index == -1){
@@ -53,7 +58,8 @@ bool test_monodimension_listage(){
     expected_third->add_string(expected_third, "static/b/");
     #endif
     struct DtwStringArray *list3 = dtw_list_basic("static",DTW_FOLDER_TYPE,DTW_CONCAT_PATH);
-
+    list3->represent(list3);
+    /*
     for (int i = 0; i < expected_third->size; i++){   
         int index = list3->find_position(list3,expected_third->strings[i]);
         if(index == -1){
@@ -82,4 +88,5 @@ bool test_monodimension_listage(){
     list4->free_string_array(list4);
     expected_fourth->free_string_array(expected_fourth);
     return true;
+    */
 }

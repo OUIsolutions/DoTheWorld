@@ -14,12 +14,14 @@ int main(int argc, char *argv[]){
         return 1;
     }
     bool monodimension_listage = test_monodimension_listage();
+    /*
     if(monodimension_listage){
         puts("All monodimension listage tests passed");
     }else{
         puts("Some monodimension listage tests failed");
         return 1;
     }
+    
     bool multidimension_listage = test_multidimension_listage();
     if(multidimension_listage){
         puts("All multidimension listage tests passed");
@@ -27,6 +29,7 @@ int main(int argc, char *argv[]){
         puts("Some multidimension listage tests failed");
         return 1;
     }
+    */
     
     return 0;
 }

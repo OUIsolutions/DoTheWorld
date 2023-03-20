@@ -44,13 +44,15 @@ struct DtwStringArray *  dtw_list_files_recursively(const char *path){
     struct  DtwStringArray *files = dtw_constructor_string_array();
     
     for(int i = 0; i < dirs->size; i++){
-        struct DtwStringArray *sub_files = dtw_list_basic(dirs->strings[i],DTW_FILE_TYPE,true);
+        struct DtwStringArray *sub_files = dtw_list_basic(dirs->strings[i],DTW_FILE_TYPE,DTW_CONCAT_PATH);
         files->merge_string_array(files,sub_files);
         sub_files->free_string_array(sub_files);
     }
     dirs->free_string_array(dirs);
     return files;
 }
+
+
 struct DtwStringArray * dtw_list_all_recursively(const char *path){
 
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(path);
