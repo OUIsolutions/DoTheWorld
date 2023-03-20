@@ -55,6 +55,20 @@ bool test_monodimension_listage(){
     puts("Testing dtw_list_basic for folders concatting path passed");
     list3->free_string_array(list3);
     expected_third->free_string_array(expected_third);
-    
+
+    struct DtwStringArray *expected_fourth  = dtw_constructor_string_array();
+    expected_fourth->add_string(expected_fourth, "a/");
+    expected_fourth->add_string(expected_fourth, "b/");
+    struct DtwStringArray *list4 = dtw_list_basic("static",DTW_FOLDER_TYPE,DTW_NOT_CONCAT_PATH);
+    for (int i = 0; i < expected_fourth->size; i++){   
+        int index = list4->find_position(list4,expected_fourth->strings[i]);
+        if(index == -1){
+            puts("testing dtw_list_basic for folders not concatting path failed");
+            return false;
+        }
+    }
+    puts("Testing dtw_list_basic for folders not concatting path passed");
+    list4->free_string_array(list4);
+    expected_fourth->free_string_array(expected_fourth);
     return true;
 }
