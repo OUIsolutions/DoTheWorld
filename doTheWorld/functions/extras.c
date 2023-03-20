@@ -74,7 +74,7 @@ void private_dtw_add_end_bar_to_dirs_string_array(struct DtwStringArray * dirs){
         #else
             if(!dtw_ends_with(dirs->strings[i], "/")){
                 char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 3);
-                sprintf(formated_dir,"%s/\0",dirs->strings[i]);
+                sprintf(formated_dir,"%s/",dirs->strings[i]);
                 dirs->set_value(dirs,i,formated_dir);
                 free(formated_dir);
             }
