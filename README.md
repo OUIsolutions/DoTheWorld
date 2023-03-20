@@ -1,5 +1,5 @@
 # DoTheWorld
-DoTheWorld is a single file library/framework designed to handle files in C in a number of ways, providing everything from simple functions for reading/writing files and folders, to complex functions like shas256 files, checking modification dates. And functionalities of atomic writing of folders/files through transaction systems.
+DoTheWorld is a single file library designed to handle files in C in a number of ways, providing everything from simple functions for reading/writing files and folders, to complex functions like taking sha256 from files, checking modification dates. And functionalities of atomic writing of folders/files through transaction systems.
 ### Installation
 
 The installation of DoTheWorld is made to be as dumb as possible, just  download the file   **doTheWorld.c**  and include in your project.
@@ -25,3 +25,5 @@ int main(int argc, char *argv[]){
 }
 
 ~~~
+### IO Operations
+
