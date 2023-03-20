@@ -9,6 +9,6 @@ int main(int argc, char *argv[]){
   dtw_copy_any("exemple_folder","exemple_folder_copy",DTW_NOT_MERGE);
 
   //| you can use copy_any to copy a file
-  dtw_copy_any("exemple_folder/deer.jpg","deer.jpg",false);
+  dtw_copy_any("exemple_folder/deer.jpg","deer.jpg",DTW_NOT_MERGE);
   return 0;
 }

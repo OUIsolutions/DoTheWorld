@@ -138,3 +138,17 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
+##### Create Dirs
+If you want to create dirs you can call the function **dtw_create_dir_recursively**
+passing the folder you want to create,dont wory about if the previews path dont exist 
+it will create till reachs the target folder
+~~~cpp
+#include "doTheWorld.c"
+
+int main(int argc, char *argv[]){
+ 
+  dtw_create_dir_recursively("a/b/c/");
+  return 0;
+}
+~~~~
+##### Copying Things 
