@@ -66,14 +66,10 @@ bool test_monodimension_listage(){
     expected_third->free_string_array(expected_third);
 
     struct DtwStringArray *expected_fourth  = dtw_constructor_string_array();
-    #ifdef _WIN32
-    expected_fourth->add_string(expected_fourth, "a\\");
-    expected_fourth->add_string(expected_fourth, "b\\");
-    #else
+
     expected_fourth->add_string(expected_fourth, "a/");
     expected_fourth->add_string(expected_fourth, "b/");
-    #endif
-
+    
     struct DtwStringArray *list4 = dtw_list_basic("static",DTW_FOLDER_TYPE,DTW_NOT_CONCAT_PATH);
     for (int i = 0; i < expected_fourth->size; i++){   
         int index = list4->find_position(list4,expected_fourth->strings[i]);
