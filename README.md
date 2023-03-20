@@ -72,6 +72,7 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
+##### Reading Binary
 if you are sure the file is a binary , call the function **dtw_load_binary_content**
 ~~~cpp
 

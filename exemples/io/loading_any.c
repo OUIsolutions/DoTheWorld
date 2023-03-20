@@ -1,10 +1,8 @@
-
-
-#include "../../doTheWorld.c"
+#include "doTheWorld.c"
 
 int main(int argc, char *argv[]){
  
-  const char *path = "../exemple_folder/deer.jpg";
+  const char *path = "exemple_folder/deer.jpg";
   int size;
   bool is_binary;
   //load any file, is useful if you don't know if the file is binary or not

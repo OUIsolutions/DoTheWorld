@@ -1,10 +1,9 @@
 
-
-#include "../../doTheWorld.c"
+#include "doTheWorld.c"
 
 int main(int argc, char *argv[]){
  
-  const char *path = "../exemple_folder/deer.jpg";
+  const char *path = "exemple_folder/deer.jpg";
   int size;
   //load a binary file content
   unsigned char *content = dtw_load_binary_content(path,&size);
