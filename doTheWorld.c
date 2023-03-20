@@ -568,7 +568,7 @@ int dtw_entity_type(const char *path);
     bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge);
 #endif 
 
-void dtw_move_any(char* src_path, char* dest_path,bool merge) ;
+void dtw_move_any(const char* src_path, const char* dest_path,bool merge);
 #define DTW_CONCAT_PATH true
 #define DTW_NOT_CONCAT_PATH false
 
@@ -4753,7 +4753,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
     
 }
 
-void dtw_move_any(char* src_path, char* dest_path,bool merge) {
+void dtw_move_any(const char* src_path, const char* dest_path,bool merge) {
     dtw_copy_any(src_path,dest_path,merge);
     dtw_remove_any(src_path);
 }
