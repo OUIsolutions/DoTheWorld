@@ -4,21 +4,21 @@ bool test_monodimension_listage(){
 
     puts("Testing monodimension listage-------------------------------------");
     puts("Testing dtw_list_basic");
-    struct DtwStringArray *expected_first  = dtw_constructor_string_array();
+    struct DtwStringArray *expected1  = dtw_constructor_string_array();
     #ifdef _WIN32
-    expected_first->add_string(expected_first, "static\\deer.jpg");
-    expected_first->add_string(expected_first, "static\\exemple.txt");
+    expected1->add_string(expected1, "static\\deer.jpg");
+    expected1->add_string(expected1, "static\\exemple.txt");
     #else
-    expected_first->add_string(expected_first, "static/deer.jpg");
-    expected_first->add_string(expected_first, "static/exemple.txt");
+    expected1->add_string(expected1, "static/deer.jpg");
+    expected1->add_string(expected1, "static/exemple.txt");
     #endif
     struct DtwStringArray *list = dtw_list_basic("static",DTW_FILE_TYPE,DTW_CONCAT_PATH);
     
 
     
-    for (int i = 0; i < expected_first->size; i++)
+    for (int i = 0; i < expected1->size; i++)
     {   
-        int index = list->find_position(list,expected_first->strings[i]);
+        int index = list->find_position(list,expected1->strings[i]);
         if(index == -1){
             puts("testing dtw_list_basic for files concatting path failed");
             return false;
@@ -28,7 +28,7 @@ bool test_monodimension_listage(){
 
     puts("Testing dtw_list_basic  for files concatting path passed");
     list->free_string_array(list);
-    expected_first->free_string_array(expected_first);
+    expected1->free_string_array(expected1);
 
     struct DtwStringArray *expected_second  = dtw_constructor_string_array();
     

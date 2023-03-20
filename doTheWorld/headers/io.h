@@ -3,7 +3,8 @@
 #define DTW_FOLDER_TYPE 2
 #define DTW_ALL_TYPE 3
 #define DTW_NOT_FOUND -1
-
+#define DTW_MERGE true 
+#define DTW_NOT_MERGE false
 #ifdef __linux__
 #define dtw_create_dir(path) mkdir(path,0777)
 #elif _WIN32
