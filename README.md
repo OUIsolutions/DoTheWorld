@@ -190,4 +190,6 @@ int main(int argc, char *argv[]){
 
 ##### Moving Things
 
-You can 
+You can move either folders or files with **dtw_move_any** function 
+
+##### Moving Files
