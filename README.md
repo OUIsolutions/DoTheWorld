@@ -176,5 +176,18 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
-also you can coping merger , to merge the content in the folder with the target
+also you can use the **dtw_copy_any** function  to merge the content in the target  folder with the target
+~~~cpp
 
+#include "doTheWorld.c"
+
+int main(int argc, char *argv[]){
+  dtw_write_string_file_content("exemple_folder2/x.txt","hello world");
+  dtw_copy_any("exemple_folder","exemple_folder2",DTW_MERGE);
+  return 0;
+}
+~~~
+
+##### Moving Things
+
+You can 
