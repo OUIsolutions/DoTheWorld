@@ -37,7 +37,7 @@ if you are sure that the content you are going to read is not binary you can cal
 
 int main(int argc, char *argv[]){
   //load a string file content
-  const char *path = "../exemple_folder/a/test.txt";
+  const char *path = "exemples/exemple_folder/a/test.txt";
   char *content = dtw_load_string_file_content(path);
   if(content == NULL){
     printf("error oppening %s\n",path);
@@ -56,7 +56,7 @@ if you are not sure what data type a file is you can call the function **dtw_loa
 
 int main(int argc, char *argv[]){
  
-  const char *path = "../exemple_folder/deer.jpg";
+  const char *path = "exemples/exemple_folder/deer.jpg";
   int size;
   bool is_binary;
   //load any file, is useful if you don't know if the file is binary or not
@@ -80,7 +80,7 @@ if you are sure the file is a binary , call the function **dtw_load_binary_conte
 
 int main(int argc, char *argv[]){
  
-  const char *path = "../exemple_folder/deer.jpg";
+  const char *path = "exemples/exemple_folder/deer.jpg";
   int size;
   //load a binary file content
   unsigned char *content = dtw_load_binary_content(path,&size);
@@ -98,3 +98,44 @@ int main(int argc, char *argv[]){
 
 ##### Writing strings
 
+to write strings in text files is very simple, just call the function **dtw_write_string_file_content**
+(Note that the target directory does not need to exist, if it does not exist it will be created automatically)
+
+~~~cpp
+#include "doTheWorld.c"
+int main(int argc, char *argv[]){
+  // Write a string to a file the path is auto created
+  
+  bool result = dtw_write_string_file_content("exemple/a/test.txt","Hello World!");
+  printf("result: %s\n",result ? "true" : "false");
+  return 0;
+}
+~~~
+
+##### Writing Any
+
+if you want to write anything to a file, it's also very simple, use the **dtw_load_binary_content** function, but note that it will be necessary to pass the writing size
+
+~~~cpp
+
+#include "doTheWorld.c"
+
+int main(int argc, char *argv[]){
+
+  //load the beer image
+  const char *deer_path = "exemples/exemple_folder/deer.jpg";
+  int deer_size;
+  unsigned char *content = dtw_load_binary_content(deer_path,&deer_size);
+  //use these functions for binary files
+  if(content == NULL){
+    printf("error oppening %s\n",deer_path);
+    return 1;
+  }
+  printf("size: %d\n",deer_size);
+
+  bool result = dtw_write_any_content("exemple/deer.jpg",content,deer_size);
+  printf("result: %s\n",result ? "true" : "false");
+  return 0;
+}
+
+~~~
