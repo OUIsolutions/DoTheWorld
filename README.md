@@ -13,6 +13,21 @@ int main(int argc, char *argv[]){
     return 0;
 }
 ~~~
+#### Lite Version
+You alson can download the **doTheWorldLite.c** file and use it, these version dont 
+have suport to json trees , witch means , all json functions wont work here 
+
+~~~cpp
+
+
+#include "doTheWorldLite.c"
+
+int main(int argc, char *argv[]){
+
+  return 0;
+}
+~~~
+
 Alternatively you can download the entire **doTheWorld** folder and include the **doTheWorld/doTheWorldMain.c** file
 
 ~~~cpp
