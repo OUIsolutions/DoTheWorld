@@ -269,3 +269,19 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
+
+##### Listing dirs 
+~~~cpp
+
+#include "doTheWorld.c"
+
+int main(int argc, char *argv[]){
+
+  struct DtwStringArray *files = dtw_list_dirs("exemple_folder", DTW_NOT_CONCAT_PATH);
+  files->represent(files);
+  return 0;
+}
+~~~
+
+##### Listing All 
+

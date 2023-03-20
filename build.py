@@ -9,33 +9,29 @@ def format_path(path:str) -> str:
         path = path.replace(char,'')
     return f'doTheWorld/{path}'
 
-with open('doTheWorld/doTheWorldMain.c','r') as f:
-    
-    lines = f.readlines()
-    for line in lines:
-        separated = line.split(' ')
-        if len(separated) > 1:
-            #verify if is #include 
-            if separated[0] == '#include':
-            
-                formated_path = format_path(separated[1])
-                with open(formated_path,'r') as inc:
-                    formated += inc.read() + '\n'
-                    continue
-        formated += line
 
-with open('doTheWorld.c','w') as f:
-    f.write(formated)
+def copile_lib(main_file:str,out_name:str):
+    formated = ''
+    with open(f'doTheWorld/{main_file}','r') as f:
+        
+        lines = f.readlines()
+        for line in lines:
+            separated = line.split(' ')
+            if len(separated) > 1:
+                #verify if is #include 
+                if separated[0] == '#include':
+                
+                    formated_path = format_path(separated[1])
+                    with open(formated_path,'r') as inc:
+                        formated += inc.read() + '\n'
+                        continue
+            formated += line
 
-if 'copile' in argv:
+    with open(out_name,'w') as f:
+        f.write(formated)
 
-    #make an gcc and c++ copilation 
-    result_c = system('gcc main.c ')
-    if result_c != 0:
-        print('gcc failed')
 
-    result_cpp = system('g++ main.c ')
-    if result_cpp != 0:
-        print('g++ failed')
+copile_lib('doTheWorldMain.c','doTheWorld.c')
 
-    print('Compilation finished')
+
+
