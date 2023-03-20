@@ -13,7 +13,7 @@ int main(int argc, char *argv[]){
         puts("Some io tests failed");
         return 1;
     }
-    /*
+    
     bool monodimension_listage = test_monodimension_listage();
     
     if(monodimension_listage){
@@ -31,6 +31,6 @@ int main(int argc, char *argv[]){
         return 1;
     }
 
-    */    
+    
     return 0;
 }

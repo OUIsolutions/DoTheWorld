@@ -23,7 +23,7 @@ bool verify_if_is_test_equal_to_static(){
         static_files->add_string(static_files, "test/exemple.txt");
     #endif
     struct DtwStringArray *files = dtw_list_all_recursively("test");
-    files->represent(files);
+
     for(int i = 0; i < files->size; i++){
         if(!static_files->find_position(static_files, files->strings[i])== -1){
             puts("Test is not equal to static");
@@ -186,7 +186,7 @@ bool  test_io_operations(){
     dtw_copy_any("static","test2",false);
     dtw_move_any("test2","test",DTW_NOT_MERGE);
     //verify if the origin were removed
-    int entity_type13 = dtw_entity_type("test");
+    int entity_type13 = dtw_entity_type("test2");
 
     if(entity_type13 == DTW_NOT_FOUND && verify_if_is_test_equal_to_static()){
         puts("Move any passed with folders");
@@ -196,4 +196,7 @@ bool  test_io_operations(){
         dtw_remove_any("test2");
         return false;
     }
+    dtw_remove_any("test");
+    dtw_remove_any("test2");
+    return true;
 }
