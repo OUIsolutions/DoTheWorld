@@ -572,10 +572,10 @@ void dtw_move_any(const char* src_path, const char* dest_path,bool merge);
 #define DTW_CONCAT_PATH true
 #define DTW_NOT_CONCAT_PATH false
 
-struct DtwStringArray * dtw_list_files(char *path, bool concat_path);
-struct DtwStringArray * dtw_list_dirs(char *path, bool concat_path);
+struct DtwStringArray * dtw_list_files(const char *path, bool concat_path);
+struct DtwStringArray * dtw_list_dirs(const char *path, bool concat_path);
 
-struct DtwStringArray *  dtw_list_all(char *path,  bool concat_path);
+struct DtwStringArray *  dtw_list_all(const char *path,  bool concat_path);
 
 #ifdef __linux__
 
@@ -4760,15 +4760,15 @@ void dtw_move_any(const char* src_path, const char* dest_path,bool merge) {
 
 
 
-struct DtwStringArray * dtw_list_files(char *path, bool concat_path){
+struct DtwStringArray * dtw_list_files(const char *path, bool concat_path){
     return dtw_list_basic(path,  DTW_FILE_TYPE, concat_path);
 }
 
-struct DtwStringArray * dtw_list_dirs(char *path, bool concat_path){
+struct DtwStringArray * dtw_list_dirs(const char *path, bool concat_path){
     return dtw_list_basic(path,DTW_FOLDER_TYPE, concat_path);
 }
 
-struct DtwStringArray *  dtw_list_all(char *path,  bool concat_path){
+struct DtwStringArray *  dtw_list_all(const char *path,  bool concat_path){
     return dtw_list_basic(path, DTW_ALL_TYPE, concat_path);
 }
 
