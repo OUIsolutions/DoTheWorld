@@ -41,9 +41,10 @@ int main(int argc, char *argv[]){
 
 ~~~
 ### Used Dependencies
-DoTheWorld includes all self dependecies in the single file, so you dont need to care about it, but if you will use one of these librarys, dont include it in your code to avoid circular imports 
-<br>**cJson** from https://github.com/DaveGamble/cJSON
-<br>**sha-256** from https://github.com/amosnier/sha-2
+DoTheWorld includes all self dependecies in the single file, so you dont need to care about it, but if you will use one of these librarys, dont include it in your code to avoid circular imports:
+
+<br>**cJson**: from https://github.com/DaveGamble/cJSON
+<br>**sha-256**: from https://github.com/amosnier/sha-2
 
 
 ### IO Operations
