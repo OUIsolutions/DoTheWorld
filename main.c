@@ -1,8 +1,12 @@
 
 
-#include "doTheWorldLite.c"
+#include "doTheWorld/doTheWorldMain.c"
 
 int main(int argc, char *argv[]){
 
-  return 0;
+    struct DtwTree *tree = dtw_tree_constructor();
+    tree->add_tree_from_hardware(tree,"exemples",true,true);
+    tree->dumps_json_tree_to_file(tree,"teste.json",true,true,true,true,false,false);
+
+   return 0;
 }

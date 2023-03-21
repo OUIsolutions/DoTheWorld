@@ -339,6 +339,7 @@ struct DtwPath {
 
 
 };
+struct DtwPath * dtw_constructor_path( const char *path);
 bool  private_dtw_path_changed(struct DtwPath *self);
 char *private_dtw_get_full_name(struct DtwPath *self);
 char *private_dtw_get_name(struct DtwPath *self);
@@ -521,10 +522,12 @@ void private_dtw_add_tree_from_hardware(
     bool load_content,
     bool preserve_content
 );
-//
+
+
 void private_dtw_hardware_remove_tree(struct DtwTree *self);
 void private_dtw_hardware_write_tree(struct DtwTree *self);
 void private_dtw_hardware_commit_tree(struct DtwTree *self);
+
 //
 struct  DtwTree * dtw_tree_constructor();
 

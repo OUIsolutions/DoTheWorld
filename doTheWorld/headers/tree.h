@@ -43,10 +43,17 @@ struct  DtwTree{
         bool preserve_content
     );
     //{%if not  lite %}
+
     void (*loads_json_tree)(
         struct DtwTree *self,
         const char *content
     );
+
+    void (*loads_json_tree_from_file)(
+        struct DtwTree *self,
+        const char *path
+    );
+    
     char *(*dumps_json_tree)(
         struct DtwTree *self,
         bool preserve_content,
@@ -56,6 +63,18 @@ struct  DtwTree{
         bool minify,
         bool consider_igonore
     ); 
+    
+    void (*dumps_json_tree_to_file)(
+        struct DtwTree *self,
+        const char *path,
+        bool preserve_content,
+        bool preserve_path_atributes,
+        bool preserve_hadware_data,
+        bool preserve_content_data,
+        bool minify,
+        bool consider_igonore
+    );
+
     //{%endif%}
     void (*free_tree)(struct DtwTree *self);
     void (*represent)(struct DtwTree *self);
@@ -93,13 +112,16 @@ void private_dtw_add_tree_from_hardware(
     bool load_content,
     bool preserve_content
 );
-//{%if not  lite %}
-void private_dtw_loads_json_tree(struct DtwTree *self,const char *content);
-//{%endif%}
+
+
 void private_dtw_hardware_remove_tree(struct DtwTree *self);
 void private_dtw_hardware_write_tree(struct DtwTree *self);
 void private_dtw_hardware_commit_tree(struct DtwTree *self);
+
 //{%if not  lite %}
+void private_dtw_loads_json_tree(struct DtwTree *self,const char *content);
+void private_dtw_loads_json_tree_from_file(struct DtwTree *self,const char *path);
+
 #ifdef __cplusplus
 char * private_dtw_dumps_tree_json(
     struct DtwTree *self,
@@ -110,9 +132,29 @@ char * private_dtw_dumps_tree_json(
     bool minify=false,
     bool consider_igonore=false
     );
+void private_dtw_dumps_tree_json_to_file(
+    struct DtwTree *self,
+    const char *path,
+    bool preserve_content=true,
+    bool preserve_path_atributes=true,
+    bool preserve_hadware_data=false,
+    bool preserve_content_data=true,
+    bool minify=false,
+    bool consider_igonore=false
+    );
 #else 
 char * private_dtw_dumps_tree_json(
     struct DtwTree *self,
+    bool preserve_content,
+    bool preserve_path_atributes,
+    bool preserve_hadware_data,
+    bool preserve_content_data,
+    bool minify,
+    bool consider_igonore
+    );
+void private_dtw_dumps_tree_json_to_file(
+    struct DtwTree *self,
+    const char *path,
     bool preserve_content,
     bool preserve_path_atributes,
     bool preserve_hadware_data,

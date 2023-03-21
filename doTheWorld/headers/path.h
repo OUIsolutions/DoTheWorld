@@ -32,6 +32,7 @@ struct DtwPath {
 
 
 };
+struct DtwPath * dtw_constructor_path( const char *path);
 bool  private_dtw_path_changed(struct DtwPath *self);
 char *private_dtw_get_full_name(struct DtwPath *self);
 char *private_dtw_get_name(struct DtwPath *self);
