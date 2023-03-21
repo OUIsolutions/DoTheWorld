@@ -42,6 +42,7 @@ struct  DtwTree{
         bool load_content,
         bool preserve_content
     );
+    
     //{%if not  lite %}
 
     void (*loads_json_tree)(
