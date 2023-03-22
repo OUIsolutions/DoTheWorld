@@ -263,7 +263,7 @@ char * private_dtw_dumps_tree_json(struct DtwTree *self,bool minify,bool preserv
 }
 
 void  private_dtw_dumps_tree_json_to_file(struct DtwTree *self,const char *path,bool preserve_content,bool preserve_path_atributes,bool preserve_hadware_data,bool preserve_content_data,bool minify,bool consider_ignore){
-    char *json_string = self->dumps_json_tree(self,preserve_content,preserve_path_atributes,preserve_hadware_data,preserve_content_data,minify,consider_ignore);
+    char *json_string = self->dumps_json_tree(self,minify,preserve_content,preserve_path_atributes,preserve_hadware_data,preserve_content_data,consider_ignore);
     dtw_write_string_file_content(path,json_string);
 
 }
