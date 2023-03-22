@@ -93,7 +93,7 @@ void private_dtw_loads_json_tree_from_file(struct DtwTree *self,const char *path
     free(content);
 }
 
-char * private_dtw_dumps_tree_json(struct DtwTree *self,bool preserve_content,bool preserve_path_atributes,bool preserve_hadware_data,bool preserve_content_data,bool minify,bool consider_ignore){
+char * private_dtw_dumps_tree_json(struct DtwTree *self,bool minify,bool preserve_content,bool preserve_path_atributes,bool preserve_hadware_data,bool preserve_content_data,bool consider_ignore){
     
     cJSON *json_array = cJSON_CreateArray();
     for(int i = 0; i < self->size; i++){
