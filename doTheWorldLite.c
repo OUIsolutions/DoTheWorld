@@ -485,6 +485,7 @@ struct  DtwTree{
         bool load_content,
         bool preserve_content
     );
+    
     //
     void (*free_tree)(struct DtwTree *self);
     void (*represent)(struct DtwTree *self);

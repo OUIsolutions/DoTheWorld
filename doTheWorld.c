@@ -804,6 +804,7 @@ struct  DtwTree{
         bool load_content,
         bool preserve_content
     );
+    
     //
 
     void (*loads_json_tree)(
@@ -818,22 +819,22 @@ struct  DtwTree{
     
     char *(*dumps_json_tree)(
         struct DtwTree *self,
+        bool minify,
         bool preserve_content,
         bool preserve_path_atributes,
         bool preserve_hadware_data,
         bool preserve_content_data,
-        bool minify,
         bool consider_igonore
     ); 
     
     void (*dumps_json_tree_to_file)(
         struct DtwTree *self,
         const char *path,
+        bool minify,
         bool preserve_content,
         bool preserve_path_atributes,
         bool preserve_hadware_data,
         bool preserve_content_data,
-        bool minify,
         bool consider_igonore
     );
 
@@ -887,41 +888,41 @@ void private_dtw_loads_json_tree_from_file(struct DtwTree *self,const char *path
 #ifdef __cplusplus
 char * private_dtw_dumps_tree_json(
     struct DtwTree *self,
+    bool minify=false,
     bool preserve_content=true,
     bool preserve_path_atributes=true,
     bool preserve_hadware_data=false,
     bool preserve_content_data=true,
-    bool minify=false,
     bool consider_igonore=false
     );
-char * private_dtw_dumps_tree_json_to_file(
+void private_dtw_dumps_tree_json_to_file(
     struct DtwTree *self,
     const char *path,
+    bool minify=false,
     bool preserve_content=true,
     bool preserve_path_atributes=true,
     bool preserve_hadware_data=false,
     bool preserve_content_data=true,
-    bool minify=false,
     bool consider_igonore=false
     );
 #else 
 char * private_dtw_dumps_tree_json(
     struct DtwTree *self,
+    bool minify,
     bool preserve_content,
     bool preserve_path_atributes,
     bool preserve_hadware_data,
     bool preserve_content_data,
-    bool minify,
     bool consider_igonore
     );
 void private_dtw_dumps_tree_json_to_file(
     struct DtwTree *self,
     const char *path,
+    bool minify,
     bool preserve_content,
     bool preserve_path_atributes,
     bool preserve_hadware_data,
     bool preserve_content_data,
-    bool minify,
     bool consider_igonore
     );
 #endif
@@ -5787,6 +5788,7 @@ struct  DtwTree * dtw_tree_constructor(){
     
     self->loads_json_tree = private_dtw_loads_json_tree;
     self->loads_json_tree_from_file = private_dtw_loads_json_tree_from_file;
+    
     self->dumps_json_tree = private_dtw_dumps_tree_json;
     self->dumps_json_tree_to_file = private_dtw_dumps_tree_json_to_file;
 
@@ -6118,7 +6120,7 @@ void private_dtw_loads_json_tree_from_file(struct DtwTree *self,const char *path
     free(content);
 }
 
-char * private_dtw_dumps_tree_json(struct DtwTree *self,bool preserve_content,bool preserve_path_atributes,bool preserve_hadware_data,bool preserve_content_data,bool minify,bool consider_ignore){
+char * private_dtw_dumps_tree_json(struct DtwTree *self,bool minify,bool preserve_content,bool preserve_path_atributes,bool preserve_hadware_data,bool preserve_content_data,bool consider_ignore){
     
     cJSON *json_array = cJSON_CreateArray();
     for(int i = 0; i < self->size; i++){
@@ -6287,8 +6289,8 @@ char * private_dtw_dumps_tree_json(struct DtwTree *self,bool preserve_content,bo
     return json_string;
 }
 
-void  private_dtw_dumps_tree_json_to_file(struct DtwTree *self,const char *path,bool preserve_content,bool preserve_path_atributes,bool preserve_hadware_data,bool preserve_content_data,bool minify,bool consider_ignore){
-    char *json_string = self->dumps_json_tree(self,preserve_content,preserve_path_atributes,preserve_hadware_data,preserve_content_data,minify,consider_ignore);
+void  private_dtw_dumps_tree_json_to_file(struct DtwTree *self,const char *path,bool minify,bool preserve_content,bool preserve_path_atributes,bool preserve_hadware_data,bool preserve_content_data,bool consider_ignore){
+    char *json_string = self->dumps_json_tree(self,minify,preserve_content,preserve_path_atributes,preserve_hadware_data,preserve_content_data,consider_ignore);
     dtw_write_string_file_content(path,json_string);
 
 }
