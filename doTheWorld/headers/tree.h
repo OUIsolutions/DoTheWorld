@@ -68,11 +68,11 @@ struct  DtwTree{
     void (*dumps_json_tree_to_file)(
         struct DtwTree *self,
         const char *path,
+        bool minify,
         bool preserve_content,
         bool preserve_path_atributes,
         bool preserve_hadware_data,
         bool preserve_content_data,
-        bool minify,
         bool consider_igonore
     );
 
@@ -136,11 +136,11 @@ char * private_dtw_dumps_tree_json(
 void private_dtw_dumps_tree_json_to_file(
     struct DtwTree *self,
     const char *path,
+    bool minify=false,
     bool preserve_content=true,
     bool preserve_path_atributes=true,
     bool preserve_hadware_data=false,
     bool preserve_content_data=true,
-    bool minify=false,
     bool consider_igonore=false
     );
 #else 
@@ -156,11 +156,11 @@ char * private_dtw_dumps_tree_json(
 void private_dtw_dumps_tree_json_to_file(
     struct DtwTree *self,
     const char *path,
+    bool minify,
     bool preserve_content,
     bool preserve_path_atributes,
     bool preserve_hadware_data,
     bool preserve_content_data,
-    bool minify,
     bool consider_igonore
     );
 #endif
