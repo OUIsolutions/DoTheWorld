@@ -4,9 +4,7 @@
 
 int main(int argc, char *argv[]){
 
-    struct DtwTree *tree = dtw_tree_constructor();
-    tree->add_tree_from_hardware(tree,"exemples",true,true);
-    tree->dumps_json_tree_to_file(tree,"teste.json",false,true,true,true,true,true);
-   
+   char *b64 = dtw_convert_binary_file_to_base64("LICENSE");
+   printf("%s", b64);
    return 0;
 }

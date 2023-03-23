@@ -215,6 +215,9 @@ unsigned char *dtw_base64_encode(unsigned char *data, size_t input_length);
 
 unsigned char *dtw_base64_decode(unsigned char *data, size_t input_length, size_t *output_length);
 
+
+char *dtw_convert_binary_file_to_base64(const char *path);
+
 /*
   Copyright (c) 2009-2017 Dave Gamble and cJSON contributors
 
@@ -4401,6 +4404,14 @@ unsigned char *dtw_base64_decode(unsigned char *data, size_t input_length, size_
     }
 
     return decoded_data;
+}
+
+char *dtw_convert_binary_file_to_base64(const char *path){
+     int size;
+     unsigned char *data  = dtw_load_binary_content(path, &size);
+    unsigned char *b64   = dtw_base64_encode(data, size);
+    free(data);
+    return (char*)b64;
 }
 
 char * dtw_generate_sha_from_file(const char *path){

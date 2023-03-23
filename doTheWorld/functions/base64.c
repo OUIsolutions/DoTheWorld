@@ -64,3 +64,11 @@ unsigned char *dtw_base64_decode(unsigned char *data, size_t input_length, size_
 
     return decoded_data;
 }
+
+char *dtw_convert_binary_file_to_base64(const char *path){
+     int size;
+     unsigned char *data  = dtw_load_binary_content(path, &size);
+    unsigned char *b64   = dtw_base64_encode(data, size);
+    free(data);
+    return (char*)b64;
+}
