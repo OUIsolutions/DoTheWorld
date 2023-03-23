@@ -264,6 +264,73 @@ int main(int argc, char *argv[]){
 ~~~
 # Useful Functions 
 
+## Dealing with base64 
+You can easly transform an binary file to an base64 string like these 
+~~~c
+
+#include "doTheWorld.c"
+
+int main(int argc, char *argv[]){
+   const char *deer_path = "exemple_folder/deer.jpg";
+   char *deerb64  = dtw_convert_binary_file_to_base64(deer_path);
+   printf("deer: %s", deerb64);
+    free(deerb64);
+}
+~~~
+Or you can retransform an base64 file to binary again 
+~~~c 
+#include "doTheWorld.c"
+
+int main(int argc, char *argv[]){
+   //creating the b64 file
+   const char *deer_path = "exemple_folder/deer.jpg";
+   char *deerb64  = dtw_convert_binary_file_to_base64(deer_path);
+   dtw_write_string_file_content("deer.txt", deerb64);
+   free(deerb64);
+
+   // loading and reconverting to binary 
+    char *string_deer64 = dtw_load_string_file_content("deer.txt");
+    int string_deer64_size = strlen(string_deer64);
+    size_t out_size = 0;
+    unsigned char *deer = dtw_base64_decode(string_deer64, string_deer64_size, &out_size);
+    dtw_write_any_content("deer2.jpg", deer, out_size);
+}
+~~~
+## Dealing with Sha 256
+Generating Sha from file 
+~~~c 
+
+#include "doTheWorld.c"
+
+int main(int argc, char *argv[]){
+
+   char *hash = dtw_generate_sha_from_file("README.md");
+   printf("SHA: %s", hash);
+   free(hash);
+}
+~~~
+## Getting file last modification 
+### Unix 
+~~~c 
+
+#include "doTheWorld.c"
+
+int main(int argc, char *argv[]){
+   int last_modification_in_unix = dtw_get_file_last_motification_in_unix("README.md");
+    printf("Last modification: %d\n", last_modification_in_unix);
+}
+~~~
+### Str
+~~~c
+#include "doTheWorld.c"
+
+int main(int argc, char *argv[]){
+    char *last_modification = dtw_get_file_last_motification_in_string("README.md");
+    printf("Last modification: %s", last_modification);
+    free(last_modification);
+}
+~~~
+
 # Used Dependencies And Atributions
 DoTheWorld includes all self dependecies in the single file, so you dont need to care about it, but if you will use one of these librarys, dont include it in your code to avoid circular imports
 
