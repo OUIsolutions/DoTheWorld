@@ -11,12 +11,13 @@ struct DtwTransactionReport * dtw_constructor_transaction_report(){
 }
 
 void  private_dtw_represent_transaction(struct DtwTransactionReport *report){
-    printf("Write:\n");
+    printf("Write:---------------------------------------\n");
     report->write->represent(report->write);
-    printf("Modify:\n");
+    printf("Modify:--------------------------------------\n");
     report->modify->represent(report->modify);
-    printf("Remove:\n");
+    printf("Remove:--------------------------------------\n");
     report->remove->represent(report->remove);
+    puts("");
 }
 
 void  private_dtw_free_transaction(struct DtwTransactionReport *report){
