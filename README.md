@@ -205,8 +205,6 @@ int main(int argc, char *argv[]){
 With the listage functions you can extract all Strings Arrays of elements in an folder 
 
 ## Listing files
-with the **dtw_list_files** you can list all files in the folder you pass as argument 
-
 ~~~cpp
 
 #include "doTheWorld.c"
