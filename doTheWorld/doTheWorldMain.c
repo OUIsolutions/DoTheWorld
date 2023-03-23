@@ -40,6 +40,7 @@ SOFTWARE.
 #include "headers/monodimension_listage.h"
 #include "headers/multidimension_listage.h"
 #include "headers/path.h"
+#include "headers/transaction_report.h"
 #include "headers/json_error.h"
 #include "headers/tree_part.h"
 #include "headers/tree.h"
@@ -60,3 +61,4 @@ SOFTWARE.
 #include "structs/tree/tree.c"
 #include "structs/json_error.c"
 #include "structs/tree/json_tree.c"
+#include "structs/transaction_report.c"
