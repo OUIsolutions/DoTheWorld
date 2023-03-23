@@ -21,8 +21,7 @@ int main(int argc, char *argv[]){
 }
 ~~~
 ## Lite Version
-You alson can download the **doTheWorldLite.c** file and use it, these version does not  
-have suport to json trees, witch means, all json functions wont work here 
+You alson can download the **doTheWorldLite.c** file and use it, these version does not  have suport to json trees, witch means, all json functions wont work here 
 
 ~~~cpp
 
