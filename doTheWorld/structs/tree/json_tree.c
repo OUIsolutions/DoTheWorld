@@ -17,7 +17,7 @@ void private_dtw_loads_json_tree(struct DtwTree *self,const char *content){
         cJSON *content = cJSON_GetObjectItemCaseSensitive(json_tree_part, "content");
         cJSON *pending_action = cJSON_GetObjectItemCaseSensitive(json_tree_part, "pending_action");
         cJSON *ignore = cJSON_GetObjectItemCaseSensitive(json_tree_part, "ignore");
-        
+   
         struct DtwTreePart *part = dtw_tree_part_constructor(
             path->valuestring,
             false,
@@ -60,10 +60,11 @@ void private_dtw_loads_json_tree(struct DtwTree *self,const char *content){
             if(part->is_binary){
                 size_t out_size;
                 unsigned char *decoded =dtw_base64_decode(
-                    (unsigned char*)content->valuestring,
-                    part->content_size,&out_size
+                    content->valuestring,
+                    part->content_size,
+                    &out_size
                 );
-                part->set_binary_content(part,decoded,out_size);
+                part->set_binary_content(part,decoded,(int)out_size);
                 free(decoded);
             }
            else{
@@ -227,12 +228,12 @@ char * private_dtw_dumps_tree_json(struct DtwTree *self,bool minify,bool preserv
                 );
             }
             else{
-                unsigned char *content_base64 = dtw_base64_encode(tree_part->content, tree_part->content_size);
-                char *content_base64_string = (char *)content_base64;
+                char *content_base64 = dtw_base64_encode(tree_part->content, tree_part->content_size);
+         
                 cJSON_AddItemToObject(
                     json_tree_part, 
                     "content", 
-                    cJSON_CreateString(content_base64_string)
+                    cJSON_CreateString(content_base64)
                 );  
                 free(content_base64);
             }
