@@ -1,6 +1,6 @@
 
 
-struct DtwTransactionReport * dtw_constructor_transaction_report(struct DtwTransactionReport *report){
+struct DtwTransactionReport * dtw_constructor_transaction_report(){
     struct DtwTransactionReport *new_report = (struct DtwTransactionReport *)malloc(sizeof(struct DtwTransactionReport));
     new_report->write = dtw_constructor_string_array();
     new_report->modify = dtw_constructor_string_array();

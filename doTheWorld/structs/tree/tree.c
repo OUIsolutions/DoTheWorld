@@ -12,6 +12,8 @@ struct  DtwTree * dtw_tree_constructor(){
     self->represent = private_dtw_represent_tree;
     self->add_tree_parts_from_string_array = private_dtw_add_tree_parts_from_string_array;
     self->add_tree_from_hardware = private_dtw_add_tree_from_hardware;
+   
+    self->report = private_dtw_create_report;
     //{%if not  lite %}
     
     self->loads_json_tree = private_dtw_loads_json_tree;
@@ -54,6 +56,29 @@ void private_dtw_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tr
     self->tree_parts[self->size - 1] = tree_part->copy_tree_part(tree_part);
        
 }
+
+struct DtwTransactionReport * private_dtw_create_report(struct DtwTree *self){
+    struct DtwTransactionReport *report = dtw_constructor_transaction_report();
+    for(int i = 0; i < self->size; i++){
+        struct DtwTreePart *tree_part = self->tree_parts[i];
+        int pending_action = tree_part->pending_action;
+        char *path = tree_part->path->get_path(tree_part->path);
+        if (pending_action == DTW_WRITE){
+
+            report->write->add_string(report->write,path);
+        }
+        else if (pending_action == DTW_MODIFY){
+            report->modify->add_string(report->modify,path);
+        }
+        else if (pending_action == DTW_REMOVE){
+            report->remove->add_string(report->remove,path);
+        }
+        free(path);
+    
+    }
+    return report;
+}
+
 
 void private_dtw_add_tree_part_reference(struct DtwTree *self, struct DtwTreePart *tree_part){
     self->size++;

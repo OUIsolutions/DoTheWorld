@@ -42,7 +42,7 @@ struct  DtwTree{
         bool load_content,
         bool preserve_content
     );
-    
+    struct DtwTransactionReport * (*report)(struct DtwTree *self);    
     //{%if not  lite %}
 
     void (*loads_json_tree)(
@@ -54,7 +54,7 @@ struct  DtwTree{
         struct DtwTree *self,
         const char *path
     );
-    
+
     char *(*dumps_json_tree)(
         struct DtwTree *self,
         bool minify,
@@ -113,6 +113,8 @@ void private_dtw_add_tree_from_hardware(
     bool load_content,
     bool preserve_content
 );
+
+struct DtwTransactionReport * private_dtw_create_report(struct DtwTree *self);
 
 
 void private_dtw_hardware_remove_tree(struct DtwTree *self);
