@@ -11,7 +11,7 @@ but if you want to get an deep knolege see at **exemples** folder, you will find
 
 The installation of DoTheWorld is made to be as dumb as possible, just  download the file  amalgamation **doTheWorld.c**  and include in your project.
 if this compiles then the library will work:
-~~~cpp
+~~~c
 #include "doTheWorld.c"
 
 int main(int argc, char *argv[]){
@@ -23,7 +23,7 @@ int main(int argc, char *argv[]){
 ## Lite Version
 You alson can download the **doTheWorldLite.c** file and use it, these version does not  have suport to json trees, witch means, all json functions wont work here 
 
-~~~cpp
+~~~c
 
 
 #include "doTheWorldLite.c"
@@ -36,7 +36,7 @@ int main(int argc, char *argv[]){
 ## Full Folder
 Alternatively you can download the entire **doTheWorld** folder and include the **doTheWorld/doTheWorldMain.c** file
 
-~~~cpp
+~~~c
 
 #include "doTheWorld/doTheWorldMain.c"
 
@@ -50,7 +50,7 @@ int main(int argc, char *argv[]){
 
 ## Reading strings
 if you are sure that the content you are going to read is not binary you can call the function **dtw_load_string_file_content**
-~~~cpp
+~~~c
 
 
 #include "doTheWorld.c"
@@ -71,7 +71,7 @@ int main(int argc, char *argv[]){
 ## Reading Any
 if you are not sure what data type a file is you can call the function **dtw_load_any_content**
 
-~~~cpp
+~~~c
 #include "doTheWorld.c"
 
 int main(int argc, char *argv[]){
@@ -99,7 +99,7 @@ int main(int argc, char *argv[]){
 to write strings in text files is very simple, just call the function **dtw_write_string_file_content**
 (Note that the target directory does not need to exist, if it does not exist it will be created automatically)
 
-~~~cpp
+~~~c
 #include "doTheWorld.c"
 int main(int argc, char *argv[]){
   // Write a string to a file the path is auto created
@@ -114,7 +114,7 @@ int main(int argc, char *argv[]){
 
 if you want to write anything to a file, it's also very simple, use the **dtw_load_binary_content** function, but note that it will be necessary to pass the writing size
 
-~~~cpp
+~~~c
 
 #include "doTheWorld.c"
 
@@ -139,7 +139,7 @@ int main(int argc, char *argv[]){
 If you want to create dirs you can call the function **dtw_create_dir_recursively**
 passing the folder you want to create,dont wory about if the previews path dont exist 
 it will create till reachs the target folder
-~~~cpp
+~~~c
 #include "doTheWorld.c"
 
 int main(int argc, char *argv[]){
@@ -151,7 +151,7 @@ int main(int argc, char *argv[]){
 ##  Copying Things 
 With the function **dtw_copy_any** you can copy either files or folders to one position to anoter position 
 ##### Copying files
-~~~cpp
+~~~c
 
 
 #include "doTheWorld.c"
@@ -168,7 +168,7 @@ int main(int argc, char *argv[]){
 
 You can move either folders or files with **dtw_move_any** function 
 
-~~~cpp
+~~~c
 
 #include "doTheWorld.c"
 
@@ -186,7 +186,7 @@ int main(int argc, char *argv[]){
 With the listage functions you can extract all Strings Arrays of elements in an folder 
 
 ## Listing files
-~~~cpp
+~~~c
 
 #include "doTheWorld.c"
 
@@ -200,7 +200,7 @@ int main(int argc, char *argv[]){
 }
 ~~~
 ## Listing dirs 
-~~~cpp
+~~~c
 
 #include "doTheWorld.c"
 
@@ -212,7 +212,7 @@ int main(int argc, char *argv[]){
 }
 ~~~
 ## Listing All 
-~~~cpp
+~~~c
 #include "doTheWorld.c"
 
 int main(int argc, char *argv[]){
@@ -223,9 +223,45 @@ int main(int argc, char *argv[]){
 }
 ~~~
 # MultiDimension Listage 
+The By Using multi dimension listage functions , you can see all itens listed in all sub folders of the "main" folder 
 
+## Listing Files Recursively
+~~~c
 
+#include "doTheWorld.c"
 
+int main(int argc, char *argv[]){
+
+  struct DtwStringArray *files = dtw_list_files_recursively("exemple_folder");
+  files->represent(files);
+  return 0;
+}
+~~~
+## Listing Dirs Recursively
+
+~~~c
+#include "doTheWorld.c"
+
+int main(int argc, char *argv[]){
+
+  struct DtwStringArray *files = dtw_list_dirs_recursively("exemple_folder");
+  files->represent(files);
+  return 0;
+}
+~~~
+## Listing All Recursively
+
+~~~c
+
+#include "doTheWorld.c"
+
+int main(int argc, char *argv[]){
+
+  struct DtwStringArray *files = dtw_list_all_recursively("exemple_folder");
+  files->represent(files);
+  return 0;
+}
+~~~
 
 # Used Dependencies And Atributions
 DoTheWorld includes all self dependecies in the single file, so you dont need to care about it, but if you will use one of these librarys, dont include it in your code to avoid circular imports
