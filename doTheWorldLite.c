@@ -210,10 +210,9 @@ uint8_t *sha_256_close(struct Sha_256 *sha_256);
 const char base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 
-unsigned char *dtw_base64_encode(unsigned char *data, size_t input_length);
+char *dtw_base64_encode(unsigned char *data, size_t input_length);
 
-
-unsigned char *dtw_base64_decode(unsigned char *data, size_t input_length, size_t *output_length);
+unsigned char *dtw_base64_decode(const char *data, size_t input_length, size_t *output_length);
 
 
 char *dtw_convert_binary_file_to_base64(const char *path);
@@ -823,10 +822,10 @@ char * calc_sha_256_from_file_returning_string(const char *filename)
 }
 
 
-unsigned char *dtw_base64_encode(unsigned char *data, size_t input_length){
+char *dtw_base64_encode(unsigned char *data, size_t input_length){
     size_t output_length = 4 * ((input_length + 2) / 3);
 
-    unsigned char *encoded_data = (unsigned char *)malloc(output_length + 1);
+    char *encoded_data = (char *)malloc(output_length + 1);
 
     if (encoded_data == NULL) return NULL;
 
@@ -855,8 +854,7 @@ unsigned char *dtw_base64_encode(unsigned char *data, size_t input_length){
     return encoded_data;
 }
 
-
-unsigned char *dtw_base64_decode(unsigned char *data, size_t input_length, size_t *output_length){
+unsigned char *dtw_base64_decode(const char *data, size_t input_length, size_t *output_length){
     if (input_length % 4 != 0) return NULL;
 
     *output_length = input_length / 4 * 3;
@@ -892,9 +890,9 @@ unsigned char *dtw_base64_decode(unsigned char *data, size_t input_length, size_
 char *dtw_convert_binary_file_to_base64(const char *path){
      int size;
      unsigned char *data  = dtw_load_binary_content(path, &size);
-    unsigned char *b64   = dtw_base64_encode(data, size);
+    char *b64   = dtw_base64_encode(data, size);
     free(data);
-    return (char*)b64;
+    return b64;
 }
 
 char * dtw_generate_sha_from_file(const char *path){

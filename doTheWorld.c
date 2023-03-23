@@ -210,10 +210,9 @@ uint8_t *sha_256_close(struct Sha_256 *sha_256);
 const char base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 
-unsigned char *dtw_base64_encode(unsigned char *data, size_t input_length);
+char *dtw_base64_encode(unsigned char *data, size_t input_length);
 
-
-unsigned char *dtw_base64_decode(unsigned char *data, size_t input_length, size_t *output_length);
+unsigned char *dtw_base64_decode(const char *data, size_t input_length, size_t *output_length);
 
 
 char *dtw_convert_binary_file_to_base64(const char *path);
@@ -4340,10 +4339,10 @@ CJSON_PUBLIC(void) cJSON_free(void *object)
 }
 
 
-unsigned char *dtw_base64_encode(unsigned char *data, size_t input_length){
+char *dtw_base64_encode(unsigned char *data, size_t input_length){
     size_t output_length = 4 * ((input_length + 2) / 3);
 
-    unsigned char *encoded_data = (unsigned char *)malloc(output_length + 1);
+    char *encoded_data = (char *)malloc(output_length + 1);
 
     if (encoded_data == NULL) return NULL;
 
@@ -4372,8 +4371,7 @@ unsigned char *dtw_base64_encode(unsigned char *data, size_t input_length){
     return encoded_data;
 }
 
-
-unsigned char *dtw_base64_decode(unsigned char *data, size_t input_length, size_t *output_length){
+unsigned char *dtw_base64_decode(const char *data, size_t input_length, size_t *output_length){
     if (input_length % 4 != 0) return NULL;
 
     *output_length = input_length / 4 * 3;
@@ -4409,9 +4407,9 @@ unsigned char *dtw_base64_decode(unsigned char *data, size_t input_length, size_
 char *dtw_convert_binary_file_to_base64(const char *path){
      int size;
      unsigned char *data  = dtw_load_binary_content(path, &size);
-    unsigned char *b64   = dtw_base64_encode(data, size);
+    char *b64   = dtw_base64_encode(data, size);
     free(data);
-    return (char*)b64;
+    return b64;
 }
 
 char * dtw_generate_sha_from_file(const char *path){
@@ -6098,8 +6096,9 @@ void private_dtw_loads_json_tree(struct DtwTree *self,const char *content){
             if(part->is_binary){
                 size_t out_size;
                 unsigned char *decoded =dtw_base64_decode(
-                    (unsigned char*)content->valuestring,
-                    part->content_size,&out_size
+                    content->valuestring,
+                    part->content_size,
+                    &out_size
                 );
                 part->set_binary_content(part,decoded,out_size);
                 free(decoded);
@@ -6265,12 +6264,12 @@ char * private_dtw_dumps_tree_json(struct DtwTree *self,bool minify,bool preserv
                 );
             }
             else{
-                unsigned char *content_base64 = dtw_base64_encode(tree_part->content, tree_part->content_size);
-                char *content_base64_string = (char *)content_base64;
+                char *content_base64 = dtw_base64_encode(tree_part->content, tree_part->content_size);
+                
                 cJSON_AddItemToObject(
                     json_tree_part, 
                     "content", 
-                    cJSON_CreateString(content_base64_string)
+                    cJSON_CreateString(content_base64)
                 );  
                 free(content_base64);
             }
