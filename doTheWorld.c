@@ -206,13 +206,13 @@ uint8_t *sha_256_close(struct Sha_256 *sha_256);
 #endif
 
 #endif
-
 const char base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 
 char *dtw_base64_encode(unsigned char *data, size_t input_length);
 
-unsigned char *dtw_base64_decode(const char *data, size_t input_length, size_t *output_length);
+
+unsigned char *dtw_base64_decode(char *data, size_t input_length, size_t *output_length);
 
 
 char *dtw_convert_binary_file_to_base64(const char *path);
@@ -677,10 +677,12 @@ struct DtWJsonError {
     int position;
     const char *menssage;
     void (*free_json_error)(struct DtWJsonError *self);
+    void (*represent)(struct DtWJsonError *self);
 
 };
 struct DtWJsonError * private_dtw_json_error_constructor();
 struct DtWJsonError * dtw_validate_json_tree(char *content);
+void private_represent_json_error(struct DtWJsonError *self);
 void private_free_json_error(struct DtWJsonError *self);
 
 
@@ -4339,6 +4341,7 @@ CJSON_PUBLIC(void) cJSON_free(void *object)
 }
 
 
+
 char *dtw_base64_encode(unsigned char *data, size_t input_length){
     size_t output_length = 4 * ((input_length + 2) / 3);
 
@@ -4371,7 +4374,8 @@ char *dtw_base64_encode(unsigned char *data, size_t input_length){
     return encoded_data;
 }
 
-unsigned char *dtw_base64_decode(const char *data, size_t input_length, size_t *output_length){
+
+unsigned char *dtw_base64_decode(char *data, size_t input_length, size_t *output_length){
     if (input_length % 4 != 0) return NULL;
 
     *output_length = input_length / 4 * 3;
@@ -5647,7 +5651,9 @@ bool private_dtw_hardware_remove(struct DtwTreePart *self,bool set_as_action){
      }
 
     char *path = self->path->get_path(self->path);
+
     dtw_remove_any(path);
+    
     free(path);
     self->content_exist_in_hardware = false;
     return true;
@@ -5903,6 +5909,7 @@ struct DtWJsonError * private_dtw_json_error_constructor(){
     self->position = 0;
     self->menssage = "ok";
     self->free_json_error = private_free_json_error;
+    self->represent = private_represent_json_error;
     return self;
 }
 
@@ -6030,6 +6037,11 @@ struct DtWJsonError * dtw_validate_json_tree(char *content){
 }
 
 
+void private_represent_json_error(struct DtWJsonError *self){
+    printf("code: %d\n", self->code);
+    printf("position: %d\n", self->position);
+    printf("menssage: %s\n", self->menssage);
+}
 
 void private_free_json_error(struct DtWJsonError *self){
     free(self);
@@ -6053,7 +6065,7 @@ void private_dtw_loads_json_tree(struct DtwTree *self,const char *content){
         cJSON *content = cJSON_GetObjectItemCaseSensitive(json_tree_part, "content");
         cJSON *pending_action = cJSON_GetObjectItemCaseSensitive(json_tree_part, "pending_action");
         cJSON *ignore = cJSON_GetObjectItemCaseSensitive(json_tree_part, "ignore");
-        
+   
         struct DtwTreePart *part = dtw_tree_part_constructor(
             path->valuestring,
             false,
@@ -6100,7 +6112,7 @@ void private_dtw_loads_json_tree(struct DtwTree *self,const char *content){
                     part->content_size,
                     &out_size
                 );
-                part->set_binary_content(part,decoded,out_size);
+                part->set_binary_content(part,decoded,(int)out_size);
                 free(decoded);
             }
            else{
@@ -6265,7 +6277,7 @@ char * private_dtw_dumps_tree_json(struct DtwTree *self,bool minify,bool preserv
             }
             else{
                 char *content_base64 = dtw_base64_encode(tree_part->content, tree_part->content_size);
-                
+         
                 cJSON_AddItemToObject(
                     json_tree_part, 
                     "content", 

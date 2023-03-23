@@ -206,13 +206,13 @@ uint8_t *sha_256_close(struct Sha_256 *sha_256);
 #endif
 
 #endif
-
 const char base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 
 char *dtw_base64_encode(unsigned char *data, size_t input_length);
 
-unsigned char *dtw_base64_decode(const char *data, size_t input_length, size_t *output_length);
+
+unsigned char *dtw_base64_decode(char *data, size_t input_length, size_t *output_length);
 
 
 char *dtw_convert_binary_file_to_base64(const char *path);
@@ -822,6 +822,7 @@ char * calc_sha_256_from_file_returning_string(const char *filename)
 }
 
 
+
 char *dtw_base64_encode(unsigned char *data, size_t input_length){
     size_t output_length = 4 * ((input_length + 2) / 3);
 
@@ -854,7 +855,8 @@ char *dtw_base64_encode(unsigned char *data, size_t input_length){
     return encoded_data;
 }
 
-unsigned char *dtw_base64_decode(const char *data, size_t input_length, size_t *output_length){
+
+unsigned char *dtw_base64_decode(char *data, size_t input_length, size_t *output_length){
     if (input_length % 4 != 0) return NULL;
 
     *output_length = input_length / 4 * 3;
@@ -2130,7 +2132,9 @@ bool private_dtw_hardware_remove(struct DtwTreePart *self,bool set_as_action){
      }
 
     char *path = self->path->get_path(self->path);
+
     dtw_remove_any(path);
+    
     free(path);
     self->content_exist_in_hardware = false;
     return true;
