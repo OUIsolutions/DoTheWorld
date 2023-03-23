@@ -204,7 +204,7 @@ int main(int argc, char *argv[]){
 
 With the listage functions you can extract all Strings Arrays of elements in an folder 
 
-##### Listing files
+## Listing files
 with the **dtw_list_files** you can list all files in the folder you pass as argument 
 
 ~~~cpp
@@ -220,36 +220,19 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
-if you pass concat path to false in all the listage functions, it will not show the previews path
-
-~~~cpp
-#include "doTheWorld.c"
-
-int main(int argc, char *argv[]){
-
-  struct DtwStringArray *files = dtw_list_files("exemple_folder", DTW_NOT_CONCAT_PATH);
-  for(int i = 0; i < files->size; i++){
-    printf("%s\n", files->strings[i]);
-  }
-  return 0;
-}
-~~~
-
-##### Listing dirs 
+## Listing dirs 
 ~~~cpp
 
 #include "doTheWorld.c"
 
 int main(int argc, char *argv[]){
 
-  struct DtwStringArray *files = dtw_list_dirs("exemple_folder", DTW_NOT_CONCAT_PATH);
+  struct DtwStringArray *files = dtw_list_dirs("exemple_folder", DTW_CONCAT_PATH);
   files->represent(files);
   return 0;
 }
 ~~~
-
-##### Listing All 
-will list everything in the current folder 
+## Listing All 
 ~~~cpp
 #include "doTheWorld.c"
 
