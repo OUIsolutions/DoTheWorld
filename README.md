@@ -2,7 +2,7 @@
 DoTheWorld is a single file library designed to handle files in C in a number of ways, providing everything from simple functions for reading/writing files and folders, to complex functions like taking sha256 from files, checking modification dates. And functionalities of atomic writing of folders/files through transaction systems.
 
 # Used Dependencies And Atributions
-DoTheWorld includes all self dependecies in the single file, so you dont need to care about it, but if you will use one of these librarys, dont include it in your code to avoid circular imports:
+DoTheWorld includes all self dependecies in the single file, so you dont need to care about it, but if you will use one of these librarys, dont include it in your code to avoid circular imports
 
 ## CJson<br><br>
 **CJson**: from https://github.com/DaveGamble/cJSON <br>
@@ -65,9 +65,9 @@ int main(int argc, char *argv[]){
 }
 
 ~~~
-### IO Operations
+# IO Operations
 
-##### Reading strings
+## Reading strings
 if you are sure that the content you are going to read is not binary you can call the function **dtw_load_string_file_content**
 ~~~cpp
 
@@ -87,7 +87,7 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
-##### Reading Any
+## Reading Any
 if you are not sure what data type a file is you can call the function **dtw_load_any_content**
 
 ~~~cpp
@@ -111,32 +111,9 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
-##### Reading Binary
-if you are sure the file is a binary , call the function **dtw_load_binary_content**
-~~~cpp
 
 
-#include "doTheWorld.c"
-
-int main(int argc, char *argv[]){
- 
-  const char *path = "exemple_folder/deer.jpg";
-  int size;
-  //load a binary file content
-  unsigned char *content = dtw_load_binary_content(path,&size);
-  if(content == NULL){
-    printf("error oppening %s\n",path);
-    return 1;
-  }
-  printf("size: %d\n",size);
-  printf("content: %s\n",content);
-  free(content);
-  return 0;
-}
-
-~~~
-
-##### Writing strings
+## Writing strings
 
 to write strings in text files is very simple, just call the function **dtw_write_string_file_content**
 (Note that the target directory does not need to exist, if it does not exist it will be created automatically)
@@ -152,7 +129,7 @@ int main(int argc, char *argv[]){
 }
 ~~~
 
-##### Writing Any
+## Writing Any
 
 if you want to write anything to a file, it's also very simple, use the **dtw_load_binary_content** function, but note that it will be necessary to pass the writing size
 
@@ -177,7 +154,7 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
-##### Creating Dirs
+## Creating Dirs
 If you want to create dirs you can call the function **dtw_create_dir_recursively**
 passing the folder you want to create,dont wory about if the previews path dont exist 
 it will create till reachs the target folder
@@ -190,7 +167,7 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
-#####  Copying Things 
+##  Copying Things 
 With the function **dtw_copy_any** you can copy either files or folders to one position to anoter position 
 ##### Copying files
 ~~~cpp
@@ -204,34 +181,12 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
-##### Copying folders
-~~~cpp
 
-#include "doTheWorld.c"
 
-int main(int argc, char *argv[]){
-
-  dtw_copy_any("exemple_folder","exemple_folder2",DTW_NOT_MERGE);
-  return 0;
-}
-~~~
-also you can use the **dtw_copy_any** function  to merge the content in the target  folder with the target
-~~~cpp
-
-#include "doTheWorld.c"
-
-int main(int argc, char *argv[]){
-  dtw_write_string_file_content("exemple_folder2/x.txt","hello world");
-  dtw_copy_any("exemple_folder","exemple_folder2",DTW_MERGE);
-  return 0;
-}
-~~~
-
-##### Moving Things
+## Moving Things
 
 You can move either folders or files with **dtw_move_any** function 
 
-##### Moving Files
 ~~~cpp
 
 #include "doTheWorld.c"
@@ -245,36 +200,7 @@ int main(int argc, char *argv[]){
 }
 ~~~
 
-##### Moving Folders
-~~~cpp
-
-
-#include "doTheWorld.c"
-
-int main(int argc, char *argv[]){
-
-
-  dtw_move_any("exemple_folder","exemple_folder2",DTW_NOT_MERGE);
-
-  return 0;
-}
-~~~
-
-as the same as copying files , you alson can merge 
-~~~cpp
-
-#include "doTheWorld.c"
-
-int main(int argc, char *argv[]){
-
-  dtw_write_string_file_content("exemple_folder2/exemple_file.txt","Hello World !");
-  dtw_move_any("exemple_folder","exemple_folder2",DTW_MERGE);
-
-  return 0;
-}
-~~~
-
-### Monodimension Listage
+# Monodimension Listage
 
 With the listage functions you can extract all Strings Arrays of elements in an folder 
 
