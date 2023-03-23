@@ -44,8 +44,6 @@ int main(int argc, char *argv[]){
 DoTheWorld includes all self dependecies in the single file, so you dont need to care about it, but if you will use one of these librarys, dont include it in your code to avoid circular imports:
 
 
-
-
 #### CJson<br><br>
 **cJson**: from https://github.com/DaveGamble/cJSON <br>
 Copyright (c) 2009-2017 Dave Gamble and cJSON contributors
@@ -58,13 +56,16 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 #### sha-256 <br>
 **sha-256**: from https://github.com/amosnier/sha-2 <br>
-### IO Operations
+
 Zero Clause BSD License
 © 2021 Alain Mosnier
 
 Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted.
 
 THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+
+### IO Operations
 
 ##### Reading strings
 if you are sure that the content you are going to read is not binary you can call the function **dtw_load_string_file_content**
