@@ -10,8 +10,10 @@ struct DtWJsonError {
     int position;
     const char *menssage;
     void (*free_json_error)(struct DtWJsonError *self);
+    void (*represent)(struct DtWJsonError *self);
 
 };
 struct DtWJsonError * private_dtw_json_error_constructor();
 struct DtWJsonError * dtw_validate_json_tree(char *content);
+void private_represent_json_error(struct DtWJsonError *self);
 void private_free_json_error(struct DtWJsonError *self);

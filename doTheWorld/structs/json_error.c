@@ -4,6 +4,7 @@ struct DtWJsonError * private_dtw_json_error_constructor(){
     self->position = 0;
     self->menssage = "ok";
     self->free_json_error = private_free_json_error;
+    self->represent = private_represent_json_error;
     return self;
 }
 
@@ -131,6 +132,11 @@ struct DtWJsonError * dtw_validate_json_tree(char *content){
 }
 
 
+void private_represent_json_error(struct DtWJsonError *self){
+    printf("code: %d\n", self->code);
+    printf("position: %d\n", self->position);
+    printf("menssage: %s\n", self->menssage);
+}
 
 void private_free_json_error(struct DtWJsonError *self){
     free(self);

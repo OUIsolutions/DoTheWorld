@@ -60,9 +60,8 @@ void private_dtw_loads_json_tree(struct DtwTree *self,const char *content){
             if(part->is_binary){
                 size_t out_size;
                 unsigned char *decoded =dtw_base64_decode(
-                    content->valuestring,
-                    part->content_size,
-                    &out_size
+                    (unsigned char*)content->valuestring,
+                    part->content_size,&out_size
                 );
                 part->set_binary_content(part,decoded,out_size);
                 free(decoded);
@@ -228,12 +227,12 @@ char * private_dtw_dumps_tree_json(struct DtwTree *self,bool minify,bool preserv
                 );
             }
             else{
-                char *content_base64 = dtw_base64_encode(tree_part->content, tree_part->content_size);
-                
+                unsigned char *content_base64 = dtw_base64_encode(tree_part->content, tree_part->content_size);
+                char *content_base64_string = (char *)content_base64;
                 cJSON_AddItemToObject(
                     json_tree_part, 
                     "content", 
-                    cJSON_CreateString(content_base64)
+                    cJSON_CreateString(content_base64_string)
                 );  
                 free(content_base64);
             }
