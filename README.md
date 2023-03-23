@@ -9,7 +9,7 @@ but if you want to get an deep knolege see at **exemples** folder, you will find
 
 # Installation
 
-The installation of DoTheWorld is made to be as dumb as possible, just  download the file   **doTheWorld.c**  and include in your project.
+The installation of DoTheWorld is made to be as dumb as possible, just  download the file  amalgamation **doTheWorld.c**  and include in your project.
 if this compiles then the library will work:
 ~~~cpp
 #include "doTheWorld.c"
