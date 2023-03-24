@@ -58,7 +58,7 @@ bool private_dtw_hardware_write(struct DtwTreePart *self,bool set_as_action){
         char *path = self->path->get_path(self->path);
         char *dir = self->path->get_dir(self->path);
         int entity_type = dtw_entity_type(path);
- 
+       
         if(entity_type== DTW_NOT_FOUND && dir!= NULL){
             dtw_create_dir_recursively(dir);
         
