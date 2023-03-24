@@ -61,6 +61,7 @@ SOFTWARE.
 {%include "functions/monodimension_listage_win32.c"%}
 {%include "functions/multidimension_listage.c"%}
 {%include "structs/path.c"%}
+{%include "headers/transaction_report.h"%}
 {%include "structs/string_array.c"%}
 {%include "structs/tree_part/tree_part.c"%}
 {%include "structs/tree_part/hardware_tree_part.c"%}
@@ -68,4 +69,5 @@ SOFTWARE.
 {%if not  lite %}
 {%include "structs/json_error.c"%}
 {%include "structs/tree/json_tree.c"%}
+{%include "structs/transaction_report.c"%}
 {%endif%}

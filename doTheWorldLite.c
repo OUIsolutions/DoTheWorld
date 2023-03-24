@@ -227,6 +227,7 @@ char * dtw_get_file_last_motification_in_string(const char *path);
 const char * private_dtw_convert_action_to_string(short action);
 short private_dtw_convert_string_to_action(const char *action);
 void private_dtw_add_end_bar_to_dirs_string_array(struct DtwStringArray * dirs);
+char *dtw_concat_path(const char *path1, const char *path2);
 
 bool dtw_starts_with(const char *string, const char *prefix);
 bool dtw_ends_with(const char *string, const char *suffix);
@@ -487,7 +488,7 @@ struct  DtwTree{
         bool load_content,
         bool preserve_content
     );
-    
+    struct DtwTransactionReport * (*report)(struct DtwTree *self);    
     //
     void (*free_tree)(struct DtwTree *self);
     void (*represent)(struct DtwTree *self);
@@ -525,6 +526,8 @@ void private_dtw_add_tree_from_hardware(
     bool load_content,
     bool preserve_content
 );
+
+struct DtwTransactionReport * private_dtw_create_report(struct DtwTree *self);
 
 
 void private_dtw_hardware_remove_tree(struct DtwTree *self);
@@ -981,6 +984,31 @@ void private_dtw_add_end_bar_to_dirs_string_array(struct DtwStringArray * dirs){
             
               
     }
+}
+
+char *dtw_concat_path(const char *path1, const char *path2){
+    char *path = (char *)malloc(strlen(path1) + strlen(path2) + 3);
+    #ifdef _WIN32
+        if(dtw_ends_with(path1, "\\")){
+            sprintf(path,"%s%s",path1,path2);
+
+        }
+        else{
+            sprintf(path,"%s\\%s",path1,path2);
+
+        }
+    #else 
+        if(dtw_ends_with(path1, "/")){
+            sprintf(path,"%s%s",path1,path2);
+
+        }
+        else{
+            sprintf(path,"%s/%s",path1,path2);
+      
+        }
+    #endif 
+
+    return path;
 }
 
 
@@ -1687,8 +1715,7 @@ char * private_dtw_get_path(struct DtwPath *self){
     #define DIR_NOT_EXIST dir == NULL
 
     if(FULL_NAME_EXIST && DIR_EXIST){
-        char *path = (char *)malloc(strlen(full_name) + strlen(dir) + 2);
-        sprintf(path, "%s/%s",dir,full_name);
+        char *path = dtw_concat_path(dir, full_name);
         free(dir);
         free(full_name);
         return path;
@@ -1812,8 +1839,7 @@ void private_dtw_add_start_dir(struct DtwPath *self, const char *start_dir){
     char *dir = self->get_dir(self);
     //concat the path, with start_dir at beguining
     if(dir != NULL){
-        char *path = (char *)malloc(strlen(dir) + strlen(start_dir) + 2);
-        sprintf(path, "%s/%s",start_dir,dir);
+        char *path = dtw_concat_path(start_dir, dir);
         self->set_dir(self, path);
         free(path);
         free(dir);
@@ -1824,8 +1850,7 @@ void private_dtw_add_end_dir(struct DtwPath *self, const char *end_dir){
     char *dir = self->get_dir(self);
     //concat the path, with start_dir at beguining
     if(dir != NULL){
-        char *path = (char *)malloc(strlen(dir) + strlen(end_dir) + 2);
-        sprintf(path, "%s/%s",dir,end_dir);
+        char *path = dtw_concat_path(dir, end_dir);
         self->set_dir(self, path);
         free(path);
         free(dir);
@@ -1867,6 +1892,18 @@ void private_dtw_destructor_path(struct DtwPath *self) {
     free(self);
 }
 
+
+struct DtwTransactionReport{
+    struct DtwStringArray *write;
+    struct DtwStringArray *modify;
+    struct DtwStringArray *remove;
+    void (*represent)(struct DtwTransactionReport *report);
+    void (*free_transaction)(struct DtwTransactionReport *report);
+};
+
+struct DtwTransactionReport * dtw_constructor_transaction_report();
+void  private_dtw_represent_transaction(struct DtwTransactionReport *report);
+void  private_dtw_free_transaction(struct DtwTransactionReport *report);
 
 struct DtwStringArray * dtw_constructor_string_array(){
     struct DtwStringArray *self = (struct DtwStringArray*)malloc(sizeof(struct DtwStringArray));
@@ -2280,6 +2317,8 @@ struct  DtwTree * dtw_tree_constructor(){
     self->represent = private_dtw_represent_tree;
     self->add_tree_parts_from_string_array = private_dtw_add_tree_parts_from_string_array;
     self->add_tree_from_hardware = private_dtw_add_tree_from_hardware;
+   
+    self->report = private_dtw_create_report;
     //
     self->hardware_remove_tree = private_dtw_hardware_remove_tree;
     self->hardware_write_tree = private_dtw_hardware_write_tree;
@@ -2314,6 +2353,29 @@ void private_dtw_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tr
     self->tree_parts[self->size - 1] = tree_part->copy_tree_part(tree_part);
        
 }
+
+struct DtwTransactionReport * private_dtw_create_report(struct DtwTree *self){
+    struct DtwTransactionReport *report = dtw_constructor_transaction_report();
+    for(int i = 0; i < self->size; i++){
+        struct DtwTreePart *tree_part = self->tree_parts[i];
+        int pending_action = tree_part->pending_action;
+        char *path = tree_part->path->get_path(tree_part->path);
+        if (pending_action == DTW_WRITE){
+
+            report->write->add_string(report->write,path);
+        }
+        else if (pending_action == DTW_MODIFY){
+            report->modify->add_string(report->modify,path);
+        }
+        else if (pending_action == DTW_REMOVE){
+            report->remove->add_string(report->remove,path);
+        }
+        free(path);
+    
+    }
+    return report;
+}
+
 
 void private_dtw_add_tree_part_reference(struct DtwTree *self, struct DtwTreePart *tree_part){
     self->size++;
