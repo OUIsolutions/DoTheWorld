@@ -105,8 +105,7 @@ char * private_dtw_get_path(struct DtwPath *self){
     #define DIR_NOT_EXIST dir == NULL
 
     if(FULL_NAME_EXIST && DIR_EXIST){
-        char *path = (char *)malloc(strlen(full_name) + strlen(dir) + 2);
-        sprintf(path, "%s/%s",dir,full_name);
+        char *path = dtw_concat_path(dir, full_name);
         free(dir);
         free(full_name);
         return path;
@@ -230,8 +229,7 @@ void private_dtw_add_start_dir(struct DtwPath *self, const char *start_dir){
     char *dir = self->get_dir(self);
     //concat the path, with start_dir at beguining
     if(dir != NULL){
-        char *path = (char *)malloc(strlen(dir) + strlen(start_dir) + 2);
-        sprintf(path, "%s/%s",start_dir,dir);
+        char *path = dtw_concat_path(start_dir, dir);
         self->set_dir(self, path);
         free(path);
         free(dir);
@@ -242,8 +240,7 @@ void private_dtw_add_end_dir(struct DtwPath *self, const char *end_dir){
     char *dir = self->get_dir(self);
     //concat the path, with start_dir at beguining
     if(dir != NULL){
-        char *path = (char *)malloc(strlen(dir) + strlen(end_dir) + 2);
-        sprintf(path, "%s/%s",dir,end_dir);
+        char *path = dtw_concat_path(dir, end_dir);
         self->set_dir(self, path);
         free(path);
         free(dir);

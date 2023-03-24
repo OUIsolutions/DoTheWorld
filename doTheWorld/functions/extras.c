@@ -86,21 +86,26 @@ void private_dtw_add_end_bar_to_dirs_string_array(struct DtwStringArray * dirs){
 }
 
 char *dtw_concat_path(const char *path1, const char *path2){
-    char *path = (char *)malloc(strlen(path1) + strlen(path2) + 1);
+    char *path = (char *)malloc(strlen(path1) + strlen(path2) + 3);
     #ifdef _WIN32
         if(dtw_ends_with(path1, "\\")){
             sprintf(path,"%s%s",path1,path2);
+
         }
         else{
             sprintf(path,"%s\\%s",path1,path2);
+
         }
     #else 
         if(dtw_ends_with(path1, "/")){
             sprintf(path,"%s%s",path1,path2);
+
         }
         else{
             sprintf(path,"%s/%s",path1,path2);
+      
         }
     #endif 
+
     return path;
 }
