@@ -230,6 +230,16 @@ char * private_dtw_dumps_tree_json(struct DtwTree *self,bool minify,bool preserv
             else{
                 char *content_base64 = dtw_base64_encode(tree_part->content, tree_part->content_size);
          
+                if(preserve_content_data){
+                    //remove old content size
+                    cJSON_DeleteItemFromObject(json_tree_part,"content_size");
+                    //add new content size
+                    cJSON_AddItemToObject(
+                        json_tree_part, 
+                        "content_size", 
+                        cJSON_CreateNumber(strlen(content_base64))
+                    );
+                }
                 cJSON_AddItemToObject(
                     json_tree_part, 
                     "content", 
