@@ -23,8 +23,8 @@ struct  DtwTree * dtw_tree_constructor(){
     self->dumps_json_tree_to_file = private_dtw_dumps_tree_json_to_file;
 
     //{%endif%}
-    self->hardware_remove_tree = private_dtw_hardware_remove_tree;
-    self->hardware_write_tree = private_dtw_hardware_write_tree;
+    self->insecure_hardware_remove_tree = private_insecure_dtw_hardware_remove_tree;
+    self->insecure_hardware_write_tree = private_insecure_dtw_hardware_write_tree;
     self->hardware_commit_tree = private_dtw_hardware_commit_tree;
     return self;
 }
@@ -123,13 +123,13 @@ void private_dtw_free_tree(struct DtwTree *self){
     free(self->tree_parts);
     free(self);
 }
-void private_dtw_hardware_remove_tree(struct DtwTree *self){
+void private_insecure_dtw_hardware_remove_tree(struct DtwTree *self){
     for(int i = 0; i < self->size; i++){
         self->tree_parts[i]->hardware_remove(self->tree_parts[i],DTW_EXECUTE_NOW);
     }
 }
 
-void private_dtw_hardware_write_tree(struct DtwTree *self){
+void private_insecure_dtw_hardware_write_tree(struct DtwTree *self){
     for(int i = 0; i < self->size; i++){
         self->tree_parts[i]->hardware_write(self->tree_parts[i],DTW_EXECUTE_NOW);
     }

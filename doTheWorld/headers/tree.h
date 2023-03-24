@@ -79,8 +79,8 @@ struct  DtwTree{
     //{%endif%}
     void (*free_tree)(struct DtwTree *self);
     void (*represent)(struct DtwTree *self);
-    void (*hardware_remove_tree)(struct DtwTree *self);
-    void (*hardware_write_tree)(struct DtwTree *self);
+    void (*insecure_hardware_remove_tree)(struct DtwTree *self);
+    void (*insecure_hardware_write_tree)(struct DtwTree *self);
     void (*hardware_commit_tree)(struct DtwTree *self);
 };
 
@@ -117,8 +117,8 @@ void private_dtw_add_tree_from_hardware(
 struct DtwTransactionReport * private_dtw_create_report(struct DtwTree *self);
 
 
-void private_dtw_hardware_remove_tree(struct DtwTree *self);
-void private_dtw_hardware_write_tree(struct DtwTree *self);
+void private_insecure_dtw_hardware_remove_tree(struct DtwTree *self);
+void private_insecure_dtw_hardware_write_tree(struct DtwTree *self);
 void private_dtw_hardware_commit_tree(struct DtwTree *self);
 
 //{%if not  lite %}
