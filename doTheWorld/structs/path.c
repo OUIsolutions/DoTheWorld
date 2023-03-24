@@ -118,8 +118,7 @@ char * private_dtw_get_path(struct DtwPath *self){
         return path;
     }
     if(FULL_NAME_NOT_EXIST && DIR_EXIST){
-        char *path = (char *)malloc(strlen(dir) + 1);
-        sprintf(path, "%s",dir);
+        char *path = dtw_concat_path(dir, "");
         free(dir);
         free(full_name);
         return path;

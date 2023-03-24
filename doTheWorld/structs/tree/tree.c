@@ -130,8 +130,10 @@ void private_insecure_dtw_hardware_remove_tree(struct DtwTree *self){
 }
 
 void private_insecure_dtw_hardware_write_tree(struct DtwTree *self){
+    
     for(int i = 0; i < self->size; i++){
-        self->tree_parts[i]->hardware_write(self->tree_parts[i],DTW_EXECUTE_NOW);
+        struct DtwTreePart *tree_part = self->tree_parts[i];
+        tree_part->hardware_write(tree_part,DTW_EXECUTE_NOW);
     }
 }
 
