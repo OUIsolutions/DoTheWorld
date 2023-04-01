@@ -59,7 +59,7 @@ short private_dtw_convert_string_to_action(const char *action){
     if(strcmp(action,"modify") == 0){
         return DTW_MODIFY;
     }
-    return -1;
+    return -1
 }
 
 void private_dtw_add_end_bar_to_dirs_string_array(struct DtwStringArray * dirs){
