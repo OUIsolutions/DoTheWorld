@@ -59,28 +59,18 @@ struct DtwStringArray * dtw_list_all_recursively(const char *path){
     struct DtwStringArray *all = dtw_constructor_string_array();
     
     for(int i = 0; i < dirs->size; i++){
-        #ifdef _WIN32
-            if(!dtw_ends_with(dirs->strings[i], "\\")){
-                char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 2); 
-                sprintf(formated_dir,"%s\\",dirs->strings[i]);
-                all->add_string(all,formated_dir);
-                free(formated_dir);
-            }
-            else{
-                all->add_string(all,dirs->strings[i]);
-            }
-        #else
-            if(!dtw_ends_with(dirs->strings[i], "/")){
-                char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 2);
-                sprintf(formated_dir,"%s/",dirs->strings[i]);
-                all->add_string(all,formated_dir);
-                free(formated_dir);
-            }
-            else{
-                all->add_string(all,dirs->strings[i]);
-            }
-        #endif
-    
+
+        if(!dtw_ends_with(dirs->strings[i], "/") || !dtw_ends_with(dirs->strings[i], "\\") ){
+            char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 2);
+            sprintf(formated_dir,"%s/",dirs->strings[i]);
+            all->add_string(all,formated_dir);
+            free(formated_dir);
+        }
+        else{
+            all->add_string(all,dirs->strings[i]);
+        }
+
+
         struct DtwStringArray *sub_files = dtw_list_basic(dirs->strings[i],DTW_FILE_TYPE,true);
         all->merge_string_array(all,sub_files);
         sub_files->free_string_array(sub_files);
