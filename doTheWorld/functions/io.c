@@ -132,7 +132,7 @@ bool dtw_write_any_content(const char *path,unsigned  char *content,int size){
     for(int i = strlen(path)-1;i > 0;i--){
         //runs in negative mode til / or \ is found
         if(path[i] == '\\' || path[i] == '/'){
-            char *dir_path =(char*)malloc(i);
+            char *dir_path =(char*)malloc(i +2);
             dir_path[i] = '\0';
             strncpy(dir_path,path,i);
             
