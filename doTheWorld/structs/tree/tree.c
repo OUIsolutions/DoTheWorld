@@ -12,7 +12,10 @@ struct  DtwTree * dtw_tree_constructor(){
     self->represent = private_dtw_represent_tree;
     self->add_tree_parts_from_string_array = private_dtw_add_tree_parts_from_string_array;
     self->add_tree_from_hardware = private_dtw_add_tree_from_hardware;
-   
+
+    self->find_part_by_function = private_dtw_find_by_function;
+    self->find_part_by_name  = private_dtw_find_tree_part_by_name;
+    self->find_part_by_path = private_dtw_find_tree_part_by_path;
     self->report = private_dtw_create_report;
     //{%if not  lite %}
     
@@ -136,8 +139,8 @@ void private_dtw_add_tree_from_hardware(struct DtwTree *self,const char *path,bo
                 strlen(current_path_string) - size_to_remove +1
                 );
         current_path->set_path(current_path,current_path_string);
+        strcpy(current_path->original_path,current_path_string);
         free(current_path_string);
-
     }
 
 }
