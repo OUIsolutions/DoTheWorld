@@ -50,8 +50,18 @@ struct  DtwTree{
 
     struct DtwTreePart *(*find_part_by_function)(
             struct DtwTree *self,
-            bool (*filter)(struct  DtwTreePart *part)
+            bool (*caller)(struct  DtwTreePart *part)
                     );
+
+    struct DtwTree *(*filter)(
+            struct DtwTree *self,
+            bool (*caller)(struct  DtwTreePart *part)
+    );
+
+    struct DtwTree *(*map)(
+            struct DtwTree *self,
+            struct  DtwTreePart*(*caller)(struct  DtwTreePart *part)
+    );
 
     struct DtwTreePart *(*find_part_by_name)( struct DtwTree *self,const char *name);
     struct DtwTreePart *(*find_part_by_path)(   struct DtwTree *self,const char *path);
@@ -116,8 +126,19 @@ struct DtwTree *private_dtw_get_sub_tree(
 
 struct DtwTreePart *private_dtw_find_by_function(
         struct DtwTree *self,
-        bool (*filter)(struct  DtwTreePart *part)
+        bool (*caller)(struct  DtwTreePart *part)
         );
+
+struct DtwTree *private_dtw_map(
+        struct DtwTree *self,
+        struct  DtwTreePart* (*caller)(struct  DtwTreePart *part)
+);
+
+struct DtwTree *private_dtw_filter(
+        struct DtwTree *self,
+        bool (*caller)(struct  DtwTreePart *part)
+);
+
 
 struct DtwTreePart *private_dtw_find_tree_part_by_name(struct DtwTree *self,const char *name);
 struct DtwTreePart *private_dtw_find_tree_part_by_path(struct DtwTree *self,const char *path);

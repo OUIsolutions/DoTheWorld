@@ -3,16 +3,51 @@
 //
 struct DtwTreePart *private_dtw_find_by_function(
         struct DtwTree *self,
-        bool (*filter)(struct  DtwTreePart *part)
+        bool (*caller)(struct  DtwTreePart *part)
 ){
     for(int i = 0;i < self->size; i++){
         struct DtwTreePart *current = self->tree_parts[i];
-        bool result = filter(current);
+        bool result = caller(current);
         if(result){
             return current;
         }
     }
     return NULL;
+}
+
+struct DtwTree *private_dtw_filter(
+        struct DtwTree *self,
+        bool (*caller)(struct  DtwTreePart *part)
+){
+    struct DtwTree *filtered_tree = dtw_tree_constructor();
+
+    for(int i = 0;i < self->size; i++){
+
+        struct DtwTreePart *current = self->tree_parts[i];
+
+        bool result = caller(current);
+
+        if(result){
+            filtered_tree->add_tree_part_by_copy(filtered_tree,current);
+        }
+    }
+    return filtered_tree;
+}
+
+
+struct DtwTree *private_dtw_map(
+        struct DtwTree *self,
+        struct DtwTreePart *(*caller)(struct  DtwTreePart *part)
+){
+    struct DtwTree *mapped_tree = dtw_tree_constructor();
+
+    for(int i = 0;i < self->size; i++){
+        struct DtwTreePart *current = self->tree_parts[i];
+        struct DtwTreePart *copy = current->copy_tree_part(current);
+        struct DtwTreePart *result = caller(copy);
+        mapped_tree->add_tree_part_by_reference(mapped_tree,result);
+    }
+    return mapped_tree;
 }
 
 

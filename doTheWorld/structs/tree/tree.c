@@ -2,6 +2,7 @@
 
 
 struct  DtwTree * dtw_tree_constructor(){
+
     struct DtwTree *self = (struct DtwTree*)malloc(sizeof(struct DtwTree));
     self->size = 0;
     self->tree_parts = (struct DtwTreePart**)malloc(1);
@@ -12,6 +13,9 @@ struct  DtwTree * dtw_tree_constructor(){
     self->represent = private_dtw_represent_tree;
     self->add_tree_parts_from_string_array = private_dtw_add_tree_parts_from_string_array;
     self->add_tree_from_hardware = private_dtw_add_tree_from_hardware;
+
+    self->map = private_dtw_map;
+    self->filter = private_dtw_filter;
 
     self->find_part_by_function = private_dtw_find_by_function;
     self->find_part_by_name  = private_dtw_find_tree_part_by_name;
