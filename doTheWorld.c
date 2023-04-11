@@ -735,6 +735,7 @@ struct DtwTreePart{
     bool(*hardware_modify)(struct DtwTreePart *self,bool set_as_action);
     bool(*hardware_commit)(struct DtwTreePart *self);
 
+
     void (*free_tree_part)(struct DtwTreePart *self);
     struct DtwTreePart *(*copy_tree_part)(struct DtwTreePart *self);
 };
@@ -813,6 +814,27 @@ struct  DtwTree{
         bool preserve_content,
         bool preserve_path_start
     );
+    //Listage Functions
+
+    struct DtwTreePart *(*find_part_by_function)(
+            struct DtwTree *self,
+            bool (*caller)(struct  DtwTreePart *part)
+                    );
+
+    struct DtwTree *(*filter)(
+            struct DtwTree *self,
+            bool (*caller)(struct  DtwTreePart *part)
+    );
+
+    struct DtwTree *(*map)(
+            struct DtwTree *self,
+            struct  DtwTreePart*(*caller)(struct  DtwTreePart *part)
+    );
+
+    struct DtwTreePart *(*find_part_by_name)( struct DtwTree *self,const char *name);
+    struct DtwTreePart *(*find_part_by_path)(   struct DtwTree *self,const char *path);
+
+
     struct DtwTransactionReport * (*report)(struct DtwTree *self);    
     //
 
@@ -820,6 +842,7 @@ struct  DtwTree{
         struct DtwTree *self,
         const char *content
     );
+
 
     void (*loads_json_tree_from_file)(
         struct DtwTree *self,
@@ -868,6 +891,26 @@ struct DtwTree *private_dtw_get_sub_tree(
     bool copy_content
 );
 #endif
+
+struct DtwTreePart *private_dtw_find_by_function(
+        struct DtwTree *self,
+        bool (*caller)(struct  DtwTreePart *part)
+        );
+
+struct DtwTree *private_dtw_map(
+        struct DtwTree *self,
+        struct  DtwTreePart* (*caller)(struct  DtwTreePart *part)
+);
+
+struct DtwTree *private_dtw_filter(
+        struct DtwTree *self,
+        bool (*caller)(struct  DtwTreePart *part)
+);
+
+
+struct DtwTreePart *private_dtw_find_tree_part_by_name(struct DtwTree *self,const char *name);
+struct DtwTreePart *private_dtw_find_tree_part_by_path(struct DtwTree *self,const char *path);
+
 void private_dtw_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_part);
 void private_dtw_add_tree_part_reference(struct DtwTree *self, struct DtwTreePart *tree_part);
 void private_dtw_free_tree(struct DtwTree *self);
@@ -4489,40 +4532,22 @@ short private_dtw_convert_string_to_action(const char *action){
 
 void private_dtw_add_end_bar_to_dirs_string_array(struct DtwStringArray * dirs){
     for(int i = 0; i < dirs->size; i++){
-        #ifdef _WIN32
-            if(!dtw_ends_with(dirs->strings[i], "\\")){
-                char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 3); 
-                sprintf(formated_dir,"%s\\\0",dirs->strings[i]);
-                dirs->set_value(dirs,i,formated_dir);
-                free(formated_dir);
-            }
-        #else
-            if(!dtw_ends_with(dirs->strings[i], "/")){
-                char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 3);
-                sprintf(formated_dir,"%s/",dirs->strings[i]);
-                dirs->set_value(dirs,i,formated_dir);
-                free(formated_dir);
-            }
-        #endif
-       
+  
+        if(!dtw_ends_with(dirs->strings[i], "/") || !dtw_ends_with(dirs->strings[i],"\\")){
+            char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 3);
+            sprintf(formated_dir,"%s/",dirs->strings[i]);
+            dirs->set_value(dirs,i,formated_dir);
+            free(formated_dir);
+        }    
             
-              
+         
     }
 }
 
 char *dtw_concat_path(const char *path1, const char *path2){
     char *path = (char *)malloc(strlen(path1) + strlen(path2) + 3);
-    #ifdef _WIN32
-        if(dtw_ends_with(path1, "\\")){
-            sprintf(path,"%s%s",path1,path2);
 
-        }
-        else{
-            sprintf(path,"%s\\%s",path1,path2);
-
-        }
-    #else 
-        if(dtw_ends_with(path1, "/")){
+        if(dtw_ends_with(path1, "/") || dtw_ends_with(path1, "\\")){
             sprintf(path,"%s%s",path1,path2);
 
         }
@@ -4530,7 +4555,7 @@ char *dtw_concat_path(const char *path1, const char *path2){
             sprintf(path,"%s/%s",path1,path2);
       
         }
-    #endif 
+   
 
     return path;
 }
@@ -5013,11 +5038,10 @@ struct DtwStringArray *  dtw_list_basic(const char *path,int expected_type,bool 
                 }
                 else{
                     char *generated_dir = (char*)malloc(strlen(path) + strlen(file_data.cFileName) + 2);
-                    #ifdef _WIN32
-                        sprintf(generated_dir, "%s\\%s", path, file_data.cFileName);
-                    #else
-                        sprintf(generated_dir, "%s/%s", path, file_data.cFileName);
-                    #endif
+                    
+
+                    sprintf(generated_dir, "%s/%s", path, file_data.cFileName);
+                   
                     dirs->add_string(dirs, generated_dir);
                     free(generated_dir);
                 }
@@ -5103,28 +5127,18 @@ struct DtwStringArray * dtw_list_all_recursively(const char *path){
     struct DtwStringArray *all = dtw_constructor_string_array();
     
     for(int i = 0; i < dirs->size; i++){
-        #ifdef _WIN32
-            if(!dtw_ends_with(dirs->strings[i], "\\")){
-                char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 2); 
-                sprintf(formated_dir,"%s\\",dirs->strings[i]);
-                all->add_string(all,formated_dir);
-                free(formated_dir);
-            }
-            else{
-                all->add_string(all,dirs->strings[i]);
-            }
-        #else
-            if(!dtw_ends_with(dirs->strings[i], "/")){
-                char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 2);
-                sprintf(formated_dir,"%s/",dirs->strings[i]);
-                all->add_string(all,formated_dir);
-                free(formated_dir);
-            }
-            else{
-                all->add_string(all,dirs->strings[i]);
-            }
-        #endif
-    
+
+        if(!dtw_ends_with(dirs->strings[i], "/") || !dtw_ends_with(dirs->strings[i], "\\") ){
+            char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 2);
+            sprintf(formated_dir,"%s/",dirs->strings[i]);
+            all->add_string(all,formated_dir);
+            free(formated_dir);
+        }
+        else{
+            all->add_string(all,dirs->strings[i]);
+        }
+
+
         struct DtwStringArray *sub_files = dtw_list_basic(dirs->strings[i],DTW_FILE_TYPE,true);
         all->merge_string_array(all,sub_files);
         sub_files->free_string_array(sub_files);
@@ -5818,6 +5832,7 @@ bool private_dtw_hardware_commit(struct DtwTreePart *self){
 
 
 struct  DtwTree * dtw_tree_constructor(){
+
     struct DtwTree *self = (struct DtwTree*)malloc(sizeof(struct DtwTree));
     self->size = 0;
     self->tree_parts = (struct DtwTreePart**)malloc(1);
@@ -5828,7 +5843,13 @@ struct  DtwTree * dtw_tree_constructor(){
     self->represent = private_dtw_represent_tree;
     self->add_tree_parts_from_string_array = private_dtw_add_tree_parts_from_string_array;
     self->add_tree_from_hardware = private_dtw_add_tree_from_hardware;
-   
+
+    self->map = private_dtw_map;
+    self->filter = private_dtw_filter;
+
+    self->find_part_by_function = private_dtw_find_by_function;
+    self->find_part_by_name  = private_dtw_find_tree_part_by_name;
+    self->find_part_by_path = private_dtw_find_tree_part_by_path;
     self->report = private_dtw_create_report;
     //
     
@@ -5952,8 +5973,8 @@ void private_dtw_add_tree_from_hardware(struct DtwTree *self,const char *path,bo
                 strlen(current_path_string) - size_to_remove +1
                 );
         current_path->set_path(current_path,current_path_string);
+        strcpy(current_path->original_path,current_path_string);
         free(current_path_string);
-
     }
 
 }
