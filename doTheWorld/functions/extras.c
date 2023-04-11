@@ -59,45 +59,27 @@ short private_dtw_convert_string_to_action(const char *action){
     if(strcmp(action,"modify") == 0){
         return DTW_MODIFY;
     }
-    return -1;
+    return -1
 }
 
 void private_dtw_add_end_bar_to_dirs_string_array(struct DtwStringArray * dirs){
     for(int i = 0; i < dirs->size; i++){
-        #ifdef _WIN32
-            if(!dtw_ends_with(dirs->strings[i], "\\")){
-                char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 3); 
-                sprintf(formated_dir,"%s\\\0",dirs->strings[i]);
-                dirs->set_value(dirs,i,formated_dir);
-                free(formated_dir);
-            }
-        #else
-            if(!dtw_ends_with(dirs->strings[i], "/")){
-                char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 3);
-                sprintf(formated_dir,"%s/",dirs->strings[i]);
-                dirs->set_value(dirs,i,formated_dir);
-                free(formated_dir);
-            }
-        #endif
-       
+  
+        if(!dtw_ends_with(dirs->strings[i], "/") || !dtw_ends_with(dirs->strings[i],"\\")){
+            char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 3);
+            sprintf(formated_dir,"%s/",dirs->strings[i]);
+            dirs->set_value(dirs,i,formated_dir);
+            free(formated_dir);
+        }    
             
-              
+         
     }
 }
 
 char *dtw_concat_path(const char *path1, const char *path2){
     char *path = (char *)malloc(strlen(path1) + strlen(path2) + 3);
-    #ifdef _WIN32
-        if(dtw_ends_with(path1, "\\")){
-            sprintf(path,"%s%s",path1,path2);
 
-        }
-        else{
-            sprintf(path,"%s\\%s",path1,path2);
-
-        }
-    #else 
-        if(dtw_ends_with(path1, "/")){
+        if(dtw_ends_with(path1, "/") || dtw_ends_with(path1, "\\")){
             sprintf(path,"%s%s",path1,path2);
 
         }
@@ -105,7 +87,7 @@ char *dtw_concat_path(const char *path1, const char *path2){
             sprintf(path,"%s/%s",path1,path2);
       
         }
-    #endif 
+   
 
     return path;
 }
