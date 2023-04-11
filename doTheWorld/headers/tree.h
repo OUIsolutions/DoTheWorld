@@ -11,6 +11,9 @@
 #define DTW_PASS_BY_REFERENCE  false
 #define DTW_CONSIDER_IGNORE  true
 #define DTW_NOT_CONSIDER_IGNORE  false
+#define DTW_PRESERVE_PATH_START true
+#define DTW_NOT_PRESERVE_PATH_START false
+
 
 struct  DtwTree{
     int size;
@@ -40,7 +43,8 @@ struct  DtwTree{
         struct DtwTree *self,
         const char *path,
         bool load_content,
-        bool preserve_content
+        bool preserve_content,
+        bool preserve_path_start
     );
     struct DtwTransactionReport * (*report)(struct DtwTree *self);    
     //{%if not  lite %}
@@ -111,7 +115,8 @@ void private_dtw_add_tree_from_hardware(
     struct DtwTree *self,
     const char *path,
     bool load_content,
-    bool preserve_content
+    bool preserve_content,
+    bool preserve_path_start
 );
 
 struct DtwTransactionReport * private_dtw_create_report(struct DtwTree *self);

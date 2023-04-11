@@ -107,11 +107,38 @@ void private_dtw_add_tree_parts_from_string_array(struct DtwTree *self,struct Dt
 }
 
 
-void private_dtw_add_tree_from_hardware(struct DtwTree *self,const char *path,bool load_content, bool preserve_content){
-    
+void private_dtw_add_tree_from_hardware(struct DtwTree *self,const char *path,bool load_content, bool preserve_content,bool preserve_path_start){
+
+
+
     struct DtwStringArray *path_array = dtw_list_all_recursively(path);
     self->add_tree_parts_from_string_array(self,path_array,load_content,preserve_content);
     path_array->free_string_array(path_array);
+
+    if(preserve_path_start){
+        return;
+    }
+
+    int size_to_remove = strlen(path);
+    if(!dtw_ends_with(path,"/")){
+        size_to_remove+=1;
+    }
+
+    for(int i =0; i < self->size; i++){
+        struct DtwTreePart *current_part = self->tree_parts[i];
+        struct DtwPath *current_path = current_part->path;
+        char *current_path_string = current_path->get_path(current_path);
+        //remove the size toremove from string
+
+        memmove(
+                current_path_string,
+                current_path_string+size_to_remove,
+                strlen(current_path_string) - size_to_remove +1
+                );
+        current_path->set_path(current_path,current_path_string);
+        free(current_path_string);
+
+    }
 
 }
 
