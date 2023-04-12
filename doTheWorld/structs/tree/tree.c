@@ -116,9 +116,7 @@ void private_dtw_add_tree_parts_from_string_array(struct DtwTree *self,struct Dt
 
 void private_dtw_add_tree_from_hardware(struct DtwTree *self,const char *path,bool load_content, bool preserve_content,bool preserve_path_start){
 
-
-
-    struct DtwStringArray *path_array = dtw_list_all_recursively(path);
+    struct DtwStringArray *path_array = dtw_list_all_recursively(path,DTW_CONCAT_PATH);
     self->add_tree_parts_from_string_array(self,path_array,load_content,preserve_content);
     path_array->free_string_array(path_array);
 

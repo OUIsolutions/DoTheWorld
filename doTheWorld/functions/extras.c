@@ -87,7 +87,39 @@ char *dtw_concat_path(const char *path1, const char *path2){
             sprintf(path,"%s/%s",path1,path2);
       
         }
-   
-
     return path;
+}
+
+struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *paths,const char *path_to_remove){
+    int size_to_remove = strlen(path_to_remove);
+
+    if(!dtw_ends_with(path_to_remove,"/")){
+        size_to_remove+=1;
+    }
+
+    struct DtwStringArray *new_array = dtw_constructor_string_array();
+
+    for(int i =0; i < paths->size; i++){
+
+        char *current_path_string = paths->strings[i];
+        int current_path_string_size = strlen(current_path_string);
+
+        char *new_string = malloc(current_path_string_size);
+        new_string[current_path_string_size] =0;
+
+        strcpy(new_string,current_path_string);
+        memmove(
+                new_string,
+                current_path_string+size_to_remove,
+                strlen(current_path_string) - size_to_remove +1
+        );
+        if(strcmp(new_string,"/") == 0){
+            free(new_string);
+            continue;
+        }
+        new_array->add_string(new_array,new_string);
+        free(new_string);
+
+    }
+    return new_array;
 }

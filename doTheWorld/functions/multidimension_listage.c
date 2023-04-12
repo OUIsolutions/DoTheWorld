@@ -1,5 +1,5 @@
 
-struct DtwStringArray * dtw_list_dirs_recursively(const char *path){
+struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool concat_path){
 
         struct  DtwStringArray *dirs  = dtw_constructor_string_array();
         //verify if the path is a directory
@@ -27,18 +27,21 @@ struct DtwStringArray * dtw_list_dirs_recursively(const char *path){
                
         }
         //unsifth path in dirs 
-        
-        
-      
 
+        if(!concat_path){
+
+            struct DtwStringArray *removed =  private_dtw_remove_start_path(dirs,path);
+            dirs->free_string_array(dirs);
+            return removed;
+        }
         return dirs;
 }
 
 
 
-struct DtwStringArray *  dtw_list_files_recursively(const char *path){
+struct DtwStringArray *  dtw_list_files_recursively(const char *path,bool concat_path){
     
-    struct DtwStringArray *dirs = dtw_list_dirs_recursively(path);
+    struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,DTW_CONCAT_PATH);
     
     struct  DtwStringArray *files = dtw_constructor_string_array();
     
@@ -48,13 +51,21 @@ struct DtwStringArray *  dtw_list_files_recursively(const char *path){
         sub_files->free_string_array(sub_files);
     }
     dirs->free_string_array(dirs);
+
+    if(!concat_path){
+
+        struct DtwStringArray *removed =  private_dtw_remove_start_path(files,path);
+        files->free_string_array(files);
+        return removed;
+    }
+
     return files;
 }
 
 
-struct DtwStringArray * dtw_list_all_recursively(const char *path){
+struct DtwStringArray * dtw_list_all_recursively(const char *path,bool concat_path){
 
-    struct DtwStringArray *dirs = dtw_list_dirs_recursively(path);
+    struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,DTW_CONCAT_PATH);
     
     struct DtwStringArray *all = dtw_constructor_string_array();
     
@@ -76,5 +87,12 @@ struct DtwStringArray * dtw_list_all_recursively(const char *path){
         sub_files->free_string_array(sub_files);
     }
     dirs->free_string_array(dirs);
+
+    if(!concat_path){
+
+        struct DtwStringArray *removed =  private_dtw_remove_start_path(all,path);
+        all->free_string_array(all);
+        return removed;
+    }
     return all;
 }
