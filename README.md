@@ -544,7 +544,7 @@ int main(){
 ### hardware_remove
 
 Will Delete the current Content 
-~~~
+~~~c
 
 #include "doTheWorld.c"
 
