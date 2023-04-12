@@ -486,6 +486,38 @@ int main(){
 
 }   
 ~~~
+## Transactions System 
+With the **hardware_modify** , **hardware_write**,**hardware_remove** 
+Functions , you can generate modifications, without implement it, in these 
+way , you can create massive atomic transactions, and execute all at once 
+
+### hardware_modify
+Will Modificate the original content, for exemple, if you change the extension of an file, it will modificate the original content 
+
+~~~c
+
+int main(){
+
+    struct DtwTreePart *part = dtw_tree_part_constructor(
+            "test.txt",
+            DTW_LOAD_CONTENT,
+            DTW_PRESERVE_CONTENT
+            );
+
+    struct DtwPath *path = part->path;
+
+    path->set_extension(path,"md");
+
+    part->hardware_modify(part,DTW_EXECUTE_NOW);
+    part->hardware_commit(part);
+
+}    
+~~~
+
+
+
+
+
 
 # Used Dependencies And Atributions
 DoTheWorld includes all self dependecies in the single file, so you dont need to care about it, but if you will use one of these librarys, dont include it in your code to avoid circular imports
