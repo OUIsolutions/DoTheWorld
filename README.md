@@ -566,11 +566,81 @@ int main(){
 ~~~
 
 ## Trees
-With Trees you can make massing folders and files modifications with 
+With Trees you can make massive folders and files modifications with 
 easy steps 
+### Loading Tree From Hardware
+~~~c
+#include "doTheWorld.c"
+
+int main(){
+
+    struct DtwTree *tree = dtw_tree_constructor();
+    tree->add_tree_from_hardware(
+            tree,
+            "exemple_folder",
+            DTW_LOAD_CONTENT,
+            DTW_PRESERVE_CONTENT,
+            DTW_PRESERVE_PATH_START
+            );
+    tree->represent(tree);
+
+}   
+~~~
+### Retriving Tree Parts
+
+#### Finding by Name 
+
+~~~c
+
+#include "doTheWorld.c"
 
 
+int main(){
 
+    struct DtwTree *tree = dtw_tree_constructor();
+    tree->add_tree_from_hardware(
+            tree,
+            "exemple_folder",
+            DTW_LOAD_CONTENT,
+            DTW_PRESERVE_CONTENT,
+            DTW_PRESERVE_PATH_START
+            );
+
+    struct DtwTreePart *deer = tree->find_part_by_name(tree,"deer.jpg");
+    if(deer){
+        deer->represent(deer);
+    }
+
+}   
+~~~
+### Finding By Full Path 
+~~~c
+
+#include "doTheWorld.c"
+
+int main(){
+
+    struct DtwTree *tree = dtw_tree_constructor();
+    tree->add_tree_from_hardware(
+            tree,
+            "exemple_folder",
+            DTW_LOAD_CONTENT,
+            DTW_PRESERVE_CONTENT,
+            DTW_PRESERVE_PATH_START
+            );
+
+    struct DtwTreePart *deer = tree->find_part_by_path(
+        tree,
+        "exemple_folder/deer.jpg"
+        );
+    if(deer){
+        deer->represent(deer);
+    }
+
+}   
+~~~
+### Lambda Functions 
+ 
 
 
 
