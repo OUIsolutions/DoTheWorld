@@ -1042,8 +1042,8 @@ char *dtw_concat_path(const char *path1, const char *path2){
 
 struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *paths,const char *path_to_remove){
     int size_to_remove = strlen(path_to_remove);
-
-    if(!dtw_ends_with(path_to_remove,"/")){
+    
+    if(dtw_ends_with(path_to_remove,"/")){
         size_to_remove+=1;
     }
 
