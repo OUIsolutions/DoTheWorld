@@ -2478,3 +2478,121 @@ void private_dtw_hardware_commit_tree(struct DtwTree *self){
         self->tree_parts[i]->hardware_commit(self->tree_parts[i]);
     }
 }
+
+
+
+struct DtwTransactionReport * dtw_constructor_transaction_report(){
+    struct DtwTransactionReport *new_report = (struct DtwTransactionReport *)malloc(sizeof(struct DtwTransactionReport));
+    new_report->write = dtw_constructor_string_array();
+    new_report->modify = dtw_constructor_string_array();
+    new_report->remove = dtw_constructor_string_array();
+    new_report->represent = private_dtw_represent_transaction;
+    new_report->free_transaction = private_dtw_free_transaction;
+    return new_report;
+}
+
+void  private_dtw_represent_transaction(struct DtwTransactionReport *report){
+    printf("Write:---------------------------------------\n");
+    report->write->represent(report->write);
+    printf("Modify:--------------------------------------\n");
+    report->modify->represent(report->modify);
+    printf("Remove:--------------------------------------\n");
+    report->remove->represent(report->remove);
+    puts("");
+}
+
+void  private_dtw_free_transaction(struct DtwTransactionReport *report){
+    report->write->free_string_array(report->write);
+    report->modify->free_string_array(report->modify);
+    report->remove->free_string_array(report->remove);
+    free(report);
+}
+//
+// Created by jurandi on 11-04-2023.
+//
+struct DtwTreePart *private_dtw_find_by_function(
+        struct DtwTree *self,
+        bool (*caller)(struct  DtwTreePart *part)
+){
+    for(int i = 0;i < self->size; i++){
+        struct DtwTreePart *current = self->tree_parts[i];
+        bool result = caller(current);
+        if(result){
+            return current;
+        }
+    }
+    return NULL;
+}
+
+struct DtwTree *private_dtw_filter(
+        struct DtwTree *self,
+        bool (*caller)(struct  DtwTreePart *part)
+){
+    struct DtwTree *filtered_tree = dtw_tree_constructor();
+
+    for(int i = 0;i < self->size; i++){
+
+        struct DtwTreePart *current = self->tree_parts[i];
+
+        bool result = caller(current);
+
+        if(result){
+            filtered_tree->add_tree_part_by_copy(filtered_tree,current);
+        }
+    }
+    return filtered_tree;
+}
+
+
+struct DtwTree *private_dtw_map(
+        struct DtwTree *self,
+        struct DtwTreePart *(*caller)(struct  DtwTreePart *part)
+){
+    struct DtwTree *mapped_tree = dtw_tree_constructor();
+
+    for(int i = 0;i < self->size; i++){
+        struct DtwTreePart *current = self->tree_parts[i];
+        struct DtwTreePart *copy = current->copy_tree_part(current);
+        struct DtwTreePart *result = caller(copy);
+        mapped_tree->add_tree_part_by_reference(mapped_tree,result);
+    }
+    return mapped_tree;
+}
+
+
+struct DtwTreePart *private_dtw_find_tree_part_by_name(struct DtwTree *self,const char *name){
+    for(int i = 0;i < self->size; i++){
+        struct DtwTreePart *current = self->tree_parts[i];
+        struct DtwPath *current_path = current->path;
+        char *current_name = current_path->get_full_name(current_path);
+        if(current_name){
+
+            if(strcmp(current_name, name) == 0){
+                free(current_name);
+                return current;
+            }
+            free(current_name);
+        }
+
+    }
+
+    return NULL;
+}
+
+struct DtwTreePart *private_dtw_find_tree_part_by_path(struct DtwTree *self,const char *path){
+    for(int i = 0;i < self->size; i++){
+        struct DtwTreePart *current = self->tree_parts[i];
+        struct DtwPath *current_path = current->path;
+        char *current_path_string = current_path->get_path(current_path);
+        if(current_path_string){
+            if(strcmp(current_path_string, path) == 0){
+                free(current_path_string);
+                return current;
+            }
+            free(current_path_string);
+        }
+
+    }
+
+    return NULL;
+}
