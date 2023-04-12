@@ -341,7 +341,7 @@ with tree concepts, you can manipulate files as trees, and implement IO modifica
 ~~~c
 
 #include "doTheWorld.c"
-#include <stdio.h>
+
 
 
 int main(){
@@ -359,7 +359,7 @@ int main(){
 ~~~c
 
 #include "doTheWorld.c"
-#include <stdio.h>
+
 
 int main(){
 
@@ -381,7 +381,6 @@ int main(){
 
 
 #include "doTheWorld.c"
-#include <stdio.h>
 
 
 int main(){
@@ -407,7 +406,7 @@ int main(){
 ~~~c 
 
 #include "doTheWorld.c"
-#include <stdio.h>
+
 
 
 int main(){
@@ -441,7 +440,6 @@ int main(){
 ~~~c
 
 #include "doTheWorld.c"
-#include <stdio.h>
 
 
 int main(){
@@ -468,7 +466,6 @@ int main(){
 ~~~c
 
 #include "doTheWorld.c"
-#include <stdio.h>
 
 int main(){
 
@@ -497,6 +494,8 @@ Will Modificate the original content, for exemple, if you change the extension o
 
 ~~~c
 
+#include "doTheWorld.c"
+
 int main(){
 
     struct DtwTreePart *part = dtw_tree_part_constructor(
@@ -522,7 +521,6 @@ old file
 ~~~c
 
 #include "doTheWorld.c"
-#include <stdio.h>
 
 
 int main(){
@@ -549,7 +547,7 @@ Will Delete the current Content
 ~~~
 
 #include "doTheWorld.c"
-#include <stdio.h>
+
 
 
 int main(){
