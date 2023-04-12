@@ -958,6 +958,22 @@ int main(){
 }
 ~~~
 
+#### Loading Json Tree from string 
+
+~~~c
+
+#include "doTheWorld.c"
+
+
+int main(){
+
+    struct DtwTree *tree = dtw_tree_constructor();
+    char *json_tree = dtw_load_string_file_content("test.json");
+    tree->loads_json_tree(tree,json_tree);
+    tree->insecure_hardware_write_tree(tree);
+}
+~~~
+
 
 
 
