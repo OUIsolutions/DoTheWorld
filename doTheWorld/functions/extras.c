@@ -104,7 +104,7 @@ struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *path
         char *current_path_string = paths->strings[i];
         int current_path_string_size = strlen(current_path_string);
 
-        char *new_string = malloc(current_path_string_size);
+        char *new_string = (char*)malloc(current_path_string_size +2);
         new_string[current_path_string_size] =0;
 
         strcpy(new_string,current_path_string);
