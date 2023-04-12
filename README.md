@@ -330,7 +330,8 @@ int main(int argc, char *argv[]){
     free(last_modification);
 }
 ~~~
-# Trees and TreeParts
+# Trees, TreeParts And Transactions
+
 with tree concepts, you can manipulate files as trees, and implement IO modifications with atomic concepts 
 
 
@@ -514,8 +515,57 @@ int main(){
 }    
 ~~~
 
+### hardware_write 
+Will write the file as an "new" file, ignoring the existence of the 
+old file 
+
+~~~c
+
+#include "doTheWorld.c"
+#include <stdio.h>
 
 
+int main(){
+
+    struct DtwTreePart *part = dtw_tree_part_constructor(
+            "test.txt",
+            DTW_LOAD_CONTENT,
+            DTW_PRESERVE_CONTENT
+            );
+
+    struct DtwPath *path = part->path;
+
+    path->set_extension(path,"md");
+
+    part->hardware_write(part,DTW_EXECUTE_NOW);
+    part->hardware_commit(part);
+
+}   
+~~~
+
+### hardware_remove
+
+Will Delete the current Content 
+~~~
+
+#include "doTheWorld.c"
+#include <stdio.h>
+
+
+int main(){
+
+    struct DtwTreePart *part = dtw_tree_part_constructor(
+            "test.txt",
+            DTW_LOAD_CONTENT,
+            DTW_PRESERVE_CONTENT
+            );
+
+
+    part->hardware_remove(part,DTW_EXECUTE_NOW);
+    part->hardware_commit(part);
+
+}   
+~~~
 
 
 
