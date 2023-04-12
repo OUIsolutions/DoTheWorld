@@ -764,8 +764,6 @@ int main(){
 #### Map
 ~~~c
 
-
-
 #include "doTheWorld.c"
 
 struct DtwTreePart * concat_test(struct DtwTreePart *part){
