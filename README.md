@@ -330,6 +330,139 @@ int main(int argc, char *argv[]){
     free(last_modification);
 }
 ~~~
+# Trees and TreeParts
+with tree concepts, you can manipulate files as trees, and implement IO modifications with atomic concepts 
+
+
+## Tree Parts 
+
+### Loading An TreePart 
+~~~c
+
+#include "doTheWorld.c"
+#include <stdio.h>
+
+
+int main(){
+
+    struct DtwTreePart *part = dtw_tree_part_constructor(
+            "main.c",
+            DTW_LOAD_CONTENT,
+            DTW_PRESERVE_CONTENT
+            );
+
+    part->represent(part);
+}   
+~~~
+### Creating an TreePart 
+~~~c
+
+#include "doTheWorld.c"
+#include <stdio.h>
+
+int main(){
+
+    struct DtwTreePart *part = dtw_tree_part_constructor(
+            "test.txt",
+            DTW_NOT_LOAD_CONTENT,
+            DTW_PRESERVE_CONTENT
+            );
+
+    part->set_string_content(part,"Hello World");
+    part->hardware_write(part,DTW_SET_AS_ACTION);
+    part->hardware_commit(part);
+    
+}   
+~~~
+### Generating Content Modifications
+
+~~~c
+
+
+#include "doTheWorld.c"
+#include <stdio.h>
+
+
+int main(){
+
+    struct DtwTreePart *part = dtw_tree_part_constructor(
+            "test.txt",
+            DTW_LOAD_CONTENT,
+            DTW_PRESERVE_CONTENT
+            );
+
+    //getting the content
+    char *content = part->get_content_string_by_reference(part);
+    char new_content[100] ="";
+    strcat(new_content,content);
+    strcat(new_content," New Mensage");
+    part->set_string_content(part,new_content);
+
+    part->hardware_write(part,DTW_SET_AS_ACTION);
+    part->hardware_commit(part);
+}   
+~~~
+### Getting  Path Paramns 
+~~~c 
+
+#include "doTheWorld.c"
+#include <stdio.h>
+
+
+int main(){
+
+    struct DtwTreePart *part = dtw_tree_part_constructor(
+            "test.txt",
+            DTW_LOAD_CONTENT,
+            DTW_PRESERVE_CONTENT
+            );
+
+    struct DtwPath *path = part->path;
+
+    char *name = path->get_full_name(path);
+    char *extension = path->get_extension(path);
+    char *dir = path->get_dir(path);
+    char *full_path = path->get_path(path);
+    printf("name : %s\n",name);
+    printf("extension : %s\n",extension);
+    printf("dir : %s\n",dir);
+    printf("full_path : %s\n",full_path);
+
+
+    free(name);
+    free(extension);
+    free(dir);
+    free(full_path);
+}   
+~~~
+### Changing path atributes 
+
+~~~c
+
+#include "doTheWorld.c"
+#include <stdio.h>
+
+
+int main(){
+
+    struct DtwTreePart *part = dtw_tree_part_constructor(
+            "test.txt",
+            DTW_LOAD_CONTENT,
+            DTW_PRESERVE_CONTENT
+            );
+
+    struct DtwPath *path = part->path;
+
+    path->set_dir(path,"a/b");
+    path->set_name(path,"test2");
+    path->set_extension(path,"md");
+    path->represent(path);
+    part->hardware_modify(part,DTW_SET_AS_ACTION);
+    part->hardware_commit(part);
+
+}   
+~~~
+
 
 # Used Dependencies And Atributions
 DoTheWorld includes all self dependecies in the single file, so you dont need to care about it, but if you will use one of these librarys, dont include it in your code to avoid circular imports
