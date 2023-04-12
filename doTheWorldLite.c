@@ -228,11 +228,14 @@ const char * private_dtw_convert_action_to_string(short action);
 short private_dtw_convert_string_to_action(const char *action);
 void private_dtw_add_end_bar_to_dirs_string_array(struct DtwStringArray * dirs);
 char *dtw_concat_path(const char *path1, const char *path2);
+struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *paths,const char *path_to_remove);
+void private_dtw_remove_double_bars(struct DtwStringArray*path);
 
 bool dtw_starts_with(const char *string, const char *prefix);
 bool dtw_ends_with(const char *string, const char *suffix);
 char *private_dtw_replace_string_once(const char *target, const char *old_element, const char *new_element);
 char* dtw_replace_string(const char *target, const char *old_element, const char *new_element);
+
 char *private_dtw_change_beginning_of_string(const char *target,int start_element_to_remove_size, const char *new_element);
 
 #define DTW_FILE_TYPE 1
@@ -300,14 +303,13 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
 struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool concat_path);
 #endif 
 
-struct DtwStringArray * dtw_list_dirs_recursively(const char *path);
+struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool concat_path);
 
 
+struct DtwStringArray *  dtw_list_files_recursively(const char *path,bool concat_path);
 
-struct DtwStringArray *  dtw_list_files_recursively(const char *path);
 
-
-struct DtwStringArray * dtw_list_all_recursively(const char *path);
+struct DtwStringArray * dtw_list_all_recursively(const char *path,bool concat_path);
 
 struct DtwPath {
     char *original_path;
@@ -1035,9 +1037,57 @@ char *dtw_concat_path(const char *path1, const char *path2){
             sprintf(path,"%s/%s",path1,path2);
       
         }
-   
-
     return path;
+}
+
+struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *paths,const char *path_to_remove){
+    int size_to_remove = strlen(path_to_remove);
+
+    if(!dtw_ends_with(path_to_remove,"/")){
+        size_to_remove+=1;
+    }
+
+    struct DtwStringArray *new_array = dtw_constructor_string_array();
+
+    for(int i =0; i < paths->size; i++){
+
+        char *current_path_string = paths->strings[i];
+        int current_path_string_size = strlen(current_path_string);
+
+        char *new_string = (char*)malloc(current_path_string_size +2);
+        new_string[current_path_string_size] =0;
+
+        strcpy(new_string,current_path_string);
+        memmove(
+                new_string,
+                current_path_string+size_to_remove,
+                strlen(current_path_string) - size_to_remove +1
+        );
+        if(strcmp(new_string,"/") == 0){
+            free(new_string);
+            continue;
+        }
+        new_array->add_string(new_array,new_string);
+        free(new_string);
+
+    }
+    return new_array;
+}
+
+void private_dtw_remove_double_bars(struct DtwStringArray*path){
+    for(int i =0;i< path->size;i++){
+        char *current_string = path->strings[i];
+        int current_string_len = strlen(current_string);
+        if(current_string_len <2){
+            continue;
+        }
+
+        char last_char = current_string[current_string_len-1];
+        char last_last_char = current_string[current_string_len-2];
+        if(last_char == '/' && last_last_char =='/'){
+            current_string[current_string_len-1] ='\0';
+        }
+    }
 }
 
 
@@ -1094,6 +1144,8 @@ char* dtw_replace_string(const char *target, const char *old_element, const char
     }
     return result;
 }
+
+
 
 char *private_dtw_change_beginning_of_string(const char *target,int start_element_to_remove_size, const char *new_element) {
     int target_size = strlen(target);
@@ -1156,7 +1208,7 @@ void dtw_remove_any(const char* path) {
         return;
     }
     
-    struct DtwStringArray *files = dtw_list_files_recursively(path);
+    struct DtwStringArray *files = dtw_list_files_recursively(path,DTW_CONCAT_PATH);
     int size = files->size;
     for(int i = 0; i < size; i++){
         remove(files->strings[i]);
@@ -1164,7 +1216,7 @@ void dtw_remove_any(const char* path) {
     files->free_string_array(files);
 
 
-    struct DtwStringArray *dirs = dtw_list_dirs_recursively(path);
+    struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,DTW_CONCAT_PATH);
     size = dirs->size;
     for(int i = dirs->size -1; i >=0; i--){
         rmdir(dirs->strings[i]);
@@ -1316,7 +1368,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
         dtw_remove_any(dest_path);
     }
     //creating dirs
-    struct DtwStringArray *dirs = dtw_list_dirs_recursively(src_path);
+    struct DtwStringArray *dirs = dtw_list_dirs_recursively(src_path,DTW_CONCAT_PATH);
     
     int size = dirs->size;
     int src_path_size = strlen(src_path);
@@ -1330,7 +1382,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
     dirs->free_string_array(dirs);
     
 
-    struct DtwStringArray *files = dtw_list_files_recursively(src_path);
+    struct DtwStringArray *files = dtw_list_files_recursively(src_path,DTW_CONCAT_PATH);
    
     for(int i = 0; i < files->size; i++){
         int file_size;
@@ -1547,7 +1599,7 @@ struct DtwStringArray *  dtw_list_basic(const char *path,int expected_type,bool 
 }
 #endif
 
-struct DtwStringArray * dtw_list_dirs_recursively(const char *path){
+struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool concat_path){
 
         struct  DtwStringArray *dirs  = dtw_constructor_string_array();
         //verify if the path is a directory
@@ -1575,18 +1627,21 @@ struct DtwStringArray * dtw_list_dirs_recursively(const char *path){
                
         }
         //unsifth path in dirs 
-        
-        
-      
+    private_dtw_remove_double_bars(dirs);
+        if(!concat_path){
 
+            struct DtwStringArray *removed =  private_dtw_remove_start_path(dirs,path);
+            dirs->free_string_array(dirs);
+            return removed;
+        }
         return dirs;
 }
 
 
 
-struct DtwStringArray *  dtw_list_files_recursively(const char *path){
+struct DtwStringArray *  dtw_list_files_recursively(const char *path,bool concat_path){
     
-    struct DtwStringArray *dirs = dtw_list_dirs_recursively(path);
+    struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,DTW_CONCAT_PATH);
     
     struct  DtwStringArray *files = dtw_constructor_string_array();
     
@@ -1596,13 +1651,21 @@ struct DtwStringArray *  dtw_list_files_recursively(const char *path){
         sub_files->free_string_array(sub_files);
     }
     dirs->free_string_array(dirs);
+
+    if(!concat_path){
+
+        struct DtwStringArray *removed =  private_dtw_remove_start_path(files,path);
+        files->free_string_array(files);
+        return removed;
+    }
+
     return files;
 }
 
 
-struct DtwStringArray * dtw_list_all_recursively(const char *path){
+struct DtwStringArray * dtw_list_all_recursively(const char *path,bool concat_path){
 
-    struct DtwStringArray *dirs = dtw_list_dirs_recursively(path);
+    struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,DTW_CONCAT_PATH);
     
     struct DtwStringArray *all = dtw_constructor_string_array();
     
@@ -1624,6 +1687,13 @@ struct DtwStringArray * dtw_list_all_recursively(const char *path){
         sub_files->free_string_array(sub_files);
     }
     dirs->free_string_array(dirs);
+    private_dtw_remove_double_bars(all);
+    if(!concat_path){
+
+        struct DtwStringArray *removed =  private_dtw_remove_start_path(all,path);
+        all->free_string_array(all);
+        return removed;
+    }
     return all;
 }
 
@@ -2424,9 +2494,7 @@ void private_dtw_add_tree_parts_from_string_array(struct DtwTree *self,struct Dt
 
 void private_dtw_add_tree_from_hardware(struct DtwTree *self,const char *path,bool load_content, bool preserve_content,bool preserve_path_start){
 
-
-
-    struct DtwStringArray *path_array = dtw_list_all_recursively(path);
+    struct DtwStringArray *path_array = dtw_list_all_recursively(path,DTW_CONCAT_PATH);
     self->add_tree_parts_from_string_array(self,path_array,load_content,preserve_content);
     path_array->free_string_array(path_array);
 
