@@ -235,7 +235,10 @@ The By Using multi dimension listage functions , you can see all itens listed in
 
 int main(int argc, char *argv[]){
 
-  struct DtwStringArray *files = dtw_list_files_recursively("exemple_folder");
+  struct DtwStringArray *files = dtw_list_files_recursively(
+    "exemple_folder",
+    DTW_CONCAT_PATH
+    );
   files->represent(files);
   files->free_string_array(files);
   return 0;
@@ -248,7 +251,10 @@ int main(int argc, char *argv[]){
 
 int main(int argc, char *argv[]){
 
-  struct DtwStringArray *files = dtw_list_dirs_recursively("exemple_folder");
+  struct DtwStringArray *files = dtw_list_dirs_recursively(
+    "exemple_folder",
+    DTW_CONCAT_PATH
+    );
   files->represent(files);
   files->free_string_array(files);
   return 0;
@@ -262,7 +268,11 @@ int main(int argc, char *argv[]){
 
 int main(int argc, char *argv[]){
 
-  struct DtwStringArray *files = dtw_list_all_recursively("exemple_folder");
+  struct DtwStringArray *files = dtw_list_all_recursively(
+    "exemple_folder",
+    DTW_CONCAT_PATH
+    );
+    
   files->represent(files);
   files->free_string_array(files);
   return 0;
