@@ -829,11 +829,12 @@ int main(){
         if(!extension){
             continue;
         }
-        printf("%s\n",extension);
         if(strcmp(extension,"txt") == 0){
             path->set_extension(path,"md");
+            part->hardware_modify(part,DTW_SET_AS_ACTION);
+
         }
-        part->hardware_modify(part,DTW_SET_AS_ACTION);
+        free(extension);
     }
 
     tree->hardware_commit_tree(tree);
@@ -844,6 +845,8 @@ int main(){
 With transactin Reports , you can see what will be modified
 
 ~~~c
+
+
 #include "doTheWorld.c"
 
 int main(){
@@ -869,10 +872,11 @@ int main(){
             part->hardware_modify(part,DTW_SET_AS_ACTION);
 
         }
+        free(extension);
     }
     struct DtwTransactionReport *report = tree->report(tree);
     report->represent(report);
-
+    report->free_transaction(report);
     tree->free_tree(tree);
 }
 ~~~
