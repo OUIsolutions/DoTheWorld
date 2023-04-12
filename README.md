@@ -803,8 +803,79 @@ int main(){
 ~~~
 
 ### Realizing Tree Modifications 
+With **hardware_commit_tree** you can commit all modifications at Once 
+turning system ultra secury
+~~~c
 
 
+#include "doTheWorld.c"
+
+
+
+int main(){
+
+    struct DtwTree *tree = dtw_tree_constructor();
+    tree->add_tree_from_hardware(
+            tree,
+            "exemple_folder",
+            DTW_LOAD_CONTENT,
+            DTW_PRESERVE_CONTENT,
+            DTW_PRESERVE_PATH_START
+    );
+    for(int i=0; i < tree->size;i++){
+        struct DtwTreePart *part = tree->tree_parts[i];
+        struct DtwPath *path = part->path;
+        char *extension = path->get_extension(path);
+        if(!extension){
+            continue;
+        }
+        printf("%s\n",extension);
+        if(strcmp(extension,"txt") == 0){
+            path->set_extension(path,"md");
+        }
+        part->hardware_modify(part,DTW_SET_AS_ACTION);
+    }
+
+    tree->hardware_commit_tree(tree);
+    tree->free_tree(tree);
+}
+~~~
+### Transaction Reports 
+With transactin Reports , you can see what will be modified
+
+~~~c
+#include "doTheWorld.c"
+
+int main(){
+
+    struct DtwTree *tree = dtw_tree_constructor();
+    tree->add_tree_from_hardware(
+            tree,
+            "exemple_folder",
+            DTW_LOAD_CONTENT,
+            DTW_PRESERVE_CONTENT,
+            DTW_PRESERVE_PATH_START
+    );
+    for(int i=0; i < tree->size;i++){
+        struct DtwTreePart *part = tree->tree_parts[i];
+        struct DtwPath *path = part->path;
+        char *extension = path->get_extension(path);
+        if(!extension){
+            continue;
+        }
+        printf("%s\n",extension);
+        if(strcmp(extension,"txt") == 0){
+            path->set_extension(path,"md");
+            part->hardware_modify(part,DTW_SET_AS_ACTION);
+
+        }
+    }
+    struct DtwTransactionReport *report = tree->report(tree);
+    report->represent(report);
+
+    tree->free_tree(tree);
+}
+~~~
 
 
 

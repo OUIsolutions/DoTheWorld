@@ -67,6 +67,7 @@ struct  DtwTreePart * private_dtw_copy_tree(struct DtwTreePart *self){
     
 
     new_tree_part->hawdware_content_sha = (char *)malloc(strlen(self->hawdware_content_sha)+1);
+    
     strcpy(new_tree_part->hawdware_content_sha,self->hawdware_content_sha);
     new_tree_part->content = (unsigned char *)malloc(self->content_size);
     
