@@ -488,7 +488,7 @@ int main(){
 }   
 ~~~
 ## Transactions System 
-With the **hardware_modify** , **hardware_write**,**hardware_remove** 
+With the **hardware_modify** , **hardware_write**, **hardware_remove** 
 Functions , you can generate modifications, without implement it, in these 
 way , you can create massive atomic transactions, and execute all at once 
 
@@ -566,6 +566,13 @@ int main(){
 
 }   
 ~~~
+
+## Trees
+With Trees you can make massing folders and files modifications with 
+easy steps 
+
+
+
 
 
 
