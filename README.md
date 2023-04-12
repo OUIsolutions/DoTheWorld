@@ -943,7 +943,20 @@ int main(){
     tree->free_tree(tree);
 }
 ~~~
+#### Loading Json Tree From file 
+If you want to recuperate the file you saved in the json file
+you can load it 
+~~~c
 
+#include "doTheWorld.c"
+
+int main(){
+
+    struct DtwTree *tree = dtw_tree_constructor();
+    tree->loads_json_tree_from_file(tree,"test.json");
+    tree->insecure_hardware_write_tree(tree);
+}
+~~~
 
 
 
