@@ -462,7 +462,30 @@ int main(){
 
 }   
 ~~~
+### Changing path Atributes at once 
 
+~~~c
+
+#include "doTheWorld.c"
+#include <stdio.h>
+
+int main(){
+
+    struct DtwTreePart *part = dtw_tree_part_constructor(
+            "test.txt",
+            DTW_LOAD_CONTENT,
+            DTW_PRESERVE_CONTENT
+            );
+
+    struct DtwPath *path = part->path;
+
+    path->set_path(path,"a/test.md");
+
+    part->hardware_modify(part,DTW_SET_AS_ACTION);
+    part->hardware_commit(part);
+
+}   
+~~~
 
 # Used Dependencies And Atributions
 DoTheWorld includes all self dependecies in the single file, so you dont need to care about it, but if you will use one of these librarys, dont include it in your code to avoid circular imports
