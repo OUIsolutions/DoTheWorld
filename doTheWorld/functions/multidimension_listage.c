@@ -27,7 +27,7 @@ struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool concat_p
                
         }
         //unsifth path in dirs 
-
+    private_dtw_remove_double_bars(dirs);
         if(!concat_path){
 
             struct DtwStringArray *removed =  private_dtw_remove_start_path(dirs,path);
@@ -87,7 +87,7 @@ struct DtwStringArray * dtw_list_all_recursively(const char *path,bool concat_pa
         sub_files->free_string_array(sub_files);
     }
     dirs->free_string_array(dirs);
-
+    private_dtw_remove_double_bars(all);
     if(!concat_path){
 
         struct DtwStringArray *removed =  private_dtw_remove_start_path(all,path);
