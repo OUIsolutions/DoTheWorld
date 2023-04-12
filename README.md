@@ -353,6 +353,7 @@ int main(){
             );
 
     part->represent(part);
+    part->free_tree_part(part);
 }   
 ~~~
 ### Creating an TreePart 
@@ -372,6 +373,7 @@ int main(){
     part->set_string_content(part,"Hello World");
     part->hardware_write(part,DTW_SET_AS_ACTION);
     part->hardware_commit(part);
+    part->free_tree_part(part);
     
 }   
 ~~~
@@ -400,6 +402,7 @@ int main(){
 
     part->hardware_write(part,DTW_SET_AS_ACTION);
     part->hardware_commit(part);
+    part->free_tree_part(part);
 }   
 ~~~
 ### Getting  Path Paramns 
@@ -433,6 +436,7 @@ int main(){
     free(extension);
     free(dir);
     free(full_path);
+    part->free_tree_part(part);
 }   
 ~~~
 ### Changing path atributes 
@@ -458,6 +462,7 @@ int main(){
     path->represent(path);
     part->hardware_modify(part,DTW_SET_AS_ACTION);
     part->hardware_commit(part);
+    part->free_tree_part(part);
 
 }   
 ~~~
@@ -481,6 +486,7 @@ int main(){
 
     part->hardware_modify(part,DTW_SET_AS_ACTION);
     part->hardware_commit(part);
+    part->free_tree_part(part);
 
 }   
 ~~~
@@ -510,6 +516,7 @@ int main(){
 
     part->hardware_modify(part,DTW_EXECUTE_NOW);
     part->hardware_commit(part);
+    part->free_tree_part(part);
 
 }    
 ~~~
@@ -537,6 +544,7 @@ int main(){
 
     part->hardware_write(part,DTW_EXECUTE_NOW);
     part->hardware_commit(part);
+    part->free_tree_part(part);
 
 }   
 ~~~
@@ -561,6 +569,7 @@ int main(){
 
     part->hardware_remove(part,DTW_EXECUTE_NOW);
     part->hardware_commit(part);
+    part->free_tree_part(part);
 
 }   
 ~~~
@@ -583,7 +592,7 @@ int main(){
             DTW_PRESERVE_PATH_START
             );
     tree->represent(tree);
-
+    tree->free_tree(tree);
 }   
 ~~~
 ### Retriving Tree Parts
@@ -610,7 +619,7 @@ int main(){
     if(deer){
         deer->represent(deer);
     }
-
+    tree->free_tree(tree);
 }   
 ~~~
 ### Finding By Full Path 
@@ -636,7 +645,7 @@ int main(){
     if(deer){
         deer->represent(deer);
     }
-
+    tree->free_tree(tree);
 }   
 ~~~
 ### Finding By Function
@@ -681,6 +690,7 @@ int main(){
     if(deer){
         deer->represent(deer);
     }
+    tree->free_tree(tree);
 
 }   
 ~~~
