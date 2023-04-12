@@ -128,7 +128,7 @@ void private_dtw_remove_double_bars(struct DtwStringArray*path){
     for(int i =0;i< path->size;i++){
         char *current_string = path->strings[i];
         int current_string_len = strlen(current_string);
-        if(current_string <2){
+        if(current_string_len <2){
             continue;
         }
 
