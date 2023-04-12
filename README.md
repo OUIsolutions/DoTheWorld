@@ -601,6 +601,28 @@ int main(){
     tree->free_tree(tree);
 }   
 ~~~
+
+### Iterating over Trees
+~~~c
+#include "doTheWorld.c"
+
+int main(){
+
+    struct DtwTree *tree = dtw_tree_constructor();
+    tree->add_tree_from_hardware(
+            tree,
+            "exemple_folder",
+            DTW_LOAD_CONTENT,
+            DTW_PRESERVE_CONTENT,
+            DTW_PRESERVE_PATH_START
+    );
+    for(int i = 0; i<tree->size;i++){
+        struct DtwTreePart *current_part = tree->tree_parts[i];
+        current_part->represent(current_part);
+    }
+    tree->free_tree(tree);
+}
+~~~
 ### Retriving Tree Parts
 
 #### Finding by Name 
@@ -740,6 +762,45 @@ int main(){
 }
 ~~~
 #### Map
+~~~c
+
+
+
+#include "doTheWorld.c"
+
+struct DtwTreePart * concat_test(struct DtwTreePart *part){
+    if(part->content_exist_in_memory && part->is_binary == false){
+        char *content = part->get_content_string_by_reference(part);
+        const char *mensage = " test";
+        char *new_content = (char*)malloc(strlen(content) + strlen(mensage)+ 2);
+        strcpy(new_content,content);
+        strcat(new_content,mensage);
+        part->set_string_content(part,new_content);
+        free(new_content);
+    }
+    return part;
+}
+
+int main(){
+
+    struct DtwTree *tree = dtw_tree_constructor();
+    tree->add_tree_from_hardware(
+            tree,
+            "exemple_folder",
+            DTW_LOAD_CONTENT,
+            DTW_PRESERVE_CONTENT,
+            DTW_PRESERVE_PATH_START
+    );
+    struct DtwTree *concated = tree->map(
+            tree,
+            concat_test
+            );
+
+    concated->represent(concated);
+    concated->free_tree(concated);
+    tree->free_tree(tree);
+}
+~~~
 
 
 
