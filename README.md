@@ -702,6 +702,44 @@ int main(){
 ~~~
 ### Map and Filter
 Trees suports even Maps or filters, it returns an new tree of the of the current lambda procediment 
+#### Filter 
+with filter you can filter the contents you want in an tree with an bool lambda
+~~~c
+
+
+#include "doTheWorld.c"
+
+bool filter_txt(struct DtwTreePart *part){
+    char *extension = part->path->get_extension(part->path);
+    if(!extension){
+        return false;
+    }
+    if(strcmp(extension,"txt") == 0){
+        return true;
+    }
+    return false;
+}
+
+int main(){
+
+    struct DtwTree *tree = dtw_tree_constructor();
+    tree->add_tree_from_hardware(
+            tree,
+            "exemple_folder",
+            DTW_LOAD_CONTENT,
+            DTW_PRESERVE_CONTENT,
+            DTW_PRESERVE_PATH_START
+    );
+    struct DtwTree *filtered = tree->filter(
+            tree,
+            filter_txt
+            );
+    filtered->represent(filtered);
+    filtered->free_tree(filtered);
+    tree->free_tree(tree);
+}
+~~~
+#### Map
 
 
 
