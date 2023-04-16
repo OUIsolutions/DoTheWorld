@@ -6,7 +6,7 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_conten
     self->path = dtw_constructor_path(path);
     self->content_exist_in_memory = false;
     self->content_exist_in_hardware = false;
-    self->last_modification_time = NULL;
+    self->last_modification_time = 0;
     self->is_binary = false;
     self->ignore = false;
     self->pending_action = 0;
