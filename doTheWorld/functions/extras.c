@@ -99,6 +99,7 @@ struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *path
         size_to_remove-=1;
     }
 
+
     struct DtwStringArray *new_array = dtw_constructor_string_array();
 
     for(int i =0; i < paths->size; i++){
@@ -115,10 +116,11 @@ struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *path
                 current_path_string+size_to_remove,
                 strlen(current_path_string) - size_to_remove +1
         );
-        if(strcmp(new_string,"/") == 0){
+        if(strcmp(new_string,"/") == 0  || strcmp(new_string,"") == 0){
             free(new_string);
             continue;
         }
+
         new_array->add_string(new_array,new_string);
         free(new_string);
 
