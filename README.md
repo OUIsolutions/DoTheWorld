@@ -9,10 +9,10 @@ but if you want to get an deep knolege see at **exemples** folder, you will find
 
 # Installation
 
-The installation of DoTheWorld is made to be as dumb as possible, just  download the file  amalgamation **doTheWorld.c**  and include in your project.
+The installation of DoTheWorld is made to be as dumb as possible, just  download the file  amalgamation **doTheWorld.h**  and include in your project.
 if this compiles then the library will work:
 ~~~c
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
     
@@ -21,12 +21,12 @@ int main(int argc, char *argv[]){
 }
 ~~~
 ## Lite Version
-You alson can download the **doTheWorldLite.c** file and use it, these version does not  have suport to json trees, witch means, all json functions wont work here 
+You alson can download the **doTheWorldLite.h** file and use it, these version does not  have suport to json trees, witch means, all json functions wont work here 
 
 ~~~c
 
 
-#include "doTheWorldLite.c"
+#include "doTheWorldLite.h"
 
 int main(int argc, char *argv[]){
 
@@ -34,11 +34,11 @@ int main(int argc, char *argv[]){
 }
 ~~~
 ## Full Folder
-Alternatively you can download the entire **doTheWorld** folder and include the **doTheWorld/doTheWorldMain.c** file
+Alternatively you can download the entire **doTheWorld** folder and include the **doTheWorld/doTheWorldMain.h** file
 
 ~~~c
 
-#include "doTheWorld/doTheWorldMain.c"
+#include "doTheWorld/doTheWorldMain.h"
 
 int main(int argc, char *argv[]){
 
@@ -53,7 +53,7 @@ if you are sure that the content you are going to read is not binary you can cal
 ~~~c
 
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
   //load a string file content
@@ -72,7 +72,7 @@ int main(int argc, char *argv[]){
 if you are not sure what data type a file is you can call the function **dtw_load_any_content**
 
 ~~~c
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
  
@@ -100,7 +100,7 @@ to write strings in text files is very simple, just call the function **dtw_writ
 (Note that the target directory does not need to exist, if it does not exist it will be created automatically)
 
 ~~~c
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 int main(int argc, char *argv[]){
   // Write a string to a file the path is auto created
   
@@ -116,7 +116,7 @@ if you want to write anything to a file, it's also very simple, use the **dtw_lo
 
 ~~~c
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
   //load the beer image
@@ -140,7 +140,7 @@ If you want to create dirs you can call the function **dtw_create_dir_recursivel
 passing the folder you want to create,dont wory about if the previews path dont exist 
 it will create till reachs the target folder
 ~~~c
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
  
@@ -154,7 +154,7 @@ With the function **dtw_copy_any** you can copy either files or folders to one p
 ~~~c
 
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
 
@@ -170,7 +170,7 @@ You can move either folders or files with **dtw_move_any** function
 
 ~~~c
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
 
@@ -188,7 +188,7 @@ With the listage functions you can extract all Strings Arrays of elements in an 
 ## Listing files
 ~~~c
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
 
@@ -203,7 +203,7 @@ int main(int argc, char *argv[]){
 ## Listing dirs 
 ~~~c
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
 
@@ -215,7 +215,7 @@ int main(int argc, char *argv[]){
 ~~~
 ## Listing All 
 ~~~c
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
 
@@ -231,7 +231,7 @@ The By Using multi dimension listage functions , you can see all itens listed in
 ## Listing Files Recursively
 ~~~c
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
 
@@ -247,7 +247,7 @@ int main(int argc, char *argv[]){
 ## Listing Dirs Recursively
 
 ~~~c
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
 
@@ -264,7 +264,7 @@ int main(int argc, char *argv[]){
 
 ~~~c
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
 
@@ -284,7 +284,7 @@ int main(int argc, char *argv[]){
 You can easly transform an binary file to an base64 string like these 
 ~~~c
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
    const char *deer_path = "exemple_folder/deer.jpg";
@@ -295,7 +295,7 @@ int main(int argc, char *argv[]){
 ~~~
 Or you can retransform an base64 file to binary again 
 ~~~c 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
    //creating the b64 file
@@ -316,7 +316,7 @@ int main(int argc, char *argv[]){
 Generating Sha from file 
 ~~~c 
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
 
@@ -329,7 +329,7 @@ int main(int argc, char *argv[]){
 ### Unix 
 ~~~c 
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
    int last_modification_in_unix = dtw_get_file_last_motification_in_unix("README.md");
@@ -338,7 +338,7 @@ int main(int argc, char *argv[]){
 ~~~
 ### Str
 ~~~c
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
     char *last_modification = dtw_get_file_last_motification_in_string("README.md");
@@ -356,7 +356,7 @@ with tree concepts, you can manipulate files as trees, and implement IO modifica
 ### Loading An TreePart 
 ~~~c
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 
 
@@ -375,7 +375,7 @@ int main(){
 ### Creating an TreePart 
 ~~~c
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 
 int main(){
@@ -398,7 +398,7 @@ int main(){
 ~~~c
 
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 
 int main(){
@@ -424,7 +424,7 @@ int main(){
 ### Getting  Path Paramns 
 ~~~c 
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 
 
@@ -459,7 +459,7 @@ int main(){
 
 ~~~c
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 
 int main(){
@@ -486,7 +486,7 @@ int main(){
 
 ~~~c
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 int main(){
 
@@ -516,7 +516,7 @@ Will Modificate the original content, for exemple, if you change the extension o
 
 ~~~c
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 int main(){
 
@@ -543,7 +543,7 @@ old file
 
 ~~~c
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 
 int main(){
@@ -570,7 +570,7 @@ int main(){
 Will Delete the current Content 
 ~~~c
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 
 
@@ -595,7 +595,7 @@ With Trees you can make massive folders and files modifications with
 easy steps 
 ### Loading Tree From Hardware
 ~~~c
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 int main(){
 
@@ -614,7 +614,7 @@ int main(){
 
 ### Iterating over Trees
 ~~~c
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 int main(){
 
@@ -639,7 +639,7 @@ int main(){
 
 ~~~c
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 
 int main(){
@@ -663,7 +663,7 @@ int main(){
 ### Finding By Full Path 
 ~~~c
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 int main(){
 
@@ -692,7 +692,7 @@ int main(){
 
 
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 bool test_if_deer(struct DtwTreePart*part){
 
     char *name = part->path->get_full_name(part->path);
@@ -739,7 +739,7 @@ with filter you can filter the contents you want in an tree with an bool lambda
 ~~~c
 
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 bool filter_txt(struct DtwTreePart *part){
     char *extension = part->path->get_extension(part->path);
@@ -774,7 +774,7 @@ int main(){
 #### Map
 ~~~c
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 struct DtwTreePart * concat_test(struct DtwTreePart *part){
     if(part->content_exist_in_memory && part->is_binary == false){
@@ -816,7 +816,7 @@ turning system ultra secury
 ~~~c
 
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 
 
@@ -855,7 +855,7 @@ With transactin Reports , you can see what will be modified
 ~~~c
 
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 int main(){
 
@@ -889,7 +889,7 @@ int main(){
 }
 ~~~
 ### Tree Json Operations 
-<b> WARNING: IT WONT WORK ON DoTheWorldLite.c </b>
+<b> WARNING: IT WONT WORK ON doTheWorldLite.h </b>
 With Json Trees Operations you can save or load trees, from hardware or strings in an super easy mode 
 
 #### Dumping Tree Json To File 
@@ -897,7 +897,7 @@ It will transform the tree in an json document
 
 ~~~c
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 
 int main(){
@@ -928,7 +928,7 @@ int main(){
 #### Dumping Json Tree to string 
 
 ~~~c
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 int main(){
 
     struct DtwTree *tree = dtw_tree_constructor();
@@ -958,7 +958,7 @@ If you want to recuperate the file you saved in the json file
 you can load it 
 ~~~c
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 int main(){
 
@@ -972,7 +972,7 @@ int main(){
 
 ~~~c
 
-#include "doTheWorld.c"
+#include "doTheWorld.h"
 
 
 int main(){
