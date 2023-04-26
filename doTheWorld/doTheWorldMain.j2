@@ -27,13 +27,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+#ifndef DO_THE_WORLD_H
+#define DO_THE_WORLD_H
 
 {%include "headers/imports.h" %}
 {%include "headers/string_array.h"%}
-{%include "headers/sha-256.h"%}
+
+
+#ifndef SHA_256_H
+
+{%include "dependencies/sha256/sha-256.h"%}
+{%include "dependencies/sha256/sha-256.c"%}
+
+#endif
+
+
+
 {%include "headers/base64.h"%}
 {%if not  lite %}
-{%include "headers/cJSON.h"%}
+
+#ifndef cJSON__h
+
+{%include "dependencies/cJSON/cJSON.h" %}
+{%include "dependencies/cJSON/cJSON.c" %}
+#endif    
 {%endif%}
 
 {%include "headers/extras.h"%}
@@ -48,10 +65,8 @@ SOFTWARE.
 {%endif%}
 {%include "headers/tree_part.h"%}
 {%include "headers/tree.h"%}
-{%include "dependencies/sha-256.c"%}
-{%if not  lite %}
-{%include "dependencies/cJSON.c"%}
-{%endif%}
+
+
 {%include "functions/base64.c"%}
 {%include "functions/extras.c"%}
 {%include "functions/string_functions.c"%}
@@ -74,3 +89,5 @@ SOFTWARE.
 {%endif%}
 {%include "structs/transaction_report.c"%}
 {%include "structs/tree/tree_finding.c"%}
+
+#endif
