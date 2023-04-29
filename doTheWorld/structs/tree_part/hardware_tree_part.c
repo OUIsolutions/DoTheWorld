@@ -12,15 +12,15 @@ void private_dtw_load_content_from_hardware(struct DtwTreePart *self){
         free(path);
         return;
     }
+    self->free_content(self);
     self->content = dtw_load_any_content(path,&size,&is_binary);
+    
     self->content_exist_in_memory = true;
     self->is_binary = is_binary;
     self->content_size = size;
     self->hardware_content_size = size;
-    self->last_modification_time = dtw_get_file_last_motification_in_unix(path);
     self->content_exist_in_hardware = true;
-    free(self->hawdware_content_sha);
-    self->hawdware_content_sha = dtw_generate_sha_from_string((const char*)self->content);
+
     free(path);
     
 }
@@ -114,7 +114,7 @@ bool private_dtw_hardware_modify(struct DtwTreePart *self,bool set_as_action){
 
     if(changed_path== false && self->content_exist_in_memory == true ){
     
-        if(self->content_exist_in_hardware == true){
+        if(self->metadata_loaded == true){
             char *hardware_sha = self->hawdware_content_sha;
             char *memory_sha = self->get_content_sha(self);
             if(strcmp(hardware_sha,memory_sha) != 0){

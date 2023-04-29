@@ -169,7 +169,7 @@ char * private_dtw_dumps_tree_json(struct DtwTree *self,bool minify,bool preserv
         }
 
 
-        if(preserve_hadware_data== true && tree_part->content_exist_in_hardware){
+        if(preserve_hadware_data == true && tree_part->metadata_loaded){
             cJSON_AddItemToObject(
                 json_tree_part, 
                 "hardware_sha256", 

@@ -35,6 +35,7 @@
         "multidimension_listage.h": "c",
         "tree_part.h": "c",
         "bitset": "c",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "dotheworldmain.h": "c"
     }
 }

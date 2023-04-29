@@ -1,8 +1,10 @@
 
 #define DTW_LOAD_CONTENT  true
-#define DTW_NOT_LOAD_CONTENT  false 
-#define DTW_NOT_PRESERVE_CONTENT  false
-#define DTW_PRESERVE_CONTENT  true
+#define DTW_NOT_LOAD_CONTENT  false
+
+#define DTW_LOAD_METADATA true
+#define DTW_NOT_LOAD_METADATA false
+
 
 #define DTW_IS_BINARY true
 #define DTW_IS_NOT_BINARY false
@@ -25,7 +27,9 @@ struct DtwTreePart{
     bool content_exist_in_hardware;
     bool ignore;
     bool is_binary;
+    bool metadata_loaded;
     char *hawdware_content_sha;
+
     unsigned char *content;
     int pending_action;
 
@@ -77,4 +81,4 @@ bool private_dtw_hardware_commit(struct DtwTreePart *self);
 void private_dtw_tree_part_destructor(struct DtwTreePart *self);
 struct DtwTreePart * private_dtw_copy_tree(struct DtwTreePart *self);
 
-struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_content,bool preserve_content);
+struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_content,bool load_meta_data);

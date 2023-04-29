@@ -100,24 +100,24 @@ void private_dtw_represent_tree(struct DtwTree *self){
     }
 }
 
-void private_dtw_add_tree_parts_from_string_array(struct DtwTree *self,struct DtwStringArray *paths,bool load_content,bool preserve_content){
+void private_dtw_add_tree_parts_from_string_array(struct DtwTree *self,struct DtwStringArray *paths,bool load_content,bool load_metadata){
     for(int i = 0; i < paths->size; i++){
 
         const char *current_path = paths->strings[i];
         struct DtwTreePart *tree_part = dtw_tree_part_constructor(
-            current_path,
-            load_content,
-            preserve_content
+                current_path,
+                load_content,
+                load_metadata
         );
         self->add_tree_part_by_reference(self, tree_part);
     }
 }
 
 
-void private_dtw_add_tree_from_hardware(struct DtwTree *self,const char *path,bool load_content, bool preserve_content,bool preserve_path_start){
+void private_dtw_add_tree_from_hardware(struct DtwTree *self, const char *path, bool load_content, bool load_meta_data, bool preserve_path_start){
 
     struct DtwStringArray *path_array = dtw_list_all_recursively(path,DTW_CONCAT_PATH);
-    self->add_tree_parts_from_string_array(self,path_array,load_content,preserve_content);
+    self->add_tree_parts_from_string_array(self, path_array, load_content, load_meta_data);
     path_array->free_string_array(path_array);
 
     if(preserve_path_start){

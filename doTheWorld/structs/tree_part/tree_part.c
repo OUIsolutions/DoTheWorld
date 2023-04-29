@@ -1,7 +1,7 @@
 
 
 
-struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_content,bool preserve_content){
+struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_content,bool load_meta_data){
     struct DtwTreePart *self = (struct DtwTreePart *)malloc(sizeof(struct DtwTreePart));
     self->path = dtw_constructor_path(path);
     self->content_exist_in_memory = false;
@@ -9,6 +9,7 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_conten
     self->last_modification_time = 0;
     self->is_binary = false;
     self->ignore = false;
+    self->metadata_loaded = false;
     self->pending_action = 0;
     self->hawdware_content_sha = (char *)malloc(0);
     self->content = (unsigned char *)malloc(0);
@@ -32,13 +33,22 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_conten
     self->hardware_commit = private_dtw_hardware_commit;
     self->free_tree_part = private_dtw_tree_part_destructor;
     self->copy_tree_part = private_dtw_copy_tree;
-    if(load_content){
+
+    if(load_content || load_meta_data){
         
         self->load_content_from_hardware(self);
-        if(preserve_content == false){
+        if(load_meta_data){
+            self->metadata_loaded = true;
+            self->last_modification_time = dtw_get_file_last_motification_in_unix(path);
+            free(self->hawdware_content_sha);
+            self->hawdware_content_sha = dtw_generate_sha_from_string((const char*)self->content);
+        }
+
+        if(!load_content){
             self->free_content(self);
         }
     }
+
     return self;
 }
 char *private_dtw_get_content_string_by_reference(struct DtwTreePart *self){
