@@ -4109,9 +4109,11 @@ void private_free_json_error(struct DtWJsonError *self);
 
 
 #define DTW_LOAD_CONTENT  true
-#define DTW_NOT_LOAD_CONTENT  false 
-#define DTW_NOT_PRESERVE_CONTENT  false
-#define DTW_PRESERVE_CONTENT  true
+#define DTW_NOT_LOAD_CONTENT  false
+
+#define DTW_LOAD_METADATA true
+#define DTW_NOT_LOAD_METADATA false
+
 
 #define DTW_IS_BINARY true
 #define DTW_IS_NOT_BINARY false
@@ -4134,7 +4136,9 @@ struct DtwTreePart{
     bool content_exist_in_hardware;
     bool ignore;
     bool is_binary;
+    bool metadata_loaded;
     char *hawdware_content_sha;
+
     unsigned char *content;
     int pending_action;
 
@@ -4186,7 +4190,7 @@ bool private_dtw_hardware_commit(struct DtwTreePart *self);
 void private_dtw_tree_part_destructor(struct DtwTreePart *self);
 struct DtwTreePart * private_dtw_copy_tree(struct DtwTreePart *self);
 
-struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_content,bool preserve_content);
+struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_content,bool load_meta_data);
 
 #define DTW_NOT_MINIFY  false
 #define DTW_MINIFY  true
@@ -4218,7 +4222,7 @@ struct  DtwTree{
     void (*add_tree_parts_from_string_array)(
         struct DtwTree *self,
         struct DtwStringArray *paths,
-        bool load_content,
+        bool load_metadata,
         bool preserve_content
     );
     
@@ -4232,7 +4236,7 @@ struct  DtwTree{
         struct DtwTree *self,
         const char *path,
         bool load_content,
-        bool preserve_content,
+        bool load_metadata,
         bool preserve_path_start
     );
     //Listage Functions
@@ -4340,13 +4344,13 @@ void private_dtw_add_tree_parts_from_string_array(
     struct DtwTree *self,
     struct DtwStringArray *paths,
     bool load_content,
-    bool preserve_content
+    bool load_metadata
 );
 void private_dtw_add_tree_from_hardware(
     struct DtwTree *self,
     const char *path,
     bool load_content,
-    bool preserve_content,
+    bool load_meta_data,
     bool preserve_path_start
 );
 
@@ -4361,27 +4365,6 @@ void private_dtw_hardware_commit_tree(struct DtwTree *self);
 void private_dtw_loads_json_tree(struct DtwTree *self,const char *content);
 void private_dtw_loads_json_tree_from_file(struct DtwTree *self,const char *path);
 
-#ifdef __cplusplus
-char * private_dtw_dumps_tree_json(
-    struct DtwTree *self,
-    bool minify=false,
-    bool preserve_content=true,
-    bool preserve_path_atributes=true,
-    bool preserve_hadware_data=false,
-    bool preserve_content_data=true,
-    bool consider_igonore=false
-    );
-void private_dtw_dumps_tree_json_to_file(
-    struct DtwTree *self,
-    const char *path,
-    bool minify=false,
-    bool preserve_content=true,
-    bool preserve_path_atributes=true,
-    bool preserve_hadware_data=false,
-    bool preserve_content_data=true,
-    bool consider_igonore=false
-    );
-#else 
 char * private_dtw_dumps_tree_json(
     struct DtwTree *self,
     bool minify,
@@ -4391,6 +4374,7 @@ char * private_dtw_dumps_tree_json(
     bool preserve_content_data,
     bool consider_igonore
     );
+
 void private_dtw_dumps_tree_json_to_file(
     struct DtwTree *self,
     const char *path,
@@ -4401,7 +4385,6 @@ void private_dtw_dumps_tree_json_to_file(
     bool preserve_content_data,
     bool consider_igonore
     );
-#endif
 //
 struct  DtwTree * dtw_tree_constructor();
 
@@ -5586,7 +5569,7 @@ void private_dtw_free_string_array(struct DtwStringArray *self){
 
 
 
-struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_content,bool preserve_content){
+struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_content,bool load_meta_data){
     struct DtwTreePart *self = (struct DtwTreePart *)malloc(sizeof(struct DtwTreePart));
     self->path = dtw_constructor_path(path);
     self->content_exist_in_memory = false;
@@ -5594,6 +5577,7 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_conten
     self->last_modification_time = 0;
     self->is_binary = false;
     self->ignore = false;
+    self->metadata_loaded = false;
     self->pending_action = 0;
     self->hawdware_content_sha = (char *)malloc(0);
     self->content = (unsigned char *)malloc(0);
@@ -5617,13 +5601,22 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_conten
     self->hardware_commit = private_dtw_hardware_commit;
     self->free_tree_part = private_dtw_tree_part_destructor;
     self->copy_tree_part = private_dtw_copy_tree;
-    if(load_content){
+
+    if(load_content || load_meta_data){
         
         self->load_content_from_hardware(self);
-        if(preserve_content == false){
+        if(load_meta_data){
+            self->metadata_loaded = true;
+            self->last_modification_time = dtw_get_file_last_motification_in_unix(path);
+            free(self->hawdware_content_sha);
+            self->hawdware_content_sha = dtw_generate_sha_from_string((const char*)self->content);
+        }
+
+        if(!load_content){
             self->free_content(self);
         }
     }
+
     return self;
 }
 char *private_dtw_get_content_string_by_reference(struct DtwTreePart *self){
@@ -5775,15 +5768,15 @@ void private_dtw_load_content_from_hardware(struct DtwTreePart *self){
         free(path);
         return;
     }
+    self->free_content(self);
     self->content = dtw_load_any_content(path,&size,&is_binary);
+    
     self->content_exist_in_memory = true;
     self->is_binary = is_binary;
     self->content_size = size;
     self->hardware_content_size = size;
-    self->last_modification_time = dtw_get_file_last_motification_in_unix(path);
     self->content_exist_in_hardware = true;
-    free(self->hawdware_content_sha);
-    self->hawdware_content_sha = dtw_generate_sha_from_string((const char*)self->content);
+
     free(path);
     
 }
@@ -5877,7 +5870,7 @@ bool private_dtw_hardware_modify(struct DtwTreePart *self,bool set_as_action){
 
     if(changed_path== false && self->content_exist_in_memory == true ){
     
-        if(self->content_exist_in_hardware == true){
+        if(self->metadata_loaded == true){
             char *hardware_sha = self->hawdware_content_sha;
             char *memory_sha = self->get_content_sha(self);
             if(strcmp(hardware_sha,memory_sha) != 0){
@@ -6024,24 +6017,24 @@ void private_dtw_represent_tree(struct DtwTree *self){
     }
 }
 
-void private_dtw_add_tree_parts_from_string_array(struct DtwTree *self,struct DtwStringArray *paths,bool load_content,bool preserve_content){
+void private_dtw_add_tree_parts_from_string_array(struct DtwTree *self,struct DtwStringArray *paths,bool load_content,bool load_metadata){
     for(int i = 0; i < paths->size; i++){
 
         const char *current_path = paths->strings[i];
         struct DtwTreePart *tree_part = dtw_tree_part_constructor(
-            current_path,
-            load_content,
-            preserve_content
+                current_path,
+                load_content,
+                load_metadata
         );
         self->add_tree_part_by_reference(self, tree_part);
     }
 }
 
 
-void private_dtw_add_tree_from_hardware(struct DtwTree *self,const char *path,bool load_content, bool preserve_content,bool preserve_path_start){
+void private_dtw_add_tree_from_hardware(struct DtwTree *self, const char *path, bool load_content, bool load_meta_data, bool preserve_path_start){
 
     struct DtwStringArray *path_array = dtw_list_all_recursively(path,DTW_CONCAT_PATH);
-    self->add_tree_parts_from_string_array(self,path_array,load_content,preserve_content);
+    self->add_tree_parts_from_string_array(self, path_array, load_content, load_meta_data);
     path_array->free_string_array(path_array);
 
     if(preserve_path_start){
@@ -6413,7 +6406,7 @@ char * private_dtw_dumps_tree_json(struct DtwTree *self,bool minify,bool preserv
         }
 
 
-        if(preserve_hadware_data== true && tree_part->content_exist_in_hardware){
+        if(preserve_hadware_data == true && tree_part->metadata_loaded){
             cJSON_AddItemToObject(
                 json_tree_part, 
                 "hardware_sha256", 
