@@ -365,7 +365,7 @@ int main(){
     struct DtwTreePart *part = dtw_tree_part_constructor(
             "main.c",
             DTW_LOAD_CONTENT,
-            DTW_PRESERVE_CONTENT
+            DTW_LOAD_METADATA
             );
 
     part->represent(part);
@@ -383,7 +383,7 @@ int main(){
     struct DtwTreePart *part = dtw_tree_part_constructor(
             "test.txt",
             DTW_NOT_LOAD_CONTENT,
-            DTW_PRESERVE_CONTENT
+            DTW_LOAD_METADATA
             );
 
     part->set_string_content(part,"Hello World");
@@ -406,7 +406,7 @@ int main(){
     struct DtwTreePart *part = dtw_tree_part_constructor(
             "test.txt",
             DTW_LOAD_CONTENT,
-            DTW_PRESERVE_CONTENT
+            DTW_LOAD_METADATA
             );
 
     //getting the content
@@ -433,7 +433,7 @@ int main(){
     struct DtwTreePart *part = dtw_tree_part_constructor(
             "test.txt",
             DTW_LOAD_CONTENT,
-            DTW_PRESERVE_CONTENT
+            DTW_LOAD_METADATA
             );
 
     struct DtwPath *path = part->path;
@@ -467,7 +467,7 @@ int main(){
     struct DtwTreePart *part = dtw_tree_part_constructor(
             "test.txt",
             DTW_LOAD_CONTENT,
-            DTW_PRESERVE_CONTENT
+            DTW_LOAD_METADATA
             );
 
     struct DtwPath *path = part->path;
@@ -493,7 +493,7 @@ int main(){
     struct DtwTreePart *part = dtw_tree_part_constructor(
             "test.txt",
             DTW_LOAD_CONTENT,
-            DTW_PRESERVE_CONTENT
+            DTW_LOAD_METADATA
             );
 
     struct DtwPath *path = part->path;
@@ -523,7 +523,7 @@ int main(){
     struct DtwTreePart *part = dtw_tree_part_constructor(
             "test.txt",
             DTW_LOAD_CONTENT,
-            DTW_PRESERVE_CONTENT
+            DTW_LOAD_METADATA
             );
 
     struct DtwPath *path = part->path;
@@ -551,7 +551,7 @@ int main(){
     struct DtwTreePart *part = dtw_tree_part_constructor(
             "test.txt",
             DTW_LOAD_CONTENT,
-            DTW_PRESERVE_CONTENT
+            DTW_LOAD_METADATA
             );
 
     struct DtwPath *path = part->path;
@@ -579,7 +579,7 @@ int main(){
     struct DtwTreePart *part = dtw_tree_part_constructor(
             "test.txt",
             DTW_LOAD_CONTENT,
-            DTW_PRESERVE_CONTENT
+            DTW_LOAD_METADATA
             );
 
 
@@ -604,7 +604,7 @@ int main(){
             tree,
             "exemple_folder",
             DTW_LOAD_CONTENT,
-            DTW_PRESERVE_CONTENT,
+            DTW_LOAD_METADATA,
             DTW_PRESERVE_PATH_START
             );
     tree->represent(tree);
@@ -623,7 +623,7 @@ int main(){
             tree,
             "exemple_folder",
             DTW_LOAD_CONTENT,
-            DTW_PRESERVE_CONTENT,
+            DTW_LOAD_METADATA,
             DTW_PRESERVE_PATH_START
     );
     for(int i = 0; i<tree->size;i++){
@@ -649,7 +649,7 @@ int main(){
             tree,
             "exemple_folder",
             DTW_LOAD_CONTENT,
-            DTW_PRESERVE_CONTENT,
+            DTW_LOAD_METADATA,
             DTW_PRESERVE_PATH_START
             );
 
@@ -672,7 +672,7 @@ int main(){
             tree,
             "exemple_folder",
             DTW_LOAD_CONTENT,
-            DTW_PRESERVE_CONTENT,
+            DTW_LOAD_METADATA,
             DTW_PRESERVE_PATH_START
             );
 
@@ -715,7 +715,7 @@ int main(){
             tree,
             "exemple_folder",
             DTW_LOAD_CONTENT,
-            DTW_PRESERVE_CONTENT,
+            DTW_LOAD_METADATA,
             DTW_PRESERVE_PATH_START
             );
 
@@ -759,7 +759,7 @@ int main(){
             tree,
             "exemple_folder",
             DTW_LOAD_CONTENT,
-            DTW_PRESERVE_CONTENT,
+            DTW_LOAD_METADATA,
             DTW_PRESERVE_PATH_START
     );
     struct DtwTree *filtered = tree->filter(
@@ -796,7 +796,7 @@ int main(){
             tree,
             "exemple_folder",
             DTW_LOAD_CONTENT,
-            DTW_PRESERVE_CONTENT,
+            DTW_LOAD_METADATA,
             DTW_PRESERVE_PATH_START
     );
     struct DtwTree *concated = tree->map(
@@ -827,7 +827,7 @@ int main(){
             tree,
             "exemple_folder",
             DTW_LOAD_CONTENT,
-            DTW_PRESERVE_CONTENT,
+            DTW_LOAD_METADATA,
             DTW_PRESERVE_PATH_START
     );
     for(int i=0; i < tree->size;i++){
@@ -864,7 +864,7 @@ int main(){
             tree,
             "exemple_folder",
             DTW_LOAD_CONTENT,
-            DTW_PRESERVE_CONTENT,
+            DTW_LOAD_METADATA,
             DTW_PRESERVE_PATH_START
     );
     for(int i=0; i < tree->size;i++){
@@ -907,17 +907,17 @@ int main(){
             tree,
             "exemple_folder",
             DTW_LOAD_CONTENT,
-            DTW_PRESERVE_CONTENT,
+            DTW_LOAD_METADATA,
             DTW_PRESERVE_PATH_START
     );
     tree->dumps_json_tree_to_file(
             tree,
             "test.json",
             DTW_NOT_MINIFY,
-            DTW_PRESERVE_CONTENT,
+            DTW_LOAD_METADATA,
             DTW_PRESERVE_PATH_ATRIBUTES,
             DTW_PRESERVE_HARDWARE_DATA,
-            DTW_PRESERVE_CONTENT_DATA,
+            DTW_LOAD_METADATA_DATA,
             DTW_CONSIDER_IGNORE
     );
 
@@ -936,17 +936,17 @@ int main(){
             tree,
             "exemple_folder",
             DTW_LOAD_CONTENT,
-            DTW_PRESERVE_CONTENT,
+            DTW_LOAD_METADATA,
             DTW_PRESERVE_PATH_START
     );
 
     char *content = tree->dumps_json_tree(
             tree,
             DTW_NOT_MINIFY,
-            DTW_PRESERVE_CONTENT,
+            DTW_LOAD_METADATA,
             DTW_PRESERVE_PATH_ATRIBUTES,
             DTW_PRESERVE_HARDWARE_DATA,
-            DTW_PRESERVE_CONTENT_DATA,
+            DTW_LOAD_METADATA_DATA,
             DTW_CONSIDER_IGNORE
     );
     printf("%s",content);
