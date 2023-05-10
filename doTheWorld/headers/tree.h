@@ -18,10 +18,17 @@
 struct  DtwTree{
     int size;
     struct DtwTreePart **tree_parts;
+
     void (*add_tree_part_by_copy)(
         struct DtwTree *self,
          struct DtwTreePart *tree_part
     );
+
+    void (*remove_tree_part)(
+            struct DtwTree *self,
+            int position
+    );
+
     void (*add_tree_part_by_reference)(
         struct DtwTree *self,
         struct DtwTreePart *tree_part
@@ -144,6 +151,7 @@ struct DtwTreePart *private_dtw_find_tree_part_by_name(struct DtwTree *self,cons
 struct DtwTreePart *private_dtw_find_tree_part_by_path(struct DtwTree *self,const char *path);
 
 void private_dtw_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_part);
+void private_dtw_remove_tree_part(struct DtwTree *self, int position);
 void private_dtw_add_tree_part_reference(struct DtwTree *self, struct DtwTreePart *tree_part);
 void private_dtw_free_tree(struct DtwTree *self);
 void private_dtw_represent_tree(struct DtwTree *self);

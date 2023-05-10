@@ -255,6 +255,7 @@ void private_dtw_represent_path(struct DtwPath *self){
     char *name = self->get_name(self);
     char *extension = self->get_extension(self);
     bool changed = self->changed(self);
+
     printf("First Path: %s\n", self->original_path ? self->original_path : "NULL");
     printf("Path: %s\n", path  ? path : "NULL");
     printf("Path Changed: %s\n", changed ? "true" : "false");

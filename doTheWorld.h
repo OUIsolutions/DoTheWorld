@@ -4211,10 +4211,17 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_conten
 struct  DtwTree{
     int size;
     struct DtwTreePart **tree_parts;
+
     void (*add_tree_part_by_copy)(
         struct DtwTree *self,
          struct DtwTreePart *tree_part
     );
+
+    void (*remove_tree_part)(
+            struct DtwTree *self,
+            int position
+    );
+
     void (*add_tree_part_by_reference)(
         struct DtwTree *self,
         struct DtwTreePart *tree_part
@@ -4337,6 +4344,7 @@ struct DtwTreePart *private_dtw_find_tree_part_by_name(struct DtwTree *self,cons
 struct DtwTreePart *private_dtw_find_tree_part_by_path(struct DtwTree *self,const char *path);
 
 void private_dtw_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_part);
+void private_dtw_remove_tree_part(struct DtwTree *self, int position);
 void private_dtw_add_tree_part_reference(struct DtwTree *self, struct DtwTreePart *tree_part);
 void private_dtw_free_tree(struct DtwTree *self);
 void private_dtw_represent_tree(struct DtwTree *self);
@@ -5468,6 +5476,7 @@ void private_dtw_represent_path(struct DtwPath *self){
     char *name = self->get_name(self);
     char *extension = self->get_extension(self);
     bool changed = self->changed(self);
+
     printf("First Path: %s\n", self->original_path ? self->original_path : "NULL");
     printf("Path: %s\n", path  ? path : "NULL");
     printf("Path Changed: %s\n", changed ? "true" : "false");
@@ -5605,7 +5614,8 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_conten
     if(load_content || load_meta_data){
         
         self->load_content_from_hardware(self);
-        if(load_meta_data){
+        if(load_meta_data && self->content_exist_in_memory){
+
             self->metadata_loaded = true;
             self->last_modification_time = dtw_get_file_last_motification_in_unix(path);
             free(self->hawdware_content_sha);
@@ -5924,6 +5934,7 @@ struct  DtwTree * dtw_tree_constructor(){
     self->size = 0;
     self->tree_parts = (struct DtwTreePart**)malloc(1);
     self->add_tree_part_by_copy = private_dtw_add_tree_part_copy;
+    self->remove_tree_part = private_dtw_remove_tree_part;
     self->get_sub_tree = private_dtw_get_sub_tree;
     self->add_tree_part_by_reference = private_dtw_add_tree_part_reference;
     self->free_tree = private_dtw_free_tree;
@@ -5979,6 +5990,17 @@ void private_dtw_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tr
     self->tree_parts =  (struct DtwTreePart**)realloc(self->tree_parts, self->size * sizeof(struct DtwTreePart *));
     self->tree_parts[self->size - 1] = tree_part->copy_tree_part(tree_part);
        
+}
+void private_dtw_remove_tree_part(struct DtwTree *self, int position){
+
+    self->size--;
+    self->tree_parts[position]->free_tree_part(self->tree_parts[position]);
+
+    for(int i = position; i<self->size; i++){
+        self->tree_parts[i] = self->tree_parts[i+1];
+    }
+
+
 }
 
 struct DtwTransactionReport * private_dtw_create_report(struct DtwTree *self){
@@ -6040,6 +6062,10 @@ void private_dtw_add_tree_from_hardware(struct DtwTree *self, const char *path, 
     if(preserve_path_start){
         return;
     }
+    if(self->size == 0){
+        return;
+    }
+    self->remove_tree_part(self,0);
 
     int size_to_remove = strlen(path);
     if(!dtw_ends_with(path,"/")){

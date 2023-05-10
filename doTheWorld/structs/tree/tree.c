@@ -7,6 +7,7 @@ struct  DtwTree * dtw_tree_constructor(){
     self->size = 0;
     self->tree_parts = (struct DtwTreePart**)malloc(1);
     self->add_tree_part_by_copy = private_dtw_add_tree_part_copy;
+    self->remove_tree_part = private_dtw_remove_tree_part;
     self->get_sub_tree = private_dtw_get_sub_tree;
     self->add_tree_part_by_reference = private_dtw_add_tree_part_reference;
     self->free_tree = private_dtw_free_tree;
@@ -62,6 +63,17 @@ void private_dtw_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tr
     self->tree_parts =  (struct DtwTreePart**)realloc(self->tree_parts, self->size * sizeof(struct DtwTreePart *));
     self->tree_parts[self->size - 1] = tree_part->copy_tree_part(tree_part);
        
+}
+void private_dtw_remove_tree_part(struct DtwTree *self, int position){
+
+    self->size--;
+    self->tree_parts[position]->free_tree_part(self->tree_parts[position]);
+
+    for(int i = position; i<self->size; i++){
+        self->tree_parts[i] = self->tree_parts[i+1];
+    }
+
+
 }
 
 struct DtwTransactionReport * private_dtw_create_report(struct DtwTree *self){
@@ -123,6 +135,10 @@ void private_dtw_add_tree_from_hardware(struct DtwTree *self, const char *path, 
     if(preserve_path_start){
         return;
     }
+    if(self->size == 0){
+        return;
+    }
+    self->remove_tree_part(self,0);
 
     int size_to_remove = strlen(path);
     if(!dtw_ends_with(path,"/")){

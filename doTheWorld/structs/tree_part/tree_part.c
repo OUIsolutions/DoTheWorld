@@ -37,7 +37,8 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_conten
     if(load_content || load_meta_data){
         
         self->load_content_from_hardware(self);
-        if(load_meta_data){
+        if(load_meta_data && self->content_exist_in_memory){
+
             self->metadata_loaded = true;
             self->last_modification_time = dtw_get_file_last_motification_in_unix(path);
             free(self->hawdware_content_sha);
