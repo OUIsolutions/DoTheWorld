@@ -77,7 +77,7 @@ void DtwTree_remove_tree_part(struct DtwTree *self, int position){
 }
 
 struct DtwTransactionReport * DtwTree_create_report(struct DtwTree *self){
-    struct DtwTransactionReport *report = dtw_constructor_transaction_report();
+    struct DtwTransactionReport *report = newDtwTransactionReport();
     for(int i = 0; i < self->size; i++){
         struct DtwTreePart *tree_part = self->tree_parts[i];
         int pending_action = tree_part->pending_action;

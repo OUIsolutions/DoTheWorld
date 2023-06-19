@@ -872,7 +872,7 @@ int main(){
     }
     struct DtwTransactionReport *report = tree->report(tree);
     report->represent(report);
-    report->free_transaction(report);
+    report->free(report);
     tree->free(tree);
 }
 ~~~

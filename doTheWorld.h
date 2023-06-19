@@ -4101,17 +4101,17 @@ void DtwPath_destructor_path(struct DtwPath *self);
 
 
 
-struct DtwTransactionReport{
+typedef struct DtwTransactionReport{
     struct DtwStringArray *write;
     struct DtwStringArray *modify;
     struct DtwStringArray *remove;
     void (*represent)(struct DtwTransactionReport *report);
-    void (*free_transaction)(struct DtwTransactionReport *report);
-};
+    void (*free)(struct DtwTransactionReport *report);
+}DtwTransactionReport;
 
-struct DtwTransactionReport * dtw_constructor_transaction_report();
-void  private_dtw_represent_transaction(struct DtwTransactionReport *report);
-void  private_dtw_free_transaction(struct DtwTransactionReport *report);
+struct DtwTransactionReport * newDtwTransactionReport();
+void  DtwTransactionReport_represent(struct DtwTransactionReport *report);
+void  DtwTransactionReport_free(struct DtwTransactionReport *report);
 
 #define DTW_JSON_ERROR_CODE_OK 0
 #define DTW_JSON_TYPE_ERROR 1
@@ -4120,18 +4120,21 @@ void  private_dtw_free_transaction(struct DtwTransactionReport *report);
 #define DTW_JSON_REQUIRED_VALUE_ERROR 4
 #define DTW_JSON_NOT_FOUND_ERROR 5
 #define DTW_ACTION_ERROR -1
-struct DtWJsonError {
+
+
+typedef struct DtwJsonError {
     int code;
     int position;
     const char *menssage;
-    void (*free_json_error)(struct DtWJsonError *self);
-    void (*represent)(struct DtWJsonError *self);
+    void (*free)(struct DtwJsonError *self);
+    void (*represent)(struct DtwJsonError *self);
 
-};
-struct DtWJsonError * newDtwJsonError();
-struct DtWJsonError * DtwJsonError_validate_json_tree(char *content);
-void private_represent_json_error(struct DtWJsonError *self);
-void private_free_json_error(struct DtWJsonError *self);
+}DtWJsonError;
+
+struct DtwJsonError * newDtwJsonError();
+struct DtwJsonError * DtwJsonError_validate_json_tree(char *content);
+void DtwJsonError_represent_json_error(struct DtwJsonError *self);
+void DtwJsonError_free_json_error(struct DtwJsonError *self);
 
 
 
@@ -6032,7 +6035,7 @@ void DtwTree_remove_tree_part(struct DtwTree *self, int position){
 }
 
 struct DtwTransactionReport * DtwTree_create_report(struct DtwTree *self){
-    struct DtwTransactionReport *report = dtw_constructor_transaction_report();
+    struct DtwTransactionReport *report = newDtwTransactionReport();
     for(int i = 0; i < self->size; i++){
         struct DtwTreePart *tree_part = self->tree_parts[i];
         int pending_action = tree_part->pending_action;
@@ -6237,20 +6240,20 @@ struct DtwTreePart *DtwTree_find_tree_part_by_path(struct DtwTree *self, const c
     return NULL;
 }
 
-struct DtWJsonError * newDtwJsonError(){
-    struct DtWJsonError *self =(struct DtWJsonError*)malloc(sizeof(struct DtWJsonError));
+struct DtwJsonError * newDtwJsonError(){
+    struct DtwJsonError *self =(struct DtwJsonError*)malloc(sizeof(struct DtwJsonError));
     self->code = DTW_JSON_ERROR_CODE_OK;
     self->position = 0;
     self->menssage = "ok";
-    self->free_json_error = private_free_json_error;
-    self->represent = private_represent_json_error;
+    self->free = DtwJsonError_free_json_error;
+    self->represent = DtwJsonError_represent_json_error;
     return self;
 }
 
 
-struct DtWJsonError * DtwJsonError_validate_json_tree(char *content){
+struct DtwJsonError * DtwJsonError_validate_json_tree(char *content){
  
-    struct DtWJsonError *json_error = private_dtw_json_error_constructor();
+    struct DtwJsonError *json_error = newDtwJsonError();
     cJSON *json_tree = cJSON_Parse(content);
     //verifiy if json_tre is not null
     if(json_tree == NULL){
@@ -6371,13 +6374,13 @@ struct DtWJsonError * DtwJsonError_validate_json_tree(char *content){
 }
 
 
-void private_represent_json_error(struct DtWJsonError *self){
+void DtwJsonError_represent_json_error(struct DtwJsonError *self){
     printf("code: %d\n", self->code);
     printf("position: %d\n", self->position);
     printf("menssage: %s\n", self->menssage);
 }
 
-void private_free_json_error(struct DtWJsonError *self){
+void DtwJsonError_free_json_error(struct DtwJsonError *self){
     free(self);
 }
 
@@ -6657,17 +6660,17 @@ void  DtwTree_dumps_tree_json_to_file(struct DtwTree *self, const char *path, bo
 
 
 
-struct DtwTransactionReport * dtw_constructor_transaction_report(){
+struct DtwTransactionReport * newDtwTransactionReport(){
     struct DtwTransactionReport *new_report = (struct DtwTransactionReport *)malloc(sizeof(struct DtwTransactionReport));
     new_report->write = newDtwStringArray();
     new_report->modify = newDtwStringArray();
     new_report->remove = newDtwStringArray();
-    new_report->represent = private_dtw_represent_transaction;
-    new_report->free_transaction = private_dtw_free_transaction;
+    new_report->represent = DtwTransactionReport_represent;
+    new_report->free = DtwTransactionReport_free;
     return new_report;
 }
 
-void  private_dtw_represent_transaction(struct DtwTransactionReport *report){
+void  DtwTransactionReport_represent(struct DtwTransactionReport *report){
     printf("Write:---------------------------------------\n");
     report->write->represent(report->write);
     printf("Modify:--------------------------------------\n");
@@ -6677,7 +6680,7 @@ void  private_dtw_represent_transaction(struct DtwTransactionReport *report){
     puts("");
 }
 
-void  private_dtw_free_transaction(struct DtwTransactionReport *report){
+void  DtwTransactionReport_free(struct DtwTransactionReport *report){
     report->write->free(report->write);
     report->modify->free(report->modify);
     report->remove->free(report->remove);
