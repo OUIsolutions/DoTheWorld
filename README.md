@@ -20,19 +20,7 @@ int main(int argc, char *argv[]){
     return 0;
 }
 ~~~
-## Lite Version
-You alson can download the **doTheWorldLite.h** file and use it, these version does not  have suport to json trees, witch means, all json functions wont work here 
 
-~~~c
-
-
-#include "doTheWorldLite.h"
-
-int main(int argc, char *argv[]){
-
-  return 0;
-}
-~~~
 ## Full Folder
 Alternatively you can download the entire **doTheWorld** folder and include the **doTheWorld/doTheWorldMain.h** file
 
@@ -889,7 +877,6 @@ int main(){
 }
 ~~~
 ### Tree Json Operations 
-<b> WARNING: IT WONT WORK ON doTheWorldLite.h </b>
 With Json Trees Operations you can save or load trees, from hardware or strings in an super easy mode 
 
 #### Dumping Tree Json To File 
