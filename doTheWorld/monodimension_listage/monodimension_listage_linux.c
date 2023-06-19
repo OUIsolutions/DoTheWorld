@@ -30,7 +30,7 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
     struct dirent *entry;
 
     //array of directories
-    struct DtwStringArray *dirs = dtw_constructor_string_array();
+    struct DtwStringArray *dirs = newDtwStringArray();
     int i = 0;
 
     //means that the directory is not found

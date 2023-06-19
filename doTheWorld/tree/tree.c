@@ -130,7 +130,7 @@ void private_dtw_add_tree_from_hardware(struct DtwTree *self, const char *path, 
 
     struct DtwStringArray *path_array = dtw_list_all_recursively(path,DTW_CONCAT_PATH);
     self->add_tree_parts_from_string_array(self, path_array, load_content, load_meta_data);
-    path_array->free_string_array(path_array);
+    path_array->free(path_array);
 
     if(preserve_path_start){
         return;

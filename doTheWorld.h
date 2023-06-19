@@ -3905,25 +3905,28 @@ char * calc_sha_256_from_file_returning_string(const char *filename)
 
 
 
-struct DtwStringArray {
-  int size;         
+typedef struct DtwStringArray {
+  int size;
 
   char **strings;       
   void (*set_value)(struct DtwStringArray *self,int index,const char *value);
   void (*add_string)(struct DtwStringArray *self,const char *string);
   void (*merge_string_array)(struct DtwStringArray *self, struct DtwStringArray *other);
   void (*represent)(struct DtwStringArray *self);
-  void (*free_string_array)(struct DtwStringArray *self);
+  void (*free)(struct DtwStringArray *self);
   int (*find_position)(struct DtwStringArray *self,const char *string);
-}; // End the structure with a semicolon
-int  private_dtw_find_position(struct DtwStringArray *self,const char *string);
-void private_dtw_add_string(struct DtwStringArray *self,const char *string);
-void private_dtw_merge_string_array(struct DtwStringArray *self, struct DtwStringArray *other);
-void private_dtw_represent_string_array(struct DtwStringArray *self);
-void private_dtw_free_string_array(struct DtwStringArray *self);
-void private_dtw_set_value(struct DtwStringArray *self,int index,const char *value);
 
-struct DtwStringArray * dtw_constructor_string_array();
+}DtwStringArray;
+
+// End the structure with a semicolon
+int  DtwStringArray_dtw_find_position(struct DtwStringArray *self, const char *string);
+void DtwStringArray_dtw_add_string(struct DtwStringArray *self, const char *string);
+void DtwStringArray_dtw_merge_string_array(struct DtwStringArray *self, struct DtwStringArray *other);
+void DtwStringArray_dtw_represent_string_array(struct DtwStringArray *self);
+void DtwStringArray_dtw_free_string_array(struct DtwStringArray *self);
+void DtwStringArray_dtw_set_value(struct DtwStringArray *self, int index, const char *value);
+
+struct DtwStringArray * newDtwStringArray();
 
 
 
@@ -4602,7 +4605,7 @@ struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *path
     }
 
 
-    struct DtwStringArray *new_array = dtw_constructor_string_array();
+    struct DtwStringArray *new_array = newDtwStringArray();
 
     for(int i =0; i < paths->size; i++){
 
@@ -4765,7 +4768,7 @@ void dtw_remove_any(const char* path) {
     for(int i = 0; i < size; i++){
         remove(files->strings[i]);
     }
-    files->free_string_array(files);
+    files->free(files);
 
 
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,DTW_CONCAT_PATH);
@@ -4773,7 +4776,7 @@ void dtw_remove_any(const char* path) {
     for(int i = dirs->size -1; i >=0; i--){
         rmdir(dirs->strings[i]);
     }
-    dirs->free_string_array(dirs);
+    dirs->free(dirs);
     //remove / to the path 
     
     
@@ -4931,7 +4934,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
         dtw_create_dir_recursively(new_path_dir);
         free(new_path_dir);
     }
-    dirs->free_string_array(dirs);
+    dirs->free(dirs);
     
 
     struct DtwStringArray *files = dtw_list_files_recursively(src_path,DTW_CONCAT_PATH);
@@ -4949,7 +4952,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
        
     }
 
-    files->free_string_array(files);
+    files->free(files);
     
     return true;
     
@@ -5008,7 +5011,7 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
     struct dirent *entry;
 
     //array of directories
-    struct DtwStringArray *dirs = dtw_constructor_string_array();
+    struct DtwStringArray *dirs = newDtwStringArray();
     int i = 0;
 
     //means that the directory is not found
@@ -5159,7 +5162,7 @@ struct DtwStringArray *  dtw_list_basic(const char *path,int expected_type,bool 
 
 struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool concat_path){
 
-        struct  DtwStringArray *dirs  = dtw_constructor_string_array();
+        struct  DtwStringArray *dirs  = newDtwStringArray();
         //verify if the path is a directory
     
         int entity_type = dtw_entity_type(path);
@@ -5180,7 +5183,7 @@ struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool concat_p
                     );
                 //merge the two dirs
                 dirs->merge_string_array(dirs,sub_dirs);
-                sub_dirs->free_string_array(sub_dirs);
+                sub_dirs->free(sub_dirs);
                 i++;
                
         }
@@ -5190,7 +5193,7 @@ struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool concat_p
         if(!concat_path){
 
             struct DtwStringArray *removed =  private_dtw_remove_start_path(dirs,path);
-            dirs->free_string_array(dirs);
+            dirs->free(dirs);
             return removed;
         }
         return dirs;
@@ -5202,19 +5205,19 @@ struct DtwStringArray *  dtw_list_files_recursively(const char *path,bool concat
     
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,DTW_CONCAT_PATH);
     
-    struct  DtwStringArray *files = dtw_constructor_string_array();
+    struct  DtwStringArray *files = newDtwStringArray();
     
     for(int i = 0; i < dirs->size; i++){
         struct DtwStringArray *sub_files = dtw_list_basic(dirs->strings[i],DTW_FILE_TYPE,DTW_CONCAT_PATH);
         files->merge_string_array(files,sub_files);
-        sub_files->free_string_array(sub_files);
+        sub_files->free(sub_files);
     }
-    dirs->free_string_array(dirs);
+    dirs->free(dirs);
 
     if(!concat_path){
 
         struct DtwStringArray *removed =  private_dtw_remove_start_path(files,path);
-        files->free_string_array(files);
+        files->free(files);
         return removed;
     }
 
@@ -5226,7 +5229,7 @@ struct DtwStringArray * dtw_list_all_recursively(const char *path,bool concat_pa
 
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,DTW_CONCAT_PATH);
     
-    struct DtwStringArray *all = dtw_constructor_string_array();
+    struct DtwStringArray *all = newDtwStringArray();
     
     for(int i = 0; i < dirs->size; i++){
 
@@ -5243,14 +5246,14 @@ struct DtwStringArray * dtw_list_all_recursively(const char *path,bool concat_pa
 
         struct DtwStringArray *sub_files = dtw_list_basic(dirs->strings[i],DTW_FILE_TYPE,true);
         all->merge_string_array(all,sub_files);
-        sub_files->free_string_array(sub_files);
+        sub_files->free(sub_files);
     }
-    dirs->free_string_array(dirs);
+    dirs->free(dirs);
     private_dtw_remove_double_bars(all);
     if(!concat_path){
 
         struct DtwStringArray *removed =  private_dtw_remove_start_path(all,path);
-        all->free_string_array(all);
+        all->free(all);
         return removed;
     }
     return all;
@@ -5543,21 +5546,21 @@ void private_dtw_destructor_path(struct DtwPath *self) {
 
 
 
-struct DtwStringArray * dtw_constructor_string_array(){
+struct DtwStringArray * newDtwStringArray(){
     struct DtwStringArray *self = (struct DtwStringArray*)malloc(sizeof(struct DtwStringArray));
     self->size = 0;
 
     self->strings = (char**)malloc(1);
-    self->add_string = private_dtw_add_string;
-    self->set_value = private_dtw_set_value;
-    self->merge_string_array = private_dtw_merge_string_array;
-    self->represent= private_dtw_represent_string_array;
-    self->free_string_array = private_dtw_free_string_array;
-    self->find_position = private_dtw_find_position;
+    self->add_string = DtwStringArray_dtw_add_string;
+    self->set_value = DtwStringArray_dtw_set_value;
+    self->merge_string_array = DtwStringArray_dtw_merge_string_array;
+    self->represent= DtwStringArray_dtw_represent_string_array;
+    self->free = DtwStringArray_dtw_free_string_array;
+    self->find_position = DtwStringArray_dtw_find_position;
     return self;
 }
 
-int private_dtw_find_position(struct DtwStringArray *self,const char *string){
+int DtwStringArray_dtw_find_position(struct DtwStringArray *self, const char *string){
     for(int i = 0; i < self->size; i++){
         if(strcmp(self->strings[i], string) == 0){
             return i;
@@ -5565,7 +5568,7 @@ int private_dtw_find_position(struct DtwStringArray *self,const char *string){
     }
     return -1;
 }
-void private_dtw_set_value(struct DtwStringArray *self,int index,const char *value){
+void DtwStringArray_dtw_set_value(struct DtwStringArray *self, int index, const char *value){
     if(index < self->size && index >= 0){
         int size = strlen(value);
         self->strings[index] = (char*)realloc(self->strings[index], size + 1);
@@ -5574,7 +5577,7 @@ void private_dtw_set_value(struct DtwStringArray *self,int index,const char *val
     }
 }
 // Function prototypes
-void private_dtw_add_string(struct DtwStringArray *self,const char *string){
+void DtwStringArray_dtw_add_string(struct DtwStringArray *self, const char *string){
     self->size++;
     self->strings =  (char**)realloc(self->strings, self->size * sizeof(char *));
     self->strings[self->size - 1] = (char*)malloc(strlen(string) + 1);
@@ -5583,19 +5586,19 @@ void private_dtw_add_string(struct DtwStringArray *self,const char *string){
 }
 
 
-void private_dtw_merge_string_array(struct DtwStringArray *self, struct DtwStringArray *other){
+void DtwStringArray_dtw_merge_string_array(struct DtwStringArray *self, struct DtwStringArray *other){
     for(int i = 0; i < other->size; i++){
         self->add_string(self, other->strings[i]);
     }
 }
 
 
-void private_dtw_represent_string_array(struct DtwStringArray *self){
+void DtwStringArray_dtw_represent_string_array(struct DtwStringArray *self){
     for(int i = 0; i < self->size; i++){
         printf("%s\n", self->strings[i]);
     }
 }
-void private_dtw_free_string_array(struct DtwStringArray *self){
+void DtwStringArray_dtw_free_string_array(struct DtwStringArray *self){
     for(int i = 0; i < self->size; i++){
         free(self->strings[i]);
     }
@@ -6090,7 +6093,7 @@ void private_dtw_add_tree_from_hardware(struct DtwTree *self, const char *path, 
 
     struct DtwStringArray *path_array = dtw_list_all_recursively(path,DTW_CONCAT_PATH);
     self->add_tree_parts_from_string_array(self, path_array, load_content, load_meta_data);
-    path_array->free_string_array(path_array);
+    path_array->free(path_array);
 
     if(preserve_path_start){
         return;
@@ -6664,9 +6667,9 @@ void  private_dtw_dumps_tree_json_to_file(struct DtwTree *self,const char *path,
 
 struct DtwTransactionReport * dtw_constructor_transaction_report(){
     struct DtwTransactionReport *new_report = (struct DtwTransactionReport *)malloc(sizeof(struct DtwTransactionReport));
-    new_report->write = dtw_constructor_string_array();
-    new_report->modify = dtw_constructor_string_array();
-    new_report->remove = dtw_constructor_string_array();
+    new_report->write = newDtwStringArray();
+    new_report->modify = newDtwStringArray();
+    new_report->remove = newDtwStringArray();
     new_report->represent = private_dtw_represent_transaction;
     new_report->free_transaction = private_dtw_free_transaction;
     return new_report;
@@ -6683,9 +6686,9 @@ void  private_dtw_represent_transaction(struct DtwTransactionReport *report){
 }
 
 void  private_dtw_free_transaction(struct DtwTransactionReport *report){
-    report->write->free_string_array(report->write);
-    report->modify->free_string_array(report->modify);
-    report->remove->free_string_array(report->remove);
+    report->write->free(report->write);
+    report->modify->free(report->modify);
+    report->remove->free(report->remove);
     free(report);
 }
 

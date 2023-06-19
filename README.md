@@ -184,7 +184,7 @@ int main(int argc, char *argv[]){
   for(int i = 0; i < files->size; i++){
     printf("%s\n", files->strings[i]);
   }
-  files->free_string_array(files);
+  files->free(files);
   return 0;
 }
 ~~~
@@ -197,7 +197,7 @@ int main(int argc, char *argv[]){
 
   struct DtwStringArray *files = dtw_list_dirs("exemple_folder", DTW_CONCAT_PATH);
   files->represent(files);
-  files->free_string_array(files);
+  files->free(files);
   return 0;
 }
 ~~~
@@ -209,7 +209,7 @@ int main(int argc, char *argv[]){
 
   struct DtwStringArray *all = dtw_list_all("exemple_folder",DTW_CONCAT_PATH);
   all->represent(all);
-  all->free_string_array(all);
+  all->free(all);
   return 0;
 }
 ~~~
@@ -228,7 +228,7 @@ int main(int argc, char *argv[]){
     DTW_CONCAT_PATH
     );
   files->represent(files);
-  files->free_string_array(files);
+  files->free(files);
   return 0;
 }
 ~~~
@@ -244,7 +244,7 @@ int main(int argc, char *argv[]){
     DTW_CONCAT_PATH
     );
   files->represent(files);
-  files->free_string_array(files);
+  files->free(files);
   return 0;
 }
 ~~~
@@ -262,7 +262,7 @@ int main(int argc, char *argv[]){
     );
     
   files->represent(files);
-  files->free_string_array(files);
+  files->free(files);
   return 0;
 }
 ~~~

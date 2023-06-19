@@ -100,7 +100,7 @@ struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *path
     }
 
 
-    struct DtwStringArray *new_array = dtw_constructor_string_array();
+    struct DtwStringArray *new_array = newDtwStringArray();
 
     for(int i =0; i < paths->size; i++){
 

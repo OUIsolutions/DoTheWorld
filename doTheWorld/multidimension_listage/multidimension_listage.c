@@ -1,7 +1,7 @@
 
 struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool concat_path){
 
-        struct  DtwStringArray *dirs  = dtw_constructor_string_array();
+        struct  DtwStringArray *dirs  = newDtwStringArray();
         //verify if the path is a directory
     
         int entity_type = dtw_entity_type(path);
@@ -22,7 +22,7 @@ struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool concat_p
                     );
                 //merge the two dirs
                 dirs->merge_string_array(dirs,sub_dirs);
-                sub_dirs->free_string_array(sub_dirs);
+                sub_dirs->free(sub_dirs);
                 i++;
                
         }
@@ -32,7 +32,7 @@ struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool concat_p
         if(!concat_path){
 
             struct DtwStringArray *removed =  private_dtw_remove_start_path(dirs,path);
-            dirs->free_string_array(dirs);
+            dirs->free(dirs);
             return removed;
         }
         return dirs;
@@ -44,19 +44,19 @@ struct DtwStringArray *  dtw_list_files_recursively(const char *path,bool concat
     
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,DTW_CONCAT_PATH);
     
-    struct  DtwStringArray *files = dtw_constructor_string_array();
+    struct  DtwStringArray *files = newDtwStringArray();
     
     for(int i = 0; i < dirs->size; i++){
         struct DtwStringArray *sub_files = dtw_list_basic(dirs->strings[i],DTW_FILE_TYPE,DTW_CONCAT_PATH);
         files->merge_string_array(files,sub_files);
-        sub_files->free_string_array(sub_files);
+        sub_files->free(sub_files);
     }
-    dirs->free_string_array(dirs);
+    dirs->free(dirs);
 
     if(!concat_path){
 
         struct DtwStringArray *removed =  private_dtw_remove_start_path(files,path);
-        files->free_string_array(files);
+        files->free(files);
         return removed;
     }
 
@@ -68,7 +68,7 @@ struct DtwStringArray * dtw_list_all_recursively(const char *path,bool concat_pa
 
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,DTW_CONCAT_PATH);
     
-    struct DtwStringArray *all = dtw_constructor_string_array();
+    struct DtwStringArray *all = newDtwStringArray();
     
     for(int i = 0; i < dirs->size; i++){
 
@@ -85,14 +85,14 @@ struct DtwStringArray * dtw_list_all_recursively(const char *path,bool concat_pa
 
         struct DtwStringArray *sub_files = dtw_list_basic(dirs->strings[i],DTW_FILE_TYPE,true);
         all->merge_string_array(all,sub_files);
-        sub_files->free_string_array(sub_files);
+        sub_files->free(sub_files);
     }
-    dirs->free_string_array(dirs);
+    dirs->free(dirs);
     private_dtw_remove_double_bars(all);
     if(!concat_path){
 
         struct DtwStringArray *removed =  private_dtw_remove_start_path(all,path);
-        all->free_string_array(all);
+        all->free(all);
         return removed;
     }
     return all;
