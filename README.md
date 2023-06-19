@@ -350,14 +350,14 @@ with tree concepts, you can manipulate files as trees, and implement IO modifica
 
 int main(){
 
-    struct DtwTreePart *part = dtw_tree_part_constructor(
+    struct DtwTreePart *part = newDtwTreePart(
             "main.c",
             DTW_LOAD_CONTENT,
             DTW_LOAD_METADATA
             );
 
     part->represent(part);
-    part->free_tree_part(part);
+    part->free(part);
 }   
 ~~~
 ### Creating an TreePart 
@@ -368,7 +368,7 @@ int main(){
 
 int main(){
 
-    struct DtwTreePart *part = dtw_tree_part_constructor(
+    struct DtwTreePart *part = newDtwTreePart(
             "test.txt",
             DTW_NOT_LOAD_CONTENT,
             DTW_LOAD_METADATA
@@ -377,7 +377,7 @@ int main(){
     part->set_string_content(part,"Hello World");
     part->hardware_write(part,DTW_SET_AS_ACTION);
     part->hardware_commit(part);
-    part->free_tree_part(part);
+    part->free(part);
     
 }   
 ~~~
@@ -391,7 +391,7 @@ int main(){
 
 int main(){
 
-    struct DtwTreePart *part = dtw_tree_part_constructor(
+    struct DtwTreePart *part = newDtwTreePart(
             "test.txt",
             DTW_LOAD_CONTENT,
             DTW_LOAD_METADATA
@@ -406,7 +406,7 @@ int main(){
 
     part->hardware_write(part,DTW_SET_AS_ACTION);
     part->hardware_commit(part);
-    part->free_tree_part(part);
+    part->free(part);
 }   
 ~~~
 ### Getting  Path Paramns 
@@ -418,7 +418,7 @@ int main(){
 
 int main(){
 
-    struct DtwTreePart *part = dtw_tree_part_constructor(
+    struct DtwTreePart *part = newDtwTreePart(
             "test.txt",
             DTW_LOAD_CONTENT,
             DTW_LOAD_METADATA
@@ -440,7 +440,7 @@ int main(){
     free(extension);
     free(dir);
     free(full_path);
-    part->free_tree_part(part);
+    part->free(part);
 }   
 ~~~
 ### Changing path atributes 
@@ -452,7 +452,7 @@ int main(){
 
 int main(){
 
-    struct DtwTreePart *part = dtw_tree_part_constructor(
+    struct DtwTreePart *part = newDtwTreePart(
             "test.txt",
             DTW_LOAD_CONTENT,
             DTW_LOAD_METADATA
@@ -466,7 +466,7 @@ int main(){
     path->represent(path);
     part->hardware_modify(part,DTW_SET_AS_ACTION);
     part->hardware_commit(part);
-    part->free_tree_part(part);
+    part->free(part);
 
 }   
 ~~~
@@ -478,7 +478,7 @@ int main(){
 
 int main(){
 
-    struct DtwTreePart *part = dtw_tree_part_constructor(
+    struct DtwTreePart *part = newDtwTreePart(
             "test.txt",
             DTW_LOAD_CONTENT,
             DTW_LOAD_METADATA
@@ -490,7 +490,7 @@ int main(){
 
     part->hardware_modify(part,DTW_SET_AS_ACTION);
     part->hardware_commit(part);
-    part->free_tree_part(part);
+    part->free(part);
 
 }   
 ~~~
@@ -508,7 +508,7 @@ Will Modificate the original content, for exemple, if you change the extension o
 
 int main(){
 
-    struct DtwTreePart *part = dtw_tree_part_constructor(
+    struct DtwTreePart *part = newDtwTreePart(
             "test.txt",
             DTW_LOAD_CONTENT,
             DTW_LOAD_METADATA
@@ -520,7 +520,7 @@ int main(){
 
     part->hardware_modify(part,DTW_EXECUTE_NOW);
     part->hardware_commit(part);
-    part->free_tree_part(part);
+    part->free(part);
 
 }    
 ~~~
@@ -536,7 +536,7 @@ old file
 
 int main(){
 
-    struct DtwTreePart *part = dtw_tree_part_constructor(
+    struct DtwTreePart *part = newDtwTreePart(
             "test.txt",
             DTW_LOAD_CONTENT,
             DTW_LOAD_METADATA
@@ -548,7 +548,7 @@ int main(){
 
     part->hardware_write(part,DTW_EXECUTE_NOW);
     part->hardware_commit(part);
-    part->free_tree_part(part);
+    part->free(part);
 
 }   
 ~~~
@@ -564,7 +564,7 @@ Will Delete the current Content
 
 int main(){
 
-    struct DtwTreePart *part = dtw_tree_part_constructor(
+    struct DtwTreePart *part = newDtwTreePart(
             "test.txt",
             DTW_LOAD_CONTENT,
             DTW_LOAD_METADATA
@@ -573,7 +573,7 @@ int main(){
 
     part->hardware_remove(part,DTW_EXECUTE_NOW);
     part->hardware_commit(part);
-    part->free_tree_part(part);
+    part->free(part);
 
 }   
 ~~~

@@ -1,7 +1,7 @@
 
 
 
-struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_content,bool load_meta_data){
+struct DtwTreePart * newDtwTreePart(const char *path, bool load_content, bool load_meta_data){
     struct DtwTreePart *self = (struct DtwTreePart *)malloc(sizeof(struct DtwTreePart));
     self->path = newDtwPath(path);
     self->content_exist_in_memory = false;
@@ -17,22 +17,22 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_conten
     self->hardware_content_size = 0;
 
 
-    self->get_content_string_by_reference = private_dtw_get_content_string_by_reference;
-    self->get_content_binary_by_reference = private_dtw_get_content_binary_by_reference;
-    self->load_content_from_hardware = private_dtw_load_content_from_hardware;
-    self->set_any_content = private_dtw_set_any_content;
-    self->set_string_content = private_dtw_set_string_content;
-    self->set_binary_content = private_dtw_set_binary_content;
-    self->get_content_sha = private_dtw_get_content_sha;
-    self->last_modification_time_in_string = private_dtw_last_modification_time_in_string;
-    self->free_content = private_dtw_free_content;
-    self->represent = private_dtw_represent_tree_part;
-    self->hardware_remove = private_dtw_hardware_remove;
-    self->hardware_write = private_dtw_hardware_write;
-    self->hardware_modify = private_dtw_hardware_modify;
-    self->hardware_commit = private_dtw_hardware_commit;
-    self->free_tree_part = private_dtw_tree_part_destructor;
-    self->copy_tree_part = private_dtw_copy_tree;
+    self->get_content_string_by_reference = DtwTreePart_get_content_string_by_reference;
+    self->get_content_binary_by_reference = DtwTreePart_get_content_binary_by_reference;
+    self->load_content_from_hardware = DtwTreePart_load_content_from_hardware;
+    self->set_any_content = DtwTreePart_set_any_content;
+    self->set_string_content = DtwTreePart_set_string_content;
+    self->set_binary_content = DtwTreePart_set_binary_content;
+    self->get_content_sha = DtwTreePart_get_content_sha;
+    self->last_modification_time_in_string = DtwTreePart_last_modification_time_in_string;
+    self->free_content = DtwTreePart_free_content;
+    self->represent = DtwTreePart_represent_tree_part;
+    self->hardware_remove = DtwTreePart_hardware_remove;
+    self->hardware_write = DtwTreePart_hardware_write;
+    self->hardware_modify = DtwTreePart_hardware_modify;
+    self->hardware_commit = DtwTreePart_hardware_commit;
+    self->free = DtwTreePart_free;
+    self->copy_tree_part = DtwTreePart_copy_tree;
 
     if(load_content || load_meta_data){
         
@@ -52,14 +52,14 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_conten
 
     return self;
 }
-char *private_dtw_get_content_string_by_reference(struct DtwTreePart *self){
+char *DtwTreePart_get_content_string_by_reference(struct DtwTreePart *self){
     if(self->content_exist_in_memory == true){
         return (char *)self->content;
     }
     return NULL;
 }
 
-unsigned char *private_dtw_get_content_binary_by_reference(struct DtwTreePart *self){
+unsigned char *DtwTreePart_get_content_binary_by_reference(struct DtwTreePart *self){
     if(self->content_exist_in_memory == true){
         return self->content;
     }
@@ -67,10 +67,10 @@ unsigned char *private_dtw_get_content_binary_by_reference(struct DtwTreePart *s
 }
 
 
-struct  DtwTreePart * private_dtw_copy_tree(struct DtwTreePart *self){
+struct  DtwTreePart * DtwTreePart_copy_tree(struct DtwTreePart *self){
     char *path = self->path->get_path(self->path);
 
-    struct DtwTreePart *new_tree_part = dtw_tree_part_constructor(path,false,false);
+    struct DtwTreePart *new_tree_part = newDtwTreePart(path, false, false);
     free(path);
 
     new_tree_part->content_exist_in_memory = self->content_exist_in_memory;
@@ -95,7 +95,7 @@ struct  DtwTreePart * private_dtw_copy_tree(struct DtwTreePart *self){
     return new_tree_part;
 }
 
-void private_dtw_set_any_content(struct DtwTreePart *self,unsigned char *content,int content_size,bool is_binary){
+void DtwTreePart_set_any_content(struct DtwTreePart *self, unsigned char *content, int content_size, bool is_binary){
 
     self->free_content(self);
     self->content_exist_in_memory = true;
@@ -107,7 +107,7 @@ void private_dtw_set_any_content(struct DtwTreePart *self,unsigned char *content
 
 }
 
-void private_dtw_set_string_content(struct DtwTreePart *self,const char *content){
+void DtwTreePart_set_string_content(struct DtwTreePart *self, const char *content){
     self->set_any_content(
         self,
         (unsigned char*)content,
@@ -118,25 +118,25 @@ void private_dtw_set_string_content(struct DtwTreePart *self,const char *content
     self->content[self->content_size] = '\0';
 }
 
-void private_dtw_set_binary_content(struct DtwTreePart *self,unsigned char *content,int content_size){
+void DtwTreePart_set_binary_content(struct DtwTreePart *self, unsigned char *content, int content_size){
     self->set_any_content(self,content,content_size,true);
 }
 
 
-char *private_dtw_get_content_sha(struct DtwTreePart *self){
+char *DtwTreePart_get_content_sha(struct DtwTreePart *self){
     if(self->content_exist_in_memory){
         return dtw_generate_sha_from_string((char *)self->content);
     }
     return NULL;
 }
 
-char *private_dtw_last_modification_time_in_string(struct DtwTreePart *self){
+char *DtwTreePart_last_modification_time_in_string(struct DtwTreePart *self){
     return dtw_convert_unix_time_to_string(self->last_modification_time);
 }
 
 
 
-void private_dtw_represent_tree_part(struct DtwTreePart *self){
+void DtwTreePart_represent_tree_part(struct DtwTreePart *self){
     char *path = self->path->get_path(self->path);
     printf("------------------------------------------------------------\n");
     self->path->represent(self->path);
@@ -177,11 +177,11 @@ void private_dtw_represent_tree_part(struct DtwTreePart *self){
 }
 
 
-void private_dtw_free_content(struct DtwTreePart *self){
+void DtwTreePart_free_content(struct DtwTreePart *self){
     self->content_exist_in_memory = false;
     self->content = (unsigned char *)realloc(self->content,0);
 }
-void private_dtw_tree_part_destructor(struct DtwTreePart *self){
+void DtwTreePart_free(struct DtwTreePart *self){
     self->path->free(self->path);
     free(self->hawdware_content_sha);
     free(self->content);

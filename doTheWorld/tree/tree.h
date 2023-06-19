@@ -148,12 +148,14 @@ void DtwTree_remove_tree_part(struct DtwTree *self, int position);
 void DtwTree_add_tree_part_reference(struct DtwTree *self, struct DtwTreePart *tree_part);
 void DtwTree_dtw_free_tree(struct DtwTree *self);
 void DtwTree_represent_tree(struct DtwTree *self);
+
 void DtwTree_add_tree_parts_from_string_array(
     struct DtwTree *self,
     struct DtwStringArray *paths,
     bool load_content,
     bool load_metadata
 );
+
 void DtwTree_add_tree_from_hardware(
     struct DtwTree *self,
     const char *path,

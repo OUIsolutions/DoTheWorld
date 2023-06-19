@@ -18,10 +18,10 @@ void DtwTree_loads_json_tree(struct DtwTree *self, const char *content){
         cJSON *pending_action = cJSON_GetObjectItemCaseSensitive(json_tree_part, "pending_action");
         cJSON *ignore = cJSON_GetObjectItemCaseSensitive(json_tree_part, "ignore");
    
-        struct DtwTreePart *part = dtw_tree_part_constructor(
-            path->valuestring,
-            false,
-            false
+        struct DtwTreePart *part = newDtwTreePart(
+                path->valuestring,
+                false,
+                false
         );
         if(original_path != NULL){
             part->path->original_path = (char *)realloc(part->path->original_path,strlen(original_path->valuestring)+1);

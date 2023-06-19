@@ -67,7 +67,7 @@ void DtwTree_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_p
 void DtwTree_remove_tree_part(struct DtwTree *self, int position){
 
     self->size--;
-    self->tree_parts[position]->free_tree_part(self->tree_parts[position]);
+    self->tree_parts[position]->free(self->tree_parts[position]);
 
     for(int i = position; i<self->size; i++){
         self->tree_parts[i] = self->tree_parts[i+1];
@@ -116,7 +116,7 @@ void DtwTree_add_tree_parts_from_string_array(struct DtwTree *self, struct DtwSt
     for(int i = 0; i < paths->size; i++){
 
         const char *current_path = paths->strings[i];
-        struct DtwTreePart *tree_part = dtw_tree_part_constructor(
+        struct DtwTreePart *tree_part = newDtwTreePart(
                 current_path,
                 load_content,
                 load_metadata
@@ -165,7 +165,7 @@ void DtwTree_add_tree_from_hardware(struct DtwTree *self, const char *path, bool
 
 void DtwTree_dtw_free_tree(struct DtwTree *self){
     for(int i = 0; i < self->size; i++){
-        self->tree_parts[i]->free_tree_part(self->tree_parts[i]);
+        self->tree_parts[i]->free(self->tree_parts[i]);
     }
     
     free(self->tree_parts);

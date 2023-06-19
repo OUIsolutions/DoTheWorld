@@ -4,7 +4,7 @@
 
 
 
-void private_dtw_load_content_from_hardware(struct DtwTreePart *self){
+void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self){
     int size;
     bool is_binary;
     char *path = self->path->get_path(self->path);
@@ -27,7 +27,7 @@ void private_dtw_load_content_from_hardware(struct DtwTreePart *self){
 
 
 
-bool private_dtw_hardware_remove(struct DtwTreePart *self,bool set_as_action){
+bool DtwTreePart_hardware_remove(struct DtwTreePart *self, bool set_as_action){
      if(self->ignore == true){
         return false;
      }
@@ -45,7 +45,7 @@ bool private_dtw_hardware_remove(struct DtwTreePart *self,bool set_as_action){
     return true;
 }
 
-bool private_dtw_hardware_write(struct DtwTreePart *self,bool set_as_action){
+bool DtwTreePart_hardware_write(struct DtwTreePart *self, bool set_as_action){
     if(self->ignore == true){
         return false;
     }
@@ -86,7 +86,7 @@ bool private_dtw_hardware_write(struct DtwTreePart *self,bool set_as_action){
   
 }
 
-bool private_dtw_hardware_modify(struct DtwTreePart *self,bool set_as_action){
+bool DtwTreePart_hardware_modify(struct DtwTreePart *self, bool set_as_action){
     if(self->ignore == true){
         return false;
     }
@@ -144,7 +144,7 @@ bool private_dtw_hardware_modify(struct DtwTreePart *self,bool set_as_action){
     }
     return false;
 }
-bool private_dtw_hardware_commit(struct DtwTreePart *self){
+bool DtwTreePart_hardware_commit(struct DtwTreePart *self){
     if(self->ignore == true){
         return false;
     }

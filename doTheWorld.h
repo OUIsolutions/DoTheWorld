@@ -4192,32 +4192,32 @@ struct DtwTreePart{
     struct DtwTreePart *(*copy_tree_part)(struct DtwTreePart *self);
 };
 
-char *private_dtw_get_content_string_by_reference(struct DtwTreePart *self);
-unsigned char *private_dtw_get_content_binary_by_reference(struct DtwTreePart *self);
-char *private_dtw_get_content_sha(struct DtwTreePart *self);
-char *private_dtw_last_modification_time_in_string(struct DtwTreePart *self);
-void private_dtw_set_any_content(struct DtwTreePart *self,unsigned char *content,int content_size,bool is_binary);
-void private_dtw_set_string_content(struct DtwTreePart *self,const char *content);
-void private_dtw_set_binary_content(struct DtwTreePart *self,unsigned char *content,int content_size);
-void private_dtw_load_content_from_hardware(struct DtwTreePart *self);
-void private_dtw_free_content(struct DtwTreePart *self);
-void private_dtw_represent_tree_part(struct DtwTreePart *self);
+char *DtwTreePart_get_content_string_by_reference(struct DtwTreePart *self);
+unsigned char *DtwTreePart_get_content_binary_by_reference(struct DtwTreePart *self);
+char *DtwTreePart_get_content_sha(struct DtwTreePart *self);
+char *DtwTreePart_last_modification_time_in_string(struct DtwTreePart *self);
+void DtwTreePart_set_any_content(struct DtwTreePart *self, unsigned char *content, int content_size, bool is_binary);
+void DtwTreePart_set_string_content(struct DtwTreePart *self, const char *content);
+void DtwTreePart_set_binary_content(struct DtwTreePart *self, unsigned char *content, int content_size);
+void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self);
+void DtwTreePart_free_content(struct DtwTreePart *self);
+void DtwTreePart_represent_tree_part(struct DtwTreePart *self);
 #ifdef __cplusplus
 bool private_dtw_hardware_remove(struct DtwTreePart *self,bool set_as_action=true);
 bool private_dtw_hardware_write(struct DtwTreePart *self,bool set_as_action=true);
 bool private_dtw_hardware_modify(struct DtwTreePart *self,bool set_as_action=true);
 #else
-bool private_dtw_hardware_remove(struct DtwTreePart *self,bool set_as_action);
-bool private_dtw_hardware_write(struct DtwTreePart *self,bool set_as_action);
-bool private_dtw_hardware_modify(struct DtwTreePart *self,bool set_as_action);
+bool DtwTreePart_hardware_remove(struct DtwTreePart *self, bool set_as_action);
+bool DtwTreePart_hardware_write(struct DtwTreePart *self, bool set_as_action);
+bool DtwTreePart_hardware_modify(struct DtwTreePart *self, bool set_as_action);
 #endif
 
-bool private_dtw_hardware_commit(struct DtwTreePart *self);
+bool DtwTreePart_hardware_commit(struct DtwTreePart *self);
 
-void private_dtw_tree_part_destructor(struct DtwTreePart *self);
-struct DtwTreePart * private_dtw_copy_tree(struct DtwTreePart *self);
+void DtwTreePart_free(struct DtwTreePart *self);
+struct DtwTreePart * DtwTreePart_copy_tree(struct DtwTreePart *self);
 
-struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_content,bool load_meta_data);
+struct DtwTreePart * newDtwTreePart(const char *path, bool load_content, bool load_meta_data);
 
 
 #define DTW_NOT_MINIFY  false
@@ -5610,7 +5610,7 @@ void DtwStringArray_dtw_free_string_array(struct DtwStringArray *self){
 
 
 
-struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_content,bool load_meta_data){
+struct DtwTreePart * newDtwTreePart(const char *path, bool load_content, bool load_meta_data){
     struct DtwTreePart *self = (struct DtwTreePart *)malloc(sizeof(struct DtwTreePart));
     self->path = newDtwPath(path);
     self->content_exist_in_memory = false;
@@ -5661,14 +5661,14 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_conten
 
     return self;
 }
-char *private_dtw_get_content_string_by_reference(struct DtwTreePart *self){
+char *DtwTreePart_get_content_string_by_reference(struct DtwTreePart *self){
     if(self->content_exist_in_memory == true){
         return (char *)self->content;
     }
     return NULL;
 }
 
-unsigned char *private_dtw_get_content_binary_by_reference(struct DtwTreePart *self){
+unsigned char *DtwTreePart_get_content_binary_by_reference(struct DtwTreePart *self){
     if(self->content_exist_in_memory == true){
         return self->content;
     }
@@ -5676,7 +5676,7 @@ unsigned char *private_dtw_get_content_binary_by_reference(struct DtwTreePart *s
 }
 
 
-struct  DtwTreePart * private_dtw_copy_tree(struct DtwTreePart *self){
+struct  DtwTreePart * DtwTreePart_copy_tree(struct DtwTreePart *self){
     char *path = self->path->get_path(self->path);
 
     struct DtwTreePart *new_tree_part = dtw_tree_part_constructor(path,false,false);
@@ -5704,7 +5704,7 @@ struct  DtwTreePart * private_dtw_copy_tree(struct DtwTreePart *self){
     return new_tree_part;
 }
 
-void private_dtw_set_any_content(struct DtwTreePart *self,unsigned char *content,int content_size,bool is_binary){
+void DtwTreePart_set_any_content(struct DtwTreePart *self, unsigned char *content, int content_size, bool is_binary){
 
     self->free_content(self);
     self->content_exist_in_memory = true;
@@ -5716,7 +5716,7 @@ void private_dtw_set_any_content(struct DtwTreePart *self,unsigned char *content
 
 }
 
-void private_dtw_set_string_content(struct DtwTreePart *self,const char *content){
+void DtwTreePart_set_string_content(struct DtwTreePart *self, const char *content){
     self->set_any_content(
         self,
         (unsigned char*)content,
@@ -5727,25 +5727,25 @@ void private_dtw_set_string_content(struct DtwTreePart *self,const char *content
     self->content[self->content_size] = '\0';
 }
 
-void private_dtw_set_binary_content(struct DtwTreePart *self,unsigned char *content,int content_size){
+void DtwTreePart_set_binary_content(struct DtwTreePart *self, unsigned char *content, int content_size){
     self->set_any_content(self,content,content_size,true);
 }
 
 
-char *private_dtw_get_content_sha(struct DtwTreePart *self){
+char *DtwTreePart_get_content_sha(struct DtwTreePart *self){
     if(self->content_exist_in_memory){
         return dtw_generate_sha_from_string((char *)self->content);
     }
     return NULL;
 }
 
-char *private_dtw_last_modification_time_in_string(struct DtwTreePart *self){
+char *DtwTreePart_last_modification_time_in_string(struct DtwTreePart *self){
     return dtw_convert_unix_time_to_string(self->last_modification_time);
 }
 
 
 
-void private_dtw_represent_tree_part(struct DtwTreePart *self){
+void DtwTreePart_represent_tree_part(struct DtwTreePart *self){
     char *path = self->path->get_path(self->path);
     printf("------------------------------------------------------------\n");
     self->path->represent(self->path);
@@ -5786,11 +5786,11 @@ void private_dtw_represent_tree_part(struct DtwTreePart *self){
 }
 
 
-void private_dtw_free_content(struct DtwTreePart *self){
+void DtwTreePart_free_content(struct DtwTreePart *self){
     self->content_exist_in_memory = false;
     self->content = (unsigned char *)realloc(self->content,0);
 }
-void private_dtw_tree_part_destructor(struct DtwTreePart *self){
+void DtwTreePart_free(struct DtwTreePart *self){
     self->path->free(self->path);
     free(self->hawdware_content_sha);
     free(self->content);
@@ -5804,7 +5804,7 @@ void private_dtw_tree_part_destructor(struct DtwTreePart *self){
 
 
 
-void private_dtw_load_content_from_hardware(struct DtwTreePart *self){
+void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self){
     int size;
     bool is_binary;
     char *path = self->path->get_path(self->path);
@@ -5827,7 +5827,7 @@ void private_dtw_load_content_from_hardware(struct DtwTreePart *self){
 
 
 
-bool private_dtw_hardware_remove(struct DtwTreePart *self,bool set_as_action){
+bool DtwTreePart_hardware_remove(struct DtwTreePart *self, bool set_as_action){
      if(self->ignore == true){
         return false;
      }
@@ -5845,7 +5845,7 @@ bool private_dtw_hardware_remove(struct DtwTreePart *self,bool set_as_action){
     return true;
 }
 
-bool private_dtw_hardware_write(struct DtwTreePart *self,bool set_as_action){
+bool DtwTreePart_hardware_write(struct DtwTreePart *self, bool set_as_action){
     if(self->ignore == true){
         return false;
     }
@@ -5886,7 +5886,7 @@ bool private_dtw_hardware_write(struct DtwTreePart *self,bool set_as_action){
   
 }
 
-bool private_dtw_hardware_modify(struct DtwTreePart *self,bool set_as_action){
+bool DtwTreePart_hardware_modify(struct DtwTreePart *self, bool set_as_action){
     if(self->ignore == true){
         return false;
     }
@@ -5944,7 +5944,7 @@ bool private_dtw_hardware_modify(struct DtwTreePart *self,bool set_as_action){
     }
     return false;
 }
-bool private_dtw_hardware_commit(struct DtwTreePart *self){
+bool DtwTreePart_hardware_commit(struct DtwTreePart *self){
     if(self->ignore == true){
         return false;
     }
