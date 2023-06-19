@@ -4128,8 +4128,8 @@ struct DtWJsonError {
     void (*represent)(struct DtWJsonError *self);
 
 };
-struct DtWJsonError * private_dtw_json_error_constructor();
-struct DtWJsonError * dtw_validate_json_tree(char *content);
+struct DtWJsonError * newDtwJsonError();
+struct DtWJsonError * DtwJsonError_validate_json_tree(char *content);
 void private_represent_json_error(struct DtWJsonError *self);
 void private_free_json_error(struct DtWJsonError *self);
 
@@ -6237,7 +6237,7 @@ struct DtwTreePart *DtwTree_find_tree_part_by_path(struct DtwTree *self, const c
     return NULL;
 }
 
-struct DtWJsonError * private_dtw_json_error_constructor(){
+struct DtWJsonError * newDtwJsonError(){
     struct DtWJsonError *self =(struct DtWJsonError*)malloc(sizeof(struct DtWJsonError));
     self->code = DTW_JSON_ERROR_CODE_OK;
     self->position = 0;
@@ -6248,7 +6248,7 @@ struct DtWJsonError * private_dtw_json_error_constructor(){
 }
 
 
-struct DtWJsonError * dtw_validate_json_tree(char *content){
+struct DtWJsonError * DtwJsonError_validate_json_tree(char *content){
  
     struct DtWJsonError *json_error = private_dtw_json_error_constructor();
     cJSON *json_tree = cJSON_Parse(content);

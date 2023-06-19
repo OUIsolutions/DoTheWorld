@@ -1,17 +1,17 @@
-struct DtWJsonError * private_dtw_json_error_constructor(){
-    struct DtWJsonError *self =(struct DtWJsonError*)malloc(sizeof(struct DtWJsonError));
+struct DtwJsonError * newDtwJsonError(){
+    struct DtwJsonError *self =(struct DtwJsonError*)malloc(sizeof(struct DtwJsonError));
     self->code = DTW_JSON_ERROR_CODE_OK;
     self->position = 0;
     self->menssage = "ok";
-    self->free_json_error = private_free_json_error;
-    self->represent = private_represent_json_error;
+    self->free = DtwJsonError_free_json_error;
+    self->represent = DtwJsonError_represent_json_error;
     return self;
 }
 
 
-struct DtWJsonError * dtw_validate_json_tree(char *content){
+struct DtwJsonError * DtwJsonError_validate_json_tree(char *content){
  
-    struct DtWJsonError *json_error = private_dtw_json_error_constructor();
+    struct DtwJsonError *json_error = newDtwJsonError();
     cJSON *json_tree = cJSON_Parse(content);
     //verifiy if json_tre is not null
     if(json_tree == NULL){
@@ -132,12 +132,12 @@ struct DtWJsonError * dtw_validate_json_tree(char *content){
 }
 
 
-void private_represent_json_error(struct DtWJsonError *self){
+void DtwJsonError_represent_json_error(struct DtwJsonError *self){
     printf("code: %d\n", self->code);
     printf("position: %d\n", self->position);
     printf("menssage: %s\n", self->menssage);
 }
 
-void private_free_json_error(struct DtWJsonError *self){
+void DtwJsonError_free_json_error(struct DtwJsonError *self){
     free(self);
 }

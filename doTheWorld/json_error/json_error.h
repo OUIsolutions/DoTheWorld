@@ -5,15 +5,18 @@
 #define DTW_JSON_REQUIRED_VALUE_ERROR 4
 #define DTW_JSON_NOT_FOUND_ERROR 5
 #define DTW_ACTION_ERROR -1
-struct DtWJsonError {
+
+
+typedef struct DtwJsonError {
     int code;
     int position;
     const char *menssage;
-    void (*free_json_error)(struct DtWJsonError *self);
-    void (*represent)(struct DtWJsonError *self);
+    void (*free)(struct DtwJsonError *self);
+    void (*represent)(struct DtwJsonError *self);
 
-};
-struct DtWJsonError * private_dtw_json_error_constructor();
-struct DtWJsonError * dtw_validate_json_tree(char *content);
-void private_represent_json_error(struct DtWJsonError *self);
-void private_free_json_error(struct DtWJsonError *self);
+}DtWJsonError;
+
+struct DtwJsonError * newDtwJsonError();
+struct DtwJsonError * DtwJsonError_validate_json_tree(char *content);
+void DtwJsonError_represent_json_error(struct DtwJsonError *self);
+void DtwJsonError_free_json_error(struct DtwJsonError *self);
