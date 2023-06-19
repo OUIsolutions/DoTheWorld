@@ -3,7 +3,7 @@
 
 struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_content,bool load_meta_data){
     struct DtwTreePart *self = (struct DtwTreePart *)malloc(sizeof(struct DtwTreePart));
-    self->path = dtw_constructor_path(path);
+    self->path = newDtwPath(path);
     self->content_exist_in_memory = false;
     self->content_exist_in_hardware = false;
     self->last_modification_time = 0;
@@ -182,7 +182,7 @@ void private_dtw_free_content(struct DtwTreePart *self){
     self->content = (unsigned char *)realloc(self->content,0);
 }
 void private_dtw_tree_part_destructor(struct DtwTreePart *self){
-    self->path->free_path(self->path);
+    self->path->free(self->path);
     free(self->hawdware_content_sha);
     free(self->content);
     free(self);
