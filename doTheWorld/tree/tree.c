@@ -1,45 +1,45 @@
 
 
 
-struct  DtwTree * dtw_tree_constructor(){
+struct  DtwTree * newDtwTree(){
 
     struct DtwTree *self = (struct DtwTree*)malloc(sizeof(struct DtwTree));
     self->size = 0;
     self->tree_parts = (struct DtwTreePart**)malloc(1);
-    self->add_tree_part_by_copy = private_dtw_add_tree_part_copy;
-    self->remove_tree_part = private_dtw_remove_tree_part;
-    self->get_sub_tree = private_dtw_get_sub_tree;
-    self->add_tree_part_by_reference = private_dtw_add_tree_part_reference;
-    self->free_tree = private_dtw_free_tree;
-    self->represent = private_dtw_represent_tree;
-    self->add_tree_parts_from_string_array = private_dtw_add_tree_parts_from_string_array;
-    self->add_tree_from_hardware = private_dtw_add_tree_from_hardware;
+    self->add_tree_part_by_copy = DtwTree_add_tree_part_copy;
+    self->remove_tree_part = DtwTree_remove_tree_part;
+    self->get_sub_tree = DtwTree_get_sub_tree;
+    self->add_tree_part_by_reference = DtwTree_add_tree_part_reference;
+    self->free = DtwTree_dtw_free_tree;
+    self->represent = DtwTree_represent_tree;
+    self->add_tree_parts_from_string_array = DtwTree_add_tree_parts_from_string_array;
+    self->add_tree_from_hardware = DtwTree_add_tree_from_hardware;
 
-    self->map = private_dtw_map;
-    self->filter = private_dtw_filter;
+    self->map = DtwTree_dtw_map;
+    self->filter = DtwTree_dtw_filter;
 
-    self->find_part_by_function = private_dtw_find_by_function;
-    self->find_part_by_name  = private_dtw_find_tree_part_by_name;
-    self->find_part_by_path = private_dtw_find_tree_part_by_path;
-    self->report = private_dtw_create_report;
+    self->find_part_by_function = DtwTree_find_by_function;
+    self->find_part_by_name  = DtwTree_find_tree_part_by_name;
+    self->find_part_by_path = DtwTree_find_tree_part_by_path;
+    self->report = DtwTree_create_report;
     //{%if not  lite %}
     
-    self->loads_json_tree = private_dtw_loads_json_tree;
-    self->loads_json_tree_from_file = private_dtw_loads_json_tree_from_file;
+    self->loads_json_tree = DtwTree_loads_json_tree;
+    self->loads_json_tree_from_file = DtwTree_loads_json_tree_from_file;
     
-    self->dumps_json_tree = private_dtw_dumps_tree_json;
-    self->dumps_json_tree_to_file = private_dtw_dumps_tree_json_to_file;
+    self->dumps_json_tree = DtwTree_dumps_tree_json;
+    self->dumps_json_tree_to_file = DtwTree_dumps_tree_json_to_file;
 
     //{%endif%}
-    self->insecure_hardware_remove_tree = private_insecure_dtw_hardware_remove_tree;
-    self->insecure_hardware_write_tree = private_insecure_dtw_hardware_write_tree;
-    self->hardware_commit_tree = private_dtw_hardware_commit_tree;
+    self->insecure_hardware_remove_tree = DtwTree_insecure_hardware_remove_tree;
+    self->insecure_hardware_write_tree = DtwTree_insecure_hardware_write_tree;
+    self->hardware_commit_tree = DtwTree_hardware_commit_tree;
     return self;
 }
 
 
-struct DtwTree *private_dtw_get_sub_tree(struct DtwTree *self,const char *path,bool copy_content){
-    struct DtwTree *sub_tree = dtw_tree_constructor();
+struct DtwTree *DtwTree_get_sub_tree(struct DtwTree *self, const char *path, bool copy_content){
+    struct DtwTree *sub_tree = newDtwTree();
     for(int i = 0; i < self->size; i++){
         struct DtwTreePart *tree_part = self->tree_parts[i];
         char *current_path = tree_part->path->get_path(tree_part->path);
@@ -58,13 +58,13 @@ struct DtwTree *private_dtw_get_sub_tree(struct DtwTree *self,const char *path,b
 }
 
 
-void private_dtw_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_part){
+void DtwTree_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_part){
     self->size++;
     self->tree_parts =  (struct DtwTreePart**)realloc(self->tree_parts, self->size * sizeof(struct DtwTreePart *));
     self->tree_parts[self->size - 1] = tree_part->copy_tree_part(tree_part);
        
 }
-void private_dtw_remove_tree_part(struct DtwTree *self, int position){
+void DtwTree_remove_tree_part(struct DtwTree *self, int position){
 
     self->size--;
     self->tree_parts[position]->free_tree_part(self->tree_parts[position]);
@@ -76,7 +76,7 @@ void private_dtw_remove_tree_part(struct DtwTree *self, int position){
 
 }
 
-struct DtwTransactionReport * private_dtw_create_report(struct DtwTree *self){
+struct DtwTransactionReport * DtwTree_create_report(struct DtwTree *self){
     struct DtwTransactionReport *report = dtw_constructor_transaction_report();
     for(int i = 0; i < self->size; i++){
         struct DtwTreePart *tree_part = self->tree_parts[i];
@@ -99,20 +99,20 @@ struct DtwTransactionReport * private_dtw_create_report(struct DtwTree *self){
 }
 
 
-void private_dtw_add_tree_part_reference(struct DtwTree *self, struct DtwTreePart *tree_part){
+void DtwTree_add_tree_part_reference(struct DtwTree *self, struct DtwTreePart *tree_part){
     self->size++;
     self->tree_parts =  (struct DtwTreePart**)realloc(self->tree_parts, self->size * sizeof(struct DtwTreePart *));
     self->tree_parts[self->size - 1] = tree_part;
 }
 
 
-void private_dtw_represent_tree(struct DtwTree *self){
+void DtwTree_represent_tree(struct DtwTree *self){
     for(int i = 0; i < self->size; i++){
         self->tree_parts[i]->represent(self->tree_parts[i]);
     }
 }
 
-void private_dtw_add_tree_parts_from_string_array(struct DtwTree *self,struct DtwStringArray *paths,bool load_content,bool load_metadata){
+void DtwTree_add_tree_parts_from_string_array(struct DtwTree *self, struct DtwStringArray *paths, bool load_content, bool load_metadata){
     for(int i = 0; i < paths->size; i++){
 
         const char *current_path = paths->strings[i];
@@ -126,7 +126,7 @@ void private_dtw_add_tree_parts_from_string_array(struct DtwTree *self,struct Dt
 }
 
 
-void private_dtw_add_tree_from_hardware(struct DtwTree *self, const char *path, bool load_content, bool load_meta_data, bool preserve_path_start){
+void DtwTree_add_tree_from_hardware(struct DtwTree *self, const char *path, bool load_content, bool load_meta_data, bool preserve_path_start){
 
     struct DtwStringArray *path_array = dtw_list_all_recursively(path,DTW_CONCAT_PATH);
     self->add_tree_parts_from_string_array(self, path_array, load_content, load_meta_data);
@@ -163,7 +163,7 @@ void private_dtw_add_tree_from_hardware(struct DtwTree *self, const char *path, 
 
 }
 
-void private_dtw_free_tree(struct DtwTree *self){
+void DtwTree_dtw_free_tree(struct DtwTree *self){
     for(int i = 0; i < self->size; i++){
         self->tree_parts[i]->free_tree_part(self->tree_parts[i]);
     }
@@ -171,13 +171,13 @@ void private_dtw_free_tree(struct DtwTree *self){
     free(self->tree_parts);
     free(self);
 }
-void private_insecure_dtw_hardware_remove_tree(struct DtwTree *self){
+void DtwTree_insecure_hardware_remove_tree(struct DtwTree *self){
     for(int i = 0; i < self->size; i++){
         self->tree_parts[i]->hardware_remove(self->tree_parts[i],DTW_EXECUTE_NOW);
     }
 }
 
-void private_insecure_dtw_hardware_write_tree(struct DtwTree *self){
+void DtwTree_insecure_hardware_write_tree(struct DtwTree *self){
     
     for(int i = 0; i < self->size; i++){
         struct DtwTreePart *tree_part = self->tree_parts[i];
@@ -185,7 +185,7 @@ void private_insecure_dtw_hardware_write_tree(struct DtwTree *self){
     }
 }
 
-void private_dtw_hardware_commit_tree(struct DtwTree *self){
+void DtwTree_hardware_commit_tree(struct DtwTree *self){
     for(int i = 0; i < self->size; i++){
         self->tree_parts[i]->hardware_commit(self->tree_parts[i]);
     }

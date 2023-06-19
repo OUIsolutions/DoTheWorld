@@ -1,7 +1,7 @@
 //
 // Created by jurandi on 11-04-2023.
 //
-struct DtwTreePart *private_dtw_find_by_function(
+struct DtwTreePart *DtwTree_find_by_function(
         struct DtwTree *self,
         bool (*caller)(struct  DtwTreePart *part)
 ){
@@ -15,11 +15,11 @@ struct DtwTreePart *private_dtw_find_by_function(
     return NULL;
 }
 
-struct DtwTree *private_dtw_filter(
+struct DtwTree *DtwTree_dtw_filter(
         struct DtwTree *self,
         bool (*caller)(struct  DtwTreePart *part)
 ){
-    struct DtwTree *filtered_tree = dtw_tree_constructor();
+    struct DtwTree *filtered_tree = newDtwTree();
 
     for(int i = 0;i < self->size; i++){
 
@@ -35,11 +35,11 @@ struct DtwTree *private_dtw_filter(
 }
 
 
-struct DtwTree *private_dtw_map(
+struct DtwTree *DtwTree_dtw_map(
         struct DtwTree *self,
         struct DtwTreePart *(*caller)(struct  DtwTreePart *part)
 ){
-    struct DtwTree *mapped_tree = dtw_tree_constructor();
+    struct DtwTree *mapped_tree = newDtwTree();
 
     for(int i = 0;i < self->size; i++){
         struct DtwTreePart *current = self->tree_parts[i];
@@ -51,7 +51,7 @@ struct DtwTree *private_dtw_map(
 }
 
 
-struct DtwTreePart *private_dtw_find_tree_part_by_name(struct DtwTree *self,const char *name){
+struct DtwTreePart *DtwTree_find_tree_part_by_name(struct DtwTree *self, const char *name){
     for(int i = 0;i < self->size; i++){
         struct DtwTreePart *current = self->tree_parts[i];
         struct DtwPath *current_path = current->path;
@@ -70,7 +70,7 @@ struct DtwTreePart *private_dtw_find_tree_part_by_name(struct DtwTree *self,cons
     return NULL;
 }
 
-struct DtwTreePart *private_dtw_find_tree_part_by_path(struct DtwTree *self,const char *path){
+struct DtwTreePart *DtwTree_find_tree_part_by_path(struct DtwTree *self, const char *path){
     for(int i = 0;i < self->size; i++){
         struct DtwTreePart *current = self->tree_parts[i];
         struct DtwPath *current_path = current->path;

@@ -587,7 +587,7 @@ easy steps
 
 int main(){
 
-    struct DtwTree *tree = dtw_tree_constructor();
+    struct DtwTree *tree = newDtwTree();
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",
@@ -596,7 +596,7 @@ int main(){
             DTW_PRESERVE_PATH_START
             );
     tree->represent(tree);
-    tree->free_tree(tree);
+    tree->free(tree);
 }   
 ~~~
 
@@ -606,7 +606,7 @@ int main(){
 
 int main(){
 
-    struct DtwTree *tree = dtw_tree_constructor();
+    struct DtwTree *tree = newDtwTree();
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",
@@ -618,7 +618,7 @@ int main(){
         struct DtwTreePart *current_part = tree->tree_parts[i];
         current_part->represent(current_part);
     }
-    tree->free_tree(tree);
+    tree->free(tree);
 }
 ~~~
 ### Retriving Tree Parts
@@ -632,7 +632,7 @@ int main(){
 
 int main(){
 
-    struct DtwTree *tree = dtw_tree_constructor();
+    struct DtwTree *tree = newDtwTree();
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",
@@ -645,7 +645,7 @@ int main(){
     if(deer){
         deer->represent(deer);
     }
-    tree->free_tree(tree);
+    tree->free(tree);
 }   
 ~~~
 ### Finding By Full Path 
@@ -655,7 +655,7 @@ int main(){
 
 int main(){
 
-    struct DtwTree *tree = dtw_tree_constructor();
+    struct DtwTree *tree = newDtwTree();
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",
@@ -671,7 +671,7 @@ int main(){
     if(deer){
         deer->represent(deer);
     }
-    tree->free_tree(tree);
+    tree->free(tree);
 }   
 ~~~
 ### Finding By Function
@@ -698,7 +698,7 @@ bool test_if_deer(struct DtwTreePart*part){
 
 int main(){
 
-    struct DtwTree *tree = dtw_tree_constructor();
+    struct DtwTree *tree = newDtwTree();
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",
@@ -716,7 +716,7 @@ int main(){
     if(deer){
         deer->represent(deer);
     }
-    tree->free_tree(tree);
+    tree->free(tree);
 
 }   
 ~~~
@@ -742,7 +742,7 @@ bool filter_txt(struct DtwTreePart *part){
 
 int main(){
 
-    struct DtwTree *tree = dtw_tree_constructor();
+    struct DtwTree *tree = newDtwTree();
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",
@@ -755,8 +755,8 @@ int main(){
             filter_txt
             );
     filtered->represent(filtered);
-    filtered->free_tree(filtered);
-    tree->free_tree(tree);
+    filtered->free(filtered);
+    tree->free(tree);
 }
 ~~~
 #### Map
@@ -779,7 +779,7 @@ struct DtwTreePart * concat_test(struct DtwTreePart *part){
 
 int main(){
 
-    struct DtwTree *tree = dtw_tree_constructor();
+    struct DtwTree *tree = newDtwTree();
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",
@@ -793,8 +793,8 @@ int main(){
             );
 
     concated->represent(concated);
-    concated->free_tree(concated);
-    tree->free_tree(tree);
+    concated->free(concated);
+    tree->free(tree);
 }
 ~~~
 
@@ -810,7 +810,7 @@ turning system ultra secury
 
 int main(){
 
-    struct DtwTree *tree = dtw_tree_constructor();
+    struct DtwTree *tree = newDtwTree();
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",
@@ -834,7 +834,7 @@ int main(){
     }
 
     tree->hardware_commit_tree(tree);
-    tree->free_tree(tree);
+    tree->free(tree);
 }
 ~~~
 ### Transaction Reports 
@@ -847,7 +847,7 @@ With transactin Reports , you can see what will be modified
 
 int main(){
 
-    struct DtwTree *tree = dtw_tree_constructor();
+    struct DtwTree *tree = newDtwTree();
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",
@@ -873,7 +873,7 @@ int main(){
     struct DtwTransactionReport *report = tree->report(tree);
     report->represent(report);
     report->free_transaction(report);
-    tree->free_tree(tree);
+    tree->free(tree);
 }
 ~~~
 ### Tree Json Operations 
@@ -889,7 +889,7 @@ It will transform the tree in an json document
 
 int main(){
 
-    struct DtwTree *tree = dtw_tree_constructor();
+    struct DtwTree *tree = newDtwTree();
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",
@@ -908,7 +908,7 @@ int main(){
             DTW_CONSIDER_IGNORE
     );
 
-    tree->free_tree(tree);
+    tree->free(tree);
 }
 ~~~
 
@@ -918,7 +918,7 @@ int main(){
 #include "doTheWorld.h"
 int main(){
 
-    struct DtwTree *tree = dtw_tree_constructor();
+    struct DtwTree *tree = newDtwTree();
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",
@@ -937,7 +937,7 @@ int main(){
             DTW_CONSIDER_IGNORE
     );
     printf("%s",content);
-    tree->free_tree(tree);
+    tree->free(tree);
 }
 ~~~
 #### Loading Json Tree From file 
@@ -949,7 +949,7 @@ you can load it
 
 int main(){
 
-    struct DtwTree *tree = dtw_tree_constructor();
+    struct DtwTree *tree = newDtwTree();
     tree->loads_json_tree_from_file(tree,"test.json");
     tree->insecure_hardware_write_tree(tree);
 }
@@ -964,7 +964,7 @@ int main(){
 
 int main(){
 
-    struct DtwTree *tree = dtw_tree_constructor();
+    struct DtwTree *tree = newDtwTree();
     char *json_tree = dtw_load_string_file_content("test.json");
     tree->loads_json_tree(tree,json_tree);
     tree->insecure_hardware_write_tree(tree);

@@ -1,5 +1,5 @@
 
-struct DtwPath {
+typedef struct DtwPath {
     char *original_path;
     char *dir;
     char *name;
@@ -31,7 +31,7 @@ struct DtwPath {
     void (*free) (struct DtwPath *self);
 
 
-};
+}DtwPath;
 struct DtwPath * newDtwPath(const char *path);
 bool  DtwPath_path_changed(struct DtwPath *self);
 char *DtwPath_get_full_name(struct DtwPath *self);
