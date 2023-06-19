@@ -26,51 +26,56 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+
 #ifndef DO_THE_WORLD_H
 #define DO_THE_WORLD_H
-#ifndef cJSON__h
 
+#ifndef cJSON__h
 #include "dependencies/cJSON/cJSON.h"
 #include "dependencies/cJSON/cJSON.c"
-#endif    
-
+#endif //cJSON__h
 #ifndef SHA_256_H
 #include "dependencies/sha256/sha-256.h"
 #include "dependencies/sha256/sha-256.c"
-#endif
+#endif  //SHA_256_H
 
-#include "headers/imports.h"
-#include "headers/string_array.h"
+#include "imports.h"
+#include "string_array/string_array.h"
 
-#include "headers/base64.h"
+#include "base64/base64.h"
 
-#include "headers/extras.h"
-#include "headers/string_functions.h"
-#include "headers/io.h"
-#include "headers/listage_wrappers.h"
-#include "headers/monodimension_listage.h"
-#include "headers/multidimension_listage.h"
-#include "headers/path.h"
-#include "headers/transaction_report.h"
+#include "extras/extras.h"
+#include "string_functions/string_functions.h"
+#include "io/io.h"
+#include "listage_wrappers/listage_wrappers.h"
+#include "monodimension_listage/monodimension_listage.h"
+#include "multidimension_listage/multidimension_listage.h"
+#include "path/path.h"
+#include "transaction_report/transaction_report.h"
 #include "headers/json_error.h"
-#include "headers/tree_part.h"
-#include "headers/tree.h"
+#include "tree_part/tree_part.h"
+#include "tree/tree.h"
 
-#include "functions/base64.c"
-#include "functions/extras.c"
-#include "functions/string_functions.c"
-#include "functions/io.c"
-#include "functions/listage_wrappers.c"
-#include "functions/monodimension_listage_linux.c"
-#include "functions/monodimension_listage_win32.c"
-#include "functions/multidimension_listage.c"
-#include "structs/path.c"
-#include "structs/string_array.c"
-#include "structs/tree_part/tree_part.c"
-#include "structs/tree_part/hardware_tree_part.c"
-#include "structs/tree/tree.c"
-#include "structs/tree/tree_finding.c"
-#include "structs/json_error.c"
-#include "structs/tree/json_tree.c"
-#include "structs/transaction_report.c"
-#endif
+#include "base64/base64.c"
+#include "extras/extras.c"
+#include "string_functions/string_functions.c"
+#include "io/io.c"
+#include "listage_wrappers/listage_wrappers.c"
+#include "monodimension_listage/monodimension_listage_linux.c"
+#include "multidimension_listage/monodimension_listage_win32.c"
+#include "multidimension_listage/multidimension_listage.c"
+#include "path/path.c"
+#include "string_array/string_array.c"
+#include "tree_part/tree_part.c"
+#include "tree_part/hardware_tree_part.c"
+#include "tree/tree.c"
+#include "tree/tree_finding.c"
+#include "json_error/json_error.c"
+#include "tree/json_tree.c"
+#include "transaction_report/transaction_report.c"
+
+#endif //DO_THE_WORLD_H
+
+
+
+

@@ -30,491 +30,6 @@ SOFTWARE.
 #ifndef DO_THE_WORLD_H
 #define DO_THE_WORLD_H
 
-
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <time.h>
-
-
-
-#ifdef __linux__
-  #include <dirent.h>
-  #include <unistd.h>
-#elif _WIN32
-  #include <windows.h>
-  #include <tchar.h>
-  #include <wchar.h>
-  #include <locale.h>
-  #include <direct.h>
-#endif
-
-struct DtwStringArray {
-  int size;         
-
-  char **strings;       
-  void (*set_value)(struct DtwStringArray *self,int index,const char *value);
-  void (*add_string)(struct DtwStringArray *self,const char *string);
-  void (*merge_string_array)(struct DtwStringArray *self, struct DtwStringArray *other);
-  void (*represent)(struct DtwStringArray *self);
-  void (*free_string_array)(struct DtwStringArray *self);
-  int (*find_position)(struct DtwStringArray *self,const char *string);
-}; // End the structure with a semicolon
-int  private_dtw_find_position(struct DtwStringArray *self,const char *string);
-void private_dtw_add_string(struct DtwStringArray *self,const char *string);
-void private_dtw_merge_string_array(struct DtwStringArray *self, struct DtwStringArray *other);
-void private_dtw_represent_string_array(struct DtwStringArray *self);
-void private_dtw_free_string_array(struct DtwStringArray *self);
-void private_dtw_set_value(struct DtwStringArray *self,int index,const char *value);
-
-struct DtwStringArray * dtw_constructor_string_array();
-
-
-#ifndef SHA_256_H
-
-#ifndef SHA_256_H
-#define SHA_256_H
-
-#include <stdint.h>
-#include <string.h>
-#include <stdlib.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-/*
- * @brief Size of the SHA-256 sum. This times eight is 256 bits.
- */
-#define SIZE_OF_SHA_256_HASH 32
-
-/*
- * @brief Size of the chunks used for the calculations.
- *
- * @note This should mostly be ignored by the user, although when using the streaming API, it has an impact for
- * performance. Add chunks whose size is a multiple of this, and you will avoid a lot of superfluous copying in RAM!
- */
-#define SIZE_OF_SHA_256_CHUNK 64
-
-/*
- * @brief The opaque SHA-256 type, that should be instantiated when using the streaming API.
- *
- * @note Although the details are exposed here, in order to make instantiation easy, you should refrain from directly
- * accessing the fields, as they may change in the future.
- */
-struct Sha_256 {
-	uint8_t *hash;
-	uint8_t chunk[SIZE_OF_SHA_256_CHUNK];
-	uint8_t *chunk_pos;
-	size_t space_left;
-	size_t total_len;
-	uint32_t h[8];
-};
-
-/*
- * @brief The simple SHA-256 calculation function.
- * @param hash Hash array, where the result is delivered.
- * @param input Pointer to the data the hash shall be calculated on.
- * @param len Length of the input data, in byte.
- *
- * @note If all of the data you are calculating the hash value on is available in a contiguous buffer in memory, this is
- * the function you should use.
- *
- * @note If either of the passed pointers is NULL, the results are unpredictable.
- */
-void calc_sha_256(uint8_t hash[SIZE_OF_SHA_256_HASH], const void *input, size_t len);
-
-/*
- * @brief Initialize a SHA-256 streaming calculation.
- * @param sha_256 A pointer to a SHA-256 structure.
- * @param hash Hash array, where the result will be delivered.
- *
- * @note If all of the data you are calculating the hash value on is not available in a contiguous buffer in memory, this is
- * where you should start. Instantiate a SHA-256 structure, for instance by simply declaring it locally, make your hash
- * buffer available, and invoke this function. Once a SHA-256 hash has been calculated (see further below) a SHA-256
- * structure can be initialized again for the next calculation.
- *
- * @note If either of the passed pointers is NULL, the results are unpredictable.
- */
-
-char * calc_sha_256_returning_string(const void *input, size_t len);
-/*
-	@param input: the string to be hashed
-	@param len: the length of the string
-	@return: the hash of the string
-	@note: if the input string is NULL, the results are unpredictable
-*/
-
-void calc_sha_256_from_string(uint8_t hash[SIZE_OF_SHA_256_HASH], const char *input);
-/*
-	@param hash: the hash array, where the result is delivered
-	@param input: the string to be hashed
-	@note: if the input string is NULL, the results are unpredictable
-*/
-
-int calc_sha_256_from_file(uint8_t hash[SIZE_OF_SHA_256_HASH], const char *filename);
-/*
-	@param hash: the hash array, where the result is delivered
-	@param filename: the name of the file to be hashed
-	@return: 0 if the file was hashed successfully, -1 otherwise
-*/
-
-char * calc_sha_256_from_file_returning_string(const char *filename);
-/*
-	@param filename: the name of the file to be hashed
-	@return: the hash of the file
-	@note: if the filename is NULL, the return value is NULL
-*/
-
-void sha_256_init(struct Sha_256 *sha_256, uint8_t hash[SIZE_OF_SHA_256_HASH]);
-
-/*
- * @brief Stream more input data for an on-going SHA-256 calculation.
- * @param sha_256 A pointer to a previously initialized SHA-256 structure.
- * @param data Pointer to the data to be added to the calculation.
- * @param len Length of the data to add, in byte.
- *
- * @note This function may be invoked an arbitrary number of times between initialization and closing, but the maximum
- * data length is limited by the SHA-256 algorithm: the total number of bits (i.e. the total number of bytes times
- * eight) must be representable by a 64-bit unsigned integer. While that is not a practical limitation, the results are
- * unpredictable if that limit is exceeded.
- *
- * @note This function may be invoked on empty data (zero length), although that obviously will not add any data.
- *
- * @note If either of the passed pointers is NULL, the results are unpredictable.
- */
-void sha_256_write(struct Sha_256 *sha_256, const void *data, size_t len);
-
-/*
- * @brief Conclude a SHA-256 streaming calculation, making the hash value available.
- * @param sha_256 A pointer to a previously initialized SHA-256 structure.
- * @return Pointer to the hash array, where the result is delivered.
- *
- * @note After this function has been invoked, the result is available in the hash buffer that initially was provided. A
- * pointer to the hash value is returned for convenience, but you should feel free to ignore it: it is simply a pointer
- * to the first byte of your initially provided hash array.
- *
- * @note If the passed pointer is NULL, the results are unpredictable.
- *
- * @note Invoking this function for a calculation with no data (the writing function has never been invoked, or it only
- * has been invoked with empty data) is legal. It will calculate the SHA-256 value of the empty string.
- */
-uint8_t *sha_256_close(struct Sha_256 *sha_256);
-
-
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif
-
-
-#define TOTAL_LEN_LEN 8
-
-/*
- * Comments from pseudo-code at https://en.wikipedia.org/wiki/SHA-2 are reproduced here.
- * When useful for clarification, portions of the pseudo-code are reproduced here too.
- */
-
-/*
- * @brief Rotate a 32-bit value by a number of bits to the right.
- * @param value The value to be rotated.
- * @param count The number of bits to rotate by.
- * @return The rotated value.
- */
-static inline uint32_t right_rot(uint32_t value, unsigned int count)
-{
-	/*
-	 * Defined behaviour in standard C for all count where 0 < count < 32, which is what we need here.
-	 */
-	return value >> count | value << (32 - count);
-}
-
-/*
- * @brief Update a hash value under calculation with a new chunk of data.
- * @param h Pointer to the first hash item, of a total of eight.
- * @param p Pointer to the chunk data, which has a standard length.
- *
- * @note This is the SHA-256 work horse.
- */
-static inline void consume_chunk(uint32_t *h, const uint8_t *p)
-{
-	unsigned i, j;
-	uint32_t ah[8];
-
-	/* Initialize working variables to current hash value: */
-	for (i = 0; i < 8; i++)
-		ah[i] = h[i];
-
-	/*
-	 * The w-array is really w[64], but since we only need 16 of them at a time, we save stack by
-	 * calculating 16 at a time.
-	 *
-	 * This optimization was not there initially and the rest of the comments about w[64] are kept in their
-	 * initial state.
-	 */
-
-	/*
-	 * create a 64-entry message schedule array w[0..63] of 32-bit words (The initial values in w[0..63]
-	 * don't matter, so many implementations zero them here) copy chunk into first 16 words w[0..15] of the
-	 * message schedule array
-	 */
-	uint32_t w[16];
-
-	/* Compression function main loop: */
-	for (i = 0; i < 4; i++) {
-		for (j = 0; j < 16; j++) {
-			if (i == 0) {
-				w[j] =
-				    (uint32_t)p[0] << 24 | (uint32_t)p[1] << 16 | (uint32_t)p[2] << 8 | (uint32_t)p[3];
-				p += 4;
-			} else {
-				/* Extend the first 16 words into the remaining 48 words w[16..63] of the
-				 * message schedule array: */
-				const uint32_t s0 = right_rot(w[(j + 1) & 0xf], 7) ^ right_rot(w[(j + 1) & 0xf], 18) ^
-						    (w[(j + 1) & 0xf] >> 3);
-				const uint32_t s1 = right_rot(w[(j + 14) & 0xf], 17) ^
-						    right_rot(w[(j + 14) & 0xf], 19) ^ (w[(j + 14) & 0xf] >> 10);
-				w[j] = w[j] + s0 + w[(j + 9) & 0xf] + s1;
-			}
-			const uint32_t s1 = right_rot(ah[4], 6) ^ right_rot(ah[4], 11) ^ right_rot(ah[4], 25);
-			const uint32_t ch = (ah[4] & ah[5]) ^ (~ah[4] & ah[6]);
-
-			/*
-			 * Initialize array of round constants:
-			 * (first 32 bits of the fractional parts of the cube roots of the first 64 primes 2..311):
-			 */
-			static const uint32_t k[] = {
-			    0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4,
-			    0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe,
-			    0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f,
-			    0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7,
-			    0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc,
-			    0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b,
-			    0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116,
-			    0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
-			    0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7,
-			    0xc67178f2};
-
-			const uint32_t temp1 = ah[7] + s1 + ch + k[i << 4 | j] + w[j];
-			const uint32_t s0 = right_rot(ah[0], 2) ^ right_rot(ah[0], 13) ^ right_rot(ah[0], 22);
-			const uint32_t maj = (ah[0] & ah[1]) ^ (ah[0] & ah[2]) ^ (ah[1] & ah[2]);
-			const uint32_t temp2 = s0 + maj;
-
-			ah[7] = ah[6];
-			ah[6] = ah[5];
-			ah[5] = ah[4];
-			ah[4] = ah[3] + temp1;
-			ah[3] = ah[2];
-			ah[2] = ah[1];
-			ah[1] = ah[0];
-			ah[0] = temp1 + temp2;
-		}
-	}
-
-	/* Add the compressed chunk to the current hash value: */
-	for (i = 0; i < 8; i++)
-		h[i] += ah[i];
-}
-
-/*
- * Public functions. See header file for documentation.
- */
-
-void sha_256_init(struct Sha_256 *sha_256, uint8_t hash[SIZE_OF_SHA_256_HASH])
-{
-	sha_256->hash = hash;
-	sha_256->chunk_pos = sha_256->chunk;
-	sha_256->space_left = SIZE_OF_SHA_256_CHUNK;
-	sha_256->total_len = 0;
-	/*
-	 * Initialize hash values (first 32 bits of the fractional parts of the square roots of the first 8 primes
-	 * 2..19):
-	 */
-	sha_256->h[0] = 0x6a09e667;
-	sha_256->h[1] = 0xbb67ae85;
-	sha_256->h[2] = 0x3c6ef372;
-	sha_256->h[3] = 0xa54ff53a;
-	sha_256->h[4] = 0x510e527f;
-	sha_256->h[5] = 0x9b05688c;
-	sha_256->h[6] = 0x1f83d9ab;
-	sha_256->h[7] = 0x5be0cd19;
-}
-
-void sha_256_write(struct Sha_256 *sha_256, const void *data, size_t len)
-{
-	sha_256->total_len += len;
-
-	
-	const uint8_t *p = (const uint8_t *)data;
-
-
-	while (len > 0) {
-		/*
-		 * If the input chunks have sizes that are multiples of the calculation chunk size, no copies are
-		 * necessary. We operate directly on the input data instead.
-		 */
-		if (sha_256->space_left == SIZE_OF_SHA_256_CHUNK && len >= SIZE_OF_SHA_256_CHUNK) {
-			consume_chunk(sha_256->h, p);
-			len -= SIZE_OF_SHA_256_CHUNK;
-			p += SIZE_OF_SHA_256_CHUNK;
-			continue;
-		}
-		/* General case, no particular optimization. */
-		const size_t consumed_len = len < sha_256->space_left ? len : sha_256->space_left;
-		memcpy(sha_256->chunk_pos, p, consumed_len);
-		sha_256->space_left -= consumed_len;
-		len -= consumed_len;
-		p += consumed_len;
-		if (sha_256->space_left == 0) {
-			consume_chunk(sha_256->h, sha_256->chunk);
-			sha_256->chunk_pos = sha_256->chunk;
-			sha_256->space_left = SIZE_OF_SHA_256_CHUNK;
-		} else {
-			sha_256->chunk_pos += consumed_len;
-		}
-	}
-}
-
-uint8_t *sha_256_close(struct Sha_256 *sha_256)
-{
-	uint8_t *pos = sha_256->chunk_pos;
-	size_t space_left = sha_256->space_left;
-	uint32_t *const h = sha_256->h;
-
-	/*
-	 * The current chunk cannot be full. Otherwise, it would already have be consumed. I.e. there is space left for
-	 * at least one byte. The next step in the calculation is to add a single one-bit to the data.
-	 */
-	*pos++ = 0x80;
-	--space_left;
-
-	/*
-	 * Now, the last step is to add the total data length at the end of the last chunk, and zero padding before
-	 * that. But we do not necessarily have enough space left. If not, we pad the current chunk with zeroes, and add
-	 * an extra chunk at the end.
-	 */
-	if (space_left < TOTAL_LEN_LEN) {
-		memset(pos, 0x00, space_left);
-		consume_chunk(h, sha_256->chunk);
-		pos = sha_256->chunk;
-		space_left = SIZE_OF_SHA_256_CHUNK;
-	}
-	const size_t left = space_left - TOTAL_LEN_LEN;
-	memset(pos, 0x00, left);
-	pos += left;
-	size_t len = sha_256->total_len;
-	pos[7] = (uint8_t)(len << 3);
-	len >>= 5;
-	int i;
-	for (i = 6; i >= 0; --i) {
-		pos[i] = (uint8_t)len;
-		len >>= 8;
-	}
-	consume_chunk(h, sha_256->chunk);
-	/* Produce the final hash value (big-endian): */
-	int j;
-	uint8_t *const hash = sha_256->hash;
-	for (i = 0, j = 0; i < 8; i++) {
-		hash[j++] = (uint8_t)(h[i] >> 24);
-		hash[j++] = (uint8_t)(h[i] >> 16);
-		hash[j++] = (uint8_t)(h[i] >> 8);
-		hash[j++] = (uint8_t)h[i];
-	}
-	return sha_256->hash;
-}
-
-char * sha256_open_file(const char *filename, int *size){
-	FILE *file = fopen(filename, "rb");
-	if (file == NULL) {
-		return NULL;
-	}
-	fseek(file,0,SEEK_END);
-    *size = ftell(file);
-    fseek(file,0,SEEK_SET);
-    char *content = (char*)malloc(*size +1);
-    fread(content,1,*size,file);
-	fclose(file);
-	return content;
-}
-
-//Wrapper functions
-void calc_sha_256(uint8_t hash[SIZE_OF_SHA_256_HASH], const void *input, size_t len)
-{
-	struct Sha_256 sha_256;
-	sha_256_init(&sha_256, hash);
-	sha_256_write(&sha_256, input, len);
-	(void)sha_256_close(&sha_256);
-}
-
-char * calc_sha_256_returning_string(const void *input, size_t len)
-{
-	uint8_t hash[SIZE_OF_SHA_256_HASH];
-	calc_sha_256(hash, input, len);
-	char *hash_string = (char*)malloc(SIZE_OF_SHA_256_HASH * 2 + 1);
-	for (unsigned int i = 0; i < SIZE_OF_SHA_256_HASH; i++) {
-		sprintf(hash_string + i * 2, "%02x", hash[i]);
-	}
-	return hash_string;
-}
-
-void  calc_sha_256_from_string(uint8_t hash[SIZE_OF_SHA_256_HASH], const char *input)
-{
-	calc_sha_256(hash, input, strlen(input));
-	
-}
-
-char * calc_sha_256_from_string_returning_string(const char *input)
-{
-	return calc_sha_256_returning_string(input, strlen(input));
-}
-
-int calc_sha_256_from_file(uint8_t hash[SIZE_OF_SHA_256_HASH], const char *filename)
-{
-	int size;
-	char *content = sha256_open_file(filename, &size);
-	if(content == NULL){
-		return -1;
-	}
-	calc_sha_256(hash, content, size);
-	free(content);
-	return 0;
-}
-
-char * calc_sha_256_from_file_returning_string(const char *filename)
-{
-	int size;
-	char *content = sha256_open_file(filename, &size);
-	if(content == NULL){
-		return NULL;
-	}
-	char *hash_string = calc_sha_256_returning_string(content, size);
-	free(content);
-	return hash_string;
-
-}
-
-#endif
-
-
-
-const char base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-
-
-char *dtw_base64_encode(unsigned char *data, size_t input_length);
-
-
-unsigned char *dtw_base64_decode(char *data, size_t input_length, size_t *output_length);
-
-
-char *dtw_convert_binary_file_to_base64(const char *path);
-
-
 #ifndef cJSON__h
 
 /*
@@ -817,6 +332,7 @@ CJSON_PUBLIC(void) cJSON_free(void *object);
 #endif
 
 #endif
+
 /*
   Copyright (c) 2009-2017 Dave Gamble and cJSON contributors
 
@@ -3935,7 +3451,492 @@ CJSON_PUBLIC(void) cJSON_free(void *object)
 {
     global_hooks.deallocate(object);
 }
-#endif    
+#endif //cJSON__h
+#ifndef SHA_256_H
+
+#ifndef SHA_256_H
+#define SHA_256_H
+
+#include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/*
+ * @brief Size of the SHA-256 sum. This times eight is 256 bits.
+ */
+#define SIZE_OF_SHA_256_HASH 32
+
+/*
+ * @brief Size of the chunks used for the calculations.
+ *
+ * @note This should mostly be ignored by the user, although when using the streaming API, it has an impact for
+ * performance. Add chunks whose size is a multiple of this, and you will avoid a lot of superfluous copying in RAM!
+ */
+#define SIZE_OF_SHA_256_CHUNK 64
+
+/*
+ * @brief The opaque SHA-256 type, that should be instantiated when using the streaming API.
+ *
+ * @note Although the details are exposed here, in order to make instantiation easy, you should refrain from directly
+ * accessing the fields, as they may change in the future.
+ */
+struct Sha_256 {
+	uint8_t *hash;
+	uint8_t chunk[SIZE_OF_SHA_256_CHUNK];
+	uint8_t *chunk_pos;
+	size_t space_left;
+	size_t total_len;
+	uint32_t h[8];
+};
+
+/*
+ * @brief The simple SHA-256 calculation function.
+ * @param hash Hash array, where the result is delivered.
+ * @param input Pointer to the data the hash shall be calculated on.
+ * @param len Length of the input data, in byte.
+ *
+ * @note If all of the data you are calculating the hash value on is available in a contiguous buffer in memory, this is
+ * the function you should use.
+ *
+ * @note If either of the passed pointers is NULL, the results are unpredictable.
+ */
+void calc_sha_256(uint8_t hash[SIZE_OF_SHA_256_HASH], const void *input, size_t len);
+
+/*
+ * @brief Initialize a SHA-256 streaming calculation.
+ * @param sha_256 A pointer to a SHA-256 structure.
+ * @param hash Hash array, where the result will be delivered.
+ *
+ * @note If all of the data you are calculating the hash value on is not available in a contiguous buffer in memory, this is
+ * where you should start. Instantiate a SHA-256 structure, for instance by simply declaring it locally, make your hash
+ * buffer available, and invoke this function. Once a SHA-256 hash has been calculated (see further below) a SHA-256
+ * structure can be initialized again for the next calculation.
+ *
+ * @note If either of the passed pointers is NULL, the results are unpredictable.
+ */
+
+char * calc_sha_256_returning_string(const void *input, size_t len);
+/*
+	@param input: the string to be hashed
+	@param len: the length of the string
+	@return: the hash of the string
+	@note: if the input string is NULL, the results are unpredictable
+*/
+
+void calc_sha_256_from_string(uint8_t hash[SIZE_OF_SHA_256_HASH], const char *input);
+/*
+	@param hash: the hash array, where the result is delivered
+	@param input: the string to be hashed
+	@note: if the input string is NULL, the results are unpredictable
+*/
+
+int calc_sha_256_from_file(uint8_t hash[SIZE_OF_SHA_256_HASH], const char *filename);
+/*
+	@param hash: the hash array, where the result is delivered
+	@param filename: the name of the file to be hashed
+	@return: 0 if the file was hashed successfully, -1 otherwise
+*/
+
+char * calc_sha_256_from_file_returning_string(const char *filename);
+/*
+	@param filename: the name of the file to be hashed
+	@return: the hash of the file
+	@note: if the filename is NULL, the return value is NULL
+*/
+
+void sha_256_init(struct Sha_256 *sha_256, uint8_t hash[SIZE_OF_SHA_256_HASH]);
+
+/*
+ * @brief Stream more input data for an on-going SHA-256 calculation.
+ * @param sha_256 A pointer to a previously initialized SHA-256 structure.
+ * @param data Pointer to the data to be added to the calculation.
+ * @param len Length of the data to add, in byte.
+ *
+ * @note This function may be invoked an arbitrary number of times between initialization and closing, but the maximum
+ * data length is limited by the SHA-256 algorithm: the total number of bits (i.e. the total number of bytes times
+ * eight) must be representable by a 64-bit unsigned integer. While that is not a practical limitation, the results are
+ * unpredictable if that limit is exceeded.
+ *
+ * @note This function may be invoked on empty data (zero length), although that obviously will not add any data.
+ *
+ * @note If either of the passed pointers is NULL, the results are unpredictable.
+ */
+void sha_256_write(struct Sha_256 *sha_256, const void *data, size_t len);
+
+/*
+ * @brief Conclude a SHA-256 streaming calculation, making the hash value available.
+ * @param sha_256 A pointer to a previously initialized SHA-256 structure.
+ * @return Pointer to the hash array, where the result is delivered.
+ *
+ * @note After this function has been invoked, the result is available in the hash buffer that initially was provided. A
+ * pointer to the hash value is returned for convenience, but you should feel free to ignore it: it is simply a pointer
+ * to the first byte of your initially provided hash array.
+ *
+ * @note If the passed pointer is NULL, the results are unpredictable.
+ *
+ * @note Invoking this function for a calculation with no data (the writing function has never been invoked, or it only
+ * has been invoked with empty data) is legal. It will calculate the SHA-256 value of the empty string.
+ */
+uint8_t *sha_256_close(struct Sha_256 *sha_256);
+
+
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif
+
+
+
+#define TOTAL_LEN_LEN 8
+
+/*
+ * Comments from pseudo-code at https://en.wikipedia.org/wiki/SHA-2 are reproduced here.
+ * When useful for clarification, portions of the pseudo-code are reproduced here too.
+ */
+
+/*
+ * @brief Rotate a 32-bit value by a number of bits to the right.
+ * @param value The value to be rotated.
+ * @param count The number of bits to rotate by.
+ * @return The rotated value.
+ */
+static inline uint32_t right_rot(uint32_t value, unsigned int count)
+{
+	/*
+	 * Defined behaviour in standard C for all count where 0 < count < 32, which is what we need here.
+	 */
+	return value >> count | value << (32 - count);
+}
+
+/*
+ * @brief Update a hash value under calculation with a new chunk of data.
+ * @param h Pointer to the first hash item, of a total of eight.
+ * @param p Pointer to the chunk data, which has a standard length.
+ *
+ * @note This is the SHA-256 work horse.
+ */
+static inline void consume_chunk(uint32_t *h, const uint8_t *p)
+{
+	unsigned i, j;
+	uint32_t ah[8];
+
+	/* Initialize working variables to current hash value: */
+	for (i = 0; i < 8; i++)
+		ah[i] = h[i];
+
+	/*
+	 * The w-array is really w[64], but since we only need 16 of them at a time, we save stack by
+	 * calculating 16 at a time.
+	 *
+	 * This optimization was not there initially and the rest of the comments about w[64] are kept in their
+	 * initial state.
+	 */
+
+	/*
+	 * create a 64-entry message schedule array w[0..63] of 32-bit words (The initial values in w[0..63]
+	 * don't matter, so many implementations zero them here) copy chunk into first 16 words w[0..15] of the
+	 * message schedule array
+	 */
+	uint32_t w[16];
+
+	/* Compression function main loop: */
+	for (i = 0; i < 4; i++) {
+		for (j = 0; j < 16; j++) {
+			if (i == 0) {
+				w[j] =
+				    (uint32_t)p[0] << 24 | (uint32_t)p[1] << 16 | (uint32_t)p[2] << 8 | (uint32_t)p[3];
+				p += 4;
+			} else {
+				/* Extend the first 16 words into the remaining 48 words w[16..63] of the
+				 * message schedule array: */
+				const uint32_t s0 = right_rot(w[(j + 1) & 0xf], 7) ^ right_rot(w[(j + 1) & 0xf], 18) ^
+						    (w[(j + 1) & 0xf] >> 3);
+				const uint32_t s1 = right_rot(w[(j + 14) & 0xf], 17) ^
+						    right_rot(w[(j + 14) & 0xf], 19) ^ (w[(j + 14) & 0xf] >> 10);
+				w[j] = w[j] + s0 + w[(j + 9) & 0xf] + s1;
+			}
+			const uint32_t s1 = right_rot(ah[4], 6) ^ right_rot(ah[4], 11) ^ right_rot(ah[4], 25);
+			const uint32_t ch = (ah[4] & ah[5]) ^ (~ah[4] & ah[6]);
+
+			/*
+			 * Initialize array of round constants:
+			 * (first 32 bits of the fractional parts of the cube roots of the first 64 primes 2..311):
+			 */
+			static const uint32_t k[] = {
+			    0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4,
+			    0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe,
+			    0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f,
+			    0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7,
+			    0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc,
+			    0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b,
+			    0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116,
+			    0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+			    0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7,
+			    0xc67178f2};
+
+			const uint32_t temp1 = ah[7] + s1 + ch + k[i << 4 | j] + w[j];
+			const uint32_t s0 = right_rot(ah[0], 2) ^ right_rot(ah[0], 13) ^ right_rot(ah[0], 22);
+			const uint32_t maj = (ah[0] & ah[1]) ^ (ah[0] & ah[2]) ^ (ah[1] & ah[2]);
+			const uint32_t temp2 = s0 + maj;
+
+			ah[7] = ah[6];
+			ah[6] = ah[5];
+			ah[5] = ah[4];
+			ah[4] = ah[3] + temp1;
+			ah[3] = ah[2];
+			ah[2] = ah[1];
+			ah[1] = ah[0];
+			ah[0] = temp1 + temp2;
+		}
+	}
+
+	/* Add the compressed chunk to the current hash value: */
+	for (i = 0; i < 8; i++)
+		h[i] += ah[i];
+}
+
+/*
+ * Public functions. See header file for documentation.
+ */
+
+void sha_256_init(struct Sha_256 *sha_256, uint8_t hash[SIZE_OF_SHA_256_HASH])
+{
+	sha_256->hash = hash;
+	sha_256->chunk_pos = sha_256->chunk;
+	sha_256->space_left = SIZE_OF_SHA_256_CHUNK;
+	sha_256->total_len = 0;
+	/*
+	 * Initialize hash values (first 32 bits of the fractional parts of the square roots of the first 8 primes
+	 * 2..19):
+	 */
+	sha_256->h[0] = 0x6a09e667;
+	sha_256->h[1] = 0xbb67ae85;
+	sha_256->h[2] = 0x3c6ef372;
+	sha_256->h[3] = 0xa54ff53a;
+	sha_256->h[4] = 0x510e527f;
+	sha_256->h[5] = 0x9b05688c;
+	sha_256->h[6] = 0x1f83d9ab;
+	sha_256->h[7] = 0x5be0cd19;
+}
+
+void sha_256_write(struct Sha_256 *sha_256, const void *data, size_t len)
+{
+	sha_256->total_len += len;
+
+	
+	const uint8_t *p = (const uint8_t *)data;
+
+
+	while (len > 0) {
+		/*
+		 * If the input chunks have sizes that are multiples of the calculation chunk size, no copies are
+		 * necessary. We operate directly on the input data instead.
+		 */
+		if (sha_256->space_left == SIZE_OF_SHA_256_CHUNK && len >= SIZE_OF_SHA_256_CHUNK) {
+			consume_chunk(sha_256->h, p);
+			len -= SIZE_OF_SHA_256_CHUNK;
+			p += SIZE_OF_SHA_256_CHUNK;
+			continue;
+		}
+		/* General case, no particular optimization. */
+		const size_t consumed_len = len < sha_256->space_left ? len : sha_256->space_left;
+		memcpy(sha_256->chunk_pos, p, consumed_len);
+		sha_256->space_left -= consumed_len;
+		len -= consumed_len;
+		p += consumed_len;
+		if (sha_256->space_left == 0) {
+			consume_chunk(sha_256->h, sha_256->chunk);
+			sha_256->chunk_pos = sha_256->chunk;
+			sha_256->space_left = SIZE_OF_SHA_256_CHUNK;
+		} else {
+			sha_256->chunk_pos += consumed_len;
+		}
+	}
+}
+
+uint8_t *sha_256_close(struct Sha_256 *sha_256)
+{
+	uint8_t *pos = sha_256->chunk_pos;
+	size_t space_left = sha_256->space_left;
+	uint32_t *const h = sha_256->h;
+
+	/*
+	 * The current chunk cannot be full. Otherwise, it would already have be consumed. I.e. there is space left for
+	 * at least one byte. The next step in the calculation is to add a single one-bit to the data.
+	 */
+	*pos++ = 0x80;
+	--space_left;
+
+	/*
+	 * Now, the last step is to add the total data length at the end of the last chunk, and zero padding before
+	 * that. But we do not necessarily have enough space left. If not, we pad the current chunk with zeroes, and add
+	 * an extra chunk at the end.
+	 */
+	if (space_left < TOTAL_LEN_LEN) {
+		memset(pos, 0x00, space_left);
+		consume_chunk(h, sha_256->chunk);
+		pos = sha_256->chunk;
+		space_left = SIZE_OF_SHA_256_CHUNK;
+	}
+	const size_t left = space_left - TOTAL_LEN_LEN;
+	memset(pos, 0x00, left);
+	pos += left;
+	size_t len = sha_256->total_len;
+	pos[7] = (uint8_t)(len << 3);
+	len >>= 5;
+	int i;
+	for (i = 6; i >= 0; --i) {
+		pos[i] = (uint8_t)len;
+		len >>= 8;
+	}
+	consume_chunk(h, sha_256->chunk);
+	/* Produce the final hash value (big-endian): */
+	int j;
+	uint8_t *const hash = sha_256->hash;
+	for (i = 0, j = 0; i < 8; i++) {
+		hash[j++] = (uint8_t)(h[i] >> 24);
+		hash[j++] = (uint8_t)(h[i] >> 16);
+		hash[j++] = (uint8_t)(h[i] >> 8);
+		hash[j++] = (uint8_t)h[i];
+	}
+	return sha_256->hash;
+}
+
+char * sha256_open_file(const char *filename, int *size){
+	FILE *file = fopen(filename, "rb");
+	if (file == NULL) {
+		return NULL;
+	}
+	fseek(file,0,SEEK_END);
+    *size = ftell(file);
+    fseek(file,0,SEEK_SET);
+    char *content = (char*)malloc(*size +1);
+    fread(content,1,*size,file);
+	fclose(file);
+	return content;
+}
+
+//Wrapper functions
+void calc_sha_256(uint8_t hash[SIZE_OF_SHA_256_HASH], const void *input, size_t len)
+{
+	struct Sha_256 sha_256;
+	sha_256_init(&sha_256, hash);
+	sha_256_write(&sha_256, input, len);
+	(void)sha_256_close(&sha_256);
+}
+
+char * calc_sha_256_returning_string(const void *input, size_t len)
+{
+	uint8_t hash[SIZE_OF_SHA_256_HASH];
+	calc_sha_256(hash, input, len);
+	char *hash_string = (char*)malloc(SIZE_OF_SHA_256_HASH * 2 + 1);
+	for (unsigned int i = 0; i < SIZE_OF_SHA_256_HASH; i++) {
+		sprintf(hash_string + i * 2, "%02x", hash[i]);
+	}
+	return hash_string;
+}
+
+void  calc_sha_256_from_string(uint8_t hash[SIZE_OF_SHA_256_HASH], const char *input)
+{
+	calc_sha_256(hash, input, strlen(input));
+	
+}
+
+char * calc_sha_256_from_string_returning_string(const char *input)
+{
+	return calc_sha_256_returning_string(input, strlen(input));
+}
+
+int calc_sha_256_from_file(uint8_t hash[SIZE_OF_SHA_256_HASH], const char *filename)
+{
+	int size;
+	char *content = sha256_open_file(filename, &size);
+	if(content == NULL){
+		return -1;
+	}
+	calc_sha_256(hash, content, size);
+	free(content);
+	return 0;
+}
+
+char * calc_sha_256_from_file_returning_string(const char *filename)
+{
+	int size;
+	char *content = sha256_open_file(filename, &size);
+	if(content == NULL){
+		return NULL;
+	}
+	char *hash_string = calc_sha_256_returning_string(content, size);
+	free(content);
+	return hash_string;
+
+}
+#endif  //SHA_256_H
+
+
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <time.h>
+
+
+
+#ifdef __linux__
+  #include <dirent.h>
+  #include <unistd.h>
+#elif _WIN32
+  #include <windows.h>
+  #include <tchar.h>
+  #include <wchar.h>
+  #include <locale.h>
+  #include <direct.h>
+#endif
+
+
+
+struct DtwStringArray {
+  int size;         
+
+  char **strings;       
+  void (*set_value)(struct DtwStringArray *self,int index,const char *value);
+  void (*add_string)(struct DtwStringArray *self,const char *string);
+  void (*merge_string_array)(struct DtwStringArray *self, struct DtwStringArray *other);
+  void (*represent)(struct DtwStringArray *self);
+  void (*free_string_array)(struct DtwStringArray *self);
+  int (*find_position)(struct DtwStringArray *self,const char *string);
+}; // End the structure with a semicolon
+int  private_dtw_find_position(struct DtwStringArray *self,const char *string);
+void private_dtw_add_string(struct DtwStringArray *self,const char *string);
+void private_dtw_merge_string_array(struct DtwStringArray *self, struct DtwStringArray *other);
+void private_dtw_represent_string_array(struct DtwStringArray *self);
+void private_dtw_free_string_array(struct DtwStringArray *self);
+void private_dtw_set_value(struct DtwStringArray *self,int index,const char *value);
+
+struct DtwStringArray * dtw_constructor_string_array();
+
+
+
+const char base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+
+char *dtw_base64_encode(unsigned char *data, size_t input_length);
+
+
+unsigned char *dtw_base64_decode(char *data, size_t input_length, size_t *output_length);
+
+
+char *dtw_convert_binary_file_to_base64(const char *path);
 
 
 
@@ -3951,12 +3952,15 @@ char *dtw_concat_path(const char *path1, const char *path2);
 struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *paths,const char *path_to_remove);
 void private_dtw_remove_double_bars(struct DtwStringArray*path);
 
+
 bool dtw_starts_with(const char *string, const char *prefix);
 bool dtw_ends_with(const char *string, const char *suffix);
 char *private_dtw_replace_string_once(const char *target, const char *old_element, const char *new_element);
 char* dtw_replace_string(const char *target, const char *old_element, const char *new_element);
 
 char *private_dtw_change_beginning_of_string(const char *target,int start_element_to_remove_size, const char *new_element);
+
+
 
 #define DTW_FILE_TYPE 1
 #define DTW_FOLDER_TYPE 2
@@ -3994,6 +3998,7 @@ int dtw_entity_type(const char *path);
 #endif 
 
 void dtw_move_any(const char* src_path, const char* dest_path,bool merge);
+
 #define DTW_CONCAT_PATH true
 #define DTW_NOT_CONCAT_PATH false
 
@@ -4001,6 +4006,7 @@ struct DtwStringArray * dtw_list_files(const char *path, bool concat_path);
 struct DtwStringArray * dtw_list_dirs(const char *path, bool concat_path);
 
 struct DtwStringArray *  dtw_list_all(const char *path,  bool concat_path);
+
 
 #ifdef __linux__
 
@@ -4023,6 +4029,7 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
 struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool concat_path);
 #endif 
 
+
 struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool concat_path);
 
 
@@ -4030,6 +4037,8 @@ struct DtwStringArray *  dtw_list_files_recursively(const char *path,bool concat
 
 
 struct DtwStringArray * dtw_list_all_recursively(const char *path,bool concat_path);
+
+
 
 struct DtwPath {
     char *original_path;
@@ -4087,6 +4096,20 @@ void private_dtw_destructor_path(struct DtwPath *self);
 
 
 
+
+
+struct DtwTransactionReport{
+    struct DtwStringArray *write;
+    struct DtwStringArray *modify;
+    struct DtwStringArray *remove;
+    void (*represent)(struct DtwTransactionReport *report);
+    void (*free_transaction)(struct DtwTransactionReport *report);
+};
+
+struct DtwTransactionReport * dtw_constructor_transaction_report();
+void  private_dtw_represent_transaction(struct DtwTransactionReport *report);
+void  private_dtw_free_transaction(struct DtwTransactionReport *report);
+
 #define DTW_JSON_ERROR_CODE_OK 0
 #define DTW_JSON_TYPE_ERROR 1
 #define DTW_JSON_SYNTAX_ERROR 2
@@ -4106,6 +4129,7 @@ struct DtWJsonError * private_dtw_json_error_constructor();
 struct DtWJsonError * dtw_validate_json_tree(char *content);
 void private_represent_json_error(struct DtWJsonError *self);
 void private_free_json_error(struct DtWJsonError *self);
+
 
 
 #define DTW_LOAD_CONTENT  true
@@ -4192,6 +4216,7 @@ struct DtwTreePart * private_dtw_copy_tree(struct DtwTreePart *self);
 
 struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_content,bool load_meta_data);
 
+
 #define DTW_NOT_MINIFY  false
 #define DTW_MINIFY  true
 #define DTW_NOT_PRESERVE_PATH_ATRIBUTES  false
@@ -4268,7 +4293,7 @@ struct  DtwTree{
 
 
     struct DtwTransactionReport * (*report)(struct DtwTree *self);    
-    //
+    //{%if not  lite %}
 
     void (*loads_json_tree)(
         struct DtwTree *self,
@@ -4302,7 +4327,7 @@ struct  DtwTree{
         bool consider_igonore
     );
 
-    //
+    //{%endif%}
     void (*free_tree)(struct DtwTree *self);
     void (*represent)(struct DtwTree *self);
     void (*insecure_hardware_remove_tree)(struct DtwTree *self);
@@ -4369,7 +4394,7 @@ void private_insecure_dtw_hardware_remove_tree(struct DtwTree *self);
 void private_insecure_dtw_hardware_write_tree(struct DtwTree *self);
 void private_dtw_hardware_commit_tree(struct DtwTree *self);
 
-//
+//{%if not  lite %}
 void private_dtw_loads_json_tree(struct DtwTree *self,const char *content);
 void private_dtw_loads_json_tree_from_file(struct DtwTree *self,const char *path);
 
@@ -4393,8 +4418,9 @@ void private_dtw_dumps_tree_json_to_file(
     bool preserve_content_data,
     bool consider_igonore
     );
-//
+//{%endif%}
 struct  DtwTree * dtw_tree_constructor();
+
 
 
 
@@ -4473,6 +4499,7 @@ char *dtw_convert_binary_file_to_base64(const char *path){
     free(data);
     return b64;
 }
+
 
 char * dtw_generate_sha_from_file(const char *path){
     return calc_sha_256_from_file_returning_string(path);
@@ -4614,6 +4641,7 @@ void private_dtw_remove_double_bars(struct DtwStringArray*path){
 
 
 
+
 bool dtw_starts_with(const char *string, const char *prefix){
     if(strncmp(string, prefix, strlen(prefix)) == 0){
         return true;
@@ -4680,6 +4708,8 @@ char *private_dtw_change_beginning_of_string(const char *target,int start_elemen
     free(new_target);
     return result;
 }
+
+
 
 
 
@@ -4931,6 +4961,8 @@ void dtw_move_any(const char* src_path, const char* dest_path,bool merge) {
 }
 
 
+
+
 struct DtwStringArray * dtw_list_files(const char *path, bool concat_path){
     return dtw_list_basic(path,  DTW_FILE_TYPE, concat_path);
 }
@@ -4942,6 +4974,8 @@ struct DtwStringArray * dtw_list_dirs(const char *path, bool concat_path){
 struct DtwStringArray *  dtw_list_all(const char *path,  bool concat_path){
     return dtw_list_basic(path, DTW_ALL_TYPE, concat_path);
 }
+
+
 
 
 #ifdef __linux__
@@ -5026,6 +5060,7 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
 }
 
 #endif
+
 
 #ifdef _WIN32
 
@@ -5120,6 +5155,7 @@ struct DtwStringArray *  dtw_list_basic(const char *path,int expected_type,bool 
     return dirs;
 }
 #endif
+
 
 struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool concat_path){
 
@@ -5219,6 +5255,7 @@ struct DtwStringArray * dtw_list_all_recursively(const char *path,bool concat_pa
     }
     return all;
 }
+
 
 
 struct DtwPath * dtw_constructor_path( const char *path) {
@@ -5504,17 +5541,7 @@ void private_dtw_destructor_path(struct DtwPath *self) {
 }
 
 
-struct DtwTransactionReport{
-    struct DtwStringArray *write;
-    struct DtwStringArray *modify;
-    struct DtwStringArray *remove;
-    void (*represent)(struct DtwTransactionReport *report);
-    void (*free_transaction)(struct DtwTransactionReport *report);
-};
 
-struct DtwTransactionReport * dtw_constructor_transaction_report();
-void  private_dtw_represent_transaction(struct DtwTransactionReport *report);
-void  private_dtw_free_transaction(struct DtwTransactionReport *report);
 
 struct DtwStringArray * dtw_constructor_string_array(){
     struct DtwStringArray *self = (struct DtwStringArray*)malloc(sizeof(struct DtwStringArray));
@@ -5575,6 +5602,8 @@ void private_dtw_free_string_array(struct DtwStringArray *self){
     free(self->strings);
     free(self);
 }
+
+
 
 
 
@@ -5770,6 +5799,8 @@ void private_dtw_tree_part_destructor(struct DtwTreePart *self){
 
 
 
+
+
 void private_dtw_load_content_from_hardware(struct DtwTreePart *self){
     int size;
     bool is_binary;
@@ -5928,6 +5959,8 @@ bool private_dtw_hardware_commit(struct DtwTreePart *self){
 
 
 
+
+
 struct  DtwTree * dtw_tree_constructor(){
 
     struct DtwTree *self = (struct DtwTree*)malloc(sizeof(struct DtwTree));
@@ -5949,7 +5982,7 @@ struct  DtwTree * dtw_tree_constructor(){
     self->find_part_by_name  = private_dtw_find_tree_part_by_name;
     self->find_part_by_path = private_dtw_find_tree_part_by_path;
     self->report = private_dtw_create_report;
-    //
+    //{%if not  lite %}
     
     self->loads_json_tree = private_dtw_loads_json_tree;
     self->loads_json_tree_from_file = private_dtw_loads_json_tree_from_file;
@@ -5957,7 +5990,7 @@ struct  DtwTree * dtw_tree_constructor(){
     self->dumps_json_tree = private_dtw_dumps_tree_json;
     self->dumps_json_tree_to_file = private_dtw_dumps_tree_json_to_file;
 
-    //
+    //{%endif%}
     self->insecure_hardware_remove_tree = private_insecure_dtw_hardware_remove_tree;
     self->insecure_hardware_write_tree = private_insecure_dtw_hardware_write_tree;
     self->hardware_commit_tree = private_dtw_hardware_commit_tree;
@@ -6118,6 +6151,97 @@ void private_dtw_hardware_commit_tree(struct DtwTree *self){
     }
 }
 
+
+//
+// Created by jurandi on 11-04-2023.
+//
+struct DtwTreePart *private_dtw_find_by_function(
+        struct DtwTree *self,
+        bool (*caller)(struct  DtwTreePart *part)
+){
+    for(int i = 0;i < self->size; i++){
+        struct DtwTreePart *current = self->tree_parts[i];
+        bool result = caller(current);
+        if(result){
+            return current;
+        }
+    }
+    return NULL;
+}
+
+struct DtwTree *private_dtw_filter(
+        struct DtwTree *self,
+        bool (*caller)(struct  DtwTreePart *part)
+){
+    struct DtwTree *filtered_tree = dtw_tree_constructor();
+
+    for(int i = 0;i < self->size; i++){
+
+        struct DtwTreePart *current = self->tree_parts[i];
+
+        bool result = caller(current);
+
+        if(result){
+            filtered_tree->add_tree_part_by_copy(filtered_tree,current);
+        }
+    }
+    return filtered_tree;
+}
+
+
+struct DtwTree *private_dtw_map(
+        struct DtwTree *self,
+        struct DtwTreePart *(*caller)(struct  DtwTreePart *part)
+){
+    struct DtwTree *mapped_tree = dtw_tree_constructor();
+
+    for(int i = 0;i < self->size; i++){
+        struct DtwTreePart *current = self->tree_parts[i];
+        struct DtwTreePart *copy = current->copy_tree_part(current);
+        struct DtwTreePart *result = caller(copy);
+        mapped_tree->add_tree_part_by_reference(mapped_tree,result);
+    }
+    return mapped_tree;
+}
+
+
+struct DtwTreePart *private_dtw_find_tree_part_by_name(struct DtwTree *self,const char *name){
+    for(int i = 0;i < self->size; i++){
+        struct DtwTreePart *current = self->tree_parts[i];
+        struct DtwPath *current_path = current->path;
+        char *current_name = current_path->get_full_name(current_path);
+        if(current_name){
+
+            if(strcmp(current_name, name) == 0){
+                free(current_name);
+                return current;
+            }
+            free(current_name);
+        }
+
+    }
+
+    return NULL;
+}
+
+struct DtwTreePart *private_dtw_find_tree_part_by_path(struct DtwTree *self,const char *path){
+    for(int i = 0;i < self->size; i++){
+        struct DtwTreePart *current = self->tree_parts[i];
+        struct DtwPath *current_path = current->path;
+        char *current_path_string = current_path->get_path(current_path);
+        if(current_path_string){
+            if(strcmp(current_path_string, path) == 0){
+                free(current_path_string);
+                return current;
+            }
+            free(current_path_string);
+        }
+
+    }
+
+    return NULL;
+}
+
 struct DtWJsonError * private_dtw_json_error_constructor(){
     struct DtWJsonError *self =(struct DtWJsonError*)malloc(sizeof(struct DtWJsonError));
     self->code = DTW_JSON_ERROR_CODE_OK;
@@ -6261,6 +6385,7 @@ void private_represent_json_error(struct DtWJsonError *self){
 void private_free_json_error(struct DtWJsonError *self){
     free(self);
 }
+
 
 
 void private_dtw_loads_json_tree(struct DtwTree *self,const char *content){
@@ -6537,8 +6662,6 @@ void  private_dtw_dumps_tree_json_to_file(struct DtwTree *self,const char *path,
 
 
 
-
-
 struct DtwTransactionReport * dtw_constructor_transaction_report(){
     struct DtwTransactionReport *new_report = (struct DtwTransactionReport *)malloc(sizeof(struct DtwTransactionReport));
     new_report->write = dtw_constructor_string_array();
@@ -6565,94 +6688,9 @@ void  private_dtw_free_transaction(struct DtwTransactionReport *report){
     report->remove->free_string_array(report->remove);
     free(report);
 }
-//
-// Created by jurandi on 11-04-2023.
-//
-struct DtwTreePart *private_dtw_find_by_function(
-        struct DtwTree *self,
-        bool (*caller)(struct  DtwTreePart *part)
-){
-    for(int i = 0;i < self->size; i++){
-        struct DtwTreePart *current = self->tree_parts[i];
-        bool result = caller(current);
-        if(result){
-            return current;
-        }
-    }
-    return NULL;
-}
 
-struct DtwTree *private_dtw_filter(
-        struct DtwTree *self,
-        bool (*caller)(struct  DtwTreePart *part)
-){
-    struct DtwTree *filtered_tree = dtw_tree_constructor();
-
-    for(int i = 0;i < self->size; i++){
-
-        struct DtwTreePart *current = self->tree_parts[i];
-
-        bool result = caller(current);
-
-        if(result){
-            filtered_tree->add_tree_part_by_copy(filtered_tree,current);
-        }
-    }
-    return filtered_tree;
-}
+#endif //DO_THE_WORLD_H
 
 
-struct DtwTree *private_dtw_map(
-        struct DtwTree *self,
-        struct DtwTreePart *(*caller)(struct  DtwTreePart *part)
-){
-    struct DtwTree *mapped_tree = dtw_tree_constructor();
-
-    for(int i = 0;i < self->size; i++){
-        struct DtwTreePart *current = self->tree_parts[i];
-        struct DtwTreePart *copy = current->copy_tree_part(current);
-        struct DtwTreePart *result = caller(copy);
-        mapped_tree->add_tree_part_by_reference(mapped_tree,result);
-    }
-    return mapped_tree;
-}
 
 
-struct DtwTreePart *private_dtw_find_tree_part_by_name(struct DtwTree *self,const char *name){
-    for(int i = 0;i < self->size; i++){
-        struct DtwTreePart *current = self->tree_parts[i];
-        struct DtwPath *current_path = current->path;
-        char *current_name = current_path->get_full_name(current_path);
-        if(current_name){
-
-            if(strcmp(current_name, name) == 0){
-                free(current_name);
-                return current;
-            }
-            free(current_name);
-        }
-
-    }
-
-    return NULL;
-}
-
-struct DtwTreePart *private_dtw_find_tree_part_by_path(struct DtwTree *self,const char *path){
-    for(int i = 0;i < self->size; i++){
-        struct DtwTreePart *current = self->tree_parts[i];
-        struct DtwPath *current_path = current->path;
-        char *current_path_string = current_path->get_path(current_path);
-        if(current_path_string){
-            if(strcmp(current_path_string, path) == 0){
-                free(current_path_string);
-                return current;
-            }
-            free(current_path_string);
-        }
-
-    }
-
-    return NULL;
-}
-
-#endif
