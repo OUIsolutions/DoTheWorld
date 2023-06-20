@@ -1,5 +1,5 @@
 
-#include "doTheWorld.c"
+#include "../../doTheWorld_test.h"
 
 int main(int argc, char *argv[]){
  
@@ -12,7 +12,6 @@ int main(int argc, char *argv[]){
     return 1;
   }
   printf("size: %d\n",size);
-  printf("content: %s\n",content);
   free(content);
   return 0;
 }

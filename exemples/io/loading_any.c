@@ -1,4 +1,4 @@
-#include "doTheWorld.c"
+#include "../../doTheWorld_test.h"
 
 int main(int argc, char *argv[]){
  
@@ -13,7 +13,6 @@ int main(int argc, char *argv[]){
   }
   printf("size: %d\n",size);
   printf("is_binary: %s\n",is_binary ? "true" : "false");
-  printf("content: %s\n",content);
   free(content);
   return 0;
 }

@@ -1,6 +1,6 @@
 
 
-#include "../../doTheWorld.c"
+#include "../../doTheWorld_test.h"
 
 int main(int argc, char *argv[]){
   
