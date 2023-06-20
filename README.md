@@ -38,48 +38,12 @@ int main(int argc, char *argv[]){
 
 ## Reading strings
 if you are sure that the content you are going to read is not binary you can call the function **dtw_load_string_file_content**
-~~~c
+<!--codeof:readme_exemples/loading_string.c-->
 
-
-#include "doTheWorld.h"
-
-int main(int argc, char *argv[]){
-  //load a string file content
-  const char *path = "exemple_folder/a/test.txt";
-  char *content = dtw_load_string_file_content(path);
-  if(content == NULL){
-    printf("error oppening %s\n",path);
-    return 1;
-  }
-  printf("content: %s\n",content);
-  free(content);
-  return 0;
-}
-~~~
-## Reading Any
 if you are not sure what data type a file is you can call the function **dtw_load_any_content**
 
-~~~c
-#include "doTheWorld.h"
+<!--codeof:readme_exemples/loading_any.c-->
 
-int main(int argc, char *argv[]){
- 
-  const char *path = "exemple_folder/deer.jpg";
-  int size;
-  bool is_binary;
-  //load any file, is useful if you don't know if the file is binary or not
-  unsigned char *content = dtw_load_any_content(path,&size,&is_binary);
-  if(content == NULL){
-    printf("error oppening %s\n",path);
-    return 1;
-  }
-  printf("size: %d\n",size);
-  printf("is_binary: %s\n",is_binary ? "true" : "false");
-  printf("content: %s\n",content);
-  free(content);
-  return 0;
-}
-~~~
 
 
 ## Writing strings
@@ -87,87 +51,34 @@ int main(int argc, char *argv[]){
 to write strings in text files is very simple, just call the function **dtw_write_string_file_content**
 (Note that the target directory does not need to exist, if it does not exist it will be created automatically)
 
-~~~c
-#include "doTheWorld.h"
-int main(int argc, char *argv[]){
-  // Write a string to a file the path is auto created
-  
-  bool result = dtw_write_string_file_content("test/a/test.txt","Hello World!");
-  printf("result: %s\n",result ? "true" : "false");
-  return 0;
-}
-~~~
+<!--codeof:readme_exemples/writing_strings.c-->
+
 
 ## Writing Any
 
 if you want to write anything to a file, it's also very simple, use the **dtw_load_binary_content** function, but note that it will be necessary to pass the writing size
 
-~~~c
+<!--codeof:readme_exemples/writing_any.c-->
 
-#include "doTheWorld.h"
-
-int main(int argc, char *argv[]){
-  //load the beer image
-  const char *deer_path = "test/exemple_folder/deer.jpg";
-  int deer_size;
-  unsigned char *content = dtw_load_binary_content(deer_path,&deer_size);
-  //use these functions for binary files
-  if(content == NULL){
-    printf("error oppening %s\n",deer_path);
-    return 1;
-  }
-  printf("size: %d\n",deer_size);
-
-  bool result = dtw_write_any_content("test/deer.jpg",content,deer_size);
-  printf("result: %s\n",result ? "true" : "false");
-  return 0;
-}
-~~~
 ## Creating Dirs
 If you want to create dirs you can call the function **dtw_create_dir_recursively**
 passing the folder you want to create,dont wory about if the previews path dont exist 
 it will create till reachs the target folder
-~~~c
-#include "doTheWorld.h"
 
-int main(int argc, char *argv[]){
- 
-  dtw_create_dir_recursively("a/b/c/");
-  return 0;
-}
-~~~
+<!--codeof:readme_exemples/create_dirs.c-->
+
+
 ##  Copying Things 
 With the function **dtw_copy_any** you can copy either files or folders to one position to anoter position 
 ##### Copying files
-~~~c
 
-
-#include "doTheWorld.h"
-
-int main(int argc, char *argv[]){
-
-  dtw_copy_any("exemple_folder/deer.jpg","deer.jpg",DTW_NOT_MERGE);
-  return 0;
-}
-~~~
+<!--codeof:readme_exemples/copying_files.c-->
 
 
 ## Moving Things
 
 You can move either folders or files with **dtw_move_any** function 
 
-~~~c
-
-#include "doTheWorld.h"
-
-int main(int argc, char *argv[]){
-
-
-  dtw_move_any("exemple_folder/deer.jpg","deer.jpg",DTW_NOT_MERGE);
-
-  return 0;
-}
-~~~
 
 # Monodimension Listage
 

@@ -23,7 +23,6 @@ output_test/
 # Precompiled Headers
 *.gch
 *.pch
-
 # Libraries
 *.lib
 *.a
