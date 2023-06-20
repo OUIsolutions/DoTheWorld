@@ -10,9 +10,9 @@ exemple
 main.c
 deer.jpg
 main.cpp
-teste
+teste.txt
 code.json
-teste.py
+test.py
 # Linker output
 *.ilk
 *.map
