@@ -1,7 +1,10 @@
 //
 // Created by jurandi on 20-06-2023.
 //
+
+
 #include "../../doTheWorld_test.h"
+
 int main(){
 
     DtwTree *tree = newDtwTree();
@@ -12,9 +15,11 @@ int main(){
             DTW_LOAD_METADATA,
             DTW_PRESERVE_PATH_START
     );
-    for(int i = 0; i<tree->size;i++){
-        DtwTreePart *current_part = tree->tree_parts[i];
-        current_part->represent(current_part);
+
+    DtwTreePart *deer = tree->find_part_by_name(tree,"deer.jpg");
+    if(deer){
+        deer->represent(deer);
     }
     tree->free(tree);
+
 }

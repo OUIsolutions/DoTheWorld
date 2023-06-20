@@ -203,29 +203,9 @@ easy steps
 
 #### Finding by Name 
 
-~~~c
-
-#include "doTheWorld.h"
+<!--codeof:readme_exemples/find_tree_part_by_name.c-->
 
 
-int main(){
-
-    struct DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
-            tree,
-            "exemple_folder",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_START
-            );
-
-    struct DtwTreePart *deer = tree->find_part_by_name(tree,"deer.jpg");
-    if(deer){
-        deer->represent(deer);
-    }
-    tree->free(tree);
-}   
-~~~
 ### Finding By Full Path 
 ~~~c
 

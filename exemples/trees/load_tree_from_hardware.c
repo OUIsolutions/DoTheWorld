@@ -6,7 +6,7 @@
 
 int main(){
 
-    struct DtwTree *tree = newDtwTree();
+    DtwTree *tree = newDtwTree();
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",

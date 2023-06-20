@@ -6,13 +6,13 @@
 
 int main(){
 
-    struct DtwTreePart *part = newDtwTreePart(
+    DtwTreePart *part = newDtwTreePart(
             "test.txt",
             DTW_LOAD_CONTENT,
             DTW_LOAD_METADATA
     );
 
-    struct DtwPath *path = part->path;
+    DtwPath *path = part->path;
 
     char *name = path->get_full_name(path);
     char *extension = path->get_extension(path);

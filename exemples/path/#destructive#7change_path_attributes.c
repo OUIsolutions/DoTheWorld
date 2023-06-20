@@ -6,13 +6,13 @@
 
 int main(){
 
-    struct DtwTreePart *part = newDtwTreePart(
+    DtwTreePart *part = newDtwTreePart(
             "exemple_folder/a.txt",
             DTW_LOAD_CONTENT,
             DTW_LOAD_METADATA
     );
 
-    struct DtwPath *path = part->path;
+    DtwPath *path = part->path;
 
     path->set_dir(path,"a/b");
     path->set_name(path,"test2");
