@@ -28,6 +28,7 @@ output_test/
 *.a
 *.la
 *.lo
+main.c
 test.txt
 deer.txt
 # Shared objects (inc. Windows DLLs)
