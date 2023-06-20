@@ -29,13 +29,18 @@ def execute_test_for_folder(folder:str):
             ct.execute_test_for_file('gcc',f'{folder}/{file}')
         print('passed:',file)
 
-    print(files)
 
 def  execute_all_tests():
     execute_test_for_folder('exemples/io')
+    execute_test_for_folder('exemples/monodimension_listage')
+    execute_test_for_folder('exemples/multidimension_listage')
 
 ct.generate_amalgamated_code(STARTER,OUTPUT_TEST)
+
 execute_all_tests()
+
+ct.generate_amalgamated_code(STARTER,'doTheWorld.h')
+
 
 
 
