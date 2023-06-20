@@ -13,6 +13,7 @@ ct.generate_amalgamated_code(STARTER,OUTPUT_TEST)
 
 try:
     ct.execute_test_for_folder('gcc','exemples/io/')
+    ct.execute_test_for_folder('gcc','exemples/monodimension_listage/')
     ct.generate_amalgamated_code(STARTER,'doTheWorld.h')
 except Exception as e:
     print(e)
