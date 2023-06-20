@@ -28,7 +28,7 @@ output_test/
 *.a
 *.la
 *.lo
-
+test.txt
 # Shared objects (inc. Windows DLLs)
 *.dll
 *.so

@@ -14,5 +14,6 @@ int main(int argc, char *argv[]){
 
   bool result = dtw_write_any_content("output_folder/deer.jpg",content,deer_size);
   printf("result: %s\n",result ? "true" : "false");
+  free(content);
   return 0;
 }
