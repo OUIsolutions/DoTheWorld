@@ -230,76 +230,15 @@ with filter you can filter the contents you want in an tree with an bool lambda
 With **hardware_commit_tree** you can commit all modifications at Once 
 turning system ultra securty
 
+<!--codeof:readme_exemples/#destructive#tree_commit.c-->
 
 
-#include "doTheWorld.h"
-int main(){
-
-    struct DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
-            tree,
-            "exemple_folder",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_START
-    );
-    for(int i=0; i < tree->size;i++){
-        struct DtwTreePart *part = tree->tree_parts[i];
-        struct DtwPath *path = part->path;
-        char *extension = path->get_extension(path);
-        if(!extension){
-            continue;
-        }
-        if(strcmp(extension,"txt") == 0){
-            path->set_extension(path,"md");
-            part->hardware_modify(part,DTW_SET_AS_ACTION);
-
-        }
-        free(extension);
-    }
-
-    tree->hardware_commit_tree(tree);
-    tree->free(tree);
-}
 ### Transaction Reports 
 With transactin Reports , you can see what will be modified
 
-~~~c
+<!--codeof:readme_exemples/transaction_report.c-->
 
 
-#include "doTheWorld.h"
-
-int main(){
-
-    struct DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
-            tree,
-            "exemple_folder",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_START
-    );
-    for(int i=0; i < tree->size;i++){
-        struct DtwTreePart *part = tree->tree_parts[i];
-        struct DtwPath *path = part->path;
-        char *extension = path->get_extension(path);
-        if(!extension){
-            continue;
-        }
-        printf("%s\n",extension);
-        if(strcmp(extension,"txt") == 0){
-            path->set_extension(path,"md");
-            part->hardware_modify(part,DTW_SET_AS_ACTION);
-
-        }
-        free(extension);
-    }
-    struct DtwTransactionReport *report = tree->report(tree);
-    report->represent(report);
-    report->free(report);
-    tree->free(tree);
-}
-~~~
 ### Tree Json Operations 
 With Json Trees Operations you can save or load trees, from hardware or strings in an super easy mode 
 
