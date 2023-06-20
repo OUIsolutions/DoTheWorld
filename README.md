@@ -79,172 +79,63 @@ With the function **dtw_copy_any** you can copy either files or folders to one p
 
 You can move either folders or files with **dtw_move_any** function 
 
+<!--codeof:readme_exemples/move_any.c-->
 
 # Monodimension Listage
 
 With the listage functions you can extract all Strings Arrays of elements in an folder 
 
 ## Listing files
-~~~c
+<!--codeof:readme_exemples/list_files.c-->
 
-#include "doTheWorld.h"
-
-int main(int argc, char *argv[]){
-
-  struct DtwStringArray *files = dtw_list_files("exemple_folder", DTW_CONCAT_PATH);
-  for(int i = 0; i < files->size; i++){
-    printf("%s\n", files->strings[i]);
-  }
-  files->free(files);
-  return 0;
-}
-~~~
 ## Listing dirs 
-~~~c
+<!--codeof:readme_exemples/list_dirs.c-->
 
-#include "doTheWorld.h"
-
-int main(int argc, char *argv[]){
-
-  struct DtwStringArray *files = dtw_list_dirs("exemple_folder", DTW_CONCAT_PATH);
-  files->represent(files);
-  files->free(files);
-  return 0;
-}
-~~~
 ## Listing All 
-~~~c
-#include "doTheWorld.h"
 
-int main(int argc, char *argv[]){
+<!--codeof:readme_exemples/list_all.c-->
 
-  struct DtwStringArray *all = dtw_list_all("exemple_folder",DTW_CONCAT_PATH);
-  all->represent(all);
-  all->free(all);
-  return 0;
-}
-~~~
 # MultiDimension Listage 
 The By Using multi dimension listage functions , you can see all itens listed in all sub folders of the "main" folder 
 
 ## Listing Files Recursively
-~~~c
+<!--codeof:readme_exemples/list_files_recursively.c-->
 
-#include "doTheWorld.h"
-
-int main(int argc, char *argv[]){
-
-  struct DtwStringArray *files = dtw_list_files_recursively(
-    "exemple_folder",
-    DTW_CONCAT_PATH
-    );
-  files->represent(files);
-  files->free(files);
-  return 0;
-}
-~~~
 ## Listing Dirs Recursively
 
-~~~c
-#include "doTheWorld.h"
+<!--codeof:readme_exemples/list_dirs_recursively.c-->
 
-int main(int argc, char *argv[]){
-
-  struct DtwStringArray *files = dtw_list_dirs_recursively(
-    "exemple_folder",
-    DTW_CONCAT_PATH
-    );
-  files->represent(files);
-  files->free(files);
-  return 0;
-}
-~~~
 ## Listing All Recursively
 
-~~~c
+<!--codeof:readme_exemples/list_all_recursively.c-->
 
-#include "doTheWorld.h"
 
-int main(int argc, char *argv[]){
-
-  struct DtwStringArray *files = dtw_list_all_recursively(
-    "exemple_folder",
-    DTW_CONCAT_PATH
-    );
-    
-  files->represent(files);
-  files->free(files);
-  return 0;
-}
-~~~
 # Useful Functions 
 
 ## Dealing with base64 
-You can easly transform an binary file to an base64 string like these 
-~~~c
+You can easly transform an binary file to an base64 string like these
+<!--codeof:readme_exemples/converting_file_to_base64.c-->
 
-#include "doTheWorld.h"
-
-int main(int argc, char *argv[]){
-   const char *deer_path = "exemple_folder/deer.jpg";
-   char *deerb64  = dtw_convert_binary_file_to_base64(deer_path);
-   printf("deer: %s", deerb64);
-    free(deerb64);
-}
-~~~
 Or you can retransform an base64 file to binary again 
-~~~c 
-#include "doTheWorld.h"
 
-int main(int argc, char *argv[]){
-   //creating the b64 file
-   const char *deer_path = "exemple_folder/deer.jpg";
-   char *deerb64  = dtw_convert_binary_file_to_base64(deer_path);
-   dtw_write_string_file_content("deer.txt", deerb64);
-   free(deerb64);
+<!--codeof:readme_exemples/converting_b64_to_binary.c-->
 
-   // loading and reconverting to binary 
-    char *string_deer64 = dtw_load_string_file_content("deer.txt");
-    int string_deer64_size = strlen(string_deer64);
-    size_t out_size = 0;
-    unsigned char *deer = dtw_base64_decode(string_deer64, string_deer64_size, &out_size);
-    dtw_write_any_content("deer2.jpg", deer, out_size);
-}
-~~~
+
 ## Dealing with Sha 256
 Generating Sha from file 
-~~~c 
+<!--codeof:readme_exemples/generating_sha_from_file.c-->
 
-#include "doTheWorld.h"
 
-int main(int argc, char *argv[]){
-
-   char *hash = dtw_generate_sha_from_file("README.md");
-   printf("SHA: %s", hash);
-   free(hash);
-}
-~~~
 ## Getting file last modification 
+
 ### Unix 
-~~~c 
+<!--codeof:readme_exemples/geeting_file_last_modification_in_unix.c-->
 
-#include "doTheWorld.h"
 
-int main(int argc, char *argv[]){
-   int last_modification_in_unix = dtw_get_file_last_motification_in_unix("README.md");
-    printf("Last modification: %d\n", last_modification_in_unix);
-}
-~~~
 ### Str
-~~~c
-#include "doTheWorld.h"
+<!--codeof:readme_exemples/geeting_file_last_modification.c-->
 
-int main(int argc, char *argv[]){
-    char *last_modification = dtw_get_file_last_motification_in_string("README.md");
-    printf("Last modification: %s", last_modification);
-    free(last_modification);
-}
-~~~
+
 # Trees, TreeParts And Transactions
 
 with tree concepts, you can manipulate files as trees, and implement IO modifications with atomic concepts 
@@ -253,107 +144,20 @@ with tree concepts, you can manipulate files as trees, and implement IO modifica
 ## Tree Parts 
 
 ### Loading An TreePart 
-~~~c
+<!--codeof:readme_exemples/loading_tree_part.c-->
 
-#include "doTheWorld.h"
-
-
-
-int main(){
-
-    struct DtwTreePart *part = newDtwTreePart(
-            "main.c",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA
-            );
-
-    part->represent(part);
-    part->free(part);
-}   
-~~~
 ### Creating an TreePart 
-~~~c
-
-#include "doTheWorld.h"
+<!--codeof:readme_exemples/creating_tree_part.c-->
 
 
-int main(){
-
-    struct DtwTreePart *part = newDtwTreePart(
-            "test.txt",
-            DTW_NOT_LOAD_CONTENT,
-            DTW_LOAD_METADATA
-            );
-
-    part->set_string_content(part,"Hello World");
-    part->hardware_write(part,DTW_SET_AS_ACTION);
-    part->hardware_commit(part);
-    part->free(part);
-    
-}   
-~~~
 ### Generating Content Modifications
 
-~~~c
+<!--codeof:readme_exemples/tree_part_content_modification.c-->
 
-
-#include "doTheWorld.h"
-
-
-int main(){
-
-    struct DtwTreePart *part = newDtwTreePart(
-            "test.txt",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA
-            );
-
-    //getting the content
-    char *content = part->get_content_string_by_reference(part);
-    char new_content[100] ="";
-    strcat(new_content,content);
-    strcat(new_content," New Mensage");
-    part->set_string_content(part,new_content);
-
-    part->hardware_write(part,DTW_SET_AS_ACTION);
-    part->hardware_commit(part);
-    part->free(part);
-}   
-~~~
 ### Getting  Path Paramns 
-~~~c 
-
-#include "doTheWorld.h"
+<!--codeof:readme_exemples/getting_path_paramns.c-->
 
 
-
-int main(){
-
-    struct DtwTreePart *part = newDtwTreePart(
-            "test.txt",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA
-            );
-
-    struct DtwPath *path = part->path;
-
-    char *name = path->get_full_name(path);
-    char *extension = path->get_extension(path);
-    char *dir = path->get_dir(path);
-    char *full_path = path->get_path(path);
-    printf("name : %s\n",name);
-    printf("extension : %s\n",extension);
-    printf("dir : %s\n",dir);
-    printf("full_path : %s\n",full_path);
-
-
-    free(name);
-    free(extension);
-    free(dir);
-    free(full_path);
-    part->free(part);
-}   
-~~~
 ### Changing path atributes 
 
 ~~~c
