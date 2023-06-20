@@ -40,6 +40,9 @@ def execute_test_for_folder(folder:str):
 
 
 def  execute_all_tests():
+    execute_test_for_folder('exemples/path')
+    execute_test_for_folder('exemples/tree_part')
+    execute_test_for_folder('exemples/trees')
     execute_test_for_folder('exemples/io')
     execute_test_for_folder('exemples/monodimension_listage')
     execute_test_for_folder('exemples/multidimension_listage')
