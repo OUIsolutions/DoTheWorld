@@ -195,46 +195,11 @@ Will Delete the current Content
 With Trees you can make massive folders and files modifications with 
 easy steps 
 ### Loading Tree From Hardware
-~~~c
-#include "doTheWorld.h"
 
-int main(){
-
-    struct DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
-            tree,
-            "exemple_folder",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_START
-            );
-    tree->represent(tree);
-    tree->free(tree);
-}   
-~~~
+<!--codeof:readme_exemples/load_tree_from_hardware.c-->
 
 ### Iterating over Trees
-~~~c
-#include "doTheWorld.h"
-
-int main(){
-
-    struct DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
-            tree,
-            "exemple_folder",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_START
-    );
-    for(int i = 0; i<tree->size;i++){
-        struct DtwTreePart *current_part = tree->tree_parts[i];
-        current_part->represent(current_part);
-    }
-    tree->free(tree);
-}
-~~~
-### Retriving Tree Parts
+<!--codeof:readme_exemples/tree_iteration.c-->
 
 #### Finding by Name 
 
