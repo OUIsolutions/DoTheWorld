@@ -30,5 +30,6 @@ int main(){
     DtwTree *tree = newDtwTree();
     tree->loads_json_tree(tree,content);
     tree->represent(tree);
-
+    tree->free(tree);
+    free(content);
 }

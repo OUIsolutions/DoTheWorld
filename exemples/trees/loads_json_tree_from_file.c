@@ -13,6 +13,7 @@ void dumps_tree(){
             DTW_LOAD_METADATA,
             DTW_PRESERVE_PATH_START
     );
+
     tree->dumps_json_tree_to_file(
             tree,
             "test.json",
@@ -31,4 +32,5 @@ int main(){
     DtwTree *tree = newDtwTree();
     tree->loads_json_tree_from_file(tree,"test.json");
     tree->represent(tree);
+    tree->free(tree);
 }
