@@ -20,6 +20,7 @@ void dumps_tree(){
             DTW_LOAD_METADATA,
             DTW_PRESERVE_PATH_ATRIBUTES,
             DTW_PRESERVE_HARDWARE_DATA,
+            DTW_PRESERVE_CONTENT_DATA,
             DTW_CONSIDER_IGNORE
     );
 

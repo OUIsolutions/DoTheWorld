@@ -22,5 +22,6 @@ int main(){
             DTW_CONSIDER_IGNORE
     );
     printf("%s",content);
+    free(content);
     tree->free(tree);
 }

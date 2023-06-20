@@ -23,4 +23,3 @@ int main(){
     }
     tree->free(tree);
 }
-~~~
