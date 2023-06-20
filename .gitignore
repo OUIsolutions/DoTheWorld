@@ -17,7 +17,7 @@ teste.py
 *.ilk
 *.map
 *.exp
-
+output_test/
 # Precompiled Headers
 *.gch
 *.pch
