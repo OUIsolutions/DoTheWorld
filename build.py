@@ -24,13 +24,20 @@ def execute_test_for_folder(folder:str):
                 rmtree('exemple_folder',ignore_errors=True)
                 copytree('security','exemple_folder')
                 rmtree('security',ignore_errors=True)
+                print('failuired: ',file)
                 raise e
         else:
-            ct.execute_test_for_file('gcc',f'{folder}/{file}')
+            try:
+                ct.execute_test_for_file('gcc',f'{folder}/{file}')
+            except Exception as e:
+                print('failuired: ',file)
+                raise e
+
         print('passed:',file)
 
 
 def  execute_all_tests():
+    execute_test_for_folder('exemples/extras')
     execute_test_for_folder('exemples/io')
     execute_test_for_folder('exemples/monodimension_listage')
     execute_test_for_folder('exemples/multidimension_listage')

@@ -1,5 +1,5 @@
 
-#include "doTheWorld.c"
+#include "../../doTheWorld_test.h"
 
 int main(int argc, char *argv[]){
     int size = 0;
@@ -7,4 +7,6 @@ int main(int argc, char *argv[]){
     unsigned char *content = dtw_load_binary_content(deer_path, &size);
     unsigned char *deerb64 = dtw_base64_encode(content, size);
     printf("deer: %s", deerb64);
+    free(deerb64);
+    free(content);
 }
