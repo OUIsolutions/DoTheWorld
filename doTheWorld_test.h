@@ -4190,7 +4190,7 @@ typedef struct DtwTreePart{
 
 
     void (*free)(struct DtwTreePart *self);
-    struct DtwTreePart *(*copy_tree_part)(struct DtwTreePart *self);
+    struct DtwTreePart *(*self_copy)(struct DtwTreePart *self);
 }DtwTreePart;
 
 
@@ -4328,7 +4328,6 @@ typedef struct  DtwTree{
         bool consider_igonore
     );
 
-    //{%endif%}
     void (*free)(struct DtwTree *self);
     void (*represent)(struct DtwTree *self);
     void (*insecure_hardware_remove_tree)(struct DtwTree *self);
@@ -5634,7 +5633,7 @@ struct DtwTreePart * newDtwTreePart(const char *path, bool load_content, bool lo
     self->hardware_modify = DtwTreePart_hardware_modify;
     self->hardware_commit = DtwTreePart_hardware_commit;
     self->free = DtwTreePart_free;
-    self->copy_tree_part = DtwTreePart_copy_tree;
+    self->self_copy = DtwTreePart_self_copy;
 
     if(load_content || load_meta_data){
         
@@ -5672,7 +5671,7 @@ unsigned char *DtwTreePart_get_content_binary_by_reference(struct DtwTreePart *s
 struct  DtwTreePart * DtwTreePart_self_copy(struct DtwTreePart *self){
     char *path = self->path->get_path(self->path);
 
-    struct DtwTreePart *new_tree_part = newDtwTreePart(path, false, false);
+    DtwTreePart *new_tree_part = newDtwTreePart(path, false, false);
     free(path);
 
     new_tree_part->content_exist_in_memory = self->content_exist_in_memory;
@@ -5680,11 +5679,13 @@ struct  DtwTreePart * DtwTreePart_self_copy(struct DtwTreePart *self){
     new_tree_part->is_binary = self->is_binary;
     new_tree_part->ignore = self->ignore;
     new_tree_part->content_size = self->content_size;
-    
+
+    free(new_tree_part->hawdware_content_sha);
 
     new_tree_part->hawdware_content_sha = (char *)malloc(strlen(self->hawdware_content_sha)+1);
     
     strcpy(new_tree_part->hawdware_content_sha,self->hawdware_content_sha);
+    free(new_tree_part->content);
     new_tree_part->content = (unsigned char *)malloc(self->content_size + 2);
     
     if(new_tree_part->is_binary == false){
@@ -6001,7 +6002,7 @@ struct DtwTree *DtwTree_get_sub_tree(struct DtwTree *self, const char *path, boo
         char *current_path = tree_part->path->get_path(tree_part->path);
         if(dtw_starts_with(current_path,path)){
             if(copy_content){
-                sub_tree->add_tree_part_by_copy(sub_tree,tree_part->copy_tree_part(tree_part));
+                sub_tree->add_tree_part_by_copy(sub_tree,tree_part->self_copy(tree_part));
             }
             else{
                 sub_tree->add_tree_part_by_reference(sub_tree,tree_part);
@@ -6017,7 +6018,7 @@ struct DtwTree *DtwTree_get_sub_tree(struct DtwTree *self, const char *path, boo
 void DtwTree_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_part){
     self->size++;
     self->tree_parts =  (struct DtwTreePart**)realloc(self->tree_parts, self->size * sizeof(struct DtwTreePart *));
-    self->tree_parts[self->size - 1] = tree_part->copy_tree_part(tree_part);
+    self->tree_parts[self->size - 1] = tree_part->self_copy(tree_part);
        
 }
 void DtwTree_remove_tree_part(struct DtwTree *self, int position){
@@ -6169,17 +6170,18 @@ struct DtwTree *DtwTree_dtw_filter(
         struct DtwTree *self,
         bool (*caller)(struct  DtwTreePart *part)
 ){
-    struct DtwTree *filtered_tree = newDtwTree();
+    DtwTree *filtered_tree = newDtwTree();
 
     for(int i = 0;i < self->size; i++){
 
-        struct DtwTreePart *current = self->tree_parts[i];
+        DtwTreePart *current = self->tree_parts[i];
 
         bool result = caller(current);
 
         if(result){
             filtered_tree->add_tree_part_by_copy(filtered_tree,current);
         }
+
     }
     return filtered_tree;
 }
@@ -6193,7 +6195,7 @@ struct DtwTree *DtwTree_dtw_map(
 
     for(int i = 0;i < self->size; i++){
         struct DtwTreePart *current = self->tree_parts[i];
-        struct DtwTreePart *copy = current->copy_tree_part(current);
+        struct DtwTreePart *copy = current->self_copy(current);
         struct DtwTreePart *result = caller(copy);
         mapped_tree->add_tree_part_by_reference(mapped_tree,result);
     }

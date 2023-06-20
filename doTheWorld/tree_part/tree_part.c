@@ -78,11 +78,13 @@ struct  DtwTreePart * DtwTreePart_self_copy(struct DtwTreePart *self){
     new_tree_part->is_binary = self->is_binary;
     new_tree_part->ignore = self->ignore;
     new_tree_part->content_size = self->content_size;
-    
+
+    free(new_tree_part->hawdware_content_sha);
 
     new_tree_part->hawdware_content_sha = (char *)malloc(strlen(self->hawdware_content_sha)+1);
     
     strcpy(new_tree_part->hawdware_content_sha,self->hawdware_content_sha);
+    free(new_tree_part->content);
     new_tree_part->content = (unsigned char *)malloc(self->content_size + 2);
     
     if(new_tree_part->is_binary == false){
