@@ -234,8 +234,8 @@ turning system ultra securty
 
 
 ### Transaction Reports 
-With transactin Reports , you can see what will be modified
 
+With transactin Reports , you can see what will be modified
 <!--codeof:readme_exemples/transaction_report.c-->
 
 
@@ -243,66 +243,14 @@ With transactin Reports , you can see what will be modified
 With Json Trees Operations you can save or load trees, from hardware or strings in an super easy mode 
 
 #### Dumping Tree Json To File 
-It will transform the tree in an json document 
+It will transform the tree in an json document
+<!--codeof:readme_exemples/dumps_json_tree_to_file.c-->
 
-~~~c
-
-#include "doTheWorld.h"
-
-
-int main(){
-
-    struct DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
-            tree,
-            "exemple_folder",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_START
-    );
-    tree->dumps_json_tree_to_file(
-            tree,
-            "test.json",
-            DTW_NOT_MINIFY,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_ATRIBUTES,
-            DTW_PRESERVE_HARDWARE_DATA,
-            DTW_LOAD_METADATA_DATA,
-            DTW_CONSIDER_IGNORE
-    );
-
-    tree->free(tree);
-}
-~~~
 
 #### Dumping Json Tree to string 
+<!--codeof:readme_exemples/dumps_json_tree_to_string.c-->
 
-~~~c
-#include "doTheWorld.h"
-int main(){
 
-    struct DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
-            tree,
-            "exemple_folder",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_START
-    );
-
-    char *content = tree->dumps_json_tree(
-            tree,
-            DTW_NOT_MINIFY,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_ATRIBUTES,
-            DTW_PRESERVE_HARDWARE_DATA,
-            DTW_LOAD_METADATA_DATA,
-            DTW_CONSIDER_IGNORE
-    );
-    printf("%s",content);
-    tree->free(tree);
-}
-~~~
 #### Loading Json Tree From file 
 If you want to recuperate the file you saved in the json file
 you can load it 
