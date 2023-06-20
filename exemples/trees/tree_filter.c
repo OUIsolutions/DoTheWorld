@@ -9,8 +9,10 @@ bool filter_txt(struct DtwTreePart *part){
         return false;
     }
     if(strcmp(extension,"txt") == 0){
+        free(extension);
         return true;
     }
+    free(extension);
     return false;
 }
 
@@ -24,10 +26,11 @@ int main(){
             DTW_LOAD_METADATA,
             DTW_PRESERVE_PATH_START
     );
-    struct DtwTree *filtered = tree->filter(
+    DtwTree *filtered = tree->filter(
             tree,
             filter_txt
     );
+
     filtered->represent(filtered);
     filtered->free(filtered);
     tree->free(tree);
