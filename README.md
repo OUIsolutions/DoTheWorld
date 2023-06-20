@@ -160,113 +160,29 @@ with tree concepts, you can manipulate files as trees, and implement IO modifica
 
 ### Changing path atributes 
 
-~~~c
 
-#include "doTheWorld.h"
-
-
-int main(){
-
-    struct DtwTreePart *part = newDtwTreePart(
-            "test.txt",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA
-            );
-
-    struct DtwPath *path = part->path;
-
-    path->set_dir(path,"a/b");
-    path->set_name(path,"test2");
-    path->set_extension(path,"md");
-    path->represent(path);
-    part->hardware_modify(part,DTW_SET_AS_ACTION);
-    part->hardware_commit(part);
-    part->free(part);
-
-}   
-~~~
 ### Changing path Atributes at once 
 
-~~~c
+<!--codeof:readme_exemples/#destructive#change_path_attributes.c-->
 
-#include "doTheWorld.h"
 
-int main(){
-
-    struct DtwTreePart *part = newDtwTreePart(
-            "test.txt",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA
-            );
-
-    struct DtwPath *path = part->path;
-
-    path->set_path(path,"a/test.md");
-
-    part->hardware_modify(part,DTW_SET_AS_ACTION);
-    part->hardware_commit(part);
-    part->free(part);
-
-}   
-~~~
 ## Transactions System 
 With the **hardware_modify** , **hardware_write**, **hardware_remove** 
 Functions , you can generate modifications, without implement it, in these 
 way , you can create massive atomic transactions, and execute all at once 
 
+
 ### hardware_modify
 Will Modificate the original content, for exemple, if you change the extension of an file, it will modificate the original content 
 
-~~~c
-
-#include "doTheWorld.h"
-
-int main(){
-
-    struct DtwTreePart *part = newDtwTreePart(
-            "test.txt",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA
-            );
-
-    struct DtwPath *path = part->path;
-
-    path->set_extension(path,"md");
-
-    part->hardware_modify(part,DTW_EXECUTE_NOW);
-    part->hardware_commit(part);
-    part->free(part);
-
-}    
-~~~
+<!--codeof:readme_exemples/hardware_modify.c-->
 
 ### hardware_write 
 Will write the file as an "new" file, ignoring the existence of the 
 old file 
 
-~~~c
+<!--codeof:readme_exemples/#destructive#hardware_write.c-->
 
-#include "doTheWorld.h"
-
-
-int main(){
-
-    struct DtwTreePart *part = newDtwTreePart(
-            "test.txt",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA
-            );
-
-    struct DtwPath *path = part->path;
-
-    path->set_extension(path,"md");
-
-    part->hardware_write(part,DTW_EXECUTE_NOW);
-    part->hardware_commit(part);
-    part->free(part);
-
-}   
-~~~
 
 ### hardware_remove
 
