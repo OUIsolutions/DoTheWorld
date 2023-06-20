@@ -3,15 +3,13 @@
 //
 
 
-#include "doTheWorld.h"
-
 
 #include "../../doTheWorld_test.h"
 
 int main(){
 
     DtwTreePart *part = newDtwTreePart(
-            "main.c",
+            "exemple_folder/a.txt",
             DTW_LOAD_CONTENT,
             DTW_LOAD_METADATA
     );
