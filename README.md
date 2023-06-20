@@ -79,7 +79,7 @@ With the function **dtw_copy_any** you can copy either files or folders to one p
 
 You can move either folders or files with **dtw_move_any** function 
 
-<!--codeof:readme_exemples/move_any.c-->
+<!--codeof:readme_exemples/#destructive#move_any.c-->
 
 # Monodimension Listage
 
@@ -175,7 +175,7 @@ way , you can create massive atomic transactions, and execute all at once
 ### hardware_modify
 Will Modificate the original content, for exemple, if you change the extension of an file, it will modificate the original content 
 
-<!--codeof:readme_exemples/hardware_modify.c-->
+<!--codeof:readme_exemples/#destructive#hardware_modify.c-->
 
 ### hardware_write 
 Will write the file as an "new" file, ignoring the existence of the 
@@ -196,7 +196,7 @@ With Trees you can make massive folders and files modifications with
 easy steps 
 ### Loading Tree From Hardware
 
-<!--codeof:readme_exemples/load_tree_from_hardware.c-->
+<!--codeof:readme_exemples/add_tree_from_hardware.c-->
 
 ### Iterating over Trees
 <!--codeof:readme_exemples/tree_iteration.c-->
@@ -212,7 +212,7 @@ easy steps
 
 ### Finding By Function
 
-<!--codeof:readme_exemples/find_tree_part_by_function.c-->
+<!--codeof:readme_exemples/finding_tree_part_by_function.c-->
 
 
 ### Map and Filter
@@ -255,14 +255,14 @@ It will transform the tree in an json document
 If you want to recuperate the file you saved in the json file
 you can load it 
 
-<!--codeof:readme_exemples/load_json_tree_from_file.c-->
+<!--codeof:readme_exemples/loads_json_tree_from_file.c-->
 
 
 #### Loading Json Tree from string 
 
 
 
-<!--codeof:readme_exemples/load_json_tree_from_string.c-->
+<!--codeof:readme_exemples/loads_json_tree_from_string.c-->
 
 
 # Used Dependencies And Atributions

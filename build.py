@@ -72,9 +72,9 @@ def generate_exemple_formated_for_readme():
 
 
 ct.generate_amalgamated_code(STARTER,OUTPUT_TEST)
-execute_all_tests()
-generate_exemple_formated_for_readme()
-#ct.include_code_in_markdown('README.md',True)
+#execute_all_tests()
+#generate_exemple_formated_for_readme()
+ct.include_code_in_markdown('README.md',True)
 ct.generate_amalgamated_code(STARTER,'doTheWorld.h')
 
 
