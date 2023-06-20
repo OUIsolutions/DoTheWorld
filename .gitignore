@@ -8,10 +8,10 @@ exemple
 *.obj
 *.elf
 main.c
+deer.jpg
 main.cpp
 teste
 code.json
-deer2.jpg
 teste.py
 # Linker output
 *.ilk
