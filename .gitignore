@@ -29,6 +29,7 @@ output_test/
 *.la
 *.lo
 test.txt
+deer.txt
 # Shared objects (inc. Windows DLLs)
 *.dll
 *.so
