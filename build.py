@@ -26,6 +26,9 @@ def execute_test_for_folder(folder:str):
                 rmtree('security',ignore_errors=True)
                 print('failuired: ',file)
                 raise e
+            rmtree('exemple_folder',ignore_errors=True)
+            copytree('security','exemple_folder')
+            rmtree('security',ignore_errors=True)
         else:
             try:
                 ct.execute_test_for_file('gcc',f'{folder}/{file}')
