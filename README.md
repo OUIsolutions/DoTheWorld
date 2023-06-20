@@ -187,27 +187,9 @@ old file
 ### hardware_remove
 
 Will Delete the current Content 
-~~~c
 
-#include "doTheWorld.h"
+<!--codeof:readme_exemples/#destructive#hardware_remove.c-->
 
-
-
-int main(){
-
-    struct DtwTreePart *part = newDtwTreePart(
-            "test.txt",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA
-            );
-
-
-    part->hardware_remove(part,DTW_EXECUTE_NOW);
-    part->hardware_commit(part);
-    part->free(part);
-
-}   
-~~~
 
 ## Trees
 With Trees you can make massive folders and files modifications with 
