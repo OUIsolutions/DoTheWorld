@@ -1,7 +1,7 @@
 
 import CToolKit as ct
 from shutil import copytree,rmtree
-from os import remove
+from os import remove,makedirs
 from os import listdir
 
 
@@ -49,13 +49,14 @@ def create_readme_files_of_folder(folder:str):
 
     files = listdir(folder)
     for file in files:
-        with open(f'{folder}/file','r') as arq:
+        with open(f'{folder}/{file}','r') as arq:
             formated = arq.read().replace('../../doTheWorld_test.h','doTheWorld.h')
             with open(f'readme_exemples/{file}','w') as narq:
                 narq.write(formated)
 
 def generate_exemple_formated_for_readme():
     rmtree('readme_exemples',ignore_errors=True)
+    makedirs('readme_exemples')
     create_readme_files_of_folder('exemples/extras')
     create_readme_files_of_folder('exemples/io')
     create_readme_files_of_folder('exemples/monodimension_listage')
@@ -68,7 +69,7 @@ ct.generate_amalgamated_code(STARTER,OUTPUT_TEST)
 
 #execute_all_tests()
 generate_exemple_formated_for_readme()
-
+ct.include_code_in_markdown('README.md',True)
 ct.generate_amalgamated_code(STARTER,'doTheWorld.h')
 
 
