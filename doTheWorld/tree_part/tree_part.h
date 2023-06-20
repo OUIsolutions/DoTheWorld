@@ -53,7 +53,7 @@ typedef struct DtwTreePart{
 
 
     void (*free)(struct DtwTreePart *self);
-    struct DtwTreePart *(*copy_tree_part)(struct DtwTreePart *self);
+    struct DtwTreePart *(*self_copy)(struct DtwTreePart *self);
 }DtwTreePart;
 
 
@@ -76,6 +76,6 @@ bool DtwTreePart_hardware_modify(struct DtwTreePart *self, bool set_as_action);
 bool DtwTreePart_hardware_commit(struct DtwTreePart *self);
 
 void DtwTreePart_free(struct DtwTreePart *self);
-struct DtwTreePart * DtwTreePart_copy_tree(struct DtwTreePart *self);
+struct DtwTreePart * DtwTreePart_self_copy(struct DtwTreePart *self);
 
 struct DtwTreePart * newDtwTreePart(const char *path, bool load_content, bool load_meta_data);

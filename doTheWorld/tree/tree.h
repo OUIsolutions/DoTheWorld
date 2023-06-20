@@ -109,7 +109,6 @@ typedef struct  DtwTree{
         bool consider_igonore
     );
 
-    //{%endif%}
     void (*free)(struct DtwTree *self);
     void (*represent)(struct DtwTree *self);
     void (*insecure_hardware_remove_tree)(struct DtwTree *self);

@@ -32,7 +32,7 @@ struct DtwTreePart * newDtwTreePart(const char *path, bool load_content, bool lo
     self->hardware_modify = DtwTreePart_hardware_modify;
     self->hardware_commit = DtwTreePart_hardware_commit;
     self->free = DtwTreePart_free;
-    self->copy_tree_part = DtwTreePart_copy_tree;
+    self->self_copy = DtwTreePart_self_copy;
 
     if(load_content || load_meta_data){
         
@@ -67,10 +67,10 @@ unsigned char *DtwTreePart_get_content_binary_by_reference(struct DtwTreePart *s
 }
 
 
-struct  DtwTreePart * DtwTreePart_copy_tree(struct DtwTreePart *self){
+struct  DtwTreePart * DtwTreePart_self_copy(struct DtwTreePart *self){
     char *path = self->path->get_path(self->path);
 
-    struct DtwTreePart *new_tree_part = newDtwTreePart(path, false, false);
+    DtwTreePart *new_tree_part = newDtwTreePart(path, false, false);
     free(path);
 
     new_tree_part->content_exist_in_memory = self->content_exist_in_memory;

@@ -4213,7 +4213,7 @@ bool DtwTreePart_hardware_modify(struct DtwTreePart *self, bool set_as_action);
 bool DtwTreePart_hardware_commit(struct DtwTreePart *self);
 
 void DtwTreePart_free(struct DtwTreePart *self);
-struct DtwTreePart * DtwTreePart_copy_tree(struct DtwTreePart *self);
+struct DtwTreePart * DtwTreePart_self_copy(struct DtwTreePart *self);
 
 struct DtwTreePart * newDtwTreePart(const char *path, bool load_content, bool load_meta_data);
 
@@ -5669,7 +5669,7 @@ unsigned char *DtwTreePart_get_content_binary_by_reference(struct DtwTreePart *s
 }
 
 
-struct  DtwTreePart * DtwTreePart_copy_tree(struct DtwTreePart *self){
+struct  DtwTreePart * DtwTreePart_self_copy(struct DtwTreePart *self){
     char *path = self->path->get_path(self->path);
 
     struct DtwTreePart *new_tree_part = newDtwTreePart(path, false, false);

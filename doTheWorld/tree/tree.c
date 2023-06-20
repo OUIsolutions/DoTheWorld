@@ -45,7 +45,7 @@ struct DtwTree *DtwTree_get_sub_tree(struct DtwTree *self, const char *path, boo
         char *current_path = tree_part->path->get_path(tree_part->path);
         if(dtw_starts_with(current_path,path)){
             if(copy_content){
-                sub_tree->add_tree_part_by_copy(sub_tree,tree_part->copy_tree_part(tree_part));
+                sub_tree->add_tree_part_by_copy(sub_tree,tree_part->self_copy(tree_part));
             }
             else{
                 sub_tree->add_tree_part_by_reference(sub_tree,tree_part);
@@ -61,7 +61,7 @@ struct DtwTree *DtwTree_get_sub_tree(struct DtwTree *self, const char *path, boo
 void DtwTree_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_part){
     self->size++;
     self->tree_parts =  (struct DtwTreePart**)realloc(self->tree_parts, self->size * sizeof(struct DtwTreePart *));
-    self->tree_parts[self->size - 1] = tree_part->copy_tree_part(tree_part);
+    self->tree_parts[self->size - 1] = tree_part->self_copy(tree_part);
        
 }
 void DtwTree_remove_tree_part(struct DtwTree *self, int position){
