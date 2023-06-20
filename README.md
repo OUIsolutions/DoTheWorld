@@ -254,35 +254,15 @@ It will transform the tree in an json document
 #### Loading Json Tree From file 
 If you want to recuperate the file you saved in the json file
 you can load it 
-~~~c
 
-#include "doTheWorld.h"
+<!--codeof:readme_exemples/load_json_tree_from_file.c-->
 
-int main(){
-
-    struct DtwTree *tree = newDtwTree();
-    tree->loads_json_tree_from_file(tree,"test.json");
-    tree->insecure_hardware_write_tree(tree);
-}
-~~~
 
 #### Loading Json Tree from string 
 
-~~~c
-
-#include "doTheWorld.h"
 
 
-int main(){
-
-    struct DtwTree *tree = newDtwTree();
-    char *json_tree = dtw_load_string_file_content("test.json");
-    tree->loads_json_tree(tree,json_tree);
-    tree->insecure_hardware_write_tree(tree);
-}
-~~~
-
-
+<!--codeof:readme_exemples/load_json_tree_from_string.c-->
 
 
 # Used Dependencies And Atributions
