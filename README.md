@@ -207,165 +207,32 @@ easy steps
 
 
 ### Finding By Full Path 
-~~~c
+<!--codeof:readme_exemples/find_tree_part_by_full_path.c-->
 
-#include "doTheWorld.h"
 
-int main(){
-
-    struct DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
-            tree,
-            "exemple_folder",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_START
-            );
-
-    struct DtwTreePart *deer = tree->find_part_by_path(
-        tree,
-        "exemple_folder/deer.jpg"
-        );
-    if(deer){
-        deer->represent(deer);
-    }
-    tree->free(tree);
-}   
-~~~
 ### Finding By Function
 
-~~~c
+<!--codeof:readme_exemples/find_tree_part_by_function.c-->
 
 
-
-#include "doTheWorld.h"
-bool test_if_deer(struct DtwTreePart*part){
-
-    char *name = part->path->get_full_name(part->path);
-    if(!name){
-        return false;
-    }
-    if(strcmp(name,"deer.jpg") == 0){
-        free(name);
-        return true;
-    }
-    free(name);
-    return false;
-};
-
-
-int main(){
-
-    struct DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
-            tree,
-            "exemple_folder",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_START
-            );
-
-
-    struct DtwTreePart *deer = tree->find_part_by_function(
-        tree,
-        test_if_deer
-        );
-
-    if(deer){
-        deer->represent(deer);
-    }
-    tree->free(tree);
-
-}   
-~~~
 ### Map and Filter
 Trees suports even Maps or filters, it returns an new tree of the of the current lambda procediment 
 #### Filter 
 with filter you can filter the contents you want in an tree with an bool lambda
-~~~c
 
+<!--codeof:readme_exemples/tree_filter.c-->
 
-#include "doTheWorld.h"
-
-bool filter_txt(struct DtwTreePart *part){
-    char *extension = part->path->get_extension(part->path);
-    if(!extension){
-        return false;
-    }
-    if(strcmp(extension,"txt") == 0){
-        return true;
-    }
-    return false;
-}
-
-int main(){
-
-    struct DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
-            tree,
-            "exemple_folder",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_START
-    );
-    struct DtwTree *filtered = tree->filter(
-            tree,
-            filter_txt
-            );
-    filtered->represent(filtered);
-    filtered->free(filtered);
-    tree->free(tree);
-}
-~~~
 #### Map
-~~~c
+<!--codeof:readme_exemples/tree_map.c-->
 
-#include "doTheWorld.h"
-
-struct DtwTreePart * concat_test(struct DtwTreePart *part){
-    if(part->content_exist_in_memory && part->is_binary == false){
-        char *content = part->get_content_string_by_reference(part);
-        const char *mensage = " test";
-        char *new_content = (char*)malloc(strlen(content) + strlen(mensage)+ 2);
-        strcpy(new_content,content);
-        strcat(new_content,mensage);
-        part->set_string_content(part,new_content);
-        free(new_content);
-    }
-    return part;
-}
-
-int main(){
-
-    struct DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
-            tree,
-            "exemple_folder",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_START
-    );
-    struct DtwTree *concated = tree->map(
-            tree,
-            concat_test
-            );
-
-    concated->represent(concated);
-    concated->free(concated);
-    tree->free(tree);
-}
-~~~
 
 ### Realizing Tree Modifications 
 With **hardware_commit_tree** you can commit all modifications at Once 
-turning system ultra secury
-~~~c
+turning system ultra securty
+
 
 
 #include "doTheWorld.h"
-
-
-
 int main(){
 
     struct DtwTree *tree = newDtwTree();
@@ -394,7 +261,6 @@ int main(){
     tree->hardware_commit_tree(tree);
     tree->free(tree);
 }
-~~~
 ### Transaction Reports 
 With transactin Reports , you can see what will be modified
 
