@@ -5,5 +5,6 @@ int main(int argc, char *argv[]){
 
   struct DtwStringArray *files = dtw_list_dirs_recursively("exemple_folder");
   files->represent(files);
+  files->free(files);
   return 0;
 }

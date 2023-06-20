@@ -7,5 +7,6 @@ int main(int argc, char *argv[]){
   for(int i = 0; i < files->size; i++){
     printf("%s\n", files->strings[i]);
   }
+  files->free(files);
   return 0;
 }
