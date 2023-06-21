@@ -12,4 +12,4 @@ void DtwObject_set_long(DtwObject *self, long value);
 void DtwObject_set_float(DtwObject *self, float value);
 void DtwObject_set_string(DtwObject *self, float value);
 
-DtwObject * DtwObject_sub_object(DtwObject *self,)
+DtwObject * DtwObject_sub_object(DtwObject *self,char *)
