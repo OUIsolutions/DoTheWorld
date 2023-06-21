@@ -19,6 +19,7 @@ DtwObject * private_newDtwObject_raw(){
 DtwObject * newDtwObject(const char *path){
     DtwObject * self = private_newDtwObject_raw();
     self->path = strdup(path);
+    dtw_create_dir_recursively(path);
     return self;
 }
 
@@ -100,7 +101,7 @@ DtwObject * DtwObject_unique_random_sub_object(DtwObject *self){
     char *path;
     for(int i = 2; i < 30; i++){
         char *name = dtw_create_random_token(i);
-        path = private_DtwObject_create_path(self,path);
+        path = private_DtwObject_create_path(self,name);
         if(dtw_entity_type(path) == DTW_NOT_FOUND){
             DtwObject * new_obj = private_newDtwObject_raw();
             new_obj->path = path;
