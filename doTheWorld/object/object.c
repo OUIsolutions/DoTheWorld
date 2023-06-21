@@ -57,7 +57,6 @@ long DtwObject_get_long(struct DtwObject *self, const char *name,DtwObjectError 
     return 0;
 }
 void DtwObject_set_long(struct DtwObject *self,const char *name, long value){
-        char *path = private_DtwObject_create_path(self,name);
         char result[20] = {0};
         sprintf(result,"%li",value);
         self->set_string(self,name,result);
@@ -82,18 +81,18 @@ double DtwObject_get_double(struct DtwObject *self, const char *name, DtwObjectE
 
 
 void DtwObject_set_double(struct DtwObject *self,const char *name, double value){
-    char *path = private_DtwObject_create_path(self,name);
     char result[20] = {0};
     sprintf(result,"%f",value);
     self->set_string(self,name,result);
+}
+DtwObject * DtwObject_sub_object(DtwObject *self,const char *name){
+
 }
 
 DtwObject * DtwObject_unique_random_sub_object(DtwObject *self){
 
 }
-DtwObject * DtwObject_sub_object(DtwObject *self,const char *name){
 
-}
 
 DtwObject * DtwObject_free(DtwObject *self){
     free(self->path);
