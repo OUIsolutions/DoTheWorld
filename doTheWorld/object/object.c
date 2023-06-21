@@ -85,12 +85,17 @@ void DtwObject_set_double(struct DtwObject *self,const char *name, double value)
     sprintf(result,"%f",value);
     self->set_string(self,name,result);
 }
-DtwObject * DtwObject_sub_object(DtwObject *self,const char *name){
 
+
+DtwObject * DtwObject_sub_object(DtwObject *self,const char *name){
+    char *path = private_DtwObject_create_path(self,name);
+    DtwObject * new_obj = private_newDtwObject_raw();
+    new_obj->path = path;
+    return new_obj;
 }
 
 DtwObject * DtwObject_unique_random_sub_object(DtwObject *self){
-
+    
 }
 
 
