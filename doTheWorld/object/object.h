@@ -26,9 +26,11 @@ typedef struct DtwObject{
 DtwObject * private_newDtwObject_raw();
 
 DtwObject * newDtwObject(const char *path);
+char * private_DtwObject_create_path(struct DtwObject *self,const char *name);
 
 char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectError *error);
 void DtwObject_set_string(struct DtwObject *self,const char *name, const char *value);
+
 
 long DtwObject_get_long(struct DtwObject *self, const char *name,DtwObjectError *error);
 void DtwObject_set_long(struct DtwObject *self,const char *name, long value);

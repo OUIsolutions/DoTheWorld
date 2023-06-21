@@ -21,9 +21,14 @@ DtwObject * newDtwObject(const char *path){
     self->path = strdup(path);
 }
 
-char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectError *error){
+char * private_DtwObject_create_path(struct DtwObject *self,const char *name){
     char *path = (char*) malloc(strlen(self->path) +strlen(name) + 2);
     sprintf(path,"%s/%s",self->path,name);
+    return path;
+}
+
+char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectError *error){
+    char *path = private_DtwObject_create_path(self,name);
     char *result = dtw_load_string_file_content(path);
     free(path);
     if(result == NULL){
@@ -31,9 +36,11 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectErr
     }
     return result;
 }
-void DtwObject_set_string(struct DtwObject *self,const char *name, const char *value){
-    char *path = (char*) malloc(strlen(self->path) +strlen(name) + 2);
-    sprintf(path,"%s/%s",self->path,name);}
+void DtwObject_set_string(struct DtwObject *self,const char *name, const char *value) {
+    char *path = private_DtwObject_create_path(self, name);
+    dtw_write_string_file_content(path,value);
+    free(path);
+}
 
 long DtwObject_get_long(struct DtwObject *self, const char *name,DtwObjectError *error){
     char *result = self->get_string(self,name,error);
@@ -50,8 +57,13 @@ long DtwObject_get_long(struct DtwObject *self, const char *name,DtwObjectError 
     return 0;
 }
 void DtwObject_set_long(struct DtwObject *self,const char *name, long value){
-
+        char *path = private_DtwObject_create_path(self,name);
+        char result[20] = {0};
+        sprintf(result,"%li",value);
+        self->set_string(self,name,result);
 }
+
+
 double DtwObject_get_double(struct DtwObject *self, const char *name, DtwObjectError *error){
     char *result = self->get_string(self,name,error);
     if(result){
@@ -64,12 +76,16 @@ double DtwObject_get_double(struct DtwObject *self, const char *name, DtwObjectE
         }
         return result_converted;
     }
-    return 0;}
+    return 0;
+}
 
 
 
 void DtwObject_set_double(struct DtwObject *self,const char *name, double value){
-
+    char *path = private_DtwObject_create_path(self,name);
+    char result[20] = {0};
+    sprintf(result,"%f",value);
+    self->set_string(self,name,result);
 }
 
 DtwObject * DtwObject_unique_random_sub_object(DtwObject *self){
