@@ -15,6 +15,7 @@ DtwObject * private_newDtwObject_raw(){
      return  self;
 }
 
+
 DtwObject * newDtwObject(const char *path){
     DtwObject * self = private_newDtwObject_raw();
     self->path = strdup(path);
@@ -30,7 +31,7 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectErr
     }
     return result;
 }
-void DtwObject_set_string(struct DtwObject *self, const char *value){
+void DtwObject_set_string(struct DtwObject *self,const char *name, const char *value){
     char *path = (char*) malloc(strlen(self->path) +strlen(name) + 2);
     sprintf(path,"%s/%s",self->path,name);}
 
@@ -48,7 +49,7 @@ long DtwObject_get_long(struct DtwObject *self, const char *name,DtwObjectError 
     }
     return 0;
 }
-void DtwObject_set_long(struct DtwObject *self, long value){
+void DtwObject_set_long(struct DtwObject *self,const char *name, long value){
 
 }
 double DtwObject_get_double(struct DtwObject *self, const char *name, DtwObjectError *error){
@@ -67,7 +68,7 @@ double DtwObject_get_double(struct DtwObject *self, const char *name, DtwObjectE
 
 
 
-void DtwObject_set_double(struct DtwObject *self, double value){
+void DtwObject_set_double(struct DtwObject *self,const char *name, double value){
 
 }
 

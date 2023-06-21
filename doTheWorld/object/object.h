@@ -5,15 +5,20 @@ typedef struct DtwObject{
 
     char *path;
     char *(*get_string)(struct DtwObject *self,const char *name,DtwObjectError *error);
+    void (*set_string)(struct DtwObject *self,const char *name,const char *value);
+
+
     long (*get_long)(struct DtwObject *self, const char *name,DtwObjectError *error);
+    void (*set_long)(struct DtwObject *self,const char *name,long value);
+
+
     double (*get_double)(struct DtwObject *self, const char *name, DtwObjectError *error);
+    void (*set_double)(struct DtwObject *self,const char *name, double value);
+
     struct DtwObject *(*sub_object)(struct DtwObject *self,const char*name);
     struct DtwObject *(*unique_random_sub_object)(struct DtwObject *self);
 
 
-    void (*set_long)(struct DtwObject *self,long value);
-    void (*set_double)(struct DtwObject *self, double value);
-    void (*set_string)(struct DtwObject *self,const char *value);
     void (*free)(struct DtwObject *self);
 
 
