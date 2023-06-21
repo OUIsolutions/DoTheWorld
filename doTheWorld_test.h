@@ -4417,6 +4417,8 @@ void DtwTree_dumps_tree_json_to_file(
 struct  DtwTree * newDtwTree();
 
 
+//#include "object/object.h"
+
 
 
 
@@ -6689,6 +6691,7 @@ void  DtwTransactionReport_free(struct DtwTransactionReport *report){
     report->remove->free(report->remove);
     free(report);
 }
+///#include "object/object.c"
 
 #endif //DO_THE_WORLD_H
 
