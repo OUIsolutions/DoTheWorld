@@ -1,8 +1,8 @@
 
 DtwObject * private_newDtwObject_raw(){
-    DtwObject * self = (DtwObject *)malloc(sizeof(DtwObject));
-    self->get_string = DtwObject_get_string;
 
+    DtwObject * self = (DtwObject*)malloc(sizeof(DtwObject));
+    self->get_string = DtwObject_get_string;
     self->get_long = DtwObject_get_long;
     self->get_double = DtwObject_get_double;
     self->sub_object = DtwObject_sub_object;
@@ -11,7 +11,7 @@ DtwObject * private_newDtwObject_raw(){
     self->set_string = DtwObject_set_string;
     self->set_double = DtwObject_set_double;
     self->set_long = DtwObject_set_long;
-
+    self->free =DtwObject_free;
      return  self;
 }
 
@@ -68,7 +68,7 @@ double DtwObject_get_double(struct DtwObject *self, const char *name, DtwObjectE
     char *result = self->get_string(self,name,error);
     if(result){
         double result_converted;
-        int test = sscanf(result,"%f",&result_converted);
+        int test = sscanf(result,"%lf",&result_converted);
         free(result);
         if(test == 0){
             *error = DTW_WRONG_TYPE;
