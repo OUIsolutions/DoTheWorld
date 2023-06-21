@@ -1,5 +1,5 @@
 
-typedef enum {DTO_OK,DTW_OBJECT_NOT_EXIST,DTW_WRONG_TYPE} DtwObjectError;
+typedef enum {DTW_OK,DTW_OBJECT_NOT_EXIST,DTW_WRONG_TYPE} DtwObjectError;
 
 typedef struct DtwObject{
 

@@ -136,3 +136,24 @@ void private_dtw_remove_double_bars(struct DtwStringArray*path){
         free(result);
     }
 }
+
+
+char *dtw_create_random_token(int size) {
+    static const char chars[] =
+            "abcdefghijklmnopqrstuvwxyz"
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            "0123456789";
+
+    int total_size = sizeof(chars) - 1;
+    char *token = (char*)malloc(size +1);
+
+    srand(time(NULL));
+
+    for (int i = 0; i < size; ++i) {
+        int index = rand() % total_size;
+        token[i] = chars[index];
+    }
+
+    token[size] = '\0';
+    return token;
+}

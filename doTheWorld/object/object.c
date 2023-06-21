@@ -1,6 +1,6 @@
 
 DtwObject * private_newDtwObject_raw(){
-    DtwObject * self = (DtwObject *)malloc(sizeof(DtwObject *));
+    DtwObject * self = (DtwObject *)malloc(sizeof(DtwObject));
     self->get_string = DtwObject_get_string;
 
     self->get_long = DtwObject_get_long;
@@ -19,6 +19,7 @@ DtwObject * private_newDtwObject_raw(){
 DtwObject * newDtwObject(const char *path){
     DtwObject * self = private_newDtwObject_raw();
     self->path = strdup(path);
+    return self;
 }
 
 char * private_DtwObject_create_path(struct DtwObject *self,const char *name){
@@ -91,11 +92,26 @@ DtwObject * DtwObject_sub_object(DtwObject *self,const char *name){
     char *path = private_DtwObject_create_path(self,name);
     DtwObject * new_obj = private_newDtwObject_raw();
     new_obj->path = path;
+    dtw_create_dir_recursively(path);
     return new_obj;
 }
 
 DtwObject * DtwObject_unique_random_sub_object(DtwObject *self){
-    
+    char *path;
+    for(int i = 2; i < 30; i++){
+        char *name = dtw_create_random_token(i);
+        path = private_DtwObject_create_path(self,path);
+        if(dtw_entity_type(path) == DTW_NOT_FOUND){
+            DtwObject * new_obj = private_newDtwObject_raw();
+            new_obj->path = path;
+            dtw_create_dir_recursively(path);
+            free(name);
+            return new_obj;
+
+        }
+        free(path);
+        free(name);
+    }
 }
 
 
