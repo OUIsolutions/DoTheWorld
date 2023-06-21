@@ -1,7 +1,7 @@
 # Prerequisites
 *.d
 exemple
-# Object files
+# object files
 *.json
 *.o
 *.ko

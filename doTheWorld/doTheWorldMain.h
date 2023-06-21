@@ -55,6 +55,8 @@ SOFTWARE.
 #include "json_error/json_error.h"
 #include "tree_part/tree_part.h"
 #include "tree/tree.h"
+#include "object/object.h"
+
 
 #include "base64/base64.c"
 #include "extras/extras.c"
@@ -73,6 +75,7 @@ SOFTWARE.
 #include "json_error/json_error.c"
 #include "tree/json_tree.c"
 #include "transaction_report/transaction_report.c"
+#include "object/object.c"
 
 #endif //DO_THE_WORLD_H
 

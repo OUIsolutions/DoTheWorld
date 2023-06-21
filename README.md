@@ -154,9 +154,6 @@ You can move either folders or files with **dtw_move_any** function
 
 <!--codeof:readme_exemples/#destructive#move_any.c-->
 ~~~c
-//
-// Created by jurandi on 20-06-2023.
-//
 
 #include "doTheWorld.h"
 
@@ -335,10 +332,6 @@ with tree concepts, you can manipulate files as trees, and implement IO modifica
 ### Loading An TreePart 
 <!--codeof:readme_exemples/loading_tree_part.c-->
 ~~~c
-//
-// Created by jurandi on 20-06-2023.
-//
-
 
 
 #include "doTheWorld.h"
@@ -357,9 +350,7 @@ int main(){
 ~~~
 <!--codeof:readme_exemples/creating_tree_part.c-->
 ~~~c
-//
-// Created by jurandi on 20-06-2023.
-//
+
 
 #include "doTheWorld.h"
 
@@ -407,9 +398,7 @@ int main(){
 ~~~
 <!--codeof:readme_exemples/getting_path_paramns.c-->
 ~~~c
-//
-// Created by jurandi on 20-06-2023.
-//
+
 #include "doTheWorld.h"
 
 
@@ -446,9 +435,7 @@ int main(){
 
 <!--codeof:readme_exemples/#destructive#change_path_attributes.c-->
 ~~~c
-//
-// Created by jurandi on 20-06-2023.
-//
+
 #include "doTheWorld.h"
 
 
@@ -535,9 +522,7 @@ Will Delete the current Content
 
 <!--codeof:readme_exemples/#destructive#hardware_remove.c-->
 ~~~c
-//
-// Created by jurandi on 20-06-2023.
-//
+
 
 #include "doTheWorld.h"
 
