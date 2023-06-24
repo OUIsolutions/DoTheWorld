@@ -38,6 +38,7 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectErr
     }
     return result;
 }
+
 void DtwObject_set_string(struct DtwObject *self,const char *name, const char *value) {
     char *path = private_DtwObject_create_path(self, name);
     dtw_write_string_file_content(path,value);
@@ -58,6 +59,7 @@ long DtwObject_get_long(struct DtwObject *self, const char *name,DtwObjectError 
     }
     return 0;
 }
+
 void DtwObject_set_long(struct DtwObject *self,const char *name, long value){
         char result[20] = {0};
         sprintf(result,"%li",value);
@@ -90,14 +92,18 @@ void DtwObject_set_double(struct DtwObject *self,const char *name, double value)
 
 
 DtwObject * DtwObject_sub_object(DtwObject *self,const char *name){
+
     char *path = private_DtwObject_create_path(self,name);
     DtwObject * new_obj = private_newDtwObject_raw();
     new_obj->path = path;
     dtw_create_dir_recursively(path);
     return new_obj;
+
 }
 
+
 DtwObject * DtwObject_unique_random_sub_object(DtwObject *self){
+
     char *path;
     for(int i = 2; i < 30; i++){
         char *name = dtw_create_random_token(i);
@@ -113,6 +119,7 @@ DtwObject * DtwObject_unique_random_sub_object(DtwObject *self){
         free(path);
         free(name);
     }
+
 }
 
 

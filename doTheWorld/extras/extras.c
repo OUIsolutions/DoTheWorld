@@ -147,7 +147,7 @@ char *dtw_create_random_token(int size) {
     int total_size = sizeof(chars) - 1;
     char *token = (char*)malloc(size +1);
 
-    srand(time(NULL));
+    srand(  (unsigned int)time(NULL));
 
     for (int i = 0; i < size; ++i) {
         int index = rand() % total_size;
