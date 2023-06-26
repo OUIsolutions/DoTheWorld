@@ -38,6 +38,7 @@ typedef struct DtwObject{
 DtwObject * private_newDtwObject_raw();
 
 DtwObject * newDtwObject(const char *path);
+
 char * private_DtwObject_create_path(struct DtwObject *self,const char *name);
 
 char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectError *error);
