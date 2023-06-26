@@ -19,8 +19,7 @@ DtwObject * private_newDtwObject_raw(){
 
 
     self->list_all = DtwObject_list_all;
-    self->list_objects =DtwObject_list_objects;
-    self->list_non_objects = DtwObject_list_non_objects;
+
     self->free = DtwObject_free;
      return  self;
 }
