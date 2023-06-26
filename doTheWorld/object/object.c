@@ -2,13 +2,15 @@
 DtwObject * private_newDtwObject_raw(){
 
     DtwObject * self = (DtwObject*)malloc(sizeof(DtwObject));
-
+    self->randonizer = NULL;
+    self->first_object = false;
     self->get_string = DtwObject_get_string;
     self->get_long = DtwObject_get_long;
     self->get_double = DtwObject_get_double;
     self->sub_object = DtwObject_sub_object;
     self->unique_random_sub_object = DtwObject_unique_random_sub_object;
-    
+
+
     self->set_string = DtwObject_set_string;
     self->set_double = DtwObject_set_double;
     self->set_long = DtwObject_set_long;
@@ -20,6 +22,8 @@ DtwObject * private_newDtwObject_raw(){
 DtwObject * newDtwObject(const char *path){
     DtwObject * self = private_newDtwObject_raw();
     self->path = strdup(path);
+    self->first_object = true;
+    self->randonizer = newDtwRandonizer();
     dtw_create_dir_recursively(path);
     return self;
 }
@@ -107,15 +111,15 @@ DtwObject * DtwObject_unique_random_sub_object(DtwObject *self){
 
     char *path;
     for(int i = 2; i < 30; i++){
-        char *name = dtw_create_random_token(i);
+        char *name = self->randonizer->generate_token( self->randonizer,i);
         path = private_DtwObject_create_path(self,name);
         if(dtw_entity_type(path) == DTW_NOT_FOUND){
             DtwObject * new_obj = private_newDtwObject_raw();
             new_obj->path = path;
+            new_obj->randonizer = self->randonizer;
             dtw_create_dir_recursively(path);
             free(name);
             return new_obj;
-
         }
         free(path);
         free(name);

@@ -3,7 +3,11 @@ typedef enum {DTW_OK,DTW_OBJECT_NOT_EXIST,DTW_WRONG_TYPE} DtwObjectError;
 
 typedef struct DtwObject{
 
+    bool first_object;
     char *path;
+    DtwRandonizer  *randonizer;
+
+
     char *(*get_string)(struct DtwObject *self,const char *name,DtwObjectError *error);
     void (*set_string)(struct DtwObject *self,const char *name,const char *value);
 
