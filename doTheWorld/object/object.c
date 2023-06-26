@@ -5,11 +5,11 @@ DtwObject * private_newDtwObject_raw(){
     self->randonizer = NULL;
     self->first_object = false;
 
+
     self->get_string = DtwObject_get_string;
     self->get_long = DtwObject_get_long;
     self->get_double = DtwObject_get_double;
     self->sub_object = DtwObject_sub_object;
-
 
 
     self->destroy = DtwObject_destroy;
@@ -19,7 +19,6 @@ DtwObject * private_newDtwObject_raw(){
 
 
     self->list_all = DtwObject_list_all;
-
     self->free = DtwObject_free;
      return  self;
 }
@@ -34,6 +33,7 @@ DtwObject * newDtwObject(const char *path){
     return self;
 }
 
+
 char * private_DtwObject_create_path(struct DtwObject *self,const char *name){
 
     if(name){
@@ -43,14 +43,18 @@ char * private_DtwObject_create_path(struct DtwObject *self,const char *name){
     }
 
     for(int i = 0; i  < 30; i++) {
+
         char *possible_name = self->randonizer->generate_token(self->randonizer, i);
-        char *path = (char *) malloc(strlen(self->path) + strlen(possible_name) + 2);
+        char *path = (char*)malloc(strlen(self->path) + strlen(possible_name) + 2);
         sprintf(path, "%s/%s", self->path, possible_name);
+
         free(possible_name);
         if (dtw_entity_type(path) == DTW_NOT_FOUND) {
             return path;
         }
         free(path);
+
+
     }
 }
 
@@ -72,6 +76,7 @@ void DtwObject_set_string(struct DtwObject *self,const char *name, const char *v
 
 long DtwObject_get_long(struct DtwObject *self, const char *name,DtwObjectError *error){
     char *result = self->get_string(self,name,error);
+
     if(result){
         long result_converted;
         int test = sscanf(result,"%li",&result_converted);
@@ -82,6 +87,7 @@ long DtwObject_get_long(struct DtwObject *self, const char *name,DtwObjectError 
         }
         return result_converted;
     }
+
     return 0;
 }
 
@@ -95,6 +101,7 @@ void DtwObject_set_long(struct DtwObject *self,const char *name, long value){
 double DtwObject_get_double(struct DtwObject *self, const char *name, DtwObjectError *error){
     char *result = self->get_string(self,name,error);
     if(result){
+
         double result_converted;
         int test = sscanf(result,"%lf",&result_converted);
         free(result);
@@ -103,6 +110,7 @@ double DtwObject_get_double(struct DtwObject *self, const char *name, DtwObjectE
             return 0;
         }
         return result_converted;
+
     }
     return 0;
 }

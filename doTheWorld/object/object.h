@@ -9,8 +9,6 @@ typedef struct DtwObject{
     char *path;
     DtwRandonizer  *randonizer;
 
-
-
     char *(*get_string)(struct DtwObject *self,const char *name,DtwObjectError *error);
     void (*set_string)(struct DtwObject *self,const char *name,const char *value);
 
@@ -23,14 +21,9 @@ typedef struct DtwObject{
     void (*set_double)(struct DtwObject *self,const char *name, double value);
 
 
-
     struct DtwObject *(*sub_object)(struct DtwObject *self,const char*name);
-
     DtwStringArray  * (*list_all)(struct DtwObject *self);
-
     void(*destroy)(struct DtwObject *self,const char *name);
-
-
     void (*free)(struct DtwObject *self);
 
 
