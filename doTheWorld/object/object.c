@@ -10,11 +10,11 @@ DtwObject * private_newDtwObject_raw(){
     self->sub_object = DtwObject_sub_object;
     self->unique_random_sub_object = DtwObject_unique_random_sub_object;
 
-
+    self->destroy = DtwObject_destroy;
     self->set_string = DtwObject_set_string;
     self->set_double = DtwObject_set_double;
     self->set_long = DtwObject_set_long;
-    self->free =DtwObject_free;
+    self->free = DtwObject_free;
      return  self;
 }
 
@@ -96,7 +96,7 @@ void DtwObject_set_double(struct DtwObject *self,const char *name, double value)
 }
 
 
-DtwObject * DtwObject_sub_object(DtwObject *self,const char *name){
+DtwObject * DtwObject_sub_object(struct DtwObject *self,const char *name){
 
     char *path = private_DtwObject_create_path(self,name);
     DtwObject * new_obj = private_newDtwObject_raw();
@@ -107,7 +107,7 @@ DtwObject * DtwObject_sub_object(DtwObject *self,const char *name){
 }
 
 
-DtwObject * DtwObject_unique_random_sub_object(DtwObject *self){
+DtwObject * DtwObject_unique_random_sub_object(struct DtwObject *self){
 
     char *path;
     for(int i = 2; i < 30; i++){
@@ -126,9 +126,12 @@ DtwObject * DtwObject_unique_random_sub_object(DtwObject *self){
     }
 
 }
+void DtwObject_destroy(struct DtwObject *self,const char *name){
+    char *path = private_DtwObject_create_path(self,name);
+    dtw_remove_any(path);
+}
 
-
-DtwObject * DtwObject_free(DtwObject *self){
+void DtwObject_free(struct DtwObject *self){
     free(self->path);
     free(self);
 }

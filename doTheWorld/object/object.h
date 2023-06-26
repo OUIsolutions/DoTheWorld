@@ -22,6 +22,8 @@ typedef struct DtwObject{
     struct DtwObject *(*sub_object)(struct DtwObject *self,const char*name);
     struct DtwObject *(*unique_random_sub_object)(struct DtwObject *self);
 
+    void(*destroy)(struct DtwObject *self,const char *name);
+
 
     void (*free)(struct DtwObject *self);
 
@@ -42,7 +44,8 @@ void DtwObject_set_long(struct DtwObject *self,const char *name, long value);
 double DtwObject_get_double(struct DtwObject *self, const char *name, DtwObjectError *error);
 void DtwObject_set_double(struct DtwObject *self,const char *name, double value);
 
+void DtwObject_destroy(struct DtwObject *self,const char *name);
 
-DtwObject * DtwObject_unique_random_sub_object(DtwObject *self);
-DtwObject * DtwObject_sub_object(DtwObject *self,const char *name);
-DtwObject * DtwObject_free(DtwObject *self);
+DtwObject * DtwObject_unique_random_sub_object(struct DtwObject *self);
+DtwObject * DtwObject_sub_object(struct DtwObject *self,const char *name);
+void DtwObject_free(struct DtwObject *self);
