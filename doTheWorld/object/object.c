@@ -9,7 +9,6 @@ DtwObject * private_newDtwObject_raw(){
     self->get_long = DtwObject_get_long;
     self->get_double = DtwObject_get_double;
     self->sub_object = DtwObject_sub_object;
-    self->unique_random_sub_object = DtwObject_unique_random_sub_object;
 
 
     self->destroy = DtwObject_destroy;
