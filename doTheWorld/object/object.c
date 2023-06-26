@@ -14,6 +14,9 @@ DtwObject * private_newDtwObject_raw(){
     self->set_string = DtwObject_set_string;
     self->set_double = DtwObject_set_double;
     self->set_long = DtwObject_set_long;
+
+    self->list_all = DtwObject_list_all;
+
     self->free = DtwObject_free;
      return  self;
 }
@@ -129,6 +132,9 @@ DtwObject * DtwObject_unique_random_sub_object(struct DtwObject *self){
 void DtwObject_destroy(struct DtwObject *self,const char *name){
     char *path = private_DtwObject_create_path(self,name);
     dtw_remove_any(path);
+}
+DtwStringArray  * DtwObject_list_all(struct DtwObject *self){
+    return dtw_list_all(self->path,DTW_NOT_CONCAT_PATH);
 }
 
 void DtwObject_free(struct DtwObject *self){
