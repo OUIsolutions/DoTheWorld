@@ -11,6 +11,7 @@ DtwObject * private_newDtwObject_raw(){
     self->sub_object = DtwObject_sub_object;
 
 
+
     self->destroy = DtwObject_destroy;
     self->set_string = DtwObject_set_string;
     self->set_double = DtwObject_set_double;
