@@ -43,7 +43,7 @@ SOFTWARE.
 #include "string_array/string_array.h"
 
 #include "base64/base64.h"
-
+#include "randonizer/randonizer.h"
 #include "extras/extras.h"
 #include "string_functions/string_functions.h"
 #include "io/io.h"
@@ -59,6 +59,7 @@ SOFTWARE.
 
 
 #include "base64/base64.c"
+#include "randonizer/randonizer.c"
 #include "extras/extras.c"
 #include "string_functions/string_functions.c"
 #include "io/io.c"

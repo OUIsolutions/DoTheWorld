@@ -2,12 +2,13 @@
 DtwObject * private_newDtwObject_raw(){
 
     DtwObject * self = (DtwObject*)malloc(sizeof(DtwObject));
+
     self->get_string = DtwObject_get_string;
     self->get_long = DtwObject_get_long;
     self->get_double = DtwObject_get_double;
     self->sub_object = DtwObject_sub_object;
     self->unique_random_sub_object = DtwObject_unique_random_sub_object;
-
+    
     self->set_string = DtwObject_set_string;
     self->set_double = DtwObject_set_double;
     self->set_long = DtwObject_set_long;
