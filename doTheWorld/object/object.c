@@ -142,13 +142,6 @@ DtwStringArray  * DtwObject_list_all(struct DtwObject *self){
     return dtw_list_all(self->path,DTW_NOT_CONCAT_PATH);
 }
 
-DtwStringArray  * DtwObject_list_objects(struct DtwObject *self){
-    return dtw_list_dirs(self->path,DTW_NOT_CONCAT_PATH);
-}
-
-DtwStringArray  * DtwObject_list_non_objects(struct DtwObject *self){
-    return dtw_list_files(self->path,DTW_NOT_CONCAT_PATH);
-}
 
 
 void DtwObject_free(struct DtwObject *self){
