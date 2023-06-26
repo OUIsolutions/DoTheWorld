@@ -28,6 +28,7 @@ typedef struct DtwObject{
 
 
 }DtwObject;
+
 DtwObject * private_newDtwObject_raw();
 
 DtwObject * newDtwObject(const char *path);
