@@ -1,11 +1,14 @@
 
 typedef enum {DTW_OK,DTW_OBJECT_NOT_EXIST,DTW_WRONG_TYPE} DtwObjectError;
+typedef enum {DTW_NONE,DTW_NUMBER,DTW_STRING,DTW_OBJECT} DtwObjectType;
+#define DTW_RANDOMIC NULL
 
 typedef struct DtwObject{
 
     bool first_object;
     char *path;
     DtwRandonizer  *randonizer;
+
 
 
     char *(*get_string)(struct DtwObject *self,const char *name,DtwObjectError *error);
@@ -19,8 +22,9 @@ typedef struct DtwObject{
     double (*get_double)(struct DtwObject *self, const char *name, DtwObjectError *error);
     void (*set_double)(struct DtwObject *self,const char *name, double value);
 
+
+
     struct DtwObject *(*sub_object)(struct DtwObject *self,const char*name);
-    struct DtwObject *(*unique_random_sub_object)(struct DtwObject *self);
 
     DtwStringArray  * (*list_all)(struct DtwObject *self);
 
@@ -50,6 +54,5 @@ void DtwObject_destroy(struct DtwObject *self,const char *name);
 
 DtwStringArray  * DtwObject_list_all(struct DtwObject *self);
 
-DtwObject * DtwObject_unique_random_sub_object(struct DtwObject *self);
 DtwObject * DtwObject_sub_object(struct DtwObject *self,const char *name);
 void DtwObject_free(struct DtwObject *self);

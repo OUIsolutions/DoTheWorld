@@ -28,10 +28,8 @@ bool dtw_write_any_content(const char *path,unsigned  char *content,int size);
 bool dtw_write_string_file_content(const char *path,const char *content);
 int dtw_entity_type(const char *path);
 
-#ifdef __cplusplus
-    bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge=false);
-#else
-    bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge);
-#endif 
+
+bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge);
+
 
 void dtw_move_any(const char* src_path, const char* dest_path,bool merge);
