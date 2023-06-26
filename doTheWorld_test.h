@@ -3943,6 +3943,23 @@ char *dtw_convert_binary_file_to_base64(const char *path);
 
 
 
+
+typedef struct DtwRandonizer{
+    long seed;
+    long actual_generation;
+    char * (*generate_token)(struct DtwRandonizer*self, int size);
+    void (*free)(struct DtwRandonizer *self);
+}DtwRandonizer;
+
+
+DtwRandonizer * newDtwRandonizer();
+char * DtwRandonizer_generate_token(struct DtwRandonizer*self, int size);
+void DtwRandonizer_free(struct DtwRandonizer *self);
+
+
+
+
+
 char * dtw_generate_sha_from_file(const char *path);
 char * dtw_generate_sha_from_string(const char *string);
 long int dtw_get_file_last_motification_in_unix(const char *path);
@@ -3954,6 +3971,7 @@ void private_dtw_add_end_bar_to_dirs_string_array(struct DtwStringArray * dirs);
 char *dtw_concat_path(const char *path1, const char *path2);
 struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *paths,const char *path_to_remove);
 void private_dtw_remove_double_bars(struct DtwStringArray*path);
+
 
 
 bool dtw_starts_with(const char *string, const char *prefix);
@@ -3994,11 +4012,9 @@ bool dtw_write_any_content(const char *path,unsigned  char *content,int size);
 bool dtw_write_string_file_content(const char *path,const char *content);
 int dtw_entity_type(const char *path);
 
-#ifdef __cplusplus
-    bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge=false);
-#else
-    bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge);
-#endif 
+
+bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge);
+
 
 void dtw_move_any(const char* src_path, const char* dest_path,bool merge);
 
@@ -4418,21 +4434,40 @@ struct  DtwTree * newDtwTree();
 
 
 
-//
+
+typedef enum {DTW_OK,DTW_OBJECT_NOT_EXIST,DTW_WRONG_TYPE} DtwObjectError;
+typedef enum {DTW_NONE,DTW_NUMBER,DTW_STRING,DTW_OBJECT} DtwObjectType;
+#define DTW_RANDOMIC NULL
 
 typedef struct DtwObject{
 
+    bool first_object;
     char *path;
-    char *(*get_string)(struct DtwObject *self,const char *name);
-    long (*get_long)(struct DtwObject *self, const char *name);
-    float (*get_float)(struct DtwObject *self, const char *name);
+    DtwRandonizer  *randonizer;
+
+
+
+    char *(*get_string)(struct DtwObject *self,const char *name,DtwObjectError *error);
+    void (*set_string)(struct DtwObject *self,const char *name,const char *value);
+
+
+    long (*get_long)(struct DtwObject *self, const char *name,DtwObjectError *error);
+    void (*set_long)(struct DtwObject *self,const char *name,long value);
+
+
+    double (*get_double)(struct DtwObject *self, const char *name, DtwObjectError *error);
+    void (*set_double)(struct DtwObject *self,const char *name, double value);
+
+
+
     struct DtwObject *(*sub_object)(struct DtwObject *self,const char*name);
-    struct DtwObject *(*unique_random_sub_object)(struct DtwObject *self);
+
+    DtwStringArray  * (*list_all)(struct DtwObject *self);
+
+    void(*destroy)(struct DtwObject *self,const char *name);
 
 
-    void (*set_long)(struct DtwObject *self,long value);
-    void (*set_float)(struct DtwObject *self,float value);
-    void (*set_string)(struct DtwObject *self,const char *value);
+    void (*free)(struct DtwObject *self);
 
 
 }DtwObject;
@@ -4440,18 +4475,24 @@ DtwObject * private_newDtwObject_raw();
 
 DtwObject * newDtwObject(const char *path);
 
-long DtwObject_get_long(struct DtwObject *self, const char *name);
-float DtwObject_get_float(struct DtwObject *self, const char *name);
-char * DtwObject_get_string(struct DtwObject *self,const char *name);
+char * private_DtwObject_create_path(struct DtwObject *self,const char *name);
+
+char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectError *error);
+void DtwObject_set_string(struct DtwObject *self,const char *name, const char *value);
 
 
-void DtwObject_set_long(struct DtwObject *self, long value);
-void DtwObject_set_double(struct DtwObject *self, float value);
-void DtwObject_set_string(struct DtwObject *self, const char *value);
+long DtwObject_get_long(struct DtwObject *self, const char *name,DtwObjectError *error);
+void DtwObject_set_long(struct DtwObject *self,const char *name, long value);
 
-DtwObject * DtwObject_unique_random_sub_object(DtwObject *self);
-DtwObject * DtwObject_sub_object(DtwObject *self,const char *name);
+double DtwObject_get_double(struct DtwObject *self, const char *name, DtwObjectError *error);
+void DtwObject_set_double(struct DtwObject *self,const char *name, double value);
 
+void DtwObject_destroy(struct DtwObject *self,const char *name);
+
+DtwStringArray  * DtwObject_list_all(struct DtwObject *self);
+
+DtwObject * DtwObject_sub_object(struct DtwObject *self,const char *name);
+void DtwObject_free(struct DtwObject *self);
 
 
 
@@ -4530,6 +4571,46 @@ char *dtw_convert_binary_file_to_base64(const char *path){
     free(data);
     return b64;
 }
+
+
+
+
+
+DtwRandonizer * newDtwRandonizer(){
+    DtwRandonizer *self = (DtwRandonizer*) malloc(sizeof (DtwRandonizer));
+    self->seed = time(NULL);
+    self->actual_generation = 0;
+    self->generate_token = DtwRandonizer_generate_token;
+    self->free = DtwRandonizer_free;
+    return self;
+}
+
+char * DtwRandonizer_generate_token(struct DtwRandonizer*self, int size){
+    self->actual_generation+=1;
+    static const char chars[] =
+            "abcdefghijklmnopqrstuvwxyz"
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            "0123456789";
+
+    int total_size = sizeof(chars) - 1;
+    char *token = (char*)malloc(size +1);
+
+    srand(  self->seed + self->actual_generation);
+
+    for (int i = 0; i < size; ++i) {
+        int index = rand() % total_size;
+        token[i] = chars[index];
+    }
+
+    token[size] = '\0';
+    return token;
+}
+
+void DtwRandonizer_free(struct DtwRandonizer *self){
+    free(self);
+}
+
+
 
 
 char * dtw_generate_sha_from_file(const char *path){
@@ -4669,6 +4750,9 @@ void private_dtw_remove_double_bars(struct DtwStringArray*path){
         free(result);
     }
 }
+
+
+
 
 
 
@@ -6728,62 +6812,153 @@ void  DtwTransactionReport_free(struct DtwTransactionReport *report){
 
 
 DtwObject * private_newDtwObject_raw(){
-    DtwObject * self = (DtwObject *)malloc(sizeof(DtwObject *));
+
+    DtwObject * self = (DtwObject*)malloc(sizeof(DtwObject));
+    self->randonizer = NULL;
+    self->first_object = false;
+
     self->get_string = DtwObject_get_string;
-
     self->get_long = DtwObject_get_long;
-    self->get_float = DtwObject_get_float;
+    self->get_double = DtwObject_get_double;
     self->sub_object = DtwObject_sub_object;
-    self->unique_random_sub_object = DtwObject_unique_random_sub_object;
 
+
+
+    self->destroy = DtwObject_destroy;
     self->set_string = DtwObject_set_string;
-    self->set_float = DtwObject_set_float;
+    self->set_double = DtwObject_set_double;
     self->set_long = DtwObject_set_long;
 
+
+    self->list_all = DtwObject_list_all;
+
+    self->free = DtwObject_free;
      return  self;
 }
+
 
 DtwObject * newDtwObject(const char *path){
     DtwObject * self = private_newDtwObject_raw();
     self->path = strdup(path);
+    self->first_object = true;
+    self->randonizer = newDtwRandonizer();
+    dtw_create_dir_recursively(path);
+    return self;
 }
 
-char * DtwObject_get_string(struct DtwObject *self,const char *name){
-    char *path = (char*) malloc(strlen(self->path) +strlen(name) + 2);
-    sprintf(path,"%s/%s",self->path,name);
+char * private_DtwObject_create_path(struct DtwObject *self,const char *name){
+
+    if(name){
+        char *path = (char*) malloc(strlen(self->path) +strlen(name) + 2);
+        sprintf(path,"%s/%s",self->path,name);
+        return path;
+    }
+
+    for(int i = 0; i  < 30; i++) {
+        char *possible_name = self->randonizer->generate_token(self->randonizer, i);
+        char *path = (char *) malloc(strlen(self->path) + strlen(possible_name) + 2);
+        sprintf(path, "%s/%s", self->path, possible_name);
+        free(possible_name);
+        if (dtw_entity_type(path) == DTW_NOT_FOUND) {
+            return path;
+        }
+        free(path);
+    }
+}
+
+char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectError *error){
+    char *path = private_DtwObject_create_path(self,name);
     char *result = dtw_load_string_file_content(path);
     free(path);
+    if(result == NULL){
+        *error = DTW_OBJECT_NOT_EXIST;
+    }
     return result;
 }
 
-long DtwObject_get_long(struct DtwObject *self, const char *name){
-    char *result = self->get_string(self,name);
-    if(result){
+void DtwObject_set_string(struct DtwObject *self,const char *name, const char *value) {
+    char *path = private_DtwObject_create_path(self, name);
+    dtw_write_string_file_content(path,value);
+    free(path);
+}
 
+long DtwObject_get_long(struct DtwObject *self, const char *name,DtwObjectError *error){
+    char *result = self->get_string(self,name,error);
+    if(result){
+        long result_converted;
+        int test = sscanf(result,"%li",&result_converted);
+        free(result);
+        if(test == 0){
+            *error = DTW_WRONG_TYPE;
+            return 0;
+        }
+        return result_converted;
     }
     return 0;
 }
 
-float DtwObject_get_float(struct DtwObject *self, const char *name){
+void DtwObject_set_long(struct DtwObject *self,const char *name, long value){
+        char result[20] = {0};
+        sprintf(result,"%li",value);
+        self->set_string(self,name,result);
+}
+
+
+double DtwObject_get_double(struct DtwObject *self, const char *name, DtwObjectError *error){
+    char *result = self->get_string(self,name,error);
+    if(result){
+        double result_converted;
+        int test = sscanf(result,"%lf",&result_converted);
+        free(result);
+        if(test == 0){
+            *error = DTW_WRONG_TYPE;
+            return 0;
+        }
+        return result_converted;
+    }
     return 0;
 }
 
 
-void DtwObject_set_long(struct DtwObject *self, long value){
 
-}
-void DtwObject_set_double(struct DtwObject *self, float value){
-
-}
-void DtwObject_set_string(struct DtwObject *self, const char *value){}
-
-DtwObject * DtwObject_unique_random_sub_object(DtwObject *self){
-
-}
-DtwObject * DtwObject_sub_object(DtwObject *self,const char *name){
-
+void DtwObject_set_double(struct DtwObject *self,const char *name, double value){
+    char result[20] = {0};
+    sprintf(result,"%f",value);
+    self->set_string(self,name,result);
 }
 
+
+DtwObject * DtwObject_sub_object(struct DtwObject *self,const char *name){
+
+    char *path = private_DtwObject_create_path(self,name);
+    DtwObject * new_obj = private_newDtwObject_raw();
+    new_obj->path = path;
+    dtw_create_dir_recursively(path);
+    return new_obj;
+
+}
+
+
+
+void DtwObject_destroy(struct DtwObject *self,const char *name){
+    char *path = private_DtwObject_create_path(self,name);
+    dtw_remove_any(path);
+}
+
+DtwStringArray  * DtwObject_list_all(struct DtwObject *self){
+    return dtw_list_all(self->path,DTW_NOT_CONCAT_PATH);
+}
+
+
+void DtwObject_free(struct DtwObject *self){
+
+    if(self->first_object){
+        self->randonizer->free(self->randonizer);
+    }
+
+    free(self->path);
+    free(self);
+}
 
 #endif //DO_THE_WORLD_H
 
