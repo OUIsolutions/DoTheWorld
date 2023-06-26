@@ -131,13 +131,18 @@ void DtwObject_destroy(struct DtwObject *self,const char *name){
     char *path = private_DtwObject_create_path(self,name);
     dtw_remove_any(path);
 }
+
 DtwStringArray  * DtwObject_list_all(struct DtwObject *self){
     return dtw_list_all(self->path,DTW_NOT_CONCAT_PATH);
 }
 
 
-
 void DtwObject_free(struct DtwObject *self){
+
+    if(self->first_object){
+        self->randonizer->free(self->randonizer);
+    }
+
     free(self->path);
     free(self);
 }

@@ -7,6 +7,7 @@ DtwRandonizer * newDtwRandonizer(){
     self->seed = time(NULL);
     self->actual_generation = 0;
     self->generate_token = DtwRandonizer_generate_token;
+    self->free = DtwRandonizer_free;
     return self;
 }
 
@@ -31,5 +32,7 @@ char * DtwRandonizer_generate_token(struct DtwRandonizer*self, int size){
     return token;
 }
 
-
+void DtwRandonizer_free(struct DtwRandonizer *self){
+    free(self);
+}
 
