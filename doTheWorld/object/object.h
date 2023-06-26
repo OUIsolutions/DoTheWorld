@@ -23,6 +23,8 @@ typedef struct DtwObject{
     struct DtwObject *(*unique_random_sub_object)(struct DtwObject *self);
 
     DtwStringArray  * (*list_all)(struct DtwObject *self);
+    DtwStringArray  * (*list_objects)(struct DtwObject *self);
+    DtwStringArray  * (*list_non_objects)(struct DtwObject *self);
 
     void(*destroy)(struct DtwObject *self,const char *name);
 
@@ -49,6 +51,9 @@ void DtwObject_set_double(struct DtwObject *self,const char *name, double value)
 void DtwObject_destroy(struct DtwObject *self,const char *name);
 
 DtwStringArray  * DtwObject_list_all(struct DtwObject *self);
+
+DtwStringArray  * DtwObject_list_objects(struct DtwObject *self);
+DtwStringArray  * DtwObject_list_non_objects(struct DtwObject *self);
 
 DtwObject * DtwObject_unique_random_sub_object(struct DtwObject *self);
 DtwObject * DtwObject_sub_object(struct DtwObject *self,const char *name);

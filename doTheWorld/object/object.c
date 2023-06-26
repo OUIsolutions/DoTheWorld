@@ -4,19 +4,23 @@ DtwObject * private_newDtwObject_raw(){
     DtwObject * self = (DtwObject*)malloc(sizeof(DtwObject));
     self->randonizer = NULL;
     self->first_object = false;
+
     self->get_string = DtwObject_get_string;
     self->get_long = DtwObject_get_long;
     self->get_double = DtwObject_get_double;
     self->sub_object = DtwObject_sub_object;
     self->unique_random_sub_object = DtwObject_unique_random_sub_object;
 
+
     self->destroy = DtwObject_destroy;
     self->set_string = DtwObject_set_string;
     self->set_double = DtwObject_set_double;
     self->set_long = DtwObject_set_long;
 
-    self->list_all = DtwObject_list_all;
 
+    self->list_all = DtwObject_list_all;
+    self->list_objects =DtwObject_list_objects;
+    self->list_non_objects = DtwObject_list_non_objects;
     self->free = DtwObject_free;
      return  self;
 }
@@ -129,6 +133,7 @@ DtwObject * DtwObject_unique_random_sub_object(struct DtwObject *self){
     }
 
 }
+
 void DtwObject_destroy(struct DtwObject *self,const char *name){
     char *path = private_DtwObject_create_path(self,name);
     dtw_remove_any(path);
@@ -136,6 +141,15 @@ void DtwObject_destroy(struct DtwObject *self,const char *name){
 DtwStringArray  * DtwObject_list_all(struct DtwObject *self){
     return dtw_list_all(self->path,DTW_NOT_CONCAT_PATH);
 }
+
+DtwStringArray  * DtwObject_list_objects(struct DtwObject *self){
+    return dtw_list_dirs(self->path,DTW_NOT_CONCAT_PATH);
+}
+
+DtwStringArray  * DtwObject_list_non_objects(struct DtwObject *self){
+    return dtw_list_files(self->path,DTW_NOT_CONCAT_PATH);
+}
+
 
 void DtwObject_free(struct DtwObject *self){
     free(self->path);
