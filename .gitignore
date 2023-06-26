@@ -27,7 +27,7 @@ output_test/
 *.lib
 *.a
 *.la
-*.lo
+*.loa
 main.c
 test.txt
 deer.txt
