@@ -1,0 +1,18 @@
+
+typedef enum {
+    DTW_NONE,
+    DTW_NUMBER,
+    DTW_LONG,
+    DTW_DOUBLE,
+    DTW_STRING,
+    DTW_OBJECT
+} DtwObjectType;
+
+
+enum {DTW_OK,DTW_OBJECT_NOT_EXIST,DTW_WRONG_TYPE};
+enum {DTW_BY_REFERENCE,DTW_BY_OWNERSHIP,DTW_BY_VALUE};
+
+#define DTW_ALLOW_CACHE true
+#define DTW_NOT_CACHE false
+
+#define DTW_RANDOMIC NULL
