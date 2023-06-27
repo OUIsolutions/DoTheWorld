@@ -6,6 +6,7 @@ typedef struct DtwObject{
     char *path;
     DtwRandonizer  *randonizer;
     //DtwSubObjectKeyVal  *key_val;
+    DtwGarbageArray  *garbage_array;
 
     char *(*get_string)(struct DtwObject *self,const char *name,int mode, int *error);
     void (*set_string)(struct DtwObject *self,const char *name,const char *value);
