@@ -21,3 +21,4 @@ typedef struct DtwSubObject{
 
 }DtwSubObject;
 
+DtwSubObject * newDtwSubObject();
