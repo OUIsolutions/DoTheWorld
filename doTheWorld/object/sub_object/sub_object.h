@@ -9,15 +9,16 @@ typedef enum {
 } DtwObjectType;
 
 typedef struct DtwSubObject{
+
+    char *old_key;
     char *key;
-    char *new_key;
 
     double number_value;
     void *any_value;
     int size;
 
     DtwObjectType type;
-    bool seted;
-    bool owner;
+    int action;
+
 }DtwSubObject;
 
