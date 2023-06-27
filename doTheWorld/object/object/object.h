@@ -13,9 +13,9 @@ typedef struct DtwObject{
     bool first_object;
     char *path;
     DtwRandonizer  *randonizer;
-    DtwSubObjectKeyVal  *key_val;
+    //DtwSubObjectKeyVal  *key_val;
 
-    char *(*get_string)(struct DtwObject *self,const char *name,bool allow_cache,int mode, int *error);
+    char *(*get_string)(struct DtwObject *self,const char *name,int mode, int *error);
     void (*set_string)(struct DtwObject *self,const char *name,const char *value);
 
     long (*get_long)(struct DtwObject *self, const char *name,int  *error);
@@ -40,7 +40,7 @@ DtwObject * newDtwObject(const char *path);
 
 char * private_DtwObject_create_path(struct DtwObject *self,const char *name);
 
-char * DtwObject_get_string(struct DtwObject *self,const char *name,bool allow_cache,int mode, int *error);
+char * DtwObject_get_string(struct DtwObject *self,const char *name,int mode, int *error);
 void DtwObject_set_string(struct DtwObject *self,const char *name, const char *value);
 
 

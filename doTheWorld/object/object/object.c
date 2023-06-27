@@ -29,7 +29,7 @@ DtwObject * newDtwObject(const char *path){
     self->path = strdup(path);
     self->first_object = true;
     self->randonizer = newDtwRandonizer();
-    self->key_val = newDtwSubObjectKeyVal();
+    //self->key_val = newDtwSubObjectKeyVal();
     dtw_create_dir_recursively(path);
     return self;
 }
@@ -59,8 +59,8 @@ char * private_DtwObject_create_path(struct DtwObject *self,const char *name){
     }
 }
 
-char * DtwObject_get_string(struct DtwObject *self,const char *name,bool allow_cache,int mode, int *error){
-
+char * DtwObject_get_string(struct DtwObject *self,const char *name,int mode, int *error){
+    /*
     if(allow_cache){
         DtwSubObject *sub_obj = self->key_val->get(self->key_val,name);
         //means it were finded
@@ -86,7 +86,7 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,bool allow_c
 
     }
 
-
+    */
     char *path = private_DtwObject_create_path(self,name);
     char *result = dtw_load_string_file_content(path);
     free(path);
@@ -95,6 +95,7 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,bool allow_c
         *error = DTW_OBJECT_NOT_EXIST;
     }
     return result;
+
 }
 
 void DtwObject_set_string(struct DtwObject *self,const char *name, const char *value) {
@@ -106,7 +107,7 @@ void DtwObject_set_string(struct DtwObject *self,const char *name, const char *v
 }
 
 long DtwObject_get_long(struct DtwObject *self, const char *name,int *error){
-    char *result = self->get_string(self,name,DTW_NOT_CACHE,DTW_BY_REFERENCE,error);
+    char *result = self->get_string(self,name,DTW_BY_REFERENCE,error);
 
     if(result){
         long result_converted;
@@ -130,7 +131,7 @@ void DtwObject_set_long(struct DtwObject *self,const char *name, long value){
 
 
 double DtwObject_get_double(struct DtwObject *self, const char *name, int *error){
-    char *result = self->get_string(self,name,DTW_NOT_CACHE,DTW_BY_REFERENCE,error);
+    char *result = self->get_string(self,name,DTW_BY_REFERENCE,error);
     if(result){
 
         double result_converted;
