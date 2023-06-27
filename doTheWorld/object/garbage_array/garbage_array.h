@@ -5,7 +5,7 @@ typedef struct DtwGarbageArray{
 
     void (*append)(struct DtwGarbageArray *self,DtwObjectGarbage *element);
     void (*free)(struct DtwGarbageArray *self);
-    
+
 }DtwGarbageArray;
 
 DtwGarbageArray * newDtwGarbageArray();
