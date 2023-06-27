@@ -58,7 +58,7 @@ char * private_DtwObject_create_path(struct DtwObject *self,const char *name){
     }
 }
 
-char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectError *error){
+char * DtwObject_get_string(struct DtwObject *self,const char *name,int *error){
     char *path = private_DtwObject_create_path(self,name);
     char *result = dtw_load_string_file_content(path);
     free(path);
@@ -74,7 +74,7 @@ void DtwObject_set_string(struct DtwObject *self,const char *name, const char *v
     free(path);
 }
 
-long DtwObject_get_long(struct DtwObject *self, const char *name,DtwObjectError *error){
+long DtwObject_get_long(struct DtwObject *self, const char *name,int *error){
     char *result = self->get_string(self,name,error);
 
     if(result){
@@ -98,7 +98,7 @@ void DtwObject_set_long(struct DtwObject *self,const char *name, long value){
 }
 
 
-double DtwObject_get_double(struct DtwObject *self, const char *name, DtwObjectError *error){
+double DtwObject_get_double(struct DtwObject *self, const char *name, int *error){
     char *result = self->get_string(self,name,error);
     if(result){
 
