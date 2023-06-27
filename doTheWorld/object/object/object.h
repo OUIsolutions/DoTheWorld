@@ -1,7 +1,8 @@
 
 typedef enum {DTW_OK,DTW_OBJECT_NOT_EXIST,DTW_WRONG_TYPE} DtwObjectError;
-typedef enum {DTW_NONE,DTW_NUMBER,DTW_STRING,DTW_OBJECT} DtwObjectType;
+
 #define DTW_RANDOMIC NULL
+
 
 typedef struct DtwObject{
 
