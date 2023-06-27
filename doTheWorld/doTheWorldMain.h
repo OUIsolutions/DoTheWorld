@@ -55,7 +55,6 @@ SOFTWARE.
 #include "json_error/json_error.h"
 #include "tree_part/tree_part.h"
 #include "tree/tree.h"
-#include "object/sub_object/sub_object.h"
 #include "object/declarations.h"
 
 
