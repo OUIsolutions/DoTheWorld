@@ -7,7 +7,7 @@ enum {
     DTW_STRING,
     DTW_STRING_ARRAY,
     DTW_OBJECT
-}
+};
 
 
 enum {DTW_OK,DTW_OBJECT_NOT_EXIST,DTW_WRONG_TYPE};

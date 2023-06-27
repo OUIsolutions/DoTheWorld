@@ -61,33 +61,9 @@ char * private_DtwObject_create_path(struct DtwObject *self,const char *name){
 }
 
 char * DtwObject_get_string(struct DtwObject *self,const char *name,int mode, int *error){
-    /*
-    if(allow_cache){
-        DtwSubObject *sub_obj = self->key_val->get(self->key_val,name);
-        //means it were finded
-        if(!sub_obj){
-            char *path = private_DtwObject_create_path(self,name);
-            char *result = dtw_load_string_file_content(path);
-            sub_obj = newDtwSubObject();
-            sub_obj->key = path;
-            sub_obj->any_value = result;
-            sub_obj->type = DTW_STRING;
-        }
-
-        char *value = (char*)sub_obj->any_value;
-
-        if(mode == DTW_BY_REFERENCE){
-            return value;
-        }
-
-        else{
-            return strdup(value);
-        }
 
 
-    }
 
-    */
     char *path = private_DtwObject_create_path(self,name);
     char *result = dtw_load_string_file_content(path);
     free(path);
@@ -95,6 +71,12 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,int mode, in
     if(result == NULL){
         *error = DTW_OBJECT_NOT_EXIST;
     }
+
+    if(mode == DTW_BY_REFERENCE){
+        DtwObjectGarbage  *element = newDtwObjectGarbage(DTW_STRING,result);
+        self->garbage_array->append(self->garbage_array,element);
+    }
+
     return result;
 
 }
