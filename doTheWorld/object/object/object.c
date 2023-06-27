@@ -166,6 +166,7 @@ DtwStringArray  * DtwObject_list_all(struct DtwObject *self){
 
 void DtwObject_free(struct DtwObject *self){
 
+
     if(self->first_object){
         self->randonizer->free(self->randonizer);
         self->garbage_array->free(self->garbage_array);

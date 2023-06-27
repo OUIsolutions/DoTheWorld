@@ -3,7 +3,10 @@
 DtwGarbageArray * newDtwGarbageArray(){
     DtwGarbageArray *self = (DtwGarbageArray*) malloc(sizeof (DtwGarbageArray));
     self->elements = malloc(0);
+    self->append = DtwGarbageArray_append;
+    self->free = DtwObjectGarbage_free;
     self->size = 0;
+
 }
 
 void DtwGarbageArray_append(struct DtwGarbageArray *self,DtwObjectGarbage *element){
