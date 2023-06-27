@@ -59,6 +59,11 @@ char * private_DtwObject_create_path(struct DtwObject *self,const char *name){
 }
 
 char * DtwObject_get_string(struct DtwObject *self,const char *name,bool allow_cache,int mode, int *error){
+
+    if(allow_cache){
+
+    }
+
     char *path = private_DtwObject_create_path(self,name);
     char *result = dtw_load_string_file_content(path);
     free(path);
@@ -69,9 +74,11 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,bool allow_c
 }
 
 void DtwObject_set_string(struct DtwObject *self,const char *name, const char *value) {
+
     char *path = private_DtwObject_create_path(self, name);
     dtw_write_string_file_content(path,value);
     free(path);
+
 }
 
 long DtwObject_get_long(struct DtwObject *self, const char *name,int *error){

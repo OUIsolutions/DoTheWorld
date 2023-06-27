@@ -13,6 +13,7 @@ typedef struct DtwObject{
     bool first_object;
     char *path;
     DtwRandonizer  *randonizer;
+    DtwSubObjectKeyVal  *key_val;
 
     char *(*get_string)(struct DtwObject *self,const char *name,bool allow_cache,int mode, int *error);
     void (*set_string)(struct DtwObject *self,const char *name,const char *value);
