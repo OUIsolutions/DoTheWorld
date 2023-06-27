@@ -29,6 +29,7 @@ DtwObject * newDtwObject(const char *path){
     self->path = strdup(path);
     self->first_object = true;
     self->randonizer = newDtwRandonizer();
+    self->key_val = newDtwSubObjectKeyVal();
     dtw_create_dir_recursively(path);
     return self;
 }

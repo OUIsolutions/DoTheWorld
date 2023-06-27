@@ -10,7 +10,7 @@ typedef struct DtwSubObjectKeyVal{
 
 }DtwSubObjectKeyVal;
 
-DtwSubObjectKeyVal * newDtwSubObjectArray();
+DtwSubObjectKeyVal * newDtwSubObjectKeyVal();
 void DtwSubObjectArray_append(struct DtwSubObjectKeyVal *self, DtwSubObject *object);
 DtwSubObject * DtwSubObjectArray_get(struct DtwSubObjectKeyVal *self, const char *name);
 void DtwSubObjectArray_free(struct DtwSubObjectKeyVal *self);

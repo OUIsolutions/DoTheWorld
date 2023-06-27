@@ -1,5 +1,5 @@
 
-DtwSubObjectKeyVal * newDtwSubObjectArray(){
+DtwSubObjectKeyVal * newDtwSubObjectKeyVal(){
 
     DtwSubObjectKeyVal *self = (DtwSubObjectKeyVal*) malloc(sizeof (DtwSubObjectKeyVal));
     self->elements = malloc(0);
