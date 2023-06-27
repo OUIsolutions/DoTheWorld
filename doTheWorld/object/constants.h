@@ -1,12 +1,13 @@
 
-typedef enum {
+enum {
     DTW_NONE,
     DTW_NUMBER,
     DTW_LONG,
     DTW_DOUBLE,
     DTW_STRING,
+    DTW_STRING_ARRAY,
     DTW_OBJECT
-} DtwObjectType;
+}
 
 
 enum {DTW_OK,DTW_OBJECT_NOT_EXIST,DTW_WRONG_TYPE};
