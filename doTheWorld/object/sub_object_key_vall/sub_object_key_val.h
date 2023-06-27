@@ -1,13 +1,13 @@
 
 typedef struct DtwSubObjectArray{
 
-    DtwSubObject *elements;
+    DtwSubObject **elements;
     int size;
 
     void (*append)(struct DtwSubObjectArray *self,DtwSubObject *object);
     DtwSubObject *(*get)(struct DtwSubObjectArray *self, const char *name);
     void(*free)(struct DtwSubObjectArray *self);
-    
+
 }DtwSubObjectArray;
 
 DtwSubObjectArray * newDtwSubObjectArray();

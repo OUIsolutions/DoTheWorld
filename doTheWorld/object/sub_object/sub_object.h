@@ -10,7 +10,6 @@ typedef enum {
 
 typedef struct DtwSubObject{
 
-    char *old_key;
     char *key;
 
     double number_value;
@@ -18,7 +17,7 @@ typedef struct DtwSubObject{
     int size;
 
     DtwObjectType type;
-    int action;
+
 
 }DtwSubObject;
 
