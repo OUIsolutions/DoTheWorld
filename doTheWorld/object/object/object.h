@@ -1,5 +1,9 @@
 
 enum {DTW_OK,DTW_OBJECT_NOT_EXIST,DTW_WRONG_TYPE};
+enum {DTW_BY_REFERENCE,DTW_BY_OWNERSHIP,DTW_BY_VALUE};
+
+#define DTW_ALLOW_CACHE true
+#define DTW_NOT_CACHE false
 
 #define DTW_RANDOMIC NULL
 
@@ -10,7 +14,7 @@ typedef struct DtwObject{
     char *path;
     DtwRandonizer  *randonizer;
 
-    char *(*get_string)(struct DtwObject *self,const char *name,int *error);
+    char *(*get_string)(struct DtwObject *self,const char *name,bool allow_cache,int mode, int *error);
     void (*set_string)(struct DtwObject *self,const char *name,const char *value);
 
     long (*get_long)(struct DtwObject *self, const char *name,int  *error);
@@ -35,7 +39,7 @@ DtwObject * newDtwObject(const char *path);
 
 char * private_DtwObject_create_path(struct DtwObject *self,const char *name);
 
-char * DtwObject_get_string(struct DtwObject *self,const char *name,int *error);
+char * DtwObject_get_string(struct DtwObject *self,const char *name,bool allow_cache,int mode, int *error);
 void DtwObject_set_string(struct DtwObject *self,const char *name, const char *value);
 
 
