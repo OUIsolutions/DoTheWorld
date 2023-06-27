@@ -70,6 +70,7 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,int mode, in
 
     if(result == NULL){
         *error = DTW_OBJECT_NOT_EXIST;
+        return result;
     }
 
     if(mode == DTW_BY_REFERENCE){
@@ -90,7 +91,7 @@ void DtwObject_set_string(struct DtwObject *self,const char *name, const char *v
 }
 
 long DtwObject_get_long(struct DtwObject *self, const char *name,int *error){
-    char *result = self->get_string(self,name,DTW_BY_REFERENCE,error);
+    char *result = self->get_string(self,name,DTW_BY_OWNERSHIP,error);
 
     if(result){
         long result_converted;
@@ -114,7 +115,7 @@ void DtwObject_set_long(struct DtwObject *self,const char *name, long value){
 
 
 double DtwObject_get_double(struct DtwObject *self, const char *name, int *error){
-    char *result = self->get_string(self,name,DTW_BY_REFERENCE,error);
+    char *result = self->get_string(self,name,DTW_BY_OWNERSHIP,error);
     if(result){
 
         double result_converted;

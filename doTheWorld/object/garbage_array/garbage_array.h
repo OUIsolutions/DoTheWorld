@@ -12,4 +12,3 @@ DtwGarbageArray * newDtwGarbageArray();
 
 void DtwGarbageArray_append(struct DtwGarbageArray *self,DtwObjectGarbage *element);
 void DtwGarbageArray_free(struct DtwGarbageArray *self);
-
