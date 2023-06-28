@@ -3,3 +3,5 @@
 #include "garbage/garbage.c"
 #include "garbage_array/garbage_array.c"
 #include "object/object.c"
+#include "object/constructors.c"
+#include "object/primitive_elements.c"
