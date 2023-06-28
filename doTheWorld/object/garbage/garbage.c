@@ -10,7 +10,7 @@ DtwGarbage * newDtwObjectGarbage(int type, void *value){
 
 void DtwObjectGarbage_free(struct DtwGarbage *self){
 
-    if(self->type == DTW_STRING){
+    if(self->type == DTW_STRING || self->type == DTW_BLOB){
         free(self->value);
     }
 

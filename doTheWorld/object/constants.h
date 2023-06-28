@@ -5,6 +5,7 @@ enum {
     DTW_LONG,
     DTW_DOUBLE,
     DTW_STRING,
+    DTW_BLOB,
     DTW_STRING_ARRAY,
     DTW_OBJECT
 };

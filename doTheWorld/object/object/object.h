@@ -8,7 +8,7 @@ typedef struct DtwObject{
     DtwGarbageArray  *garbage_array;
 
     unsigned char *(*get_blob)(struct DtwObject *self,const char *name,int *size,int mode, int *error);
-    void (*set_blob)(struct DtwObject *self,const char *name,const char *value,int size);
+    void (*set_blob)(struct DtwObject *self,const char *name,unsigned  char *value,int size);
 
 
     char *(*get_string)(struct DtwObject *self,const char *name,int mode, int *error);
@@ -38,7 +38,7 @@ char * private_DtwObject_create_path(struct DtwObject *self,const char *name);
 
 
 unsigned char * DtwObject_get_blob(struct DtwObject *self,const char *name,int *size,int mode, int *error);
-void DtwObject_set_blob(struct DtwObject *self,const char *name,const char *value,int size);
+void DtwObject_set_blob(struct DtwObject *self,const char *name,unsigned  char *value,int size);
 
 char * DtwObject_get_string(struct DtwObject *self,const char *name,int mode, int *error);
 void DtwObject_set_string(struct DtwObject *self,const char *name, const char *value);

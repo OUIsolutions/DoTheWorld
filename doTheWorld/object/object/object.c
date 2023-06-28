@@ -60,20 +60,10 @@ char * private_DtwObject_create_path(struct DtwObject *self,const char *name){
 
     }
 }
+
 unsigned char * DtwObject_get_blob(struct DtwObject *self,const char *name,int *size,int mode, int *error){
-
-
-}
-
-void DtwObject_set_blob(struct DtwObject *self,const char *name,const char *value,int size){
-
-
-}
-
-char * DtwObject_get_string(struct DtwObject *self,const char *name,int mode, int *error){
-
     char *path = private_DtwObject_create_path(self,name);
-    char *result = dtw_load_string_file_content(path);
+    unsigned char *result =dtw_load_binary_content(path,size);
     free(path);
 
     if(result == NULL){
@@ -86,6 +76,43 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,int mode, in
     }
 
     return result;
+
+
+}
+
+void DtwObject_set_blob(struct DtwObject *self,const char *name,unsigned  char *value,int size){
+
+    char *path = private_DtwObject_create_path(self, name);
+    dtw_write_any_content(path,value,size);
+
+    free(path);
+
+}
+
+char * DtwObject_get_string(struct DtwObject *self,const char *name,int mode, int *error){
+
+    char *path = private_DtwObject_create_path(self,name);
+    int size;
+    bool is_binary;
+    unsigned  char *result = dtw_load_any_content(path,&size,&is_binary);
+    free(path);
+
+    if(is_binary){
+        free(result);
+        *error = DTW_WRONG_TYPE;
+        return NULL;
+    }
+
+    if(result == NULL){
+        *error = DTW_OBJECT_NOT_EXIST;
+        return NULL;
+    }
+
+    if(mode == DTW_BY_REFERENCE){
+        self->garbage_array->append(self->garbage_array,DTW_BLOB,result);
+    }
+
+    return (char*)result;
 
 }
 
