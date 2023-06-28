@@ -96,6 +96,7 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,int mode, in
     bool is_binary;
     unsigned  char *result = dtw_load_any_content(path,&size,&is_binary);
     free(path);
+    printf("size: %d\n",size);
 
     if(is_binary){
         free(result);
