@@ -1,6 +1,6 @@
 
 typedef struct DtwGarbageArray{
-    DtwObjectGarbage **elements;
+    DtwGarbage **elements;
     int size;
 
     void (*append)(struct DtwGarbageArray *self,int type, void *value);

@@ -1,11 +1,11 @@
 
 
-typedef struct DtwObjectGarbage{
+typedef struct DtwGarbage{
     void *value;
     int type;
-}DtwObjectGarbage;
+}DtwGarbage;
 
-DtwObjectGarbage * newDtwObjectGarbage(int type, void *value);
+DtwGarbage * newDtwObjectGarbage(int type, void *value);
 
 
-void DtwObjectGarbage_free(struct DtwObjectGarbage *self);
+void DtwObjectGarbage_free(struct DtwGarbage *self);
