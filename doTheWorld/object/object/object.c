@@ -3,7 +3,7 @@ DtwObject * private_newDtwObject_raw(){
 
     DtwObject * self = (DtwObject*)malloc(sizeof(DtwObject));
     self->randonizer = NULL;
-    self->garbage_array = NULL;
+    self->garbage_array = newDtwGarbageArray();
     self->first_object = false;
 
 
@@ -30,7 +30,6 @@ DtwObject * newDtwObject(const char *path){
     self->path = strdup(path);
     self->first_object = true;
     self->randonizer = newDtwRandonizer();
-    self->garbage_array = newDtwGarbageArray();
     dtw_create_dir_recursively(path);
     return self;
 }
@@ -145,8 +144,6 @@ DtwObject * DtwObject_sub_object(struct DtwObject *self,const char*name,int mode
     DtwObject * new_obj = private_newDtwObject_raw();
     new_obj->path = path;
     new_obj->randonizer = self->randonizer;
-    new_obj->garbage_array = self->garbage_array;
-
 
     dtw_create_dir_recursively(path);
 
@@ -179,9 +176,8 @@ void DtwObject_free(struct DtwObject *self){
 
     if(self->first_object){
         self->randonizer->free(self->randonizer);
-        self->garbage_array->free(self->garbage_array);
     }
-
+    self->garbage_array->free(self->garbage_array);
     free(self->path);
     free(self);
 }
