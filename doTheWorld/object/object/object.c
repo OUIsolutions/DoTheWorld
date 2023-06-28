@@ -62,14 +62,25 @@ char * private_DtwObject_create_path(struct DtwObject *self,const char *name){
 }
 
 unsigned char * DtwObject_get_blob(struct DtwObject *self,const char *name,int *size,int mode, int *error){
+
     char *path = private_DtwObject_create_path(self,name);
     unsigned char *result =dtw_load_binary_content(path,size);
-    free(path);
 
     if(result == NULL){
-        *error = DTW_OBJECT_NOT_EXIST;
-        return result;
+        if(dtw_entity_type(path) == DTW_FOLDER_TYPE){
+            *error = DTW_WRONG_TYPE;
+        }
+        else{
+            *error = DTW_OBJECT_NOT_EXIST;
+
+        }
+        free(path);
+        return NULL;
     }
+
+    free(path);
+
+
 
     if(mode == DTW_BY_REFERENCE){
         self->garbage_array->append(self->garbage_array,DTW_STRING,result);
@@ -95,8 +106,20 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,int mode, in
     int size;
     bool is_binary;
     unsigned  char *result = dtw_load_any_content(path,&size,&is_binary);
+
+    if(result == NULL){
+        if(dtw_entity_type(path) == DTW_FOLDER_TYPE){
+            *error = DTW_WRONG_TYPE;
+        }
+        else{
+            *error = DTW_OBJECT_NOT_EXIST;
+
+        }
+        free(path);
+        return NULL;
+    }
+
     free(path);
-    printf("size: %d\n",size);
 
     if(is_binary){
         free(result);
@@ -104,10 +127,7 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,int mode, in
         return NULL;
     }
 
-    if(result == NULL){
-        *error = DTW_OBJECT_NOT_EXIST;
-        return NULL;
-    }
+
 
     if(mode == DTW_BY_REFERENCE){
         self->garbage_array->append(self->garbage_array,DTW_BLOB,result);

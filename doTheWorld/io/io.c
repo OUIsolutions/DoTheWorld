@@ -75,7 +75,12 @@ unsigned char *dtw_load_any_content(const char * path,int *size,bool *is_binary)
     }
     fseek(file,0,SEEK_END);
     *size = ftell(file);
-    
+
+    if(*size == -1){
+        free(file);
+        return NULL;
+    }
+
     fseek(file,0,SEEK_SET);
     unsigned char *content = (unsigned char*)malloc(*size +1);
     fread(content,1,*size,file);
