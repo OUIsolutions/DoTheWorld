@@ -70,14 +70,13 @@ void dtw_remove_any(const char* path) {
 unsigned char *dtw_load_any_content(const char * path,int *size,bool *is_binary){
     FILE *file = fopen(path,"rb");
     if(file == NULL){
-        free(file);
         return NULL;
     }
     fseek(file,0,SEEK_END);
     *size = ftell(file);
 
     if(*size == -1){
-        free(file);
+        fclose(file);
         return NULL;
     }
 
@@ -119,11 +118,20 @@ char *dtw_load_string_file_content(const char * path){
 
 unsigned char *dtw_load_binary_content(const char * path,int *size){
     FILE *file = fopen(path,"rb");
+
     if(file == NULL){
         return NULL;
     }
+
     fseek(file,0,SEEK_END);
     *size = ftell(file);
+
+
+    if(*size == -1){
+        free(file);
+        return NULL;
+    }
+
     fseek(file,0,SEEK_SET);
     unsigned char *content = (unsigned char*)malloc(*size);
     fread(content,1,*size,file);
