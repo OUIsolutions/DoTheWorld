@@ -30,9 +30,13 @@ DtwObject * private_newDtwObject_raw(){
 DtwObject * newDtwObject(const char *path){
     DtwObject * self = private_newDtwObject_raw();
     self->path = strdup(path);
+
     self->first_object = true;
     self->randonizer = newDtwRandonizer();
-    dtw_create_dir_recursively(path);
+    if(dtw_entity_type(path) ==  DTW_FILE_TYPE){
+        dtw_remove_any(path);
+    }
+
     return self;
 }
 
@@ -202,6 +206,9 @@ DtwObject * DtwObject_sub_object(struct DtwObject *self,const char*name,int mode
     new_obj->path = path;
     new_obj->randonizer = self->randonizer;
 
+    if(dtw_entity_type(path) ==  DTW_FILE_TYPE){
+        dtw_remove_any(path);
+    }
 
     if(mode == DTW_BY_REFERENCE){
         self->garbage_array->append(self->garbage_array,DTW_OBJECT,new_obj);
