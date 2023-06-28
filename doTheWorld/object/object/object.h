@@ -19,7 +19,7 @@ typedef struct DtwObject{
 
 
     struct DtwObject *(*sub_object)(struct DtwObject *self,const char*name,int mode);
-    DtwStringArray  * (*list_all)(struct DtwObject *self);
+    DtwStringArray  * (*list_all)(struct DtwObject *self,int mode);
     void(*destroy)(struct DtwObject *self,const char *name);
     void (*free)(struct DtwObject *self);
 
@@ -44,7 +44,7 @@ void DtwObject_set_double(struct DtwObject *self,const char *name, double value)
 
 void DtwObject_destroy(struct DtwObject *self,const char *name);
 
-DtwStringArray  * DtwObject_list_all(struct DtwObject *self);
+DtwStringArray  * DtwObject_list_all(struct DtwObject *self,int mode);
 
 DtwObject * DtwObject_sub_object(struct DtwObject *self,const char*name,int mode);
 void DtwObject_free(struct DtwObject *self);

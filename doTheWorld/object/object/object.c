@@ -167,8 +167,13 @@ void DtwObject_destroy(struct DtwObject *self,const char *name){
     dtw_remove_any(path);
 }
 
-DtwStringArray  * DtwObject_list_all(struct DtwObject *self){
-    return dtw_list_all(self->path,DTW_NOT_CONCAT_PATH);
+DtwStringArray  * DtwObject_list_all(struct DtwObject *self,int mode){
+
+    DtwStringArray  *element = dtw_list_all(self->path,DTW_NOT_CONCAT_PATH);
+    if(mode == DTW_BY_REFERENCE){
+        DtwObjectGarbage *trash = newDtwObjectGarbage(DTW_STRING_ARRAY,element);
+        self->garbage_array->append(self->garbage_array,trash);
+    }
 }
 
 
