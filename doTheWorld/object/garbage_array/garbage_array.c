@@ -9,9 +9,9 @@ DtwGarbageArray * newDtwGarbageArray(){
 
 }
 
-void DtwGarbageArray_append(struct DtwGarbageArray *self,DtwObjectGarbage *element){
+void DtwGarbageArray_append(struct DtwGarbageArray *self,int type, void *value){
     self->elements = (DtwObjectGarbage**) realloc(self->elements,(self->size + 1) * sizeof (DtwObjectGarbage*));
-    self->elements[self->size] = element;
+    self->elements[self->size] = newDtwObjectGarbage(type,value);
     self->size+=1;
 }
 

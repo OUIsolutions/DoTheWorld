@@ -74,8 +74,7 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,int mode, in
     }
 
     if(mode == DTW_BY_REFERENCE){
-        DtwObjectGarbage  *element = newDtwObjectGarbage(DTW_STRING,result);
-        self->garbage_array->append(self->garbage_array,element);
+        self->garbage_array->append(self->garbage_array,DTW_STRING,result);
     }
 
     return result;
@@ -152,8 +151,7 @@ DtwObject * DtwObject_sub_object(struct DtwObject *self,const char*name,int mode
     dtw_create_dir_recursively(path);
 
     if(mode == DTW_BY_REFERENCE){
-        DtwObjectGarbage  * trash = newDtwObjectGarbage(DTW_OBJECT,new_obj);
-        self->garbage_array->append(self->garbage_array,trash);
+        self->garbage_array->append(self->garbage_array,DTW_OBJECT,new_obj);
     }
 
     return new_obj;
@@ -171,8 +169,7 @@ DtwStringArray  * DtwObject_list_all(struct DtwObject *self,int mode){
 
     DtwStringArray  *element = dtw_list_all(self->path,DTW_NOT_CONCAT_PATH);
     if(mode == DTW_BY_REFERENCE){
-        DtwObjectGarbage *trash = newDtwObjectGarbage(DTW_STRING_ARRAY,element);
-        self->garbage_array->append(self->garbage_array,trash);
+        self->garbage_array->append(self->garbage_array,DTW_STRING_ARRAY,element);
     }
 }
 
