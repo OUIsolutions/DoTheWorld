@@ -6,6 +6,8 @@ DtwObject * private_newDtwObject_raw(){
     self->garbage_array = newDtwGarbageArray();
     self->first_object = false;
 
+    self->get_blob = DtwObject_get_blob;
+    self->set_blob = DtwObject_set_blob;
 
     self->get_string = DtwObject_get_string;
     self->get_long = DtwObject_get_long;
@@ -58,10 +60,17 @@ char * private_DtwObject_create_path(struct DtwObject *self,const char *name){
 
     }
 }
+unsigned char * DtwObject_get_blob(struct DtwObject *self,const char *name,int *size,int mode, int *error){
+
+
+}
+
+void DtwObject_set_blob(struct DtwObject *self,const char *name,const char *value,int size){
+
+
+}
 
 char * DtwObject_get_string(struct DtwObject *self,const char *name,int mode, int *error){
-
-
 
     char *path = private_DtwObject_create_path(self,name);
     char *result = dtw_load_string_file_content(path);
