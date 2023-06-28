@@ -5,7 +5,6 @@ typedef struct DtwObject{
     bool first_object;
     char *path;
     DtwRandonizer  *randonizer;
-    //DtwSubObjectKeyVal  *key_val;
     DtwGarbageArray  *garbage_array;
 
     char *(*get_string)(struct DtwObject *self,const char *name,int mode, int *error);
@@ -19,7 +18,7 @@ typedef struct DtwObject{
     void (*set_double)(struct DtwObject *self,const char *name, double value);
 
 
-    struct DtwObject *(*sub_object)(struct DtwObject *self,const char*name);
+    struct DtwObject *(*sub_object)(struct DtwObject *self,const char*name,int mode);
     DtwStringArray  * (*list_all)(struct DtwObject *self);
     void(*destroy)(struct DtwObject *self,const char *name);
     void (*free)(struct DtwObject *self);
@@ -47,5 +46,5 @@ void DtwObject_destroy(struct DtwObject *self,const char *name);
 
 DtwStringArray  * DtwObject_list_all(struct DtwObject *self);
 
-DtwObject * DtwObject_sub_object(struct DtwObject *self,const char *name);
+DtwObject * DtwObject_sub_object(struct DtwObject *self,const char*name,int mode);
 void DtwObject_free(struct DtwObject *self);

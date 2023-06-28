@@ -140,7 +140,7 @@ void DtwObject_set_double(struct DtwObject *self,const char *name, double value)
 }
 
 
-DtwObject * DtwObject_sub_object(struct DtwObject *self,const char *name){
+DtwObject * DtwObject_sub_object(struct DtwObject *self,const char*name,int mode){
 
     char *path = private_DtwObject_create_path(self,name);
     DtwObject * new_obj = private_newDtwObject_raw();
@@ -148,7 +148,14 @@ DtwObject * DtwObject_sub_object(struct DtwObject *self,const char *name){
     new_obj->randonizer = self->randonizer;
     new_obj->garbage_array = self->garbage_array;
 
+
     dtw_create_dir_recursively(path);
+
+    if(mode == DTW_BY_REFERENCE){
+        DtwObjectGarbage  * trash = newDtwObjectGarbage(DTW_OBJECT,new_obj);
+        self->garbage_array->append(self->garbage_array,trash);
+    }
+
     return new_obj;
 
 }
