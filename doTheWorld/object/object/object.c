@@ -145,7 +145,6 @@ DtwObject * DtwObject_sub_object(struct DtwObject *self,const char*name,int mode
     new_obj->path = path;
     new_obj->randonizer = self->randonizer;
 
-    dtw_create_dir_recursively(path);
 
     if(mode == DTW_BY_REFERENCE){
         self->garbage_array->append(self->garbage_array,DTW_OBJECT,new_obj);
