@@ -36,18 +36,23 @@ void DtwStringArray_dtw_set_value(struct DtwStringArray *self, int index, const 
 
 // Function prototypes
 void DtwStringArray_dtw_append(struct DtwStringArray *self, const char *string,int ownership){
+
     self->strings =  (char**)realloc(self->strings, (self->size+ 1) * sizeof(char*));
-    self->ownership = (bool*) realloc(self->ownership,(self->size+ 1) * sizeof(bool));
+    self->ownership = (bool*)realloc(self->ownership,(self->size+ 1) * sizeof(bool));
+
     self->ownership[self->size] = ownership;
 
     if(ownership == DTW_BY_REFERENCE || ownership == DTW_BY_OWNERSHIP){
         self->strings[self->size] = string;
     }
+
     else{
+
         int string_size = strlen(string);
         self->strings[self->size] = (char*)malloc(string_size + 1);
         self->strings[self->size][string_size] = '\0';
         strcpy(self->strings[self->size], string);
+
     }
     self->size+=1;
 }

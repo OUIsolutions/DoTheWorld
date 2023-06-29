@@ -82,16 +82,19 @@ struct DtwTransactionReport * DtwTree_create_report(struct DtwTree *self){
         struct DtwTreePart *tree_part = self->tree_parts[i];
         int pending_action = tree_part->pending_action;
         char *path = tree_part->path->get_path(tree_part->path);
-        if (pending_action == DTW_WRITE){
 
-            report->write->append(report->write, path);
+        if (pending_action == DTW_WRITE){
+            report->write->append(report->write, path,DTW_BY_VALUE);
         }
+
         else if (pending_action == DTW_MODIFY){
-            report->modify->append(report->modify, path);
+            report->modify->append(report->modify, path,DTW_BY_VALUE);
         }
+
         else if (pending_action == DTW_REMOVE){
-            report->remove->append(report->remove, path);
+            report->remove->append(report->remove, path,DTW_BY_VALUE);
         }
+
         free(path);
     
     }
