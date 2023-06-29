@@ -3904,13 +3904,19 @@ char * calc_sha_256_from_file_returning_string(const char *filename)
 #endif
 
 
+#define DTW_BY_REFERENCE 1
+#define DTW_BY_OWNERSHIP 2
+#define DTW_BY_VALUE 3
+
 
 typedef struct DtwStringArray {
   int size;
 
-  char **strings;       
+  char **strings;
+  bool *ownership;
+
   void (*set_value)(struct DtwStringArray *self,int index,const char *value);
-  void (*add_string)(struct DtwStringArray *self,const char *string);
+  void (*append)(struct DtwStringArray *self,char *string,int mode);
   void (*merge_string_array)(struct DtwStringArray *self, struct DtwStringArray *other);
   void (*represent)(struct DtwStringArray *self);
   void (*free)(struct DtwStringArray *self);
@@ -3920,7 +3926,7 @@ typedef struct DtwStringArray {
 
 // End the structure with a semicolon
 int  DtwStringArray_dtw_find_position(struct DtwStringArray *self, const char *string);
-void DtwStringArray_dtw_add_string(struct DtwStringArray *self, const char *string);
+void DtwStringArray_dtw_append(struct DtwStringArray *self,char *string,int ownership);
 void DtwStringArray_dtw_merge_string_array(struct DtwStringArray *self, struct DtwStringArray *other);
 void DtwStringArray_dtw_represent_string_array(struct DtwStringArray *self);
 void DtwStringArray_dtw_free_string_array(struct DtwStringArray *self);
@@ -4434,65 +4440,125 @@ struct  DtwTree * newDtwTree();
 
 
 
+//#include "sub_object/sub_object.h"
+//#include "sub_object_key_vall/sub_object_key_val.h"
 
-typedef enum {DTW_OK,DTW_OBJECT_NOT_EXIST,DTW_WRONG_TYPE} DtwObjectError;
-typedef enum {DTW_NONE,DTW_NUMBER,DTW_STRING,DTW_OBJECT} DtwObjectType;
+
+#define DTW_OBJECT DTW_FOLDER_TYPE
+#define DTW_LONG 3
+#define DTW_DOUBLE 4
+#define DTW_STRING 5
+#define DTW_BINARY 6
+#define DTW_STRING_ARRAY 7
+
+#define DTW_OK 0
+#define DTW_WRONG_TYPE -2
+
+
+
+
+#define DTW_ALLOW_CACHE true
+#define DTW_NOT_CACHE false
+
 #define DTW_RANDOMIC NULL
+
+
+
+
+typedef struct DtwGarbage{
+    void *value;
+    int type;
+}DtwGarbage;
+
+DtwGarbage * newDtwObjectGarbage(int type, void *value);
+
+
+void DtwObjectGarbage_free(struct DtwGarbage *self);
+
+
+
+typedef struct DtwGarbageArray{
+    DtwGarbage **elements;
+    int size;
+
+    void (*append)(struct DtwGarbageArray *self,int type, void *value);
+    void (*free)(struct DtwGarbageArray *self);
+
+}DtwGarbageArray;
+
+DtwGarbageArray * newDtwGarbageArray();
+
+void DtwGarbageArray_append(struct DtwGarbageArray *self,int type, void *value);
+void DtwGarbageArray_free(struct DtwGarbageArray *self);
+
+
+
 
 typedef struct DtwObject{
 
     bool first_object;
     char *path;
+    int mode;
+    int error;
+
     DtwRandonizer  *randonizer;
+    DtwGarbageArray  *garbage_array;
+
+    unsigned char *(*get_binary)(struct DtwObject *self, const char *name, int *size);
+    void (*set_binary)(struct DtwObject *self, const char *name, unsigned  char *value, int size);
 
 
-
-    char *(*get_string)(struct DtwObject *self,const char *name,DtwObjectError *error);
+    char *(*get_string)(struct DtwObject *self,const char *name);
     void (*set_string)(struct DtwObject *self,const char *name,const char *value);
 
-
-    long (*get_long)(struct DtwObject *self, const char *name,DtwObjectError *error);
+    long (*get_long)(struct DtwObject *self, const char *name);
     void (*set_long)(struct DtwObject *self,const char *name,long value);
 
 
-    double (*get_double)(struct DtwObject *self, const char *name, DtwObjectError *error);
+    double (*get_double)(struct DtwObject *self, const char *name);
     void (*set_double)(struct DtwObject *self,const char *name, double value);
 
-
-
     struct DtwObject *(*sub_object)(struct DtwObject *self,const char*name);
-
+    int (*type_of)(struct DtwObject *self,const char*name);
+    char *(*inspect_type)(struct DtwObject *self,int type);
     DtwStringArray  * (*list_all)(struct DtwObject *self);
-
     void(*destroy)(struct DtwObject *self,const char *name);
-
-
     void (*free)(struct DtwObject *self);
 
 
 }DtwObject;
+
 DtwObject * private_newDtwObject_raw();
 
 DtwObject * newDtwObject(const char *path);
 
 char * private_DtwObject_create_path(struct DtwObject *self,const char *name);
 
-char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectError *error);
+
+unsigned char * DtwObject_get_binary(struct DtwObject *self, const char *name, int *size);
+void DtwObject_set_binary(struct DtwObject *self, const char *name, unsigned  char *value, int size);
+
+
+char * DtwObject_get_string(struct DtwObject *self,const char *name);
 void DtwObject_set_string(struct DtwObject *self,const char *name, const char *value);
 
 
-long DtwObject_get_long(struct DtwObject *self, const char *name,DtwObjectError *error);
+long DtwObject_get_long(struct DtwObject *self, const char *name);
 void DtwObject_set_long(struct DtwObject *self,const char *name, long value);
 
-double DtwObject_get_double(struct DtwObject *self, const char *name, DtwObjectError *error);
+double DtwObject_get_double(struct DtwObject *self, const char *name);
 void DtwObject_set_double(struct DtwObject *self,const char *name, double value);
 
-void DtwObject_destroy(struct DtwObject *self,const char *name);
 
+void DtwObject_destroy(struct DtwObject *self,const char *name);
 DtwStringArray  * DtwObject_list_all(struct DtwObject *self);
 
-DtwObject * DtwObject_sub_object(struct DtwObject *self,const char *name);
+DtwObject * DtwObject_sub_object(struct DtwObject *self,const char*name);
+int DtwObject_type_of(struct DtwObject *self,const char*name);
+char *DtwObject_inspect_type(struct DtwObject *self,int type);
+
 void DtwObject_free(struct DtwObject *self);
+
 
 
 
@@ -4735,7 +4801,7 @@ struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *path
             continue;
         }
 
-        new_array->add_string(new_array,new_string);
+        new_array->append(new_array, new_string,DTW_BY_VALUE);
         free(new_string);
 
     }
@@ -4840,7 +4906,7 @@ char *private_dtw_change_beginning_of_string(const char *target,int start_elemen
 void dtw_create_dir_recursively(const char *path){
     bool check = dtw_create_dir(path);
   
-    int size_path = strlen(path);
+    long size_path = strlen(path);
     for(int i=0;i <  size_path;i++){
         if(path[i] == '\\'  || path[i] == '/'   && i != size_path - 1){
             
@@ -4899,12 +4965,19 @@ void dtw_remove_any(const char* path) {
 
 unsigned char *dtw_load_any_content(const char * path,int *size,bool *is_binary){
     FILE *file = fopen(path,"rb");
+
     if(file == NULL){
-        free(file);
         return NULL;
     }
+
     fseek(file,0,SEEK_END);
     *size = ftell(file);
+
+    if(*size == -1){
+        fclose(file);
+        return NULL;
+    }
+
     fseek(file,0,SEEK_SET);
     unsigned char *content = (unsigned char*)malloc(*size +1);
     fread(content,1,*size,file);
@@ -4926,40 +4999,27 @@ unsigned char *dtw_load_any_content(const char * path,int *size,bool *is_binary)
 
 
 char *dtw_load_string_file_content(const char * path){
-    FILE *file = fopen(path,"r");
-    if(file == NULL){
+    int size;
+    bool is_binary;
+    unsigned char *element = dtw_load_any_content(path,&size,&is_binary);
+    if(is_binary){
+        free(element);
         return NULL;
     }
-    fseek(file,0,SEEK_END);
-    int size = ftell(file);
-    fseek(file,0,SEEK_SET);
-    char *content = (char*)malloc(size +1);
-    fread(content,1,size,file);
-    content[size] = '\0';
-    fclose(file);
-    return content;
+    return (char*)element;
 }
 
 
 unsigned char *dtw_load_binary_content(const char * path,int *size){
-    FILE *file = fopen(path,"rb");
-    if(file == NULL){
-        return NULL;
-    }
-    fseek(file,0,SEEK_END);
-    *size = ftell(file);
-    fseek(file,0,SEEK_SET);
-    unsigned char *content = (unsigned char*)malloc(*size);
-    fread(content,1,*size,file);
-    fclose(file);
-    return content;
+    bool is_binary;
+    return dtw_load_any_content(path,size,&is_binary);
 }
 
 
 bool dtw_write_any_content(const char *path,unsigned  char *content,int size){
     //Iterate through the path and create directories if they don't exist
     
-    for(int i = strlen(path)-1;i > 0;i--){
+    for(long i = strlen(path)-1;i > 0;i--){
         //runs in negative mode til / or \ is found
         if(path[i] == '\\' || path[i] == '/'){
             char *dir_path =(char*)malloc(i +2);
@@ -5009,6 +5069,7 @@ int dtw_entity_type(const char *path){
         }
     }
     return DTW_NOT_FOUND;
+
 }
 
 bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
@@ -5040,14 +5101,13 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
     int size = dirs->size;
     int src_path_size = strlen(src_path);
 
-    for(int i = 0; i < size; i++){
-        
+    for(int i = 0; i < size; i++){        
         char *new_path_dir = private_dtw_change_beginning_of_string(dirs->strings[i],src_path_size,dest_path);
         dtw_create_dir_recursively(new_path_dir);
         free(new_path_dir);
     }
     dirs->free(dirs);
-    
+
 
     struct DtwStringArray *files = dtw_list_files_recursively(src_path,DTW_CONCAT_PATH);
    
@@ -5151,14 +5211,10 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
                     sprintf(generated_dir, "%s/%s", path, entry->d_name);
                 }
 
-                
-                
-                dirs->add_string(dirs, generated_dir);
-                free(generated_dir);
-
+                dirs->append(dirs, generated_dir,DTW_BY_OWNERSHIP);
             }
             else{
-                dirs->add_string(dirs, entry->d_name);
+                dirs->append(dirs, entry->d_name,DTW_BY_VALUE);
                 
             }
 
@@ -5237,7 +5293,7 @@ struct DtwStringArray *  dtw_list_basic(const char *path,int expected_type,bool 
                 if(path[strlen(path) - 1] == '\\' || path[strlen(path) - 1] == '/'){
                     char *generated_dir = (char*)malloc(strlen(path) + strlen(file_data.cFileName) + 1);
                     sprintf(generated_dir, "%s%s", path, file_data.cFileName);
-                    dirs->add_string(dirs, generated_dir);
+                    dirs->append(dirs, generated_dir,DTW_BY_VALUE);
                     free(generated_dir);
                 }
                 else{
@@ -5246,14 +5302,14 @@ struct DtwStringArray *  dtw_list_basic(const char *path,int expected_type,bool 
 
                     sprintf(generated_dir, "%s/%s", path, file_data.cFileName);
                    
-                    dirs->add_string(dirs, generated_dir);
+                    dirs->append(dirs, generated_dir,DTW_BY_VALUE);
                     free(generated_dir);
                 }
                 
     
             }
             else{
-                dirs->add_string(dirs, file_data.cFileName);
+                dirs->append(dirs, file_data.cFileName,DTW_BY_VALUE);
             
             }
 
@@ -5283,7 +5339,8 @@ struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool concat_p
         }
       
         
-        dirs->add_string(dirs,path);
+        dirs->append(dirs, (char*)path,DTW_BY_VALUE);
+
         private_dtw_add_end_bar_to_dirs_string_array(dirs);
         int i = 0;
         //The size of dirs will increase til it reaches the end of the array
@@ -5318,12 +5375,12 @@ struct DtwStringArray *  dtw_list_files_recursively(const char *path,bool concat
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,DTW_CONCAT_PATH);
     
     struct  DtwStringArray *files = newDtwStringArray();
-    
     for(int i = 0; i < dirs->size; i++){
         struct DtwStringArray *sub_files = dtw_list_basic(dirs->strings[i],DTW_FILE_TYPE,DTW_CONCAT_PATH);
         files->merge_string_array(files,sub_files);
         sub_files->free(sub_files);
     }
+
     dirs->free(dirs);
 
     if(!concat_path){
@@ -5346,15 +5403,16 @@ struct DtwStringArray * dtw_list_all_recursively(const char *path,bool concat_pa
     for(int i = 0; i < dirs->size; i++){
 
         if(!dtw_ends_with(dirs->strings[i], "/") || !dtw_ends_with(dirs->strings[i], "\\") ){
+
             char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 2);
             sprintf(formated_dir,"%s/",dirs->strings[i]);
-            all->add_string(all,formated_dir);
-            free(formated_dir);
-        }
-        else{
-            all->add_string(all,dirs->strings[i]);
+            all->append(all, formated_dir,DTW_BY_OWNERSHIP);
+
         }
 
+        else{
+            all->append(all, dirs->strings[i],DTW_BY_VALUE);
+        }
 
         struct DtwStringArray *sub_files = dtw_list_basic(dirs->strings[i],DTW_FILE_TYPE,true);
         all->merge_string_array(all,sub_files);
@@ -5663,7 +5721,9 @@ struct DtwStringArray * newDtwStringArray(){
     self->size = 0;
 
     self->strings = (char**)malloc(1);
-    self->add_string = DtwStringArray_dtw_add_string;
+    self->ownership = malloc(0);
+
+    self->append = DtwStringArray_dtw_append;
     self->set_value = DtwStringArray_dtw_set_value;
     self->merge_string_array = DtwStringArray_dtw_merge_string_array;
     self->represent= DtwStringArray_dtw_represent_string_array;
@@ -5680,6 +5740,8 @@ int DtwStringArray_dtw_find_position(struct DtwStringArray *self, const char *st
     }
     return -1;
 }
+
+
 void DtwStringArray_dtw_set_value(struct DtwStringArray *self, int index, const char *value){
     if(index < self->size && index >= 0){
         int size = strlen(value);
@@ -5688,19 +5750,37 @@ void DtwStringArray_dtw_set_value(struct DtwStringArray *self, int index, const 
         strcpy(self->strings[index], value);
     }
 }
+
 // Function prototypes
-void DtwStringArray_dtw_add_string(struct DtwStringArray *self, const char *string){
-    self->size++;
-    self->strings =  (char**)realloc(self->strings, self->size * sizeof(char *));
-    self->strings[self->size - 1] = (char*)malloc(strlen(string) + 1);
-    self->strings[self->size - 1][strlen(string)] = '\0';
-    strcpy(self->strings[self->size - 1], string);
+void DtwStringArray_dtw_append(struct DtwStringArray *self, char *string,int ownership){
+
+    self->strings =  (char**)realloc(self->strings, (self->size+ 1) * sizeof(char*));
+    self->ownership = (bool*)realloc(self->ownership,(self->size+ 1) * sizeof(bool));
+    self->ownership[self->size] = false;
+
+    if(ownership == DTW_BY_OWNERSHIP || ownership == DTW_BY_VALUE){
+        self->ownership[self->size] = true;
+    }
+
+    if(ownership == DTW_BY_REFERENCE || ownership == DTW_BY_OWNERSHIP){
+        self->strings[self->size] = string;
+    }
+
+    else{
+
+        int string_size = strlen(string);
+        self->strings[self->size] = (char*)malloc(string_size + 1);
+        self->strings[self->size][string_size] = '\0';
+        strcpy(self->strings[self->size], string);
+
+    }
+    self->size+=1;
 }
 
 
 void DtwStringArray_dtw_merge_string_array(struct DtwStringArray *self, struct DtwStringArray *other){
     for(int i = 0; i < other->size; i++){
-        self->add_string(self, other->strings[i]);
+        self->append(self, other->strings[i],DTW_BY_VALUE);
     }
 }
 
@@ -5710,10 +5790,15 @@ void DtwStringArray_dtw_represent_string_array(struct DtwStringArray *self){
         printf("%s\n", self->strings[i]);
     }
 }
+
 void DtwStringArray_dtw_free_string_array(struct DtwStringArray *self){
     for(int i = 0; i < self->size; i++){
-        free(self->strings[i]);
+        bool owner= self->ownership[i];
+        if(owner){
+            free(self->strings[i]);
+        }
     }
+    free(self->ownership);
     free(self->strings);
     free(self);
 }
@@ -6162,16 +6247,19 @@ struct DtwTransactionReport * DtwTree_create_report(struct DtwTree *self){
         struct DtwTreePart *tree_part = self->tree_parts[i];
         int pending_action = tree_part->pending_action;
         char *path = tree_part->path->get_path(tree_part->path);
-        if (pending_action == DTW_WRITE){
 
-            report->write->add_string(report->write,path);
+        if (pending_action == DTW_WRITE){
+            report->write->append(report->write, path,DTW_BY_VALUE);
         }
+
         else if (pending_action == DTW_MODIFY){
-            report->modify->add_string(report->modify,path);
+            report->modify->append(report->modify, path,DTW_BY_VALUE);
         }
+
         else if (pending_action == DTW_REMOVE){
-            report->remove->add_string(report->remove,path);
+            report->remove->append(report->remove, path,DTW_BY_VALUE);
         }
+
         free(path);
     
     }
@@ -6810,41 +6898,69 @@ void  DtwTransactionReport_free(struct DtwTransactionReport *report){
     free(report);
 }
 
-
-DtwObject * private_newDtwObject_raw(){
-
-    DtwObject * self = (DtwObject*)malloc(sizeof(DtwObject));
-    self->randonizer = NULL;
-    self->first_object = false;
-
-    self->get_string = DtwObject_get_string;
-    self->get_long = DtwObject_get_long;
-    self->get_double = DtwObject_get_double;
-    self->sub_object = DtwObject_sub_object;
+//#include "sub_object/sub_object.c"
+//#include "sub_object_key_vall/sub_object_key_val.c"
 
 
 
-    self->destroy = DtwObject_destroy;
-    self->set_string = DtwObject_set_string;
-    self->set_double = DtwObject_set_double;
-    self->set_long = DtwObject_set_long;
 
-
-    self->list_all = DtwObject_list_all;
-
-    self->free = DtwObject_free;
-     return  self;
+DtwGarbage * newDtwObjectGarbage(int type, void *value){
+    DtwGarbage *self = (DtwGarbage*) malloc(sizeof (DtwGarbage));
+    self->type = type;
+    self->value = value;
 }
 
 
-DtwObject * newDtwObject(const char *path){
-    DtwObject * self = private_newDtwObject_raw();
-    self->path = strdup(path);
-    self->first_object = true;
-    self->randonizer = newDtwRandonizer();
-    dtw_create_dir_recursively(path);
-    return self;
+void DtwObjectGarbage_free(struct DtwGarbage *self){
+
+    if(self->type == DTW_STRING || self->type == DTW_BINARY){
+        free(self->value);
+    }
+
+    if(self->type == DTW_OBJECT){
+        DtwObject * element = (DtwObject*)self->value;
+        element->free(element);
+    }
+
+    if(self->type == DTW_STRING_ARRAY){
+        DtwStringArray *element =(DtwStringArray*)self->value;
+        element->free(element);
+    }
+
+    free(self);
 }
+
+
+
+
+
+DtwGarbageArray * newDtwGarbageArray(){
+    DtwGarbageArray *self = (DtwGarbageArray*) malloc(sizeof (DtwGarbageArray));
+    self->elements = malloc(0);
+    self->append = DtwGarbageArray_append;
+    self->free = DtwGarbageArray_free;
+    self->size = 0;
+
+}
+
+void DtwGarbageArray_append(struct DtwGarbageArray *self,int type, void *value){
+    self->elements = (DtwGarbage**) realloc(self->elements, (self->size + 1) * sizeof (DtwGarbage*));
+    self->elements[self->size] = newDtwObjectGarbage(type,value);
+    self->size+=1;
+}
+
+void DtwGarbageArray_free(struct DtwGarbageArray *self){
+    for(int i = 0; i < self->size; i++){
+        DtwObjectGarbage_free(self->elements[i]);
+
+    }
+    free(self->elements);
+    free(self);
+}
+
+
+
+
 
 char * private_DtwObject_create_path(struct DtwObject *self,const char *name){
 
@@ -6855,66 +6971,308 @@ char * private_DtwObject_create_path(struct DtwObject *self,const char *name){
     }
 
     for(int i = 0; i  < 30; i++) {
+
         char *possible_name = self->randonizer->generate_token(self->randonizer, i);
-        char *path = (char *) malloc(strlen(self->path) + strlen(possible_name) + 2);
+        char *path = (char*)malloc(strlen(self->path) + strlen(possible_name) + 2);
         sprintf(path, "%s/%s", self->path, possible_name);
+
         free(possible_name);
         if (dtw_entity_type(path) == DTW_NOT_FOUND) {
             return path;
         }
         free(path);
+
+
     }
 }
 
-char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectError *error){
+
+DtwObject * DtwObject_sub_object(struct DtwObject *self,const char*name){
+
     char *path = private_DtwObject_create_path(self,name);
-    char *result = dtw_load_string_file_content(path);
-    free(path);
-    if(result == NULL){
-        *error = DTW_OBJECT_NOT_EXIST;
+    DtwObject * new_obj = private_newDtwObject_raw();
+    new_obj->path = path;
+    new_obj->randonizer = self->randonizer;
+
+    if(dtw_entity_type(path) ==  DTW_FILE_TYPE){
+        dtw_remove_any(path);
     }
+
+    if(self->mode == DTW_BY_REFERENCE){
+        self->garbage_array->append(self->garbage_array,DTW_OBJECT,new_obj);
+    }
+
+    return new_obj;
+
+}
+
+
+
+void DtwObject_destroy(struct DtwObject *self,const char *name){
+    char *path = private_DtwObject_create_path(self,name);
+    dtw_remove_any(path);
+    free(path);
+}
+
+DtwStringArray  * DtwObject_list_all(struct DtwObject *self){
+
+    DtwStringArray  *element = dtw_list_all(self->path,DTW_NOT_CONCAT_PATH);
+    if(self->mode == DTW_BY_REFERENCE){
+        self->garbage_array->append(self->garbage_array,DTW_STRING_ARRAY,element);
+    }
+    return element;
+}
+
+
+int DtwObject_type_of(struct DtwObject *self,const char*name){
+    char *path = private_DtwObject_create_path(self,name);
+
+    int entity = dtw_entity_type(path);
+    if(entity != DTW_FILE_TYPE){
+        free(path);
+        return entity;
+    }
+
+    int size;
+    bool is_binary;
+    unsigned char *result = dtw_load_any_content(path,&size,&is_binary);
+
+    if(is_binary){
+        free(result);
+        return DTW_BINARY;
+    }
+    char *result_string = (char*)result;
+    double result_converted;
+    int test = sscanf(result_string,"%lf",&result_converted);
+
+    if(test == 0){
+        free(result);
+        return DTW_STRING;
+    }
+    //verify if its an . inside the result
+    int  result_size = (int)strlen(result);
+    for(int  i = 0; i < result_size; i++){
+        if(result_string[i]== '.'){
+            free(result);
+            return DTW_DOUBLE;
+        }
+    }
+    free(result);
+    return DTW_LONG;
+
+}
+char *DtwObject_inspect_type(struct DtwObject *self,int type){
+    if(type == DTW_FOLDER_TYPE){
+        return "Object";
+    }
+    if(type == DTW_NOT_FOUND){
+        return "Not Found";
+    }
+    if(type == DTW_BINARY){
+        return "Binary";
+    }
+
+    if(type == DTW_STRING){
+        return "String";
+    }
+
+    if(type == DTW_LONG){
+        return "Long";
+    }
+
+    if(type == DTW_DOUBLE){
+        return "Double";
+    }
+}
+void DtwObject_free(struct DtwObject *self){
+
+
+    if(self->first_object){
+        self->randonizer->free(self->randonizer);
+    }
+    self->garbage_array->free(self->garbage_array);
+    free(self->path);
+    free(self);
+}
+
+//
+// Created by jurandi on 28-06-2023.
+//
+
+DtwObject * private_newDtwObject_raw(){
+
+    DtwObject * self = (DtwObject*)malloc(sizeof(DtwObject));
+    self->randonizer = NULL;
+    self->mode = DTW_BY_REFERENCE;
+    self->error =  DTW_OK;
+    self->garbage_array = newDtwGarbageArray();
+    self->first_object = false;
+
+    self->get_binary = DtwObject_get_binary;
+    self->set_binary = DtwObject_set_binary;
+
+    self->get_string = DtwObject_get_string;
+    self->get_long = DtwObject_get_long;
+    self->get_double = DtwObject_get_double;
+    self->sub_object = DtwObject_sub_object;
+
+    self->type_of = DtwObject_type_of;
+    self->inspect_type = DtwObject_inspect_type;
+    self->destroy = DtwObject_destroy;
+    self->set_string = DtwObject_set_string;
+    self->set_double = DtwObject_set_double;
+    self->set_long = DtwObject_set_long;
+
+
+    self->list_all = DtwObject_list_all;
+    self->free = DtwObject_free;
+    return  self;
+}
+
+
+DtwObject * newDtwObject(const char *path){
+    DtwObject * self = private_newDtwObject_raw();
+    self->path = strdup(path);
+
+    self->first_object = true;
+    self->randonizer = newDtwRandonizer();
+    if(dtw_entity_type(path) ==  DTW_FILE_TYPE){
+        dtw_remove_any(path);
+    }
+
+    return self;
+}
+
+
+unsigned char * DtwObject_get_binary(struct DtwObject *self, const char *name, int *size){
+
+    char *path = private_DtwObject_create_path(self,name);
+    unsigned char *result =dtw_load_binary_content(path,size);
+
+    if(result == NULL){
+        if(dtw_entity_type(path) == DTW_FOLDER_TYPE){
+            self->error  = DTW_WRONG_TYPE;
+        }
+        else{
+            self->error = DTW_NOT_FOUND;
+
+        }
+        free(path);
+        return NULL;
+    }
+
+    free(path);
+
+
+
+    if(self->mode == DTW_BY_REFERENCE){
+        self->garbage_array->append(self->garbage_array,DTW_STRING,result);
+    }
+
     return result;
+
+
+}
+
+void DtwObject_set_binary(struct DtwObject *self, const char *name, unsigned  char *value, int size){
+
+    char *path = private_DtwObject_create_path(self, name);
+    dtw_write_any_content(path,value,size);
+
+    free(path);
+
+}
+
+char * DtwObject_get_string(struct DtwObject *self,const char *name){
+
+    char *path = private_DtwObject_create_path(self,name);
+    int size;
+    bool is_binary;
+    unsigned  char *result = dtw_load_any_content(path,&size,&is_binary);
+
+    if(result == NULL){
+        if(dtw_entity_type(path) == DTW_FOLDER_TYPE){
+            self->error = DTW_WRONG_TYPE;
+        }
+        else{
+            self->error = DTW_NOT_FOUND;
+        }
+        free(path);
+        return NULL;
+    }
+
+
+    free(path);
+
+    if(is_binary){
+        free(result);
+        self->error = DTW_WRONG_TYPE;
+        return NULL;
+    }
+
+
+
+    if(self->mode == DTW_BY_REFERENCE){
+        self->garbage_array->append(self->garbage_array, DTW_BINARY, result);
+    }
+
+    return (char*)result;
+
 }
 
 void DtwObject_set_string(struct DtwObject *self,const char *name, const char *value) {
+
     char *path = private_DtwObject_create_path(self, name);
     dtw_write_string_file_content(path,value);
     free(path);
+
 }
 
-long DtwObject_get_long(struct DtwObject *self, const char *name,DtwObjectError *error){
-    char *result = self->get_string(self,name,error);
+long DtwObject_get_long(struct DtwObject *self, const char *name){
+    int old_mode = self->mode;
+    self->mode = DTW_BY_OWNERSHIP;
+    char *result = self->get_string(self,name);
+    self->mode = old_mode;
+
+
     if(result){
         long result_converted;
         int test = sscanf(result,"%li",&result_converted);
         free(result);
         if(test == 0){
-            *error = DTW_WRONG_TYPE;
+            self->error = DTW_WRONG_TYPE;
             return 0;
         }
         return result_converted;
     }
+
     return 0;
 }
 
 void DtwObject_set_long(struct DtwObject *self,const char *name, long value){
-        char result[20] = {0};
-        sprintf(result,"%li",value);
-        self->set_string(self,name,result);
+    char result[20] = {0};
+    sprintf(result,"%li",value);
+    self->set_string(self,name,result);
 }
 
 
-double DtwObject_get_double(struct DtwObject *self, const char *name, DtwObjectError *error){
-    char *result = self->get_string(self,name,error);
+double DtwObject_get_double(struct DtwObject *self, const char *name){
+    int old_mode = self->mode;
+    self->mode = DTW_BY_OWNERSHIP;
+    char *result = self->get_string(self,name);
+    self->mode = old_mode;
+
     if(result){
+
         double result_converted;
         int test = sscanf(result,"%lf",&result_converted);
         free(result);
         if(test == 0){
-            *error = DTW_WRONG_TYPE;
+            self->mode = DTW_WRONG_TYPE;
             return 0;
         }
         return result_converted;
+
     }
     return 0;
 }
@@ -6928,37 +7286,6 @@ void DtwObject_set_double(struct DtwObject *self,const char *name, double value)
 }
 
 
-DtwObject * DtwObject_sub_object(struct DtwObject *self,const char *name){
-
-    char *path = private_DtwObject_create_path(self,name);
-    DtwObject * new_obj = private_newDtwObject_raw();
-    new_obj->path = path;
-    dtw_create_dir_recursively(path);
-    return new_obj;
-
-}
-
-
-
-void DtwObject_destroy(struct DtwObject *self,const char *name){
-    char *path = private_DtwObject_create_path(self,name);
-    dtw_remove_any(path);
-}
-
-DtwStringArray  * DtwObject_list_all(struct DtwObject *self){
-    return dtw_list_all(self->path,DTW_NOT_CONCAT_PATH);
-}
-
-
-void DtwObject_free(struct DtwObject *self){
-
-    if(self->first_object){
-        self->randonizer->free(self->randonizer);
-    }
-
-    free(self->path);
-    free(self);
-}
 
 #endif //DO_THE_WORLD_H
 

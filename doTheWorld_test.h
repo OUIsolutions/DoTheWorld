@@ -5101,14 +5101,13 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
     int size = dirs->size;
     int src_path_size = strlen(src_path);
 
-    for(int i = 0; i < size; i++){
-        
+    for(int i = 0; i < size; i++){        
         char *new_path_dir = private_dtw_change_beginning_of_string(dirs->strings[i],src_path_size,dest_path);
         dtw_create_dir_recursively(new_path_dir);
         free(new_path_dir);
     }
     dirs->free(dirs);
-    
+
 
     struct DtwStringArray *files = dtw_list_files_recursively(src_path,DTW_CONCAT_PATH);
    
@@ -5211,6 +5210,7 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
                 else{
                     sprintf(generated_dir, "%s/%s", path, entry->d_name);
                 }
+
                 dirs->append(dirs, generated_dir,DTW_BY_OWNERSHIP);
             }
             else{
@@ -5293,7 +5293,7 @@ struct DtwStringArray *  dtw_list_basic(const char *path,int expected_type,bool 
                 if(path[strlen(path) - 1] == '\\' || path[strlen(path) - 1] == '/'){
                     char *generated_dir = (char*)malloc(strlen(path) + strlen(file_data.cFileName) + 1);
                     sprintf(generated_dir, "%s%s", path, file_data.cFileName);
-                    dirs->add_string(dirs, generated_dir);
+                    dirs->append(dirs, generated_dir,DTW_BY_VALUE);
                     free(generated_dir);
                 }
                 else{
@@ -5302,14 +5302,14 @@ struct DtwStringArray *  dtw_list_basic(const char *path,int expected_type,bool 
 
                     sprintf(generated_dir, "%s/%s", path, file_data.cFileName);
                    
-                    dirs->add_string(dirs, generated_dir);
+                    dirs->append(dirs, generated_dir,DTW_BY_VALUE);
                     free(generated_dir);
                 }
                 
     
             }
             else{
-                dirs->add_string(dirs, file_data.cFileName);
+                dirs->append(dirs, file_data.cFileName,DTW_BY_VALUE);
             
             }
 
@@ -5375,12 +5375,12 @@ struct DtwStringArray *  dtw_list_files_recursively(const char *path,bool concat
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,DTW_CONCAT_PATH);
     
     struct  DtwStringArray *files = newDtwStringArray();
-    
     for(int i = 0; i < dirs->size; i++){
         struct DtwStringArray *sub_files = dtw_list_basic(dirs->strings[i],DTW_FILE_TYPE,DTW_CONCAT_PATH);
         files->merge_string_array(files,sub_files);
         sub_files->free(sub_files);
     }
+
     dirs->free(dirs);
 
     if(!concat_path){
@@ -5780,7 +5780,7 @@ void DtwStringArray_dtw_append(struct DtwStringArray *self, char *string,int own
 
 void DtwStringArray_dtw_merge_string_array(struct DtwStringArray *self, struct DtwStringArray *other){
     for(int i = 0; i < other->size; i++){
-        self->append(self, other->strings[i],DTW_BY_REFERENCE);
+        self->append(self, other->strings[i],DTW_BY_VALUE);
     }
 }
 

@@ -63,7 +63,7 @@ void DtwStringArray_dtw_append(struct DtwStringArray *self, char *string,int own
 
 void DtwStringArray_dtw_merge_string_array(struct DtwStringArray *self, struct DtwStringArray *other){
     for(int i = 0; i < other->size; i++){
-        self->append(self, other->strings[i],DTW_BY_REFERENCE);
+        self->append(self, other->strings[i],DTW_BY_VALUE);
     }
 }
 
