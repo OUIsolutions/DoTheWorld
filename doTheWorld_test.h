@@ -3916,7 +3916,7 @@ typedef struct DtwStringArray {
   bool *ownership;
 
   void (*set_value)(struct DtwStringArray *self,int index,const char *value);
-  void (*append)(struct DtwStringArray *self, const char *string,int mode);
+  void (*append)(struct DtwStringArray *self,char *string,int mode);
   void (*merge_string_array)(struct DtwStringArray *self, struct DtwStringArray *other);
   void (*represent)(struct DtwStringArray *self);
   void (*free)(struct DtwStringArray *self);
@@ -3926,7 +3926,7 @@ typedef struct DtwStringArray {
 
 // End the structure with a semicolon
 int  DtwStringArray_dtw_find_position(struct DtwStringArray *self, const char *string);
-void DtwStringArray_dtw_append(struct DtwStringArray *self, const char *string,int ownership);
+void DtwStringArray_dtw_append(struct DtwStringArray *self,char *string,int ownership);
 void DtwStringArray_dtw_merge_string_array(struct DtwStringArray *self, struct DtwStringArray *other);
 void DtwStringArray_dtw_represent_string_array(struct DtwStringArray *self);
 void DtwStringArray_dtw_free_string_array(struct DtwStringArray *self);
@@ -5339,7 +5339,7 @@ struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool concat_p
         }
       
         
-        dirs->append(dirs, path,DTW_BY_VALUE);
+        dirs->append(dirs, (char*)path,DTW_BY_VALUE);
 
         private_dtw_add_end_bar_to_dirs_string_array(dirs);
         int i = 0;
@@ -5752,12 +5752,15 @@ void DtwStringArray_dtw_set_value(struct DtwStringArray *self, int index, const 
 }
 
 // Function prototypes
-void DtwStringArray_dtw_append(struct DtwStringArray *self, const char *string,int ownership){
+void DtwStringArray_dtw_append(struct DtwStringArray *self, char *string,int ownership){
 
     self->strings =  (char**)realloc(self->strings, (self->size+ 1) * sizeof(char*));
     self->ownership = (bool*)realloc(self->ownership,(self->size+ 1) * sizeof(bool));
+    self->ownership[self->size] = false;
 
-    self->ownership[self->size] = ownership;
+    if(ownership == DTW_BY_OWNERSHIP || ownership == DTW_BY_VALUE){
+        self->ownership[self->size] = true;
+    }
 
     if(ownership == DTW_BY_REFERENCE || ownership == DTW_BY_OWNERSHIP){
         self->strings[self->size] = string;
@@ -5790,8 +5793,10 @@ void DtwStringArray_dtw_represent_string_array(struct DtwStringArray *self){
 
 void DtwStringArray_dtw_free_string_array(struct DtwStringArray *self){
     for(int i = 0; i < self->size; i++){
-        free(self->strings[i]);
-
+        bool owner= self->ownership[i];
+        if(owner){
+            free(self->strings[i]);
+        }
     }
     free(self->ownership);
     free(self->strings);

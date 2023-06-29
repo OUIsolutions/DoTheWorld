@@ -212,7 +212,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
         free(new_path_dir);
     }
     dirs->free(dirs);
-    
+
 
     struct DtwStringArray *files = dtw_list_files_recursively(src_path,DTW_CONCAT_PATH);
    
