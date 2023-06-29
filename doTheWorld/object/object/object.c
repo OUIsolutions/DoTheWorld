@@ -68,6 +68,7 @@ int DtwObject_type_of(struct DtwObject *self,const char*name){
 
     int entity = dtw_entity_type(path);
     if(entity != DTW_FILE_TYPE){
+        free(path);
         return entity;
     }
 
