@@ -26,7 +26,7 @@ char * private_DtwObject_create_path(struct DtwObject *self,const char *name){
 }
 
 
-DtwObject * DtwObject_sub_object(struct DtwObject *self,const char*name,int mode){
+DtwObject * DtwObject_sub_object(struct DtwObject *self,const char*name){
 
     char *path = private_DtwObject_create_path(self,name);
     DtwObject * new_obj = private_newDtwObject_raw();
@@ -37,7 +37,7 @@ DtwObject * DtwObject_sub_object(struct DtwObject *self,const char*name,int mode
         dtw_remove_any(path);
     }
 
-    if(mode == DTW_BY_REFERENCE){
+    if(self->mode == DTW_BY_REFERENCE){
         self->garbage_array->append(self->garbage_array,DTW_OBJECT,new_obj);
     }
 
@@ -52,10 +52,10 @@ void DtwObject_destroy(struct DtwObject *self,const char *name){
     dtw_remove_any(path);
 }
 
-DtwStringArray  * DtwObject_list_all(struct DtwObject *self,int mode){
+DtwStringArray  * DtwObject_list_all(struct DtwObject *self){
 
     DtwStringArray  *element = dtw_list_all(self->path,DTW_NOT_CONCAT_PATH);
-    if(mode == DTW_BY_REFERENCE){
+    if(self->mode == DTW_BY_REFERENCE){
         self->garbage_array->append(self->garbage_array,DTW_STRING_ARRAY,element);
     }
 }

@@ -1,15 +1,15 @@
 
-unsigned char * DtwObject_get_blob(struct DtwObject *self,const char *name,int *size,int mode, int *error){
+unsigned char * DtwObject_get_blob(struct DtwObject *self,const char *name,int *size){
 
     char *path = private_DtwObject_create_path(self,name);
     unsigned char *result =dtw_load_binary_content(path,size);
 
     if(result == NULL){
         if(dtw_entity_type(path) == DTW_FOLDER_TYPE){
-            *error = DTW_WRONG_TYPE;
+            self->error  = DTW_WRONG_TYPE;
         }
         else{
-            *error = DTW_OBJECT_NOT_EXIST;
+            self->error = DTW_OBJECT_NOT_EXIST;
 
         }
         free(path);
@@ -20,7 +20,7 @@ unsigned char * DtwObject_get_blob(struct DtwObject *self,const char *name,int *
 
 
 
-    if(mode == DTW_BY_REFERENCE){
+    if(self->mode == DTW_BY_REFERENCE){
         self->garbage_array->append(self->garbage_array,DTW_STRING,result);
     }
 
@@ -38,7 +38,7 @@ void DtwObject_set_blob(struct DtwObject *self,const char *name,unsigned  char *
 
 }
 
-char * DtwObject_get_string(struct DtwObject *self,const char *name,int mode, int *error){
+char * DtwObject_get_string(struct DtwObject *self,const char *name){
 
     char *path = private_DtwObject_create_path(self,name);
     int size;
@@ -47,10 +47,10 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,int mode, in
 
     if(result == NULL){
         if(dtw_entity_type(path) == DTW_FOLDER_TYPE){
-            *error = DTW_WRONG_TYPE;
+            self->error = DTW_WRONG_TYPE;
         }
         else{
-            *error = DTW_OBJECT_NOT_EXIST;
+            self->error = DTW_OBJECT_NOT_EXIST;
 
         }
         free(path);
@@ -61,13 +61,13 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,int mode, in
 
     if(is_binary){
         free(result);
-        *error = DTW_WRONG_TYPE;
+        self->error = DTW_WRONG_TYPE;
         return NULL;
     }
 
 
 
-    if(mode == DTW_BY_REFERENCE){
+    if(self->mode == DTW_BY_REFERENCE){
         self->garbage_array->append(self->garbage_array,DTW_BLOB,result);
     }
 
@@ -83,15 +83,19 @@ void DtwObject_set_string(struct DtwObject *self,const char *name, const char *v
 
 }
 
-long DtwObject_get_long(struct DtwObject *self, const char *name,int *error){
-    char *result = self->get_string(self,name,DTW_BY_OWNERSHIP,error);
+long DtwObject_get_long(struct DtwObject *self, const char *name){
+    int old_mode = self->mode;
+    self->mode = DTW_BY_OWNERSHIP;
+    char *result = self->get_string(self,name);
+    self->mode = old_mode;
+
 
     if(result){
         long result_converted;
         int test = sscanf(result,"%li",&result_converted);
         free(result);
         if(test == 0){
-            *error = DTW_WRONG_TYPE;
+            self->error = DTW_WRONG_TYPE;
             return 0;
         }
         return result_converted;
@@ -107,15 +111,19 @@ void DtwObject_set_long(struct DtwObject *self,const char *name, long value){
 }
 
 
-double DtwObject_get_double(struct DtwObject *self, const char *name, int *error){
-    char *result = self->get_string(self,name,DTW_BY_OWNERSHIP,error);
+double DtwObject_get_double(struct DtwObject *self, const char *name){
+    int old_mode = self->mode;
+    self->mode = DTW_BY_OWNERSHIP;
+    char *result = self->get_string(self,name);
+    self->mode = old_mode;
+
     if(result){
 
         double result_converted;
         int test = sscanf(result,"%lf",&result_converted);
         free(result);
         if(test == 0){
-            *error = DTW_WRONG_TYPE;
+            self->mode = DTW_WRONG_TYPE;
             return 0;
         }
         return result_converted;
