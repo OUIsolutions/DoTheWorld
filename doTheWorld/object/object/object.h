@@ -4,6 +4,9 @@ typedef struct DtwObject{
 
     bool first_object;
     char *path;
+    int mode;
+    int error;
+
     DtwRandonizer  *randonizer;
     DtwGarbageArray  *garbage_array;
 
@@ -40,6 +43,7 @@ char * private_DtwObject_create_path(struct DtwObject *self,const char *name);
 unsigned char * DtwObject_get_blob(struct DtwObject *self,const char *name,int *size,int mode, int *error);
 void DtwObject_set_blob(struct DtwObject *self,const char *name,unsigned  char *value,int size);
 
+
 char * DtwObject_get_string(struct DtwObject *self,const char *name,int mode, int *error);
 void DtwObject_set_string(struct DtwObject *self,const char *name, const char *value);
 
@@ -51,8 +55,8 @@ double DtwObject_get_double(struct DtwObject *self, const char *name, int *error
 void DtwObject_set_double(struct DtwObject *self,const char *name, double value);
 
 void DtwObject_destroy(struct DtwObject *self,const char *name);
-
 DtwStringArray  * DtwObject_list_all(struct DtwObject *self,int mode);
+
 
 DtwObject * DtwObject_sub_object(struct DtwObject *self,const char*name,int mode);
 void DtwObject_free(struct DtwObject *self);
