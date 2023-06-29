@@ -39,8 +39,11 @@ void DtwStringArray_dtw_append(struct DtwStringArray *self, char *string,int own
 
     self->strings =  (char**)realloc(self->strings, (self->size+ 1) * sizeof(char*));
     self->ownership = (bool*)realloc(self->ownership,(self->size+ 1) * sizeof(bool));
+    self->ownership[self->size] = false;
 
-    self->ownership[self->size] = ownership;
+    if(ownership == DTW_BY_OWNERSHIP || ownership == DTW_BY_VALUE){
+        self->ownership[self->size] = true;
+    }
 
     if(ownership == DTW_BY_REFERENCE || ownership == DTW_BY_OWNERSHIP){
         self->strings[self->size] = string;
@@ -73,8 +76,10 @@ void DtwStringArray_dtw_represent_string_array(struct DtwStringArray *self){
 
 void DtwStringArray_dtw_free_string_array(struct DtwStringArray *self){
     for(int i = 0; i < self->size; i++){
-        free(self->strings[i]);
-
+        bool owner= self->ownership[i];
+        if(owner){
+            free(self->strings[i]);
+        }
     }
     free(self->ownership);
     free(self->strings);
