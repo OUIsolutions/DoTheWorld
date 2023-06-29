@@ -77,7 +77,7 @@ struct DtwStringArray * dtw_list_all_recursively(const char *path,bool concat_pa
 
             char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 2);
             sprintf(formated_dir,"%s/",dirs->strings[i]);
-            all->append(all, formated_dir,DTW_BY_OWNERSHIP);
+            all->append(all, formated_dir,DTW_BY_VALUE);
 
         }
 

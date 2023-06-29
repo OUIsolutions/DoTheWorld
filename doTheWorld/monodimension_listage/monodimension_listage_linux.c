@@ -57,7 +57,7 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
                 else{
                     sprintf(generated_dir, "%s/%s", path, entry->d_name);
                 }
-                dirs->append(dirs, generated_dir,DTW_BY_OWNERSHIP);
+                dirs->append(dirs, generated_dir,DTW_BY_VALUE);
             }
             else{
                 dirs->append(dirs, entry->d_name,DTW_BY_VALUE);
