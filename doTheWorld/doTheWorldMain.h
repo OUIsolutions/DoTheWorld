@@ -40,6 +40,7 @@ SOFTWARE.
 #endif  //SHA_256_H
 
 #include "imports.h"
+#include "global_constants.h"
 #include "string_array/string_array.h"
 
 #include "base64/base64.h"

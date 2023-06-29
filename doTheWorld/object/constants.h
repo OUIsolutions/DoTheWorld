@@ -9,9 +9,7 @@
 #define DTW_OK 0
 #define DTW_WRONG_TYPE -2
 
-#define DTW_BY_REFERENCE 1
-#define DTW_BY_OWNERSHIP 2
-#define DTW_BY_VALUE 3
+
 
 
 #define DTW_ALLOW_CACHE true

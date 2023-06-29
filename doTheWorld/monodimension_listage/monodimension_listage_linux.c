@@ -60,12 +60,12 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
 
                 
                 
-                dirs->add_string(dirs, generated_dir);
+                dirs->append(dirs, generated_dir);
                 free(generated_dir);
 
             }
             else{
-                dirs->add_string(dirs, entry->d_name);
+                dirs->append(dirs, entry->d_name);
                 
             }
 
