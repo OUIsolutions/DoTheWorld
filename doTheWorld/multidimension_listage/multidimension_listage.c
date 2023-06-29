@@ -10,7 +10,7 @@ struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool concat_p
         }
       
         
-        dirs->append(dirs, path,DTW_BY_VALUE);
+        dirs->append(dirs, (char*)path,DTW_BY_VALUE);
 
         private_dtw_add_end_bar_to_dirs_string_array(dirs);
         int i = 0;
