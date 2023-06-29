@@ -3,7 +3,7 @@
 #define DTW_LONG 3
 #define DTW_DOUBLE 4
 #define DTW_STRING 5
-#define DTW_BLOB 6
+#define DTW_BINARY 6
 #define DTW_STRING_ARRAY 7
 
 #define DTW_OK 0

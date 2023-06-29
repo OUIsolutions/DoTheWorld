@@ -11,8 +11,8 @@ DtwObject * private_newDtwObject_raw(){
     self->garbage_array = newDtwGarbageArray();
     self->first_object = false;
 
-    self->get_blob = DtwObject_get_blob;
-    self->set_blob = DtwObject_set_blob;
+    self->get_binary = DtwObject_get_binary;
+    self->set_binary = DtwObject_set_binary;
 
     self->get_string = DtwObject_get_string;
     self->get_long = DtwObject_get_long;

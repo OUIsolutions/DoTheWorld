@@ -10,8 +10,8 @@ typedef struct DtwObject{
     DtwRandonizer  *randonizer;
     DtwGarbageArray  *garbage_array;
 
-    unsigned char *(*get_blob)(struct DtwObject *self,const char *name,int *size);
-    void (*set_blob)(struct DtwObject *self,const char *name,unsigned  char *value,int size);
+    unsigned char *(*get_binary)(struct DtwObject *self, const char *name, int *size);
+    void (*set_binary)(struct DtwObject *self, const char *name, unsigned  char *value, int size);
 
 
     char *(*get_string)(struct DtwObject *self,const char *name);
@@ -41,8 +41,8 @@ DtwObject * newDtwObject(const char *path);
 char * private_DtwObject_create_path(struct DtwObject *self,const char *name);
 
 
-unsigned char * DtwObject_get_blob(struct DtwObject *self,const char *name,int *size);
-void DtwObject_set_blob(struct DtwObject *self,const char *name,unsigned  char *value,int size);
+unsigned char * DtwObject_get_binary(struct DtwObject *self, const char *name, int *size);
+void DtwObject_set_binary(struct DtwObject *self, const char *name, unsigned  char *value, int size);
 
 
 char * DtwObject_get_string(struct DtwObject *self,const char *name);

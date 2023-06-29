@@ -77,7 +77,7 @@ int DtwObject_type_of(struct DtwObject *self,const char*name){
 
     if(is_binary){
         free(result);
-        return DTW_BLOB;
+        return DTW_BINARY;
     }
     char *result_string = (char*)result;
     double result_converted;
@@ -106,8 +106,8 @@ char *DtwObject_inspect_type(struct DtwObject *self,int type){
     if(type == DTW_NOT_FOUND){
         return "Not Found";
     }
-    if(type == DTW_BLOB){
-        return "Bynary";
+    if(type == DTW_BINARY){
+        return "Binary";
     }
 
     if(type == DTW_STRING){

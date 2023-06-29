@@ -1,5 +1,5 @@
 
-unsigned char * DtwObject_get_blob(struct DtwObject *self,const char *name,int *size){
+unsigned char * DtwObject_get_binary(struct DtwObject *self, const char *name, int *size){
 
     char *path = private_DtwObject_create_path(self,name);
     unsigned char *result =dtw_load_binary_content(path,size);
@@ -9,7 +9,7 @@ unsigned char * DtwObject_get_blob(struct DtwObject *self,const char *name,int *
             self->error  = DTW_WRONG_TYPE;
         }
         else{
-            self->error = DTW_OBJECT_NOT_EXIST;
+            self->error = DTW_NOT_FOUND;
 
         }
         free(path);
@@ -29,7 +29,7 @@ unsigned char * DtwObject_get_blob(struct DtwObject *self,const char *name,int *
 
 }
 
-void DtwObject_set_blob(struct DtwObject *self,const char *name,unsigned  char *value,int size){
+void DtwObject_set_binary(struct DtwObject *self, const char *name, unsigned  char *value, int size){
 
     char *path = private_DtwObject_create_path(self, name);
     dtw_write_any_content(path,value,size);
@@ -68,7 +68,7 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name){
 
 
     if(self->mode == DTW_BY_REFERENCE){
-        self->garbage_array->append(self->garbage_array,DTW_BLOB,result);
+        self->garbage_array->append(self->garbage_array, DTW_BINARY, result);
     }
 
     return (char*)result;
