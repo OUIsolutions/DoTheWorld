@@ -2,7 +2,9 @@
 typedef struct DtwStringArray {
   int size;
 
-  char **strings;       
+  char **strings;
+  bool *ownership;
+  
   void (*set_value)(struct DtwStringArray *self,int index,const char *value);
   void (*add_string)(struct DtwStringArray *self,const char *string);
   void (*merge_string_array)(struct DtwStringArray *self, struct DtwStringArray *other);
