@@ -50,6 +50,7 @@ DtwObject * DtwObject_sub_object(struct DtwObject *self,const char*name){
 void DtwObject_destroy(struct DtwObject *self,const char *name){
     char *path = private_DtwObject_create_path(self,name);
     dtw_remove_any(path);
+    free(path);
 }
 
 DtwStringArray  * DtwObject_list_all(struct DtwObject *self){
@@ -61,6 +62,43 @@ DtwStringArray  * DtwObject_list_all(struct DtwObject *self){
     return element;
 }
 
+
+int DtwObject_type_of(struct DtwObject *self,const char*name){
+    char *path = private_DtwObject_create_path(self,name);
+
+    int entity = dtw_entity_type(path);
+    if(entity != DTW_FILE_TYPE){
+        return entity;
+    }
+
+    int size;
+    bool is_binary;
+    unsigned char *result = dtw_load_any_content(path,&size,&is_binary);
+
+    if(is_binary){
+        free(result);
+        return DTW_BLOB;
+    }
+    char *result_string = (char*)result;
+    double result_converted;
+    int test = sscanf(result_string,"%lf",&result_converted);
+
+    if(test == 0){
+        free(result);
+        return DTW_STRING;
+    }
+    //verify if its an . inside the result
+    int  result_size = (int)strlen(result);
+    for(int  i = 0; i < result_size; i++){
+        if(result_string[i]== '.'){
+            free(result);
+            return DTW_DOUBLE;
+        }
+    }
+    free(result);
+    return DTW_LONG;
+
+}
 
 void DtwObject_free(struct DtwObject *self){
 

@@ -1,18 +1,18 @@
 
-enum {
-    DTW_NONE,
-    DTW_NUMBER,
-    DTW_LONG,
-    DTW_DOUBLE,
-    DTW_STRING,
-    DTW_BLOB,
-    DTW_STRING_ARRAY,
-    DTW_OBJECT
-};
+#define DTW_OBJECT DTW_FOLDER_TYPE
+#define DTW_LONG 3
+#define DTW_DOUBLE 4
+#define DTW_STRING 5
+#define DTW_BLOB 6
+#define DTW_STRING_ARRAY 7
 
+#define DTW_OK 0
+#define DTW_WRONG_TYPE -2
 
-enum {DTW_OK,DTW_OBJECT_NOT_EXIST,DTW_WRONG_TYPE};
-enum {DTW_BY_REFERENCE,DTW_BY_OWNERSHIP,DTW_BY_VALUE};
+#define DTW_BY_REFERENCE 1
+#define DTW_BY_OWNERSHIP 2
+#define DTW_BY_VALUE 3
+
 
 #define DTW_ALLOW_CACHE true
 #define DTW_NOT_CACHE false

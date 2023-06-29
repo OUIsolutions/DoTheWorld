@@ -173,6 +173,7 @@ int dtw_entity_type(const char *path){
         }
     }
     return DTW_NOT_FOUND;
+
 }
 
 bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {

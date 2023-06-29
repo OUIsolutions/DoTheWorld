@@ -50,12 +50,12 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name){
             self->error = DTW_WRONG_TYPE;
         }
         else{
-            self->error = DTW_OBJECT_NOT_EXIST;
-
+            self->error = DTW_NOT_FOUND;
         }
         free(path);
         return NULL;
     }
+
 
     free(path);
 

@@ -7,7 +7,7 @@ DtwObject * private_newDtwObject_raw(){
     DtwObject * self = (DtwObject*)malloc(sizeof(DtwObject));
     self->randonizer = NULL;
     self->mode = DTW_BY_REFERENCE;
-    self->error =  DTW_NONE;
+    self->error =  DTW_OK;
     self->garbage_array = newDtwGarbageArray();
     self->first_object = false;
 
@@ -19,7 +19,7 @@ DtwObject * private_newDtwObject_raw(){
     self->get_double = DtwObject_get_double;
     self->sub_object = DtwObject_sub_object;
 
-
+    self->type_of = DtwObject_type_of;
     self->destroy = DtwObject_destroy;
     self->set_string = DtwObject_set_string;
     self->set_double = DtwObject_set_double;
