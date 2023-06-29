@@ -58,6 +58,7 @@ DtwStringArray  * DtwObject_list_all(struct DtwObject *self){
     if(self->mode == DTW_BY_REFERENCE){
         self->garbage_array->append(self->garbage_array,DTW_STRING_ARRAY,element);
     }
+    return element;
 }
 
 

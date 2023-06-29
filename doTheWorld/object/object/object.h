@@ -26,7 +26,7 @@ typedef struct DtwObject{
 
 
     struct DtwObject *(*sub_object)(struct DtwObject *self,const char*name);
-    DtwStringArray  * (*list_all)(struct DtwObject *self,int mode);
+    DtwStringArray  * (*list_all)(struct DtwObject *self);
     void(*destroy)(struct DtwObject *self,const char *name);
     void (*free)(struct DtwObject *self);
 
