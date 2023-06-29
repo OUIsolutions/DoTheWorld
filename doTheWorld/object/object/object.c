@@ -99,7 +99,29 @@ int DtwObject_type_of(struct DtwObject *self,const char*name){
     return DTW_LONG;
 
 }
+char *DtwObject_inspect_type(struct DtwObject *self,int type){
+    if(type == DTW_FOLDER_TYPE){
+        return "Object";
+    }
+    if(type == DTW_NOT_FOUND){
+        return "Not Found";
+    }
+    if(type == DTW_BLOB){
+        return "Bynary";
+    }
 
+    if(type == DTW_STRING){
+        return "String";
+    }
+
+    if(type == DTW_LONG){
+        return "Long";
+    }
+
+    if(type == DTW_DOUBLE){
+        return "Double";
+    }
+}
 void DtwObject_free(struct DtwObject *self){
 
 
