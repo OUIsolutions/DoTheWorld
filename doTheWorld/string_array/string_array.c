@@ -35,7 +35,7 @@ void DtwStringArray_dtw_set_value(struct DtwStringArray *self, int index, const 
 }
 
 // Function prototypes
-void DtwStringArray_dtw_append(struct DtwStringArray *self, const char *string,int ownership){
+void DtwStringArray_dtw_append(struct DtwStringArray *self, char *string,int ownership){
 
     self->strings =  (char**)realloc(self->strings, (self->size+ 1) * sizeof(char*));
     self->ownership = (bool*)realloc(self->ownership,(self->size+ 1) * sizeof(bool));
