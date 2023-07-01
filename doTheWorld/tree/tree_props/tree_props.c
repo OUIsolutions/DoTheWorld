@@ -9,7 +9,7 @@ DtwTreeProps DtwTreeProps_format_props( DtwTreeProps *props){
         result = *props;
     }
     if(!result.minification){
-        result.minification = DTW_MIMIFY;
+        result.minification = DTW_NOT_MIMIFY;
     }
     if(!result.content){
         result.content = DTW_PRESERVE;
