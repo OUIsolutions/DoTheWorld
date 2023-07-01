@@ -18,9 +18,8 @@ void DtwTree_loads_json_tree(struct DtwTree *self, const char *content){
         cJSON *pending_action = cJSON_GetObjectItemCaseSensitive(json_tree_part, "pending_action");
         cJSON *ignore = cJSON_GetObjectItemCaseSensitive(json_tree_part, "ignore");
    
-        struct DtwTreePart *part = newDtwTreePart(
-                path->valuestring,
-                &(DtwTreeProps){.content =DTW_NOT_LOAD,.hadware_data = DTW_NOT_LOAD}
+        struct DtwTreePart *part = newDtwTreePartEmpty(
+                path->valuestring
                 );
 
         if(original_path != NULL){

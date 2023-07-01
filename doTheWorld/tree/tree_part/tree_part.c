@@ -197,3 +197,15 @@ void DtwTreePart_free(struct DtwTreePart *self){
     free(self->content);
     free(self);
 }
+
+struct DtwTreePart * newDtwTreePartEmpty(const char *path){
+    return newDtwTreePart(
+            path,
+         &(DtwTreeProps){.content =DTW_NOT_LOAD,.hadware_data = DTW_NOT_LOAD}
+    );
+}struct DtwTreePart * newDtwTreePartLoading(const char *path){
+    return newDtwTreePart(
+            path,
+            &(DtwTreeProps){.content =DTW_LOAD,.hadware_data = DTW_LOAD}
+    );
+}

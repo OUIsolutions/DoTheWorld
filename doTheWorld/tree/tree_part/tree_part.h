@@ -73,3 +73,5 @@ void DtwTreePart_free(struct DtwTreePart *self);
 struct DtwTreePart * DtwTreePart_self_copy(struct DtwTreePart *self);
 
 struct DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps *props);
+struct DtwTreePart * newDtwTreePartEmpty(const char *path);
+struct DtwTreePart * newDtwTreePartLoading(const char *path);

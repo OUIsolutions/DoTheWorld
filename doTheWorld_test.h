@@ -4260,6 +4260,9 @@ void DtwTreePart_free(struct DtwTreePart *self);
 struct DtwTreePart * DtwTreePart_self_copy(struct DtwTreePart *self);
 
 struct DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps *props);
+struct DtwTreePart * newDtwTreePartEmpty(const char *path);
+struct DtwTreePart * newDtwTreePartLoading(const char *path);
+
 
 
 
@@ -6192,6 +6195,18 @@ void DtwTreePart_free(struct DtwTreePart *self){
     free(self);
 }
 
+struct DtwTreePart * newDtwTreePartEmpty(const char *path){
+    return newDtwTreePart(
+            path,
+         &(DtwTreeProps){.content =DTW_NOT_LOAD,.hadware_data = DTW_NOT_LOAD}
+    );
+}struct DtwTreePart * newDtwTreePartLoading(const char *path){
+    return newDtwTreePart(
+            path,
+            &(DtwTreeProps){.content =DTW_LOAD,.hadware_data = DTW_LOAD}
+    );
+}
+
 
 
 
@@ -6377,9 +6392,8 @@ void DtwTree_loads_json_tree(struct DtwTree *self, const char *content){
         cJSON *pending_action = cJSON_GetObjectItemCaseSensitive(json_tree_part, "pending_action");
         cJSON *ignore = cJSON_GetObjectItemCaseSensitive(json_tree_part, "ignore");
    
-        struct DtwTreePart *part = newDtwTreePart(
-                path->valuestring,
-                &(DtwTreeProps){.content =DTW_NOT_LOAD,.hadware_data = DTW_NOT_LOAD}
+        struct DtwTreePart *part = newDtwTreePartEmpty(
+                path->valuestring
                 );
 
         if(original_path != NULL){
