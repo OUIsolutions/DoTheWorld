@@ -1,18 +1,4 @@
 
-#define DTW_NOT_MINIFY  false
-#define DTW_MINIFY  true
-#define DTW_NOT_PRESERVE_PATH_ATRIBUTES  false
-#define DTW_PRESERVE_PATH_ATRIBUTES  true
-#define DTW_NOT_PRESERVE_HARDWARE_DATA  false
-#define DTW_PRESERVE_HARDWARE_DATA  true
-#define DTW_NOT_PRESERVE_CONTENT_DATA  false
-#define DTW_PRESERVE_CONTENT_DATA  true
-#define DTW_COPY_CONTENT  true 
-#define DTW_PASS_BY_REFERENCE  false
-#define DTW_CONSIDER_IGNORE  true
-#define DTW_NOT_CONSIDER_IGNORE  false
-#define DTW_PRESERVE_PATH_START true
-#define DTW_NOT_PRESERVE_PATH_START false
 
 
 typedef struct  DtwTree{
@@ -90,23 +76,13 @@ typedef struct  DtwTree{
 
     char *(*dumps_json_tree)(
         struct DtwTree *self,
-        bool minify,
-        bool preserve_content,
-        bool preserve_path_atributes,
-        bool preserve_hadware_data,
-        bool preserve_content_data,
-        bool consider_igonore
+        DtwJsonTreeProps * props
     ); 
     
     void (*dumps_json_tree_to_file)(
         struct DtwTree *self,
         const char *path,
-        bool minify,
-        bool preserve_content,
-        bool preserve_path_atributes,
-        bool preserve_hadware_data,
-        bool preserve_content_data,
-        bool consider_igonore
+        DtwJsonTreeProps * props
     );
 
     void (*free)(struct DtwTree *self);
@@ -176,23 +152,13 @@ void DtwTree_loads_json_tree_from_file(struct DtwTree *self, const char *path);
 
 char * DtwTree_dumps_tree_json(
     struct DtwTree *self,
-    bool minify,
-    bool preserve_content,
-    bool preserve_path_atributes,
-    bool preserve_hadware_data,
-    bool preserve_content_data,
-    bool consider_igonore
+    DtwJsonTreeProps * props
     );
 
 void DtwTree_dumps_tree_json_to_file(
     struct DtwTree *self,
     const char *path,
-    bool minify,
-    bool preserve_content,
-    bool preserve_path_atributes,
-    bool preserve_hadware_data,
-    bool preserve_content_data,
-    bool consider_igonore
+    DtwJsonTreeProps * props
     );
 
 struct  DtwTree * newDtwTree();

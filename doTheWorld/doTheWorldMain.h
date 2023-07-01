@@ -55,6 +55,7 @@ SOFTWARE.
 #include "transaction_report/transaction_report.h"
 #include "json_error/json_error.h"
 #include "tree_part/tree_part.h"
+#include "tree/json_tree_props.h"
 #include "tree/tree.h"
 #include "object/declarations.h"
 
