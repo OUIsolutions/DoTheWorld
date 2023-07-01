@@ -107,7 +107,7 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwJsonTreeProps * props){
             cJSON_Delete(json_tree_part);
             continue;
         }
-        if(formated_props.ignored_elements == DTW_PRESERVE  && tree_part->ignore){
+        if(formated_props.ignored_elements == DTW_INCLUDE && tree_part->ignore){
             continue;
         }
         
@@ -127,7 +127,7 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwJsonTreeProps * props){
         
         
         
-        if(formated_props.path_atributes == DTW_PRESERVE ){
+        if(formated_props.path_atributes == DTW_INCLUDE ){
                 char *dir_string = tree_part->path->get_dir(tree_part->path);
                 char *full_name_string = tree_part->path->get_full_name(tree_part->path);
                 char *name_string = tree_part->path->get_name(tree_part->path);
@@ -170,7 +170,7 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwJsonTreeProps * props){
         }
 
 
-        if(formated_props.hadware_data == DTW_PRESERVE && tree_part->metadata_loaded){
+        if(formated_props.hadware_data == DTW_INCLUDE && tree_part->metadata_loaded){
             cJSON_AddItemToObject(
                 json_tree_part, 
                 "hardware_sha256", 
@@ -199,7 +199,7 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwJsonTreeProps * props){
             
         }
 
-        if(formated_props.content_data == DTW_PRESERVE && tree_part->content_exist_in_memory){
+        if(formated_props.content_data == DTW_INCLUDE && tree_part->content_exist_in_memory){
             char *content_sha = tree_part->get_content_sha(tree_part);
             cJSON_AddItemToObject(
                 json_tree_part, 
@@ -216,7 +216,7 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwJsonTreeProps * props){
             free(content_sha);
         }
 
-        if(formated_props.content == DTW_PRESERVE && tree_part->content_exist_in_memory){
+        if(formated_props.content == DTW_INCLUDE && tree_part->content_exist_in_memory){
 
             cJSON_AddItemToObject(
                 json_tree_part, 

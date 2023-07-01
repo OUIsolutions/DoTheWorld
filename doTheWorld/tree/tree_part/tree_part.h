@@ -5,6 +5,8 @@
 #define DTW_LOAD_METADATA true
 #define DTW_NOT_LOAD_METADATA false
 
+#define DTW_PRESERVE_PATH_START true 
+#define NOT_PRESERVE_PATH_START false 
 
 #define DTW_IS_BINARY true
 #define DTW_IS_NOT_BINARY false
