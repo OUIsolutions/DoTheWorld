@@ -1,6 +1,6 @@
 
 typedef struct DtwJsonTreeProps{
-   bool minify;
+   bool not_minify;
    bool preserve_content;
    bool not_preserve_path_atributes;
    bool not_preserve_hadware_data;

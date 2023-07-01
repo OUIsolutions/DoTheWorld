@@ -263,7 +263,7 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwJsonTreeProps * props){
     
     char *json_string = cJSON_Print(json_array);
     //set ident to 4 spaces
-    if(formated_props.minify){
+    if(!formated_props.not_minify){
         cJSON_Minify(json_string);
     }
     cJSON_Delete(json_array);
