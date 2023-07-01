@@ -52,11 +52,8 @@ SOFTWARE.
 #include "monodimension_listage/monodimension_listage.h"
 #include "multidimension_listage/multidimension_listage.h"
 #include "path/path.h"
-#include "transaction_report/transaction_report.h"
-#include "json_error/json_error.h"
-#include "tree_part/tree_part.h"
-#include "tree/json_tree_props.h"
-#include "tree/tree.h"
+
+#include "tree/declarations.h"
 #include "object/declarations.h"
 
 
@@ -71,13 +68,7 @@ SOFTWARE.
 #include "multidimension_listage/multidimension_listage.c"
 #include "path/path.c"
 #include "string_array/string_array.c"
-#include "tree_part/tree_part.c"
-#include "tree_part/hardware_tree_part.c"
-#include "tree/tree.c"
-#include "tree/tree_finding.c"
-#include "json_error/json_error.c"
-#include "tree/json_tree.c"
-#include "transaction_report/transaction_report.c"
+#include "tree/definitions.h"
 #include "object/definitions.h"
 
 #endif //DO_THE_WORLD_H
