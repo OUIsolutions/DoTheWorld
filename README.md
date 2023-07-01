@@ -338,11 +338,7 @@ with tree concepts, you can manipulate files as trees, and implement IO modifica
 
 int main(){
 
-    DtwTreePart *part = newDtwTreePart(
-            "exemple_folder/a.txt",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA
-    );
+    DtwTreePart *part = newDtwTreePartLoading("exemple_folder/a.txt");
 
     part->represent(part);
     part->free(part);
@@ -350,15 +346,19 @@ int main(){
 ~~~
 <!--codeof:readme_exemples/creating_tree_part.c-->
 ~~~c
-
-
+//
+// Created by jurandi on 20-06-2023.
+//
 #include "doTheWorld.h"
 
 
 int main(){
 
-
-
+    DtwTreePart *part = newDtwTreePartEmpty("test.txt");
+    part->set_string_content(part,"my mensage");
+    part->hardware_write(part,DTW_SET_AS_ACTION);
+    part->hardware_commit(part);
+    part->free(part);
 }
 ~~~
 
@@ -369,11 +369,7 @@ int main(){
 
 int main(){
 
-     DtwTreePart *part = newDtwTreePart(
-            "test.txt",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA
-    );
+     DtwTreePart *part = newDtwTreePartLoading("test.txt");
 
     //getting the content
     char *content = part->get_content_string_by_reference(part);
@@ -395,11 +391,7 @@ int main(){
 
 int main(){
 
-    DtwTreePart *part = newDtwTreePart(
-            "test.txt",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA
-    );
+    DtwTreePart *part = newDtwTreePartLoading( "test.txt");
 
     DtwPath *path = part->path;
 
@@ -432,11 +424,7 @@ int main(){
 
 int main(){
 
-    DtwTreePart *part = newDtwTreePart(
-            "exemple_folder/a.txt",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA
-    );
+    DtwTreePart *part = newDtwTreePartLoading("exemple_folder/a.txt");
 
     DtwPath *path = part->path;
 
@@ -465,11 +453,7 @@ Will Modificate the original content, for exemple, if you change the extension o
 
 int main(){
 
-    DtwTreePart *part = newDtwTreePart(
-            "exemple_folder/a.txt",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA
-    );
+    DtwTreePart *part = newDtwTreePartLoading("exemple_folder/a.txt");
 
     DtwPath *path = part->path;
 
@@ -492,11 +476,7 @@ old file
 
 int main(){
 
-    DtwTreePart *part = newDtwTreePart(
-            "exemple_folder/a.txt",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA
-    );
+    DtwTreePart *part = newDtwTreePartLoading("exemple_folder/a.txt");
 
     DtwPath *path = part->path;
 
@@ -521,12 +501,7 @@ Will Delete the current Content
 
 int main(){
 
-    DtwTreePart *part = newDtwTreePart(
-            "exemple_folder/a.txt",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA
-    );
-
+    DtwTreePart *part = newDtwTreePartLoading("exemple_folder/a.txt");
 
     part->hardware_remove(part,DTW_EXECUTE_NOW);
     part->hardware_commit(part);
@@ -552,9 +527,11 @@ int main(){
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_START
+            &(DtwTreeProps){
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_INCLUDE,
+                    .path_atributes=DTW_INCLUDE
+            }
     );
     tree->represent(tree);
     tree->free(tree);
@@ -572,9 +549,11 @@ int main(){
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_START
+            &(DtwTreeProps){
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_INCLUDE,
+                    .path_atributes=DTW_INCLUDE
+            }
     );
     for(int i = 0; i<tree->size;i++){
         DtwTreePart *current_part = tree->tree_parts[i];
@@ -599,9 +578,11 @@ int main(){
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_START
+            &(DtwTreeProps){
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_INCLUDE,
+                    .path_atributes=DTW_INCLUDE
+            }
     );
 
     DtwTreePart *deer = tree->find_part_by_name(tree,"deer.jpg");
@@ -625,9 +606,11 @@ int main(){
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_START
+            &(DtwTreeProps){
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_INCLUDE,
+                    .path_atributes=DTW_INCLUDE
+            }
     );
 
     DtwTreePart *deer = tree->find_part_by_path(
@@ -670,9 +653,11 @@ int main(){
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_START
+            &(DtwTreeProps){
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_INCLUDE,
+                    .path_atributes=DTW_INCLUDE
+            }
     );
 
 
@@ -718,9 +703,11 @@ int main(){
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_START
+            &(DtwTreeProps){
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_INCLUDE,
+                    .path_atributes=DTW_INCLUDE
+            }
     );
     DtwTree *filtered = tree->filter(
             tree,
@@ -758,9 +745,11 @@ int main(){
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_START
+            &(DtwTreeProps){
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_INCLUDE,
+                    .path_atributes=DTW_INCLUDE
+            }
     );
 
     DtwTree *concated = tree->map(
@@ -790,10 +779,13 @@ int main(){
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_START
+            &(DtwTreeProps){
+                .content = DTW_INCLUDE,
+                .hadware_data=DTW_INCLUDE,
+                .path_atributes=DTW_INCLUDE
+            }
     );
+
     for(int i=0; i < tree->size;i++){
         struct DtwTreePart *part = tree->tree_parts[i];
         struct DtwPath *path = part->path;
@@ -828,9 +820,11 @@ int main(){
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_START
+            &(DtwTreeProps){
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_INCLUDE,
+                    .path_atributes=DTW_INCLUDE
+            }
     );
     for(int i=0; i < tree->size;i++){
         DtwTreePart *part = tree->tree_parts[i];
@@ -871,19 +865,22 @@ int main(){
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_START
+            &(DtwTreeProps){
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_INCLUDE,
+                    .path_atributes=DTW_INCLUDE
+            }
     );
     tree->dumps_json_tree_to_file(
             tree,
             "test.json",
-            DTW_NOT_MINIFY,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_ATRIBUTES,
-            DTW_PRESERVE_HARDWARE_DATA,
-            DTW_PRESERVE_CONTENT_DATA,
-            DTW_CONSIDER_IGNORE
+            &(DtwTreeProps){
+                    .minification = DTW_MIMIFY,
+                    .ignored_elements=DTW_HIDE,
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_INCLUDE,
+                    .path_atributes=DTW_INCLUDE
+            }
     );
 
     tree->free(tree);
@@ -900,19 +897,22 @@ int main(){
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_START
+            &(DtwTreeProps){
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_INCLUDE,
+                    .path_atributes=DTW_INCLUDE
+            }
     );
 
     char *content = tree->dumps_json_tree(
             tree,
-            DTW_NOT_MINIFY,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_ATRIBUTES,
-            DTW_PRESERVE_HARDWARE_DATA,
-            DTW_PRESERVE_CONTENT_DATA,
-            DTW_CONSIDER_IGNORE
+            &(DtwTreeProps){
+                    .minification = DTW_MIMIFY,
+                    .ignored_elements=DTW_HIDE,
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_INCLUDE,
+                    .path_atributes=DTW_INCLUDE
+            }
     );
     printf("%s",content);
     free(content);
@@ -935,20 +935,23 @@ void dumps_tree(){
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_START
+            &(DtwTreeProps){
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_INCLUDE,
+                    .path_atributes=DTW_INCLUDE
+            }
     );
 
     tree->dumps_json_tree_to_file(
             tree,
             "test.json",
-            DTW_NOT_MINIFY,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_ATRIBUTES,
-            DTW_PRESERVE_HARDWARE_DATA,
-            DTW_PRESERVE_CONTENT_DATA,
-            DTW_CONSIDER_IGNORE
+            &(DtwTreeProps){
+                    .minification = DTW_MIMIFY,
+                    .ignored_elements=DTW_HIDE,
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_INCLUDE,
+                    .path_atributes=DTW_INCLUDE
+            }
     );
 
     tree->free(tree);
@@ -977,18 +980,21 @@ char *dumps_tree(){
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_START
+            &(DtwTreeProps){
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_INCLUDE,
+                    .path_atributes=DTW_INCLUDE
+            }
     );
     char *content = tree->dumps_json_tree(
             tree,
-            DTW_NOT_MINIFY,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_ATRIBUTES,
-            DTW_PRESERVE_HARDWARE_DATA,
-            DTW_PRESERVE_CONTENT_DATA,
-            DTW_CONSIDER_IGNORE
+            &(DtwTreeProps){
+                    .minification = DTW_MIMIFY,
+                    .ignored_elements=DTW_HIDE,
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_INCLUDE,
+                    .path_atributes=DTW_INCLUDE
+            }
     );
     tree->free(tree);
     return content;
