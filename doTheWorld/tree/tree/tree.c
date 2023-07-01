@@ -115,27 +115,29 @@ void DtwTree_represent_tree(struct DtwTree *self){
     }
 }
 
-void DtwTree_add_tree_parts_from_string_array(struct DtwTree *self, struct DtwStringArray *paths, bool load_content, bool load_metadata){
+void DtwTree_add_tree_parts_from_string_array(struct DtwTree *self, struct DtwStringArray *paths,DtwTreeProps *props){
     for(int i = 0; i < paths->size; i++){
 
         const char *current_path = paths->strings[i];
         struct DtwTreePart *tree_part = newDtwTreePart(
                 current_path,
-                load_content,
-                load_metadata
+                props
         );
+        
         self->add_tree_part_by_reference(self, tree_part);
     }
 }
 
 
-void DtwTree_add_tree_from_hardware(struct DtwTree *self, const char *path, bool load_content, bool load_meta_data, bool preserve_path_start){
-
+void DtwTree_add_tree_from_hardware(struct DtwTree *self,const char *path, DtwTreeProps *props){
+    DtwTreeProps formated_props = DtwTreeProps_format_props(props);
     struct DtwStringArray *path_array = dtw_list_all_recursively(path,DTW_CONCAT_PATH);
-    self->add_tree_parts_from_string_array(self, path_array, load_content, load_meta_data);
+
+    self->add_tree_parts_from_string_array(self, path_array,props);
     path_array->free(path_array);
 
-    if(preserve_path_start){
+
+    if(formated_props.path_atributes == DTW_INCLUDE){
         return;
     }
     if(self->size == 0){

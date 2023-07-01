@@ -1,12 +1,4 @@
 
-#define DTW_LOAD_CONTENT  true
-#define DTW_NOT_LOAD_CONTENT  false
-
-#define DTW_LOAD_METADATA true
-#define DTW_NOT_LOAD_METADATA false
-
-#define DTW_PRESERVE_PATH_START true 
-#define NOT_PRESERVE_PATH_START false 
 
 #define DTW_IS_BINARY true
 #define DTW_IS_NOT_BINARY false
@@ -80,4 +72,4 @@ bool DtwTreePart_hardware_commit(struct DtwTreePart *self);
 void DtwTreePart_free(struct DtwTreePart *self);
 struct DtwTreePart * DtwTreePart_self_copy(struct DtwTreePart *self);
 
-struct DtwTreePart * newDtwTreePart(const char *path, bool load_content, bool load_meta_data);
+struct DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps *props);

@@ -1,7 +1,9 @@
 
 
 
-struct DtwTreePart * newDtwTreePart(const char *path, bool load_content, bool load_meta_data){
+struct DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps *props){
+    DtwTreeProps formated_props = DtwTreeProps_format_props(props);
+
     struct DtwTreePart *self = (struct DtwTreePart *)malloc(sizeof(struct DtwTreePart));
     self->path = newDtwPath(path);
     self->content_exist_in_memory = false;
@@ -34,10 +36,10 @@ struct DtwTreePart * newDtwTreePart(const char *path, bool load_content, bool lo
     self->free = DtwTreePart_free;
     self->self_copy = DtwTreePart_self_copy;
 
-    if(load_content || load_meta_data){
+    if(formated_props.content == DTW_INCLUDE || formated_props.hadware_data == DTW_INCLUDE){
         
         self->load_content_from_hardware(self);
-        if(load_meta_data && self->content_exist_in_memory){
+        if(formated_props.hadware_data == DTW_INCLUDE && self->content_exist_in_memory){
 
             self->metadata_loaded = true;
             self->last_modification_time = dtw_get_file_last_motification_in_unix(path);
@@ -45,7 +47,7 @@ struct DtwTreePart * newDtwTreePart(const char *path, bool load_content, bool lo
             self->hawdware_content_sha = dtw_generate_sha_from_string((const char*)self->content);
         }
 
-        if(!load_content){
+        if(formated_props.content == DTW_HIDE){
             self->free_content(self);
         }
     }
@@ -70,7 +72,10 @@ unsigned char *DtwTreePart_get_content_binary_by_reference(struct DtwTreePart *s
 struct  DtwTreePart * DtwTreePart_self_copy(struct DtwTreePart *self){
     char *path = self->path->get_path(self->path);
 
-    DtwTreePart *new_tree_part = newDtwTreePart(path, false, false);
+    DtwTreePart *new_tree_part = newDtwTreePart(
+            path,
+            &(DtwTreeProps){.content =DTW_NOT_LOAD,.hadware_data = DTW_NOT_LOAD}
+    );
     free(path);
 
     new_tree_part->content_exist_in_memory = self->content_exist_in_memory;

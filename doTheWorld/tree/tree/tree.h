@@ -22,8 +22,7 @@ typedef struct  DtwTree{
     void (*add_tree_parts_from_string_array)(
         struct DtwTree *self,
         struct DtwStringArray *paths,
-        bool load_metadata,
-        bool preserve_content
+        DtwTreeProps *props
     );
     
     struct DtwTree *(*get_sub_tree)(
@@ -35,9 +34,7 @@ typedef struct  DtwTree{
     void (*add_tree_from_hardware)(
         struct DtwTree *self,
         const char *path,
-        bool load_content,
-        bool load_metadata,
-        bool preserve_path_start
+        DtwTreeProps *props
     );
     //Listage Functions
 
@@ -76,13 +73,13 @@ typedef struct  DtwTree{
 
     char *(*dumps_json_tree)(
             struct DtwTree *self,
-            DtwJsonTreeProps * props
+            DtwTreeProps * props
     );
     
     void (*dumps_json_tree_to_file)(
             struct DtwTree *self,
             const char *path,
-            DtwJsonTreeProps * props
+            DtwTreeProps * props
     );
 
     void (*free)(struct DtwTree *self);
@@ -127,16 +124,13 @@ void DtwTree_represent_tree(struct DtwTree *self);
 void DtwTree_add_tree_parts_from_string_array(
     struct DtwTree *self,
     struct DtwStringArray *paths,
-    bool load_content,
-    bool load_metadata
+    DtwTreeProps *props
 );
 
 void DtwTree_add_tree_from_hardware(
     struct DtwTree *self,
     const char *path,
-    bool load_content,
-    bool load_meta_data,
-    bool preserve_path_start
+    DtwTreeProps *props
 );
 
 struct DtwTransactionReport * DtwTree_create_report(struct DtwTree *self);
@@ -152,13 +146,13 @@ void DtwTree_loads_json_tree_from_file(struct DtwTree *self, const char *path);
 
 char * DtwTree_dumps_tree_json(
         struct DtwTree *self,
-        DtwJsonTreeProps * props
+        DtwTreeProps * props
     );
 
 void DtwTree_dumps_tree_json_to_file(
         struct DtwTree *self,
         const char *path,
-        DtwJsonTreeProps * props
+        DtwTreeProps * props
     );
 
 struct  DtwTree * newDtwTree();

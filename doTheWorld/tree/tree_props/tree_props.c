@@ -2,8 +2,8 @@
 // Created by jurandi on 01-07-2023.
 //
 
-DtwJsonTreeProps DtwTreeProps_format_props(DtwJsonTreeProps *props){
-    DtwJsonTreeProps result = {0};
+DtwTreeProps DtwTreeProps_format_props(DtwTreeProps *props){
+    DtwTreeProps result = {0};
 
     if(props){
         result = *props;
