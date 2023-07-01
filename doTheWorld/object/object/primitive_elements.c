@@ -65,8 +65,6 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name){
         return NULL;
     }
 
-
-
     if(self->mode == DTW_BY_REFERENCE){
         self->garbage_array->append(self->garbage_array, DTW_BINARY, result);
     }
