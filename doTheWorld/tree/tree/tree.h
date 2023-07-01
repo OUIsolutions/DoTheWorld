@@ -76,13 +76,13 @@ typedef struct  DtwTree{
 
     char *(*dumps_json_tree)(
             struct DtwTree *self,
-            DtwTreeProps * props
-    ); 
+            DtwJsonTreeProps * props
+    );
     
     void (*dumps_json_tree_to_file)(
             struct DtwTree *self,
             const char *path,
-            DtwTreeProps * props
+            DtwJsonTreeProps * props
     );
 
     void (*free)(struct DtwTree *self);
@@ -152,13 +152,13 @@ void DtwTree_loads_json_tree_from_file(struct DtwTree *self, const char *path);
 
 char * DtwTree_dumps_tree_json(
         struct DtwTree *self,
-        DtwTreeProps * props
+        DtwJsonTreeProps * props
     );
 
 void DtwTree_dumps_tree_json_to_file(
         struct DtwTree *self,
         const char *path,
-        DtwTreeProps * props
+        DtwJsonTreeProps * props
     );
 
 struct  DtwTree * newDtwTree();

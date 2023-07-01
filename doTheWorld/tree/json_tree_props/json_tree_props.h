@@ -5,7 +5,7 @@
 #define DTW_NOT_PRESERVE 1
 #define DTW_PRESERVE 2
 
-typedef struct DtwTreeProps{
+typedef struct DtwJsonTreeProps{
    int minification;
    int content;
    int path_atributes;
@@ -13,8 +13,8 @@ typedef struct DtwTreeProps{
    int content_data;
    int ignored_elements;
 
-}DtwTreeProps;
+}DtwJsonTreeProps;
 
 
 
-DtwTreeProps DtwJsonTreeProps_format_props( DtwTreeProps *props);
+DtwJsonTreeProps DtwJsonTreeProps_format_props(DtwJsonTreeProps *props);
