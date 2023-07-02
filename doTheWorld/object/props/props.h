@@ -19,3 +19,14 @@ DtwObjectProps dtw_no_store= {
         .garbage = DTW_NOT_GARBAGE,
         .cache =DTW_NOT_CACHE
 };
+
+DtwObjectProps execute_now = {
+        .transaction = DTW_EXECUTE_NOW
+};
+
+DtwObjectProps execute_now_and_no_store = {
+        .garbage = DTW_NOT_GARBAGE,
+        .cache =DTW_NOT_CACHE,
+        .transaction = DTW_EXECUTE_NOW
+};
+
