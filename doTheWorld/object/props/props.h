@@ -15,7 +15,7 @@ typedef struct DtwObjectProps{
 DtwObjectProps DtwObjectProps_create_props(DtwObjectProps *props);
 
 
-DtwObjectProps no_store= {
+DtwObjectProps dtw_no_store= {
         .garbage = DTW_NOT_GARBAGE,
         .cache =DTW_NOT_CACHE
 };
