@@ -10,9 +10,3 @@
 #define DTW_WRONG_TYPE -2
 
 
-
-
-#define DTW_ALLOW_CACHE true
-#define DTW_NOT_CACHE false
-
-#define DTW_RANDOMIC NULL
