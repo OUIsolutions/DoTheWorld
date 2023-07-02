@@ -1,5 +1,6 @@
 
-unsigned char * DtwObject_get_binary(struct DtwObject *self, const char *name, int *size){
+unsigned char * DtwObject_get_binary(struct DtwObject *self, const char *name, int *size,DtwObjectProps *props){
+    DtwObjectProps formated_props = DtwObjectProps_create_props(props);
 
     char *path = private_DtwObject_create_path(self,name);
     unsigned char *result =dtw_load_binary_content(path,size);
@@ -20,7 +21,7 @@ unsigned char * DtwObject_get_binary(struct DtwObject *self, const char *name, i
 
 
 
-    if(self->mode == DTW_BY_REFERENCE){
+    if(formated_props.garbage == DTW_ALLOW_GARBAGE){
         self->garbage_array->append(self->garbage_array,DTW_STRING,result);
     }
 
@@ -29,8 +30,8 @@ unsigned char * DtwObject_get_binary(struct DtwObject *self, const char *name, i
 
 }
 
-void DtwObject_set_binary(struct DtwObject *self, const char *name, unsigned  char *value, int size){
-
+void DtwObject_set_binary(struct DtwObject *self, const char *name, unsigned  char *value, int size,DtwObjectProps *props){
+    DtwObjectProps formated_props = DtwObjectProps_create_props(props);
     char *path = private_DtwObject_create_path(self, name);
     dtw_write_any_content(path,value,size);
 
@@ -38,7 +39,8 @@ void DtwObject_set_binary(struct DtwObject *self, const char *name, unsigned  ch
 
 }
 
-char * DtwObject_get_string(struct DtwObject *self,const char *name){
+char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectProps *props){
+    DtwObjectProps formated_props = DtwObjectProps_create_props(props);
 
     char *path = private_DtwObject_create_path(self,name);
     int size;
@@ -65,7 +67,7 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name){
         return NULL;
     }
 
-    if(self->mode == DTW_BY_REFERENCE){
+    if(formated_props.garbage == DTW_ALLOW_GARBAGE){
         self->garbage_array->append(self->garbage_array, DTW_BINARY, result);
     }
 
@@ -73,20 +75,19 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name){
 
 }
 
-void DtwObject_set_string(struct DtwObject *self,const char *name, const char *value) {
+void DtwObject_set_string(struct DtwObject *self,const char *name, const char *value,DtwObjectProps *props) {
 
+    DtwObjectProps formated_props = DtwObjectProps_create_props(props);
     char *path = private_DtwObject_create_path(self, name);
     dtw_write_string_file_content(path,value);
     free(path);
 
 }
 
-long DtwObject_get_long(struct DtwObject *self, const char *name){
-    int old_mode = self->mode;
-    self->mode = DTW_BY_OWNERSHIP;
-    char *result = self->get_string(self,name);
-    self->mode = old_mode;
+long DtwObject_get_long(struct DtwObject *self, const char *name,DtwObjectProps *props){
+    DtwObjectProps formated_props = DtwObjectProps_create_props(props);
 
+    char *result = self->get_string(self,name,&(DtwObjectProps){.garbage=DTW_NOT_GARBAGE});
 
     if(result){
         long result_converted;
@@ -102,18 +103,17 @@ long DtwObject_get_long(struct DtwObject *self, const char *name){
     return 0;
 }
 
-void DtwObject_set_long(struct DtwObject *self,const char *name, long value){
+void DtwObject_set_long(struct DtwObject *self,const char *name, long value,DtwObjectProps *props){
     char result[20] = {0};
     sprintf(result,"%li",value);
-    self->set_string(self,name,result);
+    self->set_string(self,name,result,NULL);
 }
 
 
-double DtwObject_get_double(struct DtwObject *self, const char *name){
-    int old_mode = self->mode;
-    self->mode = DTW_BY_OWNERSHIP;
-    char *result = self->get_string(self,name);
-    self->mode = old_mode;
+double DtwObject_get_double(struct DtwObject *self, const char *name,DtwObjectProps *props){
+
+
+    char *result = self->get_string(self,name,&(DtwObjectProps){.garbage=DTW_NOT_GARBAGE});
 
     if(result){
 
@@ -121,7 +121,7 @@ double DtwObject_get_double(struct DtwObject *self, const char *name){
         int test = sscanf(result,"%lf",&result_converted);
         free(result);
         if(test == 0){
-            self->mode = DTW_WRONG_TYPE;
+            self->error = DTW_WRONG_TYPE;
             return 0;
         }
         return result_converted;
@@ -132,8 +132,9 @@ double DtwObject_get_double(struct DtwObject *self, const char *name){
 
 
 
-void DtwObject_set_double(struct DtwObject *self,const char *name, double value){
+void DtwObject_set_double(struct DtwObject *self,const char *name, double value,DtwObjectProps *props){
+    DtwObjectProps formated_props = DtwObjectProps_create_props(props);
     char result[20] = {0};
     sprintf(result,"%f",value);
-    self->set_string(self,name,result);
+    self->set_string(self,name,result,NULL);
 }

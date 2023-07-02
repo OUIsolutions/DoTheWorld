@@ -26,8 +26,8 @@ char * private_DtwObject_create_path(struct DtwObject *self,const char *name){
 }
 
 
-DtwObject * DtwObject_sub_object(struct DtwObject *self,const char*name){
-
+DtwObject * DtwObject_sub_object(struct DtwObject *self,const char*name,DtwObjectProps *props){
+    DtwObjectProps formated_props = DtwObjectProps_create_props(props);
     char *path = private_DtwObject_create_path(self,name);
     DtwObject * new_obj = private_newDtwObject_raw();
     new_obj->path = path;
@@ -37,7 +37,7 @@ DtwObject * DtwObject_sub_object(struct DtwObject *self,const char*name){
         dtw_remove_any(path);
     }
 
-    if(self->mode == DTW_BY_REFERENCE){
+    if(formated_props.garbage == DTW_ALLOW_GARBAGE){
         self->garbage_array->append(self->garbage_array,DTW_OBJECT,new_obj);
     }
 
@@ -53,10 +53,10 @@ void DtwObject_destroy(struct DtwObject *self,const char *name){
     free(path);
 }
 
-DtwStringArray  * DtwObject_list_all(struct DtwObject *self){
-
+DtwStringArray  * DtwObject_list_all(struct DtwObject *self,DtwObjectProps *props){
+    DtwObjectProps formated_props = DtwObjectProps_create_props(props);
     DtwStringArray  *element = dtw_list_all(self->path,DTW_NOT_CONCAT_PATH);
-    if(self->mode == DTW_BY_REFERENCE){
+    if(formated_props.garbage == DTW_ALLOW_GARBAGE){
         self->garbage_array->append(self->garbage_array,DTW_STRING_ARRAY,element);
     }
     return element;

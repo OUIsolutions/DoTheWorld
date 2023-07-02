@@ -6,7 +6,6 @@ DtwObject * private_newDtwObject_raw(){
 
     DtwObject * self = (DtwObject*)malloc(sizeof(DtwObject));
     self->randonizer = NULL;
-    self->mode = DTW_BY_REFERENCE;
     self->error =  DTW_OK;
     self->garbage_array = newDtwGarbageArray();
     self->first_object = false;
