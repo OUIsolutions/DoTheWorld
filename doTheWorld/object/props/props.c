@@ -13,3 +13,10 @@ DtwObjectProps DtwObjectProps_create_props(DtwObjectProps *props){
     return result;
 
 }
+
+DtwObjectProps DtwObjectProps_not_store(){
+    DtwObjectProps props = {
+            .garbage = DTW_NOT_GARBAGE
+    };
+    return props;
+}

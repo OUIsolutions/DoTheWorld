@@ -86,8 +86,8 @@ void DtwObject_set_string(struct DtwObject *self,const char *name, const char *v
 
 long DtwObject_get_long(struct DtwObject *self, const char *name,DtwObjectProps *props){
     DtwObjectProps formated_props = DtwObjectProps_create_props(props);
-
-    char *result = self->get_string(self,name,&(DtwObjectProps){.garbage=DTW_NOT_GARBAGE});
+    DtwObjectProps no_store =DtwObjectProps_not_store();
+    char *result = self->get_string(self,name,&no_store);
 
     if(result){
         long result_converted;
@@ -112,8 +112,8 @@ void DtwObject_set_long(struct DtwObject *self,const char *name, long value,DtwO
 
 double DtwObject_get_double(struct DtwObject *self, const char *name,DtwObjectProps *props){
 
-
-    char *result = self->get_string(self,name,&(DtwObjectProps){.garbage=DTW_NOT_GARBAGE});
+    DtwObjectProps no_store =DtwObjectProps_not_store();
+    char *result = self->get_string(self,name,&no_store);
 
     if(result){
 

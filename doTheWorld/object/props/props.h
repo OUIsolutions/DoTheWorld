@@ -8,3 +8,5 @@ typedef struct DtwObjectProps{
 }DtwObjectProps;
 
 DtwObjectProps DtwObjectProps_create_props(DtwObjectProps *props);
+
+DtwObjectProps DtwObjectProps_not_store();
