@@ -5,8 +5,8 @@
 #define DTW_IGNORE true
 #define DTW_NOT_IGNORE false
 
-#define DTW_SET_AS_ACTION true
-#define DTW_EXECUTE_NOW false
+#define DTW_SET_AS_ACTION 1
+#define DTW_EXECUTE_NOW 2
 
 #define DTW_MODIFY 1
 #define DTW_WRITE 2
@@ -40,9 +40,9 @@ typedef struct DtwTreePart{
     void (*free_content)(struct DtwTreePart *self);
     void(*represent)(struct DtwTreePart *self);
     
-    bool(*hardware_remove)(struct DtwTreePart *self,bool set_as_action);
-    bool(*hardware_write)(struct DtwTreePart *self,bool set_as_action);
-    bool(*hardware_modify)(struct DtwTreePart *self,bool set_as_action);
+    bool(*hardware_remove)(struct DtwTreePart *self, int transaction);
+    bool(*hardware_write)(struct DtwTreePart *self, int transaction);
+    bool(*hardware_modify)(struct DtwTreePart *self, int transaction);
     bool(*hardware_commit)(struct DtwTreePart *self);
 
 
@@ -62,9 +62,9 @@ void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self);
 void DtwTreePart_free_content(struct DtwTreePart *self);
 void DtwTreePart_represent_tree_part(struct DtwTreePart *self);
 
-bool DtwTreePart_hardware_remove(struct DtwTreePart *self, bool set_as_action);
-bool DtwTreePart_hardware_write(struct DtwTreePart *self, bool set_as_action);
-bool DtwTreePart_hardware_modify(struct DtwTreePart *self, bool set_as_action);
+bool DtwTreePart_hardware_remove(struct DtwTreePart *self,int transaction);
+bool DtwTreePart_hardware_write(struct DtwTreePart *self,int transaction);
+bool DtwTreePart_hardware_modify(struct DtwTreePart *self,int transaction);
 
 
 bool DtwTreePart_hardware_commit(struct DtwTreePart *self);

@@ -10,26 +10,16 @@ DtwObjectProps DtwObjectProps_create_props(DtwObjectProps *props){
     if(!result.garbage){
         result.garbage =DTW_ALLOW_GARBAGE;
     }
+
     if(!result.cache){
         result.cache = DTW_ALLOW_CACHE;
+    }
+
+    if(!result.transaction){
+        result.transaction = DTW_SET_AS_ACTION;
     }
 
     return result;
 
 }
-
-
-DtwObjectProps no_garbage = {
-        .garbage = DTW_NOT_GARBAGE
-};
-
-
-DtwObjectProps no_cache= {
-        .cache =DTW_NOT_CACHE
-};
-
-DtwObjectProps no_store= {
-        .garbage = DTW_NOT_GARBAGE,
-        .cache =DTW_NOT_CACHE
-};
 
