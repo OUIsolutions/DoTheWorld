@@ -14,9 +14,7 @@ DtwObjectProps DtwObjectProps_create_props(DtwObjectProps *props){
 
 }
 
-DtwObjectProps DtwObjectProps_not_store(){
-    DtwObjectProps props = {
-            .garbage = DTW_NOT_GARBAGE
-    };
-    return props;
-}
+
+DtwObjectProps no_store = {
+        .garbage = DTW_NOT_GARBAGE
+};
