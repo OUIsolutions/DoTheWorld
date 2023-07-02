@@ -654,9 +654,9 @@ int main(){
             tree,
             "exemple_folder",
             &(DtwTreeProps){
-                    .content = DTW_INCLUDE,
-                    .hadware_data=DTW_INCLUDE,
-                    .path_atributes=DTW_INCLUDE
+                .content = DTW_INCLUDE,
+                .hadware_data=DTW_INCLUDE,
+                .path_atributes=DTW_INCLUDE
             }
     );
 
