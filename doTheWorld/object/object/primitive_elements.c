@@ -48,8 +48,11 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectPro
     bool is_binary;
 
 
-    if(props->cache == DTW_ALLOW_CACHE && props->update_cache == DTW_NOT_UPDATE_CACHE){
-        
+    if(formated_props.cache == DTW_ALLOW_CACHE){
+
+        if(formated_props.update_cache == DTW_NOT_UPDATE_CACHE){
+            
+        }
 
 
     }
