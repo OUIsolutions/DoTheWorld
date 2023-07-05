@@ -3,12 +3,16 @@
 #define DTW_ALLOW_CACHE 2
 #define DTW_NOT_GARBAGE 1
 #define DTW_ALLOW_GARBAGE 2
+#define DTW_NOT_UPDATE_CACHE 1
+#define DTW_UPDATE_CACHE 2
+
 
 typedef struct DtwObjectProps{
 
     int cache;
     int garbage;
     int transaction;
+    int update_cache;
 
 }DtwObjectProps;
 

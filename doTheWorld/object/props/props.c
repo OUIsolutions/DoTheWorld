@@ -18,6 +18,9 @@ DtwObjectProps DtwObjectProps_create_props(DtwObjectProps *props){
     if(!result.transaction){
         result.transaction = DTW_SET_AS_ACTION;
     }
+    if(!result.update_cache){
+        result.update_cache = DTW_NOT_UPDATE_CACHE;
+    }
 
     return result;
 

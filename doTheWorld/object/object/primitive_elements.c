@@ -35,6 +35,7 @@ void DtwObject_set_binary(struct DtwObject *self, const char *name, unsigned  ch
     char *path = private_DtwObject_create_path(self, name);
     dtw_write_any_content(path,value,size);
 
+
     free(path);
 
 }
@@ -46,6 +47,8 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectPro
     int size;
     bool is_binary;
     unsigned  char *result = dtw_load_any_content(path,&size,&is_binary);
+
+
 
     if(result == NULL){
         if(dtw_entity_type(path) == DTW_FOLDER_TYPE){
