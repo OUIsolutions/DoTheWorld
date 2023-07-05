@@ -38,7 +38,7 @@ int main(int argc, char *argv[]){
 
 ## Reading strings
 if you are sure that the content you are going to read is not binary you can call the function **dtw_load_string_file_content**
-<!--codeof:readme_exemples/loading_string.c-->
+<!--codeof:exemples/io/loading_string.c-->
 ~~~c
 
 #include "doTheWorld.h"
@@ -57,7 +57,7 @@ int main(int argc, char *argv[]){
 }
 ~~~
 
-<!--codeof:readme_exemples/loading_any.c-->
+<!--codeof:exemples/io/loading_any.c-->
 ~~~c
 #include "doTheWorld.h"
 
@@ -82,7 +82,7 @@ int main(int argc, char *argv[]){
 to write strings in text files is very simple, just call the function **dtw_write_string_file_content**
 (Note that the target directory does not need to exist, if it does not exist it will be created automatically)
 
-<!--codeof:readme_exemples/writing_strings.c-->
+<!--codeof:exemples/io/writing_strings.c-->
 ~~~c
 #include "doTheWorld.h"
 
@@ -97,7 +97,7 @@ int main(int argc, char *argv[]){
 
 if you want to write anything to a file, it's also very simple, use the **dtw_load_binary_content** function, but note that it will be necessary to pass the writing size
 
-<!--codeof:readme_exemples/writing_any.c-->
+<!--codeof:exemples/io/writing_any.c-->
 ~~~c
 #include "doTheWorld.h"
 
@@ -123,7 +123,7 @@ If you want to create dirs you can call the function **dtw_create_dir_recursivel
 passing the folder you want to create,dont wory about if the previews path dont exist 
 it will create till reachs the target folder
 
-<!--codeof:readme_exemples/create_dirs.c-->
+<!--codeof:exemples/io/create_dirs.c-->
 ~~~c
 #include "doTheWorld.h"
 
@@ -137,7 +137,7 @@ int main(int argc, char *argv[]){
 With the function **dtw_copy_any** you can copy either files or folders to one position to anoter position 
 ##### Copying files
 
-<!--codeof:readme_exemples/copying_files.c-->
+<!--codeof:exemples/io/copying_files.c-->
 ~~~c
 
 
@@ -152,7 +152,7 @@ int main(int argc, char *argv[]){
 
 You can move either folders or files with **dtw_move_any** function 
 
-<!--codeof:readme_exemples/#destructive#move_any.c-->
+<!--codeof:exemples/io/#destructive#move_any.c-->
 ~~~c
 
 #include "doTheWorld.h"
@@ -169,7 +169,7 @@ int main(int argc, char *argv[]){
 With the listage functions you can extract all Strings Arrays of elements in an folder 
 
 ## Listing files
-<!--codeof:readme_exemples/list_files.c-->
+<!--codeof:exemples/monodimension_listage/list_files.c-->
 ~~~c
 
 #include "doTheWorld.h"
@@ -184,7 +184,7 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
-<!--codeof:readme_exemples/list_dirs.c-->
+<!--codeof:exemples/monodimension_listage/list_dirs.c-->
 ~~~c
 
 
@@ -200,7 +200,7 @@ int main(int argc, char *argv[]){
 }
 ~~~
 
-<!--codeof:readme_exemples/list_all.c-->
+<!--codeof:exemples/monodimension_listage/list_all.c-->
 ~~~c
 
 
@@ -218,7 +218,7 @@ int main(int argc, char *argv[]){
 The By Using multi dimension listage functions , you can see all itens listed in all sub folders of the "main" folder 
 
 ## Listing Files Recursively
-<!--codeof:readme_exemples/list_files_recursively.c-->
+<!--codeof:exemples/multidimension_listage/list_files_recursively.c-->
 ~~~c
 
 #include "doTheWorld.h"
@@ -232,7 +232,7 @@ int main(int argc, char *argv[]){
 }
 ~~~
 
-<!--codeof:readme_exemples/list_dirs_recursively.c-->
+<!--codeof:exemples/multidimension_listage/list_dirs_recursively.c-->
 ~~~c
 
 #include "doTheWorld.h"
@@ -246,7 +246,7 @@ int main(int argc, char *argv[]){
 }
 ~~~
 
-<!--codeof:readme_exemples/list_all_recursively.c-->
+<!--codeof:exemples/multidimension_listage/list_all_recursively.c-->
 ~~~c
 
 #include "doTheWorld.h"
@@ -262,7 +262,7 @@ int main(int argc, char *argv[]){
 
 ## Dealing with base64 
 You can easly transform an binary file to an base64 string like these
-<!--codeof:readme_exemples/converting_file_to_base64.c-->
+<!--codeof:exemples/extras/converting_file_to_base64.c-->
 ~~~c
 
 #include "doTheWorld.h"
@@ -275,7 +275,7 @@ int main(int argc, char *argv[]){
 }
 ~~~
 
-<!--codeof:readme_exemples/converting_b64_to_binary.c-->
+<!--codeof:exemples/extras/converting_b64_to_binary.c-->
 ~~~c
 #include "doTheWorld.h"
 
@@ -289,7 +289,7 @@ int main(int argc, char *argv[]){
 }
 ~~~
 Generating Sha from file 
-<!--codeof:readme_exemples/generating_sha_from_file.c-->
+<!--codeof:exemples/extras/generating_sha_from_file.c-->
 ~~~c
 
 #include "doTheWorld.h"
@@ -303,7 +303,7 @@ int main(int argc, char *argv[]){
 ~~~
 
 ### Unix 
-<!--codeof:readme_exemples/geeting_file_last_modification_in_unix.c-->
+<!--codeof:exemples/extras/geeting_file_last_modification_in_unix.c-->
 ~~~c
 
 #include "doTheWorld.h"
@@ -313,7 +313,7 @@ int main(int argc, char *argv[]){
     printf("Last modification: %d\n", last_modification_in_unix);
 }
 ~~~
-<!--codeof:readme_exemples/geeting_file_last_modification.c-->
+<!--codeof:exemples/extras/geeting_file_last_modification.c-->
 ~~~c
 #include "doTheWorld.h"
 
@@ -330,7 +330,7 @@ with tree concepts, you can manipulate files as trees, and implement IO modifica
 ## Tree Parts 
 
 ### Loading An TreePart 
-<!--codeof:readme_exemples/loading_tree_part.c-->
+<!--codeof:exemples/tree_parts/loading_tree_part.c-->
 ~~~c
 
 
@@ -344,7 +344,7 @@ int main(){
     part->free(part);
 }
 ~~~
-<!--codeof:readme_exemples/creating_tree_part.c-->
+<!--codeof:exemples/trees/creating_tree_part.c-->
 ~~~c
 //
 // Created by jurandi on 20-06-2023.
@@ -362,7 +362,7 @@ int main(){
 }
 ~~~
 
-<!--codeof:readme_exemples/tree_part_content_modification.c-->
+<!--codeof:exemples/tree_parts/tree_part_content_modification.c-->
 ~~~c
 #include "doTheWorld.h"
 
@@ -383,7 +383,7 @@ int main(){
     part->free(part);
 }
 ~~~
-<!--codeof:readme_exemples/getting_path_paramns.c-->
+<!--codeof:exemples/path/getting_path_paramns.c-->
 ~~~c
 
 #include "doTheWorld.h"
@@ -416,7 +416,7 @@ int main(){
 
 ### Changing path Atributes at once 
 
-<!--codeof:readme_exemples/#destructive#change_path_attributes.c-->
+<!--codeof:exemples/path/#destructive#change_path_attributes.c-->
 ~~~c
 
 #include "doTheWorld.h"
@@ -446,7 +446,7 @@ way , you can create massive atomic transactions, and execute all at once
 ### hardware_modify
 Will Modificate the original content, for exemple, if you change the extension of an file, it will modificate the original content 
 
-<!--codeof:readme_exemples/#destructive#hardware_modify.c-->
+<!--codeof:exemples/tree_parts/#destructive#hardware_modify.c-->
 ~~~c
 #include "doTheWorld.h"
 
@@ -468,7 +468,7 @@ int main(){
 Will write the file as an "new" file, ignoring the existence of the 
 old file 
 
-<!--codeof:readme_exemples/#destructive#hardware_write.c-->
+<!--codeof:exemples/tree_parts/#destructive#hardware_write.c-->
 ~~~c
 
 #include "doTheWorld.h"
@@ -491,7 +491,7 @@ int main(){
 
 Will Delete the current Content 
 
-<!--codeof:readme_exemples/#destructive#hardware_remove.c-->
+<!--codeof:exemples/tree_parts/#destructive#hardware_remove.c-->
 ~~~c
 
 
@@ -513,7 +513,7 @@ With Trees you can make massive folders and files modifications with
 easy steps 
 ### Loading Tree From Hardware
 
-<!--codeof:readme_exemples/add_tree_from_hardware.c-->
+<!--codeof:exemples/trees/add_tree_from_hardware.c-->
 ~~~c
 //
 // Created by jurandi on 20-06-2023.
@@ -537,7 +537,7 @@ int main(){
     tree->free(tree);
 }
 ~~~
-<!--codeof:readme_exemples/tree_iteration.c-->
+<!--codeof:exemples/trees/tree_iteration.c-->
 ~~~c
 //
 // Created by jurandi on 20-06-2023.
@@ -563,7 +563,7 @@ int main(){
 }
 ~~~
 
-<!--codeof:readme_exemples/find_tree_part_by_name.c-->
+<!--codeof:exemples/trees/find_tree_part_by_name.c-->
 ~~~c
 //
 // Created by jurandi on 20-06-2023.
@@ -593,7 +593,7 @@ int main(){
 
 }
 ~~~
-<!--codeof:readme_exemples/find_tree_part_by_full_path.c-->
+<!--codeof:exemples/trees/find_tree_part_by_full_path.c-->
 ~~~c
 //
 // Created by jurandi on 20-06-2023.
@@ -625,7 +625,7 @@ int main(){
 
 ~~~
 
-<!--codeof:readme_exemples/finding_tree_part_by_function.c-->
+<!--codeof:exemples/trees/finding_tree_part_by_function.c-->
 ~~~c
 //
 // Created by jurandi on 20-06-2023.
@@ -677,7 +677,7 @@ Trees suports even Maps or filters, it returns an new tree of the of the current
 #### Filter 
 with filter you can filter the contents you want in an tree with an bool lambda
 
-<!--codeof:readme_exemples/tree_filter.c-->
+<!--codeof:exemples/trees/tree_filter.c-->
 ~~~c
 //
 // Created by jurandi on 20-06-2023.
@@ -719,7 +719,7 @@ int main(){
     tree->free(tree);
 }
 ~~~
-<!--codeof:readme_exemples/tree_map.c-->
+<!--codeof:exemples/trees/tree_map.c-->
 ~~~c
 //
 // Created by jurandi on 20-06-2023.
@@ -765,7 +765,7 @@ int main(){
 With **hardware_commit_tree** you can commit all modifications at Once 
 turning system ultra securty
 
-<!--codeof:readme_exemples/#destructive#tree_commit.c-->
+<!--codeof:exemples/trees/#destructive#tree_commit.c-->
 ~~~c
 //
 // Created by jurandi on 20-06-2023.
@@ -807,7 +807,7 @@ int main(){
 ~~~
 
 With transactin Reports , you can see what will be modified
-<!--codeof:readme_exemples/transaction_report.c-->
+<!--codeof:exemples/trees/transaction_report.c-->
 ~~~c
 //
 // Created by jurandi on 20-06-2023.
@@ -851,7 +851,7 @@ With Json Trees Operations you can save or load trees, from hardware or strings 
 
 #### Dumping Tree Json To File 
 It will transform the tree in an json document
-<!--codeof:readme_exemples/dumps_json_tree_to_file.c-->
+<!--codeof:exemples/trees/dumps_json_tree_to_file.c-->
 ~~~c
 //
 // Created by jurandi on 20-06-2023.
@@ -886,7 +886,7 @@ int main(){
     tree->free(tree);
 }
 ~~~
-<!--codeof:readme_exemples/dumps_json_tree_to_string.c-->
+<!--codeof:exemples/trees/dumps_json_tree_to_string.c-->
 ~~~c
 
 #include "doTheWorld.h"
@@ -922,7 +922,7 @@ int main(){
 If you want to recuperate the file you saved in the json file
 you can load it 
 
-<!--codeof:readme_exemples/loads_json_tree_from_file.c-->
+<!--codeof:exemples/trees/loads_json_tree_from_file.c-->
 ~~~c
 //
 // Created by jurandi on 20-06-2023.
@@ -967,7 +967,7 @@ int main(){
 
 
 
-<!--codeof:readme_exemples/loads_json_tree_from_string.c-->
+<!--codeof:exemples/trees/loads_json_tree_from_string.c-->
 ~~~c
 //
 // Created by jurandi on 20-06-2023.
