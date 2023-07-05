@@ -1,5 +1,5 @@
 
-DtwObjectDict * newDtwSubObjectKeyVal(){
+DtwObjectDict * newDtwObjectDict(){
 
     DtwObjectDict *self = (DtwObjectDict*) malloc(sizeof (DtwObjectDict));
     self->elements = malloc(0);

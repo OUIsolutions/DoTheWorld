@@ -46,14 +46,14 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectPro
     char *path = private_DtwObject_create_path(self,name);
     int size;
     bool is_binary;
+    bool load_result;
+    char *result_text;
 
+    if(formated_props.update_cache == DTW_NOT_UPDATE_CACHE){
+        load_result = true;
+    }
 
-    if(formated_props.cache == DTW_ALLOW_CACHE){
-
-        if(formated_props.update_cache == DTW_NOT_UPDATE_CACHE){
-            
-        }
-
+    else if(formated_props.cache == DTW_ALLOW_CACHE){
 
     }
     unsigned  char *result = dtw_load_any_content(path,&size,&is_binary);

@@ -10,7 +10,7 @@ typedef struct DtwObjectDict{
 
 }DtwObjectDict;
 
-DtwObjectDict * newDtwSubObjectKeyVal();
+DtwObjectDict * newDtwObjectDict();
 void DtwObjectDict_append(struct DtwObjectDict *self, DtwKeyVal *object);
 DtwKeyVal * DtwObjectDict_get(struct DtwObjectDict *self, const char *name);
 void DtwObjectDict_free(struct DtwObjectDict *self);

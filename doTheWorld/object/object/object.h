@@ -8,7 +8,8 @@ typedef struct DtwObject{
 
     DtwRandonizer  *randonizer;
     DtwGarbageArray  *garbage_array;
-    
+    DtwObjectDict  *dict;
+
     unsigned char *(*get_binary)(struct DtwObject *self, const char *name, int *size,DtwObjectProps *props);
     void (*set_binary)(struct DtwObject *self, const char *name, unsigned  char *value, int size,DtwObjectProps *props);
 
