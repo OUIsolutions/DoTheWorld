@@ -1,5 +1,6 @@
 
 #define DTW_OBJECT DTW_FOLDER_TYPE
+#define DTW_NONE DTW_NOT_FOUND
 #define DTW_LONG 3
 #define DTW_DOUBLE 4
 #define DTW_STRING 5

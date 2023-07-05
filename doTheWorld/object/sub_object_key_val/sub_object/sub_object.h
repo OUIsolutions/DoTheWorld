@@ -4,11 +4,12 @@ typedef struct DtwSubObject{
 
     char *key;
 
-    double number_value;
     void *any_value;
     int size;
     int type;
 
 }DtwSubObject;
 
-DtwSubObject * newDtwSubObject();
+DtwSubObject * newDtwSubObject(char *key,void *any_value,int type,int size);
+
+void DtwSubObject_free(DtwSubObject *self);
