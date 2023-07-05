@@ -21,7 +21,7 @@ DtwObjectProps DtwObjectProps_create_props(DtwObjectProps *props){
     }
 
     if(!result.update_cache){
-        result.update_cache = DTW_UPDATE_CACHE;
+        result.update_cache = DTW_NOT_UPDATE_CACHE;
     }
 
     return result;
