@@ -46,9 +46,14 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectPro
     char *path = private_DtwObject_create_path(self,name);
     int size;
     bool is_binary;
+
+
+    if(props->cache == DTW_ALLOW_CACHE && props->update_cache == DTW_NOT_UPDATE_CACHE){
+        
+
+
+    }
     unsigned  char *result = dtw_load_any_content(path,&size,&is_binary);
-
-
 
     if(result == NULL){
         if(dtw_entity_type(path) == DTW_FOLDER_TYPE){

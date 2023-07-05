@@ -1,14 +1,14 @@
 
 
-typedef struct DtwSubObject{
+typedef struct DtwKeyVal{
 
     char *key;
     void *any_value;
     int size;
     int type;
 
-}DtwSubObject;
+}DtwKeyVal;
 
-DtwSubObject * newDtwSubObject(char *key,void *any_value,int type,int size);
+DtwKeyVal * newDtwKeyVal(char *key, void *any_value, int type, int size);
 
-void DtwSubObject_free(DtwSubObject *self);
+void DtwKeyVal_free(DtwKeyVal *self);
