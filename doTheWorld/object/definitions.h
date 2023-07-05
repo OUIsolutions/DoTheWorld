@@ -1,5 +1,4 @@
-//#include "sub_object/sub_object.c"
-//#include "sub_object_key_vall/sub_object_key_val.c"
+#include "sub_object/definitions.h"
 #include "props/props.c"
 #include "garbage/garbage.c"
 #include "garbage_array/garbage_array.c"
