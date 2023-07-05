@@ -3,7 +3,6 @@
 typedef struct DtwSubObject{
 
     char *key;
-
     void *any_value;
     int size;
     int type;

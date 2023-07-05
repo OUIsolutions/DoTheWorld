@@ -1,7 +1,7 @@
 
-DtwSubObjectKeyVal * newDtwSubObjectKeyVal(){
+DtwObjectDict * newDtwSubObjectKeyVal(){
 
-    DtwSubObjectKeyVal *self = (DtwSubObjectKeyVal*) malloc(sizeof (DtwSubObjectKeyVal));
+    DtwObjectDict *self = (DtwObjectDict*) malloc(sizeof (DtwObjectDict));
     self->elements = malloc(0);
     self->size = 0;
 
@@ -11,13 +11,13 @@ DtwSubObjectKeyVal * newDtwSubObjectKeyVal(){
 
 
 }
-void DtwSubObjectArray_append(struct DtwSubObjectKeyVal *self, DtwSubObject *object){
+void DtwSubObjectArray_append(struct DtwObjectDict *self, DtwSubObject *object){
     self->elements = (DtwSubObject**) realloc(self->elements,(self->size+1)*sizeof (DtwSubObject*));
     self->elements[self->size] = object;
     self->size+=1;
 }
 
-DtwSubObject * DtwSubObjectArray_get(struct DtwSubObjectKeyVal *self, const char *name){
+DtwSubObject * DtwSubObjectArray_get(struct DtwObjectDict *self, const char *name){
     for(int i = 0; i < self->size;i++){
         DtwSubObject *current = self->elements[i];
         if(strcmp(current->key,name) == 0){
@@ -28,7 +28,7 @@ DtwSubObject * DtwSubObjectArray_get(struct DtwSubObjectKeyVal *self, const char
 }
 
 
-void DtwSubObjectArray_free(struct DtwSubObjectKeyVal *self){
+void DtwSubObjectArray_free(struct DtwObjectDict *self){
     for(int i = 0; i <self->size;i++){
         //free the object here
         free(self->elements[i]);
