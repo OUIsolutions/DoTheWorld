@@ -36,6 +36,7 @@
         "tree_part.h": "c",
         "bitset": "c",
         "ostream": "cpp",
-        "dotheworldmain.h": "c"
+        "dotheworldmain.h": "c",
+        "istream": "c"
     }
 }

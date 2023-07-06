@@ -12,7 +12,7 @@ OUTPUT = 'doTheWorld.h'
 
 
 def execute_test_for_folder(folder:str):
-    
+    ct.execute_test_for_folder('gcc','tests/readonly')
 
 
 
