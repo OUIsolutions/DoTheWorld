@@ -15,8 +15,11 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectPro
                 name
          );
          if(keyval){
+
              if(keyval->type == DTW_STRING){
-                result_text = (char*)keyval->any_value;
+                 printf("fez a leitura da HEAP\n");
+
+                 result_text = (char*)keyval->any_value;
                 load_result = false;
              }
              else{
@@ -30,8 +33,7 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectPro
     }
 
     if(load_result){
-        printf("carregou\n");
-
+        printf("fez a leitura do disco\n");
         int size;
         bool is_binary;
         unsigned char *possible_string = dtw_load_any_content(path,&size,&is_binary);
@@ -72,13 +74,16 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectPro
 
     //to avoid duplication
     if(formated_props.garbage == DTW_ALLOW_GARBAGE && formated_props.cache ==DTW_NOT_CACHE){
+        printf("adicionou ao garbage");
         self->garbage_array->append(self->garbage_array, DTW_BINARY, result_text);
     }
 
     if(formated_props.garbage == DTW_NOT_GARBAGE){
+        printf("retornou uma cópia");
         return strdup(result_text);
     }
 
+    printf("retornou uma referencia");
     return result_text;
 
 }

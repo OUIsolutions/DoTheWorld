@@ -1,5 +1,5 @@
 
-DtwKeyVal * newDtwKeyVal(char *key, void *any_value, int type, int size){
+DtwKeyVal * newDtwKeyVal(const char *key, void *any_value, int type, int size){
     DtwKeyVal  *self = (DtwKeyVal*) malloc(sizeof (DtwKeyVal));
     self->key = strdup(key);
     self->any_value = any_value;

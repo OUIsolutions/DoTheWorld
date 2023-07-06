@@ -9,6 +9,6 @@ typedef struct DtwKeyVal{
 
 }DtwKeyVal;
 
-DtwKeyVal * newDtwKeyVal(char *key, void *any_value, int type, int size);
+DtwKeyVal * newDtwKeyVal(const char *key, void *any_value, int type, int size);
 
 void DtwKeyVal_free(DtwKeyVal *self);
