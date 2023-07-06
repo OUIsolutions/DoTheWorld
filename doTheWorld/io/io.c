@@ -105,7 +105,7 @@ unsigned char *dtw_load_any_content(const char * path,long *size,bool *is_binary
 
 
 char *dtw_load_string_file_content(const char * path){
-    int size;
+    long size;
     bool is_binary;
     unsigned char *element = dtw_load_any_content(path,&size,&is_binary);
     if(is_binary){
@@ -116,7 +116,7 @@ char *dtw_load_string_file_content(const char * path){
 }
 
 
-unsigned char *dtw_load_binary_content(const char * path,int *size){
+unsigned char *dtw_load_binary_content(const char * path,long *size){
     bool is_binary;
     return dtw_load_any_content(path,size,&is_binary);
 }
