@@ -12,13 +12,13 @@ OUTPUT = 'doTheWorld.h'
 
 
 
-def execute_test_for_folder(folder:str):
+def execute_test_for_folder():
     ct.execute_test_for_folder('gcc','tests/readonly')
-
+    
 
 
 ct.generate_amalgamated_code(STARTER,OUTPUT_TEST)
-#execute_test_for_folder('exemples')
+execute_test_for_folder()
 
 
 '''
