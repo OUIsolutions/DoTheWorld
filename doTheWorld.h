@@ -3936,7 +3936,7 @@ const char base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxy
 char *dtw_base64_encode(unsigned char *data, size_t input_length);
 
 
-unsigned char *dtw_base64_decode(char *data, size_t input_length, size_t *output_length);
+unsigned char *dtw_base64_decode(const char *data, size_t *output_length);
 
 
 char *dtw_convert_binary_file_to_base64(const char *path);
@@ -3984,13 +3984,14 @@ bool dtw_remove_any(const char* path);
 char *dtw_get_current_dir();
 
 
-unsigned char *dtw_load_any_content(const char * path,int *size,bool *is_binary);
+unsigned char *dtw_load_any_content(const char * path,long *size,bool *is_binary);
+
 char *dtw_load_string_file_content(const char * path);
 
-unsigned char *dtw_load_binary_content(const char * path,int *size);
+unsigned char *dtw_load_binary_content(const char * path,long *size);
 
 
-bool dtw_write_any_content(const char *path,unsigned  char *content,int size);
+bool dtw_write_any_content(const char *path,unsigned  char *content,long size);
 bool dtw_write_string_file_content(const char *path,const char *content);
 int dtw_entity_type(const char *path);
 
@@ -4456,7 +4457,8 @@ char *dtw_base64_encode(unsigned char *data, size_t input_length){
 }
 
 
-unsigned char *dtw_base64_decode(char *data, size_t input_length, size_t *output_length){
+unsigned char *dtw_base64_decode(const char *data, size_t *output_length){
+    unsigned long input_length = strlen(data);
     if (input_length % 4 != 0) return NULL;
 
     *output_length = input_length / 4 * 3;
@@ -4490,7 +4492,7 @@ unsigned char *dtw_base64_decode(char *data, size_t input_length, size_t *output
 }
 
 char *dtw_convert_binary_file_to_base64(const char *path){
-     int size;
+     long size;
      unsigned char *data  = dtw_load_binary_content(path, &size);
     char *b64   = dtw_base64_encode(data, size);
     free(data);
@@ -4781,7 +4783,7 @@ bool dtw_remove_any(const char* path) {
 }
 
 
-unsigned char *dtw_load_any_content(const char * path,int *size,bool *is_binary){
+unsigned char *dtw_load_any_content(const char * path,long *size,bool *is_binary){
     FILE *file = fopen(path,"rb");
     if(file == NULL){
         free(file);
@@ -4825,7 +4827,7 @@ char *dtw_load_string_file_content(const char * path){
 }
 
 
-unsigned char *dtw_load_binary_content(const char * path,int *size){
+unsigned char *dtw_load_binary_content(const char * path,long *size){
     FILE *file = fopen(path,"rb");
     if(file == NULL){
         return NULL;
@@ -4840,7 +4842,7 @@ unsigned char *dtw_load_binary_content(const char * path,int *size){
 }
 
 
-bool dtw_write_any_content(const char *path,unsigned  char *content,int size){
+bool dtw_write_any_content(const char *path,unsigned  char *content,long size){
     //Iterate through the path and create directories if they don't exist
     
     for(int i = strlen(path)-1;i > 0;i--){
@@ -4905,7 +4907,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
 
     if(type == DTW_FILE_TYPE){
     
-        int size;
+        long size;
         bool is_binary;
         unsigned char *content = dtw_load_any_content(src_path,&size,&is_binary);
         bool result =  dtw_write_any_content(dest_path,content,size);
@@ -4936,7 +4938,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
     struct DtwStringArray *files = dtw_list_files_recursively(src_path,DTW_CONCAT_PATH);
    
     for(int i = 0; i < files->size; i++){
-        int file_size;
+        long file_size;
         bool is_binary;
         unsigned char *content = dtw_load_any_content(files->strings[i],&file_size,&is_binary);
         char *new_path = private_dtw_change_beginning_of_string(files->strings[i],src_path_size,dest_path);
@@ -5807,7 +5809,7 @@ void DtwTreePart_free(struct DtwTreePart *self){
 
 
 void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self){
-    int size;
+    long size;
     bool is_binary;
     char *path = self->path->get_path(self->path);
     if(dtw_entity_type(path) != DTW_FILE_TYPE){
@@ -6453,7 +6455,6 @@ void DtwTree_loads_json_tree(struct DtwTree *self, const char *content){
                 size_t out_size;
                 unsigned char *decoded =dtw_base64_decode(
                     content->valuestring,
-                    strlen(content->valuestring),
                     &out_size
                 );
                 part->set_binary_content(part,decoded,(int)out_size);

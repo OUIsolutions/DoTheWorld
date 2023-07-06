@@ -64,7 +64,7 @@ int main(int argc, char *argv[]){
 int main(int argc, char *argv[]){
  
   const char *path = "exemple_folder/deer.jpg";
-  int size;
+  long size;
   bool is_binary;
   //load any file, is useful if you don't know if the file is binary or not
   unsigned char *content = dtw_load_any_content(path,&size,&is_binary);
@@ -72,7 +72,7 @@ int main(int argc, char *argv[]){
     printf("error oppening %s\n",path);
     return 1;
   }
-  printf("size: %d\n",size);
+  printf("size: %ld\n",size);
   printf("is_binary: %s\n",is_binary ? "true" : "false");
   free(content);
   return 0;
@@ -104,14 +104,14 @@ if you want to write anything to a file, it's also very simple, use the **dtw_lo
 int main(int argc, char *argv[]){
   //load the beer image
   const char *deer_path = "exemple_folder/deer.jpg";
-  int deer_size;
+  long deer_size;
   unsigned char *content = dtw_load_binary_content(deer_path,&deer_size);
   //use these functions for binary files
   if(content == NULL){
     printf("error oppening %s\n",deer_path);
     return 1;
   }
-  printf("size: %d\n",deer_size);
+  printf("size: %ld\n",deer_size);
 
   bool result = dtw_write_any_content("output_folder/deer.jpg",content,deer_size);
   printf("result: %s\n",result ? "true" : "false");
