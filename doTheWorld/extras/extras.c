@@ -3,6 +3,9 @@ char * dtw_generate_sha_from_file(const char *path){
     return calc_sha_256_from_file_returning_string(path);
 }
 
+char * dtw_generate_sha_from_any(void *anything , long size){
+    return calc_sha_256_returning_string(anything,size);
+}   
 
 char * dtw_generate_sha_from_string(const char *string){
     return calc_sha_256_from_string_returning_string(string);

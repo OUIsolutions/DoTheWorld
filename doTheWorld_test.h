@@ -3945,6 +3945,8 @@ char *dtw_convert_binary_file_to_base64(const char *path);
 
 char * dtw_generate_sha_from_file(const char *path);
 char * dtw_generate_sha_from_string(const char *string);
+char * dtw_generate_sha_from_any(void *anything , long size);
+
 long int dtw_get_file_last_motification_in_unix(const char *path);
 char * dtw_convert_unix_time_to_string(long int unix_time);
 char * dtw_get_file_last_motification_in_string(const char *path);
@@ -4504,6 +4506,9 @@ char * dtw_generate_sha_from_file(const char *path){
     return calc_sha_256_from_file_returning_string(path);
 }
 
+char * dtw_generate_sha_from_any(void *anything , long size){
+    return calc_sha_256_returning_string(anything,size);
+}   
 
 char * dtw_generate_sha_from_string(const char *string){
     return calc_sha_256_from_string_returning_string(string);
