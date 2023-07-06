@@ -1,14 +1,14 @@
 
 
 
-DtwGarbage * newDtwObjectGarbage(int type, void *value){
-    DtwGarbage *self = (DtwGarbage*) malloc(sizeof (DtwGarbage));
+DtwGarbageElement * newDtwObjectGarbage(int type, void *value){
+    DtwGarbageElement *self = (DtwGarbageElement*) malloc(sizeof (DtwGarbageElement));
     self->type = type;
     self->value = value;
 }
 
 
-void DtwObjectGarbage_free(struct DtwGarbage *self){
+void DtwObjectGarbage_free(struct DtwGarbageElement *self){
 
     if(self->type == DTW_STRING || self->type == DTW_BINARY){
         free(self->value);

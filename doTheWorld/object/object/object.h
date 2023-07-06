@@ -7,7 +7,7 @@ typedef struct DtwObject{
     int error;
 
     DtwRandonizer  *randonizer;
-    DtwGarbageArray  *garbage_array;
+    DtwGarbage  *garbage_array;
     DtwObjectDict  *loaded_elements;
 
     unsigned char *(*get_binary)(struct DtwObject *self, const char *name, int *size,DtwObjectProps *props);
