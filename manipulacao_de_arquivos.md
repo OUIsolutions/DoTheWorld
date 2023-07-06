@@ -107,3 +107,31 @@ int main(){
   dtw_write_any_content("teste.txt",conteudo,tamanho);
 }
 ~~~
+
+### Copiando qualquer coisa
+como ja dito anteriormente a lib não diferencia pastas de arquivos, então 
+para copiar algo, basta chamar a função **dtw_copy_any**
+
+Copiando arquivos
+~~~c
+  #include "doTheWorld.h"
+
+int main(){ 
+  //copia arquivos
+  bool consseguiu_arquivo = dtw_copy_any(
+    "test.txt",
+    "saida.json",
+    DTW_NOT_MERGE
+  );
+  printf("resultado arquivo :%s\n",consseguiu_arquivo? "positivo":"negativo");
+
+  //copia pasta
+  bool consseguiu_pasta = dtw_copy_any(
+    "output_folder",
+    "saida",
+    DTW_NOT_MERGE
+  );
+  printf("resultado pasta :%s\n",consseguiu_pasta? "positivo":"negativo");
+}
+~~~
+
