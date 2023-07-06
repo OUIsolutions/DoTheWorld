@@ -20,7 +20,7 @@ unsigned char * DtwObject_get_binary(struct DtwObject *self, const char *name, i
 
 
 
-    if(formated_props.garbage == DTW_ALLOW_GARBAGE){
+    if(formated_props.cache == DTW_ALLOW_CACHE){
         self->garbage_array->append(self->garbage_array,DTW_STRING,result);
     }
 
