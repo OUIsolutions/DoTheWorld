@@ -59,6 +59,7 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectPro
             return NULL;
         }
         result_text = (char*)possible_string;
+
         //making the first upload
         if(formated_props.cache == DTW_ALLOW_CACHE){
 
@@ -74,16 +75,16 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectPro
 
     //to avoid duplication
     if(formated_props.garbage == DTW_ALLOW_GARBAGE && formated_props.cache ==DTW_NOT_CACHE){
-        printf("adicionou ao garbage");
+        printf("adicionou ao garbage\n");
         self->garbage_array->append(self->garbage_array, DTW_BINARY, result_text);
     }
 
     if(formated_props.garbage == DTW_NOT_GARBAGE){
-        printf("retornou uma cópia");
+        printf("retornou uma cópia\n");
         return strdup(result_text);
     }
 
-    printf("retornou uma referencia");
+    printf("retornou uma referencia\n");
     return result_text;
 
 }

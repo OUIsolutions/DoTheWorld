@@ -31,8 +31,9 @@ DtwKeyVal * DtwObjectDict_get(struct DtwObjectDict *self, const char *name){
 void DtwObjectDict_free(struct DtwObjectDict *self){
     for(int i = 0; i <self->size;i++){
         //free the object here
-        free(self->elements[i]);
+        DtwKeyVal_free(self->elements[i]);
     }
+    free(self->elements);
     free(self);
 }
 

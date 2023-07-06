@@ -62,6 +62,8 @@ void DtwObject_destroy(struct DtwObject *self,const char *name);
 DtwStringArray  * DtwObject_list_all(struct DtwObject *self,DtwObjectProps *props);
 
 DtwObject * DtwObject_sub_object(struct DtwObject *self,const char*name,DtwObjectProps *props);
+
+
 int DtwObject_type_of(struct DtwObject *self,const char*name);
 char *DtwObject_inspect_type(struct DtwObject *self,int type);
 

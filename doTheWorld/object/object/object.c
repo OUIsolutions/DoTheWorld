@@ -63,6 +63,8 @@ DtwStringArray  * DtwObject_list_all(struct DtwObject *self,DtwObjectProps *prop
 }
 
 
+
+
 int DtwObject_type_of(struct DtwObject *self,const char*name){
     char *path = private_DtwObject_create_path(self,name);
 
@@ -129,6 +131,7 @@ void DtwObject_free(struct DtwObject *self){
     if(self->first_object){
         self->randonizer->free(self->randonizer);
     }
+    self->loaded_elements->free(self->loaded_elements);
     self->garbage_array->free(self->garbage_array);
     free(self->path);
     free(self);
