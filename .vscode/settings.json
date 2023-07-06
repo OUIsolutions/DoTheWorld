@@ -37,6 +37,7 @@
         "bitset": "c",
         "ostream": "cpp",
         "dotheworldmain.h": "c",
-        "istream": "c"
+        "istream": "c",
+        "dotheworld_test.h": "c"
     }
 }
