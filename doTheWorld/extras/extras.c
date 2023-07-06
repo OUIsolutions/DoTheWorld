@@ -124,7 +124,7 @@ struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *path
             continue;
         }
 
-        new_array->add_string(new_array,new_string);
+        new_array->append(new_array, new_string,DTW_BY_VALUE);
         free(new_string);
 
     }
@@ -139,3 +139,5 @@ void private_dtw_remove_double_bars(struct DtwStringArray*path){
         free(result);
     }
 }
+
+

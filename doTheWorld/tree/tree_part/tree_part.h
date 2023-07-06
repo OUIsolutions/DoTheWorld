@@ -1,18 +1,12 @@
 
-#define DTW_LOAD_CONTENT  true
-#define DTW_NOT_LOAD_CONTENT  false
-
-#define DTW_LOAD_METADATA true
-#define DTW_NOT_LOAD_METADATA false
-
 
 #define DTW_IS_BINARY true
 #define DTW_IS_NOT_BINARY false
 #define DTW_IGNORE true
 #define DTW_NOT_IGNORE false
 
-#define DTW_SET_AS_ACTION true
-#define DTW_EXECUTE_NOW false
+#define DTW_SET_AS_ACTION 1
+#define DTW_EXECUTE_NOW 2
 
 #define DTW_MODIFY 1
 #define DTW_WRITE 2
@@ -46,9 +40,9 @@ typedef struct DtwTreePart{
     void (*free_content)(struct DtwTreePart *self);
     void(*represent)(struct DtwTreePart *self);
     
-    bool(*hardware_remove)(struct DtwTreePart *self,bool set_as_action);
-    bool(*hardware_write)(struct DtwTreePart *self,bool set_as_action);
-    bool(*hardware_modify)(struct DtwTreePart *self,bool set_as_action);
+    bool(*hardware_remove)(struct DtwTreePart *self, int transaction);
+    bool(*hardware_write)(struct DtwTreePart *self, int transaction);
+    bool(*hardware_modify)(struct DtwTreePart *self, int transaction);
     bool(*hardware_commit)(struct DtwTreePart *self);
 
 
@@ -68,9 +62,9 @@ void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self);
 void DtwTreePart_free_content(struct DtwTreePart *self);
 void DtwTreePart_represent_tree_part(struct DtwTreePart *self);
 
-bool DtwTreePart_hardware_remove(struct DtwTreePart *self, bool set_as_action);
-bool DtwTreePart_hardware_write(struct DtwTreePart *self, bool set_as_action);
-bool DtwTreePart_hardware_modify(struct DtwTreePart *self, bool set_as_action);
+bool DtwTreePart_hardware_remove(struct DtwTreePart *self,int transaction);
+bool DtwTreePart_hardware_write(struct DtwTreePart *self,int transaction);
+bool DtwTreePart_hardware_modify(struct DtwTreePart *self,int transaction);
 
 
 bool DtwTreePart_hardware_commit(struct DtwTreePart *self);
@@ -78,4 +72,6 @@ bool DtwTreePart_hardware_commit(struct DtwTreePart *self);
 void DtwTreePart_free(struct DtwTreePart *self);
 struct DtwTreePart * DtwTreePart_self_copy(struct DtwTreePart *self);
 
-struct DtwTreePart * newDtwTreePart(const char *path, bool load_content, bool load_meta_data);
+struct DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps *props);
+struct DtwTreePart * newDtwTreePartEmpty(const char *path);
+struct DtwTreePart * newDtwTreePartLoading(const char *path);

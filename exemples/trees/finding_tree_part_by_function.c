@@ -24,9 +24,11 @@ int main(){
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_START
+            &(DtwTreeProps){
+                .content = DTW_INCLUDE,
+                .hadware_data=DTW_INCLUDE,
+                .path_atributes=DTW_INCLUDE
+            }
     );
 
 

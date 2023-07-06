@@ -10,7 +10,7 @@
 void dtw_create_dir_recursively(const char *path){
     bool check = dtw_create_dir(path);
   
-    int size_path = strlen(path);
+    long size_path = strlen(path);
     for(int i=0;i <  size_path;i++){
         if(path[i] == '\\'  || path[i] == '/'   && i != size_path - 1){
             
@@ -71,12 +71,19 @@ bool dtw_remove_any(const char* path) {
 
 unsigned char *dtw_load_any_content(const char * path,long *size,bool *is_binary){
     FILE *file = fopen(path,"rb");
+
     if(file == NULL){
-        free(file);
         return NULL;
     }
+
     fseek(file,0,SEEK_END);
     *size = ftell(file);
+
+    if(*size == -1){
+        fclose(file);
+        return NULL;
+    }
+
     fseek(file,0,SEEK_SET);
     unsigned char *content = (unsigned char*)malloc(*size +1);
     fread(content,1,*size,file);
@@ -98,40 +105,27 @@ unsigned char *dtw_load_any_content(const char * path,long *size,bool *is_binary
 
 
 char *dtw_load_string_file_content(const char * path){
-    FILE *file = fopen(path,"r");
-    if(file == NULL){
+    int size;
+    bool is_binary;
+    unsigned char *element = dtw_load_any_content(path,&size,&is_binary);
+    if(is_binary){
+        free(element);
         return NULL;
     }
-    fseek(file,0,SEEK_END);
-    int size = ftell(file);
-    fseek(file,0,SEEK_SET);
-    char *content = (char*)malloc(size +1);
-    fread(content,1,size,file);
-    content[size] = '\0';
-    fclose(file);
-    return content;
+    return (char*)element;
 }
 
 
-unsigned char *dtw_load_binary_content(const char * path,long *size){
-    FILE *file = fopen(path,"rb");
-    if(file == NULL){
-        return NULL;
-    }
-    fseek(file,0,SEEK_END);
-    *size = ftell(file);
-    fseek(file,0,SEEK_SET);
-    unsigned char *content = (unsigned char*)malloc(*size);
-    fread(content,1,*size,file);
-    fclose(file);
-    return content;
+unsigned char *dtw_load_binary_content(const char * path,int *size){
+    bool is_binary;
+    return dtw_load_any_content(path,size,&is_binary);
 }
 
 
 bool dtw_write_any_content(const char *path,unsigned  char *content,long size){
     //Iterate through the path and create directories if they don't exist
     
-    for(int i = strlen(path)-1;i > 0;i--){
+    for(long i = strlen(path)-1;i > 0;i--){
         //runs in negative mode til / or \ is found
         if(path[i] == '\\' || path[i] == '/'){
             char *dir_path =(char*)malloc(i +2);
@@ -181,6 +175,7 @@ int dtw_entity_type(const char *path){
         }
     }
     return DTW_NOT_FOUND;
+
 }
 
 bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
@@ -212,14 +207,13 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
     int size = dirs->size;
     int src_path_size = strlen(src_path);
 
-    for(int i = 0; i < size; i++){
-        
+    for(int i = 0; i < size; i++){        
         char *new_path_dir = private_dtw_change_beginning_of_string(dirs->strings[i],src_path_size,dest_path);
         dtw_create_dir_recursively(new_path_dir);
         free(new_path_dir);
     }
     dirs->free(dirs);
-    
+
 
     struct DtwStringArray *files = dtw_list_files_recursively(src_path,DTW_CONCAT_PATH);
    

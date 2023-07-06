@@ -43,7 +43,7 @@ SOFTWARE.
 #include "string_array/string_array.h"
 
 #include "base64/base64.h"
-
+#include "randonizer/randonizer.h"
 #include "extras/extras.h"
 #include "string_functions/string_functions.h"
 #include "io/io.h"
@@ -51,14 +51,13 @@ SOFTWARE.
 #include "monodimension_listage/monodimension_listage.h"
 #include "multidimension_listage/multidimension_listage.h"
 #include "path/path.h"
-#include "transaction_report/transaction_report.h"
-#include "json_error/json_error.h"
-#include "tree_part/tree_part.h"
-#include "tree/tree.h"
-//#include "object/object.h"
+
+#include "tree/declarations.h"
+#include "object/declarations.h"
 
 
 #include "base64/base64.c"
+#include "randonizer/randonizer.c"
 #include "extras/extras.c"
 #include "string_functions/string_functions.c"
 #include "io/io.c"
@@ -68,14 +67,8 @@ SOFTWARE.
 #include "multidimension_listage/multidimension_listage.c"
 #include "path/path.c"
 #include "string_array/string_array.c"
-#include "tree_part/tree_part.c"
-#include "tree_part/hardware_tree_part.c"
-#include "tree/tree.c"
-#include "tree/tree_finding.c"
-#include "json_error/json_error.c"
-#include "tree/json_tree.c"
-#include "transaction_report/transaction_report.c"
-///#include "object/object.c"
+#include "tree/definitions.h"
+#include "object/definitions.h"
 
 #endif //DO_THE_WORLD_H
 

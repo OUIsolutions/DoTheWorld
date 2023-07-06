@@ -18,11 +18,10 @@ void DtwTree_loads_json_tree(struct DtwTree *self, const char *content){
         cJSON *pending_action = cJSON_GetObjectItemCaseSensitive(json_tree_part, "pending_action");
         cJSON *ignore = cJSON_GetObjectItemCaseSensitive(json_tree_part, "ignore");
    
-        struct DtwTreePart *part = newDtwTreePart(
-                path->valuestring,
-                false,
-                false
-        );
+        struct DtwTreePart *part = newDtwTreePartEmpty(
+                path->valuestring
+                );
+
         if(original_path != NULL){
             part->path->original_path = (char *)realloc(part->path->original_path,strlen(original_path->valuestring)+1);
             strcpy(part->path->original_path,original_path->valuestring);
@@ -91,8 +90,11 @@ void DtwTree_loads_json_tree_from_file(struct DtwTree *self, const char *path){
     free(content);
 }
 
-char * DtwTree_dumps_tree_json(struct DtwTree *self, bool minify, bool preserve_content, bool preserve_path_atributes, bool preserve_hadware_data, bool preserve_content_data, bool consider_igonore){
-    
+char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwTreeProps * props){
+
+
+    DtwTreeProps formated_props = DtwTreeProps_format_props(props);
+
     cJSON *json_array = cJSON_CreateArray();
     for(int i = 0; i < self->size; i++){
        
@@ -103,7 +105,7 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, bool minify, bool preserve_
             cJSON_Delete(json_tree_part);
             continue;
         }
-        if(consider_igonore == DTW_NOT_CONSIDER_IGNORE && tree_part->ignore){
+        if(formated_props.ignored_elements == DTW_INCLUDE && tree_part->ignore){
             continue;
         }
         
@@ -123,8 +125,7 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, bool minify, bool preserve_
         
         
         
-        if(preserve_path_atributes == true){
-
+        if(formated_props.path_atributes == DTW_INCLUDE ){
                 char *dir_string = tree_part->path->get_dir(tree_part->path);
                 char *full_name_string = tree_part->path->get_full_name(tree_part->path);
                 char *name_string = tree_part->path->get_name(tree_part->path);
@@ -136,7 +137,6 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, bool minify, bool preserve_
                         cJSON_CreateString(tree_part->path->original_path)
                     );
                 }
-
                 cJSON_AddItemToObject(
                     json_tree_part, 
                     "dir", 
@@ -168,7 +168,7 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, bool minify, bool preserve_
         }
 
 
-        if(preserve_hadware_data == true && tree_part->metadata_loaded){
+        if(formated_props.hadware_data == DTW_INCLUDE && tree_part->metadata_loaded){
             cJSON_AddItemToObject(
                 json_tree_part, 
                 "hardware_sha256", 
@@ -197,7 +197,7 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, bool minify, bool preserve_
             
         }
 
-        if(preserve_content_data && tree_part->content_exist_in_memory){
+        if(formated_props.content_data == DTW_INCLUDE && tree_part->content_exist_in_memory){
             char *content_sha = tree_part->get_content_sha(tree_part);
             cJSON_AddItemToObject(
                 json_tree_part, 
@@ -214,7 +214,7 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, bool minify, bool preserve_
             free(content_sha);
         }
 
-        if(preserve_content && tree_part->content_exist_in_memory){
+        if(formated_props.content == DTW_INCLUDE && tree_part->content_exist_in_memory){
 
             cJSON_AddItemToObject(
                 json_tree_part, 
@@ -258,15 +258,15 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, bool minify, bool preserve_
     
     char *json_string = cJSON_Print(json_array);
     //set ident to 4 spaces
-    if(minify == true){
+    if(formated_props.minification == DTW_MIMIFY){
         cJSON_Minify(json_string);
     }
     cJSON_Delete(json_array);
     return json_string;
 }
 
-void  DtwTree_dumps_tree_json_to_file(struct DtwTree *self, const char *path, bool minify, bool preserve_content, bool preserve_path_atributes, bool preserve_hadware_data, bool preserve_content_data, bool consider_igonore){
-    char *json_string = self->dumps_json_tree(self, minify, preserve_content, preserve_path_atributes, preserve_hadware_data, preserve_content_data, consider_igonore);
+void  DtwTree_dumps_tree_json_to_file(struct DtwTree *self, const char *path, DtwTreeProps * props){
+    char *json_string = self->dumps_json_tree(self,props);
     dtw_write_string_file_content(path,json_string);
     free(json_string);
 }

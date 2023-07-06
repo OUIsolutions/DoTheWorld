@@ -1,18 +1,4 @@
 
-#define DTW_NOT_MINIFY  false
-#define DTW_MINIFY  true
-#define DTW_NOT_PRESERVE_PATH_ATRIBUTES  false
-#define DTW_PRESERVE_PATH_ATRIBUTES  true
-#define DTW_NOT_PRESERVE_HARDWARE_DATA  false
-#define DTW_PRESERVE_HARDWARE_DATA  true
-#define DTW_NOT_PRESERVE_CONTENT_DATA  false
-#define DTW_PRESERVE_CONTENT_DATA  true
-#define DTW_COPY_CONTENT  true 
-#define DTW_PASS_BY_REFERENCE  false
-#define DTW_CONSIDER_IGNORE  true
-#define DTW_NOT_CONSIDER_IGNORE  false
-#define DTW_PRESERVE_PATH_START true
-#define DTW_NOT_PRESERVE_PATH_START false
 
 
 typedef struct  DtwTree{
@@ -33,11 +19,11 @@ typedef struct  DtwTree{
         struct DtwTree *self,
         struct DtwTreePart *tree_part
     );
+
     void (*add_tree_parts_from_string_array)(
         struct DtwTree *self,
         struct DtwStringArray *paths,
-        bool load_metadata,
-        bool preserve_content
+        DtwTreeProps *props
     );
     
     struct DtwTree *(*get_sub_tree)(
@@ -49,9 +35,7 @@ typedef struct  DtwTree{
     void (*add_tree_from_hardware)(
         struct DtwTree *self,
         const char *path,
-        bool load_content,
-        bool load_metadata,
-        bool preserve_path_start
+        DtwTreeProps *props
     );
     //Listage Functions
 
@@ -74,7 +58,7 @@ typedef struct  DtwTree{
     struct DtwTreePart *(*find_part_by_path)(   struct DtwTree *self,const char *path);
 
 
-    struct DtwTransactionReport * (*report)(struct DtwTree *self);    
+    struct DtwTreeTransactionReport * (*report)(struct DtwTree *self);
     //{%if not  lite %}
 
     void (*loads_json_tree)(
@@ -89,24 +73,14 @@ typedef struct  DtwTree{
     );
 
     char *(*dumps_json_tree)(
-        struct DtwTree *self,
-        bool minify,
-        bool preserve_content,
-        bool preserve_path_atributes,
-        bool preserve_hadware_data,
-        bool preserve_content_data,
-        bool consider_igonore
-    ); 
+            struct DtwTree *self,
+            DtwTreeProps * props
+    );
     
     void (*dumps_json_tree_to_file)(
-        struct DtwTree *self,
-        const char *path,
-        bool minify,
-        bool preserve_content,
-        bool preserve_path_atributes,
-        bool preserve_hadware_data,
-        bool preserve_content_data,
-        bool consider_igonore
+            struct DtwTree *self,
+            const char *path,
+            DtwTreeProps * props
     );
 
     void (*free)(struct DtwTree *self);
@@ -151,19 +125,16 @@ void DtwTree_represent_tree(struct DtwTree *self);
 void DtwTree_add_tree_parts_from_string_array(
     struct DtwTree *self,
     struct DtwStringArray *paths,
-    bool load_content,
-    bool load_metadata
+    DtwTreeProps *props
 );
 
 void DtwTree_add_tree_from_hardware(
     struct DtwTree *self,
     const char *path,
-    bool load_content,
-    bool load_meta_data,
-    bool preserve_path_start
+    DtwTreeProps *props
 );
 
-struct DtwTransactionReport * DtwTree_create_report(struct DtwTree *self);
+struct DtwTreeTransactionReport * DtwTree_create_report(struct DtwTree *self);
 
 
 void DtwTree_insecure_hardware_remove_tree(struct DtwTree *self);
@@ -175,24 +146,14 @@ void DtwTree_loads_json_tree(struct DtwTree *self, const char *content);
 void DtwTree_loads_json_tree_from_file(struct DtwTree *self, const char *path);
 
 char * DtwTree_dumps_tree_json(
-    struct DtwTree *self,
-    bool minify,
-    bool preserve_content,
-    bool preserve_path_atributes,
-    bool preserve_hadware_data,
-    bool preserve_content_data,
-    bool consider_igonore
+        struct DtwTree *self,
+        DtwTreeProps * props
     );
 
 void DtwTree_dumps_tree_json_to_file(
-    struct DtwTree *self,
-    const char *path,
-    bool minify,
-    bool preserve_content,
-    bool preserve_path_atributes,
-    bool preserve_hadware_data,
-    bool preserve_content_data,
-    bool consider_igonore
+        struct DtwTree *self,
+        const char *path,
+        DtwTreeProps * props
     );
 
 struct  DtwTree * newDtwTree();

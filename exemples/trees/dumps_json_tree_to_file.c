@@ -10,19 +10,22 @@ int main(){
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_START
+            &(DtwTreeProps){
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_INCLUDE,
+                    .path_atributes=DTW_INCLUDE
+            }
     );
     tree->dumps_json_tree_to_file(
             tree,
             "test.json",
-            DTW_NOT_MINIFY,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_ATRIBUTES,
-            DTW_PRESERVE_HARDWARE_DATA,
-            DTW_PRESERVE_CONTENT_DATA,
-            DTW_CONSIDER_IGNORE
+            &(DtwTreeProps){
+                    .minification = DTW_MIMIFY,
+                    .ignored_elements=DTW_HIDE,
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_INCLUDE,
+                    .path_atributes=DTW_INCLUDE
+            }
     );
 
     tree->free(tree);

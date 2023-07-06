@@ -27,11 +27,11 @@ void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self){
 
 
 
-bool DtwTreePart_hardware_remove(struct DtwTreePart *self, bool set_as_action){
+bool DtwTreePart_hardware_remove(struct DtwTreePart *self, int transaction){
      if(self->ignore == true){
         return false;
      }
-     if(set_as_action){
+     if(transaction == DTW_SET_AS_ACTION){
         self->pending_action = DTW_REMOVE;
         return false;
      }
@@ -45,11 +45,11 @@ bool DtwTreePart_hardware_remove(struct DtwTreePart *self, bool set_as_action){
     return true;
 }
 
-bool DtwTreePart_hardware_write(struct DtwTreePart *self, bool set_as_action){
+bool DtwTreePart_hardware_write(struct DtwTreePart *self, int transaction){
     if(self->ignore == true){
         return false;
     }
-    if(set_as_action){
+    if(transaction == DTW_SET_AS_ACTION){
         self->pending_action = DTW_WRITE;
         return false;
     }   
@@ -86,11 +86,11 @@ bool DtwTreePart_hardware_write(struct DtwTreePart *self, bool set_as_action){
   
 }
 
-bool DtwTreePart_hardware_modify(struct DtwTreePart *self, bool set_as_action){
+bool DtwTreePart_hardware_modify(struct DtwTreePart *self, int transaction){
     if(self->ignore == true){
         return false;
     }
-    if(set_as_action){
+    if(transaction == DTW_SET_AS_ACTION){
         self->pending_action = DTW_MODIFY;
         return false;
     }
@@ -144,6 +144,7 @@ bool DtwTreePart_hardware_modify(struct DtwTreePart *self, bool set_as_action){
     }
     return false;
 }
+
 bool DtwTreePart_hardware_commit(struct DtwTreePart *self){
     if(self->ignore == true){
         return false;

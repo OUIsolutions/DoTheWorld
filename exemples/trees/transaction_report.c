@@ -9,9 +9,11 @@ int main(){
     tree->add_tree_from_hardware(
             tree,
             "exemple_folder",
-            DTW_LOAD_CONTENT,
-            DTW_LOAD_METADATA,
-            DTW_PRESERVE_PATH_START
+            &(DtwTreeProps){
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_INCLUDE,
+                    .path_atributes=DTW_INCLUDE
+            }
     );
     for(int i=0; i < tree->size;i++){
         DtwTreePart *part = tree->tree_parts[i];
@@ -28,7 +30,7 @@ int main(){
         }
         free(extension);
     }
-    DtwTransactionReport *report = tree->report(tree);
+    DtwTreeTransactionReport *report = tree->report(tree);
     report->represent(report);
     report->free(report);
     tree->free(tree);

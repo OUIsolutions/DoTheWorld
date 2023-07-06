@@ -8,7 +8,6 @@ In These Current Markdown you will see some basic exemples of usage of these lib
 but if you want to get an deep knolege see at **exemples** folder, you will find an lot of exemplos of how you can use DoTheWorld
 
 # Installation
-
 The installation of DoTheWorld is made to be as dumb as possible, just  download the file  amalgamation **doTheWorld.h**  and include in your project.
 if this compiles then the library will work:
 ~~~c
@@ -56,7 +55,7 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
-
+### Reading Any Content
 <!--codeof:exemples/io/loading_any.c-->
 ~~~c
 #include "doTheWorld.h"
@@ -78,7 +77,7 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
-
+### Writing Strings
 to write strings in text files is very simple, just call the function **dtw_write_string_file_content**
 (Note that the target directory does not need to exist, if it does not exist it will be created automatically)
 
@@ -94,8 +93,8 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
-
-if you want to write anything to a file, it's also very simple, use the **dtw_load_binary_content** function, but note that it will be necessary to pass the writing size
+### Writing Any
+if you want to write anything to a file, it's also very simple, use the **dtw_write_any_content** function, but note that it will be necessary to pass the writing size
 
 <!--codeof:exemples/io/writing_any.c-->
 ~~~c
@@ -119,6 +118,7 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
+### Creating Dirs
 If you want to create dirs you can call the function **dtw_create_dir_recursively**
 passing the folder you want to create,dont wory about if the previews path dont exist 
 it will create till reachs the target folder
@@ -134,8 +134,8 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
+### Copying Anything
 With the function **dtw_copy_any** you can copy either files or folders to one position to anoter position 
-##### Copying files
 
 <!--codeof:exemples/io/copying_files.c-->
 ~~~c
@@ -149,9 +149,8 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
-
-You can move either folders or files with **dtw_move_any** function 
-
+### Moving Any
+You can move either folders or files with **dtw_move_any** function
 <!--codeof:exemples/io/#destructive#move_any.c-->
 ~~~c
 
@@ -184,6 +183,7 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
+### Listing Dirs
 <!--codeof:exemples/monodimension_listage/list_dirs.c-->
 ~~~c
 
@@ -199,7 +199,7 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
-
+### Listing All
 <!--codeof:exemples/monodimension_listage/list_all.c-->
 ~~~c
 
@@ -231,6 +231,7 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
+## Listing Dirs Recursively
 
 <!--codeof:exemples/multidimension_listage/list_dirs_recursively.c-->
 ~~~c
@@ -246,6 +247,7 @@ int main(int argc, char *argv[]){
 }
 ~~~
 
+## Listing All Recursively
 <!--codeof:exemples/multidimension_listage/list_all_recursively.c-->
 ~~~c
 
@@ -274,7 +276,7 @@ int main(int argc, char *argv[]){
     free(deerb64);
 }
 ~~~
-
+You also can reconvert an base64 string to binary
 <!--codeof:exemples/extras/converting_b64_to_binary.c-->
 ~~~c
 #include "doTheWorld.h"
@@ -301,8 +303,8 @@ int main(int argc, char *argv[]){
    free(hash);
 }
 ~~~
+### Unix
 
-### Unix 
 <!--codeof:exemples/extras/geeting_file_last_modification_in_unix.c-->
 ~~~c
 
@@ -344,6 +346,7 @@ int main(){
     part->free(part);
 }
 ~~~
+### Creating an empty tree Part
 <!--codeof:exemples/trees/creating_tree_part.c-->
 ~~~c
 //
@@ -362,6 +365,7 @@ int main(){
 }
 ~~~
 
+### Modifying an tree part
 <!--codeof:exemples/tree_parts/tree_part_content_modification.c-->
 ~~~c
 #include "doTheWorld.h"
@@ -383,6 +387,8 @@ int main(){
     part->free(part);
 }
 ~~~
+
+### Retriing Paths Paramns
 <!--codeof:exemples/path/getting_path_paramns.c-->
 ~~~c
 
@@ -537,6 +543,8 @@ int main(){
     tree->free(tree);
 }
 ~~~
+
+### Iterating over An Tree
 <!--codeof:exemples/trees/tree_iteration.c-->
 ~~~c
 //
@@ -563,6 +571,7 @@ int main(){
 }
 ~~~
 
+### Finding An Tree by name
 <!--codeof:exemples/trees/find_tree_part_by_name.c-->
 ~~~c
 //
@@ -593,6 +602,8 @@ int main(){
 
 }
 ~~~
+
+### Finding An Tree by Path
 <!--codeof:exemples/trees/find_tree_part_by_full_path.c-->
 ~~~c
 //
@@ -624,7 +635,7 @@ int main(){
 }
 
 ~~~
-
+### Finding An Tree by Function
 <!--codeof:exemples/trees/finding_tree_part_by_function.c-->
 ~~~c
 //
@@ -719,6 +730,8 @@ int main(){
     tree->free(tree);
 }
 ~~~
+
+### Map 
 <!--codeof:exemples/trees/tree_map.c-->
 ~~~c
 //
