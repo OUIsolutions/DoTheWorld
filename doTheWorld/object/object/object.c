@@ -37,9 +37,10 @@ DtwObject * DtwObject_sub_object(struct DtwObject *self,const char*name,DtwObjec
         dtw_remove_any(path);
     }
 
-    if(formated_props.garbage == DTW_ALLOW_GARBAGE){
+    if(formated_props.cache == DTW_ALLOW_CACHE){
         self->garbage_array->append(self->garbage_array,DTW_OBJECT,new_obj);
     }
+
 
     return new_obj;
 
@@ -56,7 +57,7 @@ void DtwObject_destroy(struct DtwObject *self,const char *name){
 DtwStringArray  * DtwObject_list_all(struct DtwObject *self,DtwObjectProps *props){
     DtwObjectProps formated_props = DtwObjectProps_create_props(props);
     DtwStringArray  *element = dtw_list_all(self->path,DTW_NOT_CONCAT_PATH);
-    if(formated_props.garbage == DTW_ALLOW_GARBAGE){
+    if(formated_props.cache == DTW_ALLOW_CACHE){
         self->garbage_array->append(self->garbage_array,DTW_STRING_ARRAY,element);
     }
     return element;

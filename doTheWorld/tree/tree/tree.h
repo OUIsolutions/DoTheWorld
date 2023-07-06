@@ -19,6 +19,7 @@ typedef struct  DtwTree{
         struct DtwTree *self,
         struct DtwTreePart *tree_part
     );
+
     void (*add_tree_parts_from_string_array)(
         struct DtwTree *self,
         struct DtwStringArray *paths,
@@ -57,7 +58,7 @@ typedef struct  DtwTree{
     struct DtwTreePart *(*find_part_by_path)(   struct DtwTree *self,const char *path);
 
 
-    struct DtwTransactionReport * (*report)(struct DtwTree *self);    
+    struct DtwTreeTransactionReport * (*report)(struct DtwTree *self);
     //{%if not  lite %}
 
     void (*loads_json_tree)(
@@ -133,7 +134,7 @@ void DtwTree_add_tree_from_hardware(
     DtwTreeProps *props
 );
 
-struct DtwTransactionReport * DtwTree_create_report(struct DtwTree *self);
+struct DtwTreeTransactionReport * DtwTree_create_report(struct DtwTree *self);
 
 
 void DtwTree_insecure_hardware_remove_tree(struct DtwTree *self);

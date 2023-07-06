@@ -9,15 +9,7 @@ DtwKeyVal * newDtwKeyVal(const char *key, void *any_value, int type, int size){
 }
 
 void DtwKeyVal_free(DtwKeyVal *self){
-    if(self->type != DTW_NONE){
-        if(self->type == DTW_OBJECT){
-            DtwObject *element = (DtwObject*)self->any_value;
-            element->free(element);
-        }
-        else{
-            free(self->any_value);
-        }
-    }
+
     free(self->key);
     free(self);
 

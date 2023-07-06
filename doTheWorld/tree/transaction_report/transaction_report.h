@@ -1,12 +1,12 @@
 
-typedef struct DtwTransactionReport{
+typedef struct DtwTreeTransactionReport{
     struct DtwStringArray *write;
     struct DtwStringArray *modify;
     struct DtwStringArray *remove;
-    void (*represent)(struct DtwTransactionReport *report);
-    void (*free)(struct DtwTransactionReport *report);
-}DtwTransactionReport;
+    void (*represent)(struct DtwTreeTransactionReport *report);
+    void (*free)(struct DtwTreeTransactionReport *report);
+}DtwTreeTransactionReport;
 
-struct DtwTransactionReport * newDtwTransactionReport();
-void  DtwTransactionReport_represent(struct DtwTransactionReport *report);
-void  DtwTransactionReport_free(struct DtwTransactionReport *report);
+struct DtwTreeTransactionReport * newDtwTreeTransactionReport();
+void  DtwTreeTransactionReport_represent(struct DtwTreeTransactionReport *report);
+void  DtwTreeTransactionReport_free(struct DtwTreeTransactionReport *report);

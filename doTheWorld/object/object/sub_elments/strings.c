@@ -68,23 +68,12 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectPro
                     self->loaded_elements,
                     keyval
             );
+            self->garbage_array->append(self->garbage_array, DTW_STRING, result_text);
 
         }
     }
     free(path);
 
-    //to avoid duplication
-    if(formated_props.garbage == DTW_ALLOW_GARBAGE && formated_props.cache ==DTW_NOT_CACHE){
-        printf("adicionou ao garbage\n");
-        self->garbage_array->append(self->garbage_array, DTW_BINARY, result_text);
-    }
-
-    if(formated_props.garbage == DTW_NOT_GARBAGE){
-        printf("retornou uma cópia\n");
-        return strdup(result_text);
-    }
-
-    printf("retornou uma referencia\n");
     return result_text;
 
 }

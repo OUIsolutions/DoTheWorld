@@ -4179,7 +4179,7 @@ typedef struct DtwTransactionReport{
     void (*free)(struct DtwTransactionReport *report);
 }DtwTransactionReport;
 
-struct DtwTransactionReport * newDtwTransactionReport();
+struct DtwTransactionReport * newDtwTreeTransactionReport();
 void  DtwTransactionReport_represent(struct DtwTransactionReport *report);
 void  DtwTransactionReport_free(struct DtwTransactionReport *report);
 
@@ -5995,7 +5995,7 @@ void DtwJsonError_free_json_error(struct DtwJsonError *self){
 
 
 
-struct DtwTransactionReport * newDtwTransactionReport(){
+struct DtwTransactionReport * newDtwTreeTransactionReport(){
     struct DtwTransactionReport *new_report = (struct DtwTransactionReport *)malloc(sizeof(struct DtwTransactionReport));
     new_report->write = newDtwStringArray();
     new_report->modify = newDtwStringArray();

@@ -1,16 +1,16 @@
 
 
-struct DtwTransactionReport * newDtwTransactionReport(){
-    struct DtwTransactionReport *new_report = (struct DtwTransactionReport *)malloc(sizeof(struct DtwTransactionReport));
+struct DtwTreeTransactionReport * newDtwTreeTransactionReport(){
+    struct DtwTreeTransactionReport *new_report = (struct DtwTreeTransactionReport *)malloc(sizeof(struct DtwTreeTransactionReport));
     new_report->write = newDtwStringArray();
     new_report->modify = newDtwStringArray();
     new_report->remove = newDtwStringArray();
-    new_report->represent = DtwTransactionReport_represent;
-    new_report->free = DtwTransactionReport_free;
+    new_report->represent = DtwTreeTransactionReport_represent;
+    new_report->free = DtwTreeTransactionReport_free;
     return new_report;
 }
 
-void  DtwTransactionReport_represent(struct DtwTransactionReport *report){
+void  DtwTreeTransactionReport_represent(struct DtwTreeTransactionReport *report){
     printf("Write:---------------------------------------\n");
     report->write->represent(report->write);
     printf("Modify:--------------------------------------\n");
@@ -20,7 +20,7 @@ void  DtwTransactionReport_represent(struct DtwTransactionReport *report){
     puts("");
 }
 
-void  DtwTransactionReport_free(struct DtwTransactionReport *report){
+void  DtwTreeTransactionReport_free(struct DtwTreeTransactionReport *report){
     report->write->free(report->write);
     report->modify->free(report->modify);
     report->remove->free(report->remove);

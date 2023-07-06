@@ -841,7 +841,7 @@ int main(){
         }
         free(extension);
     }
-    DtwTransactionReport *report = tree->report(tree);
+    DtwTreeTransactionReport *report = tree->report(tree);
     report->represent(report);
     report->free(report);
     tree->free(tree);
