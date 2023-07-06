@@ -70,15 +70,18 @@ bool dtw_remove_any(const char* path) {
 
 
 unsigned char *dtw_load_any_content(const char * path,long *size,bool *is_binary){
-    FILE *file = fopen(path,"rb");
 
-    if(file == NULL){
+    int entity = dtw_entity_type(path);
+    if(entity != DTW_FILE_TYPE){
         return NULL;
     }
 
+    FILE *file = fopen(path,"rb");
+
+
     fseek(file,0,SEEK_END);
     *size = ftell(file);
-
+    
     if(*size == -1){
         fclose(file);
         return NULL;
