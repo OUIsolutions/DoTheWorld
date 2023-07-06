@@ -136,3 +136,27 @@ int main(){
 
 ### Movendo qualquer coisa 
 Da mesma forma também é possível mover qualquer coisa em C usando a função
+**dtw_move_any**
+~~~c
+#include "doTheWorld.h"
+
+int main(){ 
+  //copia arquivos
+  bool consseguiu_arquivo = dtw_move_any(
+      "README.md",
+      "saida.md",
+      DTW_NOT_MERGE
+  );
+  printf("resultado arquivo :%s\n",consseguiu_arquivo? "positivo":"negativo");
+
+    //copia arquivos
+  bool consseguiu_pasta = dtw_move_any(
+      "output_folder",
+      "saida",
+      DTW_NOT_MERGE
+  );
+  printf("resultado pasta :%s\n",consseguiu_pasta? "positivo":"negativo");
+}
+~~~
+
+### Removendo arquivos
