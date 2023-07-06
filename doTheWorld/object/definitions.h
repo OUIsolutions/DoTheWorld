@@ -4,4 +4,7 @@
 #include "garbage_array/garbage_array.c"
 #include "object/object.c"
 #include "object/constructors.c"
-#include "object/primitive_elements.c"
+#include "object/sub_elments/long.c"
+#include "object/sub_elments/double.c"
+#include "object/sub_elments/strings.c"
+#include "object/sub_elments/binary.c"
