@@ -56,7 +56,7 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
-
+## Reading Anything 
 <!--codeof:readme_exemples/loading_any.c-->
 ~~~c
 #include "doTheWorld.h"
@@ -95,7 +95,7 @@ int main(int argc, char *argv[]){
 }
 ~~~
 
-if you want to write anything to a file, it's also very simple, use the **dtw_load_binary_content** function, but note that it will be necessary to pass the writing size
+if you want to write anything to a file, it's also very simple, use the **dtw_write_any_content** function, but note that it will be necessary to pass the writing size
 
 <!--codeof:readme_exemples/writing_any.c-->
 ~~~c
@@ -119,6 +119,7 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
+### Creating Dir
 If you want to create dirs you can call the function **dtw_create_dir_recursively**
 passing the folder you want to create,dont wory about if the previews path dont exist 
 it will create till reachs the target folder
@@ -149,7 +150,7 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
-
+### Moving any
 You can move either folders or files with **dtw_move_any** function 
 
 <!--codeof:readme_exemples/#destructive#move_any.c-->
@@ -168,7 +169,7 @@ int main(int argc, char *argv[]){
 
 With the listage functions you can extract all Strings Arrays of elements in an folder 
 
-## Listing files
+### Listing files
 <!--codeof:readme_exemples/list_files.c-->
 ~~~c
 
@@ -184,6 +185,7 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
+### Listing Dirs
 <!--codeof:readme_exemples/list_dirs.c-->
 ~~~c
 
@@ -199,7 +201,7 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
-
+### Listing All
 <!--codeof:readme_exemples/list_all.c-->
 ~~~c
 
@@ -215,9 +217,10 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
+
 The By Using multi dimension listage functions , you can see all itens listed in all sub folders of the "main" folder 
 
-## Listing Files Recursively
+### Listing Files Recursively
 <!--codeof:readme_exemples/list_files_recursively.c-->
 ~~~c
 
@@ -231,6 +234,7 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
+### Listing Dirs Recursively
 
 <!--codeof:readme_exemples/list_dirs_recursively.c-->
 ~~~c
@@ -245,7 +249,7 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
-
+### Listing All Recursively
 <!--codeof:readme_exemples/list_all_recursively.c-->
 ~~~c
 
@@ -260,7 +264,7 @@ int main(int argc, char *argv[]){
 }
 ~~~
 
-## Dealing with base64 
+### Dealing with base64 
 You can easly transform an binary file to an base64 string like these
 <!--codeof:readme_exemples/converting_file_to_base64.c-->
 ~~~c
@@ -288,7 +292,7 @@ int main(int argc, char *argv[]){
 
 }
 ~~~
-Generating Sha from file 
+### Generating Sha from file 
 <!--codeof:readme_exemples/generating_sha_from_file.c-->
 ~~~c
 
