@@ -160,3 +160,8 @@ int main(){
 ~~~
 
 ### Removendo arquivos
+
+Da mesma forma é plenamente possível remover arquivos usando a do TheWorld
+através da função **dtw_remove_any**
+
+
