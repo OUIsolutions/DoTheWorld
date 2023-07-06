@@ -4754,25 +4754,28 @@ char *dtw_get_current_dir(){
 bool dtw_remove_any(const char* path) {
     //means is an file
     if(remove(path) == 0){
-        return false;
+        return true;
     }
     
     struct DtwStringArray *files = dtw_list_files_recursively(path,DTW_CONCAT_PATH);
-    int size = files->size;
-    for(int i = 0; i < size; i++){
+    int files_size = files->size;
+    for(int i = 0; i < files_size; i++){
         remove(files->strings[i]);
     }
     files->free(files);
 
 
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,DTW_CONCAT_PATH);
-    size = dirs->size;
+    int dirs_size = dirs->size;
     for(int i = dirs->size -1; i >=0; i--){
         rmdir(dirs->strings[i]);
     }
     dirs->free(dirs);
     //remove / to the path 
-    return true;
+    if(files_size ||dirs_size){
+        return true;
+    }    
+    return false;
     
  
 }
