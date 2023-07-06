@@ -18,13 +18,14 @@ bool dtw_remove_any(const char* path);
 char *dtw_get_current_dir();
 
 
-unsigned char *dtw_load_any_content(const char * path,int *size,bool *is_binary);
+unsigned char *dtw_load_any_content(const char * path,long *size,bool *is_binary);
+
 char *dtw_load_string_file_content(const char * path);
 
-unsigned char *dtw_load_binary_content(const char * path,int *size);
+unsigned char *dtw_load_binary_content(const char * path,long *size);
 
 
-bool dtw_write_any_content(const char *path,unsigned  char *content,int size);
+bool dtw_write_any_content(const char *path,unsigned  char *content,long size);
 bool dtw_write_string_file_content(const char *path,const char *content);
 int dtw_entity_type(const char *path);
 

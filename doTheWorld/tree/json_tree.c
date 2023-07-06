@@ -59,7 +59,6 @@ void DtwTree_loads_json_tree(struct DtwTree *self, const char *content){
                 size_t out_size;
                 unsigned char *decoded =dtw_base64_decode(
                     content->valuestring,
-                    strlen(content->valuestring),
                     &out_size
                 );
                 part->set_binary_content(part,decoded,(int)out_size);

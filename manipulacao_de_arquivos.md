@@ -107,6 +107,52 @@ int main(){
   dtw_write_any_content("teste.txt",conteudo,tamanho);
 }
 ~~~
+### Obtendo Tipo de Entidade 
+Podemos obter o tipo de entidade através da função **dtw_entity_type**
+
+~~~c
+#include "doTheWorld.h"
+
+int main(){ 
+  
+  int tipo = dtw_entity_type("exemples");
+
+  if(tipo == DTW_NOT_FOUND){
+      printf("Não existe\n");
+  }
+
+  if(tipo == DTW_FOLDER_TYPE){
+      printf("é uma pasta\n");
+  }
+  
+  if(tipo == DTW_FILE_TYPE){
+      printf("é um arquivo\n");
+  }
+
+}
+~~~
+
+### Fazendo uma conversão Binária para  Base64
+Caso precise transformar um blob em string pode facilmente fazer 
+uma conversão para base64
+~~~c 
+#include "doTheWorld.h"
+
+int main(){ 
+  
+  int tamanho;
+  unsigned char * conteudo = dtw_load_binary_content(
+    "output_folder/deer.jpg",
+    &tamanho
+  );
+  const char *em_base64 = dtw_base64_encode(conteudo,tamanho);
+  printf("%s",em_base64);
+}
+
+~~~
+## Reconversão de Base64 para blob 
+
+
 
 ### Copiando qualquer coisa
 como ja dito anteriormente a lib não diferencia pastas de arquivos, então 
@@ -164,4 +210,104 @@ int main(){
 Da mesma forma é plenamente possível remover arquivos usando a do TheWorld
 através da função **dtw_remove_any**
 
+~~~c
 
+#include "doTheWorld.h"
+
+int main(){ 
+  //removendo arquivos
+  bool consseguiu_arquivo = dtw_remove_any(
+    "teste.txt"
+  );
+  printf("resultado arquivo :%s\n",consseguiu_arquivo? "positivo":"negativo");
+
+  //removendo pastas
+  bool consseguiu_pasta = dtw_remove_any(
+    "saida4"
+  );
+  printf("resultado pasta :%s\n",consseguiu_pasta? "positivo":"negativo");
+}
+~~~
+
+### Listagem 
+
+### Listagem de arquivos 
+Esse exemplo irá lista todos os arquivos de uma pasta de maneira não recursiva
+ele irá retornar um objeto da classe **DtwStringArray** aonde podemos iterar com for
+~~~c
+#include "doTheWorld.h"
+
+int main(){ 
+  //copia arquivos
+  bool concatenar_path = true;
+  DtwStringArray *conteudo = dtw_list_files("exemple_folder",concatenar_path);
+  
+  for(int i = 0; i < conteudo->size; i++){
+    printf("%s\n",conteudo->strings[i]);
+  }
+  conteudo->free(conteudo);
+
+}
+~~~
+
+### Listagem de Pasta
+
+Podemos também listar pastas dentro determinada pasta através da função 
+**dtw_list_dirs**
+
+~~~c
+#include "doTheWorld.h"
+
+int main(){ 
+  //copia arquivos
+  bool concatenar_path = true;
+  DtwStringArray *conteudo = dtw_list_dirs("exemples",concatenar_path);
+  
+  for(int i = 0; i < conteudo->size; i++){
+    printf("%s\n",conteudo->strings[i]);
+  }
+  conteudo->free(conteudo);
+
+}
+~~~
+
+### Listando tudo 
+
+Podemos listar qualquer tipo de arquivo através da função **dtw_list_all**
+
+~~~c
+#include "doTheWorld.h"
+
+int main(){ 
+  //copia arquivos
+  bool concatenar_path = true;
+  DtwStringArray *conteudo = dtw_list_all("exemples",concatenar_path);
+  
+  for(int i = 0; i < conteudo->size; i++){
+    printf("%s\n",conteudo->strings[i]);
+  }
+  conteudo->free(conteudo);
+
+}
+~~~
+
+### Listagem Recursiva 
+
+Adicionando o sulfixo **recursively** em qualquer uma das 3 listagens anteriores
+a listagem ocorrerá de maneira recursiva (iterando pastas sobre pastas)
+
+~~~c
+#include "doTheWorld.h"
+
+int main(){ 
+  //copia arquivos
+  bool concatenar_path = true;
+  DtwStringArray *conteudo = dtw_list_all_recursively("exemples",concatenar_path);
+  
+  for(int i = 0; i < conteudo->size; i++){
+    printf("%s\n",conteudo->strings[i]);
+  }
+  conteudo->free(conteudo);
+
+}
+~~~

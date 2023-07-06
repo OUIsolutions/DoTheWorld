@@ -5,7 +5,7 @@
 
 
 void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self){
-    int size;
+    long size;
     bool is_binary;
     char *path = self->path->get_path(self->path);
     if(dtw_entity_type(path) != DTW_FILE_TYPE){

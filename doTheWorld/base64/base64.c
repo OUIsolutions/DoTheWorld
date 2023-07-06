@@ -33,7 +33,8 @@ char *dtw_base64_encode(unsigned char *data, size_t input_length){
 }
 
 
-unsigned char *dtw_base64_decode(char *data, size_t input_length, size_t *output_length){
+unsigned char *dtw_base64_decode(const char *data, size_t *output_length){
+    unsigned long input_length = strlen(data);
     if (input_length % 4 != 0) return NULL;
 
     *output_length = input_length / 4 * 3;
@@ -67,7 +68,7 @@ unsigned char *dtw_base64_decode(char *data, size_t input_length, size_t *output
 }
 
 char *dtw_convert_binary_file_to_base64(const char *path){
-     int size;
+     long size;
      unsigned char *data  = dtw_load_binary_content(path, &size);
     char *b64   = dtw_base64_encode(data, size);
     free(data);

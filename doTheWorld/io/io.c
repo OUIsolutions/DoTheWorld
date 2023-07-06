@@ -69,7 +69,7 @@ bool dtw_remove_any(const char* path) {
 }
 
 
-unsigned char *dtw_load_any_content(const char * path,int *size,bool *is_binary){
+unsigned char *dtw_load_any_content(const char * path,long *size,bool *is_binary){
     FILE *file = fopen(path,"rb");
     if(file == NULL){
         free(file);
@@ -113,7 +113,7 @@ char *dtw_load_string_file_content(const char * path){
 }
 
 
-unsigned char *dtw_load_binary_content(const char * path,int *size){
+unsigned char *dtw_load_binary_content(const char * path,long *size){
     FILE *file = fopen(path,"rb");
     if(file == NULL){
         return NULL;
@@ -128,7 +128,7 @@ unsigned char *dtw_load_binary_content(const char * path,int *size){
 }
 
 
-bool dtw_write_any_content(const char *path,unsigned  char *content,int size){
+bool dtw_write_any_content(const char *path,unsigned  char *content,long size){
     //Iterate through the path and create directories if they don't exist
     
     for(int i = strlen(path)-1;i > 0;i--){
@@ -193,7 +193,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
 
     if(type == DTW_FILE_TYPE){
     
-        int size;
+        long size;
         bool is_binary;
         unsigned char *content = dtw_load_any_content(src_path,&size,&is_binary);
         bool result =  dtw_write_any_content(dest_path,content,size);
@@ -224,7 +224,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
     struct DtwStringArray *files = dtw_list_files_recursively(src_path,DTW_CONCAT_PATH);
    
     for(int i = 0; i < files->size; i++){
-        int file_size;
+        long file_size;
         bool is_binary;
         unsigned char *content = dtw_load_any_content(files->strings[i],&file_size,&is_binary);
         char *new_path = private_dtw_change_beginning_of_string(files->strings[i],src_path_size,dest_path);
