@@ -3979,7 +3979,7 @@ char *private_dtw_change_beginning_of_string(const char *target,int start_elemen
 
 void dtw_create_dir_recursively(const char *path);
 
-void dtw_remove_any(const char* path);
+bool dtw_remove_any(const char* path);
 
 char *dtw_get_current_dir();
 
@@ -4000,7 +4000,7 @@ int dtw_entity_type(const char *path);
     bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge);
 #endif 
 
-void dtw_move_any(const char* src_path, const char* dest_path,bool merge);
+bool dtw_move_any(const char* src_path, const char* dest_path,bool merge);
 
 #define DTW_CONCAT_PATH true
 #define DTW_NOT_CONCAT_PATH false
@@ -4751,10 +4751,10 @@ char *dtw_get_current_dir(){
 
 
 
-void dtw_remove_any(const char* path) {
+bool dtw_remove_any(const char* path) {
     //means is an file
     if(remove(path) == 0){
-        return;
+        return false;
     }
     
     struct DtwStringArray *files = dtw_list_files_recursively(path,DTW_CONCAT_PATH);
@@ -4772,9 +4772,8 @@ void dtw_remove_any(const char* path) {
     }
     dirs->free(dirs);
     //remove / to the path 
+    return true;
     
-    
-   
  
 }
 
@@ -4952,9 +4951,10 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
     
 }
 
-void dtw_move_any(const char* src_path, const char* dest_path,bool merge) {
-    dtw_copy_any(src_path,dest_path,merge);
+bool dtw_move_any(const char* src_path, const char* dest_path,bool merge) {
+    bool result = dtw_copy_any(src_path,dest_path,merge);
     dtw_remove_any(src_path);
+    return result;
 }
 
 

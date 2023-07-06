@@ -112,7 +112,6 @@ int main(){
 como ja dito anteriormente a lib não diferencia pastas de arquivos, então 
 para copiar algo, basta chamar a função **dtw_copy_any**
 
-Copiando arquivos
 ~~~c
   #include "doTheWorld.h"
 
@@ -135,3 +134,5 @@ int main(){
 }
 ~~~
 
+### Movendo qualquer coisa 
+Da mesma forma também é possível mover qualquer coisa em C usando a função

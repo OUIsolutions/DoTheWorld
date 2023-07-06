@@ -13,7 +13,7 @@
 
 void dtw_create_dir_recursively(const char *path);
 
-void dtw_remove_any(const char* path);
+bool dtw_remove_any(const char* path);
 
 char *dtw_get_current_dir();
 
@@ -34,4 +34,4 @@ int dtw_entity_type(const char *path);
     bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge);
 #endif 
 
-void dtw_move_any(const char* src_path, const char* dest_path,bool merge);
+bool dtw_move_any(const char* src_path, const char* dest_path,bool merge);
