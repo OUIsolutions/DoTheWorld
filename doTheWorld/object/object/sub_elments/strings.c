@@ -5,45 +5,81 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectPro
     DtwObjectProps formated_props = DtwObjectProps_create_props(props);
 
     char *path = private_DtwObject_create_path(self,name);
-    int size;
-    bool is_binary;
-    bool load_result;
-    char *result_text;
 
-    if(formated_props.update_cache == DTW_NOT_UPDATE_CACHE){
-        load_result = true;
+    bool load_result = true;
+    char *result_text = NULL;
+
+    if(formated_props.cache == DTW_ALLOW_CACHE){
+        DtwKeyVal  *keyval = self->loaded_elements->get(
+                self->loaded_elements,
+                name
+         );
+         if(keyval){
+             if(keyval->type == DTW_STRING){
+                result_text = (char*)keyval->any_value;
+                load_result = false;
+             }
+             else{
+                 self->error = DTW_WRONG_TYPE;
+                 free(path);
+                 return NULL;
+             }
+
+         }
+
     }
 
-    else if(formated_props.cache == DTW_ALLOW_CACHE){
+    if(load_result){
+        printf("carregou\n");
 
-    }
-    unsigned  char *result = dtw_load_any_content(path,&size,&is_binary);
+        int size;
+        bool is_binary;
+        unsigned char *possible_string = dtw_load_any_content(path,&size,&is_binary);
 
-    if(result == NULL){
-        if(dtw_entity_type(path) == DTW_FOLDER_TYPE){
+        if(possible_string ==  NULL){
+            int entity = dtw_entity_type(path);
+
+            if(entity == DTW_FOLDER_TYPE){
+                self->error = DTW_WRONG_TYPE;
+                free(path);
+                return NULL;
+            }
+            if(entity == DTW_NOT_FOUND){
+                self->error = DTW_NOT_FOUND;
+                free(path);
+                return NULL;
+            }
+        }
+        if(is_binary){
+            free(possible_string);
             self->error = DTW_WRONG_TYPE;
+            free(path);
+            return NULL;
         }
-        else{
-            self->error = DTW_NOT_FOUND;
+        result_text = (char*)possible_string;
+        //making the first upload
+        if(formated_props.cache == DTW_ALLOW_CACHE){
+
+            DtwKeyVal *keyval = newDtwKeyVal(name,result_text,DTW_STRING,0);
+            self->loaded_elements->append(
+                    self->loaded_elements,
+                    keyval
+            );
+
         }
-        free(path);
-        return NULL;
     }
-
-
     free(path);
 
-    if(is_binary){
-        free(result);
-        self->error = DTW_WRONG_TYPE;
-        return NULL;
+    //to avoid duplication
+    if(formated_props.garbage == DTW_ALLOW_GARBAGE && formated_props.cache ==DTW_NOT_CACHE){
+        self->garbage_array->append(self->garbage_array, DTW_BINARY, result_text);
     }
 
-    if(formated_props.garbage == DTW_ALLOW_GARBAGE){
-        self->garbage_array->append(self->garbage_array, DTW_BINARY, result);
+    if(formated_props.garbage == DTW_NOT_GARBAGE){
+        return strdup(result_text);
     }
 
-    return (char*)result;
+    return result_text;
 
 }
 

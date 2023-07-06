@@ -8,7 +8,7 @@ DtwObject * private_newDtwObject_raw(){
     self->randonizer = NULL;
     self->error =  DTW_OK;
     self->garbage_array = newDtwGarbageArray();
-    self->dict = newDtwObjectDict();
+    self->loaded_elements = newDtwObjectDict();
     self->first_object = false;
 
     self->get_binary = DtwObject_get_binary;
