@@ -17,8 +17,9 @@ def execute_test_for_folder():
 
 
 ct.generate_amalgamated_code(STARTER,OUTPUT_TEST)
-ct.generate_output_of_execution('tests/readonly')
-execute_test_for_folder()
+test = ct.FolderTestPresset(folder='tests/main_test')
+test.start_test()
+
 
 
 '''
