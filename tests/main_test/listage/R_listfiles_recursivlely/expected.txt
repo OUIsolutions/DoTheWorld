@@ -1,4 +1,0 @@
- 
-tests/target/deer.jpg
-tests/target/a.txt
-tests/target/a/test.txt
