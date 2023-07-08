@@ -1,3 +1,4 @@
  
 tests/target/a.txt
 tests/target/blob.png
+tests/target/blob2.png
