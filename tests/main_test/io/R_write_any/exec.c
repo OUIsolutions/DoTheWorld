@@ -12,7 +12,7 @@ int main(int argc, char *argv[]){
   }
   printf("size: %ld\n",blob_size);
 
-  bool result = dtw_write_any_content("target/tests/blob2.png",content,blob_size);
+  bool result = dtw_write_any_content("tests/target/blob2.png",content,blob_size);
   printf("result: %s\n",result ? "true" : "false");
   free(content);
   return 0;
