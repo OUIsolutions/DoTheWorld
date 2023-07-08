@@ -14,7 +14,7 @@ OUTPUT = 'doTheWorld.h'
 
 ct.generate_amalgamated_code(STARTER,OUTPUT_TEST)
 
-test = ct.FolderTestPresset(folder='tests/main_test')
+test = ct.FolderTestPresset(folder='tests/main_test',execution_flags =['aaaa'])
 test.generate_ouptut()
 test.start_test()
 
