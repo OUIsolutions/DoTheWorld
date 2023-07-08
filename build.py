@@ -12,12 +12,10 @@ OUTPUT = 'doTheWorld.h'
 
 
 
-def execute_test_for_folder():
-    ct.execute_test_for_folder('tests/readonly')
-
-
 ct.generate_amalgamated_code(STARTER,OUTPUT_TEST)
+
 test = ct.FolderTestPresset(folder='tests/main_test')
+test.generate_ouptut()
 test.start_test()
 
 
