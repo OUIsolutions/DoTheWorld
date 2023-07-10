@@ -26,7 +26,7 @@ int main(){
             "exemple_folder",
             &(DtwTreeProps){
                 .content = DTW_INCLUDE,
-                .hadware_data=DTW_INCLUDE,
+                .hadware_data=DTW_HIDE,
                 .path_atributes=DTW_INCLUDE
             }
     );

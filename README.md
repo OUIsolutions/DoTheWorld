@@ -552,7 +552,7 @@ int main(){
             "tests/target/",
             &(DtwTreeProps){
                     .content = DTW_INCLUDE,
-                    .hadware_data=DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
             }
     );
@@ -576,7 +576,7 @@ int main(){
             "tests/target",
             &(DtwTreeProps){
                     .content = DTW_INCLUDE,
-                    .hadware_data=DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
             }
     );
@@ -606,7 +606,7 @@ int main(){
             "tests/target",
             &(DtwTreeProps){
                     .content = DTW_INCLUDE,
-                    .hadware_data=DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
             }
     );
@@ -636,7 +636,7 @@ int main(){
             "tests/target/",
             &(DtwTreeProps){
                     .content = DTW_INCLUDE,
-                    .hadware_data=DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
             }
     );
@@ -683,7 +683,7 @@ int main(){
             "exemple_folder",
             &(DtwTreeProps){
                 .content = DTW_INCLUDE,
-                .hadware_data=DTW_INCLUDE,
+                .hadware_data=DTW_HIDE,
                 .path_atributes=DTW_INCLUDE
             }
     );
@@ -733,7 +733,7 @@ int main(){
             "tests/target",
             &(DtwTreeProps){
                     .content = DTW_INCLUDE,
-                    .hadware_data=DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
             }
     );
@@ -777,7 +777,7 @@ int main(){
             "tests/target",
             &(DtwTreeProps){
                     .content = DTW_INCLUDE,
-                    .hadware_data=DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
             }
     );
@@ -811,7 +811,7 @@ int main(){
             "tests/target",
             &(DtwTreeProps){
                 .content = DTW_INCLUDE,
-                .hadware_data=DTW_INCLUDE,
+                .hadware_data=DTW_HIDE,
                 .path_atributes=DTW_INCLUDE
             }
     );
@@ -903,9 +903,9 @@ int main(){
     );
     tree->dumps_json_tree_to_file(
             tree,
-            "test.json",
+            "tests/target/out.json",
             &(DtwTreeProps){
-                    .minification = DTW_MIMIFY,
+                    .minification = DTW_NOT_MIMIFY,
                     .ignored_elements=DTW_HIDE,
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_INCLUDE,
@@ -937,10 +937,10 @@ int main(){
     char *content = tree->dumps_json_tree(
             tree,
             &(DtwTreeProps){
-                    .minification = DTW_MIMIFY,
+                    .minification = DTW_NOT_MIMIFY,
                     .ignored_elements=DTW_HIDE,
                     .content = DTW_INCLUDE,
-                    .hadware_data=DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
             }
     );
@@ -967,7 +967,7 @@ void dumps_tree(){
             "tests/target",
             &(DtwTreeProps){
                     .content = DTW_INCLUDE,
-                    .hadware_data=DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
             }
     );
@@ -979,7 +979,7 @@ void dumps_tree(){
                     .minification = DTW_MIMIFY,
                     .ignored_elements=DTW_HIDE,
                     .content = DTW_INCLUDE,
-                    .hadware_data=DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
             }
     );
@@ -1022,7 +1022,7 @@ char *dumps_tree(){
                     .minification = DTW_MIMIFY,
                     .ignored_elements=DTW_HIDE,
                     .content = DTW_INCLUDE,
-                    .hadware_data=DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
             }
     );

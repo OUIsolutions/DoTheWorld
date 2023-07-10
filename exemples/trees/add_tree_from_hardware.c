@@ -12,7 +12,7 @@ int main(){
             "tests/target/",
             &(DtwTreeProps){
                     .content = DTW_INCLUDE,
-                    .hadware_data=DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
             }
     );

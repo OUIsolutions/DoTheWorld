@@ -18,9 +18,9 @@ int main(){
     );
     tree->dumps_json_tree_to_file(
             tree,
-            "test.json",
+            "tests/target/out.json",
             &(DtwTreeProps){
-                    .minification = DTW_MIMIFY,
+                    .minification = DTW_NOT_MIMIFY,
                     .ignored_elements=DTW_HIDE,
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_INCLUDE,

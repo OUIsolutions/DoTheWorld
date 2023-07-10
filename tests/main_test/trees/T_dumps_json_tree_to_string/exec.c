@@ -17,10 +17,10 @@ int main(){
     char *content = tree->dumps_json_tree(
             tree,
             &(DtwTreeProps){
-                    .minification = DTW_MIMIFY,
+                    .minification = DTW_NOT_MIMIFY,
                     .ignored_elements=DTW_HIDE,
                     .content = DTW_INCLUDE,
-                    .hadware_data=DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
             }
     );

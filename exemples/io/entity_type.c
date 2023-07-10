@@ -28,12 +28,12 @@ int main(int argc, char *argv[]){
     type = dtw_entity_type(not_exist);
     print_entity(not_exist,type);
 
-    const char *folder = "tests/target/a";
+    const char *folder = "tests/target/";
     type = dtw_entity_type(folder);
     print_entity(folder,type);
 
 
-    const char *file = "tests/target/a";
+    const char *file = "tests/target/a.txt";
     type = dtw_entity_type(file);
     print_entity(file,type);
     
