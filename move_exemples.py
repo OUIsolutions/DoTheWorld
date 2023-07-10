@@ -16,7 +16,7 @@ for c in content:
         if not isfile(novo_caminho):
             with open(caminho_do_arquivo,'r' ) as arq:
                 conteudo = arq.read()
-                with open(novo_caminho,'w') as arq::
+                with open(novo_caminho,'w') as arq:
                     arq.write(conteudo)
         
         
