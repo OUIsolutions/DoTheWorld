@@ -1,0 +1,8 @@
+ 
+First Path: tests/target/sub_folder/a.txt
+Path: a/b/test2.md
+Path Changed: true
+Dir: a/b
+Full Name: test2.md
+Name: test2
+Extension: md

@@ -1,0 +1,18 @@
+ 
+------------------------------------------------------------
+First Path: tests/target/a.txt
+Path: tests/target/a.txt
+Path Changed: false
+Dir: tests/target
+Full Name: a.txt
+Name: a
+Extension: txt
+Content Exist in Memory: true
+Ignore: false
+Content Exist In Hardware: true
+Is Binary: false
+Last Modification Time in Unix: 1688953593
+Last Modification Time: 2023-07-09 21:46:33
+Content Size: 12
+Content SHA:  7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069
+Content: Hello World!
