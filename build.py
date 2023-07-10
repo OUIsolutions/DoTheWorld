@@ -43,8 +43,9 @@ def move_all_c(destination:str,current_path:str):
 for e in elements:
     path = f'tests/main_test/{e}'
     if isdir(path):
-        makedirs(f'exemples/{e}')
-        move_all_c(path,path)
+        dest = f'exemples/{e}'
+        makedirs(dest)
+        move_all_c(dest,path)
 
 
 '''
