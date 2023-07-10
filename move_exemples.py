@@ -1,4 +1,4 @@
-from os import listdir
+from os import listdir ,makedirs
 from os.path import isdir
 #from shutil import makedirs
 
@@ -14,3 +14,5 @@ for c in content:
             print('ja existe',nova_pasta)
             continue 
         #fazendo alteracoes
+        makedirs(nova_pasta)
+        
