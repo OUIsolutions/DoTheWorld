@@ -3,13 +3,13 @@
 //
 #include "../../../doTheWorld_test.h"
 
-bool test_if_deer(struct DtwTreePart*part){
+bool test_if_blob(struct DtwTreePart*part){
 
     char *name = part->path->get_full_name(part->path);
     if(!name){
         return false;
     }
-    if(strcmp(name,"deer.jpg") == 0){
+    if(strcmp(name,"blob.png") == 0){
         free(name);
         return true;
     }
@@ -32,13 +32,13 @@ int main(){
     );
 
 
-    struct DtwTreePart *deer = tree->find_part_by_function(
+    struct DtwTreePart *blob = tree->find_part_by_function(
             tree,
-            test_if_deer
+            test_if_blob
     );
 
-    if(deer){
-        deer->represent(deer);
+    if(blob){
+        blob->represent(blob);
     }
     tree->free(tree);
 

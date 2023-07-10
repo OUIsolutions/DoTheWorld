@@ -8,7 +8,7 @@ int main(){
     DtwTree *tree = newDtwTree();
     tree->add_tree_from_hardware(
             tree,
-            "exemple_folder",
+            "tests/target/",
             &(DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_INCLUDE,
@@ -16,12 +16,12 @@ int main(){
             }
     );
 
-    DtwTreePart *deer = tree->find_part_by_path(
+    DtwTreePart *element = tree->find_part_by_path(
             tree,
-            "exemple_folder/deer.jpg"
+            "tests/target/sub_folder/sub_element.txt"
     );
-    if(deer){
-        deer->represent(deer);
+    if(element){
+        element->represent(element);
     }
     tree->free(tree);
 }

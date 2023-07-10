@@ -6,7 +6,7 @@
 
 int main(){
 
-    DtwTreePart *part = newDtwTreePartEmpty("test.txt");
+    DtwTreePart *part = newDtwTreePartEmpty("tests/target/b.txt");
     part->set_string_content(part,"my mensage");
     part->hardware_write(part,DTW_SET_AS_ACTION);
     part->hardware_commit(part);

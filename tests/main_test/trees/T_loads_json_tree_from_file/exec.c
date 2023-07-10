@@ -8,7 +8,7 @@ void dumps_tree(){
     DtwTree *tree = newDtwTree();
     tree->add_tree_from_hardware(
             tree,
-            "exemple_folder",
+            "tests/target",
             &(DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_INCLUDE,
@@ -18,7 +18,7 @@ void dumps_tree(){
 
     tree->dumps_json_tree_to_file(
             tree,
-            "test.json",
+            "tests/target/out.json",
             &(DtwTreeProps){
                     .minification = DTW_MIMIFY,
                     .ignored_elements=DTW_HIDE,
