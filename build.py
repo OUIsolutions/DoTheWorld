@@ -33,8 +33,8 @@ def move_all_c(destination:str,current_path:str):
         if e.endswith('.c') or e.endswith('.cpp'):
             with open(path,'r') as arq:
                 content = arq.read()
-                content = content.replace(f'../../{OUTPUT_TEST}',OUTPUT)
                 content = content.replace(f'../../../{OUTPUT_TEST}',OUTPUT)
+                content = content.replace(f'../../{OUTPUT_TEST}',OUTPUT)
 
             name =dirname(path).split('/')[-1].replace('T_','')
             with open(f'{destination}/{name}.c','w') as arq2:
