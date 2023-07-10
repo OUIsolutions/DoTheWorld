@@ -3,7 +3,7 @@
 
 int main(){
 
-     DtwTreePart *part = newDtwTreePartLoading("test.txt");
+     DtwTreePart *part = newDtwTreePartLoading("tests/target/a.txt");
 
     //getting the content
     char *content = part->get_content_string_by_reference(part);

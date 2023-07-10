@@ -4,7 +4,7 @@
 
 int main(){
 
-    DtwTreePart *part = newDtwTreePartLoading("exemple_folder/a.txt");
+    DtwTreePart *part = newDtwTreePartLoading("tests/target/a.txt");
 
     part->represent(part);
     part->free(part);
