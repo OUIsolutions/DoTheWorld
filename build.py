@@ -15,9 +15,10 @@ OUTPUT = 'doTheWorld.h'
 ct.generate_amalgamated_code(STARTER,OUTPUT_TEST)
 
 test = ct.FolderTestPreset(folder='tests/main_test',side_effect_folder='tests/target')
-#test.generate_ouptut()
-#test.start_test()
+test.generate_ouptut()
+test.start_test()
 
+'''
 rmtree('exemples',ignore_errors=True)
 elements = listdir('tests/main_test')
 for e in elements:
@@ -25,7 +26,6 @@ for e in elements:
         makedirs(f'exemples/{e}')
 
 
-'''
 def modifier(text:str):
     return text.replace(f'../../{OUTPUT_TEST}',OUTPUT)
 

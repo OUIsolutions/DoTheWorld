@@ -1,3 +1,2 @@
  
 tests/target/sub_folder/
-tests/target/sub_folder2/
