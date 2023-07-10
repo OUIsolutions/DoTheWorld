@@ -18,16 +18,17 @@ test = ct.FolderTestPreset(folder='tests/main_test',side_effect_folder='tests/ta
 #test.generate_ouptut()
 test.start_test()
 
-'''
+
 rmtree('exemples',ignore_errors=True)
 elements = listdir('tests/main_test')
+
 for e in elements:
     if isdir(e):
         makedirs(f'exemples/{e}')
 
-
+'''
 def modifier(text:str):
-    return text.replace(f'../../{OUTPUT_TEST}',OUTPUT)
+    return text.replace(f'../../{OUTPUT_TEST}',OUTPUT).replace(f'../../../{OUTPUT_TEST}',OUTPUT)
 
 ct.include_code_in_markdown('README.md',save_file=True,modifier=modifier)
 ct.generate_amalgamated_code(STARTER,OUTPUT)
