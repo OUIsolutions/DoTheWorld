@@ -22,9 +22,30 @@ ct.generate_amalgamated_code(STARTER,OUTPUT_TEST)
 rmtree('exemples',ignore_errors=True)
 elements = listdir('tests/main_test')
 
+def move_all_c(destination:str,current_path:str):
+    elements = listdir(current_path)
+    for e in elements:
+        current_path = f'{current_path}/{e}'
+        if isdir(current_path):
+            move_all_c(path,current_path)
+            continue
+        if e.endswith('.c') or e.endswith('.cpp'):
+
+            with open(current_path,'r') as arq:
+                content = arq.read()
+                content = content.replace(f'../../{OUTPUT_TEST}',OUTPUT)
+                content = content.replace(f'../../../{OUTPUT_TEST}',OUTPUT)
+
+                with open(f'{destination}/{e}','w') as arq:
+                        arq.write(content)
+
+
 for e in elements:
-    if isdir(e):
+    path = f'tests/main_test/{e}'
+    if isdir(path):
         makedirs(f'exemples/{e}')
+        move_all_c(path,path)
+
 
 '''
 def modifier(text:str):
