@@ -4879,6 +4879,9 @@ char *dtw_load_string_file_content(const char * path){
     long size;
     bool is_binary;
     unsigned char *element = dtw_load_any_content(path,&size,&is_binary);
+    if(!element){
+        return NULL;
+    }
     if(is_binary){
         free(element);
         return NULL;

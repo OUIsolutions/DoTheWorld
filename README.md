@@ -44,7 +44,7 @@ if you are sure that the content you are going to read is not binary you can cal
 
 int main(int argc, char *argv[]){
   //load a string file content
-  const char *path = "exemple_folder/a/test.txt";
+  const char *path = "tests/target/a.txt";
   char *content = dtw_load_string_file_content(path);
   if(content == NULL){
     printf("error oppening %s\n",path);
@@ -53,6 +53,7 @@ int main(int argc, char *argv[]){
   printf("content: %s\n",content);
   free(content);
   return 0;
+  
 }
 ~~~
 ### Reading Any Content
@@ -62,7 +63,7 @@ int main(int argc, char *argv[]){
 
 int main(int argc, char *argv[]){
  
-  const char *path = "exemple_folder/deer.jpg";
+  const char *path = "tests/target/blob.png";
   long size;
   bool is_binary;
   //load any file, is useful if you don't know if the file is binary or not
@@ -73,6 +74,8 @@ int main(int argc, char *argv[]){
   }
   printf("size: %ld\n",size);
   printf("is_binary: %s\n",is_binary ? "true" : "false");
+
+  dtw_write_any_content("tests/target/blob2.png",content,size);
   free(content);
   return 0;
 }
@@ -88,7 +91,7 @@ to write strings in text files is very simple, just call the function **dtw_writ
 int main(int argc, char *argv[]){
   // Write a string to a file the path is auto created
   
-  bool result = dtw_write_string_file_content("test.txt","Hello World!");
+  bool result = dtw_write_string_file_content("tests/target/a.txt","Hello World!");
   printf("result: %s\n",result ? "true" : "false");
   return 0;
 }
@@ -96,25 +99,25 @@ int main(int argc, char *argv[]){
 ### Writing Any
 if you want to write anything to a file, it's also very simple, use the **dtw_write_any_content** function, but note that it will be necessary to pass the writing size
 
-<!--codeof:exemples/io/writing_any.c-->
+<!--codeof:exemples/io/write_any.c-->
 ~~~c
 #include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
   //load the beer image
-  const char *deer_path = "exemple_folder/deer.jpg";
-  long deer_size;
-  unsigned char *content = dtw_load_binary_content(deer_path,&deer_size);
+  const char *blob_path = "tests/target/blob.png";
+  long blob_size;
+  unsigned char *content = dtw_load_binary_content(blob_path,&blob_size);
   //use these functions for binary files
   if(content == NULL){
-    printf("error oppening %s\n",deer_path);
+    printf("error oppening %s\n",blob_path);
     return 1;
   }
-  printf("size: %ld\n",deer_size);
+  printf("size: %ld\n",blob_size);
 
-  bool result = dtw_write_any_content("output_folder/deer.jpg",content,deer_size);
+  bool result = dtw_write_any_content("tests/target/blob2.png",content,blob_size);
   printf("result: %s\n",result ? "true" : "false");
-  free(content);
+free(content);
   return 0;
 }
 ~~~
@@ -129,7 +132,7 @@ it will create till reachs the target folder
 
 int main(int argc, char *argv[]){
  
-  dtw_create_dir_recursively("output_folder/aaa/");
+  dtw_create_dir_recursively("tests/target/sub_folder/a/b/c");
 
   return 0;
 }
@@ -145,13 +148,13 @@ With the function **dtw_copy_any** you can copy either files or folders to one p
 
 int main(int argc, char *argv[]){
 
-  dtw_copy_any("exemple_folder/deer.jpg","deer.jpg",DTW_NOT_MERGE);
+  dtw_copy_any("tests/target/blob.png","tests/target/blob3.png",DTW_NOT_MERGE);
   return 0;
 }
 ~~~
 ### Moving Any
 You can move either folders or files with **dtw_move_any** function
-<!--codeof:exemples/io/#destructive#move_any.c-->
+<!--codeof:exemples/io/move_any.c-->
 ~~~c
 
 #include "doTheWorld.h"
@@ -159,7 +162,7 @@ You can move either folders or files with **dtw_move_any** function
 int main(int argc, char *argv[]){
 
 
-    dtw_move_any("exemple_folder/deer.jpg","deer.jpg",DTW_NOT_MERGE);
+    dtw_move_any("tests/target/sub_folder","tests/target/sub_folder2",DTW_NOT_MERGE);
 
     return 0;
 }
@@ -175,7 +178,7 @@ With the listage functions you can extract all Strings Arrays of elements in an 
 
 int main(int argc, char *argv[]){
 
-  DtwStringArray *files = dtw_list_files("exemple_folder", DTW_CONCAT_PATH);
+  DtwStringArray *files = dtw_list_files("tests/target", DTW_CONCAT_PATH);
   for(int i = 0; i < files->size; i++){
     printf("%s\n", files->strings[i]);
   }
@@ -192,7 +195,7 @@ int main(int argc, char *argv[]){
 
 int main(int argc, char *argv[]){
 
-  DtwStringArray *dirs = dtw_list_dirs("exemple_folder", DTW_NOT_CONCAT_PATH);
+  DtwStringArray *dirs = dtw_list_dirs("tests/target", DTW_NOT_CONCAT_PATH);
   //the represent methold will print the dirs in the console
   dirs->represent(dirs);
   dirs->free(dirs);
@@ -209,7 +212,7 @@ int main(int argc, char *argv[]){
 
 int main(int argc, char *argv[]){
 
-  DtwStringArray *all = dtw_list_all("exemple_folder",DTW_CONCAT_PATH);
+  DtwStringArray *all = dtw_list_all("tests/target/",DTW_CONCAT_PATH);
   all->represent(all);
   all->free(all);
   return 0;
@@ -225,7 +228,7 @@ The By Using multi dimension listage functions , you can see all itens listed in
 
 int main(int argc, char *argv[]){
 
-  DtwStringArray *files = dtw_list_files_recursively("exemple_folder",DTW_CONCAT_PATH);
+  DtwStringArray *files = dtw_list_files_recursively("tests/target/",DTW_CONCAT_PATH);
   files->represent(files);
   files->free(files);
   return 0;
@@ -240,7 +243,7 @@ int main(int argc, char *argv[]){
 
 int main(int argc, char *argv[]){
 
-  DtwStringArray *files = dtw_list_dirs_recursively("exemple_folder",DTW_CONCAT_PATH);
+  DtwStringArray *files = dtw_list_dirs_recursively("tests/target/",DTW_CONCAT_PATH);
   files->represent(files);
   files->free(files);
   return 0;
@@ -255,7 +258,7 @@ int main(int argc, char *argv[]){
 
 int main(int argc, char *argv[]){
 
-  DtwStringArray *files = dtw_list_all_recursively("exemple_folder",DTW_CONCAT_PATH);
+  DtwStringArray *files = dtw_list_all_recursively("tests/target/",DTW_CONCAT_PATH);
   files->represent(files);
   files->free(files);
   return 0;
@@ -270,9 +273,9 @@ You can easly transform an binary file to an base64 string like these
 #include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
-   const char *deer_path = "exemple_folder/deer.jpg";
+   const char *deer_path = "tests/target/blob.png";
    char *deerb64  = dtw_convert_binary_file_to_base64(deer_path);
-   printf("deer: %s", deerb64);
+   printf("blob: %s", deerb64);
     free(deerb64);
 }
 ~~~
@@ -287,15 +290,15 @@ int main(int argc, char *argv[]){
 
 
     //creating the b64 file
-    const char *deer_path = "exemple_folder/deer.jpg";
-    char *deerb64  = dtw_convert_binary_file_to_base64(deer_path);
-    long output;
-    unsigned char  *result = dtw_base64_decode(deerb64,&output);
+    const char *blob_path = "tests/target/blob.png";
+    char *blob  = dtw_convert_binary_file_to_base64(blob_path);
+    unsigned long output;
+    unsigned char  *result = dtw_base64_decode(blob,&output);
 
-    dtw_write_any_content("deer.jpg",result,output);
+    dtw_write_any_content("tests/target/blob2.png",result,output);
 
     free(result);
-    free(deerb64);
+    free(blob);
 
     return 0;
 }
@@ -311,29 +314,29 @@ Generating Sha from file
 
 int main(int argc, char *argv[]){
 
-   char *hash = dtw_generate_sha_from_file("README.md");
+   char *hash = dtw_generate_sha_from_file("tests/target/blob.png");
    printf("SHA: %s", hash);
    free(hash);
 }
 ~~~
 ### Unix
 
-<!--codeof:exemples/extras/geeting_file_last_modification_in_unix.c-->
+<!--codeof:exemples/extras/get_file_last_modification_in_unix.c-->
 ~~~c
 
 #include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
-   int last_modification_in_unix = dtw_get_file_last_motification_in_unix("README.md");
+   int last_modification_in_unix = dtw_get_file_last_motification_in_unix("tests/target/a.txt");
     printf("Last modification: %d\n", last_modification_in_unix);
 }
 ~~~
-<!--codeof:exemples/extras/geeting_file_last_modification.c-->
+<!--codeof:exemples/extras/get_file_last_modification.c-->
 ~~~c
 #include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
-    char *last_modification = dtw_get_file_last_motification_in_string("README.md");
+    char *last_modification = dtw_get_file_last_motification_in_string("tests/target/a.txt");
     printf("Last modification: %s", last_modification);
     free(last_modification);
 }
@@ -353,8 +356,9 @@ with tree concepts, you can manipulate files as trees, and implement IO modifica
 
 int main(){
 
-    DtwTreePart *part = newDtwTreePartLoading("exemple_folder/a.txt");
-
+    DtwTreePart *part = newDtwTreePartLoading("tests/target/a.txt");
+    part->last_modification_time = 0;
+    
     part->represent(part);
     part->free(part);
 }
@@ -370,7 +374,7 @@ int main(){
 
 int main(){
 
-    DtwTreePart *part = newDtwTreePartEmpty("test.txt");
+    DtwTreePart *part = newDtwTreePartEmpty("tests/target/b.txt");
     part->set_string_content(part,"my mensage");
     part->hardware_write(part,DTW_SET_AS_ACTION);
     part->hardware_commit(part);
@@ -386,7 +390,7 @@ int main(){
 
 int main(){
 
-     DtwTreePart *part = newDtwTreePartLoading("test.txt");
+     DtwTreePart *part = newDtwTreePartLoading("tests/target/a.txt");
 
     //getting the content
     char *content = part->get_content_string_by_reference(part);
@@ -410,7 +414,7 @@ int main(){
 
 int main(){
 
-    DtwTreePart *part = newDtwTreePartLoading( "test.txt");
+    DtwTreePart *part = newDtwTreePartLoading( "tests/target/a.txt");
 
     DtwPath *path = part->path;
 
@@ -435,7 +439,7 @@ int main(){
 
 ### Changing path Atributes at once 
 
-<!--codeof:exemples/path/#destructive#change_path_attributes.c-->
+<!--codeof:exemples/path/change_path_attributes.c-->
 ~~~c
 
 #include "doTheWorld.h"
@@ -443,7 +447,7 @@ int main(){
 
 int main(){
 
-    DtwTreePart *part = newDtwTreePartLoading("exemple_folder/a.txt");
+    DtwTreePart *part = newDtwTreePartLoading("tests/target/sub_folder/a.txt");
 
     DtwPath *path = part->path;
 
@@ -465,14 +469,14 @@ way , you can create massive atomic transactions, and execute all at once
 ### hardware_modify
 Will Modificate the original content, for exemple, if you change the extension of an file, it will modificate the original content 
 
-<!--codeof:exemples/tree_parts/#destructive#hardware_modify.c-->
+<!--codeof:exemples/tree_parts/hardware_modify.c-->
 ~~~c
 #include "doTheWorld.h"
 
 
 int main(){
 
-    DtwTreePart *part = newDtwTreePartLoading("exemple_folder/a.txt");
+    DtwTreePart *part = newDtwTreePartLoading("tests/target/a.txt");
 
     DtwPath *path = part->path;
 
@@ -487,7 +491,7 @@ int main(){
 Will write the file as an "new" file, ignoring the existence of the 
 old file 
 
-<!--codeof:exemples/tree_parts/#destructive#hardware_write.c-->
+<!--codeof:exemples/tree_parts/hardware_write.c-->
 ~~~c
 
 #include "doTheWorld.h"
@@ -495,7 +499,7 @@ old file
 
 int main(){
 
-    DtwTreePart *part = newDtwTreePartLoading("exemple_folder/a.txt");
+    DtwTreePart *part = newDtwTreePartLoading("tests/target/a.txt");
 
     DtwPath *path = part->path;
 
@@ -510,7 +514,7 @@ int main(){
 
 Will Delete the current Content 
 
-<!--codeof:exemples/tree_parts/#destructive#hardware_remove.c-->
+<!--codeof:exemples/tree_parts/hardware_remove.c-->
 ~~~c
 
 
@@ -520,7 +524,7 @@ Will Delete the current Content
 
 int main(){
 
-    DtwTreePart *part = newDtwTreePartLoading("exemple_folder/a.txt");
+    DtwTreePart *part = newDtwTreePartLoading("tests/target/a.txt");
 
     part->hardware_remove(part,DTW_EXECUTE_NOW);
     part->hardware_commit(part);
@@ -545,7 +549,7 @@ int main(){
     DtwTree *tree = newDtwTree();
     tree->add_tree_from_hardware(
             tree,
-            "exemple_folder",
+            "tests/target/",
             &(DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_INCLUDE,
@@ -569,7 +573,7 @@ int main(){
     DtwTree *tree = newDtwTree();
     tree->add_tree_from_hardware(
             tree,
-            "exemple_folder",
+            "tests/target",
             &(DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_INCLUDE,
@@ -599,7 +603,7 @@ int main(){
     DtwTree *tree = newDtwTree();
     tree->add_tree_from_hardware(
             tree,
-            "exemple_folder",
+            "tests/target",
             &(DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_INCLUDE,
@@ -607,9 +611,9 @@ int main(){
             }
     );
 
-    DtwTreePart *deer = tree->find_part_by_name(tree,"deer.jpg");
-    if(deer){
-        deer->represent(deer);
+    DtwTreePart *blob = tree->find_part_by_name(tree,"blob.png");
+    if(blob){
+        blob->represent(blob);
     }
     tree->free(tree);
 
@@ -629,7 +633,7 @@ int main(){
     DtwTree *tree = newDtwTree();
     tree->add_tree_from_hardware(
             tree,
-            "exemple_folder",
+            "tests/target/",
             &(DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_INCLUDE,
@@ -637,12 +641,12 @@ int main(){
             }
     );
 
-    DtwTreePart *deer = tree->find_part_by_path(
+    DtwTreePart *element = tree->find_part_by_path(
             tree,
-            "exemple_folder/deer.jpg"
+            "tests/target/sub_folder/sub_element.txt"
     );
-    if(deer){
-        deer->represent(deer);
+    if(element){
+        element->represent(element);
     }
     tree->free(tree);
 }
@@ -656,13 +660,13 @@ int main(){
 //
 #include "doTheWorld.h"
 
-bool test_if_deer(struct DtwTreePart*part){
+bool test_if_blob(struct DtwTreePart*part){
 
     char *name = part->path->get_full_name(part->path);
     if(!name){
         return false;
     }
-    if(strcmp(name,"deer.jpg") == 0){
+    if(strcmp(name,"blob.png") == 0){
         free(name);
         return true;
     }
@@ -685,13 +689,13 @@ int main(){
     );
 
 
-    struct DtwTreePart *deer = tree->find_part_by_function(
+    struct DtwTreePart *blob = tree->find_part_by_function(
             tree,
-            test_if_deer
+            test_if_blob
     );
 
-    if(deer){
-        deer->represent(deer);
+    if(blob){
+        blob->represent(blob);
     }
     tree->free(tree);
 
@@ -726,7 +730,7 @@ int main(){
     DtwTree *tree = newDtwTree();
     tree->add_tree_from_hardware(
             tree,
-            "exemple_folder",
+            "tests/target",
             &(DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_INCLUDE,
@@ -770,7 +774,7 @@ int main(){
     DtwTree *tree = newDtwTree();
     tree->add_tree_from_hardware(
             tree,
-            "exemple_folder",
+            "tests/target",
             &(DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_INCLUDE,
@@ -791,7 +795,7 @@ int main(){
 With **hardware_commit_tree** you can commit all modifications at Once 
 turning system ultra securty
 
-<!--codeof:exemples/trees/#destructive#tree_commit.c-->
+<!--codeof:exemples/trees/tree_commit.c-->
 ~~~c
 //
 // Created by jurandi on 20-06-2023.
@@ -804,7 +808,7 @@ int main(){
     DtwTree *tree = newDtwTree();
     tree->add_tree_from_hardware(
             tree,
-            "exemple_folder",
+            "tests/target",
             &(DtwTreeProps){
                 .content = DTW_INCLUDE,
                 .hadware_data=DTW_INCLUDE,
@@ -845,7 +849,7 @@ int main(){
     DtwTree *tree = newDtwTree();
     tree->add_tree_from_hardware(
             tree,
-            "exemple_folder",
+            "tests/target",
             &(DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_INCLUDE,
@@ -890,7 +894,7 @@ int main(){
     struct DtwTree *tree = newDtwTree();
     tree->add_tree_from_hardware(
             tree,
-            "exemple_folder",
+            "tests/target/",
             &(DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_INCLUDE,
@@ -922,7 +926,7 @@ int main(){
     DtwTree *tree = newDtwTree();
     tree->add_tree_from_hardware(
             tree,
-            "exemple_folder",
+            "tests/target/",
             &(DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_INCLUDE,
@@ -960,7 +964,7 @@ void dumps_tree(){
     DtwTree *tree = newDtwTree();
     tree->add_tree_from_hardware(
             tree,
-            "exemple_folder",
+            "tests/target",
             &(DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_INCLUDE,
@@ -970,7 +974,7 @@ void dumps_tree(){
 
     tree->dumps_json_tree_to_file(
             tree,
-            "test.json",
+            "tests/target/out.json",
             &(DtwTreeProps){
                     .minification = DTW_MIMIFY,
                     .ignored_elements=DTW_HIDE,
@@ -985,7 +989,7 @@ void dumps_tree(){
 int main(){
     dumps_tree();
     DtwTree *tree = newDtwTree();
-    tree->loads_json_tree_from_file(tree,"test.json");
+    tree->loads_json_tree_from_file(tree,"tests/target/out.json");
     tree->represent(tree);
     tree->free(tree);
 }
@@ -1005,7 +1009,7 @@ char *dumps_tree(){
     DtwTree *tree = newDtwTree();
     tree->add_tree_from_hardware(
             tree,
-            "exemple_folder",
+            "tests/target",
             &(DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_INCLUDE,

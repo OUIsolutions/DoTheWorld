@@ -52,15 +52,11 @@ for e in elements:
         move_all_c(dest,path)
 
 
-'''
-def modifier(text:str):
-    return text.replace(f'../../{OUTPUT_TEST}',OUTPUT).replace(f'../../../{OUTPUT_TEST}',OUTPUT)
 
-ct.include_code_in_markdown('README.md',save_file=True,modifier=modifier)
+ct.include_code_in_markdown('README.md',save_file=True)
 ct.generate_amalgamated_code(STARTER,OUTPUT)
 
 
-'''
 
 
 
