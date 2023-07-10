@@ -33,7 +33,7 @@ void dumps_tree(){
 int main(){
     dumps_tree();
     DtwTree *tree = newDtwTree();
-    tree->loads_json_tree_from_file(tree,"test.json");
+    tree->loads_json_tree_from_file(tree,"tests/target/out.json");
     tree->represent(tree);
     tree->free(tree);
 }

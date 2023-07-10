@@ -8,7 +8,7 @@ int main(){
     DtwTree *tree = newDtwTree();
     tree->add_tree_from_hardware(
             tree,
-            "exemple_folder",
+            "tests/target",
             &(DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_INCLUDE,
