@@ -14,6 +14,6 @@ int main(int argc, char *argv[]){
 
   bool result = dtw_write_any_content("tests/target/blob2.png",content,blob_size);
   printf("result: %s\n",result ? "true" : "false");
-  free(content);
+free(content);
   return 0;
 }
