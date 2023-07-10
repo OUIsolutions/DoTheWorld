@@ -6,6 +6,8 @@ from os import listdir
 from os.path import isdir,dirname
 
 STARTER = 'doTheWorld/doTheWorldMain.h'
+TEST_NAME  = 'doTheWorld_test.h'
+
 OUTPUT_TEST = 'tests/doTheWorld_test.h'
 OUTPUT = 'doTheWorld.h'
 
@@ -33,8 +35,9 @@ def move_all_c(destination:str,current_path:str):
         if e.endswith('.c') or e.endswith('.cpp'):
             with open(path,'r') as arq:
                 content = arq.read()
-                content = content.replace(f'../../../{OUTPUT_TEST}',OUTPUT)
-                content = content.replace(f'../../{OUTPUT_TEST}',OUTPUT)
+
+                content = content.replace(f'../../../{TEST_NAME}',OUTPUT)
+                content = content.replace(f'../../{TEST_NAME}',OUTPUT)
 
             name =dirname(path).split('/')[-1].replace('T_','')
             with open(f'{destination}/{name}.c','w') as arq2:
