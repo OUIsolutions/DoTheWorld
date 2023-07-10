@@ -27,7 +27,7 @@ def move_all_c(destination:str,current_path:str):
         path = f'{current_path}/{e}'
 
         if isdir(path):
-            move_all_c(path,path)
+            move_all_c(destination,path)
             continue
 
         if e.endswith('.c') or e.endswith('.cpp'):
@@ -35,6 +35,7 @@ def move_all_c(destination:str,current_path:str):
                 content = arq.read()
                 content = content.replace(f'../../{OUTPUT_TEST}',OUTPUT)
                 content = content.replace(f'../../../{OUTPUT_TEST}',OUTPUT)
+
             name =dirname(path).split('/')[-1].replace('T_','')
             with open(f'{destination}/{name}.c','w') as arq2:
                 arq2.write(content)
