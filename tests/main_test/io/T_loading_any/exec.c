@@ -1,0 +1,18 @@
+#include "../../../doTheWorld_test.h"
+
+int main(int argc, char *argv[]){
+ 
+  const char *path = "exemple_folder/deer.jpg";
+  long size;
+  bool is_binary;
+  //load any file, is useful if you don't know if the file is binary or not
+  unsigned char *content = dtw_load_any_content(path,&size,&is_binary);
+  if(content == NULL){
+    printf("error oppening %s\n",path);
+    return 1;
+  }
+  printf("size: %ld\n",size);
+  printf("is_binary: %s\n",is_binary ? "true" : "false");
+  free(content);
+  return 0;
+}
