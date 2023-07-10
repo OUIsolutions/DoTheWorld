@@ -3,8 +3,7 @@ import CToolKit as ct
 from shutil import copytree,rmtree
 from os import remove,makedirs
 from os import listdir
-from os.path import isdir
-
+from os.path import isdir,dirname
 
 STARTER = 'doTheWorld/doTheWorldMain.h'
 OUTPUT_TEST = 'tests/doTheWorld_test.h'
@@ -32,11 +31,13 @@ def move_all_c(destination:str,current_path:str):
             continue
 
         if e.endswith('.c') or e.endswith('.cpp'):
-            print(path)
             with open(path,'r') as arq:
                 content = arq.read()
                 content = content.replace(f'../../{OUTPUT_TEST}',OUTPUT)
                 content = content.replace(f'../../../{OUTPUT_TEST}',OUTPUT)
+            name =dirname(path).split('/')[-1].replace('T_','')
+            with open(f'{destination}/{name}.c','w') as arq2:
+                arq2.write(content)
 
 
 for e in elements:
