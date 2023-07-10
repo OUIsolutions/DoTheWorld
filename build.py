@@ -16,8 +16,13 @@ ct.generate_amalgamated_code(STARTER,OUTPUT_TEST)
 
 test = ct.FolderTestPreset(folder='tests/main_test',side_effect_folder='tests/target')
 #test.generate_ouptut()
-test.start_test()
+#test.start_test()
 
+rmtree('exemples',ignore_errors=True)
+elements = listdir('tests/main_test')
+for e in elements:
+    if isdir(e):
+        makedirs(f'exemples/{e}')
 
 
 '''
