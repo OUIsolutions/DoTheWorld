@@ -3,7 +3,7 @@
 
 int main(int argc, char *argv[]){
  
-  const char *path = "exemple_folder/deer.jpg";
+  const char *path = "tests/target/blob.png";
   long size;
   //load a binary file content
   unsigned char *content = dtw_load_binary_content(path,&size);
@@ -12,6 +12,7 @@ int main(int argc, char *argv[]){
     return 1;
   }
   printf("size: %ld\n",size);
+  dtw_write_any_content("tests/target/blob2.png",content,size);
   free(content);
   return 0;
 }

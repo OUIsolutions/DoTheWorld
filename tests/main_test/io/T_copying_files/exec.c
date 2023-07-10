@@ -4,6 +4,6 @@
 
 int main(int argc, char *argv[]){
 
-  dtw_copy_any("exemple_folder/deer.jpg","deer.jpg",DTW_NOT_MERGE);
+  dtw_copy_any("tests/target/blob.png","tests/target/blob3.png",DTW_NOT_MERGE);
   return 0;
 }

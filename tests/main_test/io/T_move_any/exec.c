@@ -4,7 +4,7 @@
 int main(int argc, char *argv[]){
 
 
-    dtw_move_any("exemple_folder/deer.jpg","deer.jpg",DTW_NOT_MERGE);
+    dtw_move_any("tests/target/sub_folder","tests/target/sub_folder2",DTW_NOT_MERGE);
 
     return 0;
 }
