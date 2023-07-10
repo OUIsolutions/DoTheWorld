@@ -16,6 +16,7 @@ for c in content:
         if not isfile(novo_caminho):
             with open(caminho_do_arquivo,'r' ) as arq:
                 conteudo = arq.read()
+                conteudo = conteudo.replace('../../doTheWorld_test.h','../../../doTheWorld_test.h')
                 with open(novo_caminho,'w') as arq:
                     arq.write(conteudo)
         
