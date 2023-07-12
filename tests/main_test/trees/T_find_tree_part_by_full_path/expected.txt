@@ -1,0 +1,16 @@
+ 
+------------------------------------------------------------
+First Path: tests/target/sub_folder/sub_element.txt
+Path: tests/target/sub_folder/sub_element.txt
+Path Changed: false
+Dir: tests/target/sub_folder
+Full Name: sub_element.txt
+Name: sub_element
+Extension: txt
+Content Exist in Memory: true
+Ignore: false
+Content Exist In Hardware: true
+Is Binary: false
+Content Size: 0
+Content SHA:  e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+Content: 

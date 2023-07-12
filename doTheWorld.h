@@ -6818,7 +6818,7 @@ void DtwTree_add_tree_parts_from_string_array(struct DtwTree *self, struct DtwSt
 void DtwTree_add_tree_from_hardware(struct DtwTree *self,const char *path, DtwTreeProps *props){
     DtwTreeProps formated_props = DtwTreeProps_format_props(props);
     struct DtwStringArray *path_array = dtw_list_all_recursively(path,DTW_CONCAT_PATH);
-
+    path_array->sort(path_array);
     self->add_tree_parts_from_string_array(self, path_array,props);
     path_array->free(path_array);
 
