@@ -4,6 +4,7 @@ typedef struct DtwTransactionAction{
     int action;
     char *source1;
     char *source2;
+    char *sha256;
     bool is_binary;
     unsigned char *element;
     long size;
@@ -15,6 +16,7 @@ DtwTransactionAction * newDtwTransactionAction(
         int action,
         const char *source1,
         const char *source2,
+        const char *sha256,
         bool is_binary,
         unsigned char *element,
         long size
