@@ -4,7 +4,7 @@ struct DtwStringArray * newDtwStringArray(){
     self->size = 0;
 
     self->strings = (char**)malloc(1);
-    self->ownership = malloc(0);
+    self->ownership = (bool*)malloc(0);
 
     self->append = DtwStringArray_dtw_append;
     self->set_value = DtwStringArray_dtw_set_value;
@@ -36,7 +36,7 @@ void DtwStringArray_dtw_set_value(struct DtwStringArray *self, int index, const 
 }
 
 // Function prototypes
-void DtwStringArray_dtw_append(struct DtwStringArray *self, char *string,int ownership){
+void DtwStringArray_dtw_append(struct DtwStringArray *self,const  char *string,int ownership){
 
     self->strings =  (char**)realloc(self->strings, (self->size+ 1) * sizeof(char*));
     self->ownership = (bool*)realloc(self->ownership,(self->size+ 1) * sizeof(bool));
@@ -47,7 +47,7 @@ void DtwStringArray_dtw_append(struct DtwStringArray *self, char *string,int own
     }
 
     if(ownership == DTW_BY_REFERENCE || ownership == DTW_BY_OWNERSHIP){
-        self->strings[self->size] = string;
+        self->strings[self->size] = (char*)string;
     }
 
     else{
@@ -83,12 +83,7 @@ int string_cmp(const void *a, const void *b) {
 
 void DtwStringArray_dtw_sort(struct DtwStringArray *self) {
     // Criar um array auxiliar para armazenar os pares (string, ownership)
-    struct StringOwnershipPair {
-        char *string;
-        bool ownership;
-    };
-
-    struct StringOwnershipPair *pairs = malloc(self->size * sizeof(struct StringOwnershipPair));
+    privateDtwStringOwnershipPair *pairs = (privateDtwStringOwnershipPair*)malloc(self->size * sizeof(struct privateDtwStringOwnershipPair));
 
     // Copiar as strings e os ownerships para o array auxiliar
     for (int i = 0; i < self->size; i++) {
@@ -97,7 +92,7 @@ void DtwStringArray_dtw_sort(struct DtwStringArray *self) {
     }
 
     // Ordenar o array auxiliar com base nas strings
-    qsort(pairs, self->size, sizeof(struct StringOwnershipPair), string_cmp);
+    qsort(pairs, self->size, sizeof(privateDtwStringOwnershipPair), private_dtw_string_cmp);
 
     // Copiar as strings ordenadas e os ownerships de volta para o array original
     for (int i = 0; i < self->size; i++) {

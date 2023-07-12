@@ -71,10 +71,10 @@ unsigned char *DtwTreePart_get_content_binary_by_reference(struct DtwTreePart *s
 
 struct  DtwTreePart * DtwTreePart_self_copy(struct DtwTreePart *self){
     char *path = self->path->get_path(self->path);
-
+    DtwTreeProps props = {.content =DTW_NOT_LOAD,.hadware_data = DTW_NOT_LOAD};
     DtwTreePart *new_tree_part = newDtwTreePart(
             path,
-            &(DtwTreeProps){.content =DTW_NOT_LOAD,.hadware_data = DTW_NOT_LOAD}
+            &props
     );
     free(path);
 
@@ -199,13 +199,19 @@ void DtwTreePart_free(struct DtwTreePart *self){
 }
 
 struct DtwTreePart * newDtwTreePartEmpty(const char *path){
+    DtwTreeProps  props = {.content =DTW_NOT_LOAD,.hadware_data = DTW_NOT_LOAD};
     return newDtwTreePart(
             path,
-         &(DtwTreeProps){.content =DTW_NOT_LOAD,.hadware_data = DTW_NOT_LOAD}
+         &props
     );
-}struct DtwTreePart * newDtwTreePartLoading(const char *path){
+
+}
+
+
+struct DtwTreePart * newDtwTreePartLoading(const char *path){
+    DtwTreeProps  props = {.content =DTW_LOAD,.hadware_data = DTW_LOAD};
     return newDtwTreePart(
             path,
-            &(DtwTreeProps){.content =DTW_LOAD,.hadware_data = DTW_LOAD}
+            &props
     );
 }

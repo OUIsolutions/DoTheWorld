@@ -141,3 +141,8 @@ void private_dtw_remove_double_bars(struct DtwStringArray*path){
 }
 
 
+int private_dtw_string_cmp(const void *a, const void *b){
+    const char *str_a = *(const char **)a;
+    const char *str_b = *(const char **)b;
+    return strcmp(str_a, str_b);
+}

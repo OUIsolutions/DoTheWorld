@@ -12,3 +12,5 @@ void private_dtw_add_end_bar_to_dirs_string_array(struct DtwStringArray * dirs);
 char *dtw_concat_path(const char *path1, const char *path2);
 struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *paths,const char *path_to_remove);
 void private_dtw_remove_double_bars(struct DtwStringArray*path);
+
+int private_dtw_string_cmp(const void *a, const void *b);
