@@ -74,15 +74,14 @@ char *DtwTransactionAction_convert_action(DtwTransactionAction * self){
 }
 
 void DtwTransactionAction_represent(DtwTransactionAction * self){
-    printf("action %s\n",DtwTransactionAction_convert_action(self));
-    printf("source1 %s", self->source1 ? self->source1 :"null");
-    printf("source2 %s", self->source2 ? self->source2: "null");
-    printf("is binary %s",self->is_binary  ? "true" :"false");
+    printf("action:%s\n",DtwTransactionAction_convert_action(self));
+    printf("source1:%s\n", self->source1 ? self->source1 :"null");
+    printf("source2:%s\n", self->source2 ? self->source2: "null");
+    printf("is binary:%s\n",self->is_binary  ? "true" :"false");
 
     if(!self->is_binary && self->element){
-        printf("element %s",(char*)self->element);
+        printf("element:%s\n",(char*)self->element);
     }
-
 }
 
 
