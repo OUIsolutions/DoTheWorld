@@ -241,7 +241,7 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwTreeProps * props){
             }
         }
        
-        //adding action 
+        //adding action
         const char *action_string = private_dtw_convert_action_to_string(tree_part->pending_action);
         if(action_string != NULL){
             cJSON_AddItemToObject(
