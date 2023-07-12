@@ -13,6 +13,7 @@ typedef struct DtwStringArray {
   void (*represent)(struct DtwStringArray *self);
   void (*free)(struct DtwStringArray *self);
   int (*find_position)(struct DtwStringArray *self,const char *string);
+  void (*sort)(struct DtwStringArray *self);
 
 }DtwStringArray;
 
@@ -22,6 +23,9 @@ void DtwStringArray_dtw_append(struct DtwStringArray *self,char *string,int owne
 void DtwStringArray_dtw_merge_string_array(struct DtwStringArray *self, struct DtwStringArray *other);
 void DtwStringArray_dtw_represent_string_array(struct DtwStringArray *self);
 void DtwStringArray_dtw_free_string_array(struct DtwStringArray *self);
+void DtwStringArray_dtw_sort(struct DtwStringArray *self);
+
 void DtwStringArray_dtw_set_value(struct DtwStringArray *self, int index, const char *value);
 
 struct DtwStringArray * newDtwStringArray();
+

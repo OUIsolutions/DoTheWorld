@@ -11,6 +11,7 @@ struct DtwStringArray * newDtwStringArray(){
     self->merge_string_array = DtwStringArray_dtw_merge_string_array;
     self->represent= DtwStringArray_dtw_represent_string_array;
     self->free = DtwStringArray_dtw_free_string_array;
+    self->sort =DtwStringArray_dtw_sort;
     self->find_position = DtwStringArray_dtw_find_position;
     return self;
 }
@@ -73,6 +74,40 @@ void DtwStringArray_dtw_represent_string_array(struct DtwStringArray *self){
         printf("%s\n", self->strings[i]);
     }
 }
+
+int string_cmp(const void *a, const void *b) {
+    const char *str_a = *(const char **)a;
+    const char *str_b = *(const char **)b;
+    return strcmp(str_a, str_b);
+}
+
+void DtwStringArray_dtw_sort(struct DtwStringArray *self) {
+    // Criar um array auxiliar para armazenar os pares (string, ownership)
+    struct StringOwnershipPair {
+        char *string;
+        bool ownership;
+    };
+
+    struct StringOwnershipPair *pairs = malloc(self->size * sizeof(struct StringOwnershipPair));
+
+    // Copiar as strings e os ownerships para o array auxiliar
+    for (int i = 0; i < self->size; i++) {
+        pairs[i].string = self->strings[i];
+        pairs[i].ownership = self->ownership[i];
+    }
+
+    // Ordenar o array auxiliar com base nas strings
+    qsort(pairs, self->size, sizeof(struct StringOwnershipPair), string_cmp);
+
+    // Copiar as strings ordenadas e os ownerships de volta para o array original
+    for (int i = 0; i < self->size; i++) {
+        self->strings[i] = pairs[i].string;
+        self->ownership[i] = pairs[i].ownership;
+    }
+
+    free(pairs);
+}
+
 
 void DtwStringArray_dtw_free_string_array(struct DtwStringArray *self){
     for(int i = 0; i < self->size; i++){
