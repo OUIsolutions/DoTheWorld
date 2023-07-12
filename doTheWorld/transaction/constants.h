@@ -4,6 +4,7 @@ enum {
 
     DTW_MODIFY_FILE,
     DTW_CREATE_FILE,
+    DTW_CREATE_OR_MODIFY_FILE,
     DTW_RENAME_FILE,
     DTW_REMOVE_FILE,
 
@@ -13,7 +14,7 @@ enum {
     DTW_REMOVE_FOLDER,
 
 
-    DW_RENAME_ANY,
+    DTW_RENAME_ANY,
     DTW_REMOVE_ANY
 
 };

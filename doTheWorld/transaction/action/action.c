@@ -27,12 +27,65 @@ DtwTransactionAction * newDtwTransactionAction(
     return self;
 }
 
+
 char *DtwTransactionAction_convert_action(DtwTransactionAction * self){
+
     if(self->action == DTW_MODIFY_FILE){
-        return "modify_file";
+        return "modify file";
     }
-    if(self->action == )
+
+    if(self->action == DTW_CREATE_FILE){
+        return "create file";
+    }
+
+    if(self->action == DTW_CREATE_OR_MODIFY_FILE){
+        return "create or modify file";
+    }
+
+    if(self->action == DTW_RENAME_FILE){
+        return "rename file";
+    }
+
+    if(self->action == DTW_REMOVE_FILE){
+        return "remove file";
+    }
+
+    if(self->action == DTW_CREATE_FOLDER){
+        return "create folder";
+    }
+
+    if(self->action == DTW_RENAME_FOLDER){
+        return "rename folder";
+    }
+
+    if(self->action == DTW_REMOVE_FOLDER){
+        return "remove folder";
+    }
+
+    if(self->action == DTW_RENAME_ANY){
+        return "rename any";
+    }
+
+    if(self->action == DTW_REMOVE_ANY){
+        return "remove any";
+    }
+
+
 }
+
+void DtwTransactionAction_represent(DtwTransactionAction * self){
+    printf("action %s\n",DtwTransactionAction_convert_action(self));
+    printf("source1 %s", self->source1 ? self->source1 :"null");
+    printf("source2 %s", self->source2 ? self->source2: "null");
+    printf("is binary %s",self->is_binary  ? "true" :"false");
+
+    if(!self->is_binary && self->element){
+        printf("element %s",(char*)self->element);
+    }
+
+}
+
+
 void DtwTransactionAction_free(DtwTransactionAction * self){
     if(self->source1){
         free(self->source1);
