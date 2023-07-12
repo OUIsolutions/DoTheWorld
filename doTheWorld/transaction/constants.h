@@ -1,11 +1,12 @@
 
 
 enum {
-
+    DTW_FILE_ALREADY_EXIST_ERROR
 };
 
 enum {
 
+  DTW_CREATE_FILE,
   //escrita
   DTW_MODIFY_OR_CREATE_FILE,
   DTW_MODIFY_FILE,

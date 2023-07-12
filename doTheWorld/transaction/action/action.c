@@ -35,13 +35,20 @@ DtwTransactionAction * newDtwTransactionAction(
 int DtwTransactionAction_get_transaction_error_code(DtwTransactionAction * self,const char *previews_path){
 
     char formated_source1[500] = {0};
+
     if(previews_path){
        sprintf(formated_source1,"%s/%s",self->source1,previews_path);
     }else{
        strcpy(formated_source1,self->source1);
     }
+    int entity_type = dtw_entity_type(formated_source1);
 
-    
+    if(self->action ==DTW_CREATE_FILE && entity_type != DTW_NOT_FOUND){
+        return DTW_FILE_ALREADY_EXIST_ERROR;
+    }
+
+
+
 
 
 

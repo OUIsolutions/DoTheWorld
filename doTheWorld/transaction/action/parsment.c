@@ -2,6 +2,10 @@
 char *DtwTransactionAction_convert_action(DtwTransactionAction *self) {
     switch (self->action) {
         // Escrita
+
+        case DTW_CREATE_FILE:
+            return "create file";
+
         case DTW_MODIFY_OR_CREATE_FILE:
             return "modify or create file";
         case DTW_MODIFY_FILE:
@@ -63,7 +67,11 @@ char *DtwTransactionAction_convert_action(DtwTransactionAction *self) {
 
 
 int DtwTransactionAction_convert_string(const char *actionString) {
-    if (strcmp(actionString, "modify or create file") == 0) {
+    if(strcmp(actionString,"create file") == 0){
+        return DTW_CREATE_FILE;
+    }
+
+    else if (strcmp(actionString, "modify or create file") == 0) {
         return DTW_MODIFY_OR_CREATE_FILE;
     } else if (strcmp(actionString, "modify file") == 0) {
         return DTW_MODIFY_FILE;
