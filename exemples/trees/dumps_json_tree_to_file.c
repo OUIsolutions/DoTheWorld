@@ -12,10 +12,11 @@ int main(){
             "tests/target/",
             &(DtwTreeProps){
                     .content = DTW_INCLUDE,
-                    .hadware_data=DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
             }
     );
+
     tree->dumps_json_tree_to_file(
             tree,
             "tests/target/out.json",
@@ -23,7 +24,7 @@ int main(){
                     .minification = DTW_NOT_MIMIFY,
                     .ignored_elements=DTW_HIDE,
                     .content = DTW_INCLUDE,
-                    .hadware_data=DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
             }
     );

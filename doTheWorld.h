@@ -3907,6 +3907,13 @@ char * calc_sha_256_from_file_returning_string(const char *filename)
 #define DTW_BY_REFERENCE 1
 #define DTW_BY_OWNERSHIP 2
 #define DTW_BY_VALUE 3
+
+typedef struct privateDtwStringOwnershipPair {
+        char *string;
+        bool ownership;
+}privateDtwStringOwnershipPair;
+
+
 typedef struct DtwStringArray {
   int size;
 
@@ -3914,23 +3921,27 @@ typedef struct DtwStringArray {
   bool *ownership;
 
   void (*set_value)(struct DtwStringArray *self,int index,const char *value);
-  void (*append)(struct DtwStringArray *self,char *string,int mode);
+  void (*append)(struct DtwStringArray *self,const char *string,int mode);
   void (*merge_string_array)(struct DtwStringArray *self, struct DtwStringArray *other);
   void (*represent)(struct DtwStringArray *self);
   void (*free)(struct DtwStringArray *self);
   int (*find_position)(struct DtwStringArray *self,const char *string);
+  void (*sort)(struct DtwStringArray *self);
 
 }DtwStringArray;
 
 // End the structure with a semicolon
 int  DtwStringArray_dtw_find_position(struct DtwStringArray *self, const char *string);
-void DtwStringArray_dtw_append(struct DtwStringArray *self,char *string,int ownership);
+void DtwStringArray_dtw_append(struct DtwStringArray *self,const char *string,int ownership);
 void DtwStringArray_dtw_merge_string_array(struct DtwStringArray *self, struct DtwStringArray *other);
 void DtwStringArray_dtw_represent_string_array(struct DtwStringArray *self);
 void DtwStringArray_dtw_free_string_array(struct DtwStringArray *self);
+void DtwStringArray_dtw_sort(struct DtwStringArray *self);
+
 void DtwStringArray_dtw_set_value(struct DtwStringArray *self, int index, const char *value);
 
 struct DtwStringArray * newDtwStringArray();
+
 
 
 
@@ -3978,6 +3989,7 @@ char *dtw_concat_path(const char *path1, const char *path2);
 struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *paths,const char *path_to_remove);
 void private_dtw_remove_double_bars(struct DtwStringArray*path);
 
+int private_dtw_string_cmp(const void *a, const void *b);
 
 
 bool dtw_starts_with(const char *string, const char *prefix);
@@ -4690,7 +4702,11 @@ void private_dtw_remove_double_bars(struct DtwStringArray*path){
 }
 
 
-
+int private_dtw_string_cmp(const void *a, const void *b){
+    const char *str_a = *(const char **)a;
+    const char *str_b = *(const char **)b;
+    return strcmp(str_a, str_b);
+}
 
 
 
@@ -5602,13 +5618,14 @@ struct DtwStringArray * newDtwStringArray(){
     self->size = 0;
 
     self->strings = (char**)malloc(1);
-    self->ownership = malloc(0);
+    self->ownership = (bool*)malloc(0);
 
     self->append = DtwStringArray_dtw_append;
     self->set_value = DtwStringArray_dtw_set_value;
     self->merge_string_array = DtwStringArray_dtw_merge_string_array;
     self->represent= DtwStringArray_dtw_represent_string_array;
     self->free = DtwStringArray_dtw_free_string_array;
+    self->sort =DtwStringArray_dtw_sort;
     self->find_position = DtwStringArray_dtw_find_position;
     return self;
 }
@@ -5633,7 +5650,7 @@ void DtwStringArray_dtw_set_value(struct DtwStringArray *self, int index, const 
 }
 
 // Function prototypes
-void DtwStringArray_dtw_append(struct DtwStringArray *self, char *string,int ownership){
+void DtwStringArray_dtw_append(struct DtwStringArray *self,const  char *string,int ownership){
 
     self->strings =  (char**)realloc(self->strings, (self->size+ 1) * sizeof(char*));
     self->ownership = (bool*)realloc(self->ownership,(self->size+ 1) * sizeof(bool));
@@ -5644,7 +5661,7 @@ void DtwStringArray_dtw_append(struct DtwStringArray *self, char *string,int own
     }
 
     if(ownership == DTW_BY_REFERENCE || ownership == DTW_BY_OWNERSHIP){
-        self->strings[self->size] = string;
+        self->strings[self->size] = (char*)string;
     }
 
     else{
@@ -5671,6 +5688,35 @@ void DtwStringArray_dtw_represent_string_array(struct DtwStringArray *self){
         printf("%s\n", self->strings[i]);
     }
 }
+
+int string_cmp(const void *a, const void *b) {
+    const char *str_a = *(const char **)a;
+    const char *str_b = *(const char **)b;
+    return strcmp(str_a, str_b);
+}
+
+void DtwStringArray_dtw_sort(struct DtwStringArray *self) {
+    // Criar um array auxiliar para armazenar os pares (string, ownership)
+    privateDtwStringOwnershipPair *pairs = (privateDtwStringOwnershipPair*)malloc(self->size * sizeof(struct privateDtwStringOwnershipPair));
+
+    // Copiar as strings e os ownerships para o array auxiliar
+    for (int i = 0; i < self->size; i++) {
+        pairs[i].string = self->strings[i];
+        pairs[i].ownership = self->ownership[i];
+    }
+
+    // Ordenar o array auxiliar com base nas strings
+    qsort(pairs, self->size, sizeof(privateDtwStringOwnershipPair), private_dtw_string_cmp);
+
+    // Copiar as strings ordenadas e os ownerships de volta para o array original
+    for (int i = 0; i < self->size; i++) {
+        self->strings[i] = pairs[i].string;
+        self->ownership[i] = pairs[i].ownership;
+    }
+
+    free(pairs);
+}
+
 
 void DtwStringArray_dtw_free_string_array(struct DtwStringArray *self){
     for(int i = 0; i < self->size; i++){
@@ -5963,10 +6009,10 @@ unsigned char *DtwTreePart_get_content_binary_by_reference(struct DtwTreePart *s
 
 struct  DtwTreePart * DtwTreePart_self_copy(struct DtwTreePart *self){
     char *path = self->path->get_path(self->path);
-
+    DtwTreeProps props = {.content =DTW_NOT_LOAD,.hadware_data = DTW_NOT_LOAD};
     DtwTreePart *new_tree_part = newDtwTreePart(
             path,
-            &(DtwTreeProps){.content =DTW_NOT_LOAD,.hadware_data = DTW_NOT_LOAD}
+            &props
     );
     free(path);
 
@@ -6091,14 +6137,20 @@ void DtwTreePart_free(struct DtwTreePart *self){
 }
 
 struct DtwTreePart * newDtwTreePartEmpty(const char *path){
+    DtwTreeProps  props = {.content =DTW_NOT_LOAD,.hadware_data = DTW_NOT_LOAD};
     return newDtwTreePart(
             path,
-         &(DtwTreeProps){.content =DTW_NOT_LOAD,.hadware_data = DTW_NOT_LOAD}
+         &props
     );
-}struct DtwTreePart * newDtwTreePartLoading(const char *path){
+
+}
+
+
+struct DtwTreePart * newDtwTreePartLoading(const char *path){
+    DtwTreeProps  props = {.content =DTW_LOAD,.hadware_data = DTW_LOAD};
     return newDtwTreePart(
             path,
-            &(DtwTreeProps){.content =DTW_LOAD,.hadware_data = DTW_LOAD}
+            &props
     );
 }
 

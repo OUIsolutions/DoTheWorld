@@ -179,6 +179,8 @@ With the listage functions you can extract all Strings Arrays of elements in an 
 int main(int argc, char *argv[]){
 
   DtwStringArray *files = dtw_list_files("tests/target", DTW_CONCAT_PATH);
+  files->sort(files);
+
   for(int i = 0; i < files->size; i++){
     printf("%s\n", files->strings[i]);
   }
@@ -197,6 +199,7 @@ int main(int argc, char *argv[]){
 
   DtwStringArray *dirs = dtw_list_dirs("tests/target", DTW_NOT_CONCAT_PATH);
   //the represent methold will print the dirs in the console
+  dirs->sort(dirs);
   dirs->represent(dirs);
   dirs->free(dirs);
   return 0;
@@ -213,6 +216,7 @@ int main(int argc, char *argv[]){
 int main(int argc, char *argv[]){
 
   DtwStringArray *all = dtw_list_all("tests/target/",DTW_CONCAT_PATH);
+  all->sort(all);
   all->represent(all);
   all->free(all);
   return 0;
@@ -229,6 +233,7 @@ The By Using multi dimension listage functions , you can see all itens listed in
 int main(int argc, char *argv[]){
 
   DtwStringArray *files = dtw_list_files_recursively("tests/target/",DTW_CONCAT_PATH);
+  files->sort(files);
   files->represent(files);
   files->free(files);
   return 0;
@@ -244,6 +249,7 @@ int main(int argc, char *argv[]){
 int main(int argc, char *argv[]){
 
   DtwStringArray *files = dtw_list_dirs_recursively("tests/target/",DTW_CONCAT_PATH);
+  files->sort(files);
   files->represent(files);
   files->free(files);
   return 0;
@@ -259,6 +265,7 @@ int main(int argc, char *argv[]){
 int main(int argc, char *argv[]){
 
   DtwStringArray *files = dtw_list_all_recursively("tests/target/",DTW_CONCAT_PATH);
+  files->sort(files);
   files->represent(files);
   files->free(files);
   return 0;
@@ -394,7 +401,7 @@ int main(){
 
     //getting the content
     char *content = part->get_content_string_by_reference(part);
-    char new_content[100] ="";
+    char new_content[100] ={0};
     strcat(new_content,content);
     strcat(new_content," New Mensage");
     part->set_string_content(part,new_content);
@@ -897,10 +904,11 @@ int main(){
             "tests/target/",
             &(DtwTreeProps){
                     .content = DTW_INCLUDE,
-                    .hadware_data=DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
             }
     );
+
     tree->dumps_json_tree_to_file(
             tree,
             "tests/target/out.json",
@@ -908,7 +916,7 @@ int main(){
                     .minification = DTW_NOT_MIMIFY,
                     .ignored_elements=DTW_HIDE,
                     .content = DTW_INCLUDE,
-                    .hadware_data=DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
             }
     );
@@ -929,7 +937,7 @@ int main(){
             "tests/target/",
             &(DtwTreeProps){
                     .content = DTW_INCLUDE,
-                    .hadware_data=DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
             }
     );

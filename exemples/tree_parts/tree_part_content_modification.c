@@ -7,7 +7,7 @@ int main(){
 
     //getting the content
     char *content = part->get_content_string_by_reference(part);
-    char new_content[100] ="";
+    char new_content[100] ={0};
     strcat(new_content,content);
     strcat(new_content," New Mensage");
     part->set_string_content(part,new_content);
