@@ -1,14 +1,7 @@
 
 
 enum {
-    DTW_OK,
-    DTW_ITS_NOT_AN_FILE,
-    DTW_FILE_DONT_EXIST,
-    DTW_FILE_ALREADY_EXIST,
-    DTW_FOLDER_DONT_EXIST,
-    DTW_FOLDER_ALREADY_EXIST,
-    DTW_ITS_NOT_AN_FOLDER,
-    DTW_ANY_DONT_EXIST
+
 };
 
 enum {
@@ -36,7 +29,7 @@ enum {
   DTW_CREATE_FOLDER,
 
   //rename
-  DTW_RENAME_IF_EXISTE_FOLDER,
+  DTW_RENAME_IF_EXIST_FOLDER,
   DTW_RENAME_FOLDER,
 
   //remove
@@ -50,9 +43,6 @@ enum {
 
   DTW_REMOVE_ANY_IF_EXIST,
   DTW_REMOVE_ANY,
-
-
-
 
 };
 

@@ -26,8 +26,10 @@ char *DtwTransactionAction_convert_action(DtwTransactionAction * self);
 
 int DtwTransactionAction_convert_string(const char *actionString);
 
-void DtwTransactionAction_represent(DtwTransactionAction * self);
+int DtwTransactionAction_get_transaction_error_code(DtwTransactionAction * self,const char *previews_path);
 
+
+void DtwTransactionAction_represent(DtwTransactionAction * self);
 
 void DtwTransactionAction_free(DtwTransactionAction * self);
 

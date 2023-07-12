@@ -32,9 +32,21 @@ DtwTransactionAction * newDtwTransactionAction(
     return self;
 }
 
+int DtwTransactionAction_get_transaction_error_code(DtwTransactionAction * self,const char *previews_path){
+
+    char formated_source1[500] = {0};
+    if(previews_path){
+       sprintf(formated_source1,"%s/%s",self->source1,previews_path);
+    }else{
+       strcpy(formated_source1,self->source1);
+    }
+
+    
 
 
 
+
+}
 
 
 

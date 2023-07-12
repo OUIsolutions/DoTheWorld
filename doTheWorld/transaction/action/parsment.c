@@ -34,7 +34,7 @@ char *DtwTransactionAction_convert_action(DtwTransactionAction *self) {
             return "create folder";
 
             // Renomear
-        case DTW_RENAME_IF_EXISTE_FOLDER:
+        case DTW_RENAME_IF_EXIST_FOLDER:
             return "rename if exist folder";
         case DTW_RENAME_FOLDER:
             return "rename folder";
@@ -86,7 +86,7 @@ int DtwTransactionAction_convert_string(const char *actionString) {
     } else if (strcmp(actionString, "create folder") == 0) {
         return DTW_CREATE_FOLDER;
     } else if (strcmp(actionString, "rename if exist folder") == 0) {
-        return DTW_RENAME_IF_EXISTE_FOLDER;
+        return DTW_RENAME_IF_EXIST_FOLDER;
     } else if (strcmp(actionString, "rename folder") == 0) {
         return DTW_RENAME_FOLDER;
     } else if (strcmp(actionString, "remove if exist folder") == 0) {
