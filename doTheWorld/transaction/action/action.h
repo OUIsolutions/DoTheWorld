@@ -24,7 +24,7 @@ DtwTransactionAction * newDtwTransactionAction(
 
 char *DtwTransactionAction_convert_action(DtwTransactionAction * self);
 
-
+int DtwTransactionAction_convert_string(const char *actionString);
 
 void DtwTransactionAction_represent(DtwTransactionAction * self);
 
