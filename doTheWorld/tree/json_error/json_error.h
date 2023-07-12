@@ -7,16 +7,16 @@
 #define DTW_ACTION_ERROR -1
 
 
-typedef struct DtwJsonError {
+typedef struct DtwJsonTreeError {
     int code;
     int position;
     const char *menssage;
-    void (*free)(struct DtwJsonError *self);
-    void (*represent)(struct DtwJsonError *self);
+    void (*free)(struct DtwJsonTreeError *self);
+    void (*represent)(struct DtwJsonTreeError *self);
 
-}DtWJsonError;
+}DtwJsonTreeError;
 
-struct DtwJsonError * newDtwJsonError();
-struct DtwJsonError * DtwJsonError_validate_json_tree(char *content);
-void DtwJsonError_represent_json_error(struct DtwJsonError *self);
-void DtwJsonError_free_json_error(struct DtwJsonError *self);
+struct DtwJsonTreeError * newDtwJsonTreeError();
+struct DtwJsonTreeError * DtwJsonTreeError_validate_json_tree(char *content);
+void DtwJsonTreeError_represent_json_error(struct DtwJsonTreeError *self);
+void DtwJsonTreeError_free_json_error(struct DtwJsonTreeError *self);
