@@ -1,0 +1,5 @@
+ 
+tests/target/a.txt
+tests/target/blob.png
+tests/target/sub_folder/sub_element.txt
+tests/target/sub_folder/sub_element2.txt
