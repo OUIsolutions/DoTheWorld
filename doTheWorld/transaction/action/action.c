@@ -48,11 +48,6 @@ int DtwTransactionAction_get_transaction_error_code(DtwTransactionAction * self,
     }
 
 
-
-
-
-
-
 }
 
 
