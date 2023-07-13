@@ -54,7 +54,7 @@ def create_full_folder_file_to_zip(folder:str = None):
     for c in content:
         if c.startswith('.'):
             continue
-
+            
 
 
 ct.generate_amalgamated_code(STARTER,OUTPUT_TEST)
