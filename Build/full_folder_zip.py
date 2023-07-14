@@ -1,6 +1,6 @@
 from os.path import isdir
 from os import listdir
-
+from os import getcwd
 def create_full_folder_cleared(folder:str,dest:str):    
     content = listdir(folder)
     for c in content:
@@ -17,4 +17,4 @@ def create_full_folder_cleared(folder:str,dest:str):
 
 
 def zip_folder():
-    pass 
+    create_full_folder_cleared(getcwd(),'out_folder')
