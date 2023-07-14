@@ -22,8 +22,7 @@ double DtwObject_get_double(struct DtwObject *self, const char *name){
 
 
 
-void DtwObject_set_double(struct DtwObject *self,const char *name, double value,DtwObjectProps *props){
-    DtwObjectProps formated_props = DtwObjectProps_create_props(props);
+void DtwObject_set_double(struct DtwObject *self,const char *name, double value){
     char result[20] = {0};
     sprintf(result,"%f",value);
     self->set_string(self,name,result,NULL);

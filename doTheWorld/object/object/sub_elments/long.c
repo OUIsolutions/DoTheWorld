@@ -19,7 +19,7 @@ long DtwObject_get_long(struct DtwObject *self, const char *name){
     return 0;
 }
 
-void DtwObject_set_long(struct DtwObject *self,const char *name, long value,DtwObjectProps *props){
+void DtwObject_set_long(struct DtwObject *self,const char *name, long value){
     char result[20] = {0};
     sprintf(result,"%li",value);
     self->set_string(self,name,result,NULL);
