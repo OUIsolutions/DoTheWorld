@@ -16,7 +16,9 @@ ct.generate_amalgamated_code(STARTER,OUTPUT_TEST)
 use_valgrind = True 
 if osname() == 'Windows':
     use_valgrind = False
+ct.compile_project('teste.c')
 
+'''
 test = ct.FolderTestPreset(
     folder='tests/main_test',
     side_effect_folder='tests/target',
@@ -30,3 +32,4 @@ ct.generate_amalgamated_code(STARTER,OUTPUT)
 create_exemples(TEST_NAME,OUTPUT)
 
 zip_folder(ZIP_NAME)
+'''

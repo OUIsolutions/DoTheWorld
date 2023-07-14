@@ -58,7 +58,7 @@ def compile_project( file: str,compiler ='gcc', output: str = None, flags: List[
 
     if output is None:
         if current_os() == 'Windows':
-            output = file.replace('.c', 'exe').replace('.cpp', '.exe')
+            output = file.replace('.c', '.exe').replace('.cpp', '.exe')
         else:
             output = file.replace('.c', '.out').replace('.cpp', '.out')
 

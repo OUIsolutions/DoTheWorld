@@ -3948,10 +3948,10 @@ struct DtwStringArray * newDtwStringArray();
 const char base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 
-char *dtw_base64_encode(unsigned char *data, size_t input_length);
+char *dtw_base64_encode(unsigned char *data, long input_length);
 
 
-unsigned char *dtw_base64_decode(const char *data, size_t *output_length);
+unsigned char *dtw_base64_decode(const char *data, long *output_length);
 
 
 char *dtw_convert_binary_file_to_base64(const char *path);
@@ -4444,7 +4444,7 @@ struct  DtwTree * newDtwTree();
 
 
 
-char *dtw_base64_encode(unsigned char *data, size_t input_length){
+char *dtw_base64_encode(unsigned char *data, long input_length){
     size_t output_length = 4 * ((input_length + 2) / 3);
 
     char *encoded_data = (char *)malloc(output_length + 1);
@@ -4477,7 +4477,7 @@ char *dtw_base64_encode(unsigned char *data, size_t input_length){
 }
 
 
-unsigned char *dtw_base64_decode(const char *data, size_t *output_length){
+unsigned char *dtw_base64_decode(const char *data, long *output_length){
     unsigned long input_length = strlen(data);
     if (input_length % 4 != 0) return NULL;
 
@@ -6377,7 +6377,7 @@ void DtwTree_loads_json_tree(struct DtwTree *self, const char *content){
             part->content_exist_in_memory = true;
         
             if(part->is_binary){
-                size_t out_size;
+                long out_size;
                 unsigned char *decoded =dtw_base64_decode(
                     content->valuestring,
                     &out_size
