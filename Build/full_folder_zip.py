@@ -17,3 +17,4 @@ def create_full_folder_cleared(folder:str,dest:str):
 
 
 def zip_folder():
+    pass 
