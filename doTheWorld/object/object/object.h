@@ -9,8 +9,8 @@ typedef struct DtwObject{
     DtwRandonizer  *randonizer;
     DtwGarbage  *garbage_array;
 
-    unsigned char *(*get_binary)(struct DtwObject *self, const char *name, int *size,DtwObjectProps *props);
-    void (*set_binary)(struct DtwObject *self, const char *name, unsigned  char *value, int size,DtwObjectProps *props);
+    unsigned char *(*get_binary)(struct DtwObject *self, const char *name, long *size,DtwObjectProps *props);
+    void (*set_binary)(struct DtwObject *self, const char *name, unsigned  char *value, long size,DtwObjectProps *props);
 
 
     char *(*get_string)(struct DtwObject *self,const char *name,DtwObjectProps *props);
@@ -43,8 +43,8 @@ DtwObject * newDtwObject(const char *path);
 char * private_DtwObject_create_path(struct DtwObject *self,const char *name);
 
 
-unsigned char * DtwObject_get_binary(struct DtwObject *self, const char *name, int *size,DtwObjectProps *props);
-void DtwObject_set_binary(struct DtwObject *self, const char *name, unsigned  char *value, int size,DtwObjectProps *props);
+unsigned char * DtwObject_get_binary(struct DtwObject *self, const char *name, long *size,DtwObjectProps *props);
+void DtwObject_set_binary(struct DtwObject *self, const char *name, unsigned  char *value, long size,DtwObjectProps *props);
 
 
 char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectProps *props);

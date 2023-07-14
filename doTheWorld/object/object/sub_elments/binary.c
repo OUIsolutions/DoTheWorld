@@ -1,4 +1,4 @@
-unsigned char * DtwObject_get_binary(struct DtwObject *self, const char *name, int *size,DtwObjectProps *props){
+unsigned char * DtwObject_get_binary(struct DtwObject *self, const char *name, long *size,DtwObjectProps *props){
     DtwObjectProps formated_props = DtwObjectProps_create_props(props);
 
     char *path = private_DtwObject_create_path(self,name);
@@ -29,7 +29,7 @@ unsigned char * DtwObject_get_binary(struct DtwObject *self, const char *name, i
 
 }
 
-void DtwObject_set_binary(struct DtwObject *self, const char *name, unsigned  char *value, int size,DtwObjectProps *props){
+void DtwObject_set_binary(struct DtwObject *self, const char *name, unsigned  char *value, long size,DtwObjectProps *props){
     DtwObjectProps formated_props = DtwObjectProps_create_props(props);
     char *path = private_DtwObject_create_path(self, name);
     dtw_write_any_content(path,value,size);
