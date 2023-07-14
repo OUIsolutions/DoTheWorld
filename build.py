@@ -9,7 +9,7 @@ TEST_NAME  = 'doTheWorld_test.h'
 
 OUTPUT_TEST = 'tests/doTheWorld_test.h'
 OUTPUT = 'doTheWorld.h'
-
+ZIP_NAME ='DoTheWorld'
 
 '''
 ct.generate_amalgamated_code(STARTER,OUTPUT_TEST)
@@ -21,4 +21,4 @@ ct.generate_amalgamated_code(STARTER,OUTPUT)
 
 create_exemples(TEST_NAME,OUTPUT)
 '''
-zip_folder()
+zip_folder(ZIP_NAME)

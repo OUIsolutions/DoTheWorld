@@ -51,4 +51,4 @@ def zip_folder(zip_name:str):
     rmtree(out_name,ignore_errors=True)
     makedirs(out_name)
     create_full_folder_cleared(getcwd(),out_name,zip_name)
-    make_archive(zip_folder,'zip',out_name)
+    make_archive(zip_name,'zip',out_name)
