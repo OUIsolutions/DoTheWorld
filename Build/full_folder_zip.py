@@ -21,7 +21,7 @@ def create_full_folder_cleared(folder:str,dest:str):
         
  
         if isdir(path):
-            
+            makedirs(f'{dest}/{path}')
             create_full_folder_cleared(path,dest)
         else:
             print(path)
