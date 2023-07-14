@@ -8,11 +8,9 @@ DtwObjectProps DtwObjectProps_create_props(DtwObjectProps *props){
         result = *props;
     }
 
-
-    if(!result.cache){
-        result.cache = DTW_ALLOW_CACHE;
+    if(!result.garbage){
+        result.garbage = DTW_ALLOW_GARBAGE;
     }
-
 
 
     return result;

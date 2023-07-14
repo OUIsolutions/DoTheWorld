@@ -33,7 +33,7 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectPro
 
 
 
-    if(formated_props.cache == DTW_ALLOW_CACHE){
+    if(formated_props.garbage == DTW_ALLOW_GARBAGE){
         self->garbage_array->append(self->garbage_array,DTW_STRING,result);
     }
 
