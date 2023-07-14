@@ -11,7 +11,7 @@ OUTPUT_TEST = 'tests/doTheWorld_test.h'
 OUTPUT = 'doTheWorld.h'
 ZIP_NAME ='DoTheWorld'
 
-'''
+
 ct.generate_amalgamated_code(STARTER,OUTPUT_TEST)
 test = ct.FolderTestPreset(folder='tests/main_test',side_effect_folder='tests/target')
 test.generate_ouptut()
@@ -20,5 +20,5 @@ ct.include_code_in_markdown('README.md',save_file=True)
 ct.generate_amalgamated_code(STARTER,OUTPUT)
 
 create_exemples(TEST_NAME,OUTPUT)
-'''
+
 zip_folder(ZIP_NAME)
