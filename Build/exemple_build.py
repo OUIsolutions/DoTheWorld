@@ -1,6 +1,7 @@
 
 
-from shutil import copytree,rmtree
+from shutil import copytree
+from shutil import rmtree
 from os import remove,makedirs
 from os import listdir
 from os.path import isdir,dirname
