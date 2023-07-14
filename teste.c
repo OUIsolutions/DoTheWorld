@@ -1,5 +1,5 @@
 
-#include "doTheWorld/doTheWorldMain.h"
+#include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
  
