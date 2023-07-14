@@ -1,6 +1,7 @@
 # Prerequisites
 *.d
 exemple
+*.pyc
 # object files
 *.json
 *.o

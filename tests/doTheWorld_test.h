@@ -5165,7 +5165,7 @@ struct DtwStringArray *  dtw_list_basic(const char *path,int expected_type,bool 
     char search_path[MAX_PATH];
 
     //array of directories
-    struct DtwStringArray *dirs = dtw_constructor_string_array();
+    struct DtwStringArray *dirs = newDtwStringArray();
     int i = 0;
 
     // build the search path string
