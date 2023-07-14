@@ -1,7 +1,7 @@
 
 
 
-double DtwObject_get_double(struct DtwObject *self, const char *name,DtwObjectProps *props){
+double DtwObject_get_double(struct DtwObject *self, const char *name){
 
     char *result = self->get_string(self,name,&dtw_no_store);
 

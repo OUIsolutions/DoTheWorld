@@ -8,7 +8,6 @@ typedef struct DtwObject{
 
     DtwRandonizer  *randonizer;
     DtwGarbage  *garbage_array;
-    DtwObjectDict  *loaded_elements;
 
     unsigned char *(*get_binary)(struct DtwObject *self, const char *name, int *size,DtwObjectProps *props);
     void (*set_binary)(struct DtwObject *self, const char *name, unsigned  char *value, int size,DtwObjectProps *props);
@@ -17,12 +16,12 @@ typedef struct DtwObject{
     char *(*get_string)(struct DtwObject *self,const char *name,DtwObjectProps *props);
     void (*set_string)(struct DtwObject *self,const char *name,const char *value,DtwObjectProps *props);
 
-    long (*get_long)(struct DtwObject *self, const char *name,DtwObjectProps *props);
-    void (*set_long)(struct DtwObject *self,const char *name,long value,DtwObjectProps *props);
+    long (*get_long)(struct DtwObject *self, const char *name);
+    void (*set_long)(struct DtwObject *self,const char *name,long value);
 
 
-    double (*get_double)(struct DtwObject *self, const char *name,DtwObjectProps *props);
-    void (*set_double)(struct DtwObject *self,const char *name, double value,DtwObjectProps *props);
+    double (*get_double)(struct DtwObject *self, const char *name);
+    void (*set_double)(struct DtwObject *self,const char *name, double value);
 
     struct DtwObject *(*sub_object)(struct DtwObject *self,const char*name,DtwObjectProps *props);
 
@@ -51,11 +50,11 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectPro
 void DtwObject_set_string(struct DtwObject *self,const char *name, const char *value,DtwObjectProps *props);
 
 
-long DtwObject_get_long(struct DtwObject *self, const char *name,DtwObjectProps *props);
-void DtwObject_set_long(struct DtwObject *self,const char *name, long value,DtwObjectProps *props);
+long DtwObject_get_long(struct DtwObject *self, const char *name);
+void DtwObject_set_long(struct DtwObject *self,const char *name, long value);
 
-double DtwObject_get_double(struct DtwObject *self, const char *name,DtwObjectProps *props);
-void DtwObject_set_double(struct DtwObject *self,const char *name, double value,DtwObjectProps *props);
+double DtwObject_get_double(struct DtwObject *self, const char *name);
+void DtwObject_set_double(struct DtwObject *self,const char *name, double value);
 
 
 void DtwObject_destroy(struct DtwObject *self,const char *name);

@@ -2,8 +2,7 @@
 // Created by jurandi on 06-07-2023.
 //
 
-long DtwObject_get_long(struct DtwObject *self, const char *name,DtwObjectProps *props){
-    DtwObjectProps formated_props = DtwObjectProps_create_props(props);
+long DtwObject_get_long(struct DtwObject *self, const char *name){
     char *result = self->get_string(self,name,&dtw_no_store);
 
     if(result){
