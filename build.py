@@ -19,5 +19,5 @@ test.start_test()
 ct.include_code_in_markdown('README.md',save_file=True)
 ct.generate_amalgamated_code(STARTER,OUTPUT)
 '''
-create_exemples(TEST_NAME,OUTPUT_TEST)
+create_exemples(TEST_NAME,OUTPUT)
 zip_folder()
