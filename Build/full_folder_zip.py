@@ -10,6 +10,12 @@ def create_full_folder_cleared(folder:str,dest:str):
             continue
         if c.startswith('__pycache__'):
             continue
+
+        if c == 'main.c':
+            continue
+        
+        if c.endswith('.out'):
+            continue
         
  
         if isdir(path):
