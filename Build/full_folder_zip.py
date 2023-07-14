@@ -5,15 +5,17 @@ def create_full_folder_cleared(folder:str,dest:str):
     content = listdir(folder)
     for c in content:
         path = f'{folder}/{c}'
+        path = path.replace(getcwd() + '/','')
         if c.startswith('.'):
             continue
         if c.startswith('__pycache__'):
             continue
+        
  
         if isdir(path):
-            return create_full_folder_cleared(path,dest)
-
-        print(c)
+            create_full_folder_cleared(path,dest)
+        else:
+            print(path)
 
 
 def zip_folder():
