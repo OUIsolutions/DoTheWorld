@@ -28,6 +28,7 @@ typedef struct DtwObject{
     int (*type_of)(struct DtwObject *self,const char*name);
     char *(*inspect_type)(struct DtwObject *self,int type);
 
+
     DtwStringArray  * (*list_all)(struct DtwObject *self,DtwObjectProps *props);
     void(*destroy)(struct DtwObject *self,const char *name);
     void (*free)(struct DtwObject *self);
