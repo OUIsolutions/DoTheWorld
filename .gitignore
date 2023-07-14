@@ -5,6 +5,7 @@ exemple
 *.json
 *.o
 *.ko
+out_folder
 *.obj
 *.elf
 main.c

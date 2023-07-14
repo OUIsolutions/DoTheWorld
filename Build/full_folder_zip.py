@@ -24,7 +24,11 @@ def create_full_folder_cleared(folder:str,dest:str):
             makedirs(f'{dest}/{path}')
             create_full_folder_cleared(path,dest)
         else:
-            print(path)
+            with open(path,'r' ) as arq:
+                content = arq.read()
+            
+            with open(f'{dest}/{path}','w') as arq:
+                arq.write(content)
 
 
 def zip_folder():
