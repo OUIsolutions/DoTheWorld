@@ -35,7 +35,7 @@ def create_full_folder_cleared(folder:str,dest:str,zip_name:str):
         
         if isdir(path):
             makedirs(f'{dest}/{path}')
-            create_full_folder_cleared(path,dest,zip_name=)
+            create_full_folder_cleared(path,dest,zip_name)
         else:
             
             with open(path,'rb' ) as arq:
