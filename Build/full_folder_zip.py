@@ -10,8 +10,15 @@ def create_full_folder_cleared(folder:str,dest:str):
     for c in content:
         path = f'{folder}/{c}'
         path = path.replace(getcwd() + '/','')
+        if c == dest:
+            continue
+        
         if c.startswith('.'):
             continue
+        
+        if c.endswith('.pyc'):
+            continue
+
         if c.startswith('__pycache__'):
             continue
 
@@ -20,10 +27,8 @@ def create_full_folder_cleared(folder:str,dest:str):
 
         if c.endswith('.out'):
             continue
-        if c == dest:
-            continue
-        
- 
+
+
         if isdir(path):
             makedirs(f'{dest}/{path}')
             create_full_folder_cleared(path,dest)
