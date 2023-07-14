@@ -53,6 +53,7 @@ SOFTWARE.
 #include "path/path.h"
 
 #include "tree/declarations.h"
+#include "object/declarations.h"
 
 
 #include "base64/base64.c"
@@ -67,7 +68,7 @@ SOFTWARE.
 #include "path/path.c"
 #include "string_array/string_array.c"
 #include "tree/definitions.h"
-
+#include "object/definitions.h"
 #endif //DO_THE_WORLD_H
 
 
