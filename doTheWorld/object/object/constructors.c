@@ -4,11 +4,10 @@
 
 DtwObject * private_newDtwObject_raw(){
 
-    DtwObject * self = (DtwObject*)malloc(sizeof(DtwObject));
+    DtwObject * self = (DtwObject*) malloc(sizeof(DtwObject));
     self->randonizer = NULL;
     self->error =  DTW_OK;
     self->garbage_array = newDtwGarbageArray();
-    self->loaded_elements = newDtwObjectDict();
     self->first_object = false;
 
     self->get_binary = DtwObject_get_binary;
