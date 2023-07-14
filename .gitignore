@@ -2,9 +2,11 @@
 *.d
 exemple
 *.pyc
+
 # object files
 *.json
 *.o
+
 *.ko
 out_folder
 *.obj
