@@ -75,7 +75,7 @@ int DtwObject_type_of(struct DtwObject *self,const char*name){
         return entity;
     }
 
-    int size;
+    long size;
     bool is_binary;
     unsigned char *result = dtw_load_any_content(path,&size,&is_binary);
 
