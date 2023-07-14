@@ -5,7 +5,7 @@ from os import makedirs
 from shutil import rmtree,make_archive
 import zipfile
 
-def create_full_folder_cleared(folder:str,dest:str):    
+def create_full_folder_cleared(folder:str,dest:str,zip_name:str):    
     content = listdir(folder)
     for c in content:
         path = f'{folder}/{c}'
@@ -13,6 +13,9 @@ def create_full_folder_cleared(folder:str,dest:str):
         if c == dest:
             continue
         
+        if c == zip_name:
+            continue
+
         if c.startswith('.'):
             continue
         
@@ -27,11 +30,12 @@ def create_full_folder_cleared(folder:str,dest:str):
 
         if c.endswith('.out'):
             continue
-
-
+        
+    
+        
         if isdir(path):
             makedirs(f'{dest}/{path}')
-            create_full_folder_cleared(path,dest)
+            create_full_folder_cleared(path,dest,zip_name=)
         else:
             
             with open(path,'rb' ) as arq:
@@ -41,9 +45,10 @@ def create_full_folder_cleared(folder:str,dest:str):
                 arq.write(content)
             
 
-def zip_folder():
-    out_name = 'out_name'
+def zip_folder(zip_name:str):
+    out_name = 'out_folder'
+    
     rmtree(out_name,ignore_errors=True)
     makedirs(out_name)
-    create_full_folder_cleared(getcwd(),out_name)
-    make_archive('DoTheWorld','zip',out_name)
+    create_full_folder_cleared(getcwd(),out_name,zip_name)
+    make_archive(zip_folder,'zip',out_name)
