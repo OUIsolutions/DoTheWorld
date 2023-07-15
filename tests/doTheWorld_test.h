@@ -5575,6 +5575,9 @@ void DtwPath_add_end_dir(struct DtwPath *self, const char *end_dir){
         free(path);
         free(dir);
     }
+    else{
+        self->set_dir(self,end_dir);
+    }
 }
 
   
