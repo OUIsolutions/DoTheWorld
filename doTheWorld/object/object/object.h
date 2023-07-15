@@ -30,6 +30,8 @@ typedef struct DtwObject{
 
 
     DtwStringArray  * (*list_all)(struct DtwObject *self,DtwObjectProps *props);
+    long (*size)(struct DtwObject *self);
+
     void(*destroy)(struct DtwObject *self,const char *name);
     void (*free)(struct DtwObject *self);
 
@@ -63,6 +65,7 @@ DtwStringArray  * DtwObject_list_all(struct DtwObject *self,DtwObjectProps *prop
 
 DtwObject * DtwObject_sub_object(struct DtwObject *self,const char*name,DtwObjectProps *props);
 
+long DtwObject_size(struct DtwObject *self);
 
 int DtwObject_type_of(struct DtwObject *self,const char*name);
 char *DtwObject_inspect_type(struct DtwObject *self,int type);

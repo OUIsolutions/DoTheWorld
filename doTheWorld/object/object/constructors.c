@@ -25,7 +25,7 @@ DtwObject * private_newDtwObject_raw(){
     self->set_double = DtwObject_set_double;
     self->set_long = DtwObject_set_long;
 
-
+    self->size = DtwObject_size;
     self->list_all = DtwObject_list_all;
     self->free = DtwObject_free;
     return  self;

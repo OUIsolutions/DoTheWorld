@@ -63,7 +63,12 @@ DtwStringArray  * DtwObject_list_all(struct DtwObject *self,DtwObjectProps *prop
     return element;
 }
 
-
+long DtwObject_size(struct DtwObject *self){
+    DtwStringArray  *elements = self->list_all(self,&dtw_no_store);
+    long  size = elements->size;
+    elements->free(elements);
+    return size;
+}
 
 
 int DtwObject_type_of(struct DtwObject *self,const char*name){
