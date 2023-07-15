@@ -233,6 +233,9 @@ void DtwPath_add_start_dir(struct DtwPath *self, const char *start_dir){
         free(path);
         free(dir);
     }
+    else{
+        self->set_dir(self,start_dir);
+    }
 }
 
 void DtwPath_add_end_dir(struct DtwPath *self, const char *end_dir){
