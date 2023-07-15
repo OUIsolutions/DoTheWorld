@@ -4486,9 +4486,7 @@ unsigned char *dtw_base64_decode(const char *data, long *output_length){
     if (data[input_length - 2] == '=') (*output_length)--;
 
     unsigned char *decoded_data = (unsigned char*) malloc(*output_length +2);
-    strcpy((char*)decoded_data,"");
 
-    if (decoded_data == NULL) return NULL;
 
     size_t i, j;
     for (i = 0, j = 0; i < input_length; ) {
@@ -4509,6 +4507,7 @@ unsigned char *dtw_base64_decode(const char *data, long *output_length){
             decoded_data[j++] = b;
         }
     }
+    decoded_data[*output_length] = '\0';
 
     return decoded_data;
 }
