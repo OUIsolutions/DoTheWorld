@@ -1,0 +1,8 @@
+#include "props/props.c"
+#include "garbage/definitions.h"
+#include "folder/constructors.c"
+#include "folder/folder.c"
+#include "folder/sub_elments/long.c"
+#include "folder/sub_elments/double.c"
+#include "folder/sub_elments/strings.c"
+#include "folder/sub_elments/binary.c"

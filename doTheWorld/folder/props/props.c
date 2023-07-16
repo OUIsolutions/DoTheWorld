@@ -1,8 +1,8 @@
 
 
-DtwObjectProps DtwObjectProps_create_props(DtwObjectProps *props){
+DtwFolderProps DtwFolderProps_create_props(DtwFolderProps *props){
 
-    DtwObjectProps result = {0};
+    DtwFolderProps result = {0};
 
     if(props){
         result = *props;

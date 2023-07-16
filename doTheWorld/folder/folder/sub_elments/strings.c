@@ -1,10 +1,10 @@
 //
 // Created by jurandi on 06-07-2023.
 //
-char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectProps *props){
-    DtwObjectProps formated_props = DtwObjectProps_create_props(props);
+char * DtwFolder_get_string(struct DtwFolder *self, const char *name, DtwFolderProps *props){
+    DtwFolderProps formated_props = DtwFolderProps_create_props(props);
 
-    char *path = private_DtwObject_create_path(self,name);
+    char *path = private_DtwFolder_create_path(self,name);
     long size;
     bool is_binary;
 
@@ -41,8 +41,8 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectPro
 
 }
 
-void DtwObject_set_string(struct DtwObject *self,const char *name, const char *value) {
-    char *path = private_DtwObject_create_path(self, name);
+void DtwFolder_set_string(struct DtwFolder *self, const char *name, const char *value) {
+    char *path = private_DtwFolder_create_path(self, name);
     dtw_write_string_file_content(path,value);
     free(path);
 }

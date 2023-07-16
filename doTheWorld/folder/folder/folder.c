@@ -1,7 +1,7 @@
 
 
 
-char * private_DtwObject_create_path(struct DtwObject *self,const char *name){
+char * private_DtwFolder_create_path(struct DtwFolder *self, const char *name){
 
     if(strcmp(name,"$random") == 0){
         for(int i = 20; i  < 30; i++) {
@@ -36,10 +36,10 @@ char * private_DtwObject_create_path(struct DtwObject *self,const char *name){
 }
 
 
-DtwObject * DtwObject_sub_object(struct DtwObject *self,const char*name,DtwObjectProps *props){
-    DtwObjectProps formated_props = DtwObjectProps_create_props(props);
-    char *path = private_DtwObject_create_path(self,name);
-    DtwObject * new_obj = private_newDtwObject_raw();
+DtwFolder * DtwFolder_sub_object(struct DtwFolder *self, const char*name, DtwFolderProps *props){
+    DtwFolderProps formated_props = DtwFolderProps_create_props(props);
+    char *path = private_DtwFolder_create_path(self,name);
+    DtwFolder * new_obj = private_newDtwFolder_raw();
     new_obj->path = path;
     new_obj->randonizer = self->randonizer;
 
@@ -58,14 +58,14 @@ DtwObject * DtwObject_sub_object(struct DtwObject *self,const char*name,DtwObjec
 
 
 
-void DtwObject_destroy(struct DtwObject *self,const char *name){
-    char *path = private_DtwObject_create_path(self,name);
+void DtwFolder_destroy(struct DtwFolder *self, const char *name){
+    char *path = private_DtwFolder_create_path(self,name);
     dtw_remove_any(path);
     free(path);
 }
 
-DtwStringArray  * DtwObject_list_all(struct DtwObject *self,DtwObjectProps *props){
-    DtwObjectProps formated_props = DtwObjectProps_create_props(props);
+DtwStringArray  * DtwFolder_list_all(struct DtwFolder *self, DtwFolderProps *props){
+    DtwFolderProps formated_props = DtwFolderProps_create_props(props);
     DtwStringArray  *element = dtw_list_all(self->path,DTW_NOT_CONCAT_PATH);
     if(formated_props.garbage == DTW_ALLOW_GARBAGE){
         self->garbage_array->append(self->garbage_array,DTW_STRING_ARRAY,element);
@@ -73,7 +73,7 @@ DtwStringArray  * DtwObject_list_all(struct DtwObject *self,DtwObjectProps *prop
     return element;
 }
 
-long DtwObject_size(struct DtwObject *self){
+long DtwFolder_size(struct DtwFolder *self){
     DtwStringArray  *elements = self->list_all(self,&dtw_no_store);
     long  size = elements->size;
     elements->free(elements);
@@ -81,8 +81,8 @@ long DtwObject_size(struct DtwObject *self){
 }
 
 
-int DtwObject_type_of(struct DtwObject *self,const char*name){
-    char *path = private_DtwObject_create_path(self,name);
+int DtwFolder_type_of(struct DtwFolder *self, const char*name){
+    char *path = private_DtwFolder_create_path(self,name);
 
     int entity = dtw_entity_type(path);
     if(entity != DTW_FILE_TYPE){
@@ -118,7 +118,7 @@ int DtwObject_type_of(struct DtwObject *self,const char*name){
     return DTW_LONG;
 
 }
-char *DtwObject_inspect_type(struct DtwObject *self,int type){
+char *DtwFolder_inspect_type(struct DtwFolder *self, int type){
     if(type == DTW_FOLDER_TYPE){
         return "Object";
     }
@@ -141,7 +141,7 @@ char *DtwObject_inspect_type(struct DtwObject *self,int type){
         return "Double";
     }
 }
-void DtwObject_free(struct DtwObject *self){
+void DtwFolder_free(struct DtwFolder *self){
 
 
     if(self->first_object){

@@ -15,7 +15,7 @@ void DtwObjectGarbage_free(struct DtwGarbageElement *self){
     }
 
     if(self->type == DTW_OBJECT){
-        DtwObject * element = (DtwObject*)self->value;
+        DtwFolder * element = (DtwFolder*)self->value;
         element->free(element);
     }
 
