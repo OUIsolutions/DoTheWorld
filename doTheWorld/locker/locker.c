@@ -40,6 +40,7 @@ char *private_DtwLocker_format_element(struct DtwLocker *self,const  char *eleme
     if(dtw_ends_with(result,self->separator)){
         result[result_size-separator_size] = '\0';
     }
+    result[result_size] = '\0';
     return result;
 
 }
@@ -89,7 +90,7 @@ void  DtwLocker_lock(struct DtwLocker *self, const  char *element){
 
 void DtwLocker_unlock(struct DtwLocker *self,const  char *element){
     char *formated_element = private_DtwLocker_format_element(self,element);
-    int status = private_DtwLocker_element_status(self,element);
+    int status = private_DtwLocker_element_status(self,formated_element);
     if(status == PRIVATE_DTW_ALREADY_LOCKED_BY_SELF){
         dtw_remove_any(formated_element);
     }
