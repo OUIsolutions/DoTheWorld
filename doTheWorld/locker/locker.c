@@ -15,6 +15,7 @@ DtwLocker *newDtwLocker(char *path, int process,int max_lock_time){
 
 char *private_DtwLocker_format_element(struct DtwLocker *self,const  char *element){
     unsigned  long element_size = strlen(element);
+    unsigned long separator_size = strlen(self->separator);
     char *result = (char*) malloc(2000);
     sprintf(result,"%s/",self->path);
     unsigned long result_size = strlen(result);
@@ -25,7 +26,7 @@ char *private_DtwLocker_format_element(struct DtwLocker *self,const  char *eleme
         if(current_char == '\\'){
             if(!included_separator){
                 strcat(result,self->separator);
-                result_size = strlen(result);
+                result_size+= separator_size;
                 included_separator = true;
             }
 
