@@ -7,7 +7,7 @@ DtwLocker *newDtwLocker(char *path, int process,int max_lock_time){
     self->process = process;
     self->max_lock_time = max_lock_time;
     //methods
-    self->wait_til_lock = DtwLocker_wait_lock;
+    self->lock = DtwLocker_lock;
     self->unlock = DtwLocker_unlock;
     self->free = DtwLocker_free;
     return self;
@@ -58,7 +58,7 @@ int private_DtwLocker_element_status(struct DtwLocker *self,const  char *element
 
     sscanf(data,"%ld %i",&last_modification,&process);
     time_t  now = time(NULL);
-    //means its an depreciated wait_til_lock
+    //means its an depreciated lock
     if (last_modification < (now - self->max_lock_time)){
         printf("pegou no time");
         dtw_remove_any(element);
@@ -68,7 +68,7 @@ int private_DtwLocker_element_status(struct DtwLocker *self,const  char *element
 }
 
 
-void  DtwLocker_wait_lock(struct DtwLocker *self, const  char *element){
+void  DtwLocker_lock(struct DtwLocker *self, const  char *element){
     char *formated_element = private_DtwLocker_format_element(self,element);
     while (true){
         int status = private_DtwLocker_element_status(self,element);
@@ -88,6 +88,13 @@ void  DtwLocker_wait_lock(struct DtwLocker *self, const  char *element){
     }
 }
 
-void DtwLocker_unlock(struct DtwLocker *self,const  char *element){}
+void DtwLocker_unlock(struct DtwLocker *self,const  char *element){
+    char *formated_element = private_DtwLocker_format_element(self,element);
+    int status = private_DtwLocker_element_status(self,element);
+    if(status == PRIVATE_DTW_ALREADY_LOCKED_BY_SELF){
+        dtw_remove_any(formated_element);
+    }
+    free(formated_element);
+}
 
 void DtwLocker_free(struct DtwLocker *self){}
