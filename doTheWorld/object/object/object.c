@@ -18,10 +18,11 @@ char * private_DtwObject_create_path(struct DtwObject *self,const char *name){
 
         }
     }
+
     if(strcmp(name,"$now") == 0){
         time_t now = time(NULL);
-        char *path = malloc(20);
-        sprintf(path,"%ld",now);
+        char *path = (char*)malloc(strlen(self->path) + 30);
+        sprintf(path,"%s/%ld",self->path, now);
         return path;
     }
 
