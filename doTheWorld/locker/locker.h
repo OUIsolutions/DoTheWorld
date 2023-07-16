@@ -1,7 +1,7 @@
 
 
 typedef struct DtwLocker{
-
+   char *separator;
    char *path;
    int process;
    int max_lock_time;
@@ -12,7 +12,6 @@ typedef struct DtwLocker{
    void (*free)(struct DtwLocker *self);
 
 }DtwLocker;
-
 
 
 DtwLocker *newDtwLocker(char *path, int process,int max_lock_time);
