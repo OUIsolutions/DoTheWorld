@@ -16,7 +16,6 @@ DtwObject * private_newDtwObject_raw(){
 
     self->get_string = DtwObject_get_string;
     self->set_string = DtwObject_set_string;
-    self->append_string = DtwObject_append_string;
 
     self->get_long = DtwObject_get_long;
     self->set_long = DtwObject_set_long;

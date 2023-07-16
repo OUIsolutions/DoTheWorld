@@ -47,9 +47,3 @@ void DtwObject_set_string(struct DtwObject *self,const char *name, const char *v
     free(path);
 }
 
-void DtwObject_append_string(struct DtwObject *self, const char *value){
-    long size =self->size(self);
-    char formated[20] = {0};
-    sprintf(formated,"%ld",size);
-    self->set_string(self,formated,value);
-}
