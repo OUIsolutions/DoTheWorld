@@ -55,14 +55,14 @@ int private_DtwLocker_element_status(struct DtwLocker *self,const  char *element
     int process;
 
     sscanf(data,"%ld %i",&last_modification,&process);
-    if(process == self->process){
-        return PRIVATE_DTW_ALREADY_LOCKED_BY_SELF;
-    }
+
     time_t  now = time(NULL);
     //means its an depreciated lock
     if (last_modification < (now - self->max_lock_time)){
-        dtw_remove_any(element);
         return PRIVATE_DTW_ABLE_TO_LOCK;
+    }
+    if(process == self->process){
+        return PRIVATE_DTW_ALREADY_LOCKED_BY_SELF;
     }
     return PRIVADTE_DTW_LOCKED;
 }
@@ -72,7 +72,6 @@ void  DtwLocker_lock(struct DtwLocker *self, const  char *element){
     char *formated_element = private_DtwLocker_format_element(self,element);
     while (true){
         int status = private_DtwLocker_element_status(self,formated_element);
-        printf("status %d\n",status);
 
         if(status == PRIVATE_DTW_ALREADY_LOCKED_BY_SELF){
             free(formated_element);
@@ -84,8 +83,6 @@ void  DtwLocker_lock(struct DtwLocker *self, const  char *element){
             time_t  now = time(NULL);
             sprintf(content,"%ld %d",now,self->process);
             dtw_write_string_file_content(formated_element,content);
-            free(formated_element);
-            return;
         }
     }
 }
