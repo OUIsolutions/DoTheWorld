@@ -10,20 +10,26 @@ DtwObject * private_newDtwObject_raw(){
     self->garbage_array = newDtwGarbageArray();
     self->first_object = false;
 
+
     self->get_binary = DtwObject_get_binary;
     self->set_binary = DtwObject_set_binary;
 
     self->get_string = DtwObject_get_string;
+    self->set_string = DtwObject_set_string;
+    self->append_string = DtwObject_append_string;
+
     self->get_long = DtwObject_get_long;
+    self->set_long = DtwObject_set_long;
+
+    self->set_double = DtwObject_set_double;
     self->get_double = DtwObject_get_double;
+
     self->sub_object = DtwObject_sub_object;
 
     self->type_of = DtwObject_type_of;
     self->inspect_type = DtwObject_inspect_type;
     self->destroy = DtwObject_destroy;
-    self->set_string = DtwObject_set_string;
-    self->set_double = DtwObject_set_double;
-    self->set_long = DtwObject_set_long;
+
 
     self->size = DtwObject_size;
     self->list_all = DtwObject_list_all;

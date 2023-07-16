@@ -15,6 +15,8 @@ typedef struct DtwObject{
 
     char *(*get_string)(struct DtwObject *self,const char *name,DtwObjectProps *props);
     void (*set_string)(struct DtwObject *self,const char *name,const char *value);
+    void (*append_string)(struct DtwObject *self,const char *value);
+
 
     long (*get_long)(struct DtwObject *self, const char *name);
     void (*set_long)(struct DtwObject *self,const char *name,long value);
@@ -52,6 +54,8 @@ void DtwObject_set_binary(struct DtwObject *self, const char *name, unsigned  ch
 
 char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectProps *props);
 void DtwObject_set_string(struct DtwObject *self,const char *name, const char *value);
+void DtwObject_append_string(struct DtwObject *self, const char *value);
+
 
 
 long DtwObject_get_long(struct DtwObject *self, const char *name);
