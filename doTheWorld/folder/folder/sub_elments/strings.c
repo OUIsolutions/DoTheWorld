@@ -1,7 +1,7 @@
 //
 // Created by jurandi on 06-07-2023.
 //
-char * DtwFolder_get_string(struct DtwFolder *self, const char *name, DtwFolderProps *props){
+char * DtwFolder_get_string_file(struct DtwFolder *self, const char *name, DtwFolderProps *props){
     DtwFolderProps formated_props = DtwFolderProps_create_props(props);
 
     char *path = private_DtwFolder_create_path(self,name);
@@ -41,7 +41,7 @@ char * DtwFolder_get_string(struct DtwFolder *self, const char *name, DtwFolderP
 
 }
 
-void DtwFolder_set_string(struct DtwFolder *self, const char *name, const char *value) {
+void DtwFolder_set_string_file(struct DtwFolder *self, const char *name, const char *value) {
     char *path = private_DtwFolder_create_path(self, name);
     dtw_write_string_file_content(path,value);
     free(path);

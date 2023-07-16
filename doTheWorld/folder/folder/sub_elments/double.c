@@ -1,9 +1,9 @@
 
 
 
-double DtwFolder_get_double(struct DtwFolder *self, const char *name){
+double DtwFolder_get_double_file(struct DtwFolder *self, const char *name){
 
-    char *result = self->get_string(self,name,&dtw_no_store);
+    char *result = self->get_string_file(self, name, &dtw_no_store);
 
     if(result){
 
@@ -22,10 +22,10 @@ double DtwFolder_get_double(struct DtwFolder *self, const char *name){
 
 
 
-void DtwFolder_set_double(struct DtwFolder *self, const char *name, double value){
+void DtwFolder_set_double_file(struct DtwFolder *self, const char *name, double value){
     char result[20] = {0};
     sprintf(result,"%f",value);
-    self->set_string(self,name,result);
+    self->set_string_file(self, name, result);
 }
 //
 // Created by jurandi on 06-07-2023.

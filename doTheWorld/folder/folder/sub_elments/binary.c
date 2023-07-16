@@ -1,4 +1,4 @@
-unsigned char * DtwFolder_get_binary(struct DtwFolder *self, const char *name, long *size, DtwFolderProps *props){
+unsigned char * DtwFolder_get_binary_file(struct DtwFolder *self, const char *name, long *size, DtwFolderProps *props){
     DtwFolderProps formated_props = DtwFolderProps_create_props(props);
 
     char *path = private_DtwFolder_create_path(self,name);
@@ -29,7 +29,7 @@ unsigned char * DtwFolder_get_binary(struct DtwFolder *self, const char *name, l
 
 }
 
-void DtwFolder_set_binary(struct DtwFolder *self, const char *name, unsigned  char *value, long size){
+void DtwFolder_set_binary_file(struct DtwFolder *self, const char *name, unsigned  char *value, long size){
 
     char *path = private_DtwFolder_create_path(self, name);
     dtw_write_any_content(path,value,size);

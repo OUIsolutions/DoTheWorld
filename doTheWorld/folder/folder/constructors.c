@@ -11,23 +11,23 @@ DtwFolder * private_newDtwFolder_raw(){
     self->first_object = false;
 
 
-    self->get_binary = DtwFolder_get_binary;
-    self->set_binary = DtwFolder_set_binary;
+    self->get_binary_file = DtwFolder_get_binary_file;
+    self->set_binary_file = DtwFolder_set_binary_file;
 
-    self->get_string = DtwFolder_get_string;
-    self->set_string = DtwFolder_set_string;
+    self->get_string_file = DtwFolder_get_string_file;
+    self->set_string_file = DtwFolder_set_string_file;
 
-    self->get_long = DtwFolder_get_long;
-    self->set_long = DtwFolder_set_long;
+    self->get_long_file = DtwFolder_get_long_file;
+    self->set_long_file = DtwFolder_set_long_file;
 
-    self->set_double = DtwFolder_set_double;
-    self->get_double = DtwFolder_get_double;
+    self->set_double_file = DtwFolder_set_double_file;
+    self->get_double_file = DtwFolder_get_double_file;
 
-    self->sub_object = DtwFolder_sub_object;
+    self->sub_folder = DtwFolder_sub_folder;
 
     self->type_of = DtwFolder_type_of;
     self->inspect_type = DtwFolder_inspect_type;
-    self->destroy = DtwFolder_destroy;
+    self->destroy_any = DtwFolder_destroy_any;
 
 
     self->size = DtwFolder_size;

@@ -36,7 +36,7 @@ char * private_DtwFolder_create_path(struct DtwFolder *self, const char *name){
 }
 
 
-DtwFolder * DtwFolder_sub_object(struct DtwFolder *self, const char*name, DtwFolderProps *props){
+DtwFolder * DtwFolder_sub_folder(struct DtwFolder *self, const char*name, DtwFolderProps *props){
     DtwFolderProps formated_props = DtwFolderProps_create_props(props);
     char *path = private_DtwFolder_create_path(self,name);
     DtwFolder * new_obj = private_newDtwFolder_raw();
@@ -58,7 +58,7 @@ DtwFolder * DtwFolder_sub_object(struct DtwFolder *self, const char*name, DtwFol
 
 
 
-void DtwFolder_destroy(struct DtwFolder *self, const char *name){
+void DtwFolder_destroy_any(struct DtwFolder *self, const char *name){
     char *path = private_DtwFolder_create_path(self,name);
     dtw_remove_any(path);
     free(path);

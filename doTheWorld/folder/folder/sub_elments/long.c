@@ -2,8 +2,8 @@
 // Created by jurandi on 06-07-2023.
 //
 
-long DtwFolder_get_long(struct DtwFolder *self, const char *name){
-    char *result = self->get_string(self,name,&dtw_no_store);
+long DtwFolder_get_long_file(struct DtwFolder *self, const char *name){
+    char *result = self->get_string_file(self, name, &dtw_no_store);
 
     if(result){
         long result_converted;
@@ -19,8 +19,8 @@ long DtwFolder_get_long(struct DtwFolder *self, const char *name){
     return 0;
 }
 
-void DtwFolder_set_long(struct DtwFolder *self, const char *name, long value){
+void DtwFolder_set_long_file(struct DtwFolder *self, const char *name, long value){
     char result[20] = {0};
     sprintf(result,"%li",value);
-    self->set_string(self,name,result);
+    self->set_string_file(self, name, result);
 }
