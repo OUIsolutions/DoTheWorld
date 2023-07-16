@@ -43,6 +43,29 @@ char *private_DtwLocker_format_element(struct DtwLocker *self,const  char *eleme
     return result;
 
 }
+int private_DtwLocker_element_status(struct DtwLocker *self,const  char *element){
+    char *data = dtw_load_string_file_content(element);
+    if(!data){
+        return PRIVATE_DTW_ABLE_TO_LOCK;
+    }
+
+    unsigned long last_modification;
+    int process;
+    if(process == self->process){
+        return PRIVATE_DTW_ALREADY_LOCKED_BY_SELF;
+    }
+
+    sscanf(data,"%ld %i",&last_modification,&process);
+    time_t  now = time(NULL);
+    //means its an depreciated lock
+    if (last_modification < (now - self->max_lock_time)){
+        printf("pegou no time");
+        dtw_remove_any(element);
+        return PRIVATE_DTW_ABLE_TO_LOCK;
+    }
+    return PRIVADTE_DTW_LOCKED;
+}
+
 
 bool DtwLocker_lock(struct DtwLocker *self,const  char *element){
 
