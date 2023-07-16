@@ -68,13 +68,23 @@ int private_DtwLocker_element_status(struct DtwLocker *self,const  char *element
 }
 
 
-bool DtwLocker_wait_lock(struct DtwLocker *self, const  char *element){
+void  DtwLocker_wait_lock(struct DtwLocker *self, const  char *element){
+    char *formated_element = private_DtwLocker_format_element(self,element);
     while (true){
         int status = private_DtwLocker_element_status(self,element);
         if(status == PRIVATE_DTW_ALREADY_LOCKED_BY_SELF){
-            return false;
-        }
+            free(formated_element);
+            return ;
 
+        }
+        if(status == PRIVATE_DTW_ABLE_TO_LOCK){
+            char content[500] = {0};
+            time_t  now = time(NULL);
+            sprintf(content,"%ld %d",now,self->process);
+            dtw_write_string_file_content(formated_element,content);
+            free(formated_element);
+            return ;
+        }
     }
 }
 
