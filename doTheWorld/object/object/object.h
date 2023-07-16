@@ -10,11 +10,11 @@ typedef struct DtwObject{
     DtwGarbage  *garbage_array;
 
     unsigned char *(*get_binary)(struct DtwObject *self, const char *name, long *size,DtwObjectProps *props);
-    void (*set_binary)(struct DtwObject *self, const char *name, unsigned  char *value, long size,DtwObjectProps *props);
+    void (*set_binary)(struct DtwObject *self, const char *name, unsigned  char *value, long size);
 
 
     char *(*get_string)(struct DtwObject *self,const char *name,DtwObjectProps *props);
-    void (*set_string)(struct DtwObject *self,const char *name,const char *value,DtwObjectProps *props);
+    void (*set_string)(struct DtwObject *self,const char *name,const char *value);
 
     long (*get_long)(struct DtwObject *self, const char *name);
     void (*set_long)(struct DtwObject *self,const char *name,long value);
@@ -46,11 +46,12 @@ char * private_DtwObject_create_path(struct DtwObject *self,const char *name);
 
 
 unsigned char * DtwObject_get_binary(struct DtwObject *self, const char *name, long *size,DtwObjectProps *props);
-void DtwObject_set_binary(struct DtwObject *self, const char *name, unsigned  char *value, long size,DtwObjectProps *props);
+void DtwObject_set_binary(struct DtwObject *self, const char *name, unsigned  char *value, long size);
+
 
 
 char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectProps *props);
-void DtwObject_set_string(struct DtwObject *self,const char *name, const char *value,DtwObjectProps *props);
+void DtwObject_set_string(struct DtwObject *self,const char *name, const char *value);
 
 
 long DtwObject_get_long(struct DtwObject *self, const char *name);

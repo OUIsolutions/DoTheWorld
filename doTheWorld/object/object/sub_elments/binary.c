@@ -29,8 +29,8 @@ unsigned char * DtwObject_get_binary(struct DtwObject *self, const char *name, l
 
 }
 
-void DtwObject_set_binary(struct DtwObject *self, const char *name, unsigned  char *value, long size,DtwObjectProps *props){
-    DtwObjectProps formated_props = DtwObjectProps_create_props(props);
+void DtwObject_set_binary(struct DtwObject *self, const char *name, unsigned  char *value, long size){
+
     char *path = private_DtwObject_create_path(self, name);
     dtw_write_any_content(path,value,size);
 

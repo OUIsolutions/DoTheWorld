@@ -25,7 +25,7 @@ double DtwObject_get_double(struct DtwObject *self, const char *name){
 void DtwObject_set_double(struct DtwObject *self,const char *name, double value){
     char result[20] = {0};
     sprintf(result,"%f",value);
-    self->set_string(self,name,result,NULL);
+    self->set_string(self,name,result);
 }
 //
 // Created by jurandi on 06-07-2023.

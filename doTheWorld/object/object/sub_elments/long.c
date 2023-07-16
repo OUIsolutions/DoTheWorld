@@ -22,5 +22,5 @@ long DtwObject_get_long(struct DtwObject *self, const char *name){
 void DtwObject_set_long(struct DtwObject *self,const char *name, long value){
     char result[20] = {0};
     sprintf(result,"%li",value);
-    self->set_string(self,name,result,NULL);
+    self->set_string(self,name,result);
 }

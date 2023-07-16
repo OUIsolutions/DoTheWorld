@@ -41,9 +41,7 @@ char * DtwObject_get_string(struct DtwObject *self,const char *name,DtwObjectPro
 
 }
 
-void DtwObject_set_string(struct DtwObject *self,const char *name, const char *value,DtwObjectProps *props) {
-
-    DtwObjectProps formated_props = DtwObjectProps_create_props(props);
+void DtwObject_set_string(struct DtwObject *self,const char *name, const char *value) {
     char *path = private_DtwObject_create_path(self, name);
     dtw_write_string_file_content(path,value);
     free(path);
