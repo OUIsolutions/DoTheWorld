@@ -23,10 +23,11 @@ char *private_DtwLocker_format_element(struct DtwLocker *self,const  char *eleme
 
     for(unsigned  long i =0; i < element_size;i++){
         char current_char = element[i];
-        if(current_char == '\\'){
+        if(current_char == '/' || current_char == '\\'){
+
             if(!included_separator){
                 strcat(result,self->separator);
-                result_size+= separator_size;
+                result_size+=separator_size;
                 included_separator = true;
             }
 
@@ -35,12 +36,18 @@ char *private_DtwLocker_format_element(struct DtwLocker *self,const  char *eleme
             result[result_size] = current_char;
             result_size+=1;
         }
-
     }
+    if(dtw_ends_with(result,self->separator)){
+        result[result_size-separator_size] = '\0';
+    }
+    return result;
+
 }
 
 bool DtwLocker_lock(struct DtwLocker *self,const  char *element){
 
 }
 
+void DtwLocker_unlock(struct DtwLocker *self,const  char *element){}
 
+void DtwLocker_free(struct DtwLocker *self){}
