@@ -13,16 +13,16 @@ DtwLocker *newDtwLocker(char *path, int process,int max_lock_time){
     return self;
 }
 
-char *private_DtwLocker_format_element(struct DtwLocker *self,const  char *element){
+void private_DtwLocker_format_element(char *result,struct DtwLocker *self,const  char *element){
     unsigned  long element_size = strlen(element);
     unsigned long separator_size = strlen(self->separator);
-    char *result = (char*) malloc(2000);
     sprintf(result,"%s/",self->path);
     unsigned long result_size = strlen(result);
     bool included_separator = false;
 
     for(unsigned  long i =0; i < element_size;i++){
         char current_char = element[i];
+
         if(current_char == '/' || current_char == '\\'){
 
             if(!included_separator){
@@ -37,11 +37,11 @@ char *private_DtwLocker_format_element(struct DtwLocker *self,const  char *eleme
             result_size+=1;
         }
     }
+
     if(dtw_ends_with(result,self->separator)){
         result[result_size-separator_size] = '\0';
     }
-    result[result_size] = '\0';
-    return result;
+
 
 }
 
@@ -56,7 +56,7 @@ int private_DtwLocker_element_status(struct DtwLocker *self,const  char *element
     int process;
 
     sscanf(data,"%ld %i",&last_modification,&process);
-
+    free(data);
     time_t  now = time(NULL);
     //means its an depreciated lock
     if (last_modification < (now - self->max_lock_time)){
@@ -65,20 +65,21 @@ int private_DtwLocker_element_status(struct DtwLocker *self,const  char *element
     if(process == self->process){
         return PRIVATE_DTW_ALREADY_LOCKED_BY_SELF;
     }
-    return PRIVADTE_DTW_LOCKED;
+    return PRIVADE_DTW_LOCKED;
 }
 
 
 void  DtwLocker_lock(struct DtwLocker *self, const  char *element){
-    char *formated_element = private_DtwLocker_format_element(self,element);
+    char formated_element[2000] = {0};
+    private_DtwLocker_format_element(formated_element,self,element);
+
     while (true){
         int status = private_DtwLocker_element_status(self,formated_element);
 
         if(status == PRIVATE_DTW_ALREADY_LOCKED_BY_SELF){
-            free(formated_element);
             return;
-
         }
+
         if(status == PRIVATE_DTW_ABLE_TO_LOCK){
             char content[500] = {0};
             time_t  now = time(NULL);
@@ -86,15 +87,21 @@ void  DtwLocker_lock(struct DtwLocker *self, const  char *element){
             dtw_write_string_file_content(formated_element,content);
         }
     }
+
 }
 
 void DtwLocker_unlock(struct DtwLocker *self,const  char *element){
-    char *formated_element = private_DtwLocker_format_element(self,element);
+    char formated_element[2000] = {0};
+    private_DtwLocker_format_element(formated_element,self,element);
+
     int status = private_DtwLocker_element_status(self,formated_element);
     if(status == PRIVATE_DTW_ALREADY_LOCKED_BY_SELF){
         dtw_remove_any(formated_element);
     }
-    free(formated_element);
+
 }
 
-void DtwLocker_free(struct DtwLocker *self){}
+void DtwLocker_free(struct DtwLocker *self){
+    free(self->path);
+    free(self);
+}
