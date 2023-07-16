@@ -32,6 +32,9 @@ unsigned char * DtwFolder_get_binary_file(struct DtwFolder *self, const char *na
 void DtwFolder_set_binary_file(struct DtwFolder *self, const char *name, unsigned  char *value, long size){
 
     char *path = private_DtwFolder_create_path(self, name);
+
+
+
     dtw_write_any_content(path,value,size);
 
 
