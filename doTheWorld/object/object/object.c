@@ -3,26 +3,35 @@
 
 char * private_DtwObject_create_path(struct DtwObject *self,const char *name){
 
-    if(name){
-        char *path = (char*) malloc(strlen(self->path) +strlen(name) + 2);
-        sprintf(path,"%s/%s",self->path,name);
+    if(strcmp(name,"$random") == 0){
+        for(int i = 20; i  < 30; i++) {
+
+            char *possible_name = self->randonizer->generate_token(self->randonizer, i);
+            char *path = (char*)malloc(strlen(self->path) + i + 3);
+            sprintf(path, "%s/%s", self->path, possible_name);
+
+            free(possible_name);
+            if (dtw_entity_type(path) == DTW_NOT_FOUND) {
+                return path;
+            }
+            free(path);
+
+        }
+    }
+    if(strcmp(name,"$now") == 0){
+        time_t now = time(NULL);
+        char *path = malloc(20);
+        sprintf(path,"%ld",now);
         return path;
     }
 
-    for(int i = 0; i  < 30; i++) {
 
-        char *possible_name = self->randonizer->generate_token(self->randonizer, i);
-        char *path = (char*)malloc(strlen(self->path) + strlen(possible_name) + 2);
-        sprintf(path, "%s/%s", self->path, possible_name);
-
-        free(possible_name);
-        if (dtw_entity_type(path) == DTW_NOT_FOUND) {
-            return path;
-        }
-        free(path);
+    char *path = (char*) malloc(strlen(self->path) +strlen(name) + 2);
+    sprintf(path,"%s/%s",self->path,name);
+    return path;
 
 
-    }
+
 }
 
 
