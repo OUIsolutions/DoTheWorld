@@ -42,9 +42,13 @@ DtwFolder * DtwFolder_sub_folder(struct DtwFolder *self, const char*name, DtwFol
     DtwFolder * new_obj = private_newDtwFolder_raw();
     new_obj->path = path;
     new_obj->randonizer = self->randonizer;
+    int entity_type = dtw_entity_type(path);
 
-    if(dtw_entity_type(path) ==  DTW_FILE_TYPE){
+    if(entity_type ==  DTW_FILE_TYPE){
         dtw_remove_any(path);
+    }
+    if(entity_type == DTW_NOT_FOUND){
+        dtw_create_dir_recursively(path);
     }
 
     if(formated_props.garbage == DTW_ALLOW_GARBAGE){

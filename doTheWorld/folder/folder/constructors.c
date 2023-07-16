@@ -43,8 +43,12 @@ DtwFolder * newDtwFolder(const char *path){
 
     self->first_object = true;
     self->randonizer = newDtwRandonizer();
-    if(dtw_entity_type(path) ==  DTW_FILE_TYPE){
+    int entity_type = dtw_entity_type(path);
+    if(entity_type ==  DTW_FILE_TYPE){
         dtw_remove_any(path);
+    }
+    if(entity_type == DTW_NOT_FOUND){
+        dtw_create_dir_recursively(path);
     }
 
     return self;
