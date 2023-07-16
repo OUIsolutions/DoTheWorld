@@ -5,6 +5,7 @@ typedef struct DtwLocker{
    char *path;
    int process;
    int max_lock_time;
+   DtwStringArray *locked_entitys;
 
    bool (*lock)(struct DtwLocker *self,const  char *element);
    void (*unlock)(struct DtwLocker *self,const  char *element);
