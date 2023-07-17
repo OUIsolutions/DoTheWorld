@@ -11,7 +11,7 @@ void append_once(int num){
     
     locker->lock(locker,"a.txt",-1);
     char *elelement = dtw_load_string_file_content("a.txt");
-    char formated[6000] = {0};
+    char *formated = (char*) calloc(30000,sizeof(char*));
     strcpy(formated,elelement);
     char current_num[20];
     sprintf(current_num,"%d\n",num);
@@ -19,9 +19,10 @@ void append_once(int num){
         strcat(formated,current_num);
     }
 
+    
     dtw_write_string_file_content("a.txt",formated);
    free(elelement);
-
+    free(formated);
     locker->free(locker);
 }
 
