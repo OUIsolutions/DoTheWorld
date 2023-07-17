@@ -117,10 +117,10 @@ bool  DtwLocker_lock(struct DtwLocker *self, const  char *element,double timeout
             printf("processo %d bloqueou\n",self->process);
             clock_gettime(CLOCK_MONOTONIC, &start); // Marca o início da medição
             dtw_write_string_file_content(formated_element,content);
-            
+
             //these its nescesserary to make ure the file its able to continue writing
-            usleep((long)self->reverifcation_delay* 1000000);
-            time_spend+= self->reverifcation_delay;
+            //usleep((long)self->reverifcation_delay* 1000000);
+            //time_spend+= self->reverifcation_delay;
         
             int new_status = self->status(self, element);
             clock_gettime(CLOCK_MONOTONIC, &end); // Marca o fim da medição
