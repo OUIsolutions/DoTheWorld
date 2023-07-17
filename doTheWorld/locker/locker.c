@@ -54,7 +54,7 @@ int DtwLocker_element_status(struct DtwLocker *self, const  char *element){
     char *data = dtw_load_string_file_content(element);
 
     if(!data){
-        return PRIVATE_DTW_ABLE_TO_LOCK;
+        return DTW_ABLE_TO_LOCK;
     }
 
     unsigned long last_modification;
@@ -65,13 +65,13 @@ int DtwLocker_element_status(struct DtwLocker *self, const  char *element){
     time_t  now = time(NULL);
     //means its an depreciated lock
     if (last_modification < (now - self->max_lock_time)){
-        return PRIVATE_DTW_ABLE_TO_LOCK;
+        return DTW_ABLE_TO_LOCK;
     }
 
     if(process == self->process){
-        return PRIVATE_DTW_ALREADY_LOCKED_BY_SELF;
+        return DTW_ALREADY_LOCKED_BY_SELF;
     }
-    return PRIVADE_DTW_LOCKED;
+    return PRIVATE_DTW_LOCKED_BY_OTHER_PROCESS;
 }
 
 
@@ -92,7 +92,12 @@ bool  DtwLocker_lock(struct DtwLocker *self, const  char *element,int timeout){
          */
 
         int status = DtwLocker_element_status(self, formated_element);
-        if(status == PRIVATE_DTW_ABLE_TO_LOCK){
+
+        if(status == DTW_ALREADY_LOCKED_BY_SELF){
+            return true;
+        }
+
+        if(status == DTW_ABLE_TO_LOCK){
             char content[500] = {0};
             time_t  now = time(NULL);
             sprintf(content,"%ld %d",now,self->process);
@@ -102,8 +107,8 @@ bool  DtwLocker_lock(struct DtwLocker *self, const  char *element,int timeout){
             //time_spend+=(int)self->reverifcation_delay;
             int new_status = DtwLocker_element_status(self, formated_element);
 
-            if(new_status == PRIVATE_DTW_ALREADY_LOCKED_BY_SELF){
-
+            if(new_status == DTW_ALREADY_LOCKED_BY_SELF){
+                self->locked_elements->append(self->locked_elements,formated_element,DTW_BY_VALUE);
                 return true;
             }
 
@@ -122,7 +127,7 @@ void DtwLocker_unlock(struct DtwLocker *self,const  char *element){
     private_DtwLocker_format_element(formated_element,self,element);
 
     int status = DtwLocker_element_status(self, formated_element);
-    if(status == PRIVATE_DTW_ALREADY_LOCKED_BY_SELF){
+    if(status == DTW_ALREADY_LOCKED_BY_SELF){
         dtw_remove_any(formated_element);
     }
 
