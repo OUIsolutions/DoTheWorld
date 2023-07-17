@@ -8,9 +8,9 @@ int creation_per_process;
 void append_once(int num){
 
     DtwLocker *locker = newDtwLocker("aaaa");
-    
+    locker->process= num;
     locker->lock(locker,"a.txt",-1);
-    
+    //printf("processo %d bloqueou\n",num);
     char *elelement = dtw_load_string_file_content("a.txt");
     char *formated = (char*) calloc(30000,sizeof(char*));
     strcpy(formated,elelement);
@@ -37,11 +37,13 @@ int main(int argc, char *argv[]){
     dtw_write_string_file_content("a.txt","");
 
     for(int i = 0; i < total_process; i ++){
+        
         if(fork() == 0){
            // printf("created process %d\n",i);
             append_once(i);
             exit(0);
         }
+      
     }
 
     

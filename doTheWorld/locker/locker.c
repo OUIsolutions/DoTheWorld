@@ -6,7 +6,7 @@ DtwLocker *newDtwLocker(char *path){
     self->path = strdup(path);
     self->process = getpid();
     self->max_lock_time = 5;
-    self->reverifcation_delay= 0.1;
+    self->reverifcation_delay= 0.3;
     self->min_interval_delay = 0.3;
     self->max_interval_delay = 0.5;
     //methods
@@ -51,38 +51,28 @@ void private_DtwLocker_format_element(char *result,struct DtwLocker *self,const 
 }
 
 int DtwLocker_element_status(struct DtwLocker *self, const  char *element){
-
+    
+    char formated_element[2000] = {0};
+    private_DtwLocker_format_element(formated_element,self,element);
    
     char *data;
-    bool verified_zero_data = 0;
-    while(true){
 
-        data = dtw_load_string_file_content(element);
-        if(!data){
-            return DTW_ABLE_TO_LOCK;
-        }
-
-        int data_size = strlen(data);
-        printf("data :%s\n",data);
-        if(data_size == 0){
-            free(data);
-            if(verified_zero_data){
-                return DTW_ABLE_TO_LOCK;
-            }
-            else{
-                sleep(1);
-                verified_zero_data = true;
-                continue;
-            }
-        }
-        
-
-        break;
-
+    data = dtw_load_string_file_content(formated_element);
+    if(!data){
+        return DTW_ABLE_TO_LOCK;
     }
 
+    int data_size = strlen(data);
+    if(data_size == 0){
+        free(data);
+        return DTW_ABLE_TO_LOCK;
+        
+    }
+    char last_char = data[data_size -1];
+    if(last_char != '|'){
+        return DTW_ABLE_TO_LOCK;
+    }    
 
-    
     unsigned long last_modification;
     int process;
 
@@ -117,23 +107,29 @@ bool  DtwLocker_lock(struct DtwLocker *self, const  char *element,double timeout
             break;
         }
 
-        int status = DtwLocker_element_status(self, formated_element);
+        int status = self->status(self, element);
 
         if(status == DTW_ABLE_TO_LOCK || status == DTW_ALREADY_LOCKED_BY_SELF){
             char content[500] = {0};
             time_t  now = time(NULL);
             sprintf(content,"%ld %d|",now,self->process);
-            dtw_remove_any(formated_element);
+            printf("processo %d bloqueou\n",self->process);
             dtw_write_string_file_content(formated_element,content);
             //these its nescesserary to make ure the file its able to continue writing
             usleep((long)self->reverifcation_delay* 1000000);
             time_spend+= self->reverifcation_delay;
 
-            int new_status = DtwLocker_element_status(self, formated_element);
-            
+            int new_status = self->status(self, element);
+            printf("processo %d verificou\n",self->process);
+
             if(new_status == DTW_ALREADY_LOCKED_BY_SELF){
                 self->locked_elements->append(self->locked_elements,element,DTW_BY_VALUE);
+                printf("\t processo %d implementou\n",self->process);
                 return true;
+            }
+            else{
+                 printf("processo %d abortou\n",self->process);
+
             }
 
 
@@ -151,7 +147,7 @@ void DtwLocker_unlock(struct DtwLocker *self,const  char *element){
     char formated_element[2000] = {0};
     private_DtwLocker_format_element(formated_element,self,element);
 
-    int status = DtwLocker_element_status(self, formated_element);
+    int status = self->status(self, element);
     if(status == DTW_ALREADY_LOCKED_BY_SELF){
         dtw_remove_any(formated_element);
     }
