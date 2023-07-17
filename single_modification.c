@@ -10,6 +10,7 @@ void append_once(int num){
     DtwLocker *locker = newDtwLocker("aaaa");
     
     locker->lock(locker,"a.txt",-1);
+    
     char *elelement = dtw_load_string_file_content("a.txt");
     char *formated = (char*) calloc(30000,sizeof(char*));
     strcpy(formated,elelement);
