@@ -111,24 +111,29 @@ bool  DtwLocker_lock(struct DtwLocker *self, const  char *element,double timeout
 
         if(status == DTW_ABLE_TO_LOCK || status == DTW_ALREADY_LOCKED_BY_SELF){
             char content[500] = {0};
-            time_t  now = time(NULL);
-            sprintf(content,"%ld %d|",now,self->process);
-            printf("processo %d bloqueou\n",self->process);
+            time_t  previews = time(NULL);
+            sprintf(content,"%ld %d|",previews,self->process);
+            //printf("\tprocesso %d bloqueou\n",self->process);
             dtw_write_string_file_content(formated_element,content);
             //these its nescesserary to make ure the file its able to continue writing
             usleep((long)self->reverifcation_delay* 1000000);
             time_spend+= self->reverifcation_delay;
 
             int new_status = self->status(self, element);
-            printf("processo %d verificou\n",self->process);
+            //printf("\tprocesso %d verificou\n",self->process);
+
+            time_t  after = time(NULL);
+            time_t duration = previews -after ;
+            printf("duration : %d\n",duration);
+
 
             if(new_status == DTW_ALREADY_LOCKED_BY_SELF){
                 self->locked_elements->append(self->locked_elements,element,DTW_BY_VALUE);
-                printf("\t processo %d implementou\n",self->process);
+                //printf("\t\t processo %d implementou\n",self->process);
                 return true;
             }
             else{
-                 printf("processo %d abortou\n",self->process);
+                 //printf("processo %d abortou\n",self->process);
 
             }
 
