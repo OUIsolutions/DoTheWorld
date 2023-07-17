@@ -7,15 +7,15 @@ enum {
 typedef struct DtwLocker{
    char *separator;
    char *path;
-   long reverifcation_delay;
-   long min_interval_delay;
-   long max_interval_delay;
+   double reverifcation_delay;
+   double min_interval_delay;
+   double max_interval_delay;
    int process;
    int max_lock_time;
    DtwStringArray *locked_elements;
 
    int (*status)(struct DtwLocker *self, const  char *element);
-   bool (*lock)(struct DtwLocker *self, const  char *element,int timeout);
+   bool (*lock)(struct DtwLocker *self, const  char *element,double timeout);
    void (*unlock)(struct DtwLocker *self,const  char *element);
    void (*free)(struct DtwLocker *self);
 
@@ -29,7 +29,7 @@ void private_DtwLocker_format_element(char *result,struct DtwLocker *self,const 
 int DtwLocker_element_status(struct DtwLocker *self, const  char *element);
 
 
-bool DtwLocker_lock(struct DtwLocker *self, const  char *element,int timeout);
+bool DtwLocker_lock(struct DtwLocker *self, const  char *element,double timeout);
 
 void DtwLocker_unlock(struct DtwLocker *self,const  char *element);
 

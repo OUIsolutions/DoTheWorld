@@ -6,9 +6,9 @@ DtwLocker *newDtwLocker(char *path){
     self->path = strdup(path);
     self->process = getpid();
     self->max_lock_time = 5;
-    self->reverifcation_delay= 100000;
-    self->min_interval_delay = 100000;
-    self->max_interval_delay = 200000;
+    self->reverifcation_delay= 0.1;
+    self->min_interval_delay = 0.1;
+    self->max_interval_delay = 0.2;
     //methods
     self->locked_elements = newDtwStringArray();
     self->status = DtwLocker_element_status;
@@ -75,21 +75,22 @@ int DtwLocker_element_status(struct DtwLocker *self, const  char *element){
 }
 
 
-bool  DtwLocker_lock(struct DtwLocker *self, const  char *element,int timeout){
+bool  DtwLocker_lock(struct DtwLocker *self, const  char *element,double timeout){
     char formated_element[2000] = {0};
     private_DtwLocker_format_element(formated_element,self,element);
     //seed de espera
     srand(time(NULL) + self->process);
-    int delay = rand() % self->max_interval_delay + self->min_interval_delay;
+    long delay = rand() % (long)(self->max_interval_delay *1000000) +(long)(self->min_interval_delay *1000000);
 
-    //int time_spend = 0;
+    double time_spend = 0;
 
     while (true){
-        /*
-        if(time_spend > timeout){
+
+        if(time_spend > timeout && timeout > 0){
+
             break;
         }
-         */
+
 
         int status = DtwLocker_element_status(self, formated_element);
 
@@ -103,8 +104,9 @@ bool  DtwLocker_lock(struct DtwLocker *self, const  char *element,int timeout){
             sprintf(content,"%ld %d",now,self->process);
             dtw_write_string_file_content(formated_element,content);
             //these its nescesserary to make ure the file its able to continue writing
-            usleep(self->reverifcation_delay);
-            //time_spend+=(int)self->reverifcation_delay;
+            usleep((long)self->reverifcation_delay* 1000000);
+            time_spend+= self->reverifcation_delay;
+
             int new_status = DtwLocker_element_status(self, formated_element);
 
             if(new_status == DTW_ALREADY_LOCKED_BY_SELF){
@@ -113,9 +115,9 @@ bool  DtwLocker_lock(struct DtwLocker *self, const  char *element,int timeout){
             }
 
         };
-
         usleep(delay);
-        //time_spend+=delay;
+        time_spend+=(double)((double)delay / 1000000);
+
     }
 
     return false;
