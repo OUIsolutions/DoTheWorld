@@ -52,16 +52,15 @@ void private_DtwLocker_format_element(char *result,struct DtwLocker *self,const 
 
 int DtwLocker_element_status(struct DtwLocker *self, const  char *element){
 
-    int entity_type = dtw_entity_type(element);
-
-    if(entity_type == DTW_NOT_FOUND){
-        return DTW_ABLE_TO_LOCK;
-    }
+   
     char *data = dtw_load_string_file_content(element);
-
     if(!data){
         return DTW_ABLE_TO_LOCK;
     }
+
+    
+    printf("data: %s|\n",data);
+
     unsigned long last_modification;
     int process;
 
@@ -106,7 +105,7 @@ bool  DtwLocker_lock(struct DtwLocker *self, const  char *element,double timeout
         if(status == DTW_ABLE_TO_LOCK){
             char content[500] = {0};
             time_t  now = time(NULL);
-            sprintf(content,"%ld %d",now,self->process);
+            sprintf(content,"%ld %d|",now,self->process);
             dtw_write_string_file_content(formated_element,content);
             //these its nescesserary to make ure the file its able to continue writing
             usleep((long)self->reverifcation_delay* 1000000);
