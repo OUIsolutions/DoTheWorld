@@ -8,6 +8,7 @@ int creation_per_process;
 void append_once(int num){
 
     DtwLocker *locker = newDtwLocker("aaaa");
+    
     locker->lock(locker,"a.txt",-1);
     char *elelement = dtw_load_string_file_content("a.txt");
     char formated[2000] = {0};
@@ -20,6 +21,7 @@ void append_once(int num){
 
     dtw_write_string_file_content("a.txt",formated);
    free(elelement);
+
     locker->free(locker);
 }
 

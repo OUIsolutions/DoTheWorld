@@ -6,8 +6,8 @@ DtwLocker *newDtwLocker(char *path){
     self->path = strdup(path);
     self->process = getpid();
     self->max_lock_time = 5;
-    self->reverifcation_delay= 0.5;
-    self->min_interval_delay = 0.2;
+    self->reverifcation_delay= 0.1;
+    self->min_interval_delay = 0.3;
     self->max_interval_delay = 0.5;
     //methods
     self->locked_elements = newDtwStringArray();
@@ -51,12 +51,17 @@ void private_DtwLocker_format_element(char *result,struct DtwLocker *self,const 
 }
 
 int DtwLocker_element_status(struct DtwLocker *self, const  char *element){
+
+    int entity_type = dtw_entity_type(element);
+
+    if(entity_type == DTW_NOT_FOUND){
+        return DTW_ABLE_TO_LOCK;
+    }
     char *data = dtw_load_string_file_content(element);
 
     if(!data){
         return DTW_ABLE_TO_LOCK;
     }
-
     unsigned long last_modification;
     int process;
 
@@ -108,11 +113,12 @@ bool  DtwLocker_lock(struct DtwLocker *self, const  char *element,double timeout
             time_spend+= self->reverifcation_delay;
 
             int new_status = DtwLocker_element_status(self, formated_element);
-
+            
             if(new_status == DTW_ALREADY_LOCKED_BY_SELF){
                 self->locked_elements->append(self->locked_elements,element,DTW_BY_VALUE);
                 return true;
             }
+
 
         };
         usleep(delay);
