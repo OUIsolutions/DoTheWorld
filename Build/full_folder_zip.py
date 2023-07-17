@@ -5,6 +5,7 @@ from os import makedirs
 from shutil import rmtree,make_archive
 import zipfile
 
+
 def create_full_folder_cleared(folder:str,dest:str,zip_name:str):    
     content = listdir(folder)
     for c in content:
