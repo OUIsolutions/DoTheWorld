@@ -72,6 +72,9 @@ int private_DtwLocker_element_status(struct DtwLocker *self,const  char *element
 void  DtwLocker_lock(struct DtwLocker *self, const  char *element){
     char formated_element[2000] = {0};
     private_DtwLocker_format_element(formated_element,self,element);
+    //seed de espera
+    srand(time(NULL) + self->process);
+    int delay = rand() % 200000 + 100000;
 
     while (true){
         int status = private_DtwLocker_element_status(self,formated_element);
@@ -90,7 +93,9 @@ void  DtwLocker_lock(struct DtwLocker *self, const  char *element){
             }
 
         };
-        sleep(1);
+
+        usleep(delay);
+
     }
 
 }
