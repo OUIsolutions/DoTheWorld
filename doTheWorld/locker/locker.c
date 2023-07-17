@@ -1,11 +1,11 @@
 
 
-DtwLocker *newDtwLocker(char *path, int process,int max_lock_time){
+DtwLocker *newDtwLocker(char *path, int process){
     DtwLocker *self = (DtwLocker*) malloc(sizeof (DtwLocker));
     self->separator = "|";
     self->path = strdup(path);
     self->process = process;
-    self->max_lock_time = max_lock_time;
+    self->max_lock_time = 5;
     //methods
     self->lock = DtwLocker_lock;
     self->unlock = DtwLocker_unlock;
@@ -75,7 +75,7 @@ void  DtwLocker_lock(struct DtwLocker *self, const  char *element){
 
     while (true){
         int status = private_DtwLocker_element_status(self,formated_element);
-        
+
         if(status == PRIVATE_DTW_ABLE_TO_LOCK){
             char content[500] = {0};
             time_t  now = time(NULL);
