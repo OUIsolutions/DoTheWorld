@@ -134,12 +134,12 @@ void DtwLocker_unlock(struct DtwLocker *self,const  char *element){
 }
 
 void DtwLocker_free(struct DtwLocker *self){
-    free(self->path);
 
     for(int i = 0; i < self->locked_elements->size;i++){
         char *current = self->locked_elements->strings[i];
         self->unlock(self,current);
     }
+    free(self->path);
 
     self->locked_elements->free(self->locked_elements);
     free(self);
