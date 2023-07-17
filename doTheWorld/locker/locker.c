@@ -10,6 +10,7 @@ DtwLocker *newDtwLocker(char *path){
     self->min_interval_delay = 100000;
     self->max_interval_delay = 200000;
     //methods
+    self->locked_elements = newDtwStringArray();
     self->status = DtwLocker_element_status;
     self->lock = DtwLocker_lock;
     self->unlock = DtwLocker_unlock;
@@ -66,6 +67,7 @@ int DtwLocker_element_status(struct DtwLocker *self, const  char *element){
     if (last_modification < (now - self->max_lock_time)){
         return PRIVATE_DTW_ABLE_TO_LOCK;
     }
+
     if(process == self->process){
         return PRIVATE_DTW_ALREADY_LOCKED_BY_SELF;
     }
@@ -73,16 +75,23 @@ int DtwLocker_element_status(struct DtwLocker *self, const  char *element){
 }
 
 
-void  DtwLocker_lock(struct DtwLocker *self, const  char *element){
+bool  DtwLocker_lock(struct DtwLocker *self, const  char *element,int timeout){
     char formated_element[2000] = {0};
     private_DtwLocker_format_element(formated_element,self,element);
     //seed de espera
     srand(time(NULL) + self->process);
     int delay = rand() % self->max_interval_delay + self->min_interval_delay;
 
-    while (true){
-        int status = DtwLocker_element_status(self, formated_element);
+    //int time_spend = 0;
 
+    while (true){
+        /*
+        if(time_spend > timeout){
+            break;
+        }
+         */
+
+        int status = DtwLocker_element_status(self, formated_element);
         if(status == PRIVATE_DTW_ABLE_TO_LOCK){
             char content[500] = {0};
             time_t  now = time(NULL);
@@ -90,18 +99,21 @@ void  DtwLocker_lock(struct DtwLocker *self, const  char *element){
             dtw_write_string_file_content(formated_element,content);
             //these its nescesserary to make ure the file its able to continue writing
             usleep(self->reverifcation_delay);
-
+            //time_spend+=(int)self->reverifcation_delay;
             int new_status = DtwLocker_element_status(self, formated_element);
 
             if(new_status == PRIVATE_DTW_ALREADY_LOCKED_BY_SELF){
-                return;
+
+                return true;
             }
 
         };
 
         usleep(delay);
-
+        //time_spend+=delay;
     }
+
+    return false;
 
 }
 
@@ -118,5 +130,6 @@ void DtwLocker_unlock(struct DtwLocker *self,const  char *element){
 
 void DtwLocker_free(struct DtwLocker *self){
     free(self->path);
+    self->locked_elements->free(self->locked_elements);
     free(self);
 }
