@@ -2,7 +2,7 @@
 *.d
 exemple
 *.pyc
-
+a/
 # object files
 *.json
 *.o
