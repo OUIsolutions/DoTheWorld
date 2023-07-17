@@ -108,7 +108,7 @@ bool  DtwLocker_lock(struct DtwLocker *self, const  char *element,int timeout){
             int new_status = DtwLocker_element_status(self, formated_element);
 
             if(new_status == DTW_ALREADY_LOCKED_BY_SELF){
-                self->locked_elements->append(self->locked_elements,formated_element,DTW_BY_VALUE);
+                self->locked_elements->append(self->locked_elements,element,DTW_BY_VALUE);
                 return true;
             }
 
