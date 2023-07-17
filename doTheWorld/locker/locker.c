@@ -57,10 +57,12 @@ int DtwLocker_element_status(struct DtwLocker *self, const  char *element){
     if(!data){
         return DTW_ABLE_TO_LOCK;
     }
-
+    int data_size = strlen(data);
+    if(data_size == 0){
+        return PRIVATE_DTW_LOCKED_BY_OTHER_PROCESS;
+    }
     
-    printf("data: %s|\n",data);
-
+    
     unsigned long last_modification;
     int process;
 
