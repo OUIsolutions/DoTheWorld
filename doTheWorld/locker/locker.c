@@ -75,18 +75,22 @@ void  DtwLocker_lock(struct DtwLocker *self, const  char *element){
 
     while (true){
         int status = private_DtwLocker_element_status(self,formated_element);
-
-        if(status == PRIVATE_DTW_ALREADY_LOCKED_BY_SELF){
-            return;
-        }
-
+        
         if(status == PRIVATE_DTW_ABLE_TO_LOCK){
             char content[500] = {0};
             time_t  now = time(NULL);
             sprintf(content,"%ld %d",now,self->process);
             dtw_write_string_file_content(formated_element,content);
-        }
-        usleep(100000);
+            usleep(100000);
+
+            int new_status = private_DtwLocker_element_status(self,formated_element);
+
+            if(new_status == PRIVATE_DTW_ALREADY_LOCKED_BY_SELF){
+                return;
+            }
+
+        };
+        sleep(1);
     }
 
 }
