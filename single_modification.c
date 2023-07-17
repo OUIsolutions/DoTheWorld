@@ -1,7 +1,9 @@
 
 #include "doTheWorld/doTheWorldMain.h"
 
-int total_process = 20;
+int total_process;
+int creation_per_process;
+
 
 void append_once(int num){
 
@@ -12,7 +14,7 @@ void append_once(int num){
     strcpy(formated,elelement);
     char current_num[20];
     sprintf(current_num,"%d\n",num);
-    for(int x = 0; x < 10; x++){
+    for(int x = 0; x < creation_per_process; x++){
         strcat(formated,current_num);
     }
 
@@ -21,8 +23,11 @@ void append_once(int num){
     locker->free(locker);
 }
 
-int main(){
+int main(int argc, char *argv[]){
    // printf("%ld",(long)(0.1 * 1000000));
+
+    total_process = atoi(argv[1]);
+    creation_per_process = atoi(argv[2]);
 
     dtw_remove_any("a.txt");
     dtw_write_string_file_content("a.txt","");
@@ -34,6 +39,8 @@ int main(){
             exit(0);
         }
     }
+
+    
 
     // Aguarda o término de todos os processos filhos
 
