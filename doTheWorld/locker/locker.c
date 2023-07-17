@@ -137,7 +137,8 @@ void DtwLocker_free(struct DtwLocker *self){
     free(self->path);
 
     for(int i = 0; i < self->locked_elements->size;i++){
-        self->unlock(self,self->locked_elements->strings[i]);
+        char *current = self->locked_elements->strings[i];
+        self->unlock(self,current);
     }
 
     self->locked_elements->free(self->locked_elements);
