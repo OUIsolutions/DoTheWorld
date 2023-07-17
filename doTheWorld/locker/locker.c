@@ -6,7 +6,7 @@ DtwLocker *newDtwLocker(char *path){
     self->path = strdup(path);
     self->process = getpid();
     self->max_lock_time = 5;
-    self->reverifcation_delay= 0.3;
+    self->reverifcation_delay= 0.1;
     self->min_interval_delay = 0.3;
     self->max_interval_delay = 0.5;
     //methods
@@ -111,29 +111,33 @@ bool  DtwLocker_lock(struct DtwLocker *self, const  char *element,double timeout
 
         if(status == DTW_ABLE_TO_LOCK || status == DTW_ALREADY_LOCKED_BY_SELF){
             char content[500] = {0};
-            time_t  previews = time(NULL);
-            sprintf(content,"%ld %d|",previews,self->process);
-            //printf("\tprocesso %d bloqueou\n",self->process);
+            time_t  now = time(NULL);
+            struct timespec start, end;
+            sprintf(content,"%ld %d|",now,self->process);
+            printf("processo %d bloqueou\n",self->process);
+            clock_gettime(CLOCK_MONOTONIC, &start); // Marca o início da medição
             dtw_write_string_file_content(formated_element,content);
+            
             //these its nescesserary to make ure the file its able to continue writing
             usleep((long)self->reverifcation_delay* 1000000);
             time_spend+= self->reverifcation_delay;
-
+        
             int new_status = self->status(self, element);
-            //printf("\tprocesso %d verificou\n",self->process);
+            clock_gettime(CLOCK_MONOTONIC, &end); // Marca o fim da medição
 
-            time_t  after = time(NULL);
-            time_t duration = previews -after ;
-            printf("duration : %d\n",duration);
+            double duration =  (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
 
+            printf("processo %d verificou\n",self->process);
+            printf("processo %d duracao:  %f\n",self->process, duration);
+            
 
             if(new_status == DTW_ALREADY_LOCKED_BY_SELF){
                 self->locked_elements->append(self->locked_elements,element,DTW_BY_VALUE);
-                //printf("\t\t processo %d implementou\n",self->process);
+                printf("\tprocesso %d implementou\n",self->process);
                 return true;
             }
             else{
-                 //printf("processo %d abortou\n",self->process);
+                 printf("processo %d abortou\n",self->process);
 
             }
 
