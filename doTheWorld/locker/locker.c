@@ -10,6 +10,7 @@ DtwLocker *newDtwLocker(char *path){
     self->min_interval_delay = 100000;
     self->max_interval_delay = 200000;
     //methods
+    self->status = DtwLocker_element_status;
     self->lock = DtwLocker_lock;
     self->unlock = DtwLocker_unlock;
     self->free = DtwLocker_free;
@@ -48,7 +49,7 @@ void private_DtwLocker_format_element(char *result,struct DtwLocker *self,const 
 
 }
 
-int private_DtwLocker_element_status(struct DtwLocker *self,const  char *element){
+int DtwLocker_element_status(struct DtwLocker *self, const  char *element){
     char *data = dtw_load_string_file_content(element);
 
     if(!data){
@@ -80,7 +81,7 @@ void  DtwLocker_lock(struct DtwLocker *self, const  char *element){
     int delay = rand() % self->max_interval_delay + self->min_interval_delay;
 
     while (true){
-        int status = private_DtwLocker_element_status(self,formated_element);
+        int status = DtwLocker_element_status(self, formated_element);
 
         if(status == PRIVATE_DTW_ABLE_TO_LOCK){
             char content[500] = {0};
@@ -90,7 +91,7 @@ void  DtwLocker_lock(struct DtwLocker *self, const  char *element){
             //these its nescesserary to make ure the file its able to continue writing
             usleep(self->reverifcation_delay);
 
-            int new_status = private_DtwLocker_element_status(self,formated_element);
+            int new_status = DtwLocker_element_status(self, formated_element);
 
             if(new_status == PRIVATE_DTW_ALREADY_LOCKED_BY_SELF){
                 return;
@@ -108,7 +109,7 @@ void DtwLocker_unlock(struct DtwLocker *self,const  char *element){
     char formated_element[2000] = {0};
     private_DtwLocker_format_element(formated_element,self,element);
 
-    int status = private_DtwLocker_element_status(self,formated_element);
+    int status = DtwLocker_element_status(self, formated_element);
     if(status == PRIVATE_DTW_ALREADY_LOCKED_BY_SELF){
         dtw_remove_any(formated_element);
     }
