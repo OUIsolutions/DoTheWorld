@@ -84,6 +84,7 @@ void  DtwLocker_lock(struct DtwLocker *self, const  char *element){
             time_t  now = time(NULL);
             sprintf(content,"%ld %d",now,self->process);
             dtw_write_string_file_content(formated_element,content);
+            //these its nescesserary to make ure the file its able to continue writing
             usleep(100000);
 
             int new_status = private_DtwLocker_element_status(self,formated_element);
