@@ -53,15 +53,36 @@ void private_DtwLocker_format_element(char *result,struct DtwLocker *self,const 
 int DtwLocker_element_status(struct DtwLocker *self, const  char *element){
 
    
-    char *data = dtw_load_string_file_content(element);
-    if(!data){
-        return DTW_ABLE_TO_LOCK;
+    char *data;
+    int total_verifications = 0;
+    while(true){
+
+        data = dtw_load_string_file_content(element);
+        if(!data){
+            return DTW_ABLE_TO_LOCK;
+        }
+
+        int data_size = strlen(data);
+        
+        if(data_size == 0){
+            free(data);
+            if(total_verifications > 2){
+                return DTW_ABLE_TO_LOCK;
+            }
+            else{
+                printf("pegou aqui\n");
+                usleep((long)self->reverifcation_delay* 1000000);
+                total_verifications+=1;
+                continue;
+            }
+
+        }
+
+        break;
+
     }
-    int data_size = strlen(data);
-    if(data_size == 0){
-        return PRIVATE_DTW_LOCKED_BY_OTHER_PROCESS;
-    }
-    
+
+
     
     unsigned long last_modification;
     int process;
