@@ -1,10 +1,10 @@
 
 
-DtwLocker *newDtwLocker(char *path, int process){
+DtwLocker *newDtwLocker(char *path){
     DtwLocker *self = (DtwLocker*) malloc(sizeof (DtwLocker));
     self->separator = "|";
     self->path = strdup(path);
-    self->process = process;
+    self->process = getpid();
     self->max_lock_time = 5;
     //methods
     self->lock = DtwLocker_lock;

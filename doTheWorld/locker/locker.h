@@ -18,7 +18,7 @@ typedef struct DtwLocker{
 }DtwLocker;
 
 
-DtwLocker *newDtwLocker(char *path, int process);
+DtwLocker *newDtwLocker(char *path);
 
 void private_DtwLocker_format_element(char *result,struct DtwLocker *self,const  char *element);
 
