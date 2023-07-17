@@ -7,6 +7,9 @@ enum {
 typedef struct DtwLocker{
    char *separator;
    char *path;
+   long reverifcation_delay;
+   long min_interval_delay;
+   long max_interval_delay;
    int process;
    int max_lock_time;
    DtwStringArray *locked_elements;

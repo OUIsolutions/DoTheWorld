@@ -6,6 +6,9 @@ DtwLocker *newDtwLocker(char *path){
     self->path = strdup(path);
     self->process = getpid();
     self->max_lock_time = 5;
+    self->reverifcation_delay= 100000;
+    self->min_interval_delay = 100000;
+    self->max_interval_delay = 200000;
     //methods
     self->lock = DtwLocker_lock;
     self->unlock = DtwLocker_unlock;
@@ -74,7 +77,7 @@ void  DtwLocker_lock(struct DtwLocker *self, const  char *element){
     private_DtwLocker_format_element(formated_element,self,element);
     //seed de espera
     srand(time(NULL) + self->process);
-    int delay = rand() % 200000 + 100000;
+    int delay = rand() % self->max_interval_delay + self->min_interval_delay;
 
     while (true){
         int status = private_DtwLocker_element_status(self,formated_element);
@@ -85,7 +88,7 @@ void  DtwLocker_lock(struct DtwLocker *self, const  char *element){
             sprintf(content,"%ld %d",now,self->process);
             dtw_write_string_file_content(formated_element,content);
             //these its nescesserary to make ure the file its able to continue writing
-            usleep(100000);
+            usleep(self->reverifcation_delay);
 
             int new_status = private_DtwLocker_element_status(self,formated_element);
 
