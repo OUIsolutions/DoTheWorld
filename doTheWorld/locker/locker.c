@@ -54,7 +54,7 @@ int DtwLocker_element_status(struct DtwLocker *self, const  char *element){
 
    
     char *data;
-    int total_verifications = 0;
+    bool verified_zero_data = 0;
     while(true){
 
         data = dtw_load_string_file_content(element);
@@ -63,20 +63,19 @@ int DtwLocker_element_status(struct DtwLocker *self, const  char *element){
         }
 
         int data_size = strlen(data);
-        
+        printf("data :%s\n",data);
         if(data_size == 0){
             free(data);
-            if(total_verifications > 2){
+            if(verified_zero_data){
                 return DTW_ABLE_TO_LOCK;
             }
             else{
-                printf("pegou aqui\n");
-                usleep((long)self->reverifcation_delay* 1000000);
-                total_verifications+=1;
+                sleep(1);
+                verified_zero_data = true;
                 continue;
             }
-
         }
+        
 
         break;
 
@@ -118,17 +117,13 @@ bool  DtwLocker_lock(struct DtwLocker *self, const  char *element,double timeout
             break;
         }
 
-
         int status = DtwLocker_element_status(self, formated_element);
 
-        if(status == DTW_ALREADY_LOCKED_BY_SELF){
-            return true;
-        }
-
-        if(status == DTW_ABLE_TO_LOCK){
+        if(status == DTW_ABLE_TO_LOCK || status == DTW_ALREADY_LOCKED_BY_SELF){
             char content[500] = {0};
             time_t  now = time(NULL);
             sprintf(content,"%ld %d|",now,self->process);
+            dtw_remove_any(formated_element);
             dtw_write_string_file_content(formated_element,content);
             //these its nescesserary to make ure the file its able to continue writing
             usleep((long)self->reverifcation_delay* 1000000);
