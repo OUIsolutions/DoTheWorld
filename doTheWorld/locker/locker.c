@@ -86,6 +86,7 @@ void  DtwLocker_lock(struct DtwLocker *self, const  char *element){
             sprintf(content,"%ld %d",now,self->process);
             dtw_write_string_file_content(formated_element,content);
         }
+        sleep(1);
     }
 
 }
