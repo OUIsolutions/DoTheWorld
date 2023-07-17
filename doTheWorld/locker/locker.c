@@ -6,9 +6,9 @@ DtwLocker *newDtwLocker(char *path){
     self->path = strdup(path);
     self->process = getpid();
     self->max_lock_time = 5;
-    self->reverifcation_delay= 0.2;
-    self->min_interval_delay = 0.1;
-    self->max_interval_delay = 0.2;
+    self->reverifcation_delay= 0.5;
+    self->min_interval_delay = 0.2;
+    self->max_interval_delay = 0.5;
     //methods
     self->locked_elements = newDtwStringArray();
     self->status = DtwLocker_element_status;
