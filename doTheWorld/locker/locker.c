@@ -2,6 +2,9 @@
 
 DtwLocker *newDtwLocker(char *path){
     DtwLocker *self = (DtwLocker*) malloc(sizeof (DtwLocker));
+    dtw_remove_any(self->path);
+    dtw_create_dir_recursively(path);
+
     self->separator = "|";
     self->path = strdup(path);
     self->process = getpid();
@@ -91,64 +94,64 @@ int DtwLocker_element_status(struct DtwLocker *self, const  char *element){
 }
 
 
-bool  DtwLocker_lock(struct DtwLocker *self, const  char *element,double timeout){
-    char formated_element[2000] = {0};
-    private_DtwLocker_format_element(formated_element,self,element);
+void  DtwLocker_lock(struct DtwLocker *self, const  char *element){
+    
+    char formated_path[2000] = {0};
+    private_DtwLocker_format_element(formated_path,self,element);
     //seed de espera
-    srand(time(NULL) + self->process);
-    long delay = rand() % (long)(self->max_interval_delay *1000000) +(long)(self->min_interval_delay *1000000);
 
-    double time_spend = 0;
+    bool return_on_end = false;
 
     while (true){
+        int file = open(formated_path, O_RDWR | O_CREAT, 0644);
 
-        if(time_spend > timeout && timeout > 0){
 
-            break;
+        //não consseguiu abrir o  arquiv
+        if (file == -1) {
+            continue;
         }
 
-        int status = self->status(self, element);
+        struct flock fl;
+        memset(&fl, 0, sizeof(fl));
+        fl.l_type = F_WRLCK;  // Bloqueio de escrita
+        fl.l_whence = SEEK_SET;
+        fl.l_start = 0;
+        fl.l_len = 0;
 
-        if(status == DTW_ABLE_TO_LOCK || status == DTW_ALREADY_LOCKED_BY_SELF){
-            char content[500] = {0};
-            time_t  now = time(NULL);
-            struct timespec start, end;
-            sprintf(content,"%ld %d|",now,self->process);
-            printf("processo %d bloqueou\n",self->process);
-            clock_gettime(CLOCK_MONOTONIC, &start); // Marca o início da medição
-            dtw_write_string_file_content(formated_element,content);
 
-            //these its nescesserary to make ure the file its able to continue writing
-            usleep((long)self->reverifcation_delay* 1000000);
-            time_spend+= self->reverifcation_delay;
-        
-            int new_status = self->status(self, element);
-            clock_gettime(CLOCK_MONOTONIC, &end); // Marca o fim da medição
+        //signfica que consseguiu bloquear
+        if (fcntl(file, F_SETLK, &fl) != -1) {
+            time_t now = time(NULL);
 
-            double duration =  (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
+            char *value = dtw_load_string_file_content(formated_path);
+            unsigned long last_modification;
+            int process;
+            sscanf(value,"%ld %i",&last_modification,&process);
+            free(value);
 
-            printf("processo %d verificou\n",self->process);
-            printf("processo %d duracao:  %f\n",self->process, duration);
-            
-
-            if(new_status == DTW_ALREADY_LOCKED_BY_SELF){
-                self->locked_elements->append(self->locked_elements,element,DTW_BY_VALUE);
-                printf("\tprocesso %d implementou\n",self->process);
-                return true;
-            }
-            else{
-                 printf("processo %d abortou\n",self->process);
-
+            if (last_modification < (now - self->max_lock_time)){
+                char content[500] = {0};
+                sprintf(content,"%ld %d",now,self->process);
+                dtw_write_string_file_content(formated_path,content);
+                return_on_end = true;
             }
 
 
-        };
-        usleep(delay);
-        time_spend+=(double)((double)delay / 1000000);
+            if(process == self->process){
+                return_on_end = true;
+            };
 
+            // Desbloquear o arquivo
+            fl.l_type = F_UNLCK;
+            fcntl(file, F_SETLK, &fl);
+
+        }
+
+        close(file);
+        if(return_on_end){
+            return;
+        }
     }
-
-    return false;
 
 }
 

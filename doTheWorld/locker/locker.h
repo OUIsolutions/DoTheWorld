@@ -15,7 +15,7 @@ typedef struct DtwLocker{
    DtwStringArray *locked_elements;
 
    int (*status)(struct DtwLocker *self, const  char *element);
-   bool (*lock)(struct DtwLocker *self, const  char *element,double timeout);
+   void (*lock)(struct DtwLocker *self, const  char *element);
    void (*unlock)(struct DtwLocker *self,const  char *element);
    void (*free)(struct DtwLocker *self);
 
@@ -29,7 +29,7 @@ void private_DtwLocker_format_element(char *result,struct DtwLocker *self,const 
 int DtwLocker_element_status(struct DtwLocker *self, const  char *element);
 
 
-bool DtwLocker_lock(struct DtwLocker *self, const  char *element,double timeout);
+void DtwLocker_lock(struct DtwLocker *self, const  char *element);
 
 void DtwLocker_unlock(struct DtwLocker *self,const  char *element);
 
