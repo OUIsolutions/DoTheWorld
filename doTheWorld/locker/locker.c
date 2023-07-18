@@ -102,25 +102,12 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 
     while (true) {
         int file = open(formated_path, O_RDWR | O_CREAT, 0644);
-
         if (file == -1) {
             // Não conseguiu abrir o arquivo, continua tentando
             continue;
         }
 
-        struct flock fl;
-        memset(&fl, 0, sizeof(fl));
-        fl.l_type = F_WRLCK;  // Bloqueio de escrita
-        fl.l_whence = SEEK_SET;
-        fl.l_start = 0;
-        fl.l_pid = self->process;   // PID do processo atual
-
-        // Definir o tempo máximo de timeout no struct flock
-        fl.l_type |= F_UNLCK;  // Desbloquear o arquivo se o timeout ocorrer
-        fl.l_pid = getpid();   // PID do processo atual
-        fl.l_len = self->max_lock_time;
-
-        if (fcntl(file, F_SETLKW, &fl) != -1) {
+        if (flock(file, LOCK_EX ) != -1) {
             printf("process %d bloqueou\n", self->process);
 
             char *value = dtw_load_string_file_content(formated_path);
@@ -134,8 +121,11 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
             sprintf(content, "%ld %d", now, self->process);
             dtw_write_string_file_content(formated_path, content);
 
+            sleep(4);
             close(file);
             return;
+
+
         }
         close(file);
         // Se chegou até aqui, significa que conseguiu bloquear
