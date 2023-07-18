@@ -16,6 +16,7 @@ void append_once(int num){
     strcpy(formated,elelement);
     char current_num[20];
     sprintf(current_num,"%d\n",num);
+    
     for(int x = 0; x < creation_per_process; x++){
         strcat(formated,current_num);
     }

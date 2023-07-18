@@ -108,7 +108,6 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
         }
 
         if (flock(file, LOCK_EX ) != -1) {
-            printf("process %d bloqueou\n", self->process);
 
             char *value = dtw_load_string_file_content(formated_path);
             unsigned long last_modification;
@@ -120,8 +119,7 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
             char content[500] = {0};
             sprintf(content, "%ld %d", now, self->process);
             dtw_write_string_file_content(formated_path, content);
-
-            sleep(4);
+            sleep(1);
             close(file);
             return;
 
@@ -134,7 +132,7 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 
 void DtwLocker_unlock(struct DtwLocker *self,const  char *element){
     char formated_path[2000] = {0};
-    private_DtwLocker_format_element(element,self,element);
+    private_DtwLocker_format_element(formated_path,self,element);
     int file = open(formated_path, O_RDWR | O_CREAT, 0644);
     flock(file,LOCK_EX);
     close(file);
