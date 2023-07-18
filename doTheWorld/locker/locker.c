@@ -117,11 +117,13 @@ void  DtwLocker_lock(struct DtwLocker *self, const  char *element){
         fl.l_whence = SEEK_SET;
         fl.l_start = 0;
         fl.l_len = 0;
+        fl.l_type |= F_UNLCK;  // Desbloquear o arquivo se o timeout ocorrer
+        fl.l_pid = getpid();   // PID do processo atual
+        fl.l_len = self->max_lock_time;
 
 
         //signfica que consseguiu bloquear
         if (fcntl(file, F_SETLK, &fl) != -1) {
-            time_t now = time(NULL);
 
             char *value = dtw_load_string_file_content(formated_path);
             unsigned long last_modification;
@@ -129,28 +131,18 @@ void  DtwLocker_lock(struct DtwLocker *self, const  char *element){
             sscanf(value,"%ld %i",&last_modification,&process);
             free(value);
 
-            if (last_modification < (now - self->max_lock_time)){
-                char content[500] = {0};
-                sprintf(content,"%ld %d",now,self->process);
-                dtw_write_string_file_content(formated_path,content);
-                return_on_end = true;
-            }
-
-
-            if(process == self->process){
-                return_on_end = true;
-            };
+            time_t now = time(NULL);
+            char content[500] = {0};
+            sprintf(content,"%ld %d",now,self->process);
+            dtw_write_string_file_content(formated_path,content);
 
             // Desbloquear o arquivo
-            fl.l_type = F_UNLCK;
-            fcntl(file, F_SETLK, &fl);
-
+            close(file);
+            return;
         }
 
         close(file);
-        if(return_on_end){
-            return;
-        }
+
     }
 
 }
