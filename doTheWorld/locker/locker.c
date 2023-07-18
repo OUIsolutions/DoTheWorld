@@ -133,21 +133,19 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 }
 
 void DtwLocker_unlock(struct DtwLocker *self,const  char *element){
-    char formated_element[2000] = {0};
-    private_DtwLocker_format_element(formated_element,self,element);
-
-    int status = self->status(self, element);
-    if(status == DTW_ALREADY_LOCKED_BY_SELF){
-        dtw_remove_any(formated_element);
-    }
-
+    char formated_path[2000] = {0};
+    private_DtwLocker_format_element(element,self,element);
+    int file = open(formated_path, O_RDWR | O_CREAT, 0644);
+    flock(file,LOCK_EX);
+    close(file);
 }
+
 
 void DtwLocker_free(struct DtwLocker *self){
 
     for(int i = 0; i < self->locked_elements->size;i++){
         char *current = self->locked_elements->strings[i];
-      //  self->unlock(self,current);
+         self->unlock(self,current);
     }
 
     free(self->path);
