@@ -94,20 +94,17 @@ int DtwLocker_element_status(struct DtwLocker *self, const  char *element){
 }
 
 
-void  DtwLocker_lock(struct DtwLocker *self, const  char *element){
-    
+void DtwLocker_lock(struct DtwLocker *self, const char *element) {
     char formated_path[2000] = {0};
-    private_DtwLocker_format_element(formated_path,self,element);
-    //seed de espera
+    private_DtwLocker_format_element(formated_path, self, element);
 
     bool return_on_end = false;
 
-    while (true){
+    while (true) {
         int file = open(formated_path, O_RDWR | O_CREAT, 0644);
 
-
-        //não consseguiu abrir o  arquiv
         if (file == -1) {
+            // Não conseguiu abrir o arquivo, continua tentando
             continue;
         }
 
@@ -116,35 +113,33 @@ void  DtwLocker_lock(struct DtwLocker *self, const  char *element){
         fl.l_type = F_WRLCK;  // Bloqueio de escrita
         fl.l_whence = SEEK_SET;
         fl.l_start = 0;
-        fl.l_len = 0;
+        fl.l_pid = self->process;   // PID do processo atual
+
+        // Definir o tempo máximo de timeout no struct flock
         fl.l_type |= F_UNLCK;  // Desbloquear o arquivo se o timeout ocorrer
         fl.l_pid = getpid();   // PID do processo atual
         fl.l_len = self->max_lock_time;
 
-
-        //signfica que consseguiu bloquear
-        if (fcntl(file, F_SETLK, &fl) != -1) {
+        if (fcntl(file, F_SETLKW, &fl) != -1) {
+            printf("process %d bloqueou\n", self->process);
 
             char *value = dtw_load_string_file_content(formated_path);
             unsigned long last_modification;
             int process;
-            sscanf(value,"%ld %i",&last_modification,&process);
+            sscanf(value, "%ld %i", &last_modification, &process);
             free(value);
 
             time_t now = time(NULL);
             char content[500] = {0};
-            sprintf(content,"%ld %d",now,self->process);
-            dtw_write_string_file_content(formated_path,content);
+            sprintf(content, "%ld %d", now, self->process);
+            dtw_write_string_file_content(formated_path, content);
 
-            // Desbloquear o arquivo
             close(file);
             return;
         }
-
         close(file);
-
+        // Se chegou até aqui, significa que conseguiu bloquear
     }
-
 }
 
 void DtwLocker_unlock(struct DtwLocker *self,const  char *element){
@@ -162,8 +157,9 @@ void DtwLocker_free(struct DtwLocker *self){
 
     for(int i = 0; i < self->locked_elements->size;i++){
         char *current = self->locked_elements->strings[i];
-        self->unlock(self,current);
+      //  self->unlock(self,current);
     }
+
     free(self->path);
 
     self->locked_elements->free(self->locked_elements);
