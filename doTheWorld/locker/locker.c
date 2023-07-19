@@ -19,7 +19,11 @@ DtwLocker *newDtwLocker(){
 
 
 
-
+unsigned long long int getMicroseconds() {
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    return ((unsigned long long int)tv.tv_sec * 1000000) + tv.tv_usec;
+}
 
 
 void DtwLocker_lock(struct DtwLocker *self, const char *element) {
@@ -33,9 +37,13 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 
     while(true){
         time_t  now = time(NULL);
-
         long last_modification = dtw_get_file_last_motification_in_unix(formated_path);
+
+
+
         bool not_exist = (dtw_entity_type(formated_path) == DTW_NOT_FOUND);
+
+
         bool exist = !not_exist;
         bool expired = false;
 
@@ -44,6 +52,7 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
         }
 
         if(not_exist || expired){
+
             dtw_write_string_file_content(formated_path,process_string);
             usleep((int)self->reverifcation_delay * 1000000);
             continue;
@@ -51,7 +60,12 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 
 
         if(exist){
-            char *content = dtw_load_string_file_content(formated_path);
+           //unsigned long long startTime = getMicroseconds();
+                char *content = dtw_load_string_file_content(formated_path);
+            //unsigned long long endTime = getMicroseconds();
+            //unsigned long long elapsedTime = endTime - startTime;
+            printf("processo :%d tempo de leitura %llu",self->process, elapsedTime);
+
             if(!content){
                 continue;
             }

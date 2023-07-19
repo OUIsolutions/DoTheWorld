@@ -2,8 +2,8 @@
 #include "doTheWorld/doTheWorldMain.h"
 
 int total_process;
-int creation_per_process;
-int reverifation_delay;
+double creation_per_process;
+double reverifation_delay;
 int wait_delay;
 
 void append_once(int num){
@@ -36,8 +36,8 @@ int main(int argc, char *argv[]){
 
     total_process = atoi(argv[1]);
     creation_per_process = atoi(argv[2]);
-    //reverifation_delay =  atoi(argv[3]);
-    //wait_delay = atoi(argv[4]);
+    reverifation_delay =  atof(argv[3]);
+    wait_delay = atof(argv[4]);
     
     dtw_remove_any("a.txt");
     dtw_write_string_file_content("a.txt","");
