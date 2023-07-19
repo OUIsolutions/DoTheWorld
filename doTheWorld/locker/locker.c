@@ -63,7 +63,6 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
             }
         }
 
-
     }
 
 }
@@ -75,9 +74,8 @@ void DtwLocker_free(struct DtwLocker *self){
 
     for(int i = 0 ; i < self->locked_elements->size;i++){
         char *element = self->locked_elements->strings[i];
-        char formated_path[2000] = {0};
-        sprintf(formated_path,"%s.lock",element);
-        dtw_remove_any(formated_path);
+
+        dtw_remove_any(element);
     }
 
     self->locked_elements->free(self->locked_elements);
