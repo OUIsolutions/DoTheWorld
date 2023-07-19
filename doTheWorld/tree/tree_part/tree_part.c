@@ -135,6 +135,7 @@ void DtwTreePart_set_binary_content(struct DtwTreePart *self, unsigned char *con
 
 char *DtwTreePart_get_content_sha(struct DtwTreePart *self){
     if(self->content_exist_in_memory){
+
         return dtw_generate_sha_from_string((char *)self->content);
     }
     return NULL;

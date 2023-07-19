@@ -14,8 +14,11 @@ void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self){
     }
     self->free_content(self);
     self->content = dtw_load_any_content(path,&size,&is_binary);
-    
-    self->content_exist_in_memory = true;
+
+    if(self->content){
+        self->content_exist_in_memory = true;
+    }
+
     self->is_binary = is_binary;
     self->content_size = size;
     self->hardware_content_size = size;

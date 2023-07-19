@@ -4919,7 +4919,7 @@ unsigned char *dtw_load_any_content(const char * path,long *size,bool *is_binary
 
     if(*size == 0){
         fclose(file);
-        return NULL;
+        return malloc(0);
     }
 
 
