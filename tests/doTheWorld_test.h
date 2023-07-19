@@ -4919,7 +4919,7 @@ unsigned char *dtw_load_any_content(const char * path,long *size,bool *is_binary
 
     if(*size == 0){
         fclose(file);
-        return malloc(0);
+        return NULL;
     }
 
 
@@ -6141,6 +6141,7 @@ void DtwTreePart_set_binary_content(struct DtwTreePart *self, unsigned char *con
 
 char *DtwTreePart_get_content_sha(struct DtwTreePart *self){
     if(self->content_exist_in_memory){
+
         return dtw_generate_sha_from_string((char *)self->content);
     }
     return NULL;
@@ -6239,8 +6240,11 @@ void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self){
     }
     self->free_content(self);
     self->content = dtw_load_any_content(path,&size,&is_binary);
-    
-    self->content_exist_in_memory = true;
+
+    if(self->content){
+        self->content_exist_in_memory = true;
+    }
+
     self->is_binary = is_binary;
     self->content_size = size;
     self->hardware_content_size = size;
