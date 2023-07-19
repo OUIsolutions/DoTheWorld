@@ -55,15 +55,18 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
             if(file == NULL){
                 continue;
             }
-            unsigned long long endTime = getMicroseconds();
-            unsigned long long controled_duration = endTime - startTime;
+            unsigned long long end_controled = getMicroseconds();
+            unsigned long long controled_duration = end_controled - startTime;
             printf("processo :%d tempo de duration %llu\n",self->process, controled_duration);
 
             fwrite(process_string, sizeof(char), strlen(process_string), file);
             fclose(file);
 
+            unsigned long long end_time = getMicroseconds();
+            unsigned long long write_time = end_time - end_controled;
+            printf("processo :%d tempo de escrita %llu\n",self->process, write_time);
 
-            usleep((long)self->reverifcation_delay * 1000000);
+            usleep((long)(self->reverifcation_delay * 1000000));
 
             continue;
         }
@@ -85,7 +88,7 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
             }
             else{
                 total_fails+=1;
-                usleep((long)self->wait_delay * 1000000);
+                usleep((long)(self->wait_delay * 1000000));
             }
         }
 
