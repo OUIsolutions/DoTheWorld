@@ -35,11 +35,7 @@
 		"dir":	"tests/target/sub_folder",
 		"full_name":	"sub_element.txt",
 		"name":	"sub_element",
-		"extension":	"txt",
-		"content_size":	0,
-		"content_sha256":	"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-		"is_binary":	false,
-		"content":	""
+		"extension":	"txt"
 	}, {
 		"path":	"tests/target/sub_folder/sub_element2.txt",
 		"original_path":	"tests/target/sub_folder/sub_element2.txt",

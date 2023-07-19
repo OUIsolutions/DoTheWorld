@@ -63,13 +63,11 @@ Dir: tests/target/sub_folder
 Full Name: sub_element.txt
 Name: sub_element
 Extension: txt
-Content Exist in Memory: true
+Content Exist in Memory: false
 Ignore: false
 Content Exist In Hardware: true
 Is Binary: false
-Content Size: 5
-Content SHA:  eeb282539220fa206a1f16e69bfa9811c9dc8944bf0f04f9bcfb770366681712
-Content:  test
+Content Size: 0
 ------------------------------------------------------------
 First Path: tests/target/sub_folder/sub_element2.txt
 Path: tests/target/sub_folder/sub_element2.txt
