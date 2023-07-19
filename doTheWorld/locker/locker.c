@@ -34,7 +34,7 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
     char process_string[20] = {0};
     sprintf(process_string,"%d",self->process);
     int total_fails = 0;
-
+    long verification_deley = (long)(self->reverifcation_delay * 1000000);
     while(true){
         time_t  now = time(NULL);
         unsigned long long startTime = getMicroseconds();
@@ -51,22 +51,16 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 
         if(not_exist || expired){
 
-            FILE *file = fopen(formated_path,"w");
-            if(file == NULL){
-                continue;
-            }
-            unsigned long long end_controled = getMicroseconds();
-            unsigned long long controled_duration = end_controled - startTime;
-            printf("processo :%d tempo de duration %llu\n",self->process, controled_duration);
-
-            fwrite(process_string, sizeof(char), strlen(process_string), file);
-            fclose(file);
 
             unsigned long long end_time = getMicroseconds();
-            unsigned long long write_time = end_time - end_controled;
-            printf("processo :%d tempo de escrita %llu\n",self->process, write_time);
+            unsigned long long controled_duration = end_time - startTime;
+            if(controled_duration > verification_deley){
+                printf("pegou aqui\n");
+                continue;
+            }
+            dtw_write_string_file_content(formated_path,process_string);
 
-            usleep((long)(self->reverifcation_delay * 1000000));
+            usleep(verification_deley);
 
             continue;
         }
@@ -82,7 +76,7 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
             free(content);
 
             if(process_owner == self->process ){
-                printf("process %d get ownership\n",self->process);
+                //printf("process %d get ownership\n",self->process);
                 self->locked_elements->append(self->locked_elements,formated_path,DTW_BY_VALUE);
                 return;
             }
