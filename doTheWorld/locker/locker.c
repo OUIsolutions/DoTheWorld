@@ -35,6 +35,7 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
     sprintf(process_string,"%d",self->process);
     int total_fails = 0;
     long verification_deley = (long)(self->reverifcation_delay * 1000000);
+
     while(true){
         time_t  now = time(NULL);
         unsigned long long startTime = getMicroseconds();
@@ -53,16 +54,28 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 
             DtwPath *path = newDtwPath(formated_path);
             char *dirname = path->get_dir(path);
-            printf("Dir %s\n",dirname);
-            free(dirname);
+            if(dirname){
+                dtw_create_dir_recursively(dirname);
+                free(dirname);
+            }
             path->free(path);
 
             unsigned long long end_time = getMicroseconds();
             unsigned long long controled_duration = end_time - startTime;
+
             if(controled_duration > (long)(verification_deley/2)){
-                printf("pegou aqui\n");
+                printf("controled duration exedeu\n");
                 continue;
             }
+            /*
+            FILE *file = fopen(formated_path,"wb");
+            if(!file){
+                continue;
+            }
+            //printf("proces\n");
+
+            fwrite(process_string, sizeof(char), strlen(process_string), file);
+            */
             dtw_write_string_file_content(formated_path,process_string);
 
             usleep(verification_deley);
