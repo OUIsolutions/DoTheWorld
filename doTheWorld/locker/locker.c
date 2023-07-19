@@ -13,7 +13,6 @@ DtwLocker *newDtwLocker(){
     //methods
     self->locked_elements = newDtwStringArray();
     self->lock = DtwLocker_lock;
-    self->unlock = DtwLocker_unlock;
     self->free = DtwLocker_free;
     return self;
 }
@@ -55,6 +54,7 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
             free(content);
 
             if(process_owner == self->process){
+                self->locked_elements->append(self->locked_elements,formated_path,DTW_BY_VALUE);
                 return;
             }
             else{
@@ -64,22 +64,22 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
         }
 
 
-
-
     }
 
 }
 
-void DtwLocker_unlock(struct DtwLocker *self,const  char *element){
 
-    char formated_path[2000] = {0};
-    sprintf(formated_path,"%s.lock",element);
-    dtw_remove_any(formated_path);
-
-}
 
 
 void DtwLocker_free(struct DtwLocker *self){
+
+    for(int i = 0 ; i < self->locked_elements->size;i++){
+        char *element = self->locked_elements->strings[i];
+        char formated_path[2000] = {0};
+        sprintf(formated_path,"%s.lock",element);
+        dtw_remove_any(formated_path);
+    }
+
     self->locked_elements->free(self->locked_elements);
     free(self);
 }
