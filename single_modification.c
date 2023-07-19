@@ -34,8 +34,8 @@ void append_once(int num){
 int main(int argc, char *argv[]){
 
     total_process  = atoi(argv[1]);
-    creation_per_process = atoi(argv[1]);
-    reverifation_delay = atof(argv[2]);
+    creation_per_process = atoi(argv[2]);
+    reverifation_delay = atof(argv[3]);
     wait_delay = atof(argv[4]);
 
 
