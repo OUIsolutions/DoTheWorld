@@ -16,7 +16,12 @@ long int dtw_get_file_last_motification_in_unix(const char *path){
     struct stat attr;
     stat(path, &attr);
     // convert to unix time
+
     time_t last_modification_in_unix = attr.st_mtime;
+    if(last_modification_in_unix == 1){
+        return -1;
+    }
+
     return last_modification_in_unix;
 }
 
