@@ -51,10 +51,15 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 
         if(not_exist || expired){
 
+            DtwPath *path = newDtwPath(formated_path);
+            char *dirname = path->get_dir(path);
+            printf("Dir %s\n",dirname);
+            free(dirname);
+            path->free(path);
 
             unsigned long long end_time = getMicroseconds();
             unsigned long long controled_duration = end_time - startTime;
-            if(controled_duration > verification_deley){
+            if(controled_duration > (long)(verification_deley/2)){
                 printf("pegou aqui\n");
                 continue;
             }
