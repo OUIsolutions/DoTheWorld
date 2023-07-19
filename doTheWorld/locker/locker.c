@@ -8,8 +8,7 @@ DtwLocker *newDtwLocker(){
 
     self->max_lock_time = 5;
     self->reverifcation_delay= 1;
-    self->min_interval_delay = 0.3;
-    self->max_interval_delay = 0.5;
+
     //methods
     self->locked_elements = newDtwStringArray();
     self->lock = DtwLocker_lock;
@@ -29,6 +28,7 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 
     char process_string[20] = {0};
     sprintf(process_string,"%d",self->process);
+    int total_fails = 0;
 
     while(true){
         time_t  now = time(NULL);
@@ -45,6 +45,7 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
         if(not_exist || expired){
             dtw_write_string_file_content(formated_path,process_string);
         }
+
         if(exist){
             char *content = dtw_load_string_file_content(formated_path);
             if(!content){
@@ -53,12 +54,19 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
             int process_owner = atoi(content);
             free(content);
 
-            if(process_owner == self->process){
-                self->locked_elements->append(self->locked_elements,formated_path,DTW_BY_VALUE);
-                return;
+            if(process_owner == self->process ){
+
+                //means the file exist at least one second
+                if(last_modification < now -1){
+                    printf("process %d esperando ownership\n",self->process);
+                    sleep(1);
+                    self->locked_elements->append(self->locked_elements,formated_path,DTW_BY_VALUE);
+                    return;
+                }
+
             }
             else{
-                printf("process ruled by other\n");
+                total_fails+=1;
                 sleep(1);
             }
         }
