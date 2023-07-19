@@ -1,9 +1,5 @@
 
-enum {
-    DTW_ABLE_TO_LOCK,
-    DTW_ALREADY_LOCKED_BY_SELF,
-    PRIVATE_DTW_LOCKED_BY_OTHER_PROCESS
-};
+
 typedef struct DtwLocker{
    char *separator;
    char *path;
@@ -24,9 +20,6 @@ typedef struct DtwLocker{
 
 DtwLocker *newDtwLocker(char *path);
 
-void private_DtwLocker_format_element(char *result,struct DtwLocker *self,const  char *element);
-
-int DtwLocker_element_status(struct DtwLocker *self, const  char *element);
 
 
 void DtwLocker_lock(struct DtwLocker *self, const  char *element);
