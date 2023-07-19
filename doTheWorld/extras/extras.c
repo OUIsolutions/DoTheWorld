@@ -14,13 +14,11 @@ char * dtw_generate_sha_from_string(const char *string){
 
 long int dtw_get_file_last_motification_in_unix(const char *path){
     struct stat attr;
-    stat(path, &attr);
-    // convert to unix time
-
-    time_t last_modification_in_unix = attr.st_mtime;
-    if(last_modification_in_unix == 1){
+    if(stat(path, &attr) != 0) {
         return -1;
     }
+
+    time_t last_modification_in_unix = attr.st_mtime;
 
     return last_modification_in_unix;
 }

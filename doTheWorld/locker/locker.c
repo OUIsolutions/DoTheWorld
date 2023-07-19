@@ -37,10 +37,8 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 
     while(true){
         time_t  now = time(NULL);
+        unsigned long long startTime = getMicroseconds();
         long last_modification = dtw_get_file_last_motification_in_unix(formated_path);
-
-
-
         bool not_exist = (dtw_entity_type(formated_path) == DTW_NOT_FOUND);
 
 
@@ -53,18 +51,26 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 
         if(not_exist || expired){
 
-            dtw_write_string_file_content(formated_path,process_string);
-            usleep((int)self->reverifcation_delay * 1000000);
+            FILE *file = fopen(formated_path,"w");
+            if(file == NULL){
+                continue;
+            }
+            unsigned long long endTime = getMicroseconds();
+            unsigned long long controled_duration = endTime - startTime;
+            printf("processo :%d tempo de duration %llu\n",self->process, controled_duration);
+
+            fwrite(process_string, sizeof(char), strlen(process_string), file);
+            fclose(file);
+            usleep((long)self->reverifcation_delay * 1000000);
+
             continue;
         }
 
 
         if(exist){
-            unsigned long long startTime = getMicroseconds();
             char *content = dtw_load_string_file_content(formated_path);
-            unsigned long long endTime = getMicroseconds();
-            unsigned long long elapsedTime = endTime - startTime;
-            printf("processo :%d tempo de leitura %llu\n",self->process, elapsedTime);
+
+
 
             if(!content){
                 continue;
@@ -73,13 +79,13 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
             free(content);
 
             if(process_owner == self->process ){
-                printf("process %d esperando ownership\n",self->process);
+                printf("process %d get ownership\n",self->process);
                 self->locked_elements->append(self->locked_elements,formated_path,DTW_BY_VALUE);
                 return;
             }
             else{
                 total_fails+=1;
-                usleep((int)self->wait_delay * 1000000);
+                usleep((long)self->wait_delay * 1000000);
             }
         }
 
