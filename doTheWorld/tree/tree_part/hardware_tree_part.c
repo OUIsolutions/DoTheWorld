@@ -8,17 +8,21 @@ void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self){
     long size;
     bool is_binary;
     char *path = self->path->get_path(self->path);
+    
     if(dtw_entity_type(path) != DTW_FILE_TYPE){
         free(path);
         return;
     }
+
     self->free_content(self);
     self->content = dtw_load_any_content(path,&size,&is_binary);
+    
+    if(!self->content){
+        self->content = strdup("");
+    }    
 
-    if(self->content){
-        self->content_exist_in_memory = true;
-    }
-
+    self->content_exist_in_memory = true;
+    
     self->is_binary = is_binary;
     self->content_size = size;
     self->hardware_content_size = size;

@@ -145,7 +145,7 @@ char *dtw_load_string_file_content(const char * path){
         }
         return NULL;
     }
-    
+
     if(is_binary){
         free(element);
         return NULL;
