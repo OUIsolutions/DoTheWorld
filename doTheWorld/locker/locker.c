@@ -8,7 +8,7 @@ DtwLocker *newDtwLocker(){
 
     self->max_lock_time = 5;
     self->reverifcation_delay= 1;
-
+    
     //methods
     self->locked_elements = newDtwStringArray();
     self->lock = DtwLocker_lock;
