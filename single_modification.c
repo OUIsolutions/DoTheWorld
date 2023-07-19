@@ -7,9 +7,9 @@ int creation_per_process;
 
 void append_once(int num){
 
-    DtwLocker *locker = newDtwLocker("aaaa");
+    DtwLocker *locker = newDtwLocker();
     locker->process= num;
-    locker->lock(locker,"a.txt",-1);
+    locker->lock(locker,"a.txt");
     //printf("processo %d bloqueou\n",num);
     char *elelement = dtw_load_string_file_content("a.txt");
     char *formated = (char*) calloc(30000,sizeof(char*));

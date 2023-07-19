@@ -37,7 +37,11 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
         long last_modification = dtw_get_file_last_motification_in_unix(formated_path);
         bool not_exist = (dtw_entity_type(formated_path) == DTW_NOT_FOUND);
         bool exist = !not_exist;
-        bool expired = last_modification < (now - self->max_lock_time);
+        bool expired = false;
+
+        if(exist){
+            expired = last_modification < (now - self->max_lock_time);
+        }
 
         if(not_exist || expired){
             dtw_write_string_file_content(formated_path,process_string);
@@ -62,20 +66,20 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 
 
 
-
-
-
-
-
     }
 
 }
 
 void DtwLocker_unlock(struct DtwLocker *self,const  char *element){
 
+    char formated_path[2000] = {0};
+    sprintf(formated_path,"%s.lock",element);
+    dtw_remove_any(formated_path);
+
 }
 
 
 void DtwLocker_free(struct DtwLocker *self){
-
+    self->locked_elements->free(self->locked_elements);
+    free(self);
 }
