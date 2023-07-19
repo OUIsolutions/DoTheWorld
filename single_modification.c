@@ -2,15 +2,15 @@
 #include "doTheWorld/doTheWorldMain.h"
 
 int total_process;
-double creation_per_process;
+int creation_per_process;
 double reverifation_delay;
-int wait_delay;
+double wait_delay;
 
 void append_once(int num){
 
     DtwLocker *locker = newDtwLocker(); 
-    //locker->reverifcation_delay =  reverifation_delay;
-    //locker->wait_delay = wait_delay;
+    locker->reverifcation_delay =  reverifation_delay;
+    locker->wait_delay = wait_delay;
     locker->process= num;
     locker->lock(locker,"a.txt");
     //printf("processo %d bloqueou\n",num);
