@@ -2,7 +2,6 @@
 
 typedef struct DtwLocker{
    char *separator;
-   char *path;
    double reverifcation_delay;
    double min_interval_delay;
    double max_interval_delay;
@@ -18,7 +17,7 @@ typedef struct DtwLocker{
 }DtwLocker;
 
 
-DtwLocker *newDtwLocker(char *path);
+DtwLocker *newDtwLocker();
 
 
 

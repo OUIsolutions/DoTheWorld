@@ -1,13 +1,11 @@
 
 
-DtwLocker *newDtwLocker(char *path){
+DtwLocker *newDtwLocker(){
     DtwLocker *self = (DtwLocker*) malloc(sizeof (DtwLocker));
-    dtw_remove_any(self->path);
-    dtw_create_dir_recursively(path);
 
     self->separator = "|";
-    self->path = strdup(path);
     self->process = getpid();
+
     self->max_lock_time = 5;
     self->reverifcation_delay= 1;
     self->min_interval_delay = 0.3;
@@ -26,6 +24,51 @@ DtwLocker *newDtwLocker(char *path){
 
 
 void DtwLocker_lock(struct DtwLocker *self, const char *element) {
+
+    char formated_path[2000] = {0};
+    sprintf(formated_path,"%s.lock",element);
+
+    char process_string[20] = {0};
+    sprintf(process_string,"%d",self->process);
+
+    while(true){
+        time_t  now = time(NULL);
+
+        long last_modification = dtw_get_file_last_motification_in_unix(formated_path);
+        bool not_exist = (dtw_entity_type(formated_path) == DTW_NOT_FOUND);
+        bool exist = !not_exist;
+        bool expired = last_modification < (now - self->max_lock_time);
+
+        if(not_exist || expired){
+            dtw_write_string_file_content(formated_path,process_string);
+        }
+        if(exist){
+            char *content = dtw_load_string_file_content(formated_path);
+            if(!content){
+                continue;
+            }
+            int process_owner = atoi(content);
+            free(content);
+
+            if(process_owner == self->process){
+                return;
+            }
+            else{
+                printf("process ruled by other\n");
+                sleep(1);
+            }
+        }
+
+
+
+
+
+
+
+
+
+    }
+
 }
 
 void DtwLocker_unlock(struct DtwLocker *self,const  char *element){
