@@ -8,7 +8,8 @@ DtwLocker *newDtwLocker(){
 
     self->max_lock_time = 5;
     self->reverifcation_delay= 1;
-    
+    self->wait_delay = 1;
+
     //methods
     self->locked_elements = newDtwStringArray();
     self->lock = DtwLocker_lock;
@@ -44,7 +45,10 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 
         if(not_exist || expired){
             dtw_write_string_file_content(formated_path,process_string);
+            usleep((int)self->reverifcation_delay * 1000000);
+            continue;
         }
+
 
         if(exist){
             char *content = dtw_load_string_file_content(formated_path);
@@ -55,19 +59,13 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
             free(content);
 
             if(process_owner == self->process ){
-
-                //means the file exist at least one second
-                if(last_modification < now -1){
-                    printf("process %d esperando ownership\n",self->process);
-                    sleep(1);
-                    self->locked_elements->append(self->locked_elements,formated_path,DTW_BY_VALUE);
-                    return;
-                }
-
+                printf("process %d esperando ownership\n",self->process);
+                self->locked_elements->append(self->locked_elements,formated_path,DTW_BY_VALUE);
+                return;
             }
             else{
                 total_fails+=1;
-                sleep(1);
+                usleep((int)self->wait_delay * 1000000);
             }
         }
 
