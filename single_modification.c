@@ -9,8 +9,8 @@ int wait_delay;
 void append_once(int num){
 
     DtwLocker *locker = newDtwLocker(); 
-    locker->reverifcation_delay =  reverifation_delay;
-    locker->wait_delay = wait_delay;
+    //locker->reverifcation_delay =  reverifation_delay;
+    //locker->wait_delay = wait_delay;
     locker->process= num;
     locker->lock(locker,"a.txt");
     //printf("processo %d bloqueou\n",num);
@@ -36,8 +36,8 @@ int main(int argc, char *argv[]){
 
     total_process = atoi(argv[1]);
     creation_per_process = atoi(argv[2]);
-    reverifation_delay =  atoi(argv[3]);
-    wait_delay = atoi(argv[4]);
+    //reverifation_delay =  atoi(argv[3]);
+    //wait_delay = atoi(argv[4]);
     
     dtw_remove_any("a.txt");
     dtw_write_string_file_content("a.txt","");
