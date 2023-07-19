@@ -3881,7 +3881,8 @@ char * calc_sha_256_from_file_returning_string(const char *filename)
 
 
 
-
+#include <unistd.h>
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -3889,6 +3890,10 @@ char * calc_sha_256_from_file_returning_string(const char *filename)
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <time.h>
+#include <sys/wait.h>
+#include <errno.h>
+#include <sys/file.h>
+#include <sys/time.h>
 
 
 
@@ -4129,7 +4134,6 @@ void DtwPath_add_end_dir(struct DtwPath *self, const char *end_dir);
 
 void DtwPath_represent_path(struct DtwPath *self);
 void DtwPath_destructor_path(struct DtwPath *self);
-
 
 
 
@@ -4442,6 +4446,33 @@ struct  DtwTree * newDtwTree();
 
 
 
+typedef struct DtwLocker{
+   char *separator;
+   double reverifcation_delay;
+   double wait_delay;
+   int process;
+   int max_lock_time;
+   DtwStringArray *locked_elements;
+
+   int (*status)(struct DtwLocker *self, const  char *element);
+   void (*lock)(struct DtwLocker *self, const  char *element);
+   void (*free)(struct DtwLocker *self);
+
+}DtwLocker;
+
+
+DtwLocker *newDtwLocker();
+
+
+
+void DtwLocker_lock(struct DtwLocker *self, const  char *element);
+
+
+void DtwLocker_free(struct DtwLocker *self);
+
+
+
+
 
 
 char *dtw_base64_encode(unsigned char *data, long input_length){
@@ -4576,9 +4607,12 @@ char * dtw_generate_sha_from_string(const char *string){
 
 long int dtw_get_file_last_motification_in_unix(const char *path){
     struct stat attr;
-    stat(path, &attr);
-    // convert to unix time
+    if(stat(path, &attr) != 0) {
+        return -1;
+    }
+
     time_t last_modification_in_unix = attr.st_mtime;
+
     return last_modification_in_unix;
 }
 
@@ -4856,25 +4890,52 @@ bool dtw_remove_any(const char* path) {
 
 unsigned char *dtw_load_any_content(const char * path,long *size,bool *is_binary){
 
+    *is_binary = false;
+    *size = 0;
+
     int entity = dtw_entity_type(path);
     if(entity != DTW_FILE_TYPE){
         return NULL;
     }
+    FILE  *file = fopen(path,"rb");
 
-    FILE *file = fopen(path,"rb");
+    if(!file){
+        return NULL;
+    }
 
 
-    fseek(file,0,SEEK_END);
+    if(fseek(file,0,SEEK_END) == -1){
+        fclose(file);
+        return NULL;
+    }
+
+
     *size = ftell(file);
-    
+
     if(*size == -1){
         fclose(file);
         return NULL;
     }
 
-    fseek(file,0,SEEK_SET);
+    if(*size == 0){
+        fclose(file);
+        return NULL;
+    }
+
+
+    if(fseek(file,0,SEEK_SET) == -1){
+        fclose(file);
+        return NULL;
+    }
+
     unsigned char *content = (unsigned char*)malloc(*size +1);
-    fread(content,1,*size,file);
+    int bytes_read = fread(content,1,*size,file);
+    if(bytes_read <=0 ){
+        free(content);
+        fclose(file);
+        return NULL;
+    }
+
 
     *is_binary = false;
     for(int i = 0;i < *size;i++){
@@ -4897,8 +4958,13 @@ char *dtw_load_string_file_content(const char * path){
     bool is_binary;
     unsigned char *element = dtw_load_any_content(path,&size,&is_binary);
     if(!element){
+
+        if(dtw_entity_type(path) == DTW_FILE_TYPE){
+            return strdup("");
+        }
         return NULL;
     }
+
     if(is_binary){
         free(element);
         return NULL;
@@ -6080,6 +6146,7 @@ void DtwTreePart_set_binary_content(struct DtwTreePart *self, unsigned char *con
 
 char *DtwTreePart_get_content_sha(struct DtwTreePart *self){
     if(self->content_exist_in_memory){
+
         return dtw_generate_sha_from_string((char *)self->content);
     }
     return NULL;
@@ -6172,14 +6239,21 @@ void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self){
     long size;
     bool is_binary;
     char *path = self->path->get_path(self->path);
+    
     if(dtw_entity_type(path) != DTW_FILE_TYPE){
         free(path);
         return;
     }
+
     self->free_content(self);
     self->content = dtw_load_any_content(path,&size,&is_binary);
     
+    if(!self->content){
+        self->content = strdup("");
+    }    
+
     self->content_exist_in_memory = true;
+    
     self->is_binary = is_binary;
     self->content_size = size;
     self->hardware_content_size = size;
@@ -6890,6 +6964,116 @@ void DtwTree_hardware_commit_tree(struct DtwTree *self){
 }
 
 
+
+
+
+DtwLocker *newDtwLocker(){
+    DtwLocker *self = (DtwLocker*) malloc(sizeof (DtwLocker));
+
+    self->separator = "|";
+    self->process = getpid();
+
+    self->max_lock_time = 5;
+    self->reverifcation_delay= 0.1;
+    self->wait_delay = 1;
+
+    //methods
+    self->locked_elements = newDtwStringArray();
+    self->lock = DtwLocker_lock;
+    self->free = DtwLocker_free;
+    return self;
+}
+
+
+
+unsigned long long int getMicroseconds() {
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    return ((unsigned long long int)tv.tv_sec * 1000000) + tv.tv_usec;
+}
+
+
+void DtwLocker_lock(struct DtwLocker *self, const char *element) {
+
+    char formated_path[2000] = {0};
+    sprintf(formated_path,"%s.lock",element);
+
+    char process_string[20] = {0};
+    sprintf(process_string,"%d",self->process);
+    int total_fails = 0;
+
+    while(true){
+        time_t  now = time(NULL);
+        unsigned long long startTime = getMicroseconds();
+        long last_modification = dtw_get_file_last_motification_in_unix(formated_path);
+        bool not_exist = (dtw_entity_type(formated_path) == DTW_NOT_FOUND);
+
+
+        bool exist = !not_exist;
+        bool expired = false;
+
+        if(exist){
+            expired = last_modification < (now - self->max_lock_time);
+        }
+
+        if(not_exist || expired){
+
+            FILE *file = fopen(formated_path,"w");
+            if(file == NULL){
+                continue;
+            }
+            unsigned long long endTime = getMicroseconds();
+            unsigned long long controled_duration = endTime - startTime;
+            printf("processo :%d tempo de duration %llu\n",self->process, controled_duration);
+
+            fwrite(process_string, sizeof(char), strlen(process_string), file);
+            fclose(file);
+
+
+            usleep((long)self->reverifcation_delay * 1000000);
+
+            continue;
+        }
+
+
+        if(exist){
+            char *content = dtw_load_string_file_content(formated_path);
+
+            if(!content){
+                continue;
+            }
+            int process_owner = atoi(content);
+            free(content);
+
+            if(process_owner == self->process ){
+                printf("process %d get ownership\n",self->process);
+                self->locked_elements->append(self->locked_elements,formated_path,DTW_BY_VALUE);
+                return;
+            }
+            else{
+                total_fails+=1;
+                usleep((long)self->wait_delay * 1000000);
+            }
+        }
+
+    }
+
+}
+
+
+
+
+void DtwLocker_free(struct DtwLocker *self){
+
+    for(int i = 0 ; i < self->locked_elements->size;i++){
+        char *element = self->locked_elements->strings[i];
+
+        dtw_remove_any(element);
+    }
+
+    self->locked_elements->free(self->locked_elements);
+    free(self);
+}
 
 #endif //DO_THE_WORLD_H
 
