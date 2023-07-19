@@ -67,19 +67,14 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
                 printf("controled duration exedeu\n");
                 continue;
             }
-            /*
+
             FILE *file = fopen(formated_path,"wb");
             if(!file){
                 continue;
             }
-            //printf("proces\n");
-
-            fwrite(process_string, sizeof(char), strlen(process_string), file);
-            */
-            dtw_write_string_file_content(formated_path,process_string);
-
+            fwrite(process_string, sizeof(char),strlen(process_string), file);
+            fclose(file);
             usleep(verification_deley);
-
             continue;
         }
 
