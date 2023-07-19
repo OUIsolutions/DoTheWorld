@@ -7,7 +7,9 @@ int creation_per_process;
 
 void append_once(int num){
 
-    DtwLocker *locker = newDtwLocker();
+    DtwLocker *locker = newDtwLocker(); 
+    locker->reverifcation_delay = 1;
+    locker->wait_delay = 1;
     locker->process= num;
     locker->lock(locker,"a.txt");
     //printf("processo %d bloqueou\n",num);
