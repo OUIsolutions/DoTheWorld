@@ -71,6 +71,9 @@ bool dtw_remove_any(const char* path) {
 
 unsigned char *dtw_load_any_content(const char * path,long *size,bool *is_binary){
 
+    *is_binary = false;
+    *size = 0;
+
     int entity = dtw_entity_type(path);
     if(entity != DTW_FILE_TYPE){
         return NULL;
@@ -87,6 +90,7 @@ unsigned char *dtw_load_any_content(const char * path,long *size,bool *is_binary
         return NULL;
     }
 
+
     *size = ftell(file);
 
     if(*size == -1){
@@ -94,13 +98,25 @@ unsigned char *dtw_load_any_content(const char * path,long *size,bool *is_binary
         return NULL;
     }
 
+    if(*size == 0){
+        fclose(file);
+        return NULL;
+    }
+
+
     if(fseek(file,0,SEEK_SET) == -1){
         fclose(file);
         return NULL;
     }
 
     unsigned char *content = (unsigned char*)malloc(*size +1);
-    fread(content,1,*size,file);
+    int bytes_read = fread(content,1,*size,file);
+    if(bytes_read <=0 ){
+        free(content);
+        fclose(file);
+        return NULL;
+    }
+
 
     *is_binary = false;
     for(int i = 0;i < *size;i++){

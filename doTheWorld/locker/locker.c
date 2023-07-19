@@ -61,6 +61,8 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 
             fwrite(process_string, sizeof(char), strlen(process_string), file);
             fclose(file);
+
+
             usleep((long)self->reverifcation_delay * 1000000);
 
             continue;
@@ -69,8 +71,6 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 
         if(exist){
             char *content = dtw_load_string_file_content(formated_path);
-
-
 
             if(!content){
                 continue;
