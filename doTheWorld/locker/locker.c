@@ -7,7 +7,7 @@ DtwLocker *newDtwLocker(){
     self->process = getpid();
 
     self->max_lock_time = 5;
-    self->reverifcation_delay= 1;
+    self->reverifcation_delay= 0.1;
     self->wait_delay = 1;
 
     //methods
