@@ -60,11 +60,11 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 
 
         if(exist){
-           //unsigned long long startTime = getMicroseconds();
-           char *content = dtw_load_string_file_content(formated_path);
-            //unsigned long long endTime = getMicroseconds();
-            //unsigned long long elapsedTime = endTime - startTime;
-            //printf("processo :%d tempo de leitura %llu",self->process, elapsedTime);
+            unsigned long long startTime = getMicroseconds();
+            char *content = dtw_load_string_file_content(formated_path);
+            unsigned long long endTime = getMicroseconds();
+            unsigned long long elapsedTime = endTime - startTime;
+            printf("processo :%d tempo de leitura %llu\n",self->process, elapsedTime);
 
             if(!content){
                 continue;
