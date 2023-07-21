@@ -25,8 +25,8 @@ test = ct.FolderTestPreset(
     side_effect_folder='tests/target',
     use_valgrind=use_valgrind
     )
-#test.generate_ouptut()
-#test.start_test()
+test.generate_ouptut()
+test.start_test()
 execute_locker_test()
 
 ct.include_code_in_markdown('README.md',save_file=True)

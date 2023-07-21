@@ -33,5 +33,5 @@ def execute_locker_test():
     if 'ERROR SUMMARY' in replaced: 
         raise Exception('Errors on locker')
 
-
+    print('passed: locker_tests.c')
     
