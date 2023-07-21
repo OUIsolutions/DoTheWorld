@@ -9,21 +9,25 @@ char *target = "a.txt";
 
 void append_x_times(int num,int times){
 
-    DtwLocker *locker = newDtwLocker();
-    locker->reverifcation_delay =  reverifation_delay;
-    locker->wait_delay = wait_delay;
-    locker->process= num;
-    printf("processo %d bloqueou\n",num);
-    char result[30] ={0};
-    sprintf(result,"%d",num);
 
-    for(int x = 0; x < times; x++){
+    char result[30] ={0};
+    sprintf(result,"%d\n",num);
+
+    for(int i = 0; i < times; i++){
+        DtwLocker *locker = newDtwLocker();
+        locker->reverifcation_delay =  reverifation_delay;
+        locker->wait_delay = wait_delay;
+        locker->process= num;
+    
         locker->lock(locker,target);
+        printf("process %d get the ownership\n",num);
+        //printf("aaaaaaaaaaa %d\n",times);
 
         char *content = dtw_load_string_file_content(target);
+
         content = realloc(content,strlen(content) + 20);
         strcat(content,result);
-
+        
         dtw_write_string_file_content(target,content);
         free(content);
 
@@ -38,7 +42,7 @@ void append_x_times(int num,int times){
 
 int main(int argc, char *argv[]){
 
-    total_process  = 1;
+    total_process  = 20;
     creation_per_process = 10;
     reverifation_delay = 0.1;
     wait_delay = 0.5;
