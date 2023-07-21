@@ -16,6 +16,7 @@ void append_x_times(int num){
     locker->lock(locker,target);
     printf("processo %d bloqueou\n",num);
     
+    
 
     locker->free(locker);
 }
