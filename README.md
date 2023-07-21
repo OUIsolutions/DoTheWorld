@@ -351,6 +351,11 @@ int main(int argc, char *argv[]){
 
 with tree concepts, you can manipulate files as trees, and implement IO modifications with atomic concepts 
 
+#### Locker 
+With the locker you can Lock files and ensure that even with multprocessment, they will
+be executed in an order
+<!--codeof:exemples/locker/locker_test.c-->
+
 
 ## Tree Parts 
 
@@ -1046,6 +1051,9 @@ int main(){
     free(content);
 }
 ~~~
+
+
+
 DoTheWorld includes all self dependecies in the single file, so you dont need to care about it, but if you will use one of these librarys, dont include it in your code to avoid circular imports
 
 ## CJson<br><br>
