@@ -12,7 +12,7 @@ void append_x_times(int num,int times){
   
     
     char result[30] ={0};
-    sprintf(result,"%d",num);
+    sprintf(result,"%d\n",num);
 
     for(int i = 0; i < times; i++){
         DtwLocker *locker = newDtwLocker();
@@ -33,6 +33,7 @@ void append_x_times(int num,int times){
 
 
         locker->free(locker);
+        sleep(1);
 
     }
     
@@ -42,7 +43,7 @@ void append_x_times(int num,int times){
 
 int main(int argc, char *argv[]){
 
-    total_process  = 2;
+    total_process  = 20;
     creation_per_process = 10;
     reverifation_delay = 0.1;
     wait_delay = 0.5;
