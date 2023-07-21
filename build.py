@@ -1,8 +1,8 @@
-
+from platform import system as osname
 import Build.CToolKit as ct
 from Build.exemple_build import create_exemples
 from Build.full_folder_zip import zip_folder
-from platform import system as osname
+from Build.locker_test import execute_locker_test
 
 STARTER = 'doTheWorld/doTheWorldMain.h'
 TEST_NAME  = 'doTheWorld_test.h'
@@ -14,6 +14,7 @@ ZIP_NAME ='DoTheWorld'
 
 ct.generate_amalgamated_code(STARTER,OUTPUT_TEST)
 use_valgrind = True 
+
 if osname() == 'Windows':
     use_valgrind = False
 
@@ -26,6 +27,8 @@ test = ct.FolderTestPreset(
     )
 test.generate_ouptut()
 test.start_test()
+execute_locker_test()
+
 ct.include_code_in_markdown('README.md',save_file=True)
 ct.generate_amalgamated_code(STARTER,OUTPUT)
 

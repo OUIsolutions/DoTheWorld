@@ -351,8 +351,66 @@ int main(int argc, char *argv[]){
 
 with tree concepts, you can manipulate files as trees, and implement IO modifications with atomic concepts 
 
+## Locker 
+With the locker you can Lock files and ensure that even with multprocessment, they will
+be executed in an order
+<!--codeof:exemples/locker/locker_test.c-->
+~~~c
 
-## Tree Parts 
+#include "doTheWorld.h"
+
+
+void append_text(char *file,char *text){
+
+  
+    DtwLocker *locker = newDtwLocker();
+    locker->lock(locker,file);
+    printf("process %d get the ownership\n",locker->process);
+
+    char *content = dtw_load_string_file_content(file);
+
+    content = realloc(content,strlen(content) + 20);
+    strcat(content,text);
+        
+    dtw_write_string_file_content(file,content);
+    free(content);
+
+
+    locker->free(locker);
+    
+}
+
+int main(int argc, char *argv[]){
+
+    char *file = "tests/target/append.txt";
+    int total_process  = 20;
+
+    dtw_remove_any(file);
+    dtw_write_string_file_content(file,"");
+
+    for(int i = 0; i < total_process; i ++){
+
+        if(fork() == 0){
+            char formated_content[100] = {0};
+            sprintf(formated_content,"text of: %d\n",i);
+            append_text(file,formated_content);
+            
+            exit(0);
+        }
+
+    }
+
+    // Hold the end of other process
+
+    for (int i = 0; i < total_process; i++) {
+        int status;
+        wait(&status);
+    }
+
+
+
+}
+~~~
 
 ### Loading An TreePart 
 <!--codeof:exemples/tree_parts/loading_tree_part.c-->
@@ -1046,6 +1104,9 @@ int main(){
     free(content);
 }
 ~~~
+
+
+
 DoTheWorld includes all self dependecies in the single file, so you dont need to care about it, but if you will use one of these librarys, dont include it in your code to avoid circular imports
 
 ## CJson<br><br>

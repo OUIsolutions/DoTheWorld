@@ -23,6 +23,8 @@ def move_all_c(destination:str,current_path:str,test_name:str,output:str):
 
                 content = content.replace(f'../../../{test_name}',output)
                 content = content.replace(f'../../{test_name}',output)
+                content = content.replace(f'../{test_name}',output)
+
 
             name =dirname(path).split('/')[-1].replace('T_','')
             with open(f'{destination}/{name}.c','w') as arq2:
@@ -39,3 +41,5 @@ def create_exemples(test_name:str,output:str):
             dest = f'exemples/{e}'
             makedirs(dest)
             move_all_c(dest,path,test_name,output)
+    makedirs('exemples/locker')        
+    move_all_c('exemples/locker','tests/locker_test',test_name,output)

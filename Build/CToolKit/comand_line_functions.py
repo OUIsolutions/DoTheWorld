@@ -83,7 +83,7 @@ def test_binary_with_valgrind(binary_file:str,flags: List[str]= None)->dict:
     if flags is None:
         flags = []
 
-    command = f'valgrind  ./{binary_file} ' + ' -'.join(flags)
+    command = f'valgrind  ./{binary_file} ' + '  '.join(list(map(lambda x :str(x),flags)))
     result = ComandLineExecution(command)
 
     #(result.output)
@@ -129,7 +129,7 @@ def execute_test_for_file(
     if not use_valgrind:
         if not execution_flags:
             execution_flags = []
-        command =f'{result} '+ ' -'.join(execution_flags)
+        command =f'{result} '+ ' '.join(list(map(lambda x: str(x),execution_flags)))
         return  ComandLineExecution(command)
 
     try:

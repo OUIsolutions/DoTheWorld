@@ -51,9 +51,8 @@ SOFTWARE.
 #include "monodimension_listage/monodimension_listage.h"
 #include "multidimension_listage/multidimension_listage.h"
 #include "path/path.h"
-
 #include "tree/declarations.h"
-
+#include "locker/locker.h"
 
 #include "base64/base64.c"
 #include "randonizer/randonizer.c"
@@ -67,6 +66,7 @@ SOFTWARE.
 #include "path/path.c"
 #include "string_array/string_array.c"
 #include "tree/definitions.h"
+#include "locker/locker.c"
 
 #endif //DO_THE_WORLD_H
 
