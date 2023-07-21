@@ -28,7 +28,7 @@ unsigned long long int getMicroseconds() {
 
 void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 
-    char formated_path[2000] = {0};
+    char  *formated_path = calloc(sizeof(char),strlen(element)+10);
     sprintf(formated_path,"%s.lock",element);
 
     char process_string[20] = {0};
@@ -93,6 +93,7 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
             if(process_owner == self->process ){
                 //printf("process %d get ownership\n",self->process);
                 self->locked_elements->append(self->locked_elements,formated_path,DTW_BY_VALUE);
+                free(formated_path);
                 return;
             }
             else{
