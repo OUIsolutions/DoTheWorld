@@ -9,16 +9,16 @@ char *target = "a.txt";
 
 void append_x_times(int num,int times){
 
-
+  
+    
     char result[30] ={0};
-    sprintf(result,"%d\n",num);
+    sprintf(result,"%d",num);
 
     for(int i = 0; i < times; i++){
         DtwLocker *locker = newDtwLocker();
         locker->reverifcation_delay =  reverifation_delay;
         locker->wait_delay = wait_delay;
         locker->process= num;
-    
         locker->lock(locker,target);
         printf("process %d get the ownership\n",num);
         //printf("aaaaaaaaaaa %d\n",times);
@@ -42,7 +42,7 @@ void append_x_times(int num,int times){
 
 int main(int argc, char *argv[]){
 
-    total_process  = 20;
+    total_process  = 2;
     creation_per_process = 10;
     reverifation_delay = 0.1;
     wait_delay = 0.5;
