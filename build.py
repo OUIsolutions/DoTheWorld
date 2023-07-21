@@ -1,8 +1,8 @@
-
+from platform import system as osname
 import Build.CToolKit as ct
 from Build.exemple_build import create_exemples
 from Build.full_folder_zip import zip_folder
-from platform import system as osname
+from Build.locker_test import execute_locker_test
 
 STARTER = 'doTheWorld/doTheWorldMain.h'
 TEST_NAME  = 'doTheWorld_test.h'
@@ -25,8 +25,9 @@ test = ct.FolderTestPreset(
     side_effect_folder='tests/target',
     use_valgrind=use_valgrind
     )
-test.generate_ouptut()
-test.start_test()
+#test.generate_ouptut()
+#test.start_test()
+execute_locker_test()
 
 ct.include_code_in_markdown('README.md',save_file=True)
 ct.generate_amalgamated_code(STARTER,OUTPUT)

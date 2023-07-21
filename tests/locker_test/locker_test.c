@@ -1,5 +1,5 @@
 
-#include "doTheWorld/doTheWorldMain.h"
+#include "../doTheWorld_test.h"
 
 
 void append_text(char *file,char *text){
@@ -24,7 +24,7 @@ void append_text(char *file,char *text){
 
 int main(int argc, char *argv[]){
 
-    char *file = "tests/target/out.txt";
+    char *file = "tests/target/append.txt";
     int total_process  = 20;
 
     dtw_remove_any(file);

@@ -4447,7 +4447,6 @@ struct  DtwTree * newDtwTree();
 
 
 typedef struct DtwLocker{
-   char *separator;
    double reverifcation_delay;
    double wait_delay;
    int process;
@@ -6970,7 +6969,6 @@ void DtwTree_hardware_commit_tree(struct DtwTree *self){
 DtwLocker *newDtwLocker(){
     DtwLocker *self = (DtwLocker*) malloc(sizeof (DtwLocker));
 
-    self->separator = "|";
     self->process = getpid();
 
     self->max_lock_time = 5;
@@ -6995,12 +6993,13 @@ unsigned long long int getMicroseconds() {
 
 void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 
-    char formated_path[2000] = {0};
+    char  *formated_path = calloc(sizeof(char),strlen(element)+10);
     sprintf(formated_path,"%s.lock",element);
 
     char process_string[20] = {0};
     sprintf(process_string,"%d",self->process);
     int total_fails = 0;
+    long verification_deley = (long)(self->reverifcation_delay * 1000000);
 
     while(true){
         time_t  now = time(NULL);
@@ -7018,20 +7017,31 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 
         if(not_exist || expired){
 
-            FILE *file = fopen(formated_path,"w");
-            if(file == NULL){
+            DtwPath *path = newDtwPath(formated_path);
+            char *dirname = path->get_dir(path);
+            if(dirname){
+                dtw_create_dir_recursively(dirname);
+                free(dirname);
+            }
+            path->free(path);
+
+            unsigned long long end_time = getMicroseconds();
+            unsigned long long controled_duration = end_time - startTime;
+
+            if(verification_deley != 0){
+                if(controled_duration > (long)(verification_deley/2)){
+                   // printf("controle de uração excedito\n");
+                    continue;
+                }
+            }
+
+            FILE *file = fopen(formated_path,"wb");
+            if(!file){
                 continue;
             }
-            unsigned long long endTime = getMicroseconds();
-            unsigned long long controled_duration = endTime - startTime;
-            printf("processo :%d tempo de duration %llu\n",self->process, controled_duration);
-
-            fwrite(process_string, sizeof(char), strlen(process_string), file);
+            fwrite(process_string, sizeof(char),strlen(process_string), file);
             fclose(file);
-
-
-            usleep((long)self->reverifcation_delay * 1000000);
-
+            usleep(verification_deley);
             continue;
         }
 
@@ -7046,13 +7056,14 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
             free(content);
 
             if(process_owner == self->process ){
-                printf("process %d get ownership\n",self->process);
+                //printf("process %d get ownership\n",self->process);
                 self->locked_elements->append(self->locked_elements,formated_path,DTW_BY_VALUE);
+                free(formated_path);
                 return;
             }
             else{
                 total_fails+=1;
-                usleep((long)self->wait_delay * 1000000);
+                usleep((long)(self->wait_delay * 1000000));
             }
         }
 
