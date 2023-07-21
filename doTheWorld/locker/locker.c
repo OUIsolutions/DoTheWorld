@@ -63,9 +63,11 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
             unsigned long long end_time = getMicroseconds();
             unsigned long long controled_duration = end_time - startTime;
 
-            if(controled_duration > (long)(verification_deley/2)){
-                printf("controled duration exedeu\n");
-                continue;
+            if(verification_deley != 0){
+                if(controled_duration > (long)(verification_deley/2)){
+                   // printf("controle de uração excedito\n");
+                    continue;
+                }
             }
 
             FILE *file = fopen(formated_path,"wb");
