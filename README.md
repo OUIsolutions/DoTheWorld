@@ -312,7 +312,7 @@ int main(int argc, char *argv[]){
 ~~~
 
 
-
+## Sha256
 Generating Sha from file 
 <!--codeof:exemples/extras/generating_sha_from_file.c-->
 ~~~c
@@ -349,7 +349,6 @@ int main(int argc, char *argv[]){
 }
 ~~~
 
-with tree concepts, you can manipulate files as trees, and implement IO modifications with atomic concepts 
 
 ## Locker 
 With the locker you can Lock files and ensure that even with multprocessment, they will
@@ -412,6 +411,8 @@ int main(int argc, char *argv[]){
 }
 ~~~
 
+## Trees and Tree Parts
+with tree concepts, you can manipulate files as trees, and implement IO modifications with atomic concepts 
 ### Loading An TreePart 
 <!--codeof:exemples/tree_parts/loading_tree_part.c-->
 ~~~c
