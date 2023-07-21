@@ -14,6 +14,7 @@ ZIP_NAME ='DoTheWorld'
 
 ct.generate_amalgamated_code(STARTER,OUTPUT_TEST)
 use_valgrind = True 
+
 if osname() == 'Windows':
     use_valgrind = False
 
