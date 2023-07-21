@@ -3,7 +3,6 @@
 DtwLocker *newDtwLocker(){
     DtwLocker *self = (DtwLocker*) malloc(sizeof (DtwLocker));
 
-    self->separator = "|";
     self->process = getpid();
 
     self->max_lock_time = 5;

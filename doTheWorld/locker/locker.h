@@ -1,7 +1,6 @@
 
 
 typedef struct DtwLocker{
-   char *separator;
    double reverifcation_delay;
    double wait_delay;
    int process;
