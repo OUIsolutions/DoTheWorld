@@ -60,6 +60,8 @@ char * DtwActionTransaction_convert_action_in_string(int action){
 
 
 }
+
+
 void DtwActionTransaction_commit(DtwActionTransaction* self,const char *path){
 
     char *formated_source = dtw_concat_path(path,self->source);
@@ -89,6 +91,29 @@ void DtwActionTransaction_commit(DtwActionTransaction* self,const char *path){
 
 }
 
+
+cJSON *  private_DtwActionTransaction_create_json_object(DtwActionTransaction* self){
+    cJSON * json_object = cJSON_CreateObject();
+    cJSON_AddStringToObject(json_object,"action",DtwActionTransaction_convert_action_in_string(self->action_type));
+    cJSON_AddStringToObject(json_object,"source",self->source);
+    if(self->action_type ==DTW_ACTION_WRITE){
+        if(self->is_binary){
+            char *converted = dtw_base64_encode(self->content,self->size);
+            cJSON_AddStringToObject(json_object,"content",converted);
+            free(converted);
+            cJSON_AddBoolToObject(json_object,"is binary",true);
+        }
+        else{
+            cJSON_AddStringToObject(json_object,"content",(char*)self->content);
+            cJSON_AddBoolToObject(json_object,"is binary",false);
+        }
+        cJSON_AddNumberToObject(json_object,"size",(double)self->size);
+    }
+    if(self->action_type != DTW_ACTION_DELETE){
+        cJSON_AddStringToObject(json_object,"dest",self->dest);
+    }
+    return json_object;
+}
 
 void DtwActionTransaction_represent(DtwActionTransaction* self){
 

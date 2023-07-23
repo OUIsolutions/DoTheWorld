@@ -10,6 +10,8 @@ DtwTransaction * newDtwTransaction(){
     self->move_any = DtwTransaction_move_any;
     self->copy_any = DtwTransaction_copy_any;
     self->delete_any = DtwTransaction_delete_any;
+    self->dumps_transaction_to_json =DtwTransaction_dumps_to_json;
+    self->dumps_transaction_to_json_file = DtwTransaction_dumps_to_json_file;
     self->commit = DtwTransaction_commit;
     self->represent = DtwTransaction_represent;
     self->free = DtwTransaction_free;
@@ -53,12 +55,20 @@ void DtwTransaction_delete_any(struct DtwTransaction *self,const char *source){
 cJSON * DtwTransaction_dumps_to_json(struct DtwTransaction *self){
     cJSON * json_array = cJSON_CreateArray();
     for(int i =0; i < self->size; i ++){
-        
+        cJSON_AddItemToArray(
+                json_array,
+                private_DtwActionTransaction_create_json_object(self->actions[i])
+        );
     }
+    return json_array;
 }
 
 void DtwTransaction_dumps_to_json_file(struct DtwTransaction *self,const char *filename){
-
+    cJSON *json_array = self->dumps_transaction_to_json(self);
+    char *result = cJSON_Print(json_array);
+    dtw_write_string_file_content(filename,result);
+    free(result);
+    cJSON_free(json_array);
 }
 
 

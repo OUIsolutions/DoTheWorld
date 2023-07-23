@@ -10,6 +10,10 @@ typedef struct DtwTransaction{
     void (*move_any)(struct DtwTransaction *self,const char *source,const char *dest);
     void (*copy_any)(struct DtwTransaction *self,const char *source,const char *dest);
     void (*delete_any)(struct DtwTransaction *self,const char *source);
+
+    cJSON *(*dumps_transaction_to_json)(struct DtwTransaction *self);
+    void (*dumps_transaction_to_json_file)(struct DtwTransaction *self,const char *filename);
+
     void (*commit)(struct DtwTransaction *self,const char *source);
     void (*represent)(struct DtwTransaction *self);
     void (*free)(struct DtwTransaction *self);

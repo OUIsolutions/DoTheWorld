@@ -32,6 +32,7 @@ DtwActionTransaction * DtwActionTransaction_delete_any(const char *source);
 
 char * DtwActionTransaction_convert_action_in_string(int action);
 
+cJSON *  private_DtwActionTransaction_create_json_object(DtwActionTransaction* self);
 void DtwActionTransaction_commit(DtwActionTransaction* self,const char *path);
 
 void DtwActionTransaction_represent(DtwActionTransaction* self);
