@@ -21,6 +21,12 @@ typedef struct DtwTransaction{
 }DtwTransaction;
 
 DtwTransaction * newDtwTransaction();
+
+DtwTransaction * newDtwTransaction_from_json(cJSON *json_entry);
+
+DtwTransaction * newDtwTransaction_from_json_file(cJSON *json_entry);
+
+
 void DtwTransaction_append_action(struct DtwTransaction *self,struct DtwActionTransaction  *action);
 
 void DtwTransaction_write_any(struct DtwTransaction *self,const char *path,unsigned char *content, long size,bool is_binary);
