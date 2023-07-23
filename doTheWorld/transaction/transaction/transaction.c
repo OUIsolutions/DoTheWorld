@@ -2,7 +2,7 @@
 
 DtwTransaction * newDtwTransaction(){
     DtwTransaction *self = (DtwTransaction*) malloc(sizeof(DtwTransaction));
-    self->actions = (DtwActionTransaction **) malloc(0);
+    self->actions = (DtwActionTransaction **) malloc(sizeof (DtwActionTransaction**));
     self->size = 0;
     self->append_action =DtwTransaction_append_action;
     self->write_any = DtwTransaction_write_any;
@@ -13,16 +13,16 @@ DtwTransaction * newDtwTransaction(){
     self->commit = DtwTransaction_commit;
     self->represent = DtwTransaction_represent;
     self->free = DtwTransaction_free;
+    return self;
 }
 
 void DtwTransaction_append_action(struct DtwTransaction *self,struct DtwActionTransaction  *action){
     self->actions =  (DtwActionTransaction**)realloc(
             self->actions,
-            sizeof(DtwActionTransaction*) * (self->size+1)
+            (sizeof(DtwActionTransaction*) * (self->size+1))
     );
-
     self->actions[self->size] = action;
-    self->actions++;
+    self->size++;
 }
 
 void DtwTransaction_write_any(struct DtwTransaction *self,const char *path,unsigned char *content, long size,bool is_binary){
@@ -55,6 +55,8 @@ void DtwTransaction_commit(struct DtwTransaction *self,const char *path){
 
 void DtwTransaction_represent(struct DtwTransaction *self){
     for(int i = 0; i < self->size; i++){
+        printf("------------------------------------\n");
+
         DtwActionTransaction_represent(self->actions[i]);
     }
 }
