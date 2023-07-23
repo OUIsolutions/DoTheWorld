@@ -83,6 +83,11 @@ void private_dtw_add_end_bar_to_dirs_string_array(struct DtwStringArray * dirs){
 }
 
 char *dtw_concat_path(const char *path1, const char *path2){
+
+    if(!path2){
+        return strdup(path1);
+    }
+
     char *path = (char *)malloc(strlen(path1) + strlen(path2) + 3);
 
         if(dtw_ends_with(path1, "/") || dtw_ends_with(path1, "\\")){

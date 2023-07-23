@@ -29,7 +29,10 @@ DtwActionTransaction * DtwActionTransaction_copy_any(const char *source, const c
 
 DtwActionTransaction * DtwActionTransaction_delete_any(const char *source);
 
+
 char * DtwActionTransaction_convert_action_in_string(int action);
+
+void DtwActionTransaction_commit(DtwActionTransaction* self,const char *path);
 
 void DtwActionTransaction_represent(DtwActionTransaction* self);
 

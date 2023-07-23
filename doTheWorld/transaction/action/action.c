@@ -58,6 +58,32 @@ char * DtwActionTransaction_convert_action_in_string(int action){
 
 
 }
+void DtwActionTransaction_commit(DtwActionTransaction* self,const char *path){
+    char *formated_dest = dtw_concat_path(self->dest,path);
+
+
+    if(self->action_type == DTW_ACTION_WRITE){
+        dtw_write_any_content(formated_dest,self->content,self->size);
+        free(formated_dest);
+        return;
+    }
+    if(self->action_type == DTW_ACTION_DELETE){
+        dtw_remove_any(formated_dest);
+        free(formated_dest);
+        return;
+    }
+
+    char *formated_source = dtw_concat_path(self->source,path);
+    if(self->action_type == DTW_ACTION_MOVE){
+        dtw_move_any(formated_source,formated_dest,DTW_NOT_MERGE);
+    }
+    if(self->action_type == DTW_ACTION_COPY){
+        dtw_copy_any(formated_source,formated_dest,DTW_NOT_MERGE);
+    }
+    free(formated_dest);
+    free(formated_source);
+    
+}
 
 
 void DtwActionTransaction_represent(DtwActionTransaction* self){

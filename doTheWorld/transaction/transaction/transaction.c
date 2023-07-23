@@ -49,16 +49,20 @@ void DtwTransaction_delete_any(struct DtwTransaction *self,const char *source){
      DtwActionTransaction  *action = DtwActionTransaction_delete_any(source);
      self->append_action(self,action);
 }
-void DtwTransaction_commit(struct DtwTransaction *self,const char *path){
 
+void DtwTransaction_commit(struct DtwTransaction *self,const char *path){
+    for(int i = 0; i < self->size; i++){
+        DtwActionTransaction_commit(self->actions[i],path);
+    }
 }
 
 void DtwTransaction_represent(struct DtwTransaction *self){
-    for(int i = 0; i < self->size; i++){
-        printf("------------------------------------\n");
 
+    for(int i = 0; i < self->size; i++){
         DtwActionTransaction_represent(self->actions[i]);
+        printf("------------------------------------\n");
     }
+
 }
 
 void DtwTransaction_free(struct DtwTransaction *self){
