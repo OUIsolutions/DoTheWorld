@@ -21,7 +21,7 @@ typedef struct DtwActionTransaction{
 
 DtwActionTransaction *newDtwActionTransaction();
 
-DtwActionTransaction * DtwActionTransaction_write_any(const char *dest,unsigned  char *content,long size,bool is_binary);
+DtwActionTransaction * DtwActionTransaction_write_any(const char *source,unsigned  char *content,long size,bool is_binary);
 
 DtwActionTransaction * DtwActionTransaction_move_any(const char *source, const char *dest);
 
