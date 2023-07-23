@@ -21,3 +21,14 @@ typedef struct DtwActionTransaction{
 
 DtwActionTransaction *newDtwActionTransaction();
 
+DtwActionTransaction * DtwActionTransaction_write_any(unsigned  char *content,long size,bool is_binary);
+
+DtwActionTransaction * DtwActionTransaction_move_any(unsigned  char *content,const char *source, const char *dest);
+
+DtwActionTransaction * DtwActionTransaction_copy_any(unsigned  char *content,const char *source, const char *dest);
+
+DtwActionTransaction * DtwActionTransaction_delete_any(unsigned  char *content,const char *source);
+
+void DtwActionTransaction_represent(DtwActionTransaction* self);
+
+void DtwActionTransaction_free(DtwActionTransaction* self);
