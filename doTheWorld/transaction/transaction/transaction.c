@@ -50,6 +50,18 @@ void DtwTransaction_delete_any(struct DtwTransaction *self,const char *source){
      self->append_action(self,action);
 }
 
+cJSON * DtwTransaction_dumps_to_json(struct DtwTransaction *self){
+    cJSON * json_array = cJSON_CreateArray();
+    for(int i =0; i < self->size; i ++){
+        
+    }
+}
+
+void DtwTransaction_dumps_to_json_file(struct DtwTransaction *self,const char *filename){
+
+}
+
+
 void DtwTransaction_commit(struct DtwTransaction *self,const char *path){
     for(int i = 0; i < self->size; i++){
         DtwActionTransaction_commit(self->actions[i],path);

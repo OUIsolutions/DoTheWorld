@@ -29,6 +29,9 @@ void DtwTransaction_copy_any(struct DtwTransaction *self,const char *source,cons
 
 void DtwTransaction_delete_any(struct DtwTransaction *self,const char *source);
 
+cJSON * DtwTransaction_dumps_to_json(struct DtwTransaction *self);
+
+void DtwTransaction_dumps_to_json_file(struct DtwTransaction *self,const char *filename);
 
 void DtwTransaction_commit(struct DtwTransaction *self,const char *path);
 
