@@ -62,7 +62,7 @@ char * DtwActionTransaction_convert_action_in_string(int action){
 }
 void DtwActionTransaction_commit(DtwActionTransaction* self,const char *path){
 
-    char *formated_source = dtw_concat_path(self->source,path);
+    char *formated_source = dtw_concat_path(path,self->source);
 
 
     if(self->action_type == DTW_ACTION_WRITE){
@@ -75,7 +75,7 @@ void DtwActionTransaction_commit(DtwActionTransaction* self,const char *path){
         free(formated_source);
         return;
     }
-    char *formated_dest = dtw_concat_path(self->dest,path);
+    char *formated_dest = dtw_concat_path(path,self->dest);
 
     if(self->action_type == DTW_ACTION_MOVE){
         dtw_move_any(formated_source,formated_dest,DTW_NOT_MERGE);
