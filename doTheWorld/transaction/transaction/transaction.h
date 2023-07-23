@@ -24,7 +24,7 @@ DtwTransaction * newDtwTransaction();
 
 DtwTransaction * newDtwTransaction_from_json(cJSON *json_entry);
 
-DtwTransaction * newDtwTransaction_from_json_file(cJSON *json_entry);
+DtwTransaction * newDtwTransaction_from_json_file(const char *filename);
 
 
 void DtwTransaction_append_action(struct DtwTransaction *self,struct DtwActionTransaction  *action);

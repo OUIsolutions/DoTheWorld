@@ -17,6 +17,21 @@ DtwTransaction * newDtwTransaction(){
     self->free = DtwTransaction_free;
     return self;
 }
+DtwTransaction * newDtwTransaction_from_json(cJSON *json_entry){
+    
+}
+
+DtwTransaction * newDtwTransaction_from_json_file(const char *filename){
+    char *content = dtw_load_string_file_content(filename);
+    cJSON  *element = cJSON_Parse(content);
+    free(content);
+    if(!element){
+        return NULL;
+    }
+    DtwTransaction  *self = newDtwTransaction_from_json(element);
+    cJSON_Delete(element);
+    return self;
+}
 
 void DtwTransaction_append_action(struct DtwTransaction *self,struct DtwActionTransaction  *action){
     self->actions =  (DtwActionTransaction**)realloc(
