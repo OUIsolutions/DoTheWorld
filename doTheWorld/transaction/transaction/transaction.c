@@ -11,8 +11,8 @@ DtwTransaction * newDtwTransaction(){
     self->copy_any = DtwTransaction_copy_any;
     self->delete_any = DtwTransaction_delete_any;
     self->commit = DtwTransaction_commit;
+    self->represent = DtwTransaction_represent;
     self->free = DtwTransaction_free;
-
 }
 
 void DtwTransaction_append_action(struct DtwTransaction *self,struct DtwActionTransaction  *action){
@@ -44,3 +44,15 @@ void DtwTransaction_delete_any(struct DtwTransaction *self,const char *source){
      self->append_action(self,action);
 }
 
+void DtwTransaction_represent(struct DtwTransaction *self){
+    for(int i = 0; i < self->size; i++){
+        DtwActionTransaction_represent(self->actions[i]);
+    }
+}
+
+void DtwTransaction_free(struct DtwTransaction *self){
+    for(int i =0; i < self->size; i++){
+        DtwActionTransaction_free(self->actions[i]);
+    }
+    free(self);
+}

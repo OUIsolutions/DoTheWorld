@@ -11,9 +11,8 @@ typedef struct DtwTransaction{
     void (*copy_any)(struct DtwTransaction *self,const char *source,const char *dest);
     void (*delete_any)(struct DtwTransaction *self,const char *source);
     void (*commit)(struct DtwTransaction *self,const char *source);
-
+    void (*represent)(struct DtwTransaction *self);
     void (*free)(struct DtwTransaction *self);
-
 
 }DtwTransaction;
 
@@ -30,6 +29,10 @@ void DtwTransaction_copy_any(struct DtwTransaction *self,const char *source,cons
 
 void DtwTransaction_delete_any(struct DtwTransaction *self,const char *source);
 
+
 void DtwTransaction_commit(struct DtwTransaction *self,const char *path);
+
+void DtwTransaction_represent(struct DtwTransaction *self);
+
 
 void DtwTransaction_free(struct DtwTransaction *self);
