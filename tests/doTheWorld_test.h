@@ -4474,6 +4474,97 @@ void DtwLocker_free(struct DtwLocker *self);
 
 
 
+enum {
+    DTW_ACTION_WRITE,
+    DTW_ACTION_MOVE,
+    DTW_ACTION_COPY,
+    DTW_ACTION_DELETE
+};
+
+
+typedef struct DtwActionTransaction{
+    short action_type;
+    unsigned  char *content;
+    long size;
+    bool is_binary;
+
+    char *dest;
+    char *source;
+
+}DtwActionTransaction;
+
+DtwActionTransaction *newDtwActionTransaction();
+
+DtwActionTransaction * DtwActionTransaction_write_any(const char *source,unsigned  char *content,long size,bool is_binary);
+
+DtwActionTransaction * DtwActionTransaction_move_any(const char *source, const char *dest);
+
+DtwActionTransaction * DtwActionTransaction_copy_any(const char *source, const char *dest);
+
+DtwActionTransaction * DtwActionTransaction_delete_any(const char *source);
+
+
+char * DtwActionTransaction_convert_action_in_string(int action);
+
+cJSON *  private_DtwActionTransaction_create_json_object(DtwActionTransaction* self);
+void DtwActionTransaction_commit(DtwActionTransaction* self,const char *path);
+
+void DtwActionTransaction_represent(DtwActionTransaction* self);
+
+void DtwActionTransaction_free(DtwActionTransaction* self);
+
+
+
+typedef struct DtwTransaction{
+
+    DtwActionTransaction  **actions;
+    long size;
+
+    void (*append_action)(struct DtwTransaction *self,struct DtwActionTransaction  *action);
+    void (*write_any)(struct DtwTransaction *self,const char *path,unsigned char *content, long size,bool is_binary);
+    void (*write_string)(struct DtwTransaction *self,const char *path,const char *content);
+    void (*move_any)(struct DtwTransaction *self,const char *source,const char *dest);
+    void (*copy_any)(struct DtwTransaction *self,const char *source,const char *dest);
+    void (*delete_any)(struct DtwTransaction *self,const char *source);
+
+    cJSON *(*dumps_transaction_to_json)(struct DtwTransaction *self);
+    void (*dumps_transaction_to_json_file)(struct DtwTransaction *self,const char *filename);
+
+    void (*commit)(struct DtwTransaction *self,const char *source);
+    void (*represent)(struct DtwTransaction *self);
+    void (*free)(struct DtwTransaction *self);
+
+}DtwTransaction;
+
+DtwTransaction * newDtwTransaction();
+void DtwTransaction_append_action(struct DtwTransaction *self,struct DtwActionTransaction  *action);
+
+void DtwTransaction_write_any(struct DtwTransaction *self,const char *path,unsigned char *content, long size,bool is_binary);
+
+void DtwTransaction_write_string(struct DtwTransaction *self,const char *path,const char *content);
+
+void DtwTransaction_move_any(struct DtwTransaction *self,const char *source,const char *dest);
+
+void DtwTransaction_copy_any(struct DtwTransaction *self,const char *source,const char *dest);
+
+void DtwTransaction_delete_any(struct DtwTransaction *self,const char *source);
+
+cJSON * DtwTransaction_dumps_to_json(struct DtwTransaction *self);
+
+void DtwTransaction_dumps_to_json_file(struct DtwTransaction *self,const char *filename);
+
+void DtwTransaction_commit(struct DtwTransaction *self,const char *path);
+
+void DtwTransaction_represent(struct DtwTransaction *self);
+
+
+void DtwTransaction_free(struct DtwTransaction *self);
+
+
+
+
+
+
 char *dtw_base64_encode(unsigned char *data, long input_length){
     size_t output_length = 4 * ((input_length + 2) / 3);
 
@@ -4675,6 +4766,15 @@ void private_dtw_add_end_bar_to_dirs_string_array(struct DtwStringArray * dirs){
 }
 
 char *dtw_concat_path(const char *path1, const char *path2){
+
+    if(!path1){
+        return strdup(path2);
+    }
+
+    if(!path2){
+        return strdup(path1);
+    }
+
     char *path = (char *)malloc(strlen(path1) + strlen(path2) + 3);
 
         if(dtw_ends_with(path1, "/") || dtw_ends_with(path1, "\\")){
@@ -7085,6 +7185,268 @@ void DtwLocker_free(struct DtwLocker *self){
     self->locked_elements->free(self->locked_elements);
     free(self);
 }
+
+
+
+
+DtwActionTransaction * newDtwActionTransaction(){
+    DtwActionTransaction *self = (DtwActionTransaction*) malloc(sizeof (DtwActionTransaction));
+    *self= (DtwActionTransaction){0};
+    return self;
+}
+
+DtwActionTransaction * DtwActionTransaction_write_any(const char *source, unsigned  char *content,long size,bool is_binary){
+    DtwActionTransaction *self = newDtwActionTransaction();
+    self->action_type = DTW_ACTION_WRITE;
+    self->content = (unsigned char*)malloc(size +2);
+    memcpy(self->content,content,size);
+    self->content[size] = '\0';
+    self->size = size;
+    self->source = strdup(source);
+    self->is_binary = is_binary;
+    return self;
+}
+
+
+DtwActionTransaction * DtwActionTransaction_move_any(const char *source, const char *dest){
+    DtwActionTransaction *self = newDtwActionTransaction();
+    self->action_type = DTW_ACTION_MOVE;
+    self->source = strdup(source);
+    self->dest = strdup(dest);
+    return self;
+
+}
+
+DtwActionTransaction * DtwActionTransaction_copy_any(const char *source, const char *dest){
+    DtwActionTransaction *self = newDtwActionTransaction();
+    self->action_type = DTW_ACTION_COPY;
+    self->source = strdup(source);
+    self->dest = strdup(dest);
+    return self;
+}
+
+DtwActionTransaction * DtwActionTransaction_delete_any(const char *source){
+    DtwActionTransaction *self = newDtwActionTransaction();
+    self->action_type = DTW_ACTION_DELETE;
+    self->source = strdup(source);
+    return self;
+}
+
+char * DtwActionTransaction_convert_action_in_string(int action){
+    if(action == DTW_ACTION_WRITE){
+        return "write";
+    }
+    if(action == DTW_ACTION_MOVE){
+        return "move";
+    }
+
+    if(action == DTW_ACTION_COPY){
+        return "copy";
+    }
+    if(action == DTW_ACTION_DELETE){
+        return "delete";
+    }
+
+
+}
+
+
+void DtwActionTransaction_commit(DtwActionTransaction* self,const char *path){
+
+    char *formated_source = dtw_concat_path(path,self->source);
+
+
+    if(self->action_type == DTW_ACTION_WRITE){
+        dtw_write_any_content(formated_source,self->content,self->size);
+        free(formated_source);
+        return;
+    }
+    if(self->action_type == DTW_ACTION_DELETE){
+        dtw_remove_any(formated_source);
+        free(formated_source);
+        return;
+    }
+    char *formated_dest = dtw_concat_path(path,self->dest);
+
+    if(self->action_type == DTW_ACTION_MOVE){
+        dtw_move_any(formated_source,formated_dest,DTW_NOT_MERGE);
+    }
+    if(self->action_type == DTW_ACTION_COPY){
+        dtw_copy_any(formated_source,formated_dest,DTW_NOT_MERGE);
+    }
+
+    free(formated_dest);
+    free(formated_source);
+
+}
+
+
+cJSON *  private_DtwActionTransaction_create_json_object(DtwActionTransaction* self){
+    cJSON * json_object = cJSON_CreateObject();
+    cJSON_AddStringToObject(json_object,"action",DtwActionTransaction_convert_action_in_string(self->action_type));
+
+    cJSON_AddStringToObject(json_object,"source",self->source);
+    if(self->action_type ==DTW_ACTION_WRITE){
+        if(self->is_binary){
+            char *converted = dtw_base64_encode(self->content,self->size);
+            cJSON_AddStringToObject(json_object,"content",converted);
+            free(converted);
+            cJSON_AddBoolToObject(json_object,"is binary",true);
+        }
+        else{
+           cJSON_AddStringToObject(json_object,"content",(char*)self->content);
+            cJSON_AddBoolToObject(json_object,"is binary",false);
+        }
+        cJSON_AddNumberToObject(json_object,"size",(double)self->size);
+    }
+    if(self->action_type != DTW_ACTION_DELETE){
+        cJSON_AddStringToObject(json_object,"dest",self->dest);
+    }
+
+    return json_object;
+}
+
+void DtwActionTransaction_represent(DtwActionTransaction* self){
+
+    printf("\taction: %s\n", DtwActionTransaction_convert_action_in_string(self->action_type));
+    printf("\tsource:%s\n",self->source);
+    if(self->action_type == DTW_ACTION_WRITE){
+
+        if(!self->is_binary){
+            printf("\tcontent : %s\n",(char*)self->content);
+        }
+        else{
+            printf("\tcontent: impossible to show\n");
+        }
+
+        printf("\tsize:%ld\n",self->size);
+        printf("\tis binary: %s\n",self->is_binary? "true":"false");
+        return;
+    }
+
+    if(self->action_type != DTW_ACTION_DELETE){
+        printf("\tdest: %s\n",self->dest);
+    }
+
+}
+
+
+void DtwActionTransaction_free(DtwActionTransaction* self){
+
+    if(self->content){
+        free(self->content);
+    }
+    if(self->source){
+        free(self->source);
+    }
+    if(self->dest){
+        free(self->dest);
+    }
+    free(self);
+}
+
+
+
+
+DtwTransaction * newDtwTransaction(){
+    DtwTransaction *self = (DtwTransaction*) malloc(sizeof(DtwTransaction));
+    self->actions = (DtwActionTransaction **) malloc(sizeof (DtwActionTransaction**));
+    self->size = 0;
+    self->append_action =DtwTransaction_append_action;
+    self->write_any = DtwTransaction_write_any;
+    self->write_string = DtwTransaction_write_string;
+    self->move_any = DtwTransaction_move_any;
+    self->copy_any = DtwTransaction_copy_any;
+    self->delete_any = DtwTransaction_delete_any;
+    self->dumps_transaction_to_json =DtwTransaction_dumps_to_json;
+    self->dumps_transaction_to_json_file = DtwTransaction_dumps_to_json_file;
+    self->commit = DtwTransaction_commit;
+    self->represent = DtwTransaction_represent;
+    self->free = DtwTransaction_free;
+    return self;
+}
+
+void DtwTransaction_append_action(struct DtwTransaction *self,struct DtwActionTransaction  *action){
+    self->actions =  (DtwActionTransaction**)realloc(
+            self->actions,
+            (sizeof(DtwActionTransaction*) * (self->size+1))
+    );
+    self->actions[self->size] = action;
+    self->size++;
+}
+
+void DtwTransaction_write_any(struct DtwTransaction *self,const char *path,unsigned char *content, long size,bool is_binary){
+    DtwActionTransaction * action = DtwActionTransaction_write_any(path,content,size,is_binary);
+    self->append_action(self,action);
+}
+
+void DtwTransaction_write_string(struct DtwTransaction *self,const char *path,const char *content){
+    DtwActionTransaction * action = DtwActionTransaction_write_any(path,(unsigned char*)content, strlen(content),false);
+    self->append_action(self,action);
+}
+
+void DtwTransaction_move_any(struct DtwTransaction *self,const char *source,const char *dest){
+    DtwActionTransaction * action = DtwActionTransaction_move_any(source,dest);
+    self->append_action(self,action);
+}
+
+void DtwTransaction_copy_any(struct DtwTransaction *self,const char *source,const char *dest){
+    DtwActionTransaction * action = DtwActionTransaction_copy_any(source,dest);
+    self->append_action(self,action);
+}
+
+void DtwTransaction_delete_any(struct DtwTransaction *self,const char *source){
+     DtwActionTransaction  *action = DtwActionTransaction_delete_any(source);
+     self->append_action(self,action);
+}
+
+cJSON * DtwTransaction_dumps_to_json(struct DtwTransaction *self){
+    cJSON * json_array = cJSON_CreateArray();
+    for(int i =0; i < self->size; i ++){
+        cJSON *created_obj =  private_DtwActionTransaction_create_json_object(self->actions[i]);
+
+        cJSON_AddItemToArray(
+                json_array,
+                private_DtwActionTransaction_create_json_object(self->actions[i])
+        );
+
+    }
+    return json_array;
+}
+
+void DtwTransaction_dumps_to_json_file(struct DtwTransaction *self,const char *filename){
+    cJSON *json_array = self->dumps_transaction_to_json(self);
+    char *result = cJSON_Print(json_array);
+    dtw_write_string_file_content(filename,result);
+    free(result);
+    cJSON_Delete(json_array);
+}
+
+
+void DtwTransaction_commit(struct DtwTransaction *self,const char *path){
+    for(int i = 0; i < self->size; i++){
+        DtwActionTransaction_commit(self->actions[i],path);
+    }
+}
+
+void DtwTransaction_represent(struct DtwTransaction *self){
+
+    for(int i = 0; i < self->size; i++){
+        DtwActionTransaction_represent(self->actions[i]);
+        printf("------------------------------------\n");
+    }
+
+}
+
+void DtwTransaction_free(struct DtwTransaction *self){
+    for(int i =0; i < self->size; i++){
+        DtwActionTransaction_free(self->actions[i]);
+    }
+    free(self->actions);
+    free(self);
+}
+
+
 
 #endif //DO_THE_WORLD_H
 

@@ -55,10 +55,13 @@ void DtwTransaction_delete_any(struct DtwTransaction *self,const char *source){
 cJSON * DtwTransaction_dumps_to_json(struct DtwTransaction *self){
     cJSON * json_array = cJSON_CreateArray();
     for(int i =0; i < self->size; i ++){
+        cJSON *created_obj =  private_DtwActionTransaction_create_json_object(self->actions[i]);
+
         cJSON_AddItemToArray(
                 json_array,
                 private_DtwActionTransaction_create_json_object(self->actions[i])
         );
+
     }
     return json_array;
 }
@@ -68,7 +71,7 @@ void DtwTransaction_dumps_to_json_file(struct DtwTransaction *self,const char *f
     char *result = cJSON_Print(json_array);
     dtw_write_string_file_content(filename,result);
     free(result);
-    cJSON_free(json_array);
+    cJSON_Delete(json_array);
 }
 
 
