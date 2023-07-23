@@ -95,6 +95,7 @@ void DtwActionTransaction_commit(DtwActionTransaction* self,const char *path){
 cJSON *  private_DtwActionTransaction_create_json_object(DtwActionTransaction* self){
     cJSON * json_object = cJSON_CreateObject();
     cJSON_AddStringToObject(json_object,"action",DtwActionTransaction_convert_action_in_string(self->action_type));
+
     cJSON_AddStringToObject(json_object,"source",self->source);
     if(self->action_type ==DTW_ACTION_WRITE){
         if(self->is_binary){
@@ -112,6 +113,7 @@ cJSON *  private_DtwActionTransaction_create_json_object(DtwActionTransaction* s
     if(self->action_type != DTW_ACTION_DELETE){
         cJSON_AddStringToObject(json_object,"dest",self->dest);
     }
+
     return json_object;
 }
 

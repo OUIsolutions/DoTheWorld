@@ -91,5 +91,6 @@ void DtwTransaction_free(struct DtwTransaction *self){
     for(int i =0; i < self->size; i++){
         DtwActionTransaction_free(self->actions[i]);
     }
+    free(self->actions);
     free(self);
 }
