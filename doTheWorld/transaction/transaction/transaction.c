@@ -2,7 +2,7 @@
 
 DtwTransaction * newDtwTransaction(){
     DtwTransaction *self = (DtwTransaction*) malloc(sizeof(DtwTransaction));
-    self->actions = (DtwActionTransaction **) malloc(sizeof (DtwActionTransaction **));
+    self->actions = (DtwActionTransaction **) malloc(0);
     self->size = 0;
     self->append_action =DtwTransaction_append_action;
     self->write_any = DtwTransaction_write_any;
@@ -16,10 +16,15 @@ DtwTransaction * newDtwTransaction(){
 }
 
 void DtwTransaction_append_action(struct DtwTransaction *self,struct DtwActionTransaction  *action){
-    self->actions =  (DtwActionTransaction**) realloc(self->actions,sizeof (DtwActionTransaction**) * self->size+1);
+    self->actions =  (DtwActionTransaction**)realloc(
+            self->actions,
+            sizeof(DtwActionTransaction*) * (self->size+1)
+    );
+
     self->actions[self->size] = action;
     self->actions++;
 }
+
 void DtwTransaction_write_any(struct DtwTransaction *self,const char *path,unsigned char *content, long size,bool is_binary){
     DtwActionTransaction * action = DtwActionTransaction_write_any(path,content,size,is_binary);
     self->append_action(self,action);
@@ -34,6 +39,7 @@ void DtwTransaction_move_any(struct DtwTransaction *self,const char *source,cons
     DtwActionTransaction * action = DtwActionTransaction_move_any(source,dest);
     self->append_action(self,action);
 }
+
 void DtwTransaction_copy_any(struct DtwTransaction *self,const char *source,const char *dest){
     DtwActionTransaction * action = DtwActionTransaction_copy_any(source,dest);
     self->append_action(self,action);
@@ -42,6 +48,9 @@ void DtwTransaction_copy_any(struct DtwTransaction *self,const char *source,cons
 void DtwTransaction_delete_any(struct DtwTransaction *self,const char *source){
      DtwActionTransaction  *action = DtwActionTransaction_delete_any(source);
      self->append_action(self,action);
+}
+void DtwTransaction_commit(struct DtwTransaction *self,const char *path){
+
 }
 
 void DtwTransaction_represent(struct DtwTransaction *self){
