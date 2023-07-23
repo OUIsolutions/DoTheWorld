@@ -40,8 +40,11 @@ DtwActionTransaction * DtwActionTransaction_delete_any(unsigned  char *content,c
     return self;
 }
 
+char * DtwActionTransaction_convert_action_in_string(int action);
+
+
 void DtwActionTransaction_represent(DtwActionTransaction* self){
-    
+
 }
 
 

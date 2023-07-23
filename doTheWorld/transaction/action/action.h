@@ -29,6 +29,8 @@ DtwActionTransaction * DtwActionTransaction_copy_any(unsigned  char *content,con
 
 DtwActionTransaction * DtwActionTransaction_delete_any(unsigned  char *content,const char *source);
 
+char * DtwActionTransaction_convert_action_in_string(int action);
+
 void DtwActionTransaction_represent(DtwActionTransaction* self);
 
 void DtwActionTransaction_free(DtwActionTransaction* self);
