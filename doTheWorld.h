@@ -7077,12 +7077,12 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 void DtwLocker_free(struct DtwLocker *self){
 
     for(int i = 0 ; i < self->locked_elements->size;i++){
-        char *element = self->locked_elements->strings[i];
-
-        dtw_remove_any(element);
     }
 
     self->locked_elements->free(self->locked_elements);
+        char *element = self->locked_elements->strings[i];
+
+        dtw_remove_any(element);
     free(self);
 }
 

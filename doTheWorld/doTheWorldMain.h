@@ -53,6 +53,7 @@ SOFTWARE.
 #include "path/path.h"
 #include "tree/declarations.h"
 #include "locker/locker.h"
+#include "transaction/declaration.h"
 
 #include "base64/base64.c"
 #include "randonizer/randonizer.c"
@@ -67,6 +68,7 @@ SOFTWARE.
 #include "string_array/string_array.c"
 #include "tree/definitions.h"
 #include "locker/locker.c"
+#include "transaction/definition.h"
 
 #endif //DO_THE_WORLD_H
 
