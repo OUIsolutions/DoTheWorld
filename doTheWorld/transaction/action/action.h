@@ -1,10 +1,10 @@
 
 
 enum {
-    PRIVATE_DTW_ACTION_WRITE_ANY,
-    PRIVATE_DTW_ACTION_MOVE_ANY,
-    PRIVATE_DTW_ACTION_COPY_ANY,
-    PRIVATE_DTW_ACTION_DELETE_ANY
+    DTW_ACTION_WRITE,
+    DTW_ACTION_MOVE,
+    DTW_ACTION_COPY,
+    DTW_ACTION_DELETE
 };
 
 
@@ -14,20 +14,20 @@ typedef struct DtwActionTransaction{
     long size;
     bool is_binary;
 
-    char *source;
     char *dest;
+    char *source;
 
 }DtwActionTransaction;
 
 DtwActionTransaction *newDtwActionTransaction();
 
-DtwActionTransaction * DtwActionTransaction_write_any(unsigned  char *content,long size,bool is_binary);
+DtwActionTransaction * DtwActionTransaction_write_any(const char *dest,unsigned  char *content,long size,bool is_binary);
 
-DtwActionTransaction * DtwActionTransaction_move_any(unsigned  char *content,const char *source, const char *dest);
+DtwActionTransaction * DtwActionTransaction_move_any(const char *source, const char *dest);
 
-DtwActionTransaction * DtwActionTransaction_copy_any(unsigned  char *content,const char *source, const char *dest);
+DtwActionTransaction * DtwActionTransaction_copy_any(const char *source, const char *dest);
 
-DtwActionTransaction * DtwActionTransaction_delete_any(unsigned  char *content,const char *source);
+DtwActionTransaction * DtwActionTransaction_delete_any(const char *source);
 
 char * DtwActionTransaction_convert_action_in_string(int action);
 

@@ -1,9 +1,11 @@
 
 typedef struct DtwTransaction{
 
+    DtwActionTransaction  **actions;
+    long size;
 
-
-    void (*write_any)(struct DtwTransaction *self,const char *path,unsigned char *content, long size);
+    void (*append_action)(struct DtwTransaction *self,struct DtwActionTransaction  *action);
+    void (*write_any)(struct DtwTransaction *self,const char *path,unsigned char *content, long size,bool is_binary);
     void (*write_string)(struct DtwTransaction *self,const char *path,const char *content);
     void (*move_any)(struct DtwTransaction *self,const char *source,const char *dest);
     void (*copy_any)(struct DtwTransaction *self,const char *source,const char *dest);
@@ -16,8 +18,9 @@ typedef struct DtwTransaction{
 }DtwTransaction;
 
 DtwTransaction * newDtwTransaction();
+void DtwTransaction_append_action(struct DtwTransaction *self,struct DtwActionTransaction  *action);
 
-void DtwTransaction_write_any(struct DtwTransaction *self,const char *path,unsigned char *content, long size);
+void DtwTransaction_write_any(struct DtwTransaction *self,const char *path,unsigned char *content, long size,bool is_binary);
 
 void DtwTransaction_write_string(struct DtwTransaction *self,const char *path,const char *content);
 
