@@ -37,7 +37,7 @@ DtwActionTransaction * DtwActionTransaction_copy_any(const char *source, const c
 DtwActionTransaction * DtwActionTransaction_delete_any(const char *source){
     DtwActionTransaction *self = newDtwActionTransaction();
     self->action_type = DTW_ACTION_DELETE;
-    self->source = strdup(source);
+    self->dest = strdup(source);
     return self;
 }
 
@@ -82,7 +82,7 @@ void DtwActionTransaction_commit(DtwActionTransaction* self,const char *path){
     }
     free(formated_dest);
     free(formated_source);
-    
+
 }
 
 
