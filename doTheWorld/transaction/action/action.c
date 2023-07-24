@@ -156,9 +156,7 @@ cJSON *  private_DtwActionTransaction_create_json_object(DtwActionTransaction* s
         }
         else{
            cJSON_AddStringToObject(json_object,"content",(char*)self->content);
-            cJSON_AddBoolToObject(json_object,"is binary",false);
         }
-        cJSON_AddNumberToObject(json_object,"size",(double)self->size);
     }
     if(self->action_type != DTW_ACTION_DELETE){
         cJSON_AddStringToObject(json_object,"dest",self->dest);

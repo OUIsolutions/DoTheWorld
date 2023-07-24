@@ -84,7 +84,6 @@ void DtwTransaction_delete_any(struct DtwTransaction *self,const char *source){
 cJSON * DtwTransaction_dumps_to_json(struct DtwTransaction *self){
     cJSON * json_array = cJSON_CreateArray();
     for(int i =0; i < self->size; i ++){
-        cJSON *created_obj =  private_DtwActionTransaction_create_json_object(self->actions[i]);
 
         cJSON_AddItemToArray(
                 json_array,
