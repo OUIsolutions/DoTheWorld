@@ -7759,11 +7759,13 @@ DtwJsonTransactionError * dtw_validate_json_transaction_file(const char *filenam
         free(content);
         return error;
     }
+    
     DtwJsonTransactionError *generated_error = dtw_validate_json_transaction(parsed);
     if(generated_error){
         free(content);
         return generated_error;
     }
+
     free(content);
     return NULL;
 }
