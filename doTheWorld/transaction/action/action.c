@@ -5,7 +5,10 @@ DtwActionTransaction * newDtwActionTransaction(){
     *self= (DtwActionTransaction){0};
     return self;
 }
+DtwActionTransaction * private_DtwActionTransaction_parse_json_object(cJSON *json_obj){
 
+
+}
 DtwActionTransaction * DtwActionTransaction_write_any(const char *source, unsigned  char *content,long size,bool is_binary){
     DtwActionTransaction *self = newDtwActionTransaction();
     self->action_type = DTW_ACTION_WRITE;

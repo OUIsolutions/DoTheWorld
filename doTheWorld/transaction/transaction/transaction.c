@@ -18,8 +18,14 @@ DtwTransaction * newDtwTransaction(){
     return self;
 }
 DtwTransaction * newDtwTransaction_from_json(cJSON *json_entry){
-    
+    DtwTransaction *self = newDtwTransaction();
+    long size = cJSON_GetArraySize(json_entry);
+    for(int i  = 0; i < size; i ++){
+        cJSON  *object_action = cJSON_GetArrayItem(json_entry,i);
+        
+    }
 }
+
 
 DtwTransaction * newDtwTransaction_from_json_file(const char *filename){
     char *content = dtw_load_string_file_content(filename);
