@@ -22,21 +22,8 @@ DtwTransaction * newDtwTransaction_from_json(cJSON *json_entry){
     long size = cJSON_GetArraySize(json_entry);
     for(int i  = 0; i < size; i ++){
         cJSON  *object_action = cJSON_GetArrayItem(json_entry,i);
-        
-    }
-}
 
-
-DtwTransaction * newDtwTransaction_from_json_file(const char *filename){
-    char *content = dtw_load_string_file_content(filename);
-    cJSON  *element = cJSON_Parse(content);
-    free(content);
-    if(!element){
-        return NULL;
     }
-    DtwTransaction  *self = newDtwTransaction_from_json(element);
-    cJSON_Delete(element);
-    return self;
 }
 
 void DtwTransaction_append_action(struct DtwTransaction *self,struct DtwActionTransaction  *action){
@@ -47,6 +34,27 @@ void DtwTransaction_append_action(struct DtwTransaction *self,struct DtwActionTr
     self->actions[self->size] = action;
     self->size++;
 }
+
+DtwTransaction * newDtwTransaction_from_json_file(const char *filename){
+    char *content = dtw_load_string_file_content(filename);
+    cJSON  *element = cJSON_Parse(content);
+    free(content);
+    if(!element){
+        return NULL;
+    }
+    DtwTransaction  *self = newDtwTransaction_from_json(element);
+    long element_size = cJSON_GetArraySize(element);
+    for(long i =0; i <element_size;i++){
+        cJSON * current = cJSON_GetArrayItem(element,i);
+        DtwActionTransaction  *current_action = private_DtwActionTransaction_parse_json_object(current);
+        self->append_action(self,current_action);
+    }
+
+    cJSON_Delete(element);
+    return self;
+}
+
+
 
 void DtwTransaction_write_any(struct DtwTransaction *self,const char *path,unsigned char *content, long size,bool is_binary){
     DtwActionTransaction * action = DtwActionTransaction_write_any(path,content,size,is_binary);

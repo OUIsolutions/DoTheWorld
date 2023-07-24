@@ -32,6 +32,7 @@ DtwActionTransaction * DtwActionTransaction_copy_any(const char *source, const c
 
 DtwActionTransaction * DtwActionTransaction_delete_any(const char *source);
 
+short DtwActionTransaction_convert_action_in_integer(char *action);
 
 char * DtwActionTransaction_convert_action_in_string(int action);
 

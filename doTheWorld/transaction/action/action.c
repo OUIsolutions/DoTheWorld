@@ -5,10 +5,39 @@ DtwActionTransaction * newDtwActionTransaction(){
     *self= (DtwActionTransaction){0};
     return self;
 }
+
 DtwActionTransaction * private_DtwActionTransaction_parse_json_object(cJSON *json_obj){
+    DtwActionTransaction  *self = newDtwActionTransaction();
 
+    char *action = cJSON_GetObjectItem(json_obj,"action")->valuestring;
+    self->action_type  = DtwActionTransaction_convert_action_in_integer(action);
 
+    char *source = cJSON_GetObjectItem(json_obj,"source")->valuestring;
+    self->source = strdup(source);
+
+    if(self->action_type == DTW_ACTION_DELETE){
+        return self;
+    }
+
+    if(self->action_type == DTW_ACTION_WRITE){
+        self->is_binary = cJSON_GetObjectItem(json_obj,"is binary")->valueint;
+
+        char *content = cJSON_GetObjectItem(json_obj,"content")->valuestring;
+        if(self->is_binary){
+            self->content = dtw_base64_decode(content,&self->size);
+        }
+        else{
+            self->content =(unsigned char*)strdup(content);
+            self->size =(long)strlen(content);
+        }
+
+        return self;
+    }
+    char *dest  = cJSON_GetObjectItem(json_obj,"dest")->valuestring;
+    self->dest = strdup(dest);
+    return self;
 }
+
 DtwActionTransaction * DtwActionTransaction_write_any(const char *source, unsigned  char *content,long size,bool is_binary){
     DtwActionTransaction *self = newDtwActionTransaction();
     self->action_type = DTW_ACTION_WRITE;
@@ -46,6 +75,25 @@ DtwActionTransaction * DtwActionTransaction_delete_any(const char *source){
     return self;
 }
 
+short DtwActionTransaction_convert_action_in_integer(char *action){
+    if(strcmp(action,"write") == 0){
+        return DTW_ACTION_WRITE;
+    }
+
+    if(strcmp(action,"move") == 0){
+        return DTW_ACTION_MOVE;
+    }
+
+    if(strcmp(action,"copy") == 0){
+        return DTW_ACTION_COPY;
+    }
+
+    if(strcmp(action,"delete") == 0){
+        return DTW_ACTION_DELETE;
+    }
+
+}
+
 char * DtwActionTransaction_convert_action_in_string(int action){
     if(action == DTW_ACTION_WRITE){
         return "write";
@@ -60,7 +108,6 @@ char * DtwActionTransaction_convert_action_in_string(int action){
     if(action == DTW_ACTION_DELETE){
         return "delete";
     }
-
 
 }
 
