@@ -9,6 +9,6 @@ int main(){
     t->move_any(t,"a.txt","c.txt");
     t->delete_any(t,"blob.png");
     t->copy_any(t,"sub_folder","sub_folder2");
-    t->commit(t,"tests/target");
+    t->represent(t);
     t->free(t);
 }
