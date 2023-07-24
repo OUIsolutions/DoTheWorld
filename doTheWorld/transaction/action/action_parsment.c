@@ -71,7 +71,13 @@ DtwActionTransaction * private_DtwActionTransaction_parse_json_object(cJSON *jso
     }
 
     if(self->action_type == DTW_ACTION_WRITE){
-        self->is_binary = cJSON_GetObjectItem(json_obj,"is binary")->valueint;
+        cJSON *is_binary = cJSON_GetObjectItem(json_obj,"is binary");
+
+        if(is_binary){
+           if(is_binary->valuestring){
+               self->is_binary= true;
+           }
+        }
 
         char *content = cJSON_GetObjectItem(json_obj,"content")->valuestring;
         if(self->is_binary){

@@ -22,6 +22,7 @@ DtwTransaction * newDtwTransaction_from_json_file(const char *filename){
     cJSON_Delete(element);
     return self;
 }
+
 cJSON * DtwTransaction_dumps_to_json(struct DtwTransaction *self){
     cJSON * json_array = cJSON_CreateArray();
     for(int i =0; i < self->size; i ++){
@@ -43,11 +44,14 @@ void DtwTransaction_dumps_to_json_file(struct DtwTransaction *self,const char *f
     free(result);
     cJSON_Delete(json_array);
 }
+
 void DtwTransaction_represent(struct DtwTransaction *self){
 
     for(int i = 0; i < self->size; i++){
+
         DtwActionTransaction_represent(self->actions[i]);
         printf("------------------------------------\n");
+
     }
 
 }
