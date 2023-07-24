@@ -13,13 +13,48 @@ DtwJsonTransactionError * dtw_validate_json_transaction(cJSON *json_entry){
         cJSON *current_obj = cJSON_GetArrayItem(json_entry,i);
         DtwJsonTransactionError  *current_error = private_dtw_validate_json_action_transaction(current_obj);
         if(current_error){
-
+            char formated_path[20] = {0};
+            sprintf(formated_path,"[%d]",i);
+            current_error->prepend_path(current_error,formated_path);
+            return current_error;
         }
     }
+    return NULL;
 }
 
 DtwJsonTransactionError * dtw_validate_json_transaction_file(const char *filename){
-
+    char *content = dtw_load_string_file_content(filename);
+    if(!content){
+        char *formated_mensage = calloc(sizeof (char), strlen(filename) + 50);
+        sprintf(formated_mensage, "file: %s not found",filename);
+        DtwJsonTransactionError  *error = private_new_DtwJsonTransactionError(
+                DTW_ACTION_FILE_NOT_FOUND,
+                formated_mensage,
+                NULL
+                );
+        free(formated_mensage);
+        return error;
+    }
+    cJSON *parsed = cJSON_Parse(content);
+    if(!parsed){
+        char *formated_mensage = calloc(sizeof (char), strlen(filename) + 50);
+        sprintf(formated_mensage, "file: %s its not an valid json",filename);
+        DtwJsonTransactionError  *error = private_new_DtwJsonTransactionError(
+                DTW_ACTION_ITS_NOT_JSON,
+                formated_mensage,
+                NULL
+        );
+        free(formated_mensage);
+        free(content);
+        return error;
+    }
+    DtwJsonTransactionError *generated_error = dtw_validate_json_transaction(parsed);
+    if(generated_error){
+        free(content);
+        return generated_error;
+    }
+    free(content);
+    return NULL;
 }
 
 

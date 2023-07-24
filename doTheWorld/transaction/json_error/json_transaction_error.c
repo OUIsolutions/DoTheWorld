@@ -26,7 +26,6 @@ void DtwJsonTransactionError_represent(struct DtwJsonTransactionError *self){
 }
 
 void DtwJsonTransactionError_prepend_path(struct DtwJsonTransactionError *self,char *path){
-
     if(self->path){
         char *new_path = calloc(sizeof (char), strlen(self->path) + strlen(path) + 2);
         sprintf("%s%s",path,new_path);
