@@ -10,6 +10,6 @@ int main(){
     t->delete_any(t,"blob.png");
     t->copy_any(t,"sub_folder","sub_folder2");
     t->represent(t);
-    t->dumps_transaction_to_json_file(t,"test/target/transaction.json");
+    t->dumps_transaction_to_json_file(t,"tests/target/transaction.json");
     t->free(t);
 }
