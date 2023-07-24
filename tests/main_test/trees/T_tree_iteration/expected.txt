@@ -85,3 +85,33 @@ Is Binary: false
 Content Size: 3
 Content SHA:  9834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0
 Content: aaa
+------------------------------------------------------------
+First Path: tests/target/transaction.json
+Path: tests/target/transaction.json
+Path Changed: false
+Dir: tests/target
+Full Name: transaction.json
+Name: transaction
+Extension: json
+Content Exist in Memory: true
+Ignore: false
+Content Exist In Hardware: true
+Is Binary: false
+Content Size: 261
+Content SHA:  46c8794506fd6ef750938dc67d94ff63100becce30172b3bef751ae76a750adc
+Content: [{
+		"action":	"write",
+		"source":	"b.txt",
+		"content":	"aaaaa"
+	}, {
+		"action":	"move",
+		"source":	"a.txt",
+		"dest":	"c.txt"
+	}, {
+		"action":	"delete",
+		"source":	"blob.png"
+	}, {
+		"action":	"copy",
+		"source":	"sub_folder",
+		"dest":	"sub_folder2"
+	}]

@@ -2,3 +2,4 @@
 tests/target/a.txt
 tests/target/blob.png
 tests/target/sub_folder
+tests/target/transaction.json

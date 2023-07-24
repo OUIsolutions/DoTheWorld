@@ -33,6 +33,7 @@ class FolderTestPressetCreation(FolderTestPresetExtras):
         if self._side_effect_folder_changed():
             #verify if there is no test presseted
             if not isdir(f'{folder}/side_effect') or reconstruct: 
+                rmtree(f'{folder}/side_effect',ignore_errors=True)
                 copytree(self._side_effect_folder, f'{folder}/side_effect')
                 modified = True
 
