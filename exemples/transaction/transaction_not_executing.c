@@ -1,6 +1,4 @@
-//
-// Created by mateusmoutinho on 24/07/23.
-//
+
 #include "doTheWorld.h"
 
 int main(){
