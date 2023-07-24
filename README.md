@@ -416,20 +416,64 @@ int main(int argc, char *argv[]){
 with transactions you can make all modifications and executed or denny it one time,avoid nod
 wanted side effects
 <!--codeof:exemples/transaction/transaction_executiong.c-->
+~~~c
+//
+// Created by mateusmoutinho on 24/07/23.
+//
+#include "doTheWorld.h"
 
-### Dumping Transaction to to json
+int main(){
+    DtwTransaction *t = newDtwTransaction();
+    t->write_string(t,"b.txt","aaaaa");
+    t->move_any(t,"a.txt","c.txt");
+    t->delete_any(t,"blob.png");
+    t->copy_any(t,"sub_folder","sub_folder2");
+    t->commit(t,"tests/target");
+    t->free(t);
+
+}
+~~~
 You also can dump the transaction to an json file to store it 
 
 <!--codeof:exemples/transaction/transaction_dumping_to_json.c-->
+~~~c
+//
+// Created by mateusmoutinho on 24/07/23.
+//
+#include "doTheWorld.h"
 
-
-### Loading Transaction to json 
+int main(){
+    DtwTransaction *t = newDtwTransaction();
+    t->write_string(t,"b.txt","aaaaa");
+    t->move_any(t,"a.txt","c.txt");
+    t->delete_any(t,"blob.png");
+    t->copy_any(t,"sub_folder","sub_folder2");
+    t->represent(t);
+    t->dumps_transaction_to_json_file(t,"tests/target/transaction.json");
+    t->free(t);
+}
+~~~
 
 <!--codeof:exemples/transaction/transaction_loading_from_json.c-->
+~~~c
+//
+// Created by mateusmoutinho on 24/07/23.
+//
+#include "doTheWorld.h"
 
-
-
-## Trees and Tree Parts
+int main(){
+    DtwTransaction *t = newDtwTransaction_from_json_file("tests/target/transaction.json");
+    if(!t){
+        DtwJsonTransactionError *error = dtw_validate_json_transaction_file("tests/target/transaction.json");
+        error->represent(error);
+        error->free(error);
+        return 0;
+    }
+    
+    t->represent(t);
+    t->free(t);
+}
+~~~
 with tree concepts, you can manipulate files as trees, and implement IO modifications with atomic concepts 
 ### Loading An TreePart 
 <!--codeof:exemples/tree_parts/loading_tree_part.c-->
@@ -881,9 +925,6 @@ turning system ultra securty
 
 <!--codeof:exemples/trees/tree_commit.c-->
 ~~~c
-//
-// Created by jurandi on 20-06-2023.
-//
 
 #include "doTheWorld.h"
 
@@ -923,9 +964,7 @@ int main(){
 With transactin Reports , you can see what will be modified
 <!--codeof:exemples/trees/transaction_report.c-->
 ~~~c
-//
-// Created by jurandi on 20-06-2023.
-//
+
 #include "doTheWorld.h"
 
 int main(){
