@@ -4506,7 +4506,7 @@ DtwActionTransaction * DtwActionTransaction_copy_any(const char *source, const c
 
 DtwActionTransaction * DtwActionTransaction_delete_any(const char *source);
 
-short DtwActionTransaction_convert_action_in_integer(char *action);
+short DtwActionTransaction_convert_transaction_action_to_integer(char *action);
 
 char * DtwActionTransaction_convert_action_in_string(int action);
 
@@ -7293,7 +7293,7 @@ void DtwActionTransaction_free(DtwActionTransaction* self){
 
 
 
-short DtwActionTransaction_convert_action_in_integer(char *action){
+short DtwActionTransaction_convert_transaction_action_to_integer(char *action){
     if(strcmp(action,"write") == 0){
         return DTW_ACTION_WRITE;
     }

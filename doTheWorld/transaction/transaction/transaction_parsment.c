@@ -10,7 +10,9 @@ DtwJsonTransactionError * dtw_validate_json_transaction(cJSON *json_entry){
     }
     long  element_size = cJSON_GetArraySize(json_entry);
     for(long  i = 0; i <element_size; i++){
+
         cJSON *current_obj = cJSON_GetArrayItem(json_entry,i);
+
         DtwJsonTransactionError  *current_error = private_dtw_validate_json_action_transaction(current_obj);
         if(current_error){
             char formated_path[20] = {0};
@@ -18,7 +20,9 @@ DtwJsonTransactionError * dtw_validate_json_transaction(cJSON *json_entry){
             current_error->prepend_path(current_error,formated_path);
             return current_error;
         }
+
     }
+
     return NULL;
 }
 
@@ -88,7 +92,8 @@ DtwTransaction * newDtwTransaction_from_json_file(const char *filename){
         error->free(error);
         return NULL;
     }
-    
+
+
     DtwTransaction  *self = newDtwTransaction_from_json(element);
     cJSON_Delete(element);
 

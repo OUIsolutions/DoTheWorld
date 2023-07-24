@@ -19,7 +19,7 @@ DtwJsonTransactionError * private_new_DtwJsonTransactionError( int code,const ch
 
 void DtwJsonTransactionError_represent(struct DtwJsonTransactionError *self){
     printf("code: %d\n",self->code);
-    printf("mensage:%s",self->mensage);
+    printf("mensage:%s\n",self->mensage);
     if(self->path){
         printf("path: %s",self->path);
     }
