@@ -61,4 +61,15 @@
 		"content_sha256":	"46c8794506fd6ef750938dc67d94ff63100becce30172b3bef751ae76a750adc",
 		"is_binary":	false,
 		"content":	"[{\n\t\t\"action\":\t\"write\",\n\t\t\"source\":\t\"b.txt\",\n\t\t\"content\":\t\"aaaaa\"\n\t}, {\n\t\t\"action\":\t\"move\",\n\t\t\"source\":\t\"a.txt\",\n\t\t\"dest\":\t\"c.txt\"\n\t}, {\n\t\t\"action\":\t\"delete\",\n\t\t\"source\":\t\"blob.png\"\n\t}, {\n\t\t\"action\":\t\"copy\",\n\t\t\"source\":\t\"sub_folder\",\n\t\t\"dest\":\t\"sub_folder2\"\n\t}]"
+	}, {
+		"path":	"tests/target/wrong_transaction.json",
+		"original_path":	"tests/target/wrong_transaction.json",
+		"dir":	"tests/target",
+		"full_name":	"wrong_transaction.json",
+		"name":	"wrong_transaction",
+		"extension":	"json",
+		"content_size":	272,
+		"content_sha256":	"f5442bc7f42b47aa5faf61af4a9b7886c07315ec6379818fa90eb656863173e1",
+		"is_binary":	false,
+		"content":	"[{\n\t\t\"action\":\t\"not valid action\",\n\t\t\"source\":\t\"b.txt\",\n\t\t\"content\":\t\"aaaaa\"\n\t}, {\n\t\t\"action\":\t\"move\",\n\t\t\"source\":\t\"a.txt\",\n\t\t\"dest\":\t\"c.txt\"\n\t}, {\n\t\t\"action\":\t\"delete\",\n\t\t\"source\":\t\"blob.png\"\n\t}, {\n\t\t\"action\":\t\"copy\",\n\t\t\"source\":\t\"sub_folder\",\n\t\t\"dest\":\t\"sub_folder2\"\n\t}]"
 	}]

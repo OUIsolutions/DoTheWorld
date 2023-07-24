@@ -4,6 +4,7 @@ png
 txt
 txt
 json
+json
 Write:---------------------------------------
 Modify:--------------------------------------
 tests/target/a.md

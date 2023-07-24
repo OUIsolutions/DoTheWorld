@@ -115,3 +115,33 @@ Content: [{
 		"source":	"sub_folder",
 		"dest":	"sub_folder2"
 	}] test
+------------------------------------------------------------
+First Path: tests/target/wrong_transaction.json
+Path: tests/target/wrong_transaction.json
+Path Changed: false
+Dir: tests/target
+Full Name: wrong_transaction.json
+Name: wrong_transaction
+Extension: json
+Content Exist in Memory: true
+Ignore: false
+Content Exist In Hardware: true
+Is Binary: false
+Content Size: 277
+Content SHA:  55551a2020f0fcdbc89c53457988ae883911fb0c6ef379ca45aace1cd9b128a7
+Content: [{
+		"action":	"not valid action",
+		"source":	"b.txt",
+		"content":	"aaaaa"
+	}, {
+		"action":	"move",
+		"source":	"a.txt",
+		"dest":	"c.txt"
+	}, {
+		"action":	"delete",
+		"source":	"blob.png"
+	}, {
+		"action":	"copy",
+		"source":	"sub_folder",
+		"dest":	"sub_folder2"
+	}] test

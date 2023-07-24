@@ -6,3 +6,4 @@ tests/target/sub_folder/
 tests/target/sub_folder/sub_element.txt
 tests/target/sub_folder/sub_element2.txt
 tests/target/transaction.json
+tests/target/wrong_transaction.json
