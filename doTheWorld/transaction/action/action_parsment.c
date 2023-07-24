@@ -74,7 +74,7 @@ DtwActionTransaction * private_DtwActionTransaction_parse_json_object(cJSON *jso
         cJSON *is_binary = cJSON_GetObjectItem(json_obj,"is binary");
 
         if(is_binary){
-           if(is_binary->valuestring){
+           if(is_binary->valueint){
                self->is_binary= true;
            }
         }
@@ -102,7 +102,8 @@ void DtwActionTransaction_represent(DtwActionTransaction* self){
     printf("\tsource:%s\n",self->source);
     if(self->action_type == DTW_ACTION_WRITE){
 
-        if(!self->is_binary){
+        if(!self->is_binary && self->size <  30){
+
             printf("\tcontent : %s\n",(char*)self->content);
         }
         else{
