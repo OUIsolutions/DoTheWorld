@@ -1,5 +1,5 @@
 
-short DtwActionTransaction_convert_transaction_action_to_integer(char *action){
+short DtwActionTransaction_convert_action_to_integer(char *action){
     if(strcmp(action,"write") == 0){
         return DTW_ACTION_WRITE;
     }
@@ -55,6 +55,7 @@ DtwJsonTransactionError * private_dtw_validate_json_action_transaction(cJSON *js
                 "[\"action\"]"
         );
     }
+
     if(action->type != cJSON_String){
         return private_new_DtwJsonTransactionError(
                 JSON_TRANSACTION_WRONG_TYPE,
@@ -63,9 +64,11 @@ DtwJsonTransactionError * private_dtw_validate_json_action_transaction(cJSON *js
         );
     }
 
+
     int converted_action = DtwActionTransaction_convert_action_to_integer(action->valuestring);
 
     if(converted_action == -1){
+
         char *formated_mensage = (char*)calloc(sizeof (char),strlen(action->valuestring) + 30);
         sprintf(formated_mensage,"the action: %s its not valid",action->valuestring);
         DtwJsonTransactionError  *error = private_new_DtwJsonTransactionError(
@@ -153,7 +156,7 @@ DtwActionTransaction * private_DtwActionTransaction_parse_json_object(cJSON *jso
     DtwActionTransaction  *self = newDtwActionTransaction();
 
     char *action = cJSON_GetObjectItem(json_obj,"action")->valuestring;
-    self->action_type  = DtwActionTransaction_convert_transaction_action_to_integer(action);
+    self->action_type  = DtwActionTransaction_convert_action_to_integer(action);
 
     char *source = cJSON_GetObjectItem(json_obj,"source")->valuestring;
     self->source = strdup(source);

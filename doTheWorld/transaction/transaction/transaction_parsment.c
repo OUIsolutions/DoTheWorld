@@ -16,7 +16,7 @@ DtwJsonTransactionError * dtw_validate_json_transaction(cJSON *json_entry){
         DtwJsonTransactionError  *current_error = private_dtw_validate_json_action_transaction(current_obj);
         if(current_error){
             char formated_path[20] = {0};
-            sprintf(formated_path,"[%d]",i);
+            sprintf(formated_path,"[%ld]",i);
             current_error->prepend_path(current_error,formated_path);
             return current_error;
         }
