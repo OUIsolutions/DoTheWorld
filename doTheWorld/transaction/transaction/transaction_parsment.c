@@ -11,7 +11,10 @@ DtwJsonTransactionError * dtw_validate_json_transaction(cJSON *json_entry){
     long  element_size = cJSON_GetArraySize(json_entry);
     for(long  i = 0; i <element_size; i++){
         cJSON *current_obj = cJSON_GetArrayItem(json_entry,i);
+        DtwJsonTransactionError  *current_error = private_dtw_validate_json_action_transaction(current_obj);
+        if(current_error){
 
+        }
     }
 }
 

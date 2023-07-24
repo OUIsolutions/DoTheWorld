@@ -144,7 +144,7 @@ DtwJsonTransactionError * private_dtw_validate_json_action_transaction(cJSON *js
         }
     }
     return NULL;
-    
+
 }
 
 
