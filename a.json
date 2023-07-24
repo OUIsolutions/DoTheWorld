@@ -1,5 +1,5 @@
 [{
-		"actsion":	"write",
+		"action":	"write",
 		"source":	"a.txt",
 		"content":	"aaaaaa"
 	}, {
