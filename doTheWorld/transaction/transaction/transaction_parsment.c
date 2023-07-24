@@ -70,15 +70,28 @@ DtwTransaction * newDtwTransaction_from_json(cJSON *json_entry){
 }
 
 
+
 DtwTransaction * newDtwTransaction_from_json_file(const char *filename){
     char *content = dtw_load_string_file_content(filename);
+    if(!content){
+        return NULL;
+    }
+
     cJSON  *element = cJSON_Parse(content);
     free(content);
     if(!element){
         return NULL;
     }
+
+    DtwJsonTransactionError *error = dtw_validate_json_transaction(element);
+    if(error){
+        error->free(error);
+        return NULL;
+    }
+    
     DtwTransaction  *self = newDtwTransaction_from_json(element);
     cJSON_Delete(element);
+
     return self;
 }
 
