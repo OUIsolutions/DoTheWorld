@@ -21,6 +21,9 @@ typedef struct DtwActionTransaction{
 
 DtwActionTransaction *newDtwActionTransaction();
 
+DtwJsonTransactionError * private_dtw_validate_json_action_transaction(cJSON *json_obj);
+
+
 DtwActionTransaction * private_DtwActionTransaction_parse_json_object(cJSON *json_obj);
 
 
@@ -33,6 +36,7 @@ DtwActionTransaction * DtwActionTransaction_copy_any(const char *source, const c
 DtwActionTransaction * DtwActionTransaction_delete_any(const char *source);
 
 short DtwActionTransaction_convert_action_in_integer(char *action);
+
 
 char * DtwActionTransaction_convert_action_in_string(int action);
 

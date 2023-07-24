@@ -1,7 +1,18 @@
 
 
 DtwJsonTransactionError * dtw_validate_json_transaction(cJSON *json_entry){
+    if(json_entry->type != cJSON_Array){
+        return private_new_DtwJsonTransactionError(
+                JSON_TRANSACTION_WRONG_TYPE,
+                "the initial value its not an array",
+                NULL
+                );
+    }
+    long  element_size = cJSON_GetArraySize(json_entry);
+    for(long  i = 0; i <element_size; i++){
+        cJSON *current_obj = cJSON_GetArrayItem(json_entry,i);
 
+    }
 }
 
 DtwJsonTransactionError * dtw_validate_json_transaction_file(const char *filename){

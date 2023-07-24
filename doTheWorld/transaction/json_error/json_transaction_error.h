@@ -1,4 +1,9 @@
+enum {
 
+    JSON_TRANSACTION_WRONG_TYPE,
+    JSON_TRANSACTION_NOT_PRESENT_VALUE,
+    JSON_TRANSACTION_INVALID_ACTION
+};
 typedef struct DtwJsonTransactionError{
     int code;
     char *mensage;
