@@ -24,6 +24,11 @@ DtwTransaction * newDtwTransaction();
 
 DtwTransaction * newDtwTransaction_from_json(cJSON *json_entry);
 
+DtwJsonTransactionError * dtw_validate_json_transaction(cJSON *json_entry);
+
+DtwJsonTransactionError * dtw_validate_json_transaction_file(const char *filename);
+
+
 DtwTransaction * newDtwTransaction_from_json_file(const char *filename);
 
 
