@@ -72,7 +72,7 @@ class FolderTestPressetCreation(FolderTestPresetExtras):
                     raise ex
                 continue
 
-            self._execute_loop_creating_expected(path)
+            self._execute_loop_creating_expected(path,reconstruct)
 
     def generate_ouptut(self,reconstruct:bool=False):
         self._create_copy_side_effect_folder()

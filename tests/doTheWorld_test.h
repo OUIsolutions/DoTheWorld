@@ -4472,9 +4472,36 @@ void DtwLocker_free(struct DtwLocker *self);
 
 
 
+enum {
+
+    JSON_TRANSACTION_WRONG_TYPE,
+    JSON_TRANSACTION_NOT_PRESENT_VALUE,
+    JSON_TRANSACTION_INVALID_ACTION
+};
+typedef struct DtwJsonTransactionError{
+    int code;
+    char *mensage;
+    char *path;
+    void (*represent)(struct DtwJsonTransactionError *self);
+    void (*prepend_path)(struct DtwJsonTransactionError *self,char *path);
+    void (*free)(struct DtwJsonTransactionError *self);
+
+}DtwJsonTransactionError;
+
+DtwJsonTransactionError * private_new_DtwJsonTransactionError( int code,const char *mensage,const  char *path);
+
+void DtwJsonTransactionError_represent(struct DtwJsonTransactionError *self);
+
+void DtwJsonTransactionError_prepend_path(struct DtwJsonTransactionError *self,char *path);
+
+void DtwJsonTransactionError_free(struct DtwJsonTransactionError *self);
+
+
 
 
 enum {
+    DTW_ACTION_FILE_NOT_FOUND,
+    DTW_ACTION_ITS_NOT_JSON,
     DTW_ACTION_WRITE,
     DTW_ACTION_MOVE,
     DTW_ACTION_COPY,
@@ -4495,6 +4522,9 @@ typedef struct DtwActionTransaction{
 
 DtwActionTransaction *newDtwActionTransaction();
 
+DtwJsonTransactionError * private_dtw_validate_json_action_transaction(cJSON *json_obj);
+
+
 DtwActionTransaction * private_DtwActionTransaction_parse_json_object(cJSON *json_obj);
 
 
@@ -4506,9 +4536,11 @@ DtwActionTransaction * DtwActionTransaction_copy_any(const char *source, const c
 
 DtwActionTransaction * DtwActionTransaction_delete_any(const char *source);
 
-short DtwActionTransaction_convert_action_in_integer(char *action);
+short DtwActionTransaction_convert_action_to_integer(char *action);
 
-char * DtwActionTransaction_convert_action_in_string(int action);
+
+char * DtwActionTransaction_convert_action_to_string(int action);
+
 
 cJSON *  private_DtwActionTransaction_create_json_object(DtwActionTransaction* self);
 
@@ -4545,6 +4577,11 @@ typedef struct DtwTransaction{
 DtwTransaction * newDtwTransaction();
 
 DtwTransaction * newDtwTransaction_from_json(cJSON *json_entry);
+
+DtwJsonTransactionError * dtw_validate_json_transaction(cJSON *json_entry);
+
+DtwJsonTransactionError * dtw_validate_json_transaction_file(const char *filename);
+
 
 DtwTransaction * newDtwTransaction_from_json_file(const char *filename);
 
@@ -7201,6 +7238,60 @@ void DtwLocker_free(struct DtwLocker *self){
 
 
 
+
+
+
+DtwJsonTransactionError * private_new_DtwJsonTransactionError( int code,const char *mensage,const  char *path){
+    DtwJsonTransactionError *self = (DtwJsonTransactionError*) malloc(sizeof(DtwJsonTransactionError));
+    self->code  = code;
+    self->mensage = strdup(mensage);
+    self->path = NULL;
+    if(path){
+        self->path = strdup(path);
+    }
+    self->represent = DtwJsonTransactionError_represent;
+    self->prepend_path = DtwJsonTransactionError_prepend_path;
+    self->free = DtwJsonTransactionError_free;
+    return self;
+}
+
+void DtwJsonTransactionError_represent(struct DtwJsonTransactionError *self){
+    printf("code: %d\n",self->code);
+    printf("mensage:%s\n",self->mensage);
+    if(self->path){
+        printf("path: %s",self->path);
+    }
+}
+
+void DtwJsonTransactionError_prepend_path(struct DtwJsonTransactionError *self,char *path){
+    if(self->path){
+
+        char *new_path = (char*)calloc(sizeof (char), strlen(self->path) + strlen(path) + 2);
+
+        sprintf(new_path,"%s%s",path,self->path);
+
+        free(self->path);
+        self->path = new_path;
+        return;
+    }
+    self->path = strdup(path);
+}
+
+
+void DtwJsonTransactionError_free(struct DtwJsonTransactionError *self){
+    free(self->mensage);
+    if(self->path){
+        free(self->path);
+    }
+    free(self);
+
+}
+
+
+
+
+
+
 DtwActionTransaction * newDtwActionTransaction(){
     DtwActionTransaction *self = (DtwActionTransaction*) malloc(sizeof (DtwActionTransaction));
     *self= (DtwActionTransaction){0};
@@ -7293,7 +7384,7 @@ void DtwActionTransaction_free(DtwActionTransaction* self){
 
 
 
-short DtwActionTransaction_convert_action_in_integer(char *action){
+short DtwActionTransaction_convert_action_to_integer(char *action){
     if(strcmp(action,"write") == 0){
         return DTW_ACTION_WRITE;
     }
@@ -7309,10 +7400,11 @@ short DtwActionTransaction_convert_action_in_integer(char *action){
     if(strcmp(action,"delete") == 0){
         return DTW_ACTION_DELETE;
     }
+    return -1;
 
 }
 
-char * DtwActionTransaction_convert_action_in_string(int action){
+char * DtwActionTransaction_convert_action_to_string(int action){
     if(action == DTW_ACTION_WRITE){
         return "write";
     }
@@ -7328,9 +7420,164 @@ char * DtwActionTransaction_convert_action_in_string(int action){
     }
 
 }
+
+DtwJsonTransactionError * private_dtw_validate_json_action_transaction(cJSON *json_obj){
+
+    if(json_obj->type != cJSON_Object ){
+        return private_new_DtwJsonTransactionError(
+                JSON_TRANSACTION_WRONG_TYPE,
+                "the action object its not an object",
+                NULL
+        );
+    }
+
+    cJSON *action = cJSON_GetObjectItem(json_obj,"action");
+
+    if(!action){
+        return private_new_DtwJsonTransactionError(
+                JSON_TRANSACTION_NOT_PRESENT_VALUE,
+                "the action is not present",
+                "[\"action\"]"
+        );
+    }
+
+    if(action->type != cJSON_String){
+        return private_new_DtwJsonTransactionError(
+                JSON_TRANSACTION_WRONG_TYPE,
+                "the action is not an string",
+                "[\"action\"]"
+        );
+    }
+
+
+    int converted_action = DtwActionTransaction_convert_action_to_integer(action->valuestring);
+
+    if(converted_action == -1){
+
+        char *formated_mensage = (char*)calloc(sizeof (char),strlen(action->valuestring) + 30);
+        sprintf(formated_mensage,"the action: %s its not valid",action->valuestring);
+        DtwJsonTransactionError  *error = private_new_DtwJsonTransactionError(
+                JSON_TRANSACTION_INVALID_ACTION,
+                formated_mensage,
+                "[\"action\"]"
+        );
+        free(formated_mensage);
+        return error;
+    }
+
+    if(converted_action == DTW_ACTION_WRITE){
+        cJSON  *content = cJSON_GetObjectItem(json_obj,"content");
+        if(!content){
+            return private_new_DtwJsonTransactionError(
+                    JSON_TRANSACTION_NOT_PRESENT_VALUE,
+                    "the content is not present",
+                    "[\"content\"]"
+            );
+        }
+        if(content->type != cJSON_String){
+            return private_new_DtwJsonTransactionError(
+                    JSON_TRANSACTION_WRONG_TYPE,
+                    "the content is not an string",
+                    "[\"content\"]"
+            );
+        }
+        cJSON *is_binary = cJSON_GetObjectItem(json_obj,"is binary");
+        if(is_binary){
+            if(!cJSON_IsBool(is_binary)){
+                return private_new_DtwJsonTransactionError(
+                        JSON_TRANSACTION_WRONG_TYPE,
+                        "the is binary is not an bool",
+                        "[\"is binary\"]"
+                );
+            }
+        }
+
+    }
+
+
+
+
+    cJSON *source = cJSON_GetObjectItem(json_obj,"source");
+    if(!source){
+        return private_new_DtwJsonTransactionError(
+                JSON_TRANSACTION_NOT_PRESENT_VALUE,
+                "the source is not present",
+                "[\"source\"]"
+        );
+    }
+
+    if(source->type != cJSON_String){
+        return private_new_DtwJsonTransactionError(
+                JSON_TRANSACTION_WRONG_TYPE,
+                "the source is not an string",
+                "[\"source\"]"
+        );
+    }
+
+    if(converted_action == DTW_ACTION_MOVE || converted_action == DTW_ACTION_COPY){
+        cJSON *dest = cJSON_GetObjectItem(json_obj,"dest");
+
+        if(!dest){
+            return private_new_DtwJsonTransactionError(
+                    JSON_TRANSACTION_NOT_PRESENT_VALUE,
+                    "the dest is not present",
+                    "[\"dest\"]"
+            );
+        }
+        if(dest->type != cJSON_String){
+            return private_new_DtwJsonTransactionError(
+                    JSON_TRANSACTION_WRONG_TYPE,
+                    "the dest is not an string",
+                    "[\"dest\"]"
+            );
+        }
+    }
+    return NULL;
+
+}
+
+
+DtwActionTransaction * private_DtwActionTransaction_parse_json_object(cJSON *json_obj){
+    DtwActionTransaction  *self = newDtwActionTransaction();
+
+    char *action = cJSON_GetObjectItem(json_obj,"action")->valuestring;
+    self->action_type  = DtwActionTransaction_convert_action_to_integer(action);
+
+    char *source = cJSON_GetObjectItem(json_obj,"source")->valuestring;
+    self->source = strdup(source);
+
+    if(self->action_type == DTW_ACTION_DELETE){
+        return self;
+    }
+
+    if(self->action_type == DTW_ACTION_WRITE){
+        cJSON *is_binary = cJSON_GetObjectItem(json_obj,"is binary");
+
+        if(is_binary){
+            if(is_binary->valueint){
+                self->is_binary= true;
+            }
+        }
+
+        char *content = cJSON_GetObjectItem(json_obj,"content")->valuestring;
+        if(self->is_binary){
+            self->content = dtw_base64_decode(content,&self->size);
+        }
+        else{
+            self->content =(unsigned char*)strdup(content);
+            self->size =(long)strlen(content);
+        }
+
+        return self;
+    }
+    char *dest  = cJSON_GetObjectItem(json_obj,"dest")->valuestring;
+    self->dest = strdup(dest);
+    return self;
+}
+
 cJSON *  private_DtwActionTransaction_create_json_object(DtwActionTransaction* self){
     cJSON * json_object = cJSON_CreateObject();
-    cJSON_AddStringToObject(json_object,"action",DtwActionTransaction_convert_action_in_string(self->action_type));
+    cJSON_AddStringToObject(json_object,"action",DtwActionTransaction_convert_action_to_string(self->action_type));
 
     cJSON_AddStringToObject(json_object,"source",self->source);
     if(self->action_type ==DTW_ACTION_WRITE){
@@ -7351,48 +7598,11 @@ cJSON *  private_DtwActionTransaction_create_json_object(DtwActionTransaction* s
     return json_object;
 }
 
-DtwActionTransaction * private_DtwActionTransaction_parse_json_object(cJSON *json_obj){
-    DtwActionTransaction  *self = newDtwActionTransaction();
-
-    char *action = cJSON_GetObjectItem(json_obj,"action")->valuestring;
-    self->action_type  = DtwActionTransaction_convert_action_in_integer(action);
-
-    char *source = cJSON_GetObjectItem(json_obj,"source")->valuestring;
-    self->source = strdup(source);
-
-    if(self->action_type == DTW_ACTION_DELETE){
-        return self;
-    }
-
-    if(self->action_type == DTW_ACTION_WRITE){
-        cJSON *is_binary = cJSON_GetObjectItem(json_obj,"is binary");
-
-        if(is_binary){
-           if(is_binary->valueint){
-               self->is_binary= true;
-           }
-        }
-
-        char *content = cJSON_GetObjectItem(json_obj,"content")->valuestring;
-        if(self->is_binary){
-            self->content = dtw_base64_decode(content,&self->size);
-        }
-        else{
-            self->content =(unsigned char*)strdup(content);
-            self->size =(long)strlen(content);
-        }
-
-        return self;
-    }
-    char *dest  = cJSON_GetObjectItem(json_obj,"dest")->valuestring;
-    self->dest = strdup(dest);
-    return self;
-}
 
 
 void DtwActionTransaction_represent(DtwActionTransaction* self){
 
-    printf("\taction: %s\n", DtwActionTransaction_convert_action_in_string(self->action_type));
+    printf("\taction: %s\n", DtwActionTransaction_convert_action_to_string(self->action_type));
     printf("\tsource:%s\n",self->source);
     if(self->action_type == DTW_ACTION_WRITE){
 
@@ -7496,6 +7706,69 @@ void DtwTransaction_free(struct DtwTransaction *self){
 
 
 
+
+DtwJsonTransactionError * dtw_validate_json_transaction(cJSON *json_entry){
+    if(json_entry->type != cJSON_Array){
+        return private_new_DtwJsonTransactionError(
+                JSON_TRANSACTION_WRONG_TYPE,
+                "the initial value its not an array",
+                NULL
+                );
+    }
+    long  element_size = cJSON_GetArraySize(json_entry);
+    for(long  i = 0; i <element_size; i++){
+
+        cJSON *current_obj = cJSON_GetArrayItem(json_entry,i);
+
+        DtwJsonTransactionError  *current_error = private_dtw_validate_json_action_transaction(current_obj);
+        if(current_error){
+            char formated_path[20] = {0};
+            sprintf(formated_path,"[%ld]",i);
+            current_error->prepend_path(current_error,formated_path);
+            return current_error;
+        }
+
+    }
+
+    return NULL;
+}
+
+DtwJsonTransactionError * dtw_validate_json_transaction_file(const char *filename){
+    char *content = dtw_load_string_file_content(filename);
+    if(!content){
+        char *formated_mensage = calloc(sizeof (char), strlen(filename) + 50);
+        sprintf(formated_mensage, "file: %s not found",filename);
+        DtwJsonTransactionError  *error = private_new_DtwJsonTransactionError(
+                DTW_ACTION_FILE_NOT_FOUND,
+                formated_mensage,
+                NULL
+                );
+        free(formated_mensage);
+        return error;
+    }
+    cJSON *parsed = cJSON_Parse(content);
+    if(!parsed){
+        char *formated_mensage = calloc(sizeof (char), strlen(filename) + 50);
+        sprintf(formated_mensage, "file: %s its not an valid json",filename);
+        DtwJsonTransactionError  *error = private_new_DtwJsonTransactionError(
+                DTW_ACTION_ITS_NOT_JSON,
+                formated_mensage,
+                NULL
+        );
+        free(formated_mensage);
+        free(content);
+        return error;
+    }
+    DtwJsonTransactionError *generated_error = dtw_validate_json_transaction(parsed);
+    if(generated_error){
+        free(content);
+        return generated_error;
+    }
+    free(content);
+    return NULL;
+}
+
+
 DtwTransaction * newDtwTransaction_from_json(cJSON *json_entry){
     DtwTransaction *self = newDtwTransaction();
     long size = cJSON_GetArraySize(json_entry);
@@ -7508,15 +7781,29 @@ DtwTransaction * newDtwTransaction_from_json(cJSON *json_entry){
 }
 
 
+
 DtwTransaction * newDtwTransaction_from_json_file(const char *filename){
     char *content = dtw_load_string_file_content(filename);
+    if(!content){
+        return NULL;
+    }
+
     cJSON  *element = cJSON_Parse(content);
     free(content);
     if(!element){
         return NULL;
     }
+
+    DtwJsonTransactionError *error = dtw_validate_json_transaction(element);
+    if(error){
+        error->free(error);
+        return NULL;
+    }
+
+
     DtwTransaction  *self = newDtwTransaction_from_json(element);
     cJSON_Delete(element);
+
     return self;
 }
 
