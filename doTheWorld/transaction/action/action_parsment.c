@@ -125,8 +125,26 @@ DtwJsonTransactionError * private_dtw_validate_json_action_transaction(cJSON *js
         );
     }
 
+    if(converted_action == DTW_ACTION_MOVE || converted_action == DTW_ACTION_COPY){
+        cJSON *dest = cJSON_GetObjectItem(json_obj,"dest");
 
-
+        if(!dest){
+            return private_new_DtwJsonTransactionError(
+                    JSON_TRANSACTION_NOT_PRESENT_VALUE,
+                    "the dest is not present",
+                    "[\"dest\"]"
+            );
+        }
+        if(dest->type != cJSON_String){
+            return private_new_DtwJsonTransactionError(
+                    JSON_TRANSACTION_WRONG_TYPE,
+                    "the dest is not an string",
+                    "[\"dest\"]"
+            );
+        }
+    }
+    return NULL;
+    
 }
 
 
