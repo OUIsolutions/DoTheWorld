@@ -411,6 +411,24 @@ int main(int argc, char *argv[]){
 }
 ~~~
 
+## Transactions
+### Generating transaction
+with transactions you can make all modifications and executed or denny it one time,avoid nod
+wanted side effects
+<!--codeof:exemples/transaction/transaction_executiong.c-->
+
+### Dumping Transaction to to json
+You also can dump the transaction to an json file to store it 
+
+<!--codeof:exemples/transaction/transaction_dumping_to_json.c-->
+
+
+### Loading Transaction to json 
+
+<!--codeof:exemples/transaction/transaction_loading_from_json.c-->
+
+
+
 ## Trees and Tree Parts
 with tree concepts, you can manipulate files as trees, and implement IO modifications with atomic concepts 
 ### Loading An TreePart 
