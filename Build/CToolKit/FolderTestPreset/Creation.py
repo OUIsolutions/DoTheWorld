@@ -12,7 +12,7 @@ from ..comand_line_functions import execute_test_for_file
 
 class FolderTestPressetCreation(FolderTestPresetExtras):
 
-    def _execute_test_presset_creating_output(self, folder: str):
+    def _execute_test_presset_creating_output(self, folder: str,reconstruct:bool):
         self._rebase_side_effect_folder()
 
         execution_file = self._get_file_to_execute(folder)
@@ -30,14 +30,13 @@ class FolderTestPressetCreation(FolderTestPresetExtras):
 
         modified = False
 
-
         if self._side_effect_folder_changed():
             #verify if there is no test presseted
-            if not isdir(f'{folder}/side_effect'):
+            if not isdir(f'{folder}/side_effect') or reconstruct: 
                 copytree(self._side_effect_folder, f'{folder}/side_effect')
                 modified = True
 
-        if expected_file is None:
+        if expected_file is None or reconstruct:
             if isinstance(generated_result, ComandLineExecution):
                 output = generated_result.output
             else:
@@ -54,7 +53,8 @@ class FolderTestPressetCreation(FolderTestPresetExtras):
             self._print_if_setted_to_print_creation(execution_file, False)
 
 
-    def _execute_loop_creating_expected(self, folder: str):
+
+    def _execute_loop_creating_expected(self, folder: str,reconstruct:bool):
         self._print_if_seetted_to_print_folder(folder)
 
         elements: List[str] = listdir(folder)
@@ -66,7 +66,7 @@ class FolderTestPressetCreation(FolderTestPresetExtras):
 
             if e.startswith('T_') :
                 try:
-                    self._execute_test_presset_creating_output(path)
+                    self._execute_test_presset_creating_output(path,reconstruct)
                 except Exception as ex:
                     self._print_if_setted_to_print_test(e, False)
                     raise ex
@@ -74,10 +74,10 @@ class FolderTestPressetCreation(FolderTestPresetExtras):
 
             self._execute_loop_creating_expected(path)
 
-    def generate_ouptut(self):
+    def generate_ouptut(self,reconstruct:bool=False):
         self._create_copy_side_effect_folder()
         try:
-            self._execute_loop_creating_expected(self._folder)
+            self._execute_loop_creating_expected(self._folder,reconstruct)
         except Exception as e:
             self._rebase_side_effect_folder()
             rmtree('side_effect_copy', ignore_errors=True)
