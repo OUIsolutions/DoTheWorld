@@ -80,6 +80,13 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
+
+### Reading Double bools and Integers
+you also can direclty load all types from an file  with numerical ios 
+<!--codeof:exemples/numerical_io/loading_data.c-->
+
+
+
 ### Writing Strings
 to write strings in text files is very simple, just call the function **dtw_write_string_file_content**
 (Note that the target directory does not need to exist, if it does not exist it will be created automatically)
@@ -121,6 +128,14 @@ free(content);
   return 0;
 }
 ~~~
+
+
+### Writing Double , bool and Integers
+You also can write any type direclty to an file 
+<!--codeof:exemples/numerical_io/writing_data.c-->
+
+
+
 ### Creating Dirs
 If you want to create dirs you can call the function **dtw_create_dir_recursively**
 passing the folder you want to create,dont wory about if the previews path dont exist 
@@ -468,6 +483,9 @@ int main(){
     t->free(t);
 }
 ~~~
+
+
+
 with tree concepts, you can manipulate files as trees, and implement IO modifications with atomic concepts 
 ### Loading An TreePart 
 <!--codeof:exemples/tree_parts/loading_tree_part.c-->
