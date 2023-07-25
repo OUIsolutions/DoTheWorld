@@ -27,6 +27,8 @@ unsigned char *dtw_load_binary_content(const char * path,long *size);
 
 bool dtw_write_any_content(const char *path,unsigned  char *content,long size);
 bool dtw_write_string_file_content(const char *path,const char *content);
+
+
 int dtw_entity_type(const char *path);
 
 
