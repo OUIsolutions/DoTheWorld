@@ -36,9 +36,12 @@ bool dtw_load_bool_file_content(const char * path){
     if(!data){
         return false;
     }
+
     if(strcmp(data,"true") == 0 || strcmp(data,"t") == 0){
+        free(data);
         return true;
     }
+    free(data);
     return false;
 }
 
