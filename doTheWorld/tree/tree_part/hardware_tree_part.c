@@ -18,7 +18,7 @@ void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self){
     self->content = dtw_load_any_content(path,&size,&is_binary);
     
     if(!self->content){
-        self->content = strdup("");
+        self->content = (unsigned char *)strdup("");
     }    
 
     self->content_exist_in_memory = true;

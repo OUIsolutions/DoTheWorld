@@ -30,7 +30,7 @@ DtwJsonTransactionError * dtw_validate_json_transaction(cJSON *json_entry){
 DtwJsonTransactionError * dtw_validate_json_transaction_file(const char *filename){
     char *content = dtw_load_string_file_content(filename);
     if(!content){
-        char *formated_mensage = calloc(sizeof (char), strlen(filename) + 50);
+        char *formated_mensage = (char*)calloc(sizeof (char), strlen(filename) + 50);
         sprintf(formated_mensage, "file: %s not found",filename);
         DtwJsonTransactionError  *error = private_new_DtwJsonTransactionError(
                 DTW_ACTION_FILE_NOT_FOUND,
@@ -42,7 +42,7 @@ DtwJsonTransactionError * dtw_validate_json_transaction_file(const char *filenam
     }
     cJSON *parsed = cJSON_Parse(content);
     if(!parsed){
-        char *formated_mensage = calloc(sizeof (char), strlen(filename) + 50);
+        char *formated_mensage = (char*)calloc(sizeof (char), strlen(filename) + 50);
         sprintf(formated_mensage, "file: %s its not an valid json",filename);
         DtwJsonTransactionError  *error = private_new_DtwJsonTransactionError(
                 DTW_ACTION_ITS_NOT_JSON,

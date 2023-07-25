@@ -40,7 +40,7 @@ DtwActionTransaction * DtwActionTransaction_delete_any(const char *source);
 short DtwActionTransaction_convert_action_to_integer(char *action);
 
 
-char * DtwActionTransaction_convert_action_to_string(int action);
+const char * DtwActionTransaction_convert_action_to_string(int action);
 
 
 cJSON *  private_DtwActionTransaction_create_json_object(DtwActionTransaction* self);

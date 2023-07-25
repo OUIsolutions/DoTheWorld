@@ -19,7 +19,7 @@ short DtwActionTransaction_convert_action_to_integer(char *action){
 
 }
 
-char * DtwActionTransaction_convert_action_to_string(int action){
+const char * DtwActionTransaction_convert_action_to_string(int action){
     if(action == DTW_ACTION_WRITE){
         return "write";
     }
@@ -33,7 +33,7 @@ char * DtwActionTransaction_convert_action_to_string(int action){
     if(action == DTW_ACTION_DELETE){
         return "delete";
     }
-
+    return NULL;
 }
 
 DtwJsonTransactionError * private_dtw_validate_json_action_transaction(cJSON *json_obj){

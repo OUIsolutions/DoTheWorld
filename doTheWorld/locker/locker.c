@@ -27,7 +27,7 @@ unsigned long long int getMicroseconds() {
 
 void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 
-    char  *formated_path = calloc(sizeof(char),strlen(element)+10);
+    char  *formated_path = (char*)calloc(sizeof(char),strlen(element)+10);
     sprintf(formated_path,"%s.lock",element);
 
     char process_string[20] = {0};
