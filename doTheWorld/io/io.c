@@ -222,7 +222,7 @@ int dtw_complex_entity_type(const char *path){
     if(entity != DTW_FILE_TYPE){
         return entity;
     }
-    int size;
+    long size;
     bool is_binary;
     char *data = dtw_load_any_content(path,&size,&is_binary);
     if(is_binary){
@@ -232,8 +232,8 @@ int dtw_complex_entity_type(const char *path){
 
     if(
        strcmp(data,"t") == 0 ||
-       strcmp(data,"true") == 0 ||
        strcmp(data,"f") == 0 ||
+       strcmp(data,"true") == 0 ||
        strcmp(data,"false") == 0
        ){
         free(data);
@@ -246,16 +246,17 @@ int dtw_complex_entity_type(const char *path){
         free(data);
         return DTW_COMPLEX_STRING_TYPE;
     }
-    int data_size = (int)strlen(data);
-    for(int i = 0; i < data_size; i++){
+    for(int i = 0; i < size; i++){
         char current = data[i];
         if(current == '.'){
             free(data);
             return DTW_COMPLEX_DOUBLE_TYPE;
         }
     }
+    free(data);
     return DTW_COMPLEX_LONG_TYPE;
 }
+
 
 char *dtw_convert_entity(int entity_type){
     if(entity_type == DTW_FILE_TYPE){
@@ -282,7 +283,7 @@ char *dtw_convert_entity(int entity_type){
     if(entity_type == DTW_COMPLEX_DOUBLE_TYPE){
         return "double";
     }
-    
+
 }
 
 bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
