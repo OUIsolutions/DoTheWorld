@@ -24,14 +24,12 @@ double dtw_load_double_file_content(const char * path){
 bool dtw_load_bool_file_content(const char * path){
     char *data = dtw_load_string_file_content(data);
     if(!data){
-        return -1;
+        return false;
     }
     if(strcmp(data,"true") == 0 || strcmp(data,"t") == 0){
         return true;
     }
-    if(strcmp(data,"false") == 0 || strcmp(data,"f") == 0){
-        return false;
-    }
+    return false;
 }
 
 
