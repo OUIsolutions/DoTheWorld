@@ -1,6 +1,7 @@
  
 tests/target/a.txt
 tests/target/blob.png
+tests/target/numerical
 tests/target/sub_folder
 tests/target/transaction.json
 tests/target/wrong_transaction.json

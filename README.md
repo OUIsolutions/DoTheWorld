@@ -80,7 +80,57 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
-### Writing Strings
+
+### Reading Double bools and Integers
+you also can direclty load all types from an file  with numerical ios 
+<!--codeof:exemples/numerical_io/loading_data.c-->
+~~~c
+
+#include "doTheWorld.h"
+
+
+
+
+int main (){
+
+
+    double double_txt = dtw_load_double_file_content("tests/target/numerical/double.txt");
+    printf("double.txt:%lf\n",double_txt);
+
+    double double_that_not_exist = dtw_load_double_file_content("nothing.txt");
+    printf("double that not exist:%lf\n",double_that_not_exist);
+
+
+    long integer_txt = dtw_load_long_file_content("tests/target/numerical/integer.txt");
+    printf("integer.txt:%ld\n",integer_txt);
+
+    
+    long integer_that_not_exist = dtw_load_long_file_content("nothing.txt");
+    printf("integer that not exist:%ld\n",integer_that_not_exist);
+
+    //false_small.txt = "f"
+    bool false_small = dtw_load_bool_file_content("tests/target/numerical/false_small.txt"); 
+    printf("false_small.txt:%d\n",false_small);
+
+    //false_normal.txt = "false"
+    bool false_normal = dtw_load_bool_file_content("tests/target/numerical/false_normal.txt");
+    printf("false_normal.txt:%d\n",false_normal);
+
+    //true_small.txt = "t"
+    bool true_small = dtw_load_bool_file_content("tests/target/numerical/true_small.txt"); 
+    printf("true_small.txt:%d\n",true_small);
+    
+    //true normal.txt = "true"
+    bool true_normal = dtw_load_bool_file_content("tests/target/numerical/true_normal.txt");
+    printf("true_normal.txt:%d\n",true_normal);
+
+    bool bool_that_not_exist = dtw_load_bool_file_content("nothing.txt");
+    printf("false that not exist:%d\n",bool_that_not_exist);
+
+    return 0;
+
+}
+~~~
 to write strings in text files is very simple, just call the function **dtw_write_string_file_content**
 (Note that the target directory does not need to exist, if it does not exist it will be created automatically)
 
@@ -121,7 +171,30 @@ free(content);
   return 0;
 }
 ~~~
-### Creating Dirs
+
+
+### Writing Double , bool and Integers
+You also can write any type direclty to an file 
+<!--codeof:exemples/numerical_io/writing_data.c-->
+~~~c
+
+#include "doTheWorld.h"
+
+
+
+
+int main (){
+
+
+    dtw_write_double_file_content("tests/target/numerical2/double.txt",25.4);
+    dtw_write_long_file_content("tests/target/numerical2/long.txt",12);
+    dtw_write_bool_file_content("tests/target/numerical2/bool.txt",true);
+
+
+    return 0;
+
+}
+~~~
 If you want to create dirs you can call the function **dtw_create_dir_recursively**
 passing the folder you want to create,dont wory about if the previews path dont exist 
 it will create till reachs the target folder
@@ -468,6 +541,9 @@ int main(){
     t->free(t);
 }
 ~~~
+
+
+
 with tree concepts, you can manipulate files as trees, and implement IO modifications with atomic concepts 
 ### Loading An TreePart 
 <!--codeof:exemples/tree_parts/loading_tree_part.c-->

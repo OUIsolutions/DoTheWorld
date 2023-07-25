@@ -1,3 +1,4 @@
  
 tests/target/
+tests/target/numerical/
 tests/target/sub_folder/

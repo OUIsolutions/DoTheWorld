@@ -4010,7 +4010,16 @@ char *private_dtw_change_beginning_of_string(const char *target,int start_elemen
 #define DTW_FOLDER_TYPE 2
 #define DTW_ALL_TYPE 3
 #define DTW_NOT_FOUND -1
-#define DTW_MERGE true 
+
+#define DTW_COMPLEX_BINARY 10
+#define DTW_COMPLEX_STRING_TYPE 11
+#define DTW_COMPLEX_LONG_TYPE 12
+#define DTW_COMPLEX_DOUBLE_TYPE 13
+#define DTW_COMPLEX_BOOL_TYPE 14
+
+#define DTW_MERGE true
+
+
 #define DTW_NOT_MERGE false
 #ifdef __linux__
 #define dtw_create_dir(path) mkdir(path,0777)
@@ -4034,13 +4043,41 @@ unsigned char *dtw_load_binary_content(const char * path,long *size);
 
 bool dtw_write_any_content(const char *path,unsigned  char *content,long size);
 bool dtw_write_string_file_content(const char *path,const char *content);
+
+
+
 int dtw_entity_type(const char *path);
+
+int dtw_complex_entity_type(const char *path);
+
+char *dtw_convert_entity(int entity_type);
 
 
 bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge);
 
 
 bool dtw_move_any(const char* src_path, const char* dest_path,bool merge);
+
+
+
+
+
+long dtw_load_long_file_content(const char * path);
+
+double dtw_load_double_file_content(const char * path);
+
+bool dtw_load_bool_file_content(const char * path);
+
+char *dtw_convert_entity_type_num(const char *path);
+
+
+void dtw_write_long_file_content(const char *path, long value);
+
+void dtw_write_bool_file_content(const char *path, bool value);
+
+void dtw_write_double_file_content(const char *path,double value);
+
+
 
 #define DTW_CONCAT_PATH true
 #define DTW_NOT_CONCAT_PATH false
@@ -5183,6 +5220,76 @@ int dtw_entity_type(const char *path){
 
 }
 
+
+int dtw_complex_entity_type(const char *path){
+    int entity = dtw_entity_type(path);
+    if(entity != DTW_FILE_TYPE){
+        return entity;
+    }
+    long size;
+    bool is_binary;
+    char *data = dtw_load_any_content(path,&size,&is_binary);
+    if(is_binary){
+        free(data);
+        return DTW_COMPLEX_BINARY;
+    }
+
+    if(
+       strcmp(data,"t") == 0 ||
+       strcmp(data,"f") == 0 ||
+       strcmp(data,"true") == 0 ||
+       strcmp(data,"false") == 0
+       ){
+        free(data);
+        return DTW_COMPLEX_BOOL_TYPE;
+    }
+
+    double value;
+    int result = sscanf(data,"%lf",&value);
+    if(result == 0){
+        free(data);
+        return DTW_COMPLEX_STRING_TYPE;
+    }
+    for(int i = 0; i < size; i++){
+        char current = data[i];
+        if(current == '.'){
+            free(data);
+            return DTW_COMPLEX_DOUBLE_TYPE;
+        }
+    }
+    free(data);
+    return DTW_COMPLEX_LONG_TYPE;
+}
+
+
+char *dtw_convert_entity(int entity_type){
+    if(entity_type == DTW_FILE_TYPE){
+        return "file";
+    }
+    if(entity_type == DTW_FOLDER_TYPE){
+        return "folder";
+    }
+    if(entity_type == DTW_NOT_FOUND){
+        return "null";
+    }
+    if(entity_type == DTW_COMPLEX_BINARY){
+        return "binary";
+    }
+    if(entity_type == DTW_COMPLEX_STRING_TYPE){
+        return "string";
+    }
+    if(entity_type == DTW_COMPLEX_BOOL_TYPE){
+        return "bool";
+    }
+    if(entity_type == DTW_COMPLEX_LONG_TYPE){
+        return "long";
+    }
+    if(entity_type == DTW_COMPLEX_DOUBLE_TYPE){
+        return "double";
+    }
+
+}
+
 bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
 
     //verify if is an file
@@ -5246,6 +5353,81 @@ bool dtw_move_any(const char* src_path, const char* dest_path,bool merge) {
     dtw_remove_any(src_path);
     return result;
 }
+
+
+
+
+
+long dtw_load_long_file_content(const char * path){
+    char *data = dtw_load_string_file_content(path);
+    if(!data){
+        return -1;
+    }
+    long value;
+    int result = sscanf(data,"%ld",&value);
+    free(data);
+    if(result){
+        return value;
+    }
+    return -1;
+
+}
+
+double dtw_load_double_file_content(const char * path){
+    char *data = dtw_load_string_file_content(path);
+    if(!data){
+        return -1;
+    }
+    double value;
+    int result = sscanf(data,"%lf",&value);
+    free(data);
+    if(result){
+        return value;
+    }
+    return -1;
+}
+
+
+bool dtw_load_bool_file_content(const char * path){
+    char *data = dtw_load_string_file_content(path);
+    if(!data){
+        return false;
+    }
+
+    if(strcmp(data,"true") == 0 || strcmp(data,"t") == 0){
+        free(data);
+        return true;
+    }
+    free(data);
+    return false;
+}
+
+
+
+void dtw_write_long_file_content(const char *path, long value){
+    char result[30] ={0};
+    sprintf(result,"%ld",value);
+    dtw_write_string_file_content(path,result);
+}
+
+
+void dtw_write_double_file_content(const char *path,double value){
+    char result[30] ={0};
+    sprintf(result,"%lf",value);
+    dtw_write_string_file_content(path,result);
+}
+
+
+void dtw_write_bool_file_content(const char *path, bool value){
+    if(value){
+        dtw_write_string_file_content(path,"t");
+    }
+    else{
+        dtw_write_string_file_content(path,"f");
+    }
+}
+
+
 
 
 
