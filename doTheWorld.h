@@ -5359,7 +5359,7 @@ bool dtw_move_any(const char* src_path, const char* dest_path,bool merge) {
 
 
 long dtw_load_long_file_content(const char * path){
-    char *data = dtw_load_string_file_content(data);
+    char *data = dtw_load_string_file_content(path);
     if(!data){
         return -1;
     }
@@ -5374,7 +5374,7 @@ long dtw_load_long_file_content(const char * path){
 }
 
 double dtw_load_double_file_content(const char * path){
-    char *data = dtw_load_string_file_content(data);
+    char *data = dtw_load_string_file_content(path);
     if(!data){
         return -1;
     }
@@ -5389,13 +5389,16 @@ double dtw_load_double_file_content(const char * path){
 
 
 bool dtw_load_bool_file_content(const char * path){
-    char *data = dtw_load_string_file_content(data);
+    char *data = dtw_load_string_file_content(path);
     if(!data){
         return false;
     }
+
     if(strcmp(data,"true") == 0 || strcmp(data,"t") == 0){
+        free(data);
         return true;
     }
+    free(data);
     return false;
 }
 

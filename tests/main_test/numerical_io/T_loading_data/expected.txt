@@ -1,0 +1,10 @@
+ 
+double.txt:1.300000
+double that not exist:-1.000000
+integer.txt:10
+integer that not exist:-1
+false_small.txt:0
+false_normal.txt:0
+true_small.txt:1
+true_normal.txt:1
+false that not exist:0
