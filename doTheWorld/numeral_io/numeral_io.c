@@ -6,9 +6,14 @@ long dtw_load_long_file_content(const char * path){
     if(!data){
         return -1;
     }
-    long result = -1;
-    sscanf(data,"ld", &result);
-    return result;
+    long value;
+    int result = sscanf(data,"%ld",&value);
+    free(data);
+    if(result){
+        return value;
+    }
+    return -1;
+
 }
 
 double dtw_load_double_file_content(const char * path){
@@ -16,10 +21,15 @@ double dtw_load_double_file_content(const char * path){
     if(!data){
         return -1;
     }
-    double result = -1;
-    sscanf(data,"%lf",&result);
-    return result;
+    double value;
+    int result = sscanf(data,"%lf",&value);
+    free(data);
+    if(result){
+        return value;
+    }
+    return -1;
 }
+
 
 bool dtw_load_bool_file_content(const char * path){
     char *data = dtw_load_string_file_content(data);
@@ -33,9 +43,6 @@ bool dtw_load_bool_file_content(const char * path){
 }
 
 
-int dtw_complex_entity_type(const char *path){
-    return dtw_entity_type(path);
-}
 
 void dtw_write_long_file_content(const char *path, long value){
     char result[30] ={0};

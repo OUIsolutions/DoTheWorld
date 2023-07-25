@@ -216,6 +216,49 @@ int dtw_entity_type(const char *path){
 
 }
 
+
+int dtw_complex_entity_type(const char *path){
+    int entity = dtw_entity_type(path);
+    if(entity != DTW_FILE_TYPE){
+        return entity;
+    }
+    int size;
+    bool is_binary;
+    char *data = dtw_load_any_content(path,&size,&is_binary);
+    if(is_binary){
+        free(data);
+        return DTW_COMPLEX_BINARY;
+    }
+
+    if(
+       strcmp(data,"t") == 0 ||
+       strcmp(data,"true") == 0 ||
+       strcmp(data,"f") == 0 ||
+       strcmp(data,"false") == 0
+       ){
+        free(data);
+        return DTW_COMPLEX_BOOL_TYPE;
+    }
+
+    double value;
+    int result = sscanf(data,"%lf",&value);
+    if(result == 0){
+        free(data);
+        return DTW_COMPLEX_STRING_TYPE;
+    }
+    int data_size = (int)strlen(data);
+    for(int i = 0; i < data_size; i++){
+        char current = data[i];
+        if(current == '.'){
+            free(data);
+            return DTW_COMPLEX_DOUBLE_TYPE;
+        }
+    }
+    return DTW_COMPLEX_LONG_TYPE;
+}
+
+
+
 bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
 
     //verify if is an file
