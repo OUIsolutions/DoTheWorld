@@ -53,9 +53,7 @@ void DtwActionTransaction_commit(DtwActionTransaction* self,const char *path){
 
     if(self->action_type == DTW_ACTION_WRITE){
 
-        if(dtw_entity_type(formated_source) == DTW_FOLDER_TYPE){
-            dtw_remove_any(formated_source);
-        }
+   
         dtw_write_any_content(formated_source,self->content,self->size);
         free(formated_source);
         return;

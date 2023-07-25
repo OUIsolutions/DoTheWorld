@@ -27,7 +27,7 @@ DtwJsonTransactionError *DtwDataBase_commit(struct DtwDataBase *self){
     sprintf(transaction_path,"%s/pending_transaction.json",self->path);
 
     DtwTransaction *pending_transaction = newDtwTransaction_from_json_file(transaction_path);
-    
+
 
 
 }
