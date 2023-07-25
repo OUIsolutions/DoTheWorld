@@ -25,7 +25,7 @@ test = ct.FolderTestPreset(
     side_effect_folder='tests/target',
     use_valgrind=use_valgrind
     )
-test.generate_ouptut(reconstruct=False)
+test.generate_ouptut(reconstruct=True)
 test.start_test()
 execute_locker_test()
 
