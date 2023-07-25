@@ -417,9 +417,7 @@ with transactions you can make all modifications and executed or denny it one ti
 wanted side effects
 <!--codeof:exemples/transaction/transaction_executiong.c-->
 ~~~c
-//
-// Created by mateusmoutinho on 24/07/23.
-//
+
 #include "doTheWorld.h"
 
 int main(){
@@ -437,9 +435,7 @@ You also can dump the transaction to an json file to store it
 
 <!--codeof:exemples/transaction/transaction_dumping_to_json.c-->
 ~~~c
-//
-// Created by mateusmoutinho on 24/07/23.
-//
+
 #include "doTheWorld.h"
 
 int main(){
@@ -456,9 +452,7 @@ int main(){
 
 <!--codeof:exemples/transaction/transaction_loading_from_json.c-->
 ~~~c
-//
-// Created by mateusmoutinho on 24/07/23.
-//
+
 #include "doTheWorld.h"
 
 int main(){

@@ -4539,7 +4539,7 @@ DtwActionTransaction * DtwActionTransaction_delete_any(const char *source);
 short DtwActionTransaction_convert_action_to_integer(char *action);
 
 
-char * DtwActionTransaction_convert_action_to_string(int action);
+const char * DtwActionTransaction_convert_action_to_string(int action);
 
 
 cJSON *  private_DtwActionTransaction_create_json_object(DtwActionTransaction* self);
@@ -6397,7 +6397,7 @@ void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self){
     self->content = dtw_load_any_content(path,&size,&is_binary);
     
     if(!self->content){
-        self->content = strdup("");
+        self->content = (unsigned char *)strdup("");
     }    
 
     self->content_exist_in_memory = true;
@@ -7142,7 +7142,7 @@ unsigned long long int getMicroseconds() {
 
 void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 
-    char  *formated_path = calloc(sizeof(char),strlen(element)+10);
+    char  *formated_path = (char*)calloc(sizeof(char),strlen(element)+10);
     sprintf(formated_path,"%s.lock",element);
 
     char process_string[20] = {0};
@@ -7404,7 +7404,7 @@ short DtwActionTransaction_convert_action_to_integer(char *action){
 
 }
 
-char * DtwActionTransaction_convert_action_to_string(int action){
+const char * DtwActionTransaction_convert_action_to_string(int action){
     if(action == DTW_ACTION_WRITE){
         return "write";
     }
@@ -7418,7 +7418,7 @@ char * DtwActionTransaction_convert_action_to_string(int action){
     if(action == DTW_ACTION_DELETE){
         return "delete";
     }
-
+    return NULL;
 }
 
 DtwJsonTransactionError * private_dtw_validate_json_action_transaction(cJSON *json_obj){
@@ -7737,7 +7737,7 @@ DtwJsonTransactionError * dtw_validate_json_transaction(cJSON *json_entry){
 DtwJsonTransactionError * dtw_validate_json_transaction_file(const char *filename){
     char *content = dtw_load_string_file_content(filename);
     if(!content){
-        char *formated_mensage = calloc(sizeof (char), strlen(filename) + 50);
+        char *formated_mensage = (char*)calloc(sizeof (char), strlen(filename) + 50);
         sprintf(formated_mensage, "file: %s not found",filename);
         DtwJsonTransactionError  *error = private_new_DtwJsonTransactionError(
                 DTW_ACTION_FILE_NOT_FOUND,
@@ -7749,7 +7749,7 @@ DtwJsonTransactionError * dtw_validate_json_transaction_file(const char *filenam
     }
     cJSON *parsed = cJSON_Parse(content);
     if(!parsed){
-        char *formated_mensage = calloc(sizeof (char), strlen(filename) + 50);
+        char *formated_mensage = (char*)calloc(sizeof (char), strlen(filename) + 50);
         sprintf(formated_mensage, "file: %s its not an valid json",filename);
         DtwJsonTransactionError  *error = private_new_DtwJsonTransactionError(
                 DTW_ACTION_ITS_NOT_JSON,
