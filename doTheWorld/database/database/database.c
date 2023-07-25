@@ -4,7 +4,7 @@ DtwDataBase * newDtwDataBase(const char *path){
     DtwDataBase *self = (DtwDataBase*) malloc(sizeof (DtwDataBase));
     self->path = strdup(path);
     self->data_path = dtw_concat_path(self->path,"data");
-    self->cursor = newDtwTransaction();
+    self->write_cursor = newDtwTransaction();
     self->locker = newDtwLocker();
     self->max_lock_time = 120;
     self->save_backup = true;
@@ -34,7 +34,7 @@ DtwJsonTransactionError *DtwDataBase_commit(struct DtwDataBase *self){
 void DtwDataBase_free(struct DtwDataBase *self){
     free(self->path);
     free(self->data_path);
-    self->cursor->free(self->cursor);
+    self->write_cursor->free(self->write_cursor);
     self->locker->free(self->locker);
     free(self);
 }

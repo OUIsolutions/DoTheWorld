@@ -37,7 +37,7 @@ class FolderTestPressetExecution(FolderTestPressetCreation):
         )
 
 
-        #verifying it there is an side effect folder
+        #verifying it there is an side effect object
         side_effect_test = f'{folder}/side_effect'
         if isdir(side_effect_test):
             are_equal = are_folders_equal(side_effect_test,self._side_effect_folder)
@@ -48,7 +48,7 @@ class FolderTestPressetExecution(FolderTestPressetCreation):
 
         else:
             if self._side_effect_folder_changed():
-                raise SideEffectFolderDiferent('there is no side effect folder passed')
+                raise SideEffectFolderDiferent('there is no side effect object passed')
 
 
         if isinstance(generated_result,ComandLineExecution):

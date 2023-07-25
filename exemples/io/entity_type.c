@@ -5,7 +5,7 @@
 
 void print_entity(const char *name , int type){
  if(type == DTW_FOLDER_TYPE){
-      printf("%s is an folder\n",name);
+      printf("%s is an object\n",name);
     }
     if(type == DTW_FILE_TYPE){
       printf("%s is an file\n",name);

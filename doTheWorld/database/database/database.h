@@ -2,7 +2,7 @@
 
 typedef struct DtwDataBase{
 
-    DtwTransaction *cursor;
+    DtwTransaction *write_cursor;
     DtwLocker *locker;
     char *path;
     char *data_path;

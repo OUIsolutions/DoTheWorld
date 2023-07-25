@@ -264,7 +264,7 @@ const char *dtw_convert_entity(int entity_type){
         return "file";
     }
     if(entity_type == DTW_FOLDER_TYPE){
-        return "folder";
+        return "object";
     }
     if(entity_type == DTW_NOT_FOUND){
         return "null";
