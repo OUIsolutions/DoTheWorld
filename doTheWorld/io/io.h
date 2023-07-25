@@ -43,7 +43,7 @@ int dtw_entity_type(const char *path);
 
 int dtw_complex_entity_type(const char *path);
 
-char *dtw_convert_entity(int entity_type);
+const char *dtw_convert_entity(int entity_type);
 
 
 bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge);

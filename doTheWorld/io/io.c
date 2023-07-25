@@ -224,7 +224,7 @@ int dtw_complex_entity_type(const char *path){
     }
     long size;
     bool is_binary;
-    char *data = dtw_load_any_content(path,&size,&is_binary);
+    char *data = (char*)dtw_load_any_content(path,&size,&is_binary);
     if(is_binary){
         free(data);
         return DTW_COMPLEX_BINARY;
@@ -240,6 +240,7 @@ int dtw_complex_entity_type(const char *path){
         return DTW_COMPLEX_BOOL_TYPE;
     }
 
+    
     double value;
     int result = sscanf(data,"%lf",&value);
     if(result == 0){
@@ -258,7 +259,7 @@ int dtw_complex_entity_type(const char *path){
 }
 
 
-char *dtw_convert_entity(int entity_type){
+const char *dtw_convert_entity(int entity_type){
     if(entity_type == DTW_FILE_TYPE){
         return "file";
     }
@@ -283,8 +284,8 @@ char *dtw_convert_entity(int entity_type){
     if(entity_type == DTW_COMPLEX_DOUBLE_TYPE){
         return "double";
     }
-
-}
+    return NULL;
+}   
 
 bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
 
