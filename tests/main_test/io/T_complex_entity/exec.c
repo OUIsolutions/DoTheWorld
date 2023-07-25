@@ -51,6 +51,6 @@ int main (){
     char *true_normal = dtw_convert_entity(
             dtw_complex_entity_type("tests/target/numerical/true_normal.txt")
     );
-    printf("false_normal.txt:%s\n",true_normal);
+    printf("true_normal.txt:%s\n",true_normal);
 
 }
