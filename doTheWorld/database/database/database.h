@@ -6,6 +6,7 @@ typedef struct DtwDataBase{
     DtwLocker *locker;
     char *path;
     char *data_path;
+    int max_lock_time;
     bool save_backup;
     bool use_unix_time;
 

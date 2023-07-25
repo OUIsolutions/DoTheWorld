@@ -6,6 +6,7 @@ DtwDataBase * newDtwDataBase(const char *path){
     self->data_path = dtw_concat_path(self->path,"data");
     self->cursor = newDtwTransaction();
     self->locker = newDtwLocker();
+    self->max_lock_time = 120;
     self->save_backup = true;
     self->use_unix_time = false;
 
@@ -18,7 +19,7 @@ DtwDataBase * newDtwDataBase(const char *path){
 
 DtwJsonTransactionError *DtwDataBase_reconstruct(struct DtwDataBase *self);
 DtwJsonTransactionError *DtwDataBase_commit(struct DtwDataBase *self){
-
+    self->locker->max_lock_time =self->max_lock_time;
     self->locker->lock(self->locker,self->path);
     long path_size = strlen(self->path);
     //fix pending transactions
@@ -26,7 +27,7 @@ DtwJsonTransactionError *DtwDataBase_commit(struct DtwDataBase *self){
     sprintf(transaction_path,"%s/pending_transaction.json",self->path);
 
     DtwTransaction *pending_transaction = newDtwTransaction_from_json_file(transaction_path);
-
+    
 
 
 }
