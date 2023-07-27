@@ -4651,6 +4651,34 @@ void DtwTransaction_free(struct DtwTransaction *self);
 
 
 
+typedef struct DtwDataBase{
+
+    DtwTransaction *write_cursor;
+    DtwLocker *locker;
+    char *path;
+    char *data_path;
+    int max_lock_time;
+    bool save_backup;
+    bool use_unix_time;
+
+    DtwJsonTransactionError *(*reconstruct)(struct DtwDataBase *self);
+    DtwJsonTransactionError *(*commit)(struct DtwDataBase *self);
+    void (*free)(struct DtwDataBase *self);
+}DtwDataBase;
+
+DtwDataBase * newDtwDataBase(const char *path);
+
+DtwJsonTransactionError *DtwDataBase_reconstruct(struct DtwDataBase *self);
+DtwJsonTransactionError *DtwDataBase_commit(struct DtwDataBase *self);
+void DtwDataBase_free(struct DtwDataBase *self);
+
+
+
+
+
+
+
+
 char *dtw_base64_encode(unsigned char *data, long input_length){
     size_t output_length = 4 * ((input_length + 2) / 3);
 
@@ -7527,6 +7555,8 @@ void DtwActionTransaction_commit(DtwActionTransaction* self,const char *path){
 
 
     if(self->action_type == DTW_ACTION_WRITE){
+
+   
         dtw_write_any_content(formated_source,self->content,self->size);
         free(formated_source);
         return;
@@ -8022,6 +8052,51 @@ void DtwTransaction_represent(struct DtwTransaction *self){
     }
 
 }
+
+
+
+
+
+DtwDataBase * newDtwDataBase(const char *path){
+    DtwDataBase *self = (DtwDataBase*) malloc(sizeof (DtwDataBase));
+    self->path = strdup(path);
+    self->data_path = dtw_concat_path(self->path,"data");
+    self->write_cursor = newDtwTransaction();
+    self->locker = newDtwLocker();
+    self->max_lock_time = 120;
+    self->save_backup = true;
+    self->use_unix_time = false;
+
+    //methods
+    self->commit = DtwDataBase_commit;
+    self->reconstruct =DtwDataBase_reconstruct;
+    self->free =DtwDataBase_free;
+    return self;
+}
+
+DtwJsonTransactionError *DtwDataBase_reconstruct(struct DtwDataBase *self);
+DtwJsonTransactionError *DtwDataBase_commit(struct DtwDataBase *self){
+    self->locker->max_lock_time =self->max_lock_time;
+    self->locker->lock(self->locker,self->path);
+    long path_size = strlen(self->path);
+    //fix pending transactions
+    char *transaction_path = (char*) calloc(sizeof(char*), path_size + 50);
+    sprintf(transaction_path,"%s/pending_transaction.json",self->path);
+
+    DtwTransaction *pending_transaction = newDtwTransaction_from_json_file(transaction_path);
+
+
+
+}
+void DtwDataBase_free(struct DtwDataBase *self){
+    free(self->path);
+    free(self->data_path);
+    self->write_cursor->free(self->write_cursor);
+    self->locker->free(self->locker);
+    free(self);
+}
+
+
 
 
 #endif //DO_THE_WORLD_H
