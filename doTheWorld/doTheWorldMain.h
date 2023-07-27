@@ -53,7 +53,9 @@ SOFTWARE.
 #include "multidimension_listage/multidimension_listage.h"
 #include "path/path.h"
 #include "tree/declarations.h"
+#ifdef __linux__
 #include "locker/locker.h"
+#endif
 #include "transaction/declaration.h"
 
 #include "base64/base64.c"
@@ -69,7 +71,9 @@ SOFTWARE.
 #include "path/path.c"
 #include "string_array/string_array.c"
 #include "tree/definitions.h"
+#ifdef __linux__
 #include "locker/locker.c"
+#endif
 #include "transaction/definition.h"
 
 #endif //DO_THE_WORLD_H

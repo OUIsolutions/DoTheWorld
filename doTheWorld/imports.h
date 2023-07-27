@@ -8,7 +8,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <time.h>
-#include <sys/wait.h>
+
 #include <errno.h>
 #include <sys/file.h>
 #include <sys/time.h>
@@ -16,6 +16,7 @@
 
 
 #ifdef __linux__
+#include <sys/wait.h>
   #include <dirent.h>
   #include <unistd.h>
 #elif _WIN32
