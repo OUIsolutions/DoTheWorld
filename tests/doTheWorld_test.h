@@ -3890,7 +3890,7 @@ char * calc_sha_256_from_file_returning_string(const char *filename)
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <time.h>
-#include <sys/wait.h>
+
 #include <errno.h>
 #include <sys/file.h>
 #include <sys/time.h>
@@ -3898,6 +3898,7 @@ char * calc_sha_256_from_file_returning_string(const char *filename)
 
 
 #ifdef __linux__
+#include <sys/wait.h>
   #include <dirent.h>
   #include <unistd.h>
 #elif _WIN32
@@ -4480,6 +4481,7 @@ struct  DtwTree * newDtwTree();
 
 
 
+#ifdef __linux__
 
 
 
@@ -4507,6 +4509,7 @@ void DtwLocker_lock(struct DtwLocker *self, const  char *element);
 void DtwLocker_free(struct DtwLocker *self);
 
 
+#endif
 
 
 enum {
@@ -7295,6 +7298,7 @@ void DtwTree_hardware_commit_tree(struct DtwTree *self){
 }
 
 
+#ifdef __linux__
 
 
 
@@ -7417,6 +7421,7 @@ void DtwLocker_free(struct DtwLocker *self){
     self->locked_elements->free(self->locked_elements);
     free(self);
 }
+#endif
 
 
 
