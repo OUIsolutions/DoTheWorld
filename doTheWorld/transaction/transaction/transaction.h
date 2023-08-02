@@ -7,6 +7,12 @@ typedef struct DtwTransaction{
     void (*append_action)(struct DtwTransaction *self,struct DtwActionTransaction  *action);
     void (*write_any)(struct DtwTransaction *self,const char *path,unsigned char *content, long size,bool is_binary);
     void (*write_string)(struct DtwTransaction *self,const char *path,const char *content);
+
+    void (*write_long)(struct DtwTransaction *self,const char *path,long value);
+    void (*write_bool)(struct DtwTransaction *self,const char *path,bool value);
+    void (*write_double)(struct DtwTransaction *self,const char *path,double value);
+
+
     void (*move_any)(struct DtwTransaction *self,const char *source,const char *dest);
     void (*copy_any)(struct DtwTransaction *self,const char *source,const char *dest);
     void (*delete_any)(struct DtwTransaction *self,const char *source);

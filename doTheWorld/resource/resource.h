@@ -24,7 +24,7 @@ typedef struct DtwResource{
 
     void (*lock)(struct DtwResource *self);
 
-    void (*set_any)(struct DtwResource *self,unsigned char *element,long size);
+    void (*set_binary)(struct DtwResource *self, unsigned char *element, long size);
     void (*set_string)(struct DtwResource *self,const  char *element);
     void (*set_long)(struct DtwResource *self,long element);
     void (*set_double)(struct DtwResource *self,double element);
@@ -37,6 +37,7 @@ typedef struct DtwResource{
     double (*get_double)(struct DtwResource *self);
     bool (*get_bool)(struct DtwResource *self);
 
+    void (*free)(struct DtwResource *self);
 
 }DtwResource;
 
@@ -47,7 +48,7 @@ DtwResource *new_DtwResource(const char *path);
 DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *path);
 
 void DtwResource_lock(DtwResource *self);
-void DtwResource_set_any(DtwResource *self,unsigned char *element,long size);
+void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size);
 void DtwResource_set_string(DtwResource *self,const  char *element);
 void DtwResource_set_long(DtwResource *self,long element);
 void DtwResource_set_double(DtwResource *self,double element);
@@ -61,3 +62,4 @@ double DtwResource_get_double(DtwResource *self);
 bool DtwResource_get_bool(DtwResource *self);
 
 
+void DtwResource_free(struct DtwResource *self);
