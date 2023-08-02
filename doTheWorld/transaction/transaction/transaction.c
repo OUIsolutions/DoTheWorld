@@ -7,6 +7,9 @@ DtwTransaction * newDtwTransaction(){
     self->append_action =DtwTransaction_append_action;
     self->write_any = DtwTransaction_write_any;
     self->write_string = DtwTransaction_write_string;
+    self->write_long = DtwTransaction_write_long;
+    self->write_double = DtwTransaction_write_double;
+    self->write_bool = DtwTransaction_write_bool;
     self->move_any = DtwTransaction_move_any;
     self->copy_any = DtwTransaction_copy_any;
     self->delete_any = DtwTransaction_delete_any;
@@ -40,6 +43,28 @@ void DtwTransaction_write_string(struct DtwTransaction *self,const char *path,co
     DtwActionTransaction * action = DtwActionTransaction_write_any(path,(unsigned char*)content, strlen(content),false);
     self->append_action(self,action);
 }
+
+void DtwTransaction_write_long(struct DtwTransaction *self,const char *path,long value){
+    char converted[20] ={0};
+    sprintf(converted,"%ld",value);
+    self->write_string(self,path,converted);
+}
+
+void DtwTransaction_write_bool(struct DtwTransaction *self,const char *path,bool value){
+    if(value){
+        self->write_string(self,path,"t");
+    }
+    else{
+        self->write_string(self,path,"f");
+    }
+}
+
+void DtwTransaction_write_double(struct DtwTransaction *self,const char *path,double value){
+    char converted[20] ={0};
+    sprintf(converted,"%lf",value);
+    self->write_string(self,path,converted);
+}
+
 
 void DtwTransaction_move_any(struct DtwTransaction *self,const char *source,const char *dest){
     DtwActionTransaction * action = DtwActionTransaction_move_any(source,dest);

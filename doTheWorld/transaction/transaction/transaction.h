@@ -44,6 +44,12 @@ void DtwTransaction_write_any(struct DtwTransaction *self,const char *path,unsig
 
 void DtwTransaction_write_string(struct DtwTransaction *self,const char *path,const char *content);
 
+void DtwTransaction_write_long(struct DtwTransaction *self,const char *path,long value);
+
+void DtwTransaction_write_bool(struct DtwTransaction *self,const char *path,bool value);
+
+void DtwTransaction_write_double(struct DtwTransaction *self,const char *path,double value);
+
 void DtwTransaction_move_any(struct DtwTransaction *self,const char *source,const char *dest);
 
 void DtwTransaction_copy_any(struct DtwTransaction *self,const char *source,const char *dest);

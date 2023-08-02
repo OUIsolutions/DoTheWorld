@@ -62,15 +62,31 @@ void DtwResource_set_string(DtwResource *self,const  char *element){
 void DtwResource_set_long(DtwResource *self,long element){
 
 }
-void DtwResource_set_double(DtwResource *self,double element);
-void DtwResource_set_bool( DtwResource *self,bool element);
+void DtwResource_set_double(DtwResource *self,double element){
 
-unsigned char *DtwResource_get_any(DtwResource *self, long size, bool is_binary);
-unsigned char *DtwResource_get_binary(DtwResource *self, long size);
-char *DtwResource_get_string(DtwResource *self);
-long DtwResource_get_long(DtwResource *self);
-double DtwResource_get_double(DtwResource *self);
-bool DtwResource_get_bool(DtwResource *self);
+}
+void DtwResource_set_bool( DtwResource *self,bool element){
+
+}
+
+unsigned char *DtwResource_get_any(DtwResource *self, long size, bool is_binary){
+
+}
+unsigned char *DtwResource_get_binary(DtwResource *self, long size){
+
+}
+char *DtwResource_get_string(DtwResource *self){
+
+}
+long DtwResource_get_long(DtwResource *self){
+
+}
+double DtwResource_get_double(DtwResource *self){
+
+}
+bool DtwResource_get_bool(DtwResource *self){
+
+}
 
 void DtwResource_free(struct DtwResource *self){
 
