@@ -49,6 +49,7 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *path){
     #ifdef __linux__
     new_element->locker = self->locker;
     #endif
+    private_DtwResource_lock_if_auto_lock(new_element);
 
 
 }
