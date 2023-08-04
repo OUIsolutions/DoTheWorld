@@ -3,7 +3,6 @@
 typedef struct DtwResource{
 
     bool allow_transaction;
-    bool auto_lock;
 
     DtwTransaction  *transaction;
 #ifdef  __linux__
@@ -11,6 +10,7 @@ typedef struct DtwResource{
 #endif
 
     char *path;
+    bool child;
 
 
     struct DtwResource * (*sub_resource)(struct DtwResource *self,const  char *path);
@@ -30,6 +30,8 @@ typedef struct DtwResource{
     long (*get_long)(struct DtwResource *self);
     double (*get_double)(struct DtwResource *self);
     bool (*get_bool)(struct DtwResource *self);
+
+    void (*commit)(struct DtwResource *self);
 
     void (*free)(struct DtwResource *self);
 
@@ -54,6 +56,8 @@ char *DtwResource_get_string(DtwResource *self);
 long DtwResource_get_long(DtwResource *self);
 double DtwResource_get_double(DtwResource *self);
 bool DtwResource_get_bool(DtwResource *self);
+
+void DtwResource_commit(DtwResource *self);
 
 
 void DtwResource_free(struct DtwResource *self);

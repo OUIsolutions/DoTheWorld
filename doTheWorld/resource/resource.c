@@ -17,6 +17,7 @@ DtwResource *new_DtwResource_raw(){
     self->get_long = DtwResource_get_long;
     self->get_double =DtwResource_get_double;
     self->get_bool = DtwResource_get_bool;
+    self->commit = DtwResource_commit;
     self->free = DtwResource_free;
 
 
@@ -35,7 +36,18 @@ DtwResource *new_DtwResource(const char *path){
 
 }
 
-DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *path);
+DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *path){
+
+    DtwResource *new_element = new_DtwResource_raw();
+    new_element->transaction = self->transaction;
+    new_element->child = true;
+    new_element->path = dtw_concat_path(self->path,path);
+    #ifdef __linux__
+    new_element->locker = self->locker;
+    #endif
+
+
+}
 
 void DtwResource_lock(DtwResource *self){
     #ifdef __linux__
@@ -105,14 +117,22 @@ double DtwResource_get_double(DtwResource *self){
 bool DtwResource_get_bool(DtwResource *self){
     return dtw_load_bool_file_content(self->path);
 }
+void DtwResource_commit(DtwResource *self){
+    self->transaction->commit(self->transaction,NULL);
+}
+
 
 void DtwResource_free(struct DtwResource *self){
-    if(self->transaction){
-        self->transaction->free(self->transaction);
+    free(self->path);
+    if(!self->path){
+        if(self->transaction){
+            self->transaction->free(self->transaction);
+        }
+
+        #ifdef  __linux__
+                self->locker->free(self->locker);
+        #endif
     }
 
-    #ifdef  __linux__
-        self->locker->free(self->locker);
-    #endif
     free(self);
 }
