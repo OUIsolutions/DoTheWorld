@@ -9,7 +9,8 @@ typedef struct DtwResource{
 #ifdef  __linux__
     DtwLocker  *locker;
 #endif
-
+    char *name;
+    char *mothers_path;
     char *path;
     bool child;
     /*
@@ -23,6 +24,7 @@ typedef struct DtwResource{
 
     void (*lock)(struct DtwResource *self);
 
+    void (*destroy)(struct DtwResource *self);
 
     void (*set_binary)(struct DtwResource *self, unsigned char *element, long size);
     void (*set_string)(struct DtwResource *self,const  char *element);
@@ -37,10 +39,14 @@ typedef struct DtwResource{
     double (*get_double)(struct DtwResource *self);
     bool (*get_bool)(struct DtwResource *self);
 
+    DtwStringArray *(*list)(struct DtwResource *self);
+
     int (*type)(struct DtwResource *self);
     const char *(*type_in_str)(struct DtwResource *self);
 
     void (*commit)(struct DtwResource *self);
+
+    void (*represent)(struct DtwResource *self);
 
     void (*free)(struct DtwResource *self);
 
@@ -69,6 +75,10 @@ void DtwResource_set_bool( DtwResource *self,bool element);
 
 unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binary);
 
+void DtwResource_destroy(DtwResource *self);
+
+DtwStringArray *DtwResource_list(DtwResource *self);
+
 unsigned char *DtwResource_get_binary(DtwResource *self, long *size);
 
 char *DtwResource_get_string(DtwResource *self);
@@ -85,5 +95,6 @@ bool DtwResource_get_bool(DtwResource *self);
 
 void DtwResource_commit(DtwResource *self);
 
+void DtwResource_represent(DtwResource *self);
 
 void DtwResource_free(struct DtwResource *self);

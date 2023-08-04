@@ -10,7 +10,7 @@ DtwResource *private_new_DtwResource_raw(){
     self->set_long = DtwResource_set_long;
     self->set_double = DtwResource_set_double;
     self->set_bool = DtwResource_set_bool;
-
+    self->destroy = DtwResource_destroy;
 
     self->get_any = DtwResource_get_any;
     self->get_binary = DtwResource_get_binary;
@@ -20,8 +20,10 @@ DtwResource *private_new_DtwResource_raw(){
     self->get_bool = DtwResource_get_bool;
     self->sub_resource =DtwResource_sub_resource;
     self->commit = DtwResource_commit;
+    self->represent = DtwResource_represent;
+    self->free = DtwResource_represent;
     self->free = DtwResource_free;
-
+    self->list = DtwResource_list;
     self->type = DtwResource_type;
     self->type_in_str = DtwResource_type_in_str;
 
@@ -31,6 +33,7 @@ DtwResource *private_new_DtwResource_raw(){
 
 DtwResource *new_DtwResource(const char *path){
     DtwResource *self = private_new_DtwResource_raw();
+    self->name = strdup(path);
     self->path = strdup(path);
     self->allow_transaction = true;
     self->transaction = newDtwTransaction();
@@ -45,6 +48,7 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *path){
     DtwResource *new_element = private_new_DtwResource_raw();
     new_element->transaction = self->transaction;
     new_element->child = true;
+    new_element->name = strdup(path);
     new_element->path = dtw_concat_path(self->path,path);
     new_element->locked = self->locked;
     new_element->auto_lock = self->auto_lock;
@@ -112,6 +116,14 @@ void DtwResource_set_bool( DtwResource *self,bool element){
     dtw_write_bool_file_content(self->path,element);
 }
 
+void DtwResource_destroy(DtwResource *self){
+    if(self->allow_transaction){
+        self->transaction->delete_any(self->transaction,self->path);
+        return;
+    }
+    dtw_remove_any(self->path);
+}
+
 unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binary){
     private_DtwResource_lock_if_auto_lock(self);
     return dtw_load_any_content(self->path,size,is_binary);
@@ -150,10 +162,19 @@ int DtwResource_type(DtwResource *self){
     return dtw_complex_entity_type(self->path);
 }
 
+DtwStringArray *DtwResource_list(DtwResource *self){
+    return dtw_list_all(self->path,DTW_NOT_CONCAT_PATH);
+}
+
 const char * DtwResource_type_in_str(DtwResource *self){
     return dtw_convert_entity(dtw_complex_entity_type(self->path));
 }
 
+void DtwResource_represent(DtwResource *self){
+    printf("path: %s\n", self->name);
+    printf("name: %s\n",self->name);
+    printf("type: %s\n",self->type_in_str(self));
+}
 
 void DtwResource_free(struct DtwResource *self){
     if(!self->child){
@@ -165,7 +186,7 @@ void DtwResource_free(struct DtwResource *self){
                 self->locker->free(self->locker);
         #endif
     }
-
+    free(self->name);
     free(self->path);
     free(self);
 }
