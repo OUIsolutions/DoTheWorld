@@ -22,6 +22,8 @@ DtwResource *private_new_DtwResource_raw(){
     self->commit = DtwResource_commit;
     self->free = DtwResource_free;
 
+    self->type = DtwResource_type;
+    self->type_in_str = DtwResource_type_in_str;
 
 
     return self;
@@ -50,7 +52,7 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *path){
     new_element->locker = self->locker;
     #endif
     private_DtwResource_lock_if_auto_lock(new_element);
-
+    return new_element;
 
 }
 
@@ -142,6 +144,14 @@ bool DtwResource_get_bool(DtwResource *self){
 
 void DtwResource_commit(DtwResource *self){
     self->transaction->commit(self->transaction,NULL);
+}
+
+int DtwResource_type(DtwResource *self){
+    return dtw_complex_entity_type(self->path);
+}
+
+const char * DtwResource_type_in_str(DtwResource *self){
+    return dtw_convert_entity(dtw_complex_entity_type(self->path));
 }
 
 

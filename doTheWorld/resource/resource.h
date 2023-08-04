@@ -37,6 +37,9 @@ typedef struct DtwResource{
     double (*get_double)(struct DtwResource *self);
     bool (*get_bool)(struct DtwResource *self);
 
+    int (*type)(struct DtwResource *self);
+    const char *(*type_in_str)(struct DtwResource *self);
+
     void (*commit)(struct DtwResource *self);
 
     void (*free)(struct DtwResource *self);
@@ -73,6 +76,10 @@ char *DtwResource_get_string(DtwResource *self);
 long DtwResource_get_long(DtwResource *self);
 
 double DtwResource_get_double(DtwResource *self);
+
+int DtwResource_type(DtwResource *self);
+
+const char * DtwResource_type_in_str(DtwResource *self);
 
 bool DtwResource_get_bool(DtwResource *self);
 
