@@ -32,7 +32,6 @@ DtwResource *new_DtwResource(const char *path){
 #ifdef __linux__
     self->locker = newDtwLocker();
 #endif
-    self->stored_sub_resources = (DtwResource**) malloc(0);
 
 }
 
@@ -51,6 +50,7 @@ void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size
     }
     dtw_write_any_content(self->path,element,size);
 }
+
 void DtwResource_set_string(DtwResource *self,const  char *element){
     if(self->allow_transaction){
         self->transaction->write_string(self->transaction,self->path,element);
@@ -60,34 +60,59 @@ void DtwResource_set_string(DtwResource *self,const  char *element){
 }
 
 void DtwResource_set_long(DtwResource *self,long element){
+    if(self->allow_transaction){
+        self->transaction->write_long(self->transaction,self->path,element);
+        return;
+    }
+    dtw_write_long_file_content(self->path,element);
 
 }
+
 void DtwResource_set_double(DtwResource *self,double element){
-
+    if(self->allow_transaction){
+        self->transaction->write_double(self->transaction,self->path,element);
+        return;
+    }
+    dtw_write_double_file_content(self->path,element);
 }
+
 void DtwResource_set_bool( DtwResource *self,bool element){
-
+    if(self->allow_transaction){
+        self->transaction->write_bool(self->transaction,self->path,element);
+        return;
+    }
+    dtw_write_bool_file_content(self->path,element);
 }
 
-unsigned char *DtwResource_get_any(DtwResource *self, long size, bool is_binary){
-
+unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binary){
+    return dtw_load_any_content(self->path,size,is_binary);
 }
-unsigned char *DtwResource_get_binary(DtwResource *self, long size){
-
+unsigned char *DtwResource_get_binary(DtwResource *self, long *size){
+    return dtw_load_binary_content(self->path,size);
 }
 char *DtwResource_get_string(DtwResource *self){
-
+    return dtw_load_string_file_content(self->path);
 }
+
 long DtwResource_get_long(DtwResource *self){
-
+    return dtw_load_long_file_content(self->path);
 }
+
 double DtwResource_get_double(DtwResource *self){
-
+    return dtw_load_double_file_content(self->path);
 }
-bool DtwResource_get_bool(DtwResource *self){
 
+bool DtwResource_get_bool(DtwResource *self){
+    return dtw_load_bool_file_content(self->path);
 }
 
 void DtwResource_free(struct DtwResource *self){
+    if(self->transaction){
+        self->transaction->free(self->transaction);
+    }
 
+    #ifdef  __linux__
+        self->locker->free(self->locker);
+    #endif
+    free(self);
 }
