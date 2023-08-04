@@ -61,7 +61,10 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *path){
 
 char * private_DtwResource_get_path(DtwResource *self){
     if(self->child){
-        return private_DtwResource_get_path(self->mother);
+        char *mother_path =  private_DtwResource_get_path(self->mother);
+        char *result = dtw_concat_path(mother_path,self->name);
+        free(mother_path);
+        return result;
     }
     return strdup(self->name);
 }

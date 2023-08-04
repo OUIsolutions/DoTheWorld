@@ -66,6 +66,7 @@ void private_DtwResource_lock_if_auto_lock(DtwResource *self);
 
 char * private_DtwResource_get_path(DtwResource *self);
 
+void DtwResource_rename(DtwResource *self, unsigned char *element, long size);
 
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size);
 
