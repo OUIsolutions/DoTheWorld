@@ -10,7 +10,6 @@ typedef struct DtwResource{
     DtwLocker  *locker;
 #endif
     char *name;
-    char *mothers_path;
     char *path;
     bool child;
     /*
