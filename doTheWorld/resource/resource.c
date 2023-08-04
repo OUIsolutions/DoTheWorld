@@ -1,6 +1,6 @@
 
 
-DtwResource *new_DtwResource_raw(){
+DtwResource *private_new_DtwResource_raw(){
     DtwResource *self = (DtwResource*) malloc(sizeof (DtwResource));
     *self =(DtwResource){0};
 
@@ -28,7 +28,7 @@ DtwResource *new_DtwResource_raw(){
 }
 
 DtwResource *new_DtwResource(const char *path){
-    DtwResource *self = new_DtwResource_raw();
+    DtwResource *self = private_new_DtwResource_raw();
     self->path = strdup(path);
     self->allow_transaction = true;
     self->transaction = newDtwTransaction();
@@ -40,7 +40,7 @@ DtwResource *new_DtwResource(const char *path){
 
 DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *path){
 
-    DtwResource *new_element = new_DtwResource_raw();
+    DtwResource *new_element = private_new_DtwResource_raw();
     new_element->transaction = self->transaction;
     new_element->child = true;
     new_element->path = dtw_concat_path(self->path,path);

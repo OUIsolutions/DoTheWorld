@@ -44,7 +44,7 @@ typedef struct DtwResource{
 }DtwResource;
 
 
-DtwResource *new_DtwResource_raw();
+DtwResource *private_new_DtwResource_raw();
 
 DtwResource *new_DtwResource(const char *path);
 
