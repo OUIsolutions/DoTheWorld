@@ -3,6 +3,7 @@
 typedef struct DtwResource{
 
     bool allow_transaction;
+    bool auto_lock;
 
     DtwTransaction  *transaction;
 #ifdef  __linux__
@@ -11,7 +12,12 @@ typedef struct DtwResource{
 
     char *path;
     bool child;
-
+    /*
+    struct DtwResourceArray{
+        long size;
+        struct DtwResource **resources;
+    }childs;
+    */
 
     struct DtwResource * (*sub_resource)(struct DtwResource *self,const  char *path);
 
@@ -37,6 +43,7 @@ typedef struct DtwResource{
 
 }DtwResource;
 
+
 DtwResource *new_DtwResource_raw();
 
 DtwResource *new_DtwResource(const char *path);
@@ -44,17 +51,29 @@ DtwResource *new_DtwResource(const char *path);
 DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *path);
 
 void DtwResource_lock(DtwResource *self);
+
+void private_DtwResource_lock_if_auto_lock(DtwResource *self);
+
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size);
+
 void DtwResource_set_string(DtwResource *self,const  char *element);
+
 void DtwResource_set_long(DtwResource *self,long element);
+
 void DtwResource_set_double(DtwResource *self,double element);
+
 void DtwResource_set_bool( DtwResource *self,bool element);
 
 unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binary);
+
 unsigned char *DtwResource_get_binary(DtwResource *self, long *size);
+
 char *DtwResource_get_string(DtwResource *self);
+
 long DtwResource_get_long(DtwResource *self);
+
 double DtwResource_get_double(DtwResource *self);
+
 bool DtwResource_get_bool(DtwResource *self);
 
 void DtwResource_commit(DtwResource *self);
