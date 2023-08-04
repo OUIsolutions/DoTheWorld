@@ -44,6 +44,7 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *path){
     new_element->transaction = self->transaction;
     new_element->child = true;
     new_element->path = dtw_concat_path(self->path,path);
+    new_element->locked = self->locked;
     #ifdef __linux__
     new_element->locker = self->locker;
     #endif
@@ -52,6 +53,10 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *path){
 }
 
 void DtwResource_lock(DtwResource *self){
+    if(self->locked){
+        return;
+    }
+
     #ifdef __linux__
         self->locker->lock(self->locker,self->path);
     #endif
@@ -148,7 +153,7 @@ void DtwResource_free(struct DtwResource *self){
                 self->locker->free(self->locker);
         #endif
     }
-    
+
     free(self->path);
     free(self);
 }

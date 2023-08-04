@@ -4,7 +4,7 @@ typedef struct DtwResource{
 
     bool allow_transaction;
     bool auto_lock;
-
+    bool locked;
     DtwTransaction  *transaction;
 #ifdef  __linux__
     DtwLocker  *locker;
