@@ -11,12 +11,14 @@ DtwResource *new_DtwResource_raw(){
     self->set_double = DtwResource_set_double;
     self->set_bool = DtwResource_set_bool;
 
+
     self->get_any = DtwResource_get_any;
     self->get_binary = DtwResource_get_binary;
     self->get_string = DtwResource_get_string;
     self->get_long = DtwResource_get_long;
     self->get_double =DtwResource_get_double;
     self->get_bool = DtwResource_get_bool;
+    self->sub_resource =DtwResource_sub_resource;
     self->commit = DtwResource_commit;
     self->free = DtwResource_free;
 
