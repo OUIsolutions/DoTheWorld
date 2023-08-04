@@ -139,8 +139,7 @@ void DtwResource_commit(DtwResource *self){
 
 
 void DtwResource_free(struct DtwResource *self){
-    free(self->path);
-    if(!self->path){
+    if(!self->child){
         if(self->transaction){
             self->transaction->free(self->transaction);
         }
@@ -149,6 +148,7 @@ void DtwResource_free(struct DtwResource *self){
                 self->locker->free(self->locker);
         #endif
     }
-
+    
+    free(self->path);
     free(self);
 }
