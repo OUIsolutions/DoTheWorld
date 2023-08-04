@@ -9,8 +9,9 @@ typedef struct DtwResource{
 #ifdef  __linux__
     DtwLocker  *locker;
 #endif
+    struct DtwResource *mother;
     char *name;
-    char *path;
+
     bool child;
     /*
     struct DtwResourceArray{
@@ -54,6 +55,7 @@ typedef struct DtwResource{
 
 DtwResource *private_new_DtwResource_raw();
 
+
 DtwResource *new_DtwResource(const char *path);
 
 DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *path);
@@ -61,6 +63,9 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *path);
 void DtwResource_lock(DtwResource *self);
 
 void private_DtwResource_lock_if_auto_lock(DtwResource *self);
+
+char * private_DtwResource_get_path(DtwResource *self);
+
 
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size);
 

@@ -34,7 +34,6 @@ DtwResource *private_new_DtwResource_raw(){
 DtwResource *new_DtwResource(const char *path){
     DtwResource *self = private_new_DtwResource_raw();
     self->name = strdup(path);
-    self->path = strdup(path);
     self->allow_transaction = true;
     self->transaction = newDtwTransaction();
 #ifdef __linux__
@@ -48,8 +47,8 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *path){
     DtwResource *new_element = private_new_DtwResource_raw();
     new_element->transaction = self->transaction;
     new_element->child = true;
+    new_element->mother = self;
     new_element->name = strdup(path);
-    new_element->path = dtw_concat_path(self->path,path);
     new_element->locked = self->locked;
     new_element->auto_lock = self->auto_lock;
     #ifdef __linux__
@@ -60,13 +59,23 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *path){
 
 }
 
+char * private_DtwResource_get_path(DtwResource *self){
+    if(self->child){
+        return private_DtwResource_get_path(self->mother);
+    }
+    return strdup(self->name);
+}
+
+
 void DtwResource_lock(DtwResource *self){
     if(self->locked){
         return;
     }
 
     #ifdef __linux__
-        self->locker->lock(self->locker,self->path);
+        char *path = private_DtwResource_get_path(self);
+        self->locker->lock(self->locker,path);
+        free(path);
     #endif
 }
 void private_DtwResource_lock_if_auto_lock(DtwResource *self){
@@ -76,82 +85,126 @@ void private_DtwResource_lock_if_auto_lock(DtwResource *self){
 }
 
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size){
+    char *path = private_DtwResource_get_path(self);
+
     if(self->allow_transaction){
-        self->transaction->write_any(self->transaction,self->path,element,size,true);
-        return;
+        self->transaction->write_any(self->transaction,path,element,size,true);
     }
-    dtw_write_any_content(self->path,element,size);
+    else{
+        dtw_write_any_content(path,element,size);
+    }
+
+    free(path);
+
 }
 
 void DtwResource_set_string(DtwResource *self,const  char *element){
+    char *path = private_DtwResource_get_path(self);
     if(self->allow_transaction){
-        self->transaction->write_string(self->transaction,self->path,element);
-        return;
+        self->transaction->write_string(self->transaction,path,element);
     }
-    dtw_write_string_file_content(self->path,element);
+    else{
+        dtw_write_string_file_content(path,element);
+    }
+    free(path);
+
 }
 
 void DtwResource_set_long(DtwResource *self,long element){
+    char *path = private_DtwResource_get_path(self);
     if(self->allow_transaction){
-        self->transaction->write_long(self->transaction,self->path,element);
-        return;
+        self->transaction->write_long(self->transaction,path,element);
     }
-    dtw_write_long_file_content(self->path,element);
+    else{
+        dtw_write_long_file_content(path,element);
+    }
+    free(path);
 
 }
 
 void DtwResource_set_double(DtwResource *self,double element){
+    char *path = private_DtwResource_get_path(self);
+
     if(self->allow_transaction){
-        self->transaction->write_double(self->transaction,self->path,element);
-        return;
+        self->transaction->write_double(self->transaction,path,element);
     }
-    dtw_write_double_file_content(self->path,element);
+    else{
+        dtw_write_double_file_content(path,element);
+    }
+    free(path);
 }
 
 void DtwResource_set_bool( DtwResource *self,bool element){
+    char *path = private_DtwResource_get_path(self);
+
     if(self->allow_transaction){
-        self->transaction->write_bool(self->transaction,self->path,element);
-        return;
+        self->transaction->write_bool(self->transaction,path,element);
     }
-    dtw_write_bool_file_content(self->path,element);
+    else{
+        dtw_write_bool_file_content(path,element);
+    }
+    free(path);
 }
 
 void DtwResource_destroy(DtwResource *self){
+    char *path = private_DtwResource_get_path(self);
+
     if(self->allow_transaction){
-        self->transaction->delete_any(self->transaction,self->path);
-        return;
+        self->transaction->delete_any(self->transaction,path);
     }
-    dtw_remove_any(self->path);
+    else{
+        dtw_remove_any(path);
+    }
+    free(path);
 }
 
 unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binary){
     private_DtwResource_lock_if_auto_lock(self);
-    return dtw_load_any_content(self->path,size,is_binary);
+    char *path = private_DtwResource_get_path(self);
+
+    unsigned char *result = dtw_load_any_content(path,size,is_binary);
+    free(path);
+    return result;
 }
 
 unsigned char *DtwResource_get_binary(DtwResource *self, long *size){
     private_DtwResource_lock_if_auto_lock(self);
-    return dtw_load_binary_content(self->path,size);
+    char *path = private_DtwResource_get_path(self);
+    unsigned  char *result = dtw_load_binary_content(path,size);
+    free(path);
+    return result;
 }
 
 char *DtwResource_get_string(DtwResource *self){
     private_DtwResource_lock_if_auto_lock(self);
-    return dtw_load_string_file_content(self->path);
+    char *path = private_DtwResource_get_path(self);
+    char *result = dtw_load_string_file_content(path);
+    free(path);
+    return result;
 }
 
 long DtwResource_get_long(DtwResource *self){
     private_DtwResource_lock_if_auto_lock(self);
-    return dtw_load_long_file_content(self->path);
+    char *path = private_DtwResource_get_path(self);
+    long result =  dtw_load_long_file_content(path);
+    free(path);
+    return result;
 }
 
 double DtwResource_get_double(DtwResource *self){
     private_DtwResource_lock_if_auto_lock(self);
-    return dtw_load_double_file_content(self->path);
+    char *path = private_DtwResource_get_path(self);
+    double result =  dtw_load_double_file_content(path);
+    free(path);
+    return result;
 }
 
 bool DtwResource_get_bool(DtwResource *self){
     private_DtwResource_lock_if_auto_lock(self);
-    return dtw_load_bool_file_content(self->path);
+    char *path = private_DtwResource_get_path(self);
+    bool result = dtw_load_bool_file_content(path);
+    free(path);
+    return result;
 }
 
 void DtwResource_commit(DtwResource *self){
@@ -159,21 +212,29 @@ void DtwResource_commit(DtwResource *self){
 }
 
 int DtwResource_type(DtwResource *self){
-    return dtw_complex_entity_type(self->path);
+    char *path = private_DtwResource_get_path(self);
+    int type_element =  dtw_complex_entity_type(path);
+    free(path);
+    return type_element;
 }
 
 DtwStringArray *DtwResource_list(DtwResource *self){
-    return dtw_list_all(self->path,DTW_NOT_CONCAT_PATH);
+    char *path = private_DtwResource_get_path(self);
+    DtwStringArray  *result = dtw_list_all(path,DTW_NOT_CONCAT_PATH);
+    free(path);
+    return result;
 }
 
 const char * DtwResource_type_in_str(DtwResource *self){
-    return dtw_convert_entity(dtw_complex_entity_type(self->path));
+     return dtw_convert_entity(self->type(self));
 }
 
 void DtwResource_represent(DtwResource *self){
-    printf("path: %s\n", self->name);
+    char *path = private_DtwResource_get_path(self);
+    printf("path: %s\n", path);
     printf("name: %s\n",self->name);
     printf("type: %s\n",self->type_in_str(self));
+    free(path);
 }
 
 void DtwResource_free(struct DtwResource *self){
@@ -187,6 +248,5 @@ void DtwResource_free(struct DtwResource *self){
         #endif
     }
     free(self->name);
-    free(self->path);
     free(self);
 }
