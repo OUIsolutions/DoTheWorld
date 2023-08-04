@@ -25,6 +25,7 @@ DtwResource *private_new_DtwResource_raw(){
     self->free = DtwResource_free;
     self->list = DtwResource_list;
     self->type = DtwResource_type;
+    self->rename = DtwResource_rename;
     self->type_in_str = DtwResource_type_in_str;
 
 
@@ -56,6 +57,23 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *path){
     #endif
     private_DtwResource_lock_if_auto_lock(new_element);
     return new_element;
+
+}
+void DtwResource_rename(DtwResource *self, char *new_name){
+
+    char *old_path = private_DtwResource_get_path(self);
+    free(self->name);
+    self->name = strdup(new_name);
+    char *new_path = private_DtwResource_get_path(self);
+
+    if(self->allow_transaction){
+        self->transaction->move_any(self->transaction,old_path,new_path);
+    }
+    else{
+        dtw_move_any(old_path,new_path);
+    }
+    free(old_path);
+    free(new_path);
 
 }
 

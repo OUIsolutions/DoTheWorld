@@ -43,10 +43,10 @@ typedef struct DtwResource{
 
     int (*type)(struct DtwResource *self);
     const char *(*type_in_str)(struct DtwResource *self);
-
     void (*commit)(struct DtwResource *self);
-
     void (*represent)(struct DtwResource *self);
+
+    void (*rename)(struct DtwResource *self, char *new_name);
 
     void (*free)(struct DtwResource *self);
 
@@ -66,7 +66,7 @@ void private_DtwResource_lock_if_auto_lock(DtwResource *self);
 
 char * private_DtwResource_get_path(DtwResource *self);
 
-void DtwResource_rename(DtwResource *self, unsigned char *element, long size);
+void DtwResource_rename(DtwResource *self, char *new_name);
 
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size);
 
