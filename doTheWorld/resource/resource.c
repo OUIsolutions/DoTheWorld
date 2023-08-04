@@ -70,7 +70,7 @@ void DtwResource_rename(DtwResource *self, char *new_name){
         self->transaction->move_any(self->transaction,old_path,new_path);
     }
     else{
-        dtw_move_any(old_path,new_path);
+        dtw_move_any(old_path,new_path,DTW_NOT_CONCAT_PATH);
     }
     free(old_path);
     free(new_path);
