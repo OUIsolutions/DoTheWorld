@@ -5618,6 +5618,7 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
                 }
 
                 dirs->append(dirs, generated_dir);
+                free(generated_dir);
             }
             else{
                 dirs->append(dirs, entry->d_name);
@@ -5813,7 +5814,7 @@ struct DtwStringArray * dtw_list_all_recursively(const char *path,bool concat_pa
             char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 2);
             sprintf(formated_dir,"%s/",dirs->strings[i]);
             all->append(all, formated_dir);
-
+            free(formated_dir);
         }
 
         else{

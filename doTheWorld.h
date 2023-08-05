@@ -3910,24 +3910,14 @@ char * calc_sha_256_from_file_returning_string(const char *filename)
 #endif
 
 
-#define DTW_BY_REFERENCE 1
-#define DTW_BY_OWNERSHIP 2
-#define DTW_BY_VALUE 3
-
-typedef struct privateDtwStringOwnershipPair {
-        char *string;
-        bool ownership;
-}privateDtwStringOwnershipPair;
-
 
 typedef struct DtwStringArray {
   int size;
 
   char **strings;
-  bool *ownership;
 
   void (*set_value)(struct DtwStringArray *self,int index,const char *value);
-  void (*append)(struct DtwStringArray *self,const char *string,int mode);
+  void (*append)(struct DtwStringArray *self,const char *string);
   void (*merge_string_array)(struct DtwStringArray *self, struct DtwStringArray *other);
   void (*represent)(struct DtwStringArray *self);
   void (*free)(struct DtwStringArray *self);
@@ -3938,7 +3928,7 @@ typedef struct DtwStringArray {
 
 // End the structure with a semicolon
 int  DtwStringArray_dtw_find_position(struct DtwStringArray *self, const char *string);
-void DtwStringArray_dtw_append(struct DtwStringArray *self,const char *string,int ownership);
+void DtwStringArray_dtw_append(struct DtwStringArray *self,const char *string);
 void DtwStringArray_dtw_merge_string_array(struct DtwStringArray *self, struct DtwStringArray *other);
 void DtwStringArray_dtw_represent_string_array(struct DtwStringArray *self);
 void DtwStringArray_dtw_free_string_array(struct DtwStringArray *self);
@@ -4601,6 +4591,12 @@ typedef struct DtwTransaction{
     void (*append_action)(struct DtwTransaction *self,struct DtwActionTransaction  *action);
     void (*write_any)(struct DtwTransaction *self,const char *path,unsigned char *content, long size,bool is_binary);
     void (*write_string)(struct DtwTransaction *self,const char *path,const char *content);
+
+    void (*write_long)(struct DtwTransaction *self,const char *path,long value);
+    void (*write_bool)(struct DtwTransaction *self,const char *path,bool value);
+    void (*write_double)(struct DtwTransaction *self,const char *path,double value);
+
+
     void (*move_any)(struct DtwTransaction *self,const char *source,const char *dest);
     void (*copy_any)(struct DtwTransaction *self,const char *source,const char *dest);
     void (*delete_any)(struct DtwTransaction *self,const char *source);
@@ -4632,6 +4628,12 @@ void DtwTransaction_write_any(struct DtwTransaction *self,const char *path,unsig
 
 void DtwTransaction_write_string(struct DtwTransaction *self,const char *path,const char *content);
 
+void DtwTransaction_write_long(struct DtwTransaction *self,const char *path,long value);
+
+void DtwTransaction_write_bool(struct DtwTransaction *self,const char *path,bool value);
+
+void DtwTransaction_write_double(struct DtwTransaction *self,const char *path,double value);
+
 void DtwTransaction_move_any(struct DtwTransaction *self,const char *source,const char *dest);
 
 void DtwTransaction_copy_any(struct DtwTransaction *self,const char *source,const char *dest);
@@ -4649,6 +4651,112 @@ void DtwTransaction_represent(struct DtwTransaction *self);
 
 void DtwTransaction_free(struct DtwTransaction *self);
 
+
+
+
+
+
+    typedef struct DtwResource{
+
+        bool allow_transaction;
+        bool auto_lock;
+        bool locked;
+        DtwTransaction  *transaction;
+    #ifdef  __linux__
+        DtwLocker  *locker;
+    #endif
+        char *mothhers_path;
+        char *name;
+        char *path;
+
+        bool child;
+
+
+
+        struct DtwResource * (*sub_resource)(struct DtwResource *self,const  char *path);
+
+        void (*lock)(struct DtwResource *self);
+
+        void (*destroy)(struct DtwResource *self);
+
+        void (*set_binary)(struct DtwResource *self, unsigned char *element, long size);
+        void (*set_string)(struct DtwResource *self,const  char *element);
+        void (*set_long)(struct DtwResource *self,long element);
+        void (*set_double)(struct DtwResource *self,double element);
+        void (*set_bool)(struct DtwResource *self,bool element);
+
+        unsigned char *(*get_any)(struct DtwResource *self, long *size, bool *is_binary);
+        unsigned char *(*get_binary)(struct DtwResource *self, long *size);
+        char *(*get_string)(struct DtwResource *self);
+        long (*get_long)(struct DtwResource *self);
+        double (*get_double)(struct DtwResource *self);
+        bool (*get_bool)(struct DtwResource *self);
+
+        DtwStringArray *(*list)(struct DtwResource *self);
+
+        int (*type)(struct DtwResource *self);
+        const char *(*type_in_str)(struct DtwResource *self);
+        void (*commit)(struct DtwResource *self);
+        void (*represent)(struct DtwResource *self);
+
+        void (*rename)(struct DtwResource *self, char *new_name);
+
+        void (*free)(struct DtwResource *self);
+
+    }DtwResource;
+
+
+DtwResource *private_new_DtwResource_raw();
+
+
+DtwResource *new_DtwResource(const char *path);
+
+DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name);
+
+void DtwResource_lock(DtwResource *self);
+
+void private_DtwResource_lock_if_auto_lock(DtwResource *self);
+
+
+
+
+void DtwResource_rename(DtwResource *self, char *new_name);
+
+void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size);
+
+void DtwResource_set_string(DtwResource *self,const  char *element);
+
+void DtwResource_set_long(DtwResource *self,long element);
+
+void DtwResource_set_double(DtwResource *self,double element);
+
+void DtwResource_set_bool( DtwResource *self,bool element);
+
+unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binary);
+
+void DtwResource_destroy(DtwResource *self);
+
+DtwStringArray *DtwResource_list(DtwResource *self);
+
+unsigned char *DtwResource_get_binary(DtwResource *self, long *size);
+
+char *DtwResource_get_string(DtwResource *self);
+
+long DtwResource_get_long(DtwResource *self);
+
+double DtwResource_get_double(DtwResource *self);
+
+int DtwResource_type(DtwResource *self);
+
+const char * DtwResource_type_in_str(DtwResource *self);
+
+bool DtwResource_get_bool(DtwResource *self);
+
+void DtwResource_commit(DtwResource *self);
+
+void DtwResource_represent(DtwResource *self);
+
+void DtwResource_free(struct DtwResource *self);
 
 
 
@@ -4908,7 +5016,7 @@ struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *path
             continue;
         }
 
-        new_array->append(new_array, new_string,DTW_BY_VALUE);
+        new_array->append(new_array, new_string);
         free(new_string);
 
     }
@@ -5509,10 +5617,11 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
                     sprintf(generated_dir, "%s/%s", path, entry->d_name);
                 }
 
-                dirs->append(dirs, generated_dir,DTW_BY_OWNERSHIP);
+                dirs->append(dirs, generated_dir);
+                free(generated_dir);
             }
             else{
-                dirs->append(dirs, entry->d_name,DTW_BY_VALUE);
+                dirs->append(dirs, entry->d_name);
                 
             }
 
@@ -5591,7 +5700,7 @@ struct DtwStringArray *  dtw_list_basic(const char *path,int expected_type,bool 
                 if(path[strlen(path) - 1] == '\\' || path[strlen(path) - 1] == '/'){
                     char *generated_dir = (char*)malloc(strlen(path) + strlen(file_data.cFileName) + 1);
                     sprintf(generated_dir, "%s%s", path, file_data.cFileName);
-                    dirs->append(dirs, generated_dir,DTW_BY_VALUE);
+                    dirs->append(dirs, generated_dir);
                     free(generated_dir);
                 }
                 else{
@@ -5600,14 +5709,14 @@ struct DtwStringArray *  dtw_list_basic(const char *path,int expected_type,bool 
 
                     sprintf(generated_dir, "%s/%s", path, file_data.cFileName);
                    
-                    dirs->append(dirs, generated_dir,DTW_BY_VALUE);
+                    dirs->append(dirs, generated_dir);
                     free(generated_dir);
                 }
                 
     
             }
             else{
-                dirs->append(dirs, file_data.cFileName,DTW_BY_VALUE);
+                dirs->append(dirs, file_data.cFileName);
             
             }
 
@@ -5637,7 +5746,7 @@ struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool concat_p
         }
       
         
-        dirs->append(dirs, (char*)path,DTW_BY_VALUE);
+        dirs->append(dirs, (char*)path);
 
         private_dtw_add_end_bar_to_dirs_string_array(dirs);
         int i = 0;
@@ -5704,12 +5813,12 @@ struct DtwStringArray * dtw_list_all_recursively(const char *path,bool concat_pa
 
             char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 2);
             sprintf(formated_dir,"%s/",dirs->strings[i]);
-            all->append(all, formated_dir,DTW_BY_OWNERSHIP);
-
+            all->append(all, formated_dir);
+            free(formated_dir);
         }
 
         else{
-            all->append(all, dirs->strings[i],DTW_BY_VALUE);
+            all->append(all, dirs->strings[i]);
         }
 
         struct DtwStringArray *sub_files = dtw_list_basic(dirs->strings[i],DTW_FILE_TYPE,true);
@@ -6025,7 +6134,6 @@ struct DtwStringArray * newDtwStringArray(){
     self->size = 0;
 
     self->strings = (char**)malloc(1);
-    self->ownership = (bool*)malloc(0);
 
     self->append = DtwStringArray_dtw_append;
     self->set_value = DtwStringArray_dtw_set_value;
@@ -6057,35 +6165,17 @@ void DtwStringArray_dtw_set_value(struct DtwStringArray *self, int index, const 
 }
 
 // Function prototypes
-void DtwStringArray_dtw_append(struct DtwStringArray *self,const  char *string,int ownership){
+void DtwStringArray_dtw_append(struct DtwStringArray *self,const  char *string){
 
     self->strings =  (char**)realloc(self->strings, (self->size+ 1) * sizeof(char*));
-    self->ownership = (bool*)realloc(self->ownership,(self->size+ 1) * sizeof(bool));
-    self->ownership[self->size] = false;
-
-    if(ownership == DTW_BY_OWNERSHIP || ownership == DTW_BY_VALUE){
-        self->ownership[self->size] = true;
-    }
-
-    if(ownership == DTW_BY_REFERENCE || ownership == DTW_BY_OWNERSHIP){
-        self->strings[self->size] = (char*)string;
-    }
-
-    else{
-
-        int string_size = strlen(string);
-        self->strings[self->size] = (char*)malloc(string_size + 1);
-        self->strings[self->size][string_size] = '\0';
-        strcpy(self->strings[self->size], string);
-
-    }
+    self->strings[self->size] = strdup(string);
     self->size+=1;
 }
 
 
 void DtwStringArray_dtw_merge_string_array(struct DtwStringArray *self, struct DtwStringArray *other){
     for(int i = 0; i < other->size; i++){
-        self->append(self, other->strings[i],DTW_BY_VALUE);
+        self->append(self, other->strings[i]);
     }
 }
 
@@ -6096,43 +6186,21 @@ void DtwStringArray_dtw_represent_string_array(struct DtwStringArray *self){
     }
 }
 
-int string_cmp(const void *a, const void *b) {
-    const char *str_a = *(const char **)a;
-    const char *str_b = *(const char **)b;
-    return strcmp(str_a, str_b);
-}
+
 
 void DtwStringArray_dtw_sort(struct DtwStringArray *self) {
-    // Criar um array auxiliar para armazenar os pares (string, ownership)
-    privateDtwStringOwnershipPair *pairs = (privateDtwStringOwnershipPair*)malloc(self->size * sizeof(struct privateDtwStringOwnershipPair));
 
-    // Copiar as strings e os ownerships para o array auxiliar
-    for (int i = 0; i < self->size; i++) {
-        pairs[i].string = self->strings[i];
-        pairs[i].ownership = self->ownership[i];
-    }
+    qsort(self->strings, self->size, sizeof(char*), private_dtw_string_cmp);
 
-    // Ordenar o array auxiliar com base nas strings
-    qsort(pairs, self->size, sizeof(privateDtwStringOwnershipPair), private_dtw_string_cmp);
 
-    // Copiar as strings ordenadas e os ownerships de volta para o array original
-    for (int i = 0; i < self->size; i++) {
-        self->strings[i] = pairs[i].string;
-        self->ownership[i] = pairs[i].ownership;
-    }
-
-    free(pairs);
 }
 
 
 void DtwStringArray_dtw_free_string_array(struct DtwStringArray *self){
     for(int i = 0; i < self->size; i++){
-        bool owner= self->ownership[i];
-        if(owner){
             free(self->strings[i]);
-        }
     }
-    free(self->ownership);
+
     free(self->strings);
     free(self);
 }
@@ -7185,15 +7253,15 @@ struct DtwTreeTransactionReport * DtwTree_create_report(struct DtwTree *self){
         char *path = tree_part->path->get_path(tree_part->path);
 
         if (pending_action == DTW_WRITE){
-            report->write->append(report->write, path,DTW_BY_VALUE);
+            report->write->append(report->write, path);
         }
 
         else if (pending_action == DTW_MODIFY){
-            report->modify->append(report->modify, path,DTW_BY_VALUE);
+            report->modify->append(report->modify, path);
         }
 
         else if (pending_action == DTW_REMOVE){
-            report->remove->append(report->remove, path,DTW_BY_VALUE);
+            report->remove->append(report->remove, path);
         }
 
         free(path);
@@ -7393,7 +7461,7 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 
             if(process_owner == self->process ){
                 //printf("process %d get ownership\n",self->process);
-                self->locked_elements->append(self->locked_elements,formated_path,DTW_BY_VALUE);
+                self->locked_elements->append(self->locked_elements,formated_path);
                 free(formated_path);
                 return;
             }
@@ -7422,6 +7490,271 @@ void DtwLocker_free(struct DtwLocker *self){
     free(self);
 }
 #endif
+
+
+
+
+
+
+
+void DtwResource_rename(DtwResource *self, char *new_name){
+
+    char *old_path = strdup(self->path);
+    free(self->path);
+    self->path  = dtw_concat_path(self->mothhers_path,self->name);
+
+    if(self->allow_transaction){
+        self->transaction->move_any(self->transaction,old_path,self->path);
+    }
+    else{
+        dtw_move_any(old_path,self->path,DTW_NOT_CONCAT_PATH);
+    }
+    free(old_path);
+
+}
+
+
+void DtwResource_lock(DtwResource *self){
+    if(self->locked){
+        return;
+    }
+    #ifdef __linux__
+        self->locker->lock(self->locker,self->path);
+    #endif
+}
+void private_DtwResource_lock_if_auto_lock(DtwResource *self){
+    if(self->auto_lock){
+        self->lock(self);
+    }
+}
+
+
+void DtwResource_destroy(DtwResource *self){
+
+    if(self->allow_transaction){
+        self->transaction->delete_any(self->transaction,self->path);
+    }
+    else{
+        dtw_remove_any(self->path);
+    }
+
+}
+
+
+
+
+
+
+void DtwResource_commit(DtwResource *self){
+    self->transaction->commit(self->transaction,NULL);
+}
+
+
+int DtwResource_type(DtwResource *self){
+    int type_element =  dtw_complex_entity_type(self->path);
+    return type_element;
+}
+
+DtwStringArray *DtwResource_list(DtwResource *self){
+    return dtw_list_all(self->path,DTW_NOT_CONCAT_PATH);
+}
+
+const char * DtwResource_type_in_str(DtwResource *self){
+     return dtw_convert_entity(self->type(self));
+}
+
+void DtwResource_represent(DtwResource *self){
+    printf("path: %s\n", self->path);
+    printf("name: %s\n",self->name);
+    printf("type: %s\n",self->type_in_str(self));
+
+}
+
+
+
+
+unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binary){
+    private_DtwResource_lock_if_auto_lock(self);
+
+    return dtw_load_any_content(self->path,size,is_binary);
+}
+
+unsigned char *DtwResource_get_binary(DtwResource *self, long *size){
+    private_DtwResource_lock_if_auto_lock(self);
+    return dtw_load_binary_content(self->path,size);
+}
+
+char *DtwResource_get_string(DtwResource *self){
+    private_DtwResource_lock_if_auto_lock(self);
+    return  dtw_load_string_file_content(self->path);
+
+}
+
+long DtwResource_get_long(DtwResource *self){
+    private_DtwResource_lock_if_auto_lock(self);
+    return dtw_load_long_file_content(self->path);
+}
+
+
+double DtwResource_get_double(DtwResource *self){
+    private_DtwResource_lock_if_auto_lock(self);
+    return  dtw_load_double_file_content(self->path);
+}
+
+bool DtwResource_get_bool(DtwResource *self){
+    private_DtwResource_lock_if_auto_lock(self);
+    return  dtw_load_bool_file_content(self->path);
+}
+
+
+//
+// Created by mateusmoutinho on 05/08/23.
+//
+
+
+void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size){
+
+    if(self->allow_transaction){
+        self->transaction->write_any(self->transaction,self->path,element,size,true);
+    }
+    else{
+        dtw_write_any_content(self->path,element,size);
+    }
+
+
+}
+
+void DtwResource_set_string(DtwResource *self,const  char *element){
+    if(self->allow_transaction){
+        self->transaction->write_string(self->transaction,self->path,element);
+    }
+    else{
+        dtw_write_string_file_content(self->path,element);
+    }
+
+}
+
+void DtwResource_set_long(DtwResource *self,long element){
+    if(self->allow_transaction){
+        self->transaction->write_long(self->transaction,self->path,element);
+    }
+    else{
+        dtw_write_long_file_content(self->path,element);
+    }
+
+
+}
+
+void DtwResource_set_double(DtwResource *self,double element){
+
+    if(self->allow_transaction){
+        self->transaction->write_double(self->transaction,self->path,element);
+    }
+    else{
+        dtw_write_double_file_content(self->path,element);
+    }
+}
+
+void DtwResource_set_bool( DtwResource *self,bool element){
+
+    if(self->allow_transaction){
+        self->transaction->write_bool(self->transaction,self->path,element);
+    }
+    else{
+        dtw_write_bool_file_content(self->path,element);
+    }
+}
+
+
+
+DtwResource *private_new_DtwResource_raw(){
+    DtwResource *self = (DtwResource*) malloc(sizeof (DtwResource));
+    *self =(DtwResource){0};
+
+    self->lock = DtwResource_lock;
+    self->set_binary =DtwResource_set_binary;
+    self->set_string = DtwResource_set_string;
+    self->set_long = DtwResource_set_long;
+    self->set_double = DtwResource_set_double;
+    self->set_bool = DtwResource_set_bool;
+    self->destroy = DtwResource_destroy;
+
+    self->get_any = DtwResource_get_any;
+    self->get_binary = DtwResource_get_binary;
+    self->get_string = DtwResource_get_string;
+    self->get_long = DtwResource_get_long;
+    self->get_double =DtwResource_get_double;
+    self->get_bool = DtwResource_get_bool;
+    self->sub_resource =DtwResource_sub_resource;
+    self->commit = DtwResource_commit;
+    self->represent = DtwResource_represent;
+    self->free = DtwResource_represent;
+    self->free = DtwResource_free;
+    self->list = DtwResource_list;
+    self->type = DtwResource_type;
+    self->rename = DtwResource_rename;
+    self->type_in_str = DtwResource_type_in_str;
+
+
+    return self;
+}
+
+DtwResource *new_DtwResource(const char *path){
+    DtwResource *self = private_new_DtwResource_raw();
+
+    self->path = strdup(path);
+    self->name = strdup(path);
+
+    self->allow_transaction = true;
+    self->transaction = newDtwTransaction();
+#ifdef __linux__
+    self->locker = newDtwLocker();
+#endif
+
+}
+
+DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name){
+
+    DtwResource *new_element = private_new_DtwResource_raw();
+    new_element->transaction = self->transaction;
+    new_element->child = true;
+    new_element->mothhers_path = strdup(self->path);
+    new_element->path = dtw_concat_path(self->path, name);
+    new_element->name = strdup(name);
+
+    new_element->locked = self->locked;
+    new_element->auto_lock = self->auto_lock;
+#ifdef __linux__
+    new_element->locker = self->locker;
+#endif
+    private_DtwResource_lock_if_auto_lock(new_element);
+    return new_element;
+
+}
+
+
+void DtwResource_free(struct DtwResource *self){
+    if(!self->child){
+        if(self->transaction){
+            self->transaction->free(self->transaction);
+        }
+
+#ifdef  __linux__
+        self->locker->free(self->locker);
+#endif
+    }
+
+    if(self->mothhers_path){
+        free(self->mothhers_path);
+    }
+
+    free(self->path);
+    free(self->name);
+    free(self);
+}
+
+
+
 
 
 
@@ -7825,6 +8158,9 @@ DtwTransaction * newDtwTransaction(){
     self->append_action =DtwTransaction_append_action;
     self->write_any = DtwTransaction_write_any;
     self->write_string = DtwTransaction_write_string;
+    self->write_long = DtwTransaction_write_long;
+    self->write_double = DtwTransaction_write_double;
+    self->write_bool = DtwTransaction_write_bool;
     self->move_any = DtwTransaction_move_any;
     self->copy_any = DtwTransaction_copy_any;
     self->delete_any = DtwTransaction_delete_any;
@@ -7858,6 +8194,28 @@ void DtwTransaction_write_string(struct DtwTransaction *self,const char *path,co
     DtwActionTransaction * action = DtwActionTransaction_write_any(path,(unsigned char*)content, strlen(content),false);
     self->append_action(self,action);
 }
+
+void DtwTransaction_write_long(struct DtwTransaction *self,const char *path,long value){
+    char converted[20] ={0};
+    sprintf(converted,"%ld",value);
+    self->write_string(self,path,converted);
+}
+
+void DtwTransaction_write_bool(struct DtwTransaction *self,const char *path,bool value){
+    if(value){
+        self->write_string(self,path,"t");
+    }
+    else{
+        self->write_string(self,path,"f");
+    }
+}
+
+void DtwTransaction_write_double(struct DtwTransaction *self,const char *path,double value){
+    char converted[20] ={0};
+    sprintf(converted,"%lf",value);
+    self->write_string(self,path,converted);
+}
+
 
 void DtwTransaction_move_any(struct DtwTransaction *self,const char *source,const char *dest){
     DtwActionTransaction * action = DtwActionTransaction_move_any(source,dest);
