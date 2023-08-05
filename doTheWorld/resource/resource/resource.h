@@ -16,7 +16,7 @@ typedef struct DtwResource{
     /*
     struct DtwResourceArray{
         long size;
-        struct DtwResource **resources;
+        struct DtwResource **resource;
     }childs;
     */
 

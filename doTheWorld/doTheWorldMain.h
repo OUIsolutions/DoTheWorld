@@ -57,7 +57,7 @@ SOFTWARE.
 #include "locker/locker.h"
 #endif
 #include "transaction/declaration.h"
-#include "resource/resource.h"
+#include "resource/declaration.h"
 
 #include "base64/base64.c"
 #include "randonizer/randonizer.c"
@@ -75,7 +75,7 @@ SOFTWARE.
 #ifdef __linux__
 #include "locker/locker.c"
 #endif
-#include "resource/resource.c"
+#include "resource/definition.h"
 
 
 #include "transaction/definition.h"
