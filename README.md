@@ -487,11 +487,135 @@ int main(int argc, char *argv[]){
 With Resources you can iterate over all types of values ,and modifie than into an single transaction or one by one 
 ### Setting Values 
 <!--codeof:exemples/resources/setters.c-->
+~~~c
 
-### Getting Values 
+#include "doTheWorld.h"
+
+int main (){
+
+    DtwResource *values = new_DtwResource("tests/target/new_folder");
+
+    DtwResource *string_element = values->sub_resource(values,"text.txt");
+    string_element->set_string(string_element,"nothing");
+    string_element->free(string_element);
+    long size;
+    unsigned char *blob = dtw_load_binary_content("tests/target/blob.png",&size);
+
+    DtwResource *blob_element = values->sub_resource(values,"blob.png");
+    blob_element->set_binary(blob_element,blob,size);
+    blob_element->free(blob_element);
+    free(blob);
+    DtwResource *bInt = values->sub_resource(values,"b.txt");
+    bInt->set_long(bInt,25);
+    bInt->free(bInt);
+
+    DtwResource *cDouble = values->sub_resource(values,"c.txt");
+    cDouble->set_double(cDouble,10.5);
+    cDouble->free(cDouble);
+
+    DtwResource *dBool = values->sub_resource(values,"b.txt");
+    dBool->set_bool(dBool,true);
+    dBool->free(dBool);
+
+    DtwResource  *sub_foder = values->sub_resource(values,"sub_foder");
+    DtwResource *string_element2 = sub_foder->sub_resource(sub_foder,"a.txt");
+    string_element2->set_string(string_element2,"nothing");
+    string_element2->free(string_element2);
+
+    sub_foder->free(sub_foder);
+
+    values->commit(values);
+    values->free(values);
+
+
+
+
+
+}
+
+
+
+
+
+
+~~~
 <!--codeof:exemples/resources/getters.c-->
+~~~c
+#include "doTheWorld.h"
 
-## Transactions
+int main (){
+
+    DtwResource *values = new_DtwResource("tests/target");
+
+    printf("elements:---------------------------------\n");
+    DtwStringArray  *sub_elements = values->list(values);
+    sub_elements->represent(sub_elements);
+    sub_elements->free(sub_elements);
+    printf("types:--------------------------------------\n");
+
+    int values_type = values->type(values);
+    if(values_type != DTW_FOLDER_TYPE){
+        printf("values its not an folder\n");
+        values->free(values);
+        return 1;
+    }
+
+
+    DtwResource *string_r = values->sub_resource(values, "a.txt");
+    char *value_of_string = string_r->get_string(string_r);
+    if(!value_of_string){
+        printf("unable to locate a.txt\n");
+        values->free(values);
+        string_r->free(string_r);
+        free(value_of_string);
+        return 1;
+    }
+    printf("value string :%s\n",value_of_string);
+    string_r->free(string_r);
+    free(value_of_string);
+
+    DtwResource  *blob_r = values->sub_resource(values,"blob.png");
+    long size;
+    bool is_binary;
+    unsigned  char *blob_value = blob_r->get_any(blob_r,&size,&is_binary);
+    printf("blob size: %ld, is_binary:%d\n",size,is_binary);
+    free(blob_value);
+    blob_r->free(blob_r);
+
+
+    DtwResource *numerical = values->sub_resource(values,"numerical");
+
+    DtwResource  *double_r = numerical->sub_resource(numerical,"double.txt");
+    double  double_value = double_r->get_double(double_r);
+    printf("double value %lf\n",double_value);
+    double_r->free(double_r);
+
+
+    DtwResource  *long_r = numerical->sub_resource(numerical,"integer.txt");
+    long  long_value = long_r->get_long(long_r);
+    printf("long value %ld\n",long_value);
+    long_r->free(long_r);
+
+
+    DtwResource  *bool_r = numerical->sub_resource(numerical,"true_normal.txt");
+    bool bool_value = bool_r->get_bool(bool_r);
+    printf("bool value %d\n",bool_value);
+    bool_r->free(bool_r);
+
+
+    numerical->free(numerical);
+    values->free(values);
+
+
+
+}
+
+
+
+
+
+
+~~~
 ### Generating transaction
 with transactions you can make all modifications and executed or denny it one time,avoid nod
 wanted side effects

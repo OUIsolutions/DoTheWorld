@@ -4,7 +4,7 @@
 int main (){
 
     DtwResource *values = new_DtwResource("tests/target/new_folder");
-    values->allow_transaction = true;
+
     DtwResource *string_element = values->sub_resource(values,"text.txt");
     string_element->set_string(string_element,"nothing");
     string_element->free(string_element);
