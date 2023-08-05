@@ -1,6 +1,4 @@
-//
-// Created by mateusmoutinho on 05/08/23.
-//
+
 #include "../../../doTheWorld_test.h"
 
 int main (){
