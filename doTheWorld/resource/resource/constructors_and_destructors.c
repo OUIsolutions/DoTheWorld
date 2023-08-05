@@ -48,6 +48,7 @@ DtwResource *new_DtwResource(const char *path){
 DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name){
 
     DtwResource *new_element = private_new_DtwResource_raw();
+    new_element->allow_transaction = self->allow_transaction;
     new_element->transaction = self->transaction;
     new_element->child = true;
     new_element->mothhers_path = strdup(self->path);

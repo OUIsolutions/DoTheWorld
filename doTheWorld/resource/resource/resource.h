@@ -1,6 +1,6 @@
 
 
-    typedef struct DtwResource{
+typedef struct DtwResource{
 
         bool allow_transaction;
         bool auto_lock;
@@ -47,7 +47,7 @@
 
         void (*free)(struct DtwResource *self);
 
-    }DtwResource;
+}DtwResource;
 
 
 DtwResource *private_new_DtwResource_raw();
