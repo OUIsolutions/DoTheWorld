@@ -9,8 +9,7 @@
     #ifdef  __linux__
         DtwLocker  *locker;
     #endif
-        struct DtwResource *mother;
-
+        char *mothhers_path;
         char *name;
         char *path;
 
@@ -56,7 +55,7 @@ DtwResource *private_new_DtwResource_raw();
 
 DtwResource *new_DtwResource(const char *path);
 
-DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *path);
+DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name);
 
 void DtwResource_lock(DtwResource *self);
 

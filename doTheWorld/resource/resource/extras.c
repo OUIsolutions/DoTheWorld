@@ -5,19 +5,17 @@
 
 void DtwResource_rename(DtwResource *self, char *new_name){
 
-    char *old_path = private_DtwResource_get_path(self);
-    free(self->name);
-    self->name = strdup(new_name);
-    char *new_path = private_DtwResource_get_path(self);
+    char *old_path = strdup(self->path);
+    free(self->path);
+    self->path  = dtw_concat_path(self->mothhers_path,self->name);
 
     if(self->allow_transaction){
-        self->transaction->move_any(self->transaction,old_path,new_path);
+        self->transaction->move_any(self->transaction,old_path,self->path);
     }
     else{
-        dtw_move_any(old_path,new_path,DTW_NOT_CONCAT_PATH);
+        dtw_move_any(old_path,self->path,DTW_NOT_CONCAT_PATH);
     }
     free(old_path);
-    free(new_path);
 
 }
 

@@ -45,14 +45,14 @@ DtwResource *new_DtwResource(const char *path){
 
 }
 
-DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *path){
+DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name){
 
     DtwResource *new_element = private_new_DtwResource_raw();
     new_element->transaction = self->transaction;
     new_element->child = true;
-    new_element->mother = self;
-    new_element->path = dtw_concat_path(self->path,path);
-    new_element->name = strdup(path);
+    new_element->mothhers_path = strdup(self->path);
+    new_element->path = dtw_concat_path(self->path, name);
+    new_element->name = strdup(name);
 
     new_element->locked = self->locked;
     new_element->auto_lock = self->auto_lock;
@@ -75,6 +75,12 @@ void DtwResource_free(struct DtwResource *self){
         self->locker->free(self->locker);
 #endif
     }
+
+    if(self->mothhers_path){
+        free(self->mothhers_path);
+    }
+
+    free(self->path);
     free(self->name);
     free(self);
 }
