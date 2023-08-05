@@ -15,13 +15,6 @@
         bool child;
 
 
-        bool update_cache;
-        bool cached_used;
-        int cache_type;
-        long cache_size;
-        double numerical_cache;
-        void *cache_value;
-
 
         struct DtwResource * (*sub_resource)(struct DtwResource *self,const  char *path);
 
