@@ -4,7 +4,6 @@ struct DtwStringArray * newDtwStringArray(){
     self->size = 0;
 
     self->strings = (char**)malloc(1);
-    self->ownership = (bool*)malloc(0);
 
     self->append = DtwStringArray_dtw_append;
     self->set_value = DtwStringArray_dtw_set_value;
@@ -36,35 +35,17 @@ void DtwStringArray_dtw_set_value(struct DtwStringArray *self, int index, const 
 }
 
 // Function prototypes
-void DtwStringArray_dtw_append(struct DtwStringArray *self,const  char *string,int ownership){
+void DtwStringArray_dtw_append(struct DtwStringArray *self,const  char *string){
 
     self->strings =  (char**)realloc(self->strings, (self->size+ 1) * sizeof(char*));
-    self->ownership = (bool*)realloc(self->ownership,(self->size+ 1) * sizeof(bool));
-    self->ownership[self->size] = false;
-
-    if(ownership == DTW_BY_OWNERSHIP || ownership == DTW_BY_VALUE){
-        self->ownership[self->size] = true;
-    }
-
-    if(ownership == DTW_BY_REFERENCE || ownership == DTW_BY_OWNERSHIP){
-        self->strings[self->size] = (char*)string;
-    }
-
-    else{
-
-        int string_size = strlen(string);
-        self->strings[self->size] = (char*)malloc(string_size + 1);
-        self->strings[self->size][string_size] = '\0';
-        strcpy(self->strings[self->size], string);
-
-    }
+    self->strings[self->size] = strdup(string);
     self->size+=1;
 }
 
 
 void DtwStringArray_dtw_merge_string_array(struct DtwStringArray *self, struct DtwStringArray *other){
     for(int i = 0; i < other->size; i++){
-        self->append(self, other->strings[i],DTW_BY_VALUE);
+        self->append(self, other->strings[i]);
     }
 }
 
@@ -75,43 +56,21 @@ void DtwStringArray_dtw_represent_string_array(struct DtwStringArray *self){
     }
 }
 
-int string_cmp(const void *a, const void *b) {
-    const char *str_a = *(const char **)a;
-    const char *str_b = *(const char **)b;
-    return strcmp(str_a, str_b);
-}
+
 
 void DtwStringArray_dtw_sort(struct DtwStringArray *self) {
-    // Criar um array auxiliar para armazenar os pares (string, ownership)
-    privateDtwStringOwnershipPair *pairs = (privateDtwStringOwnershipPair*)malloc(self->size * sizeof(struct privateDtwStringOwnershipPair));
 
-    // Copiar as strings e os ownerships para o array auxiliar
-    for (int i = 0; i < self->size; i++) {
-        pairs[i].string = self->strings[i];
-        pairs[i].ownership = self->ownership[i];
-    }
+    qsort(self->strings, self->size, sizeof(char*), private_dtw_string_cmp);
 
-    // Ordenar o array auxiliar com base nas strings
-    qsort(pairs, self->size, sizeof(privateDtwStringOwnershipPair), private_dtw_string_cmp);
 
-    // Copiar as strings ordenadas e os ownerships de volta para o array original
-    for (int i = 0; i < self->size; i++) {
-        self->strings[i] = pairs[i].string;
-        self->ownership[i] = pairs[i].ownership;
-    }
-
-    free(pairs);
 }
 
 
 void DtwStringArray_dtw_free_string_array(struct DtwStringArray *self){
     for(int i = 0; i < self->size; i++){
-        bool owner= self->ownership[i];
-        if(owner){
             free(self->strings[i]);
-        }
     }
-    free(self->ownership);
+
     free(self->strings);
     free(self);
 }

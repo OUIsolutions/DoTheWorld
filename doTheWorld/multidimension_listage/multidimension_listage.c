@@ -10,7 +10,7 @@ struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool concat_p
         }
       
         
-        dirs->append(dirs, (char*)path,DTW_BY_VALUE);
+        dirs->append(dirs, (char*)path);
 
         private_dtw_add_end_bar_to_dirs_string_array(dirs);
         int i = 0;
@@ -77,12 +77,12 @@ struct DtwStringArray * dtw_list_all_recursively(const char *path,bool concat_pa
 
             char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 2);
             sprintf(formated_dir,"%s/",dirs->strings[i]);
-            all->append(all, formated_dir,DTW_BY_OWNERSHIP);
+            all->append(all, formated_dir);
 
         }
 
         else{
-            all->append(all, dirs->strings[i],DTW_BY_VALUE);
+            all->append(all, dirs->strings[i]);
         }
 
         struct DtwStringArray *sub_files = dtw_list_basic(dirs->strings[i],DTW_FILE_TYPE,true);

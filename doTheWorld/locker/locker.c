@@ -91,7 +91,7 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 
             if(process_owner == self->process ){
                 //printf("process %d get ownership\n",self->process);
-                self->locked_elements->append(self->locked_elements,formated_path,DTW_BY_VALUE);
+                self->locked_elements->append(self->locked_elements,formated_path);
                 free(formated_path);
                 return;
             }
