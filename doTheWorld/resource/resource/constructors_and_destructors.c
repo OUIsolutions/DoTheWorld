@@ -33,7 +33,10 @@ DtwResource *private_new_DtwResource_raw(){
 
 DtwResource *new_DtwResource(const char *path){
     DtwResource *self = private_new_DtwResource_raw();
+
+    self->path = strdup(path);
     self->name = strdup(path);
+
     self->allow_transaction = true;
     self->transaction = newDtwTransaction();
 #ifdef __linux__
@@ -48,7 +51,9 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *path){
     new_element->transaction = self->transaction;
     new_element->child = true;
     new_element->mother = self;
+    new_element->path = dtw_concat_path(self->path,path);
     new_element->name = strdup(path);
+
     new_element->locked = self->locked;
     new_element->auto_lock = self->auto_lock;
 #ifdef __linux__

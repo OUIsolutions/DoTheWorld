@@ -21,26 +21,13 @@ void DtwResource_rename(DtwResource *self, char *new_name){
 
 }
 
-char * private_DtwResource_get_path(DtwResource *self){
-    if(self->child){
-        char *mother_path =  private_DtwResource_get_path(self->mother);
-        char *result = dtw_concat_path(mother_path,self->name);
-        free(mother_path);
-        return result;
-    }
-    return strdup(self->name);
-}
-
 
 void DtwResource_lock(DtwResource *self){
     if(self->locked){
         return;
     }
-
     #ifdef __linux__
-        char *path = private_DtwResource_get_path(self);
-        self->locker->lock(self->locker,path);
-        free(path);
+        self->locker->lock(self->locker,self->path);
     #endif
 }
 void private_DtwResource_lock_if_auto_lock(DtwResource *self){
@@ -51,15 +38,14 @@ void private_DtwResource_lock_if_auto_lock(DtwResource *self){
 
 
 void DtwResource_destroy(DtwResource *self){
-    char *path = private_DtwResource_get_path(self);
 
     if(self->allow_transaction){
-        self->transaction->delete_any(self->transaction,path);
+        self->transaction->delete_any(self->transaction,self->path);
     }
     else{
-        dtw_remove_any(path);
+        dtw_remove_any(self->path);
     }
-    free(path);
+
 }
 
 
@@ -71,18 +57,14 @@ void DtwResource_commit(DtwResource *self){
     self->transaction->commit(self->transaction,NULL);
 }
 
+
 int DtwResource_type(DtwResource *self){
-    char *path = private_DtwResource_get_path(self);
-    int type_element =  dtw_complex_entity_type(path);
-    free(path);
+    int type_element =  dtw_complex_entity_type(self->path);
     return type_element;
 }
 
 DtwStringArray *DtwResource_list(DtwResource *self){
-    char *path = private_DtwResource_get_path(self);
-    DtwStringArray  *result = dtw_list_all(path,DTW_NOT_CONCAT_PATH);
-    free(path);
-    return result;
+    return dtw_list_all(self->path,DTW_NOT_CONCAT_PATH);
 }
 
 const char * DtwResource_type_in_str(DtwResource *self){
@@ -90,10 +72,9 @@ const char * DtwResource_type_in_str(DtwResource *self){
 }
 
 void DtwResource_represent(DtwResource *self){
-    char *path = private_DtwResource_get_path(self);
-    printf("path: %s\n", path);
+    printf("path: %s\n", self->path);
     printf("name: %s\n",self->name);
     printf("type: %s\n",self->type_in_str(self));
-    free(path);
+
 }
 

@@ -10,7 +10,9 @@
         DtwLocker  *locker;
     #endif
         struct DtwResource *mother;
+
         char *name;
+        char *path;
 
         bool child;
 
@@ -60,9 +62,7 @@ void DtwResource_lock(DtwResource *self);
 
 void private_DtwResource_lock_if_auto_lock(DtwResource *self);
 
-char * private_DtwResource_get_path(DtwResource *self);
 
-void private_DtwResource_clear_cache(DtwResource *self);
 
 
 void DtwResource_rename(DtwResource *self, char *new_name);
