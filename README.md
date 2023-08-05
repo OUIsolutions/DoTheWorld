@@ -483,6 +483,13 @@ int main(int argc, char *argv[]){
 
 }
 ~~~
+## Resources 
+With Resources you can iterate over all types of values ,and modifie than into an single transaction or one by one 
+### Setting Values 
+<!--codeof:exemples/resources/setters.c-->
+
+### Getting Values 
+<!--codeof:exemples/resources/getters.c-->
 
 ## Transactions
 ### Generating transaction
