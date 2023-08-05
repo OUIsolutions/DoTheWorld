@@ -7710,8 +7710,8 @@ DtwResource *new_DtwResource(const char *path){
 #ifdef __linux__
     self->locker = newDtwLocker();
 #endif
-
-}
+    return self;
+}   
 
 DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name){
 
