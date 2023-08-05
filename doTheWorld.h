@@ -4656,7 +4656,7 @@ void DtwTransaction_free(struct DtwTransaction *self);
 
 
 
-    typedef struct DtwResource{
+typedef struct DtwResource{
 
         bool allow_transaction;
         bool auto_lock;
@@ -4703,7 +4703,7 @@ void DtwTransaction_free(struct DtwTransaction *self);
 
         void (*free)(struct DtwResource *self);
 
-    }DtwResource;
+}DtwResource;
 
 
 DtwResource *private_new_DtwResource_raw();
@@ -7716,6 +7716,7 @@ DtwResource *new_DtwResource(const char *path){
 DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name){
 
     DtwResource *new_element = private_new_DtwResource_raw();
+    new_element->allow_transaction = self->allow_transaction;
     new_element->transaction = self->transaction;
     new_element->child = true;
     new_element->mothhers_path = strdup(self->path);

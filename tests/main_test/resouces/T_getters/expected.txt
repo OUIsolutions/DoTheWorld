@@ -1,0 +1,14 @@
+ 
+elements:---------------------------------
+a.txt
+blob.png
+sub_folder
+transaction.json
+wrong_transaction.json
+numerical
+types:--------------------------------------
+value string :Hello World!
+blob size: 36577, is_binary:1
+double value 1.300000
+long value 10
+bool value 1
