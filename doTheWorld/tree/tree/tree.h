@@ -116,6 +116,20 @@ struct DtwTree *DtwTree_dtw_filter(
 struct DtwTreePart *DtwTree_find_tree_part_by_name(struct DtwTree *self, const char *name);
 struct DtwTreePart *DtwTree_find_tree_part_by_path(struct DtwTree *self, const char *path);
 
+//listages
+struct DtwStringArray *DtwTree_list_files(struct DtwTree *self, const char *path,bool concat_path);
+
+struct DtwStringArray *DtwTree_list_dirs(struct DtwTree *self, const char *path,bool concat_path);
+
+struct DtwStringArray *DtwTree_list_all(struct DtwTree *self, const char *path,bool concat_path);
+
+struct DtwStringArray *DtwTree_list_files_recursively(struct DtwTree *self, const char *path,bool concat_path);
+
+struct DtwStringArray *DtwTree_list_dirs_recursively(struct DtwTree *self, const char *path,bool concat_path);
+
+struct DtwStringArray *DtwTree_list_all_recursively(struct DtwTree *self, const char *path,bool concat_path);
+
+
 void DtwTree_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_part);
 void DtwTree_remove_tree_part(struct DtwTree *self, int position);
 void DtwTree_add_tree_part_reference(struct DtwTree *self, struct DtwTreePart *tree_part);
@@ -137,12 +151,15 @@ void DtwTree_add_tree_from_hardware(
 struct DtwTreeTransactionReport * DtwTree_create_report(struct DtwTree *self);
 
 
+
 void DtwTree_insecure_hardware_remove_tree(struct DtwTree *self);
+
 void DtwTree_insecure_hardware_write_tree(struct DtwTree *self);
+
 void DtwTree_hardware_commit_tree(struct DtwTree *self);
 
-
 void DtwTree_loads_json_tree(struct DtwTree *self, const char *content);
+
 void DtwTree_loads_json_tree_from_file(struct DtwTree *self, const char *path);
 
 char * DtwTree_dumps_tree_json(
