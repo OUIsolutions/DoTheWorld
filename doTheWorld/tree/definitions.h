@@ -6,4 +6,5 @@
 
 #include "tree/json_tree.c"
 #include "tree/tree_finding.c"
+#include "tree/listage.c"
 #include "tree/tree.c"

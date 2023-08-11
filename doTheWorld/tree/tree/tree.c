@@ -22,7 +22,14 @@ struct  DtwTree * newDtwTree(){
     self->find_part_by_name  = DtwTree_find_tree_part_by_name;
     self->find_part_by_path = DtwTree_find_tree_part_by_path;
     self->report = DtwTree_create_report;
-    //{%if not  lite %}
+    
+    self->list_files = DtwTree_list_files;
+    self->list_dirs = DtwTree_list_dirs;
+    self->list_all = DtwTree_list_all;
+
+    self->list_files_recursively = DtwTree_list_files_recursively;
+    self->list_dirs_recursively = DtwTree_list_dirs_recursively;
+    self->list_all_recursively = DtwTree_list_all_recursively;
     
     self->loads_json_tree = DtwTree_loads_json_tree;
     self->loads_json_tree_from_file = DtwTree_loads_json_tree_from_file;
