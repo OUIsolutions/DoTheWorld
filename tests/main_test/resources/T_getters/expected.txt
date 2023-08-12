@@ -2,9 +2,9 @@
 elements:---------------------------------
 a.txt
 blob.png
-sub_folder
 transaction.json
 wrong_transaction.json
+sub_folder
 numerical
 types:--------------------------------------
 value string :Hello World!

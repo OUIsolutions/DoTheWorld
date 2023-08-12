@@ -4360,6 +4360,14 @@ typedef struct  DtwTree{
             bool (*caller)(struct  DtwTreePart *part)
     );
 
+    DtwStringArray * (*list_files)(struct DtwTree *self, const char *path,bool concat_path);
+    DtwStringArray * (*list_dirs)(struct DtwTree *self, const char *path,bool concat_path);
+    DtwStringArray * (*list_all)(struct DtwTree *self, const char *path,bool concat_path);
+
+    DtwStringArray * (*list_files_recursively)(struct DtwTree *self, const char *path,bool concat_path);
+    DtwStringArray * (*list_dirs_recursively)(struct DtwTree *self, const char *path,bool concat_path);
+    DtwStringArray * (*list_all_recursively)(struct DtwTree *self, const char *path,bool concat_path);
+
     struct DtwTree *(*map)(
             struct DtwTree *self,
             struct  DtwTreePart*(*caller)(struct  DtwTreePart *part)
@@ -4370,14 +4378,13 @@ typedef struct  DtwTree{
 
 
     struct DtwTreeTransactionReport * (*report)(struct DtwTree *self);
-    //{%if not  lite %}
 
     void (*loads_json_tree)(
         struct DtwTree *self,
         const char *content
     );
 
-
+    
     void (*loads_json_tree_from_file)(
         struct DtwTree *self,
         const char *path
@@ -4427,6 +4434,20 @@ struct DtwTree *DtwTree_dtw_filter(
 struct DtwTreePart *DtwTree_find_tree_part_by_name(struct DtwTree *self, const char *name);
 struct DtwTreePart *DtwTree_find_tree_part_by_path(struct DtwTree *self, const char *path);
 
+//listages
+struct DtwStringArray *DtwTree_list_files(struct DtwTree *self, const char *path,bool concat_path);
+
+struct DtwStringArray *DtwTree_list_dirs(struct DtwTree *self, const char *path,bool concat_path);
+
+struct DtwStringArray *DtwTree_list_all(struct DtwTree *self, const char *path,bool concat_path);
+
+struct DtwStringArray *DtwTree_list_files_recursively(struct DtwTree *self, const char *path,bool concat_path);
+
+struct DtwStringArray *DtwTree_list_dirs_recursively(struct DtwTree *self, const char *path,bool concat_path);
+
+struct DtwStringArray *DtwTree_list_all_recursively(struct DtwTree *self, const char *path,bool concat_path);
+
+
 void DtwTree_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_part);
 void DtwTree_remove_tree_part(struct DtwTree *self, int position);
 void DtwTree_add_tree_part_reference(struct DtwTree *self, struct DtwTreePart *tree_part);
@@ -4448,12 +4469,15 @@ void DtwTree_add_tree_from_hardware(
 struct DtwTreeTransactionReport * DtwTree_create_report(struct DtwTree *self);
 
 
+
 void DtwTree_insecure_hardware_remove_tree(struct DtwTree *self);
+
 void DtwTree_insecure_hardware_write_tree(struct DtwTree *self);
+
 void DtwTree_hardware_commit_tree(struct DtwTree *self);
 
-
 void DtwTree_loads_json_tree(struct DtwTree *self, const char *content);
+
 void DtwTree_loads_json_tree_from_file(struct DtwTree *self, const char *path);
 
 char * DtwTree_dumps_tree_json(
@@ -7168,6 +7192,247 @@ struct DtwTreePart *DtwTree_find_tree_part_by_path(struct DtwTree *self, const c
 }
 
 
+//listages
+struct DtwStringArray *DtwTree_list_files(struct DtwTree *self, const char *path,bool concat_path){
+    DtwStringArray *formated_elements = newDtwStringArray();
+    for(int i = 0; i < self->size; i++){
+        DtwTreePart *current = self->tree_parts[i];
+        DtwPath *current_path = current->path;
+        char *current_path_string = current_path->get_path(current_path);
+
+        long size = strlen(current_path_string);
+        char last_char = current_path_string[size-1];
+        if(last_char =='/'){
+            free(current_path_string);
+            continue;
+        }
+
+        if(dtw_starts_with(current_path_string,path)){
+            //means its not an path from these dimension
+            int path_size = strlen(path);
+            bool insert = true;
+
+            for(int i =path_size +1; i < size;i++){
+                if(current_path_string[i] == '/'){
+                    insert = false;
+                    continue;
+                }
+            }
+
+            if(insert){
+                formated_elements->append(formated_elements,current_path_string);
+            }
+
+        }
+
+        free(current_path_string);
+
+    }
+    if(!concat_path){
+
+        DtwStringArray  *not_concatened = private_dtw_remove_start_path(formated_elements,path);
+        formated_elements->free(formated_elements);
+        return not_concatened;
+    }
+
+
+    return formated_elements;
+}
+
+struct DtwStringArray *DtwTree_list_dirs(struct DtwTree *self, const char *path,bool concat_path){
+
+    DtwStringArray *formated_elements = newDtwStringArray();
+    for(int i = 0; i < self->size; i++){
+        DtwTreePart *current = self->tree_parts[i];
+        DtwPath *current_path = current->path;
+        char *current_path_string = current_path->get_path(current_path);
+
+        long size = strlen(current_path_string);
+        char last_char = current_path_string[size-1];
+        if(last_char !='/'){
+            free(current_path_string);
+            continue;
+        }
+
+        if(dtw_starts_with(current_path_string,path)){
+            //means its not an path from these dimension
+            int path_size = strlen(path);
+
+            int total_found = 0;
+            for(int i =path_size +1; i < size;i++){
+                if(current_path_string[i] == '/'){
+                    total_found+=1;
+                    continue;
+                }
+            }
+
+            if(total_found ==1){
+                formated_elements->append(formated_elements,current_path_string);
+            }
+
+        }
+
+        free(current_path_string);
+
+    }
+    if(!concat_path){
+
+        DtwStringArray  *not_concatened = private_dtw_remove_start_path(formated_elements,path);
+        formated_elements->free(formated_elements);
+        return not_concatened;
+    }
+
+
+    return formated_elements;
+}
+
+struct DtwStringArray *DtwTree_list_all(struct DtwTree *self, const char *path,bool concat_path){
+
+    DtwStringArray *formated_elements = newDtwStringArray();
+    for(int i = 0; i < self->size; i++){
+        DtwTreePart *current = self->tree_parts[i];
+        DtwPath *current_path = current->path;
+        char *current_path_string = current_path->get_path(current_path);
+
+        if(dtw_starts_with(current_path_string,path)){
+            //means its not an path from these dimension
+            int path_size = strlen(path);
+            long size = strlen(current_path_string);
+            char last_char = current_path_string[size-1];
+
+            int total_found = 0;
+            for(int i =path_size+1; i < size;i++){
+                if(current_path_string[i] == '/'){
+                    total_found+=1;
+                    continue;
+                }
+            }
+
+            if(total_found ==1 && last_char == '/'){
+                formated_elements->append(formated_elements,current_path_string);
+            }
+            if(total_found ==0){
+                formated_elements->append(formated_elements,current_path_string);
+
+            }
+
+
+
+        }
+
+        free(current_path_string);
+
+    }
+    if(!concat_path){
+
+        DtwStringArray  *not_concatened = private_dtw_remove_start_path(formated_elements,path);
+        formated_elements->free(formated_elements);
+        return not_concatened;
+    }
+
+
+    return formated_elements;
+
+}
+
+struct DtwStringArray *DtwTree_list_files_recursively(struct DtwTree *self, const char *path,bool concat_path){
+    DtwStringArray *formated_elements = newDtwStringArray();
+    for(int i = 0; i < self->size; i++){
+        DtwTreePart *current = self->tree_parts[i];
+        DtwPath *current_path = current->path;
+        char *current_path_string = current_path->get_path(current_path);
+
+        long size = strlen(current_path_string);
+        char last_char = current_path_string[size-1];
+        if(last_char =='/'){
+            free(current_path_string);
+            continue;
+        }
+
+        if(dtw_starts_with(current_path_string,path)){
+            formated_elements->append(formated_elements,current_path_string);
+
+        }
+
+        free(current_path_string);
+
+    }
+    if(!concat_path){
+
+        DtwStringArray  *not_concatened = private_dtw_remove_start_path(formated_elements,path);
+        formated_elements->free(formated_elements);
+        return not_concatened;
+    }
+
+
+    return formated_elements;
+}
+
+struct DtwStringArray *DtwTree_list_dirs_recursively(struct DtwTree *self, const char *path,bool concat_path){
+    DtwStringArray *formated_elements = newDtwStringArray();
+    for(int i = 0; i < self->size; i++){
+        DtwTreePart *current = self->tree_parts[i];
+        DtwPath *current_path = current->path;
+        char *current_path_string = current_path->get_path(current_path);
+
+        long size = strlen(current_path_string);
+        char last_char = current_path_string[size-1];
+        if(last_char !='/'){
+            free(current_path_string);
+            continue;
+        }
+
+        if(dtw_starts_with(current_path_string,path)){
+            formated_elements->append(formated_elements,current_path_string);
+
+        }
+
+
+        free(current_path_string);
+
+    }
+    if(!concat_path){
+
+        DtwStringArray  *not_concatened = private_dtw_remove_start_path(formated_elements,path);
+        formated_elements->free(formated_elements);
+        return not_concatened;
+    }
+
+
+    return formated_elements;
+}
+
+
+struct DtwStringArray *DtwTree_list_all_recursively(struct DtwTree *self, const char *path,bool concat_path){
+    DtwStringArray *formated_elements = newDtwStringArray();
+    for(int i = 0; i < self->size; i++){
+        DtwTreePart *current = self->tree_parts[i];
+        DtwPath *current_path = current->path;
+        char *current_path_string = current_path->get_path(current_path);
+
+
+        if(dtw_starts_with(current_path_string,path)){
+            formated_elements->append(formated_elements,current_path_string);
+
+        }
+
+        free(current_path_string);
+
+    }
+    if(!concat_path){
+
+        DtwStringArray  *not_concatened = private_dtw_remove_start_path(formated_elements,path);
+        formated_elements->free(formated_elements);
+        return not_concatened;
+    }
+
+
+    return formated_elements;
+}
+
+
+
+
 
 
 struct  DtwTree * newDtwTree(){
@@ -7191,7 +7456,14 @@ struct  DtwTree * newDtwTree(){
     self->find_part_by_name  = DtwTree_find_tree_part_by_name;
     self->find_part_by_path = DtwTree_find_tree_part_by_path;
     self->report = DtwTree_create_report;
-    //{%if not  lite %}
+    
+    self->list_files = DtwTree_list_files;
+    self->list_dirs = DtwTree_list_dirs;
+    self->list_all = DtwTree_list_all;
+
+    self->list_files_recursively = DtwTree_list_files_recursively;
+    self->list_dirs_recursively = DtwTree_list_dirs_recursively;
+    self->list_all_recursively = DtwTree_list_all_recursively;
     
     self->loads_json_tree = DtwTree_loads_json_tree;
     self->loads_json_tree_from_file = DtwTree_loads_json_tree_from_file;
