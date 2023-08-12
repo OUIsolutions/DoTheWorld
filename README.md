@@ -867,9 +867,6 @@ easy steps
 
 <!--codeof:exemples/trees/add_tree_from_hardware.c-->
 ~~~c
-//
-// Created by jurandi on 20-06-2023.
-//
 #include "doTheWorld.h"
 
 
