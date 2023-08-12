@@ -13,7 +13,7 @@ int main(int argc, char *argv[]){
                     .path_atributes=DTW_INCLUDE
             }
     );
-  DtwStringArray *files = tree->list_all_recursively(tree,"tests/target/sub_folder",DTW_NOT_CONCAT_PATH);
+  DtwStringArray *files = tree->list_all_recursively(tree,"tests/target/",DTW_NOT_CONCAT_PATH);
   files->sort(files);
   files->represent(files);
   files->free(files);
