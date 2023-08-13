@@ -52,12 +52,12 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
         if(not_exist || expired){
 
             DtwPath *path = newDtwPath(formated_path);
-            char *dirname = path->get_dir(path);
+            char *dirname = DtwPath_get_dir(path);
             if(dirname){
                 dtw_create_dir_recursively(dirname);
                 free(dirname);
             }
-            path->free(path);
+            DtwPath_free(path);
 
             unsigned long long end_time = getMicroseconds();
             unsigned long long controled_duration = end_time - startTime;

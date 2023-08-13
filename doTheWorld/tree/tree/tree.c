@@ -49,7 +49,7 @@ struct DtwTree *DtwTree_get_sub_tree(struct DtwTree *self, const char *path, boo
     struct DtwTree *sub_tree = newDtwTree();
     for(int i = 0; i < self->size; i++){
         struct DtwTreePart *tree_part = self->tree_parts[i];
-        char *current_path = tree_part->path->get_path(tree_part->path);
+        char *current_path =  DtwPath_get_path(tree_part->path);
         if(dtw_starts_with(current_path,path)){
             if(copy_content){
                 sub_tree->add_tree_part_by_copy(sub_tree,tree_part->self_copy(tree_part));
@@ -88,7 +88,7 @@ struct DtwTreeTransactionReport * DtwTree_create_report(struct DtwTree *self){
     for(int i = 0; i < self->size; i++){
         struct DtwTreePart *tree_part = self->tree_parts[i];
         int pending_action = tree_part->pending_action;
-        char *path = tree_part->path->get_path(tree_part->path);
+        char *path = DtwPath_get_path(tree_part->path);
 
         if (pending_action == DTW_WRITE){
             DtwStringArray_append(report->write, path);
@@ -160,7 +160,7 @@ void DtwTree_add_tree_from_hardware(struct DtwTree *self,const char *path, DtwTr
     for(int i =0; i < self->size; i++){
         struct DtwTreePart *current_part = self->tree_parts[i];
         struct DtwPath *current_path = current_part->path;
-        char *current_path_string = current_path->get_path(current_path);
+        char *current_path_string = DtwPath_get_path(current_path);
         //remove the size toremove from string
 
         memmove(
@@ -168,7 +168,7 @@ void DtwTree_add_tree_from_hardware(struct DtwTree *self,const char *path, DtwTr
                 current_path_string+size_to_remove,
                 strlen(current_path_string) - size_to_remove +1
                 );
-        current_path->set_path(current_path,current_path_string);
+        DtwPath_set_path(current_path,current_path_string);
         strcpy(current_path->original_path,current_path_string);
         free(current_path_string);
     }

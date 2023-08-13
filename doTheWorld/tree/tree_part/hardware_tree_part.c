@@ -7,7 +7,7 @@
 void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self){
     long size;
     bool is_binary;
-    char *path = self->path->get_path(self->path);
+    char *path = DtwPath_get_path(self->path);
     
     if(dtw_entity_type(path) != DTW_FILE_TYPE){
         free(path);
@@ -43,7 +43,7 @@ bool DtwTreePart_hardware_remove(struct DtwTreePart *self, int transaction){
         return false;
      }
 
-    char *path = self->path->get_path(self->path);
+    char *path =DtwPath_get_path(self->path);
 
     dtw_remove_any(path);
     
@@ -62,8 +62,8 @@ bool DtwTreePart_hardware_write(struct DtwTreePart *self, int transaction){
     }   
     //means that the content not exist in memory
     if(self->content_exist_in_memory == false){
-        char *path = self->path->get_path(self->path);
-        char *dir = self->path->get_dir(self->path);
+        char *path = DtwPath_get_path(self->path);
+        char *dir = DtwPath_get_dir(self->path);
         int entity_type = dtw_entity_type(path);
        
         if(entity_type== DTW_NOT_FOUND && dir!= NULL){
@@ -79,7 +79,7 @@ bool DtwTreePart_hardware_write(struct DtwTreePart *self, int transaction){
 
         return true;
     }
-    char *path = self->path->get_path(self->path);
+    char *path = DtwPath_get_path(self->path);
 
     dtw_write_any_content(path,self->content,self->content_size);
     free(self->hawdware_content_sha);
@@ -101,12 +101,12 @@ bool DtwTreePart_hardware_modify(struct DtwTreePart *self, int transaction){
         self->pending_action = DTW_MODIFY;
         return false;
     }
-    bool changed_path = self->path->changed(self->path);
+    bool changed_path =DtwPath_changed(self->path);
 
     
     if(changed_path == true && self->content_exist_in_memory == false){
         char *old_path = self->path->original_path;
-        char *new_path = self->path->get_path(self->path);
+        char *new_path = DtwPath_get_path(self->path);
         dtw_move_any(old_path,new_path,true);
         free(new_path);
         return true;
@@ -134,7 +134,7 @@ bool DtwTreePart_hardware_modify(struct DtwTreePart *self, int transaction){
     }
 
     if(write){
-        char *path = self->path->get_path(self->path);
+        char *path = DtwPath_get_path(self->path);
         dtw_write_any_content(
             path,
             self->content,

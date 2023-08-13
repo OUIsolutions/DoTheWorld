@@ -100,7 +100,7 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwTreeProps * props){
        
         cJSON *json_tree_part = cJSON_CreateObject();
         struct DtwTreePart *tree_part = self->tree_parts[i];
-        char *path_string = tree_part->path->get_path(tree_part->path);
+        char *path_string = DtwPath_get_path(tree_part->path);
         if(!path_string){
             cJSON_Delete(json_tree_part);
             continue;
@@ -126,10 +126,10 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwTreeProps * props){
         
         
         if(formated_props.path_atributes == DTW_INCLUDE ){
-                char *dir_string = tree_part->path->get_dir(tree_part->path);
-                char *full_name_string = tree_part->path->get_full_name(tree_part->path);
-                char *name_string = tree_part->path->get_name(tree_part->path);
-                char *extension_string = tree_part->path->get_extension(tree_part->path);    
+                char *dir_string = DtwPath_get_dir(tree_part->path);
+                char *full_name_string = DtwPath_get_full_name(tree_part->path);
+                char *name_string = DtwPath_get_name(tree_part->path);
+                char *extension_string = DtwPath_get_extension(tree_part->path);
                 if(tree_part->path->original_path != path_string){
                     cJSON_AddItemToObject(
                         json_tree_part, 

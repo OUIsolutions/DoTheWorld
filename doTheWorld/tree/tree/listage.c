@@ -5,7 +5,7 @@ struct DtwStringArray *DtwTree_list_files(struct DtwTree *self, const char *path
     for(int i = 0; i < self->size; i++){
         DtwTreePart *current = self->tree_parts[i];
         DtwPath *current_path = current->path;
-        char *current_path_string = current_path->get_path(current_path);
+        char *current_path_string = DtwPath_get_path(current_path);
 
         long size = strlen(current_path_string);
         char last_char = current_path_string[size-1];
@@ -52,7 +52,7 @@ struct DtwStringArray *DtwTree_list_dirs(struct DtwTree *self, const char *path,
     for(int i = 0; i < self->size; i++){
         DtwTreePart *current = self->tree_parts[i];
         DtwPath *current_path = current->path;
-        char *current_path_string = current_path->get_path(current_path);
+        char *current_path_string = DtwPath_get_path(current_path);
 
         long size = strlen(current_path_string);
         char last_char = current_path_string[size-1];
@@ -99,7 +99,7 @@ struct DtwStringArray *DtwTree_list_all(struct DtwTree *self, const char *path,b
     for(int i = 0; i < self->size; i++){
         DtwTreePart *current = self->tree_parts[i];
         DtwPath *current_path = current->path;
-        char *current_path_string = current_path->get_path(current_path);
+        char *current_path_string = DtwPath_get_path(current_path);
 
         if(dtw_starts_with(current_path_string,path)){
             //means its not an path from these dimension
@@ -147,7 +147,7 @@ struct DtwStringArray *DtwTree_list_files_recursively(struct DtwTree *self, cons
     for(int i = 0; i < self->size; i++){
         DtwTreePart *current = self->tree_parts[i];
         DtwPath *current_path = current->path;
-        char *current_path_string = current_path->get_path(current_path);
+        char *current_path_string = DtwPath_get_path(current_path);
 
         long size = strlen(current_path_string);
         char last_char = current_path_string[size-1];
@@ -180,7 +180,7 @@ struct DtwStringArray *DtwTree_list_dirs_recursively(struct DtwTree *self, const
     for(int i = 0; i < self->size; i++){
         DtwTreePart *current = self->tree_parts[i];
         DtwPath *current_path = current->path;
-        char *current_path_string = current_path->get_path(current_path);
+        char *current_path_string = DtwPath_get_path(current_path);
 
         long size = strlen(current_path_string);
         char last_char = current_path_string[size-1];
@@ -215,7 +215,7 @@ struct DtwStringArray *DtwTree_list_all_recursively(struct DtwTree *self, const 
     for(int i = 0; i < self->size; i++){
         DtwTreePart *current = self->tree_parts[i];
         DtwPath *current_path = current->path;
-        char *current_path_string = current_path->get_path(current_path);
+        char *current_path_string = DtwPath_get_path(current_path);
 
 
         if(dtw_starts_with(current_path_string,path)){

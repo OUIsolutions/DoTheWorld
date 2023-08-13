@@ -70,7 +70,7 @@ unsigned char *DtwTreePart_get_content_binary_by_reference(struct DtwTreePart *s
 
 
 struct  DtwTreePart * DtwTreePart_self_copy(struct DtwTreePart *self){
-    char *path = self->path->get_path(self->path);
+    char *path = DtwPath_get_path(self->path);
     DtwTreeProps props = {.content =DTW_NOT_LOAD,.hadware_data = DTW_NOT_LOAD};
     DtwTreePart *new_tree_part = newDtwTreePart(
             path,
@@ -148,9 +148,9 @@ char *DtwTreePart_last_modification_time_in_string(struct DtwTreePart *self){
 
 
 void DtwTreePart_represent_tree_part(struct DtwTreePart *self){
-    char *path = self->path->get_path(self->path);
+    char *path = DtwPath_get_path(self->path);
     printf("------------------------------------------------------------\n");
-    self->path->represent(self->path);
+    DtwPath_represent(self->path);
     printf("Content Exist in Memory: %s\n",self->content_exist_in_memory ? "true" : "false");
     printf("Ignore: %s\n",self->ignore ? "true" : "false");
 
@@ -193,7 +193,7 @@ void DtwTreePart_free_content(struct DtwTreePart *self){
     self->content = (unsigned char *)realloc(self->content,0);
 }
 void DtwTreePart_free(struct DtwTreePart *self){
-    self->path->free(self->path);
+    DtwPath_free(self->path);
     free(self->hawdware_content_sha);
     free(self->content);
     free(self);

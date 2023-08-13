@@ -4143,7 +4143,7 @@ typedef struct DtwPath {
 
 }DtwPath;
 struct DtwPath * newDtwPath(const char *path);
-bool  DtwPath_path_changed(struct DtwPath *self);
+bool  DtwPath_changed(struct DtwPath *self);
 char *DtwPath_get_full_name(struct DtwPath *self);
 char *DtwPath_get_name(struct DtwPath *self);
 char *DtwPath_get_extension(struct DtwPath *self);
@@ -4160,8 +4160,8 @@ void DtwPath_set_path(struct DtwPath *self, const char *target_path);
 void DtwPath_add_start_dir(struct DtwPath *self, const char *start_dir);
 void DtwPath_add_end_dir(struct DtwPath *self, const char *end_dir);
 
-void DtwPath_represent_path(struct DtwPath *self);
-void DtwPath_destructor_path(struct DtwPath *self);
+void DtwPath_represent(struct DtwPath *self);
+void DtwPath_free(struct DtwPath *self);
 
 
 
@@ -5896,7 +5896,7 @@ struct DtwPath * newDtwPath(const char *path) {
     
     return self;
 }
-bool DtwPath_path_changed(struct DtwPath *self){
+bool DtwPath_changed(struct DtwPath *self){
     char *path = self->get_path(self);
     if(strcmp(self->original_path,path ) == 0){
         free(path);
@@ -6116,7 +6116,7 @@ void DtwPath_add_end_dir(struct DtwPath *self, const char *end_dir){
 
   
 
-void DtwPath_represent_path(struct DtwPath *self){
+void DtwPath_represent(struct DtwPath *self){
     char  *path = self->get_path(self);
     char *full_name = self->get_full_name(self);
     char *dir = self->get_dir(self);
@@ -6142,7 +6142,7 @@ void DtwPath_represent_path(struct DtwPath *self){
 
 
 
-void DtwPath_destructor_path(struct DtwPath *self) {
+void DtwPath_free(struct DtwPath *self) {
     free(self->original_path);
     free(self->dir);
     free(self->name);

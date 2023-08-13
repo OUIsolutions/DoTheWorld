@@ -32,7 +32,8 @@ typedef struct DtwNamespace{
     unsigned char *(*base64_decode)(const char *data, long *output_length);
     char *(*convert_binary_file_to_base64)(const char *path);
     //string array
-    DtwStringArrayModule *string_array;
+    DtwStringArrayModule string_array;
+    DtwPathModule module;
 
 }DtwNamespace;
 
