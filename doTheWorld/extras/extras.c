@@ -74,7 +74,7 @@ void private_dtw_add_end_bar_to_dirs_string_array(struct DtwStringArray * dirs){
         if(!dtw_ends_with(dirs->strings[i], "/") || !dtw_ends_with(dirs->strings[i],"\\")){
             char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 3);
             sprintf(formated_dir,"%s/",dirs->strings[i]);
-            dirs->set_value(dirs,i,formated_dir);
+            DtwStringArray_set_value(dirs, i, formated_dir);
             free(formated_dir);
         }    
             
@@ -136,7 +136,7 @@ struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *path
             continue;
         }
 
-        new_array->append(new_array, new_string);
+        DtwStringArray_append(new_array, new_string);
         free(new_string);
 
     }

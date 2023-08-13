@@ -27,7 +27,7 @@ struct DtwStringArray *DtwTree_list_files(struct DtwTree *self, const char *path
             }
 
             if(insert){
-                formated_elements->append(formated_elements,current_path_string);
+                DtwStringArray_append(formated_elements,current_path_string);
             }
 
         }
@@ -38,7 +38,7 @@ struct DtwStringArray *DtwTree_list_files(struct DtwTree *self, const char *path
     if(!concat_path){
 
         DtwStringArray  *not_concatened = private_dtw_remove_start_path(formated_elements,path);
-        formated_elements->free(formated_elements);
+        DtwStringArray_free(formated_elements);
         return not_concatened;
     }
 
@@ -74,7 +74,7 @@ struct DtwStringArray *DtwTree_list_dirs(struct DtwTree *self, const char *path,
             }
 
             if(total_found ==1){
-                formated_elements->append(formated_elements,current_path_string);
+                DtwStringArray_append(formated_elements,current_path_string);
             }
 
         }
@@ -85,7 +85,7 @@ struct DtwStringArray *DtwTree_list_dirs(struct DtwTree *self, const char *path,
     if(!concat_path){
 
         DtwStringArray  *not_concatened = private_dtw_remove_start_path(formated_elements,path);
-        formated_elements->free(formated_elements);
+        DtwStringArray_free(formated_elements);
         return not_concatened;
     }
 
@@ -116,10 +116,10 @@ struct DtwStringArray *DtwTree_list_all(struct DtwTree *self, const char *path,b
             }
 
             if(total_found ==1 && last_char == '/'){
-                formated_elements->append(formated_elements,current_path_string);
+                DtwStringArray_append(formated_elements,current_path_string);
             }
             if(total_found ==0){
-                formated_elements->append(formated_elements,current_path_string);
+                DtwStringArray_append(formated_elements,current_path_string);
 
             }
 
@@ -133,7 +133,7 @@ struct DtwStringArray *DtwTree_list_all(struct DtwTree *self, const char *path,b
     if(!concat_path){
 
         DtwStringArray  *not_concatened = private_dtw_remove_start_path(formated_elements,path);
-        formated_elements->free(formated_elements);
+        DtwStringArray_free(formated_elements);
         return not_concatened;
     }
 
@@ -157,7 +157,7 @@ struct DtwStringArray *DtwTree_list_files_recursively(struct DtwTree *self, cons
         }
 
         if(dtw_starts_with(current_path_string,path)){
-            formated_elements->append(formated_elements,current_path_string);
+            DtwStringArray_append(formated_elements,current_path_string);
 
         }
 
@@ -167,7 +167,7 @@ struct DtwStringArray *DtwTree_list_files_recursively(struct DtwTree *self, cons
     if(!concat_path){
 
         DtwStringArray  *not_concatened = private_dtw_remove_start_path(formated_elements,path);
-        formated_elements->free(formated_elements);
+        DtwStringArray_free(formated_elements);
         return not_concatened;
     }
 
@@ -190,7 +190,7 @@ struct DtwStringArray *DtwTree_list_dirs_recursively(struct DtwTree *self, const
         }
 
         if(dtw_starts_with(current_path_string,path)){
-            formated_elements->append(formated_elements,current_path_string);
+            DtwStringArray_append(formated_elements,current_path_string);
 
         }
 
@@ -201,7 +201,7 @@ struct DtwStringArray *DtwTree_list_dirs_recursively(struct DtwTree *self, const
     if(!concat_path){
 
         DtwStringArray  *not_concatened = private_dtw_remove_start_path(formated_elements,path);
-        formated_elements->free(formated_elements);
+        DtwStringArray_free(formated_elements);
         return not_concatened;
     }
 
@@ -219,7 +219,7 @@ struct DtwStringArray *DtwTree_list_all_recursively(struct DtwTree *self, const 
 
 
         if(dtw_starts_with(current_path_string,path)){
-            formated_elements->append(formated_elements,current_path_string);
+            DtwStringArray_append(formated_elements,current_path_string);
 
         }
 
@@ -229,7 +229,7 @@ struct DtwStringArray *DtwTree_list_all_recursively(struct DtwTree *self, const 
     if(!concat_path){
 
         DtwStringArray  *not_concatened = private_dtw_remove_start_path(formated_elements,path);
-        formated_elements->free(formated_elements);
+        DtwStringArray_free(formated_elements);
         return not_concatened;
     }
 

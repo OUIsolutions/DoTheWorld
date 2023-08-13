@@ -91,15 +91,15 @@ struct DtwTreeTransactionReport * DtwTree_create_report(struct DtwTree *self){
         char *path = tree_part->path->get_path(tree_part->path);
 
         if (pending_action == DTW_WRITE){
-            report->write->append(report->write, path);
+            DtwStringArray_append(report->write, path);
         }
 
         else if (pending_action == DTW_MODIFY){
-            report->modify->append(report->modify, path);
+            DtwStringArray_append(report->modify, path);
         }
 
         else if (pending_action == DTW_REMOVE){
-            report->remove->append(report->remove, path);
+            DtwStringArray_append(report->remove, path);
         }
 
         free(path);
@@ -139,9 +139,9 @@ void DtwTree_add_tree_parts_from_string_array(struct DtwTree *self, struct DtwSt
 void DtwTree_add_tree_from_hardware(struct DtwTree *self,const char *path, DtwTreeProps *props){
     DtwTreeProps formated_props = DtwTreeProps_format_props(props);
     struct DtwStringArray *path_array = dtw_list_all_recursively(path,DTW_CONCAT_PATH);
-    path_array->sort(path_array);
+    DtwStringArray_sort(path_array);
     self->add_tree_parts_from_string_array(self, path_array,props);
-    path_array->free(path_array);
+    DtwStringArray_free(path_array);
 
 
     if(formated_props.path_atributes == DTW_INCLUDE){
