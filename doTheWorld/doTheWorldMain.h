@@ -58,6 +58,7 @@ SOFTWARE.
 #endif
 #include "transaction/declaration.h"
 #include "resource/declaration.h"
+#include "namespace/declaration.h"
 
 #include "base64/base64.c"
 #include "randonizer/randonizer.c"
@@ -76,9 +77,8 @@ SOFTWARE.
 #include "locker/locker.c"
 #endif
 #include "resource/definition.h"
-
-
 #include "transaction/definition.h"
+#include "namespace/definition.h"
 
 #endif //DO_THE_WORLD_H
 
