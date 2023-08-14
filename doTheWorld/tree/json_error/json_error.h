@@ -17,5 +17,5 @@ typedef struct DtwJsonTreeError {
 
 struct DtwJsonTreeError * newDtwJsonError();
 struct DtwJsonTreeError * DtwJsonTreeError_validate_json_tree(char *content);
-void DtwJsonTreeError_represent_json_error(struct DtwJsonTreeError *self);
-void DtwJsonTreeError_free_json_error(struct DtwJsonTreeError *self);
+void DtwJsonTreeError_represent(struct DtwJsonTreeError *self);
+void DtwJsonTreeError_free(struct DtwJsonTreeError *self);

@@ -5,8 +5,6 @@ struct DtwTreeTransactionReport * newDtwTreeTransactionReport(){
     new_report->write = newDtwStringArray();
     new_report->modify = newDtwStringArray();
     new_report->remove = newDtwStringArray();
-    new_report->represent = DtwTreeTransactionReport_represent;
-    new_report->free = DtwTreeTransactionReport_free;
     return new_report;
 }
 

@@ -34,7 +34,7 @@ DtwTreeModule newDtwTreeModule(){
     self.insecure_hardware_write_tree = DtwTree_insecure_hardware_write_tree;
     self.hardware_commit_tree = DtwTree_hardware_commit_tree;
     self.free = DtwTree_free;
-
+    self.transaction_report = newDtwTreeTransactionReportModule();
     self.part = newDtwTreePartModule();
     self.json_error = newDtwJsonTreeErrorModule();
     return self;

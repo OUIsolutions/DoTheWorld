@@ -1,10 +1,9 @@
 
 typedef struct DtwTreeTransactionReport{
-    struct DtwStringArray *write;
-    struct DtwStringArray *modify;
-    struct DtwStringArray *remove;
-    void (*represent)(struct DtwTreeTransactionReport *report);
-    void (*free)(struct DtwTreeTransactionReport *report);
+    DtwStringArray *write;
+    DtwStringArray *modify;
+    DtwStringArray *remove;
+
 }DtwTreeTransactionReport;
 
 struct DtwTreeTransactionReport * newDtwTreeTransactionReport();

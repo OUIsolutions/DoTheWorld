@@ -95,6 +95,7 @@ typedef struct DtwTreeModule{
     void (*hardware_commit_tree)(struct DtwTree *self);
     void (*free)(struct DtwTree *self);
 
+    DtwTreeTransactionReportModule transaction_report;
 
     DtwTreePartModule part;
     DtwJsonTreeErrorModule json_error;

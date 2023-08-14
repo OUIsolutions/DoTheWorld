@@ -131,12 +131,12 @@ struct DtwJsonTreeError * DtwJsonTreeError_validate_json_tree(char *content){
 }
 
 
-void DtwJsonTreeError_represent_json_error(struct DtwJsonTreeError *self){
+void DtwJsonTreeError_represent(struct DtwJsonTreeError *self){
     printf("code: %d\n", self->code);
     printf("position: %d\n", self->position);
     printf("menssage: %s\n", self->menssage);
 }
 
-void DtwJsonTreeError_free_json_error(struct DtwJsonTreeError *self){
+void DtwJsonTreeError_free(struct DtwJsonTreeError *self){
     free(self);
 }
