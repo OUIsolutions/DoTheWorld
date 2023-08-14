@@ -77,7 +77,7 @@ void DtwTree_loads_json_tree(struct DtwTree *self, const char *content){
             part->ignore = ignore->valueint;
         }
 
-        DtwTree_add_tree_part_reference(self,part);
+        DtwTree_add_tree_part_by_reference(self, part);
         
     }
     cJSON_Delete(json_tree);

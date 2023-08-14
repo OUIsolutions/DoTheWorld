@@ -15,17 +15,17 @@ struct DtwTree *DtwTree_get_sub_tree(
     bool copy_content
 );
 
-struct DtwTreePart *DtwTree_find_by_function(
+struct DtwTreePart *DtwTree_find_tree_part_by_function(
         struct DtwTree *self,
         bool (*caller)(struct  DtwTreePart *part)
         );
 
-struct DtwTree *DtwTree_dtw_map(
+struct DtwTree *DtwTree_map(
         struct DtwTree *self,
         struct  DtwTreePart* (*caller)(struct  DtwTreePart *part)
 );
 
-struct DtwTree *DtwTree_dtw_filter(
+struct DtwTree *DtwTree_filter(
         struct DtwTree *self,
         bool (*caller)(struct  DtwTreePart *part)
 );
@@ -50,9 +50,9 @@ struct DtwStringArray *DtwTree_list_all_recursively(struct DtwTree *self, const 
 
 void DtwTree_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_part);
 void DtwTree_remove_tree_part(struct DtwTree *self, int position);
-void DtwTree_add_tree_part_reference(struct DtwTree *self, struct DtwTreePart *tree_part);
-void DtwTree_dtw_free_tree(struct DtwTree *self);
-void DtwTree_represent_tree(struct DtwTree *self);
+void DtwTree_add_tree_part_by_reference(struct DtwTree *self, struct DtwTreePart *tree_part);
+void DtwTree_free(struct DtwTree *self);
+void DtwTree_represent(struct DtwTree *self);
 
 void DtwTree_add_tree_parts_from_string_array(
     struct DtwTree *self,

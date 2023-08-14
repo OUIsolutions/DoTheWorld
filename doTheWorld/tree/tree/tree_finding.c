@@ -1,7 +1,7 @@
 //
 // Created by jurandi on 11-04-2023.
 //
-struct DtwTreePart *DtwTree_find_by_function(
+struct DtwTreePart *DtwTree_find_tree_part_by_function(
         struct DtwTree *self,
         bool (*caller)(struct  DtwTreePart *part)
 ){
@@ -15,7 +15,7 @@ struct DtwTreePart *DtwTree_find_by_function(
     return NULL;
 }
 
-struct DtwTree *DtwTree_dtw_filter(
+struct DtwTree *DtwTree_filter(
         struct DtwTree *self,
         bool (*caller)(struct  DtwTreePart *part)
 ){
@@ -36,7 +36,7 @@ struct DtwTree *DtwTree_dtw_filter(
 }
 
 
-struct DtwTree *DtwTree_dtw_map(
+struct DtwTree *DtwTree_map(
         struct DtwTree *self,
         struct DtwTreePart *(*caller)(struct  DtwTreePart *part)
 ){
@@ -46,7 +46,7 @@ struct DtwTree *DtwTree_dtw_map(
         struct DtwTreePart *current = self->tree_parts[i];
         struct DtwTreePart *copy = DtwTreePart_self_copy(current);
         struct DtwTreePart *result = caller(copy);
-        DtwTree_add_tree_part_reference(mapped_tree,result);
+        DtwTree_add_tree_part_by_reference(mapped_tree, result);
     }
     return mapped_tree;
 }

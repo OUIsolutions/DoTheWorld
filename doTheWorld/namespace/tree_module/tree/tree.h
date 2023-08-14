@@ -35,15 +35,21 @@ typedef struct DtwTreeModule{
     );
     //Listage Functions
 
-    struct DtwTreePart *(*find_part_by_function)(
+    DtwTreePart *(*find_tree_part_by_function)(
             struct DtwTree *self,
             bool (*caller)(struct  DtwTreePart *part)
     );
 
-    struct DtwTree *(*filter)(
+    DtwTree *(*filter)(
             struct DtwTree *self,
             bool (*caller)(struct  DtwTreePart *part)
     );
+
+    DtwTree *(*map)(
+            struct DtwTree *self,
+            struct  DtwTreePart*(*caller)(struct  DtwTreePart *part)
+    );
+
 
     DtwStringArray * (*list_files)(struct DtwTree *self, const char *path,bool concat_path);
     DtwStringArray * (*list_dirs)(struct DtwTree *self, const char *path,bool concat_path);
@@ -53,16 +59,12 @@ typedef struct DtwTreeModule{
     DtwStringArray * (*list_dirs_recursively)(struct DtwTree *self, const char *path,bool concat_path);
     DtwStringArray * (*list_all_recursively)(struct DtwTree *self, const char *path,bool concat_path);
 
-    struct DtwTree *(*map)(
-            struct DtwTree *self,
-            struct  DtwTreePart*(*caller)(struct  DtwTreePart *part)
-    );
 
-    struct DtwTreePart *(*find_part_by_name)( struct DtwTree *self,const char *name);
-    struct DtwTreePart *(*find_part_by_path)(   struct DtwTree *self,const char *path);
+    struct DtwTreePart *(*find_tree_part_by_name)( struct DtwTree *self,const char *name);
+    struct DtwTreePart *(*find_tree_part_by_path)(   struct DtwTree *self,const char *path);
 
 
-    struct DtwTreeTransactionReport * (*report)(struct DtwTree *self);
+    struct DtwTreeTransactionReport * (*create_report)(struct DtwTree *self);
 
     void (*loads_json_tree)(
             struct DtwTree *self,
@@ -86,11 +88,15 @@ typedef struct DtwTreeModule{
             DtwTreeProps * props
     );
 
-    void (*free)(struct DtwTree *self);
     void (*represent)(struct DtwTree *self);
     void (*insecure_hardware_remove_tree)(struct DtwTree *self);
     void (*insecure_hardware_write_tree)(struct DtwTree *self);
     void (*hardware_commit_tree)(struct DtwTree *self);
+    void (*free)(struct DtwTree *self);
+
+
+    DtwTreePartModule part;
+    DtwJsonTreeErrorModule json_error;
 
 }DtwTreeModule;
 

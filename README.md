@@ -1015,7 +1015,7 @@ int main(){
     );
 
 
-    struct DtwTreePart *blob = tree->find_part_by_function(
+    struct DtwTreePart *blob = tree->find_tree_part_by_function(
             tree,
             test_if_blob
     );
@@ -1197,9 +1197,9 @@ int main(){
         }
         free(extension);
     }
-    DtwTreeTransactionReport *report = tree->report(tree);
-    report->represent(report);
-    report->free(report);
+    DtwTreeTransactionReport *create_report = tree->create_report(tree);
+    create_report->represent(create_report);
+    create_report->free(create_report);
     tree->free(tree);
 }
 ~~~

@@ -4415,17 +4415,17 @@ struct DtwTree *DtwTree_get_sub_tree(
     bool copy_content
 );
 
-struct DtwTreePart *DtwTree_find_by_function(
+struct DtwTreePart *DtwTree_find_tree_part_by_function(
         struct DtwTree *self,
         bool (*caller)(struct  DtwTreePart *part)
         );
 
-struct DtwTree *DtwTree_dtw_map(
+struct DtwTree *DtwTree_map(
         struct DtwTree *self,
         struct  DtwTreePart* (*caller)(struct  DtwTreePart *part)
 );
 
-struct DtwTree *DtwTree_dtw_filter(
+struct DtwTree *DtwTree_filter(
         struct DtwTree *self,
         bool (*caller)(struct  DtwTreePart *part)
 );
@@ -4450,9 +4450,9 @@ struct DtwStringArray *DtwTree_list_all_recursively(struct DtwTree *self, const 
 
 void DtwTree_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_part);
 void DtwTree_remove_tree_part(struct DtwTree *self, int position);
-void DtwTree_add_tree_part_reference(struct DtwTree *self, struct DtwTreePart *tree_part);
-void DtwTree_dtw_free_tree(struct DtwTree *self);
-void DtwTree_represent_tree(struct DtwTree *self);
+void DtwTree_add_tree_part_by_reference(struct DtwTree *self, struct DtwTreePart *tree_part);
+void DtwTree_free(struct DtwTree *self);
+void DtwTree_represent(struct DtwTree *self);
 
 void DtwTree_add_tree_parts_from_string_array(
     struct DtwTree *self,
@@ -7103,7 +7103,7 @@ void  DtwTree_dumps_tree_json_to_file(struct DtwTree *self, const char *path, Dt
 //
 // Created by jurandi on 11-04-2023.
 //
-struct DtwTreePart *DtwTree_find_by_function(
+struct DtwTreePart *DtwTree_find_tree_part_by_function(
         struct DtwTree *self,
         bool (*caller)(struct  DtwTreePart *part)
 ){
@@ -7117,7 +7117,7 @@ struct DtwTreePart *DtwTree_find_by_function(
     return NULL;
 }
 
-struct DtwTree *DtwTree_dtw_filter(
+struct DtwTree *DtwTree_filter(
         struct DtwTree *self,
         bool (*caller)(struct  DtwTreePart *part)
 ){
@@ -7138,7 +7138,7 @@ struct DtwTree *DtwTree_dtw_filter(
 }
 
 
-struct DtwTree *DtwTree_dtw_map(
+struct DtwTree *DtwTree_map(
         struct DtwTree *self,
         struct DtwTreePart *(*caller)(struct  DtwTreePart *part)
 ){
@@ -7543,14 +7543,14 @@ struct DtwTreeTransactionReport * DtwTree_create_report(struct DtwTree *self){
 }
 
 
-void DtwTree_add_tree_part_reference(struct DtwTree *self, struct DtwTreePart *tree_part){
+void DtwTree_add_tree_part_by_reference(struct DtwTree *self, struct DtwTreePart *tree_part){
     self->size++;
     self->tree_parts =  (struct DtwTreePart**)realloc(self->tree_parts, self->size * sizeof(struct DtwTreePart *));
     self->tree_parts[self->size - 1] = tree_part;
 }
 
 
-void DtwTree_represent_tree(struct DtwTree *self){
+void DtwTree_represent(struct DtwTree *self){
     for(int i = 0; i < self->size; i++){
         self->tree_parts[i]->represent(self->tree_parts[i]);
     }
@@ -7609,7 +7609,7 @@ void DtwTree_add_tree_from_hardware(struct DtwTree *self,const char *path, DtwTr
 
 }
 
-void DtwTree_dtw_free_tree(struct DtwTree *self){
+void DtwTree_free(struct DtwTree *self){
     for(int i = 0; i < self->size; i++){
         self->tree_parts[i]->free(self->tree_parts[i]);
     }
