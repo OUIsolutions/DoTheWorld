@@ -10,7 +10,7 @@ void DtwResource_rename(DtwResource *self, char *new_name){
     self->path  = dtw_concat_path(self->mothhers_path,self->name);
 
     if(self->allow_transaction){
-        self->transaction->move_any(self->transaction,old_path,self->path);
+        DtwTransaction_move_any(self->transaction,old_path,self->path);
     }
     else{
         dtw_move_any(old_path,self->path,DTW_NOT_CONCAT_PATH);
@@ -38,7 +38,7 @@ void private_DtwResource_lock_if_auto_lock(DtwResource *self){
 void DtwResource_destroy(DtwResource *self){
 
     if(self->allow_transaction){
-        self->transaction->delete_any(self->transaction,self->path);
+        DtwTransaction_delete_any(self->transaction,self->path);
     }
     else{
         dtw_remove_any(self->path);
@@ -52,7 +52,7 @@ void DtwResource_destroy(DtwResource *self){
 
 
 void DtwResource_commit(DtwResource *self){
-    self->transaction->commit(self->transaction,NULL);
+    DtwTransaction_commit(self->transaction,NULL);
 }
 
 

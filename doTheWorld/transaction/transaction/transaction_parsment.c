@@ -67,7 +67,7 @@ DtwTransaction * newDtwTransaction_from_json(cJSON *json_entry){
     for(int i  = 0; i < size; i ++){
         cJSON  *object_action = cJSON_GetArrayItem(json_entry,i);
         DtwActionTransaction  *current_action = private_DtwActionTransaction_parse_json_object(object_action);
-        self->append_action(self,current_action);
+        DtwTransaction_append_action(self,current_action);
     }
     return self;
 }
@@ -115,7 +115,7 @@ cJSON * DtwTransaction_dumps_to_json(struct DtwTransaction *self){
 
 
 void DtwTransaction_dumps_to_json_file(struct DtwTransaction *self,const char *filename){
-    cJSON *json_array = self->dumps_transaction_to_json(self);
+    cJSON *json_array = DtwTransaction_dumps_to_json(self);
     char *result = cJSON_Print(json_array);
     dtw_write_string_file_content(filename,result);
     free(result);

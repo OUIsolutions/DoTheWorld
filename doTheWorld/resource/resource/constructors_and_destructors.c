@@ -69,7 +69,7 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name){
 void DtwResource_free(struct DtwResource *self){
     if(!self->child){
         if(self->transaction){
-            self->transaction->free(self->transaction);
+            DtwTransaction_free(self->transaction);
         }
 
 #ifdef  __linux__
