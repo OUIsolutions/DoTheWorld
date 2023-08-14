@@ -3,26 +3,26 @@
 
 
 int main (){
-
-    const char *blob = dtw_convert_entity(
+    DtwNamespace dtw = newDtwNamespace();
+    const char *blob = dtw.convert_entity(
             dtw_complex_entity_type("tests/target/blob.png")
     );
 
     printf("blob.png: %s\n",blob);
 
-    const char *a = dtw_convert_entity(
+    const char *a = dtw.convert_entity(
             dtw_complex_entity_type("tests/target/a.txt")
     );
 
     printf("a.txt: %s\n",a);
 
-    const char *sub_folder =  dtw_convert_entity(
+    const char *sub_folder =  dtw.convert_entity(
             dtw_complex_entity_type("tests/target/sub_folder")
     );
     printf("sub_folder: %s\n",sub_folder);
 
 
-    const char *double_txt = dtw_convert_entity(
+    const char *double_txt = dtw.convert_entity(
             dtw_complex_entity_type("tests/target/numerical/double.txt")
     );
     printf("double.txt:%s\n",double_txt);
