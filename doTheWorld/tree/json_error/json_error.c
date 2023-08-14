@@ -3,8 +3,7 @@ struct DtwJsonTreeError * newDtwJsonError(){
     self->code = DTW_JSON_ERROR_CODE_OK;
     self->position = 0;
     self->menssage = "ok";
-    self->free = DtwJsonTreeError_free_json_error;
-    self->represent = DtwJsonTreeError_represent_json_error;
+
     return self;
 }
 

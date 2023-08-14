@@ -11,8 +11,7 @@ typedef struct DtwJsonTreeError {
     int code;
     int position;
     const char *menssage;
-    void (*free)(struct DtwJsonTreeError *self);
-    void (*represent)(struct DtwJsonTreeError *self);
+
 
 }DtwJsonTreeError;
 
