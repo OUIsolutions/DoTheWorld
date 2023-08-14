@@ -6,8 +6,7 @@ DtwRandonizer * newDtwRandonizer(){
     DtwRandonizer *self = (DtwRandonizer*) malloc(sizeof (DtwRandonizer));
     self->seed = time(NULL);
     self->actual_generation = 0;
-    self->generate_token = DtwRandonizer_generate_token;
-    self->free = DtwRandonizer_free;
+
     return self;
 }
 
