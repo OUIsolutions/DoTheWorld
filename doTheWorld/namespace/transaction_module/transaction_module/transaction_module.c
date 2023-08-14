@@ -3,6 +3,9 @@
 DtwTransactionModule newDtwTransactionModule(){
     DtwTransactionModule self = {0};
     self.newTransaction = newDtwTransaction;
+    self.newTransaction_from_json = newDtwTransaction_from_json;
+    self.newTransaction_from_json_file = newDtwTransaction_from_json_file;
+    self.validate_json_transaction_file = dtw_validate_json_transaction_file;
     self.append_action = DtwTransaction_append_action;
     self.write_any = DtwTransaction_write_any;
     self.write_string = DtwTransaction_write_string;
