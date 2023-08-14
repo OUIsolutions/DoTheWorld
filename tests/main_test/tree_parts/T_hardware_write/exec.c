@@ -3,15 +3,12 @@
 
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTreePart *part = newDtwTreePartLoading("tests/target/a.txt");
-
-    DtwPath *path = part->path;
-
-    path->set_extension(path,"md");
-
-    part->hardware_write(part,DTW_EXECUTE_NOW);
-    part->hardware_commit(part);
-    part->free(part);
+    DtwTreePart *part = dtw.tree.part.newPartLoading("tests/target/a.txt");
+    dtw.path.set_extension(part->path,"md");
+    dtw.tree.part.hardware_write(part,DTW_EXECUTE_NOW);
+    dtw.tree.part.hardware_commit(part);
+    dtw.tree.part.free(part);
 
 }
