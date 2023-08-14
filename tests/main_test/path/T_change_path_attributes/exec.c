@@ -5,16 +5,16 @@
 int main(){
     DtwNamespace dtw = newDtwNamespace();
 
-    DtwTreePart *part = newDtwTreePartLoading("tests/target/sub_folder/a.txt");
+    DtwTreePart *part = dtw.tree.part.newPartLoading("tests/target/sub_folder/a.txt");
 
     DtwPath *path = part->path;
 
-    path->set_dir(path,"a/b");
-    path->set_name(path,"test2");
-    path->set_extension(path,"md");
-    path->represent(path);
-    part->hardware_modify(part,DTW_SET_AS_ACTION);
-    part->hardware_commit(part);
-    part->free(part);
+    dtw.path.set_dir(path,"a/b");
+    dtw.path.set_name(path,"test2");
+    dtw.path.set_extension(path,"md");
+    dtw.path.represent(path);
+    dtw.tree.part.hardware_modify(part,DTW_SET_AS_ACTION);
+    dtw.tree.part.hardware_commit(part);
+    dtw.tree.part.free(part);
 
 }
