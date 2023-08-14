@@ -2,6 +2,8 @@
 
 typedef struct DtwPathModule{
     //Getters
+
+    DtwPath * (*newPath)(const char *path);
     bool  (*changed)(struct DtwPath *self);
     char *(*get_full_name) (struct DtwPath *self);
     char *(*get_name) (struct DtwPath *self);
