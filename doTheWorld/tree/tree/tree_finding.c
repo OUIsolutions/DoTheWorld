@@ -28,7 +28,7 @@ struct DtwTree *DtwTree_dtw_filter(
         bool result = caller(current);
 
         if(result){
-            filtered_tree->add_tree_part_by_copy(filtered_tree,current);
+            DtwTree_add_tree_part_copy(filtered_tree,current);
         }
 
     }
@@ -46,7 +46,7 @@ struct DtwTree *DtwTree_dtw_map(
         struct DtwTreePart *current = self->tree_parts[i];
         struct DtwTreePart *copy = DtwTreePart_self_copy(current);
         struct DtwTreePart *result = caller(copy);
-        mapped_tree->add_tree_part_by_reference(mapped_tree,result);
+        DtwTree_add_tree_part_reference(mapped_tree,result);
     }
     return mapped_tree;
 }

@@ -6,41 +6,7 @@ struct  DtwTree * newDtwTree(){
     struct DtwTree *self = (struct DtwTree*)malloc(sizeof(struct DtwTree));
     self->size = 0;
     self->tree_parts = (struct DtwTreePart**)malloc(1);
-    self->add_tree_part_by_copy = DtwTree_add_tree_part_copy;
-    self->remove_tree_part = DtwTree_remove_tree_part;
-    self->get_sub_tree = DtwTree_get_sub_tree;
-    self->add_tree_part_by_reference = DtwTree_add_tree_part_reference;
-    self->free = DtwTree_dtw_free_tree;
-    self->represent = DtwTree_represent_tree;
-    self->add_tree_parts_from_string_array = DtwTree_add_tree_parts_from_string_array;
-    self->add_tree_from_hardware = DtwTree_add_tree_from_hardware;
 
-    self->map = DtwTree_dtw_map;
-    self->filter = DtwTree_dtw_filter;
-
-    self->find_part_by_function = DtwTree_find_by_function;
-    self->find_part_by_name  = DtwTree_find_tree_part_by_name;
-    self->find_part_by_path = DtwTree_find_tree_part_by_path;
-    self->report = DtwTree_create_report;
-    
-    self->list_files = DtwTree_list_files;
-    self->list_dirs = DtwTree_list_dirs;
-    self->list_all = DtwTree_list_all;
-
-    self->list_files_recursively = DtwTree_list_files_recursively;
-    self->list_dirs_recursively = DtwTree_list_dirs_recursively;
-    self->list_all_recursively = DtwTree_list_all_recursively;
-    
-    self->loads_json_tree = DtwTree_loads_json_tree;
-    self->loads_json_tree_from_file = DtwTree_loads_json_tree_from_file;
-    
-    self->dumps_json_tree = DtwTree_dumps_tree_json;
-    self->dumps_json_tree_to_file = DtwTree_dumps_tree_json_to_file;
-
-    //{%endif%}
-    self->insecure_hardware_remove_tree = DtwTree_insecure_hardware_remove_tree;
-    self->insecure_hardware_write_tree = DtwTree_insecure_hardware_write_tree;
-    self->hardware_commit_tree = DtwTree_hardware_commit_tree;
     return self;
 }
 
@@ -52,10 +18,10 @@ struct DtwTree *DtwTree_get_sub_tree(struct DtwTree *self, const char *path, boo
         char *current_path =  DtwPath_get_path(tree_part->path);
         if(dtw_starts_with(current_path,path)){
             if(copy_content){
-                sub_tree->add_tree_part_by_copy(sub_tree,DtwTreePart_self_copy(tree_part));
+                DtwTree_add_tree_part_copy(sub_tree,DtwTreePart_self_copy(tree_part));
             }
             else{
-                sub_tree->add_tree_part_by_reference(sub_tree,tree_part);
+                DtwTree_add_tree_part_reference(sub_tree,tree_part);
 
             }
         }
@@ -131,7 +97,7 @@ void DtwTree_add_tree_parts_from_string_array(struct DtwTree *self, struct DtwSt
                 props
         );
         
-        self->add_tree_part_by_reference(self, tree_part);
+        DtwTree_add_tree_part_reference(self, tree_part);
     }
 }
 
@@ -140,7 +106,7 @@ void DtwTree_add_tree_from_hardware(struct DtwTree *self,const char *path, DtwTr
     DtwTreeProps formated_props = DtwTreeProps_format_props(props);
     struct DtwStringArray *path_array = dtw_list_all_recursively(path,DTW_CONCAT_PATH);
     DtwStringArray_sort(path_array);
-    self->add_tree_parts_from_string_array(self, path_array,props);
+    DtwTree_add_tree_parts_from_string_array(self, path_array,props);
     DtwStringArray_free(path_array);
 
 
@@ -150,7 +116,7 @@ void DtwTree_add_tree_from_hardware(struct DtwTree *self,const char *path, DtwTr
     if(self->size == 0){
         return;
     }
-    self->remove_tree_part(self,0);
+    DtwTree_remove_tree_part(self,0);
 
     int size_to_remove = strlen(path);
     if(!dtw_ends_with(path,"/")){
