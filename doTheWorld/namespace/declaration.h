@@ -3,4 +3,5 @@
 #include "tree_module/declaration.h"
 #include "locker/locker.h"
 #include "transaction_module/declaration.h"
+#include "resource_module/resource_module.h"
 #include "namespace/namespace.h"

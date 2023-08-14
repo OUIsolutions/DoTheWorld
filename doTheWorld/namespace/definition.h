@@ -3,4 +3,5 @@
 #include "tree_module/definition.h"
 #include "locker/locker.c"
 #include "transaction_module/definition.h"
+#include "resource_module/resource_module.c"
 #include "namespace/namespace.c"

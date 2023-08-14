@@ -30,7 +30,7 @@ void DtwResource_lock(DtwResource *self){
 }
 void private_DtwResource_lock_if_auto_lock(DtwResource *self){
     if(self->auto_lock){
-        self->lock(self);
+        DtwResource_lock(self);
     }
 }
 
@@ -66,13 +66,13 @@ DtwStringArray *DtwResource_list(DtwResource *self){
 }
 
 const char * DtwResource_type_in_str(DtwResource *self){
-     return dtw_convert_entity(self->type(self));
+     return dtw_convert_entity(DtwResource_type(self));
 }
 
 void DtwResource_represent(DtwResource *self){
     printf("path: %s\n", self->path);
     printf("name: %s\n",self->name);
-    printf("type: %s\n",self->type_in_str(self));
+    printf("type: %s\n",DtwResource_type_in_str(self));
 
 }
 
