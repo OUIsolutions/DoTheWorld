@@ -10,12 +10,12 @@ void append_text(char *file,char *text){
     dtw.locker.lock(locker,file);
     printf("process %d get the ownership\n",locker->process);
 
-    char *content = dtw_load_string_file_content(file);
+    char *content = dtw.load_string_file_content(file);
 
     content = realloc(content,strlen(content) + 20);
     strcat(content,text);
         
-    dtw_write_string_file_content(file,content);
+    dtw.write_string_file_content(file,content);
     free(content);
 
 
