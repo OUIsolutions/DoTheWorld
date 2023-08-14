@@ -2,12 +2,14 @@
 #include "../../../doTheWorld_test.h"
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
+
     DtwTransaction *t = newDtwTransaction();
-    t->write_string(t,"b.txt","aaaaa");
-    t->move_any(t,"a.txt","c.txt");
-    t->delete_any(t,"blob.png");
-    t->copy_any(t,"sub_folder","sub_folder2");
-    t->represent(t);
-    t->dumps_transaction_to_json_file(t,"tests/target/transaction.json");
-    t->free(t);
+    dtw.transaction.write_string(t,"b.txt","aaaaa");
+    dtw.transaction.move_any(t,"a.txt","c.txt");
+    dtw.transaction.delete_any(t,"blob.png");
+    dtw.transaction.copy_any(t,"sub_folder","sub_folder2");
+    dtw.transaction.represent(t);
+    dtw.transaction.dumps_transaction_to_json_file(t,"tests/target/transaction.json");
+    dtw.transaction.free(t);
 }

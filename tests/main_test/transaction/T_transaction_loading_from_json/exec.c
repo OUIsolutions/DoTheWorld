@@ -2,6 +2,8 @@
 #include "../../../doTheWorld_test.h"
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
+
     DtwTransaction *t = newDtwTransaction_from_json_file("tests/target/transaction.json");
     if(!t){
         DtwJsonTransactionError *error = dtw_validate_json_transaction_file("tests/target/transaction.json");
