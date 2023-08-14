@@ -369,8 +369,10 @@ You can easly transform an binary file to an base64 string like these
 #include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
-   const char *deer_path = "tests/target/blob.png";
-   char *deerb64  = dtw_convert_binary_file_to_base64(deer_path);
+    DtwNamespace dtw = newDtwNamespace();
+
+    const char *deer_path = "tests/target/blob.png";
+   char *deerb64  = dtw.convert_binary_file_to_base64(deer_path);
    printf("blob: %s", deerb64);
     free(deerb64);
 }
@@ -384,14 +386,15 @@ You also can reconvert an base64 string to binary
 int main(int argc, char *argv[]){
 
 
+    DtwNamespace dtw = newDtwNamespace();
 
     //creating the b64 file
     const char *blob_path = "tests/target/blob.png";
-    char *blob  = dtw_convert_binary_file_to_base64(blob_path);
+    char *blob  = dtw.convert_binary_file_to_base64(blob_path);
     unsigned long output;
-    unsigned char  *result = dtw_base64_decode(blob,&output);
+    unsigned char  *result = dtw.base64_decode(blob,&output);
 
-    dtw_write_any_content("tests/target/blob2.png",result,output);
+    dtw.write_any_content("tests/target/blob2.png",result,output);
 
     free(result);
     free(blob);
@@ -409,8 +412,9 @@ Generating Sha from file
 #include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
 
-   char *hash = dtw_generate_sha_from_file("tests/target/blob.png");
+   char *hash = dtw.generate_sha_from_file("tests/target/blob.png");
    printf("SHA: %s", hash);
    free(hash);
 }
@@ -423,7 +427,9 @@ int main(int argc, char *argv[]){
 #include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
-   int last_modification_in_unix = dtw_get_file_last_motification_in_unix("tests/target/a.txt");
+    DtwNamespace dtw = newDtwNamespace();
+
+    int last_modification_in_unix = dtw.get_file_last_motification_in_unix("tests/target/a.txt");
     printf("Last modification: %d\n", last_modification_in_unix);
 }
 ~~~
@@ -432,7 +438,9 @@ int main(int argc, char *argv[]){
 #include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
-    char *last_modification = dtw_get_file_last_motification_in_string("tests/target/a.txt");
+    DtwNamespace dtw = newDtwNamespace();
+
+    char *last_modification = dtw.get_file_last_motification_in_string("tests/target/a.txt");
     printf("Last modification: %s", last_modification);
     free(last_modification);
 }
@@ -456,12 +464,12 @@ void append_text(char *file,char *text){
     dtw.locker.lock(locker,file);
     printf("process %d get the ownership\n",locker->process);
 
-    char *content = dtw_load_string_file_content(file);
+    char *content = dtw.load_string_file_content(file);
 
     content = realloc(content,strlen(content) + 20);
     strcat(content,text);
         
-    dtw_write_string_file_content(file,content);
+    dtw.write_string_file_content(file,content);
     free(content);
 
 

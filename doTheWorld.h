@@ -3952,8 +3952,7 @@ char *dtw_convert_binary_file_to_base64(const char *path);
 typedef struct DtwRandonizer{
     long seed;
     long actual_generation;
-    char * (*generate_token)(struct DtwRandonizer*self, int size);
-    void (*free)(struct DtwRandonizer *self);
+
 }DtwRandonizer;
 
 
@@ -4593,6 +4592,16 @@ void DtwResource_free(struct DtwResource *self);
 
 
 
+typedef struct  DtwRandonizerModule{
+    DtwRandonizer * (*newRandonizer)();
+
+    char * (*generate_token)(DtwRandonizer*self, int size);
+    void (*free)(DtwRandonizer *self);
+}DtwRandonizerModule;
+
+DtwRandonizerModule newDtwRandonizerModule();
+
+
 
 typedef struct DtwPathModule{
     //Getters
@@ -5133,8 +5142,7 @@ DtwRandonizer * newDtwRandonizer(){
     DtwRandonizer *self = (DtwRandonizer*) malloc(sizeof (DtwRandonizer));
     self->seed = time(NULL);
     self->actual_generation = 0;
-    self->generate_token = DtwRandonizer_generate_token;
-    self->free = DtwRandonizer_free;
+
     return self;
 }
 
@@ -8797,6 +8805,15 @@ void DtwTransaction_represent(struct DtwTransaction *self){
 }
 
 
+
+
+
+DtwRandonizerModule newDtwRandonizerModule(){
+    DtwRandonizerModule self = {0};
+    self.newRandonizer = newDtwRandonizer;
+    self.generate_token =DtwRandonizer_generate_token;
+    self.free = DtwRandonizer_free;
+}
 
 
 DtwPathModule newDtwPathModule(){
