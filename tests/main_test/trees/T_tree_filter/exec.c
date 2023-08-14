@@ -4,7 +4,9 @@
 #include "../../../doTheWorld_test.h"
 
 bool filter_txt(struct DtwTreePart *part){
-    char *extension = part->path->get_extension(part->path);
+    DtwNamespace dtw = newDtwNamespace();
+
+    char *extension = dtw.path.get_extension(part->path);
     if(!extension){
         return false;
     }
@@ -17,9 +19,10 @@ bool filter_txt(struct DtwTreePart *part){
 }
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target",
             &(DtwTreeProps){
@@ -28,12 +31,12 @@ int main(){
                     .path_atributes=DTW_INCLUDE
             }
     );
-    DtwTree *filtered = tree->filter(
+    DtwTree *filtered = dtw.tree.filter(
             tree,
             filter_txt
     );
 
-    filtered->represent(filtered);
-    filtered->free(filtered);
-    tree->free(tree);
+    dtw.tree.represent(filtered);
+    dtw.tree.free(filtered);
+    dtw.tree.free(tree);
 }

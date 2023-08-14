@@ -5,9 +5,10 @@
 
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    struct DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
+    struct DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target/",
             &(DtwTreeProps){
@@ -17,7 +18,7 @@ int main(){
             }
     );
 
-    tree->dumps_json_tree_to_file(
+    dtw.tree.dumps_json_tree_to_file(
             tree,
             "tests/target/out.json",
             &(DtwTreeProps){
@@ -29,5 +30,5 @@ int main(){
             }
     );
 
-    tree->free(tree);
+    dtw.tree.free(tree);
 }

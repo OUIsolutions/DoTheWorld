@@ -5,10 +5,11 @@
 
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTreePart *part = newDtwTreePartEmpty("tests/target/b.txt");
-    part->set_string_content(part,"my mensage");
-    part->hardware_write(part,DTW_SET_AS_ACTION);
-    part->hardware_commit(part);
-    part->free(part);
+    DtwTreePart *part = dtw.tree.part.newPartEmpty("tests/target/b.txt");
+    dtw.tree.part.set_string_content(part,"my mensage");
+    dtw.tree.part.hardware_write(part,DTW_SET_AS_ACTION);
+    dtw.tree.part.hardware_commit(part);
+    dtw.tree.part.free(part);
 }

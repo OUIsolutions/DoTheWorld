@@ -5,9 +5,10 @@
 #include "../../../doTheWorld_test.h"
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target",
             &(DtwTreeProps){
@@ -19,19 +20,19 @@ int main(){
 
     for(int i=0; i < tree->size;i++){
         struct DtwTreePart *part = tree->tree_parts[i];
-        struct DtwPath *path = part->path;
-        char *extension = path->get_extension(path);
+
+        char *extension = dtw.path.get_extension( part->path);
         if(!extension){
             continue;
         }
         if(strcmp(extension,"txt") == 0){
-            path->set_extension(path,"md");
-            part->hardware_modify(part,DTW_SET_AS_ACTION);
+            dtw.path.set_extension( part->path,"md");
+            dtw.tree.part.hardware_modify(part,DTW_SET_AS_ACTION);
 
         }
         free(extension);
     }
 
-    tree->hardware_commit_tree(tree);
-    tree->free(tree);
+    dtw.tree.hardware_commit_tree(tree);
+    dtw.tree.free(tree);
 }

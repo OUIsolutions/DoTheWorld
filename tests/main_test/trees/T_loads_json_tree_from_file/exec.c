@@ -4,9 +4,10 @@
 #include "../../../doTheWorld_test.h"
 
 void dumps_tree(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target",
             &(DtwTreeProps){
@@ -16,7 +17,7 @@ void dumps_tree(){
             }
     );
 
-    tree->dumps_json_tree_to_file(
+    dtw.tree.dumps_json_tree_to_file(
             tree,
             "tests/target/out.json",
             &(DtwTreeProps){
@@ -28,12 +29,13 @@ void dumps_tree(){
             }
     );
 
-    tree->free(tree);
+    dtw.tree.free(tree);
 }
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
     dumps_tree();
-    DtwTree *tree = newDtwTree();
-    tree->loads_json_tree_from_file(tree,"tests/target/out.json");
-    tree->represent(tree);
-    tree->free(tree);
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.loads_json_tree_from_file(tree,"tests/target/out.json");
+    dtw.tree.represent(tree);
+    dtw.tree.free(tree);
 }

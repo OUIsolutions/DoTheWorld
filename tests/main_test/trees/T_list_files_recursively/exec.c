@@ -2,9 +2,10 @@
 #include "../../../doTheWorld_test.h"
 
 int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target/",
             &(DtwTreeProps){
@@ -13,10 +14,10 @@ int main(int argc, char *argv[]){
                     .path_atributes=DTW_INCLUDE
             }
     );
-  DtwStringArray *files = tree->list_files_recursively(tree,"tests/target/",DTW_NOT_CONCAT_PATH);
-  files->sort(files);
-  files->represent(files);
-  files->free(files);
-  tree->free(tree);
+  DtwStringArray *files = dtw.tree.list_files_recursively(tree,"tests/target/",DTW_NOT_CONCAT_PATH);
+  dtw.string_array.sort(files);
+  dtw.string_array.represent(files);
+  dtw.string_array.free(files);
+  dtw.tree.free(tree);
   return 0;
 }

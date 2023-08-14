@@ -4,8 +4,9 @@
 #include "../../../doTheWorld_test.h"
 
 bool test_if_blob(struct DtwTreePart*part){
+    DtwNamespace dtw = newDtwNamespace();
 
-    char *name = part->path->get_full_name(part->path);
+    char *name = dtw.path.get_full_name(part->path);
     if(!name){
         return false;
     }
@@ -19,9 +20,10 @@ bool test_if_blob(struct DtwTreePart*part){
 
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    struct DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
+    struct DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
             tree,
             "exemple_folder",
             &(DtwTreeProps){
@@ -32,14 +34,14 @@ int main(){
     );
 
 
-    struct DtwTreePart *blob = tree->find_part_by_function(
+    struct DtwTreePart *blob = dtw.tree.find_tree_part_by_function(
             tree,
             test_if_blob
     );
 
     if(blob){
-        blob->represent(blob);
+        dtw.tree.part.represent(blob);
     }
-    tree->free(tree);
+    dtw.tree.free(tree);
 
 }

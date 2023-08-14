@@ -17,9 +17,10 @@ DtwTreePart * concat_test(struct DtwTreePart *part){
 }
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target",
             &(DtwTreeProps){
@@ -29,12 +30,12 @@ int main(){
             }
     );
 
-    DtwTree *concated = tree->map(
+    DtwTree *concated = dtw.tree.map(
             tree,
             concat_test
     );
 
-    concated->represent(concated);
-    concated->free(concated);
-    tree->free(tree);
+    dtw.tree.represent(concated);
+    dtw.tree.free(concated);
+    dtw.tree.free(tree);
 }
