@@ -9,7 +9,7 @@ typedef struct DtwStringArray {
 }DtwStringArray;
 
 // End the structure with a semicolon
-int  DtwStringArray_dtw_find_position(struct DtwStringArray *self, const char *string);
+int  DtwStringArray_find_position(struct DtwStringArray *self, const char *string);
 void DtwStringArray_append(struct DtwStringArray *self, const char *string);
 void DtwStringArray_merge(struct DtwStringArray *self, struct DtwStringArray *other);
 void DtwStringArray_represent(struct DtwStringArray *self);

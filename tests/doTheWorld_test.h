@@ -3927,7 +3927,7 @@ typedef struct DtwStringArray {
 }DtwStringArray;
 
 // End the structure with a semicolon
-int  DtwStringArray_dtw_find_position(struct DtwStringArray *self, const char *string);
+int  DtwStringArray_find_position(struct DtwStringArray *self, const char *string);
 void DtwStringArray_dtw_append(struct DtwStringArray *self,const char *string);
 void DtwStringArray_dtw_merge_string_array(struct DtwStringArray *self, struct DtwStringArray *other);
 void DtwStringArray_dtw_represent_string_array(struct DtwStringArray *self);
@@ -6169,7 +6169,7 @@ struct DtwStringArray * newDtwStringArray(){
     return self;
 }
 
-int DtwStringArray_dtw_find_position(struct DtwStringArray *self, const char *string){
+int DtwStringArray_find_position(struct DtwStringArray *self, const char *string){
     for(int i = 0; i < self->size; i++){
         if(strcmp(self->strings[i], string) == 0){
             return i;
