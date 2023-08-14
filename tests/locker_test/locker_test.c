@@ -3,10 +3,11 @@
 
 
 void append_text(char *file,char *text){
+    DtwNamespace dtw = newDtwNamespace();
 
   
     DtwLocker *locker = newDtwLocker();
-    locker->lock(locker,file);
+    dtw.locker.lock(locker,file);
     printf("process %d get the ownership\n",locker->process);
 
     char *content = dtw_load_string_file_content(file);
@@ -18,17 +19,18 @@ void append_text(char *file,char *text){
     free(content);
 
 
-    locker->free(locker);
+    dtw.locker.free(locker);
     
 }
 
 int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
 
     char *file = "tests/target/append.txt";
     int total_process  = 20;
 
-    dtw_remove_any(file);
-    dtw_write_string_file_content(file,"");
+    dtw.remove_any(file);
+    dtw.write_string_file_content(file,"");
 
     for(int i = 0; i < total_process; i ++){
 
