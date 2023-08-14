@@ -11,9 +11,7 @@ DtwJsonTransactionError * private_new_DtwJsonTransactionError( int code,const ch
     if(path){
         self->path = strdup(path);
     }
-    self->represent = DtwJsonTransactionError_represent;
-    self->prepend_path = DtwJsonTransactionError_prepend_path;
-    self->free = DtwJsonTransactionError_free;
+
     return self;
 }
 

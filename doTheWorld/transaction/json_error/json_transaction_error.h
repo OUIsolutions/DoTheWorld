@@ -8,9 +8,7 @@ typedef struct DtwJsonTransactionError{
     int code;
     char *mensage;
     char *path;
-    void (*represent)(struct DtwJsonTransactionError *self);
-    void (*prepend_path)(struct DtwJsonTransactionError *self,char *path);
-    void (*free)(struct DtwJsonTransactionError *self);
+
 
 }DtwJsonTransactionError;
 

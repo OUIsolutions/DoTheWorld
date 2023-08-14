@@ -17,7 +17,7 @@ DtwJsonTransactionError * dtw_validate_json_transaction(cJSON *json_entry){
         if(current_error){
             char formated_path[20] = {0};
             sprintf(formated_path,"[%ld]",i);
-            current_error->prepend_path(current_error,formated_path);
+            DtwJsonTransactionError_prepend_path(current_error,formated_path);
 
             return current_error;
         }
@@ -88,7 +88,7 @@ DtwTransaction * newDtwTransaction_from_json_file(const char *filename){
 
     DtwJsonTransactionError *error = dtw_validate_json_transaction(element);
     if(error){
-        error->free(error);
+        DtwJsonTransactionError_free(error);
         cJSON_Delete(element);
         return NULL;
     }
