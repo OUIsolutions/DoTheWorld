@@ -54,7 +54,7 @@ DtwNamespace newDtwNamespace(){
     self.tree = newDtwTreeModule();
     self.transaction = newDtwTransactionModule();
     self.resource = newDtwResourceModule();
-
+    self.randonizer = newDtwRandonizerModule();
 
     return self;
 }

@@ -95,6 +95,7 @@ typedef struct DtwNamespace{
     DtwTransactionModule transaction;
 
     DtwResourceModule resource;
+    DtwRandonizerModule randonizer;
 
 }DtwNamespace;
 
