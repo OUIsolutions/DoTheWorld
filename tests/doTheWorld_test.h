@@ -4053,7 +4053,6 @@ double dtw_load_double_file_content(const char * path);
 
 bool dtw_load_bool_file_content(const char * path);
 
-char *dtw_convert_entity_type_num(const char *path);
 
 
 void dtw_write_long_file_content(const char *path, long value);
@@ -4654,6 +4653,9 @@ DtwStringArrayModule newDtwStringArrayModule();
 typedef struct DtwTreePartModule{
 
     DtwTreePart  *(*newPart)(const char *path, DtwTreeProps *props);
+    DtwTreePart  *(*newPartEmpty)(const char *path);
+    DtwTreePart * (*newPartLoading)(const char *path);
+
     char *(*get_content_string_by_reference)(struct DtwTreePart *self);
     unsigned char *(*get_content_binary_by_reference)(struct DtwTreePart *self);
 
@@ -4858,6 +4860,10 @@ DtwJsonTransactionErrorModule newDtwJsonTransactionErrorModule();
 
 typedef struct DtwTransactionModule{
     DtwTransaction *(*newTransaction)();
+    DtwTransaction * (*newTransaction_from_json)(cJSON *json_entry);
+    DtwTransaction * (*newTransaction_from_json_file)(const char *filename);
+    DtwJsonTransactionError * (*validate_json_transaction_file)(const char *filename);
+
     void (*append_action)(struct DtwTransaction *self,struct DtwActionTransaction  *action);
     void (*write_any)(struct DtwTransaction *self,const char *path,unsigned char *content, long size,bool is_binary);
     void (*write_string)(struct DtwTransaction *self,const char *path,const char *content);
@@ -4965,6 +4971,25 @@ typedef struct DtwNamespace{
     bool (*copy_any)(const char* src_path,const  char* dest_path,bool merge);
 
     bool (*move_any)(const char* src_path, const char* dest_path,bool merge);
+
+    //numeral io
+
+    long (*load_long_file_content)(const char * path);
+
+    double (*load_double_file_content)(const char * path);
+
+    bool (*load_bool_file_content)(const char * path);
+
+
+
+    void (*write_long_file_content)(const char *path, long value);
+
+    void (*write_bool_file_content)(const char *path, bool value);
+
+    void (*write_double_file_content)(const char *path,double value);
+
+
+
     //listage
 
     DtwStringArray * (*list_files)(const char *path, bool concat_path);
@@ -8818,6 +8843,8 @@ DtwStringArrayModule newDtwStringArrayModule(){
 DtwTreePartModule newDtwTreePartModule(){
     DtwTreePartModule self ={0};
     self.newPart = newDtwTreePart;
+    self.newPartEmpty = newDtwTreePartEmpty;
+    self.newPartLoading = newDtwTreePartLoading;
     self.get_content_string_by_reference = DtwTreePart_get_content_string_by_reference;
     self.get_content_binary_by_reference = DtwTreePart_get_content_binary_by_reference;
     self.get_content_sha = DtwTreePart_get_content_sha;
@@ -8939,6 +8966,9 @@ DtwJsonTransactionErrorModule newDtwJsonTransactionErrorModule(){
 DtwTransactionModule newDtwTransactionModule(){
     DtwTransactionModule self = {0};
     self.newTransaction = newDtwTransaction;
+    self.newTransaction_from_json = newDtwTransaction_from_json;
+    self.newTransaction_from_json_file = newDtwTransaction_from_json_file;
+    self.validate_json_transaction_file = dtw_validate_json_transaction_file;
     self.append_action = DtwTransaction_append_action;
     self.write_any = DtwTransaction_write_any;
     self.write_string = DtwTransaction_write_string;
@@ -9013,6 +9043,14 @@ DtwNamespace newDtwNamespace(){
     self.convert_entity  = dtw_convert_entity;
     self.copy_any = dtw_copy_any;
     self.move_any = dtw_move_any;
+    //numeral io
+    self.load_long_file_content = dtw_load_long_file_content;
+    self.load_double_file_content =  dtw_load_double_file_content;
+    self.load_bool_file_content = dtw_load_bool_file_content;
+
+    self.write_long_file_content = dtw_write_long_file_content;
+    self.write_double_file_content = dtw_write_double_file_content;
+    self.write_bool_file_content = dtw_write_bool_file_content;
 
     //listage
     self.list_files = dtw_list_files;
