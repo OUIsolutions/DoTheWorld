@@ -3,9 +3,10 @@
 //
 #include "doTheWorld.h"
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target",
             &(DtwTreeProps){
@@ -16,7 +17,7 @@ int main(){
     );
     for(int i = 0; i<tree->size;i++){
         DtwTreePart *current_part = tree->tree_parts[i];
-        current_part->represent(current_part);
+        dtw.tree.part.represent(current_part);
     }
-    tree->free(tree);
+    dtw.tree.free(tree);
 }

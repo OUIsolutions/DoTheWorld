@@ -4,13 +4,15 @@
 #include "../../../doTheWorld_test.h"
 
 DtwTreePart * concat_test(struct DtwTreePart *part){
+    DtwNamespace dtw = newDtwNamespace();
+
     if(part->content_exist_in_memory && part->is_binary == false){
-        char *content = part->get_content_string_by_reference(part);
+        char *content = dtw.tree.part.get_content_string_by_reference(part);
         const char *mensage = " test";
         char *new_content = (char*)malloc(strlen(content) + strlen(mensage)+ 2);
         strcpy(new_content,content);
         strcat(new_content,mensage);
-        part->set_string_content(part,new_content);
+        dtw.tree.part.set_string_content(part,new_content);
         free(new_content);
     }
     return part;

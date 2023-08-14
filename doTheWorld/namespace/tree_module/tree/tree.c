@@ -20,7 +20,7 @@ DtwTreeModule newDtwTreeModule(){
     self.list_dirs_recursively = DtwTree_list_dirs_recursively;
     self.list_all_recursively = DtwTree_list_all_recursively;
 
-    self.find_tree_part_by_name = DtwTree_find_tree_part_by_path;
+    self.find_tree_part_by_name = DtwTree_find_tree_part_by_name;
     self.find_tree_part_by_path = DtwTree_find_tree_part_by_path;
 
     self.create_report = DtwTree_create_report;

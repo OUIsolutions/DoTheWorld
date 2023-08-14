@@ -3,10 +3,11 @@
 #include "doTheWorld.h"
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTreePart *part = newDtwTreePartLoading("tests/target/a.txt");
+    DtwTreePart *part = dtw.tree.part.newPartLoading("tests/target/a.txt");
     part->last_modification_time = 0;
     
-    part->represent(part);
-    part->free(part);
+    dtw.tree.part.represent(part);
+    dtw.tree.part.free(part);
 }

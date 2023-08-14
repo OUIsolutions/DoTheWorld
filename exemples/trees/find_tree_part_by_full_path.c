@@ -4,9 +4,10 @@
 #include "doTheWorld.h"
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target/",
             &(DtwTreeProps){
@@ -16,12 +17,12 @@ int main(){
             }
     );
 
-    DtwTreePart *element = tree->find_part_by_path(
+    DtwTreePart *element = dtw.tree.find_tree_part_by_path(
             tree,
             "tests/target/sub_folder/sub_element.txt"
     );
     if(element){
-        element->represent(element);
+        dtw.tree.part.represent(element);
     }
-    tree->free(tree);
+    dtw.tree.free(tree);
 }

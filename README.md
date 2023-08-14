@@ -44,8 +44,10 @@ if you are sure that the content you are going to read is not binary you can cal
 
 int main(int argc, char *argv[]){
   //load a string file content
-  const char *path = "tests/target/a.txt";
-  char *content = dtw_load_string_file_content(path);
+    DtwNamespace dtw = newDtwNamespace();
+
+    const char *path = "tests/target/a.txt";
+  char *content = dtw.load_string_file_content(path);
   if(content == NULL){
     printf("error oppening %s\n",path);
     return 1;
@@ -62,12 +64,13 @@ int main(int argc, char *argv[]){
 #include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
- 
-  const char *path = "tests/target/blob.png";
+    DtwNamespace dtw = newDtwNamespace();
+
+    const char *path = "tests/target/blob.png";
   long size;
   bool is_binary;
   //load any file, is useful if you don't know if the file is binary or not
-  unsigned char *content = dtw_load_any_content(path,&size,&is_binary);
+  unsigned char *content = dtw.load_any_content(path,&size,&is_binary);
   if(content == NULL){
     printf("error oppening %s\n",path);
     return 1;
@@ -75,7 +78,7 @@ int main(int argc, char *argv[]){
   printf("size: %ld\n",size);
   printf("is_binary: %s\n",is_binary ? "true" : "false");
 
-  dtw_write_any_content("tests/target/blob2.png",content,size);
+  dtw.write_any_content("tests/target/blob2.png",content,size);
   free(content);
   return 0;
 }
@@ -93,38 +96,39 @@ you also can direclty load all types from an file  with numerical ios
 
 int main (){
 
+    DtwNamespace dtw = newDtwNamespace();
 
-    double double_txt = dtw_load_double_file_content("tests/target/numerical/double.txt");
+    double double_txt = dtw.load_double_file_content("tests/target/numerical/double.txt");
     printf("double.txt:%lf\n",double_txt);
 
-    double double_that_not_exist = dtw_load_double_file_content("nothing.txt");
+    double double_that_not_exist = dtw.load_double_file_content("nothing.txt");
     printf("double that not exist:%lf\n",double_that_not_exist);
 
 
-    long integer_txt = dtw_load_long_file_content("tests/target/numerical/integer.txt");
+    long integer_txt = dtw.load_long_file_content("tests/target/numerical/integer.txt");
     printf("integer.txt:%ld\n",integer_txt);
 
     
-    long integer_that_not_exist = dtw_load_long_file_content("nothing.txt");
+    long integer_that_not_exist = dtw.load_long_file_content("nothing.txt");
     printf("integer that not exist:%ld\n",integer_that_not_exist);
 
     //false_small.txt = "f"
-    bool false_small = dtw_load_bool_file_content("tests/target/numerical/false_small.txt"); 
+    bool false_small = dtw.load_bool_file_content("tests/target/numerical/false_small.txt");
     printf("false_small.txt:%d\n",false_small);
 
     //false_normal.txt = "false"
-    bool false_normal = dtw_load_bool_file_content("tests/target/numerical/false_normal.txt");
+    bool false_normal = dtw.load_bool_file_content("tests/target/numerical/false_normal.txt");
     printf("false_normal.txt:%d\n",false_normal);
 
     //true_small.txt = "t"
-    bool true_small = dtw_load_bool_file_content("tests/target/numerical/true_small.txt"); 
+    bool true_small = dtw.load_bool_file_content("tests/target/numerical/true_small.txt");
     printf("true_small.txt:%d\n",true_small);
     
     //true normal.txt = "true"
-    bool true_normal = dtw_load_bool_file_content("tests/target/numerical/true_normal.txt");
+    bool true_normal = dtw.load_bool_file_content("tests/target/numerical/true_normal.txt");
     printf("true_normal.txt:%d\n",true_normal);
 
-    bool bool_that_not_exist = dtw_load_bool_file_content("nothing.txt");
+    bool bool_that_not_exist = dtw.load_bool_file_content("nothing.txt");
     printf("false that not exist:%d\n",bool_that_not_exist);
 
     return 0;
@@ -140,8 +144,9 @@ to write strings in text files is very simple, just call the function **dtw_writ
 
 int main(int argc, char *argv[]){
   // Write a string to a file the path is auto created
-  
-  bool result = dtw_write_string_file_content("tests/target/a.txt","Hello World!");
+    DtwNamespace dtw = newDtwNamespace();
+
+    bool result = dtw.write_string_file_content("tests/target/a.txt","Hello World!");
   printf("result: %s\n",result ? "true" : "false");
   return 0;
 }
@@ -154,10 +159,12 @@ if you want to write anything to a file, it's also very simple, use the **dtw_wr
 #include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
-  //load the beer image
+    DtwNamespace dtw = newDtwNamespace();
+
+    //load the beer image
   const char *blob_path = "tests/target/blob.png";
   long blob_size;
-  unsigned char *content = dtw_load_binary_content(blob_path,&blob_size);
+  unsigned char *content = dtw.load_binary_content(blob_path,&blob_size);
   //use these functions for binary files
   if(content == NULL){
     printf("error oppening %s\n",blob_path);
@@ -165,7 +172,7 @@ int main(int argc, char *argv[]){
   }
   printf("size: %ld\n",blob_size);
 
-  bool result = dtw_write_any_content("tests/target/blob2.png",content,blob_size);
+  bool result = dtw.write_any_content("tests/target/blob2.png",content,blob_size);
   printf("result: %s\n",result ? "true" : "false");
 free(content);
   return 0;
@@ -185,10 +192,11 @@ You also can write any type direclty to an file
 
 int main (){
 
+    DtwNamespace dtw = newDtwNamespace();
 
-    dtw_write_double_file_content("tests/target/numerical2/double.txt",25.4);
-    dtw_write_long_file_content("tests/target/numerical2/long.txt",12);
-    dtw_write_bool_file_content("tests/target/numerical2/bool.txt",true);
+    dtw.write_double_file_content("tests/target/numerical2/double.txt",25.4);
+    dtw.write_long_file_content("tests/target/numerical2/long.txt",12);
+    dtw.write_bool_file_content("tests/target/numerical2/bool.txt",true);
 
 
     return 0;
@@ -204,8 +212,9 @@ it will create till reachs the target folder
 #include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
- 
-  dtw_create_dir_recursively("tests/target/sub_folder/a/b/c");
+    DtwNamespace dtw = newDtwNamespace();
+
+    dtw.create_dir_recursively("tests/target/sub_folder/a/b/c");
 
   return 0;
 }
@@ -220,8 +229,8 @@ With the function **dtw_copy_any** you can copy either files or folders to one p
 #include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
-
-  dtw_copy_any("tests/target/blob.png","tests/target/blob3.png",DTW_NOT_MERGE);
+  DtwNamespace dtw = newDtwNamespace();
+  dtw.copy_any("tests/target/blob.png","tests/target/blob3.png",DTW_NOT_MERGE);
   return 0;
 }
 ~~~
@@ -234,8 +243,9 @@ You can move either folders or files with **dtw_move_any** function
 
 int main(int argc, char *argv[]){
 
+    DtwNamespace dtw = newDtwNamespace();
 
-    dtw_move_any("tests/target/sub_folder","tests/target/sub_folder2",DTW_NOT_MERGE);
+    dtw.move_any("tests/target/sub_folder","tests/target/sub_folder2",DTW_NOT_MERGE);
 
     return 0;
 }
@@ -250,14 +260,15 @@ With the listage functions you can extract all Strings Arrays of elements in an 
 #include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
 
-  DtwStringArray *files = dtw_list_files("tests/target", DTW_CONCAT_PATH);
-  files->sort(files);
+  DtwStringArray *files = dtw.list_files("tests/target", DTW_CONCAT_PATH);
+  dtw.string_array.sort(files);
 
   for(int i = 0; i < files->size; i++){
     printf("%s\n", files->strings[i]);
   }
-  files->free(files);
+  dtw.string_array.free(files);
   return 0;
 }
 ~~~
@@ -269,12 +280,13 @@ int main(int argc, char *argv[]){
 #include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
 
-  DtwStringArray *dirs = dtw_list_dirs("tests/target", DTW_NOT_CONCAT_PATH);
+  DtwStringArray *dirs = dtw.list_dirs("tests/target", DTW_NOT_CONCAT_PATH);
   //the represent methold will print the dirs in the console
-  dirs->sort(dirs);
-  dirs->represent(dirs);
-  dirs->free(dirs);
+  dtw.string_array.sort(dirs);
+  dtw.string_array.represent(dirs);
+  dtw.string_array.free(dirs);
   return 0;
 }
 ~~~
@@ -287,11 +299,12 @@ int main(int argc, char *argv[]){
 #include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
 
-  DtwStringArray *all = dtw_list_all("tests/target/",DTW_CONCAT_PATH);
-  all->sort(all);
-  all->represent(all);
-  all->free(all);
+  DtwStringArray *all = dtw.list_all("tests/target/",DTW_CONCAT_PATH);
+  dtw.string_array.sort(all);
+  dtw.string_array.represent(all);
+  dtw.string_array.free(all);
   return 0;
 }
 ~~~
@@ -304,11 +317,12 @@ The By Using multi dimension listage functions , you can see all itens listed in
 #include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
 
-  DtwStringArray *files = dtw_list_files_recursively("tests/target/",DTW_CONCAT_PATH);
-  files->sort(files);
-  files->represent(files);
-  files->free(files);
+  DtwStringArray *files = dtw.list_files_recursively("tests/target/",DTW_CONCAT_PATH);
+  dtw.string_array.sort(files);
+  dtw.string_array.represent(files);
+  dtw.string_array.free(files);
   return 0;
 }
 ~~~
@@ -320,11 +334,12 @@ int main(int argc, char *argv[]){
 #include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
 
-  DtwStringArray *files = dtw_list_dirs_recursively("tests/target/",DTW_CONCAT_PATH);
-  files->sort(files);
-  files->represent(files);
-  files->free(files);
+  DtwStringArray *files = dtw.list_dirs_recursively("tests/target/",DTW_CONCAT_PATH);
+  dtw.string_array.sort(files);
+  dtw.string_array.represent(files);
+  dtw.string_array.free(files);
   return 0;
 }
 ~~~
@@ -336,11 +351,12 @@ int main(int argc, char *argv[]){
 #include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
 
-  DtwStringArray *files = dtw_list_all_recursively("tests/target/",DTW_CONCAT_PATH);
-  files->sort(files);
-  files->represent(files);
-  files->free(files);
+  DtwStringArray *files = dtw.list_all_recursively("tests/target/",DTW_CONCAT_PATH);
+  dtw.string_array.sort(files);
+  dtw.string_array.represent(files);
+  dtw.string_array.free(files);
   return 0;
 }
 ~~~
@@ -433,10 +449,11 @@ be executed in an order
 
 
 void append_text(char *file,char *text){
+    DtwNamespace dtw = newDtwNamespace();
 
   
     DtwLocker *locker = newDtwLocker();
-    locker->lock(locker,file);
+    dtw.locker.lock(locker,file);
     printf("process %d get the ownership\n",locker->process);
 
     char *content = dtw_load_string_file_content(file);
@@ -448,17 +465,18 @@ void append_text(char *file,char *text){
     free(content);
 
 
-    locker->free(locker);
+    dtw.locker.free(locker);
     
 }
 
 int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
 
     char *file = "tests/target/append.txt";
     int total_process  = 20;
 
-    dtw_remove_any(file);
-    dtw_write_string_file_content(file,"");
+    dtw.remove_any(file);
+    dtw.write_string_file_content(file,"");
 
     for(int i = 0; i < total_process; i ++){
 
@@ -492,40 +510,41 @@ With Resources you can iterate over all types of values ,and modifie than into a
 #include "doTheWorld.h"
 
 int main (){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwResource *values = new_DtwResource("tests/target/new_folder");
+    DtwResource *values = dtw.resource.newResource("tests/target/new_folder");
 
-    DtwResource *string_element = values->sub_resource(values,"text.txt");
-    string_element->set_string(string_element,"nothing");
-    string_element->free(string_element);
+    DtwResource *string_element = dtw.resource.sub_resource(values,"text.txt");
+    dtw.resource.set_string(string_element,"nothing");
+    dtw.resource.free(string_element);
     long size;
     unsigned char *blob = dtw_load_binary_content("tests/target/blob.png",&size);
 
-    DtwResource *blob_element = values->sub_resource(values,"blob.png");
-    blob_element->set_binary(blob_element,blob,size);
-    blob_element->free(blob_element);
+    DtwResource *blob_element = dtw.resource.sub_resource(values,"blob.png");
+    dtw.resource.set_binary(blob_element,blob,size);
+    dtw.resource.free(blob_element);
     free(blob);
-    DtwResource *bInt = values->sub_resource(values,"b.txt");
-    bInt->set_long(bInt,25);
-    bInt->free(bInt);
+    DtwResource *bInt = dtw.resource.sub_resource(values,"b.txt");
+    dtw.resource.set_long(bInt,25);
+    dtw.resource.free(bInt);
 
-    DtwResource *cDouble = values->sub_resource(values,"c.txt");
-    cDouble->set_double(cDouble,10.5);
-    cDouble->free(cDouble);
+    DtwResource *cDouble = dtw.resource.sub_resource(values,"c.txt");
+    dtw.resource.set_double(cDouble,10.5);
+    dtw.resource.free(cDouble);
 
-    DtwResource *dBool = values->sub_resource(values,"b.txt");
-    dBool->set_bool(dBool,true);
-    dBool->free(dBool);
+    DtwResource *dBool = dtw.resource.sub_resource(values,"b.txt");
+    dtw.resource.set_bool(dBool,true);
+    dtw.resource.free(dBool);
 
-    DtwResource  *sub_foder = values->sub_resource(values,"sub_foder");
-    DtwResource *string_element2 = sub_foder->sub_resource(sub_foder,"a.txt");
-    string_element2->set_string(string_element2,"nothing");
-    string_element2->free(string_element2);
+    DtwResource  *sub_foder = dtw.resource.sub_resource(values,"sub_foder");
+    DtwResource *string_element2 = dtw.resource.sub_resource(sub_foder,"a.txt");
+    dtw.resource.set_string(string_element2,"nothing");
+    dtw.resource.free(string_element2);
 
-    sub_foder->free(sub_foder);
+    dtw.resource.free(sub_foder);
 
-    values->commit(values);
-    values->free(values);
+    dtw.resource.commit(values);
+    dtw.resource.free(values);
 
 
 
@@ -544,67 +563,68 @@ int main (){
 #include "doTheWorld.h"
 
 int main (){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwResource *values = new_DtwResource("tests/target");
+    DtwResource *values = dtw.resource.newResource("tests/target");
 
     printf("elements:---------------------------------\n");
-    DtwStringArray  *sub_elements = values->list(values);
-    sub_elements->represent(sub_elements);
-    sub_elements->free(sub_elements);
+    DtwStringArray  *sub_elements = dtw.resource.list(values);
+    dtw.string_array.represent(sub_elements);
+    dtw.string_array.free(sub_elements);
     printf("types:--------------------------------------\n");
 
-    int values_type = values->type(values);
+    int values_type = dtw.resource.type(values);
     if(values_type != DTW_FOLDER_TYPE){
         printf("values its not an folder\n");
-        values->free(values);
+        dtw.resource.free(values);
         return 1;
     }
 
 
-    DtwResource *string_r = values->sub_resource(values, "a.txt");
-    char *value_of_string = string_r->get_string(string_r);
+    DtwResource *string_r = dtw.resource.sub_resource(values, "a.txt");
+    char *value_of_string = dtw.resource.get_string(string_r);
     if(!value_of_string){
         printf("unable to locate a.txt\n");
-        values->free(values);
-        string_r->free(string_r);
+        dtw.resource.free(values);
+        dtw.resource.free(string_r);
         free(value_of_string);
         return 1;
     }
     printf("value string :%s\n",value_of_string);
-    string_r->free(string_r);
+    dtw.resource.free(string_r);
     free(value_of_string);
 
-    DtwResource  *blob_r = values->sub_resource(values,"blob.png");
+    DtwResource  *blob_r = dtw.resource.sub_resource(values,"blob.png");
     long size;
     bool is_binary;
-    unsigned  char *blob_value = blob_r->get_any(blob_r,&size,&is_binary);
+    unsigned  char *blob_value = dtw.resource.get_any(blob_r,&size,&is_binary);
     printf("blob size: %ld, is_binary:%d\n",size,is_binary);
     free(blob_value);
-    blob_r->free(blob_r);
+    dtw.resource.free(blob_r);
 
 
-    DtwResource *numerical = values->sub_resource(values,"numerical");
+    DtwResource *numerical = dtw.resource.sub_resource(values,"numerical");
 
-    DtwResource  *double_r = numerical->sub_resource(numerical,"double.txt");
-    double  double_value = double_r->get_double(double_r);
+    DtwResource  *double_r = dtw.resource.sub_resource(numerical,"double.txt");
+    double  double_value = dtw.resource.get_double(double_r);
     printf("double value %lf\n",double_value);
-    double_r->free(double_r);
+    dtw.resource.free(double_r);
 
 
-    DtwResource  *long_r = numerical->sub_resource(numerical,"integer.txt");
-    long  long_value = long_r->get_long(long_r);
+    DtwResource  *long_r = dtw.resource.sub_resource(numerical,"integer.txt");
+    long  long_value = dtw.resource.get_long(long_r);
     printf("long value %ld\n",long_value);
-    long_r->free(long_r);
+    dtw.resource.free(long_r);
 
 
-    DtwResource  *bool_r = numerical->sub_resource(numerical,"true_normal.txt");
-    bool bool_value = bool_r->get_bool(bool_r);
+    DtwResource  *bool_r = dtw.resource.sub_resource(numerical,"true_normal.txt");
+    bool bool_value = dtw.resource.get_bool(bool_r);
     printf("bool value %d\n",bool_value);
-    bool_r->free(bool_r);
+    dtw.resource.free(bool_r);
 
 
-    numerical->free(numerical);
-    values->free(values);
+    dtw.resource.free(numerical);
+    dtw.resource.free(values);
 
 
 
@@ -625,13 +645,15 @@ wanted side effects
 #include "doTheWorld.h"
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
+
     DtwTransaction *t = newDtwTransaction();
-    t->write_string(t,"b.txt","aaaaa");
-    t->move_any(t,"a.txt","c.txt");
-    t->delete_any(t,"blob.png");
-    t->copy_any(t,"sub_folder","sub_folder2");
-    t->commit(t,"tests/target");
-    t->free(t);
+    dtw.transaction.write_string(t,"b.txt","aaaaa");
+    dtw.transaction.move_any(t,"a.txt","c.txt");
+    dtw.transaction.delete_any(t,"blob.png");
+    dtw.transaction.copy_any(t,"sub_folder","sub_folder2");
+    dtw.transaction.commit(t,"tests/target");
+    dtw.transaction.free(t);
 
 }
 ~~~
@@ -643,14 +665,16 @@ You also can dump the transaction to an json file to store it
 #include "doTheWorld.h"
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
+
     DtwTransaction *t = newDtwTransaction();
-    t->write_string(t,"b.txt","aaaaa");
-    t->move_any(t,"a.txt","c.txt");
-    t->delete_any(t,"blob.png");
-    t->copy_any(t,"sub_folder","sub_folder2");
-    t->represent(t);
-    t->dumps_transaction_to_json_file(t,"tests/target/transaction.json");
-    t->free(t);
+    dtw.transaction.write_string(t,"b.txt","aaaaa");
+    dtw.transaction.move_any(t,"a.txt","c.txt");
+    dtw.transaction.delete_any(t,"blob.png");
+    dtw.transaction.copy_any(t,"sub_folder","sub_folder2");
+    dtw.transaction.represent(t);
+    dtw.transaction.dumps_transaction_to_json_file(t,"tests/target/transaction.json");
+    dtw.transaction.free(t);
 }
 ~~~
 
@@ -660,16 +684,18 @@ int main(){
 #include "doTheWorld.h"
 
 int main(){
-    DtwTransaction *t = newDtwTransaction_from_json_file("tests/target/transaction.json");
+    DtwNamespace dtw = newDtwNamespace();
+
+    DtwTransaction *t = dtw.transaction.newTransaction_from_json_file("tests/target/transaction.json");
     if(!t){
         DtwJsonTransactionError *error = dtw_validate_json_transaction_file("tests/target/transaction.json");
-        error->represent(error);
-        error->free(error);
+        dtw.transaction.json_error.represent(error);
+        dtw.transaction.json_error.free(error);
         return 0;
     }
     
-    t->represent(t);
-    t->free(t);
+    dtw.transaction.represent(t);
+    dtw.transaction.free(t);
 }
 ~~~
 
@@ -684,12 +710,13 @@ with tree concepts, you can manipulate files as trees, and implement IO modifica
 #include "doTheWorld.h"
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTreePart *part = newDtwTreePartLoading("tests/target/a.txt");
+    DtwTreePart *part = dtw.tree.part.newPartLoading("tests/target/a.txt");
     part->last_modification_time = 0;
     
-    part->represent(part);
-    part->free(part);
+    dtw.tree.part.represent(part);
+    dtw.tree.part.free(part);
 }
 ~~~
 ### Creating an empty tree Part
@@ -702,12 +729,13 @@ int main(){
 
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTreePart *part = newDtwTreePartEmpty("tests/target/b.txt");
-    part->set_string_content(part,"my mensage");
-    part->hardware_write(part,DTW_SET_AS_ACTION);
-    part->hardware_commit(part);
-    part->free(part);
+    DtwTreePart *part = dtw.tree.part.newPartEmpty("tests/target/b.txt");
+    dtw.tree.part.set_string_content(part,"my mensage");
+    dtw.tree.part.hardware_write(part,DTW_SET_AS_ACTION);
+    dtw.tree.part.hardware_commit(part);
+    dtw.tree.part.free(part);
 }
 ~~~
 
@@ -718,19 +746,20 @@ int main(){
 
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-     DtwTreePart *part = newDtwTreePartLoading("tests/target/a.txt");
+     DtwTreePart *part = dtw.tree.part.newPartLoading("tests/target/a.txt");
 
     //getting the content
-    char *content = part->get_content_string_by_reference(part);
+    char *content = dtw.tree.part.get_content_string_by_reference(part);
     char new_content[100] ={0};
     strcat(new_content,content);
     strcat(new_content," New Mensage");
-    part->set_string_content(part,new_content);
+    dtw.tree.part.set_string_content(part,new_content);
 
-    part->hardware_write(part,DTW_SET_AS_ACTION);
-    part->hardware_commit(part);
-    part->free(part);
+    dtw.tree.part.hardware_write(part,DTW_SET_AS_ACTION);
+    dtw.tree.part.hardware_commit(part);
+    dtw.tree.part.free(part);
 }
 ~~~
 
@@ -742,15 +771,16 @@ int main(){
 
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTreePart *part = newDtwTreePartLoading( "tests/target/a.txt");
+    DtwTreePart *part = dtw.tree.part.newPartLoading( "tests/target/a.txt");
 
     DtwPath *path = part->path;
 
-    char *name = path->get_full_name(path);
-    char *extension = path->get_extension(path);
-    char *dir = path->get_dir(path);
-    char *full_path = path->get_path(path);
+    char *name = dtw.path.get_full_name(path);
+    char *extension = dtw.path.get_extension(path);
+    char *dir = dtw.path.get_dir(path);
+    char *full_path = dtw.path.get_path(path);
     printf("name : %s\n",name);
     printf("extension : %s\n",extension);
     printf("dir : %s\n",dir);
@@ -761,7 +791,7 @@ int main(){
     free(extension);
     free(dir);
     free(full_path);
-    part->free(part);
+    dtw.tree.part.free(part);
 }
 ~~~
 
@@ -775,18 +805,19 @@ int main(){
 
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTreePart *part = newDtwTreePartLoading("tests/target/sub_folder/a.txt");
+    DtwTreePart *part = dtw.tree.part.newPartLoading("tests/target/sub_folder/a.txt");
 
     DtwPath *path = part->path;
 
-    path->set_dir(path,"a/b");
-    path->set_name(path,"test2");
-    path->set_extension(path,"md");
-    path->represent(path);
-    part->hardware_modify(part,DTW_SET_AS_ACTION);
-    part->hardware_commit(part);
-    part->free(part);
+    dtw.path.set_dir(path,"a/b");
+    dtw.path.set_name(path,"test2");
+    dtw.path.set_extension(path,"md");
+    dtw.path.represent(path);
+    dtw.tree.part.hardware_modify(part,DTW_SET_AS_ACTION);
+    dtw.tree.part.hardware_commit(part);
+    dtw.tree.part.free(part);
 
 }
 ~~~
@@ -804,16 +835,15 @@ Will Modificate the original content, for exemple, if you change the extension o
 
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTreePart *part = newDtwTreePartLoading("tests/target/a.txt");
+    DtwTreePart *part = dtw.tree.part.newPartLoading("tests/target/a.txt");
 
-    DtwPath *path = part->path;
+    dtw.path.set_extension(part->path,"md");
 
-    path->set_extension(path,"md");
-
-    part->hardware_modify(part,DTW_EXECUTE_NOW);
-    part->hardware_commit(part);
-    part->free(part);
+    dtw.tree.part.hardware_modify(part,DTW_EXECUTE_NOW);
+    dtw.tree.part.hardware_commit(part);
+    dtw.tree.part.free(part);
 
 }
 ~~~
@@ -827,16 +857,13 @@ old file
 
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTreePart *part = newDtwTreePartLoading("tests/target/a.txt");
-
-    DtwPath *path = part->path;
-
-    path->set_extension(path,"md");
-
-    part->hardware_write(part,DTW_EXECUTE_NOW);
-    part->hardware_commit(part);
-    part->free(part);
+    DtwTreePart *part = dtw.tree.part.newPartLoading("tests/target/a.txt");
+    dtw.path.set_extension(part->path,"md");
+    dtw.tree.part.hardware_write(part,DTW_EXECUTE_NOW);
+    dtw.tree.part.hardware_commit(part);
+    dtw.tree.part.free(part);
 
 }
 ~~~
@@ -852,12 +879,13 @@ Will Delete the current Content
 
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTreePart *part = newDtwTreePartLoading("tests/target/a.txt");
+    DtwTreePart *part = dtw.tree.part.newPartLoading("tests/target/a.txt");
 
-    part->hardware_remove(part,DTW_EXECUTE_NOW);
-    part->hardware_commit(part);
-    part->free(part);
+    dtw.tree.part.hardware_remove(part,DTW_EXECUTE_NOW);
+    dtw.tree.part.hardware_commit(part);
+    dtw.tree.part.free(part);
 
 }
 ~~~
@@ -871,9 +899,10 @@ easy steps
 
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target/",
             &(DtwTreeProps){
@@ -882,8 +911,8 @@ int main(){
                     .path_atributes=DTW_INCLUDE
             }
     );
-    tree->represent(tree);
-    tree->free(tree);
+    dtw.tree.represent(tree);
+    dtw.tree.free(tree);
 }
 ~~~
 
@@ -895,9 +924,10 @@ int main(){
 //
 #include "doTheWorld.h"
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target",
             &(DtwTreeProps){
@@ -908,9 +938,9 @@ int main(){
     );
     for(int i = 0; i<tree->size;i++){
         DtwTreePart *current_part = tree->tree_parts[i];
-        current_part->represent(current_part);
+        dtw.tree.part.represent(current_part);
     }
-    tree->free(tree);
+    dtw.tree.free(tree);
 }
 ~~~
 
@@ -925,9 +955,10 @@ int main(){
 #include "doTheWorld.h"
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target",
             &(DtwTreeProps){
@@ -937,11 +968,11 @@ int main(){
             }
     );
 
-    DtwTreePart *blob = tree->find_part_by_name(tree,"blob.png");
+    DtwTreePart *blob = dtw.tree.find_tree_part_by_name(tree,"blob.png");
     if(blob){
-        blob->represent(blob);
+        dtw.tree.part.represent(blob);
     }
-    tree->free(tree);
+    dtw.tree.free(tree);
 
 }
 ~~~
@@ -955,9 +986,10 @@ int main(){
 #include "doTheWorld.h"
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target/",
             &(DtwTreeProps){
@@ -967,14 +999,14 @@ int main(){
             }
     );
 
-    DtwTreePart *element = tree->find_part_by_path(
+    DtwTreePart *element = dtw.tree.find_tree_part_by_path(
             tree,
             "tests/target/sub_folder/sub_element.txt"
     );
     if(element){
-        element->represent(element);
+        dtw.tree.part.represent(element);
     }
-    tree->free(tree);
+    dtw.tree.free(tree);
 }
 
 ~~~
@@ -987,8 +1019,9 @@ int main(){
 #include "doTheWorld.h"
 
 bool test_if_blob(struct DtwTreePart*part){
+    DtwNamespace dtw = newDtwNamespace();
 
-    char *name = part->path->get_full_name(part->path);
+    char *name = dtw.path.get_full_name(part->path);
     if(!name){
         return false;
     }
@@ -1002,9 +1035,10 @@ bool test_if_blob(struct DtwTreePart*part){
 
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    struct DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
+    struct DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
             tree,
             "exemple_folder",
             &(DtwTreeProps){
@@ -1015,15 +1049,15 @@ int main(){
     );
 
 
-    struct DtwTreePart *blob = tree->find_tree_part_by_function(
+    struct DtwTreePart *blob = dtw.tree.find_tree_part_by_function(
             tree,
             test_if_blob
     );
 
     if(blob){
-        blob->represent(blob);
+        dtw.tree.part.represent(blob);
     }
-    tree->free(tree);
+    dtw.tree.free(tree);
 
 }
 ~~~
@@ -1039,7 +1073,9 @@ with filter you can filter the contents you want in an tree with an bool lambda
 #include "doTheWorld.h"
 
 bool filter_txt(struct DtwTreePart *part){
-    char *extension = part->path->get_extension(part->path);
+    DtwNamespace dtw = newDtwNamespace();
+
+    char *extension = dtw.path.get_extension(part->path);
     if(!extension){
         return false;
     }
@@ -1052,9 +1088,10 @@ bool filter_txt(struct DtwTreePart *part){
 }
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target",
             &(DtwTreeProps){
@@ -1063,14 +1100,14 @@ int main(){
                     .path_atributes=DTW_INCLUDE
             }
     );
-    DtwTree *filtered = tree->filter(
+    DtwTree *filtered = dtw.tree.filter(
             tree,
             filter_txt
     );
 
-    filtered->represent(filtered);
-    filtered->free(filtered);
-    tree->free(tree);
+    dtw.tree.represent(filtered);
+    dtw.tree.free(filtered);
+    dtw.tree.free(tree);
 }
 ~~~
 
@@ -1083,22 +1120,25 @@ int main(){
 #include "doTheWorld.h"
 
 DtwTreePart * concat_test(struct DtwTreePart *part){
+    DtwNamespace dtw = newDtwNamespace();
+
     if(part->content_exist_in_memory && part->is_binary == false){
-        char *content = part->get_content_string_by_reference(part);
+        char *content = dtw.tree.part.get_content_string_by_reference(part);
         const char *mensage = " test";
         char *new_content = (char*)malloc(strlen(content) + strlen(mensage)+ 2);
         strcpy(new_content,content);
         strcat(new_content,mensage);
-        part->set_string_content(part,new_content);
+        dtw.tree.part.set_string_content(part,new_content);
         free(new_content);
     }
     return part;
 }
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target",
             &(DtwTreeProps){
@@ -1108,14 +1148,14 @@ int main(){
             }
     );
 
-    DtwTree *concated = tree->map(
+    DtwTree *concated = dtw.tree.map(
             tree,
             concat_test
     );
 
-    concated->represent(concated);
-    concated->free(concated);
-    tree->free(tree);
+    dtw.tree.represent(concated);
+    dtw.tree.free(concated);
+    dtw.tree.free(tree);
 }
 ~~~
 With **hardware_commit_tree** you can commit all modifications at Once 
@@ -1130,9 +1170,10 @@ turning system ultra securty
 #include "doTheWorld.h"
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target",
             &(DtwTreeProps){
@@ -1144,21 +1185,21 @@ int main(){
 
     for(int i=0; i < tree->size;i++){
         struct DtwTreePart *part = tree->tree_parts[i];
-        struct DtwPath *path = part->path;
-        char *extension = path->get_extension(path);
+
+        char *extension = dtw.path.get_extension( part->path);
         if(!extension){
             continue;
         }
         if(strcmp(extension,"txt") == 0){
-            path->set_extension(path,"md");
-            part->hardware_modify(part,DTW_SET_AS_ACTION);
+            dtw.path.set_extension( part->path,"md");
+            dtw.tree.part.hardware_modify(part,DTW_SET_AS_ACTION);
 
         }
         free(extension);
     }
 
-    tree->hardware_commit_tree(tree);
-    tree->free(tree);
+    dtw.tree.hardware_commit_tree(tree);
+    dtw.tree.free(tree);
 }
 ~~~
 
@@ -1171,9 +1212,10 @@ With transactin Reports , you can see what will be modified
 #include "doTheWorld.h"
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target",
             &(DtwTreeProps){
@@ -1184,23 +1226,23 @@ int main(){
     );
     for(int i=0; i < tree->size;i++){
         DtwTreePart *part = tree->tree_parts[i];
-        DtwPath *path = part->path;
-        char *extension = path->get_extension(path);
+
+        char *extension = dtw.path.get_extension(part->path);
         if(!extension){
             continue;
         }
         printf("%s\n",extension);
         if(strcmp(extension,"txt") == 0){
-            path->set_extension(path,"md");
-            part->hardware_modify(part,DTW_SET_AS_ACTION);
+            dtw.path.set_extension(part->path,"md");
+            dtw.tree.part.hardware_modify(part,DTW_SET_AS_ACTION);
 
         }
         free(extension);
     }
-    DtwTreeTransactionReport *create_report = tree->create_report(tree);
-    create_report->represent(create_report);
-    create_report->free(create_report);
-    tree->free(tree);
+    DtwTreeTransactionReport *report = dtw.tree.create_report(tree);
+    dtw.tree.transaction_report.represent(report);
+    dtw.tree.transaction_report.free(report);
+    dtw.tree.free(tree);
 }
 ~~~
 With Json Trees Operations you can save or load trees, from hardware or strings in an super easy mode 
@@ -1216,9 +1258,10 @@ It will transform the tree in an json document
 
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    struct DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
+    struct DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target/",
             &(DtwTreeProps){
@@ -1228,7 +1271,7 @@ int main(){
             }
     );
 
-    tree->dumps_json_tree_to_file(
+    dtw.tree.dumps_json_tree_to_file(
             tree,
             "tests/target/out.json",
             &(DtwTreeProps){
@@ -1240,7 +1283,7 @@ int main(){
             }
     );
 
-    tree->free(tree);
+    dtw.tree.free(tree);
 }
 ~~~
 <!--codeof:exemples/trees/dumps_json_tree_to_string.c-->
@@ -1249,9 +1292,10 @@ int main(){
 #include "doTheWorld.h"
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target/",
             &(DtwTreeProps){
@@ -1261,7 +1305,7 @@ int main(){
             }
     );
 
-    char *content = tree->dumps_json_tree(
+    char *content = dtw.tree.dumps_json_tree(
             tree,
             &(DtwTreeProps){
                     .minification = DTW_NOT_MIMIFY,
@@ -1273,7 +1317,7 @@ int main(){
     );
     printf("%s",content);
     free(content);
-    tree->free(tree);
+    dtw.tree.free(tree);
 }
 ~~~
 If you want to recuperate the file you saved in the json file
@@ -1287,9 +1331,10 @@ you can load it
 #include "doTheWorld.h"
 
 void dumps_tree(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target",
             &(DtwTreeProps){
@@ -1299,7 +1344,7 @@ void dumps_tree(){
             }
     );
 
-    tree->dumps_json_tree_to_file(
+    dtw.tree.dumps_json_tree_to_file(
             tree,
             "tests/target/out.json",
             &(DtwTreeProps){
@@ -1311,14 +1356,15 @@ void dumps_tree(){
             }
     );
 
-    tree->free(tree);
+    dtw.tree.free(tree);
 }
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
     dumps_tree();
-    DtwTree *tree = newDtwTree();
-    tree->loads_json_tree_from_file(tree,"tests/target/out.json");
-    tree->represent(tree);
-    tree->free(tree);
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.loads_json_tree_from_file(tree,"tests/target/out.json");
+    dtw.tree.represent(tree);
+    dtw.tree.free(tree);
 }
 ~~~
 
@@ -1332,9 +1378,10 @@ int main(){
 #include "doTheWorld.h"
 
 char *dumps_tree(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target",
             &(DtwTreeProps){
@@ -1343,7 +1390,7 @@ char *dumps_tree(){
                     .path_atributes=DTW_INCLUDE
             }
     );
-    char *content = tree->dumps_json_tree(
+    char *content = dtw.tree.dumps_json_tree(
             tree,
             &(DtwTreeProps){
                     .minification = DTW_MIMIFY,
@@ -1353,15 +1400,17 @@ char *dumps_tree(){
                     .path_atributes=DTW_INCLUDE
             }
     );
-    tree->free(tree);
+    dtw.tree.free(tree);
     return content;
 }
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
+
     char * content = dumps_tree();
-    DtwTree *tree = newDtwTree();
-    tree->loads_json_tree(tree,content);
-    tree->represent(tree);
-    tree->free(tree);
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.loads_json_tree(tree,content);
+    dtw.tree.represent(tree);
+    dtw.tree.free(tree);
     free(content);
 }
 ~~~

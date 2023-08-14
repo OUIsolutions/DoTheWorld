@@ -6,9 +6,10 @@
 #include "doTheWorld.h"
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target",
             &(DtwTreeProps){
@@ -18,10 +19,10 @@ int main(){
             }
     );
 
-    DtwTreePart *blob = tree->find_part_by_name(tree,"blob.png");
+    DtwTreePart *blob = dtw.tree.find_tree_part_by_name(tree,"blob.png");
     if(blob){
-        blob->represent(blob);
+        dtw.tree.part.represent(blob);
     }
-    tree->free(tree);
+    dtw.tree.free(tree);
 
 }

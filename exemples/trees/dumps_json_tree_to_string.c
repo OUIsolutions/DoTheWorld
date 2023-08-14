@@ -2,9 +2,10 @@
 #include "doTheWorld.h"
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target/",
             &(DtwTreeProps){
@@ -14,7 +15,7 @@ int main(){
             }
     );
 
-    char *content = tree->dumps_json_tree(
+    char *content = dtw.tree.dumps_json_tree(
             tree,
             &(DtwTreeProps){
                     .minification = DTW_NOT_MIMIFY,
@@ -26,5 +27,5 @@ int main(){
     );
     printf("%s",content);
     free(content);
-    tree->free(tree);
+    dtw.tree.free(tree);
 }

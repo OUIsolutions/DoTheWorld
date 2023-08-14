@@ -4,9 +4,10 @@
 #include "doTheWorld.h"
 
 char *dumps_tree(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target",
             &(DtwTreeProps){
@@ -15,7 +16,7 @@ char *dumps_tree(){
                     .path_atributes=DTW_INCLUDE
             }
     );
-    char *content = tree->dumps_json_tree(
+    char *content = dtw.tree.dumps_json_tree(
             tree,
             &(DtwTreeProps){
                     .minification = DTW_MIMIFY,
@@ -25,14 +26,16 @@ char *dumps_tree(){
                     .path_atributes=DTW_INCLUDE
             }
     );
-    tree->free(tree);
+    dtw.tree.free(tree);
     return content;
 }
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
+
     char * content = dumps_tree();
-    DtwTree *tree = newDtwTree();
-    tree->loads_json_tree(tree,content);
-    tree->represent(tree);
-    tree->free(tree);
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.loads_json_tree(tree,content);
+    dtw.tree.represent(tree);
+    dtw.tree.free(tree);
     free(content);
 }

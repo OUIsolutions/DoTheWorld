@@ -4,22 +4,25 @@
 #include "doTheWorld.h"
 
 DtwTreePart * concat_test(struct DtwTreePart *part){
+    DtwNamespace dtw = newDtwNamespace();
+
     if(part->content_exist_in_memory && part->is_binary == false){
-        char *content = part->get_content_string_by_reference(part);
+        char *content = dtw.tree.part.get_content_string_by_reference(part);
         const char *mensage = " test";
         char *new_content = (char*)malloc(strlen(content) + strlen(mensage)+ 2);
         strcpy(new_content,content);
         strcat(new_content,mensage);
-        part->set_string_content(part,new_content);
+        dtw.tree.part.set_string_content(part,new_content);
         free(new_content);
     }
     return part;
 }
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target",
             &(DtwTreeProps){
@@ -29,12 +32,12 @@ int main(){
             }
     );
 
-    DtwTree *concated = tree->map(
+    DtwTree *concated = dtw.tree.map(
             tree,
             concat_test
     );
 
-    concated->represent(concated);
-    concated->free(concated);
-    tree->free(tree);
+    dtw.tree.represent(concated);
+    dtw.tree.free(concated);
+    dtw.tree.free(tree);
 }

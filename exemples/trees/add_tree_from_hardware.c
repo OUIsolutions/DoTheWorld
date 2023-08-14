@@ -2,9 +2,10 @@
 
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwTree *tree = newDtwTree();
-    tree->add_tree_from_hardware(
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target/",
             &(DtwTreeProps){
@@ -13,6 +14,6 @@ int main(){
                     .path_atributes=DTW_INCLUDE
             }
     );
-    tree->represent(tree);
-    tree->free(tree);
+    dtw.tree.represent(tree);
+    dtw.tree.free(tree);
 }
