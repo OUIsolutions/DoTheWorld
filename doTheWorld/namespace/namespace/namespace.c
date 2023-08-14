@@ -15,6 +15,14 @@ DtwNamespace newDtwNamespace(){
     self.convert_entity  = dtw_convert_entity;
     self.copy_any = dtw_copy_any;
     self.move_any = dtw_move_any;
+    //numeral io
+    self.load_long_file_content = dtw_load_long_file_content;
+    self.load_double_file_content =  dtw_load_double_file_content;
+    self.load_bool_file_content = dtw_load_bool_file_content;
+
+    self.write_long_file_content = dtw_write_long_file_content;
+    self.write_double_file_content = dtw_write_double_file_content;
+    self.write_bool_file_content = dtw_write_bool_file_content;
 
     //listage
     self.list_files = dtw_list_files;

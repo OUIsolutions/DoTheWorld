@@ -26,6 +26,25 @@ typedef struct DtwNamespace{
     bool (*copy_any)(const char* src_path,const  char* dest_path,bool merge);
 
     bool (*move_any)(const char* src_path, const char* dest_path,bool merge);
+
+    //numeral io
+
+    long (*load_long_file_content)(const char * path);
+
+    double (*load_double_file_content)(const char * path);
+
+    bool (*load_bool_file_content)(const char * path);
+
+
+
+    void (*write_long_file_content)(const char *path, long value);
+
+    void (*write_bool_file_content)(const char *path, bool value);
+
+    void (*write_double_file_content)(const char *path,double value);
+
+
+
     //listage
 
     DtwStringArray * (*list_files)(const char *path, bool concat_path);
