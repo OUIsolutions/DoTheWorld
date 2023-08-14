@@ -1,6 +1,7 @@
 
 typedef struct DtwTreeModule{
 
+    DtwTree  *(*newTree)();
     void (*add_tree_part_by_copy)(
             struct DtwTree *self,
             struct DtwTreePart *tree_part

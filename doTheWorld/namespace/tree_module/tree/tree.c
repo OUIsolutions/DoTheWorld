@@ -1,6 +1,7 @@
 
 DtwTreeModule newDtwTreeModule(){
     DtwTreeModule self = {0};
+    self.newTree = newDtwTree;
     self.add_tree_part_by_copy = DtwTree_add_tree_part_copy;
     self.remove_tree_part  = DtwTree_remove_tree_part;
     self.add_tree_part_by_reference = DtwTree_add_tree_part_by_reference;

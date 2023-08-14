@@ -1,6 +1,8 @@
 
 
 typedef struct DtwTreePartModule{
+
+    DtwTreePart  *(*newPart)(const char *path, DtwTreeProps *props);
     char *(*get_content_string_by_reference)(struct DtwTreePart *self);
     unsigned char *(*get_content_binary_by_reference)(struct DtwTreePart *self);
 
