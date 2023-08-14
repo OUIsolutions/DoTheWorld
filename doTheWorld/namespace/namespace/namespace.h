@@ -35,6 +35,7 @@ typedef struct DtwNamespace{
     DtwStringArrayModule string_array;
     DtwPathModule module;
 
+
 }DtwNamespace;
 
 DtwNamespace newDtwNamespace();

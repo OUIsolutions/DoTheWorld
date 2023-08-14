@@ -52,7 +52,7 @@ struct DtwTree *DtwTree_get_sub_tree(struct DtwTree *self, const char *path, boo
         char *current_path =  DtwPath_get_path(tree_part->path);
         if(dtw_starts_with(current_path,path)){
             if(copy_content){
-                sub_tree->add_tree_part_by_copy(sub_tree,tree_part->self_copy(tree_part));
+                sub_tree->add_tree_part_by_copy(sub_tree,DtwTreePart_self_copy(tree_part));
             }
             else{
                 sub_tree->add_tree_part_by_reference(sub_tree,tree_part);
@@ -68,13 +68,13 @@ struct DtwTree *DtwTree_get_sub_tree(struct DtwTree *self, const char *path, boo
 void DtwTree_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_part){
     self->size++;
     self->tree_parts =  (struct DtwTreePart**)realloc(self->tree_parts, self->size * sizeof(struct DtwTreePart *));
-    self->tree_parts[self->size - 1] = tree_part->self_copy(tree_part);
+    self->tree_parts[self->size - 1] = DtwTreePart_self_copy(tree_part);
        
 }
 void DtwTree_remove_tree_part(struct DtwTree *self, int position){
 
     self->size--;
-    self->tree_parts[position]->free(self->tree_parts[position]);
+    DtwTreePart_free(self->tree_parts[position]);
 
     for(int i = position; i<self->size; i++){
         self->tree_parts[i] = self->tree_parts[i+1];
@@ -118,7 +118,7 @@ void DtwTree_add_tree_part_reference(struct DtwTree *self, struct DtwTreePart *t
 
 void DtwTree_represent_tree(struct DtwTree *self){
     for(int i = 0; i < self->size; i++){
-        self->tree_parts[i]->represent(self->tree_parts[i]);
+        DtwTreePart_represent(self->tree_parts[i]);
     }
 }
 
@@ -177,7 +177,7 @@ void DtwTree_add_tree_from_hardware(struct DtwTree *self,const char *path, DtwTr
 
 void DtwTree_dtw_free_tree(struct DtwTree *self){
     for(int i = 0; i < self->size; i++){
-        self->tree_parts[i]->free(self->tree_parts[i]);
+        DtwTreePart_free(self->tree_parts[i]);
     }
     
     free(self->tree_parts);
@@ -185,7 +185,7 @@ void DtwTree_dtw_free_tree(struct DtwTree *self){
 }
 void DtwTree_insecure_hardware_remove_tree(struct DtwTree *self){
     for(int i = 0; i < self->size; i++){
-        self->tree_parts[i]->hardware_remove(self->tree_parts[i],DTW_EXECUTE_NOW);
+        DtwTreePart_hardware_remove(self->tree_parts[i],DTW_EXECUTE_NOW);
     }
 }
 
@@ -193,12 +193,12 @@ void DtwTree_insecure_hardware_write_tree(struct DtwTree *self){
     
     for(int i = 0; i < self->size; i++){
         struct DtwTreePart *tree_part = self->tree_parts[i];
-        tree_part->hardware_write(tree_part,DTW_EXECUTE_NOW);
+        DtwTreePart_hardware_write(tree_part,DTW_EXECUTE_NOW);
     }
 }
 
 void DtwTree_hardware_commit_tree(struct DtwTree *self){
     for(int i = 0; i < self->size; i++){
-        self->tree_parts[i]->hardware_commit(self->tree_parts[i]);
+        DtwTreePart_hardware_commit(self->tree_parts[i]);
     }
 }

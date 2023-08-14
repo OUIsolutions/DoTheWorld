@@ -60,11 +60,11 @@ void DtwTree_loads_json_tree(struct DtwTree *self, const char *content){
                     content->valuestring,
                     &out_size
                 );
-                part->set_binary_content(part,decoded,(int)out_size);
+                DtwTreePart_set_binary_content(part,decoded,(int)out_size);
                 free(decoded);
             }
            else{
-                part->set_string_content(part,content->valuestring);
+                DtwTreePart_set_string_content(part,content->valuestring);
            } 
         }
         if(pending_action != NULL &&  pending_action->valuestring){
@@ -185,7 +185,7 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwTreeProps * props){
                 "hardware_content_size", 
                 cJSON_CreateNumber(tree_part->hardware_content_size)
             );
-            char *last_modification_string =tree_part->last_modification_time_in_string(tree_part);
+            char *last_modification_string =DtwTreePart_last_modification_time_in_string(tree_part);
             cJSON_AddItemToObject(
                 json_tree_part, 
                 "last_modification", 
@@ -198,7 +198,7 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwTreeProps * props){
         }
 
         if(formated_props.content_data == DTW_INCLUDE && tree_part->content_exist_in_memory){
-            char *content_sha = tree_part->get_content_sha(tree_part);
+            char *content_sha = DtwTreePart_get_content_sha(tree_part);
             cJSON_AddItemToObject(
                 json_tree_part, 
                 "content_size", 
@@ -225,7 +225,7 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwTreeProps * props){
                 cJSON_AddItemToObject(
                     json_tree_part, 
                     "content", 
-                    cJSON_CreateString(tree_part->get_content_string_by_reference(tree_part))
+                    cJSON_CreateString(DtwTreePart_get_content_string_by_reference(tree_part))
                 );
             }
             else{

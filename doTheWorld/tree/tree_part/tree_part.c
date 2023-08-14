@@ -19,26 +19,9 @@ struct DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps *props){
     self->hardware_content_size = 0;
 
 
-    self->get_content_string_by_reference = DtwTreePart_get_content_string_by_reference;
-    self->get_content_binary_by_reference = DtwTreePart_get_content_binary_by_reference;
-    self->load_content_from_hardware = DtwTreePart_load_content_from_hardware;
-    self->set_any_content = DtwTreePart_set_any_content;
-    self->set_string_content = DtwTreePart_set_string_content;
-    self->set_binary_content = DtwTreePart_set_binary_content;
-    self->get_content_sha = DtwTreePart_get_content_sha;
-    self->last_modification_time_in_string = DtwTreePart_last_modification_time_in_string;
-    self->free_content = DtwTreePart_free_content;
-    self->represent = DtwTreePart_represent_tree_part;
-    self->hardware_remove = DtwTreePart_hardware_remove;
-    self->hardware_write = DtwTreePart_hardware_write;
-    self->hardware_modify = DtwTreePart_hardware_modify;
-    self->hardware_commit = DtwTreePart_hardware_commit;
-    self->free = DtwTreePart_free;
-    self->self_copy = DtwTreePart_self_copy;
-
     if(formated_props.content == DTW_INCLUDE || formated_props.hadware_data == DTW_INCLUDE){
         
-        self->load_content_from_hardware(self);
+        DtwTreePart_load_content_from_hardware(self);
         if(formated_props.hadware_data == DTW_INCLUDE && self->content_exist_in_memory){
 
             self->metadata_loaded = true;
@@ -48,7 +31,7 @@ struct DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps *props){
         }
 
         if(formated_props.content == DTW_HIDE){
-            self->free_content(self);
+            DtwTreePart_free_content(self);
         }
     }
 
@@ -84,7 +67,7 @@ struct  DtwTreePart * DtwTreePart_self_copy(struct DtwTreePart *self){
     new_tree_part->ignore = self->ignore;
     new_tree_part->content_size = self->content_size;
 
-    char * possible_sha = self->get_content_sha(self);
+    char * possible_sha = DtwTreePart_get_content_sha(self);
 
     if(possible_sha){
         free(new_tree_part->hawdware_content_sha);
@@ -107,7 +90,7 @@ struct  DtwTreePart * DtwTreePart_self_copy(struct DtwTreePart *self){
 
 void DtwTreePart_set_any_content(struct DtwTreePart *self, unsigned char *content, int content_size, bool is_binary){
 
-    self->free_content(self);
+    DtwTreePart_free_content(self);
     self->content_exist_in_memory = true;
     self->is_binary = is_binary;
     self->content = (unsigned char *)realloc(self->content,content_size+2);
@@ -118,7 +101,7 @@ void DtwTreePart_set_any_content(struct DtwTreePart *self, unsigned char *conten
 }
 
 void DtwTreePart_set_string_content(struct DtwTreePart *self, const char *content){
-    self->set_any_content(
+    DtwTreePart_set_any_content(
         self,
         (unsigned char*)content,
         strlen(content),
@@ -129,7 +112,7 @@ void DtwTreePart_set_string_content(struct DtwTreePart *self, const char *conten
 }
 
 void DtwTreePart_set_binary_content(struct DtwTreePart *self, unsigned char *content, int content_size){
-    self->set_any_content(self,content,content_size,true);
+    DtwTreePart_set_any_content(self,content,content_size,true);
 }
 
 
@@ -147,7 +130,7 @@ char *DtwTreePart_last_modification_time_in_string(struct DtwTreePart *self){
 
 
 
-void DtwTreePart_represent_tree_part(struct DtwTreePart *self){
+void DtwTreePart_represent(struct DtwTreePart *self){
     char *path = DtwPath_get_path(self->path);
     printf("------------------------------------------------------------\n");
     DtwPath_represent(self->path);
@@ -159,14 +142,14 @@ void DtwTreePart_represent_tree_part(struct DtwTreePart *self){
 
     if(self->last_modification_time){
         printf("Last Modification Time in Unix: %li\n",self->last_modification_time);
-        char *last_moditication_in_string = self->last_modification_time_in_string(self);
+        char *last_moditication_in_string = DtwTreePart_last_modification_time_in_string(self);
         printf("Last Modification Time: %s\n",last_moditication_in_string);
         free(last_moditication_in_string);
     }
 
     printf("Content Size: %li\n",self->content_size);
 
-    char *content_sha = self->get_content_sha(self);
+    char *content_sha = DtwTreePart_get_content_sha(self);
     if(content_sha){
         printf("Content SHA:  %s\n",content_sha);
         free(content_sha);

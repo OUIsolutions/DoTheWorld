@@ -44,7 +44,7 @@ struct DtwTree *DtwTree_dtw_map(
 
     for(int i = 0;i < self->size; i++){
         struct DtwTreePart *current = self->tree_parts[i];
-        struct DtwTreePart *copy = current->self_copy(current);
+        struct DtwTreePart *copy = DtwTreePart_self_copy(current);
         struct DtwTreePart *result = caller(copy);
         mapped_tree->add_tree_part_by_reference(mapped_tree,result);
     }

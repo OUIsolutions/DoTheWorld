@@ -14,7 +14,7 @@ void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self){
         return;
     }
 
-    self->free_content(self);
+    DtwTreePart_free_content(self);
     self->content = dtw_load_any_content(path,&size,&is_binary);
     
     if(!self->content){
@@ -123,7 +123,7 @@ bool DtwTreePart_hardware_modify(struct DtwTreePart *self, int transaction){
     
         if(self->metadata_loaded == true){
             char *hardware_sha = self->hawdware_content_sha;
-            char *memory_sha = self->get_content_sha(self);
+            char *memory_sha = DtwTreePart_get_content_sha(self);
             if(strcmp(hardware_sha,memory_sha) != 0){
                 write = true;
             }
@@ -157,13 +157,13 @@ bool DtwTreePart_hardware_commit(struct DtwTreePart *self){
         return false;
     }
     if(self->pending_action == DTW_REMOVE){
-        return self->hardware_remove(self,DTW_EXECUTE_NOW);
+        return DtwTreePart_hardware_remove(self,DTW_EXECUTE_NOW);
     }
     if(self->pending_action == DTW_WRITE){
-        return self->hardware_write(self,DTW_EXECUTE_NOW);
+        return DtwTreePart_hardware_write(self,DTW_EXECUTE_NOW);
     }
     if(self->pending_action == DTW_MODIFY){
-        return self->hardware_modify(self,DTW_EXECUTE_NOW);
+        return DtwTreePart_hardware_modify(self,DTW_EXECUTE_NOW);
     }
     return false;
 }

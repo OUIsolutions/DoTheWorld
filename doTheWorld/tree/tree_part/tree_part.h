@@ -28,26 +28,7 @@ typedef struct DtwTreePart{
     int pending_action;
 
     size_t content_size;
-    char *(*get_content_string_by_reference)(struct DtwTreePart *self);
-    unsigned char *(*get_content_binary_by_reference)(struct DtwTreePart *self);
 
-    char *(*get_content_sha)(struct DtwTreePart *self);
-    char *(*last_modification_time_in_string)(struct DtwTreePart *self);
-    void (*set_any_content)(struct DtwTreePart *self,unsigned char *content,int content_size,bool is_binary);
-    void (*set_string_content)(struct DtwTreePart *self,const char *content);
-    void (*set_binary_content)(struct DtwTreePart *self,unsigned char *content,int content_size);
-    void (*load_content_from_hardware)(struct DtwTreePart *self);
-    void (*free_content)(struct DtwTreePart *self);
-    void(*represent)(struct DtwTreePart *self);
-    
-    bool(*hardware_remove)(struct DtwTreePart *self, int transaction);
-    bool(*hardware_write)(struct DtwTreePart *self, int transaction);
-    bool(*hardware_modify)(struct DtwTreePart *self, int transaction);
-    bool(*hardware_commit)(struct DtwTreePart *self);
-
-
-    void (*free)(struct DtwTreePart *self);
-    struct DtwTreePart *(*self_copy)(struct DtwTreePart *self);
 }DtwTreePart;
 
 
@@ -60,7 +41,7 @@ void DtwTreePart_set_string_content(struct DtwTreePart *self, const char *conten
 void DtwTreePart_set_binary_content(struct DtwTreePart *self, unsigned char *content, int content_size);
 void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self);
 void DtwTreePart_free_content(struct DtwTreePart *self);
-void DtwTreePart_represent_tree_part(struct DtwTreePart *self);
+void DtwTreePart_represent(struct DtwTreePart *self);
 
 bool DtwTreePart_hardware_remove(struct DtwTreePart *self,int transaction);
 bool DtwTreePart_hardware_write(struct DtwTreePart *self,int transaction);
