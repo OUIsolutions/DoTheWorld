@@ -4,6 +4,7 @@
 
 
 void print_entity(const char *name , int type){
+
  if(type == DTW_FOLDER_TYPE){
       printf("%s is an folder\n",name);
     }
@@ -17,24 +18,25 @@ void print_entity(const char *name , int type){
 }
 
 int main(int argc, char *argv[]){
-  
+    DtwNamespace dtw = newDtwNamespace();
+
     //| entity_type return the type of the entity
     //| it can be:
-    //| DTW_FILE = 1
-    //| DTW_FOLDER = 2
-    //| DTW_NOT_FOUND = -1
+    //| dtw.FILE = 1
+    //| dtw.FOLDER = 2
+    //| dtw.NOT_FOUND = -1
     short type;
     const char *not_exist = "asasasas";
-    type = dtw_entity_type(not_exist);
+    type = dtw.entity_type(not_exist);
     print_entity(not_exist,type);
 
     const char *folder = "tests/target/";
-    type = dtw_entity_type(folder);
+    type = dtw.entity_type(folder);
     print_entity(folder,type);
 
 
     const char *file = "tests/target/a.txt";
-    type = dtw_entity_type(file);
+    type = dtw.entity_type(file);
     print_entity(file,type);
     
 
