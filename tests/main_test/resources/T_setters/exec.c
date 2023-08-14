@@ -2,40 +2,41 @@
 #include "../../../doTheWorld_test.h"
 
 int main (){
+    DtwNamespace dtw = newDtwNamespace();
 
-    DtwResource *values = new_DtwResource("tests/target/new_folder");
+    DtwResource *values = dtw.resource.newResource("tests/target/new_folder");
 
-    DtwResource *string_element = values->sub_resource(values,"text.txt");
-    string_element->set_string(string_element,"nothing");
-    string_element->free(string_element);
+    DtwResource *string_element = dtw.resource.sub_resource(values,"text.txt");
+    dtw.resource.set_string(string_element,"nothing");
+    dtw.resource.free(string_element);
     long size;
     unsigned char *blob = dtw_load_binary_content("tests/target/blob.png",&size);
 
-    DtwResource *blob_element = values->sub_resource(values,"blob.png");
-    blob_element->set_binary(blob_element,blob,size);
-    blob_element->free(blob_element);
+    DtwResource *blob_element = dtw.resource.sub_resource(values,"blob.png");
+    dtw.resource.set_binary(blob_element,blob,size);
+    dtw.resource.free(blob_element);
     free(blob);
-    DtwResource *bInt = values->sub_resource(values,"b.txt");
-    bInt->set_long(bInt,25);
-    bInt->free(bInt);
+    DtwResource *bInt = dtw.resource.sub_resource(values,"b.txt");
+    dtw.resource.set_long(bInt,25);
+    dtw.resource.free(bInt);
 
-    DtwResource *cDouble = values->sub_resource(values,"c.txt");
-    cDouble->set_double(cDouble,10.5);
-    cDouble->free(cDouble);
+    DtwResource *cDouble = dtw.resource.sub_resource(values,"c.txt");
+    dtw.resource.set_double(cDouble,10.5);
+    dtw.resource.free(cDouble);
 
-    DtwResource *dBool = values->sub_resource(values,"b.txt");
-    dBool->set_bool(dBool,true);
-    dBool->free(dBool);
+    DtwResource *dBool = dtw.resource.sub_resource(values,"b.txt");
+    dtw.resource.set_bool(dBool,true);
+    dtw.resource.free(dBool);
 
-    DtwResource  *sub_foder = values->sub_resource(values,"sub_foder");
-    DtwResource *string_element2 = sub_foder->sub_resource(sub_foder,"a.txt");
-    string_element2->set_string(string_element2,"nothing");
-    string_element2->free(string_element2);
+    DtwResource  *sub_foder = dtw.resource.sub_resource(values,"sub_foder");
+    DtwResource *string_element2 = dtw.resource.sub_resource(sub_foder,"a.txt");
+    dtw.resource.set_string(string_element2,"nothing");
+    dtw.resource.free(string_element2);
 
-    sub_foder->free(sub_foder);
+    dtw.resource.free(sub_foder);
 
-    values->commit(values);
-    values->free(values);
+    dtw.resource.commit(values);
+    dtw.resource.free(values);
 
 
 
