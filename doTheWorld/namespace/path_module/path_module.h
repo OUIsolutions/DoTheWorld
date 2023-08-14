@@ -1,7 +1,7 @@
 
 
 typedef struct DtwPathModule{
-        //Getters
+    //Getters
     bool  (*changed)(struct DtwPath *self);
     char *(*get_full_name) (struct DtwPath *self);
     char *(*get_name) (struct DtwPath *self);
