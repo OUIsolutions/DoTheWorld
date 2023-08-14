@@ -3,6 +3,8 @@
 DtwTreePartModule newDtwTreePartModule(){
     DtwTreePartModule self ={0};
     self.newPart = newDtwTreePart;
+    self.newPartEmpty = newDtwTreePartEmpty;
+    self.newPartLoading = newDtwTreePartLoading;
     self.get_content_string_by_reference = DtwTreePart_get_content_string_by_reference;
     self.get_content_binary_by_reference = DtwTreePart_get_content_binary_by_reference;
     self.get_content_sha = DtwTreePart_get_content_sha;

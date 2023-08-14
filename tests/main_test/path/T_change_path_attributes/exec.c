@@ -3,6 +3,7 @@
 
 
 int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
     DtwTreePart *part = newDtwTreePartLoading("tests/target/sub_folder/a.txt");
 
