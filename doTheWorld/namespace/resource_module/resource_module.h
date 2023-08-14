@@ -1,6 +1,7 @@
 
 typedef struct DtwResourceModule{
 
+    DtwResource *(*newResource)(const char *path);
     struct DtwResource * (*sub_resource)(struct DtwResource *self,const  char *path);
 
     void (*lock)(struct DtwResource *self);
