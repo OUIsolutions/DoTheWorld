@@ -7660,7 +7660,7 @@ DtwLocker *newDtwLocker(){
 
 
 
-unsigned long long int getMicroseconds() {
+unsigned long long int private_dtw_getMicroseconds() {
     struct timeval tv;
     gettimeofday(&tv, NULL);
     return ((unsigned long long int)tv.tv_sec * 1000000) + tv.tv_usec;

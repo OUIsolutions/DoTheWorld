@@ -11,14 +11,13 @@ DtwLocker *newDtwLocker(){
 
     //methods
     self->locked_elements = newDtwStringArray();
-    self->lock = DtwLocker_lock;
-    self->free = DtwLocker_free;
+
     return self;
 }
 
 
 
-unsigned long long int getMicroseconds() {
+unsigned long long int private_dtw_getMicroseconds() {
     struct timeval tv;
     gettimeofday(&tv, NULL);
     return ((unsigned long long int)tv.tv_sec * 1000000) + tv.tv_usec;
@@ -37,7 +36,7 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 
     while(true){
         time_t  now = time(NULL);
-        unsigned long long startTime = getMicroseconds();
+        unsigned long long startTime = private_dtw_getMicroseconds();
         long last_modification = dtw_get_file_last_motification_in_unix(formated_path);
         bool not_exist = (dtw_entity_type(formated_path) == DTW_NOT_FOUND);
 
@@ -59,7 +58,7 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
             }
             DtwPath_free(path);
 
-            unsigned long long end_time = getMicroseconds();
+            unsigned long long end_time = private_dtw_getMicroseconds();
             unsigned long long controled_duration = end_time - startTime;
 
             if(verification_deley != 0){

@@ -25,7 +25,7 @@ void DtwResource_lock(DtwResource *self){
         return;
     }
     #ifdef __linux__
-        self->locker->lock(self->locker,self->path);
+        DtwLocker_lock(self->locker,self->path);
     #endif
 }
 void private_DtwResource_lock_if_auto_lock(DtwResource *self){

@@ -73,7 +73,7 @@ void DtwResource_free(struct DtwResource *self){
         }
 
 #ifdef  __linux__
-        self->locker->free(self->locker);
+        DtwLocker_free(self->locker);
 #endif
     }
 
