@@ -1,5 +1,5 @@
 
-struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool concat_path){
+ DtwStringArray * dtw_list_dirs_recursively(const char *path,bool concat_path){
 
         struct  DtwStringArray *dirs  = newDtwStringArray();
         //verify if the path is a directory
@@ -41,7 +41,7 @@ struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool concat_p
 
 
 
-struct DtwStringArray *  dtw_list_files_recursively(const char *path,bool concat_path){
+ DtwStringArray *  dtw_list_files_recursively(const char *path,bool concat_path){
     
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,DTW_CONCAT_PATH);
     
@@ -65,7 +65,7 @@ struct DtwStringArray *  dtw_list_files_recursively(const char *path,bool concat
 }
 
 
-struct DtwStringArray * dtw_list_all_recursively(const char *path,bool concat_path){
+ DtwStringArray * dtw_list_all_recursively(const char *path,bool concat_path){
 
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,DTW_CONCAT_PATH);
     
