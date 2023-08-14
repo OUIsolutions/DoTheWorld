@@ -1,5 +1,6 @@
 
 typedef struct DtwTransactionModule{
+    DtwTransaction *(*newTransaction)();
     void (*append_action)(struct DtwTransaction *self,struct DtwActionTransaction  *action);
     void (*write_any)(struct DtwTransaction *self,const char *path,unsigned char *content, long size,bool is_binary);
     void (*write_string)(struct DtwTransaction *self,const char *path,const char *content);
@@ -19,6 +20,10 @@ typedef struct DtwTransactionModule{
     void (*commit)(struct DtwTransaction *self,const char *source);
     void (*represent)(struct DtwTransaction *self);
     void (*free)(struct DtwTransaction *self);
+
+    DtwActionTransactionModule action;
+    DtwJsonTransactionErrorModule json_error;
+
 
 }DtwTransactionModule;
 
