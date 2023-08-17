@@ -59,7 +59,7 @@ struct DtwStringArray *  dtw_list_basic(const char *path,int expected_type,bool 
                 if(path[strlen(path) - 1] == '\\' || path[strlen(path) - 1] == '/'){
                     char *generated_dir = (char*)malloc(strlen(path) + strlen(file_data.cFileName) + 1);
                     sprintf(generated_dir, "%s%s", path, file_data.cFileName);
-                    dirs->append(dirs, generated_dir);
+                    DtwStringArray_append(dirs, generated_dir);
                     free(generated_dir);
                 }
                 else{
@@ -68,14 +68,14 @@ struct DtwStringArray *  dtw_list_basic(const char *path,int expected_type,bool 
 
                     sprintf(generated_dir, "%s/%s", path, file_data.cFileName);
                    
-                    dirs->append(dirs, generated_dir);
+                    DtwStringArray_append(dirs, generated_dir);
                     free(generated_dir);
                 }
                 
     
             }
             else{
-                dirs->append(dirs, file_data.cFileName);
+                DtwStringArray_append(dirs, file_data.cFileName);
             
             }
 

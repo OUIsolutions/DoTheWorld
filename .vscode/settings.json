@@ -38,6 +38,7 @@
         "ostream": "cpp",
         "dotheworldmain.h": "c",
         "istream": "c",
-        "dotheworld_test.h": "c"
+        "dotheworld_test.h": "c",
+        "locker.h": "c"
     }
 }
