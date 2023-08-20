@@ -18,10 +18,8 @@ typedef struct DtwResource{
         bool child;
 
     //cache implementation
-    bool resset_cache;
 
     int  cache_state;
-
     int cache_type;
     int cache_size;
     unsigned char *cache_any;
