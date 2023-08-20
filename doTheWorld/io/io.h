@@ -41,6 +41,8 @@ bool dtw_write_string_file_content(const char *path,const char *content);
 
 int dtw_entity_type(const char *path);
 
+
+
 int dtw_complex_entity_type(const char *path);
 
 const char *dtw_convert_entity(int entity_type);

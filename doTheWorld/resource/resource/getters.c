@@ -33,6 +33,18 @@ char *DtwResource_get_string(DtwResource *self){
 
 long DtwResource_get_long(DtwResource *self){
     private_DtwResource_lock_if_auto_lock(self);
+
+    if(
+        self->cache_state == DTW_CACHE_LOADED 
+        && !self->resset_cache 
+        && (    self->cache_type == DTW_COMPLEX_LONG_TYPE 
+                ||self->cache_type == DTW_COMPLEX_DOUBLE_TYPE 
+           )
+        ){
+        return (long)self->cache_number;
+    }
+    int type = dtw_complex_entity_type(self->path);
+    
     return dtw_load_long_file_content(self->path);
 }
 

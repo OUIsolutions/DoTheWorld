@@ -23,7 +23,7 @@ void DtwResource_set_string(DtwResource *self,const  char *element){
         dtw_write_string_file_content(self->path,element);
     }
     DtwResource_clear_cache(self);
-    self->cache_used = true;
+    self->cache_state = DTW_CACHE_LOADED;
     self->cache_type =DTW_COMPLEX_STRING_TYPE;
     self->cache_size =  strlen(element);
     self->cache_any = (unsigned char *)strdup(element);

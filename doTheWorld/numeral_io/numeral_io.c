@@ -1,10 +1,9 @@
 
-
-
-long dtw_load_long_file_content(const char * path){
+long dtw_load_long_file_content_setting_error(const char *path,int *error){
     char *data = dtw_load_string_file_content(path);
     if(!data){
-        return -1;
+        *error = DTW_NOT_FOUND;
+        return DTW_NOT_FOUND;
     }
     long value;
     int result = sscanf(data,"%ld",&value);
@@ -12,28 +11,45 @@ long dtw_load_long_file_content(const char * path){
     if(result){
         return value;
     }
-    return -1;
-
+    *error = DTW_NOT_NUMERICAL;
+    return DTW_NOT_NUMERICAL;
 }
 
-double dtw_load_double_file_content(const char * path){
+
+long dtw_load_long_file_content(const char * path){
+   int error;
+   return dtw_load_long_file_content_setting_error(path,&error);
+}
+
+
+double dtw_load_double_file_content_setting_error(const char * path, int *error){
     char *data = dtw_load_string_file_content(path);
     if(!data){
-        return -1;
+        *error = DTW_NOT_FOUND;
+        return DTW_NOT_FOUND;
     }
     double value;
     int result = sscanf(data,"%lf",&value);
     free(data);
     if(result){
+    
         return value;
     }
-    return -1;
+    *error = DTW_NOT_NUMERICAL;
+    return DTW_NOT_NUMERICAL;
 }
 
 
-bool dtw_load_bool_file_content(const char * path){
+double dtw_load_double_file_content(const char * path){
+    int error;
+    return dtw_load_double_file_content_setting_error(path,&error);
+}
+
+
+bool dtw_load_bool_file_content_setting_error(const char * path, int *error){
     char *data = dtw_load_string_file_content(path);
     if(!data){
+        *error = DTW_NOT_FOUND;
         return false;
     }
 
@@ -41,8 +57,22 @@ bool dtw_load_bool_file_content(const char * path){
         free(data);
         return true;
     }
+
+    if(strcmp(data,"false") == 0 || strcmp(data,"f") == 0){
+        free(data);
+        return false;
+    }
     free(data);
+    *error = DTW_NOT_BOOL;
     return false;
+
+}
+
+
+bool dtw_load_bool_file_content(const char * path){
+    int error;
+    return dtw_load_bool_file_content_setting_error(path,&error);
+    
 }
 
 
