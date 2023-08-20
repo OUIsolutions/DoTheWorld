@@ -38,7 +38,10 @@ void DtwResource_set_long(DtwResource *self,long element){
         dtw_write_long_file_content(self->path,element);
     }
 
-
+    DtwResource_clear_cache(self);
+    self->cache_state = DTW_CACHE_LOADED;
+    self->cache_type = DTW_COMPLEX_LONG_TYPE;
+    self->cache_number = (double)element;
 }
 
 void DtwResource_set_double(DtwResource *self,double element){
@@ -49,6 +52,12 @@ void DtwResource_set_double(DtwResource *self,double element){
     else{
         dtw_write_double_file_content(self->path,element);
     }
+    
+    DtwResource_clear_cache(self);
+    self->cache_state = DTW_CACHE_LOADED;
+    self->cache_type = DTW_COMPLEX_DOUBLE_TYPE;
+    self->cache_number = (double)element;
+
 }
 
 void DtwResource_set_bool( DtwResource *self,bool element){
@@ -59,4 +68,10 @@ void DtwResource_set_bool( DtwResource *self,bool element){
     else{
         dtw_write_bool_file_content(self->path,element);
     }
+
+    DtwResource_clear_cache(self);
+    self->cache_state = DTW_CACHE_LOADED;
+    self->cache_type = DTW_COMPLEX_BOOL_TYPE;
+    self->cache_number = (double)element;
+
 }

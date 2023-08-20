@@ -43,9 +43,15 @@ long DtwResource_get_long(DtwResource *self){
         ){
         return (long)self->cache_number;
     }
-    int type = dtw_complex_entity_type(self->path);
-    
-    return dtw_load_long_file_content(self->path);
+    DtwResource_clear_cache(self);
+    int error =  0;
+    long result = dtw_load_long_file_content_setting_error(self->path,&error);
+    if(error == 0){
+        self->cache_state = DTW_CACHE_LOADED;
+        self->cache_type = DTW_COMPLEX_LONG_TYPE;
+        self->cache_number = (double)result;
+    }
+    return  result;
 }
 
 
