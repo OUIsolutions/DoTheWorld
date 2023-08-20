@@ -15,6 +15,16 @@ typedef struct DtwResource{
 
         bool child;
 
+    //cache implementation
+    bool resset_cache;
+
+    bool cache_used;
+    int cache_type;
+
+    int cache_size;
+    unsigned char *cache_any;
+    double cache_number;
+
 
 
 }DtwResource;
@@ -30,6 +40,7 @@ void DtwResource_lock(DtwResource *self);
 
 void private_DtwResource_lock_if_auto_lock(DtwResource *self);
 
+void DtwResource_clear_cache(DtwResource *self);
 
 
 
