@@ -77,16 +77,18 @@ void DtwResource_represent(DtwResource *self){
 }
 
 void DtwResource_clear_cache(DtwResource *self){
-    if(!self->cache_used){
+    if(!self->cache_state  == DTW_CACHE_UNUSED){
         return;
     }
+    
 
     if(self->cache_type == DTW_COMPLEX_STRING_TYPE || self->cache_type == DTW_COMPLEX_BINARY){
         free(self->cache_any);
     }
+    
     self->cache_type = 0;
     self->cache_size = 0;
-    self->cache_used = false;
+    self->cache_state = DTW_CACHE_UNUSED;
     self->cache_number = 0;
     self->cache_any = NULL;
 

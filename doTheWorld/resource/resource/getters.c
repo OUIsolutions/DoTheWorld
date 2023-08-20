@@ -12,7 +12,22 @@ unsigned char *DtwResource_get_binary(DtwResource *self, long *size){
 
 char *DtwResource_get_string(DtwResource *self){
     private_DtwResource_lock_if_auto_lock(self);
-    return  dtw_load_string_file_content(self->path);
+    
+    if(self->cache_state == DTW_CACHE_LOADED && !self->resset_cache && self->cache_type == DTW_COMPLEX_STRING_TYPE){
+        return (char*)self->cache_any;
+    }
+
+    DtwResource_clear_cache(self);
+    
+    char *result = dtw_load_string_file_content(self->path);
+
+    if(result){
+        self->cache_state  = DTW_CACHE_LOADED;
+        self->cache_type = DTW_COMPLEX_STRING_TYPE;
+        self->cache_any = (unsigned char *)result;
+        self->cache_size = strlen(result);
+    }
+    return result;
 
 }
 

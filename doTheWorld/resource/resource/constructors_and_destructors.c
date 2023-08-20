@@ -50,7 +50,7 @@ void DtwResource_free(struct DtwResource *self){
     if(self->mothhers_path){
         free(self->mothhers_path);
     }
-
+    DtwResource_clear_cache(self);
     free(self->path);
     free(self->name);
     free(self);

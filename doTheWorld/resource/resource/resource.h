@@ -1,4 +1,6 @@
-
+#define DTW_CACHE_UNUSED 0 
+#define DTW_CACHE_LOADED_ONLY_TYPE 1 
+#define DTW_CACHE_LOADED 2
 
 typedef struct DtwResource{
 
@@ -18,9 +20,9 @@ typedef struct DtwResource{
     //cache implementation
     bool resset_cache;
 
-    bool cache_used;
-    int cache_type;
+    int  cache_state;
 
+    int cache_type;
     int cache_size;
     unsigned char *cache_any;
     double cache_number;
