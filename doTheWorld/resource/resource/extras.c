@@ -82,7 +82,7 @@ void DtwResource_represent(DtwResource *self){
             printf("value: %s\n",self->value_bool ? "true": "false");
         }
 
-        
+
 
 
     }
