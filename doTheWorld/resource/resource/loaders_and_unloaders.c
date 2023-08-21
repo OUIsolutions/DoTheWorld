@@ -21,7 +21,8 @@ void DtwResource_unload(DtwResource *self){
 }
 
 void DtwResource_load(DtwResource *self){
-
+    DtwResource_unload(self);
+    self->loaded = true;
     self->type  = dtw_entity_type(self->path);
     if(self->type != DTW_FILE_TYPE){
         return;
@@ -30,7 +31,6 @@ void DtwResource_load(DtwResource *self){
     bool is_binary;
     long value_size;
     unsigned char *data  = dtw_load_any_content(self->path, &value_size, &is_binary);
-
     if(is_binary){
         self->type = DTW_COMPLEX_BINARY;
         self->value_size = value_size;
@@ -55,7 +55,7 @@ void DtwResource_load(DtwResource *self){
     }
 
     double data_double;
-    int result = sscanf(self->value_string,"%lf",&data_double);
+    int result = sscanf(data_in_string,"%lf",&data_double);
     if(result == 0){
         self->type= DTW_COMPLEX_STRING_TYPE;
         self->value_size = value_size;

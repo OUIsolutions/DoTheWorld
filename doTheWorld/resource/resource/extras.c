@@ -59,7 +59,7 @@ DtwStringArray *DtwResource_list(DtwResource *self){
 }
 
 const char * DtwResource_type_in_str(DtwResource *self){
-     return dtw_convert_entity(DtwResource_type(self));
+     return dtw_convert_entity(self->type);
 }
 
 void DtwResource_represent(DtwResource *self){

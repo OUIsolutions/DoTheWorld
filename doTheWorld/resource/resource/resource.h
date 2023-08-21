@@ -1,6 +1,8 @@
 #define DTW_CACHE_UNUSED 0 
 #define DTW_CACHE_LOADED_ONLY_TYPE 1 
 #define DTW_CACHE_LOADED 2
+#define DTW_LOAD_RESOURCE true
+#define DTW_NOT_LOAD_RESOURCE false
 
 typedef struct DtwResource{
 

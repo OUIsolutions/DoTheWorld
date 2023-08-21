@@ -284,7 +284,7 @@ const char *dtw_convert_entity(int entity_type){
     if(entity_type == DTW_COMPLEX_DOUBLE_TYPE){
         return "double";
     }
-    return NULL;
+    return "invalid";
 }   
 
 bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
