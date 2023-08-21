@@ -4032,6 +4032,8 @@ bool dtw_write_string_file_content(const char *path,const char *content);
 
 int dtw_entity_type(const char *path);
 
+
+
 int dtw_complex_entity_type(const char *path);
 
 const char *dtw_convert_entity(int entity_type);
@@ -4044,14 +4046,21 @@ bool dtw_move_any(const char* src_path, const char* dest_path,bool merge);
 
 
 
+#define DTW_NOT_NUMERICAL -2
+#define DTW_NOT_BOOL -3
 
+long dtw_load_long_file_content_setting_error(const char *path,int *error);
 
 long dtw_load_long_file_content(const char * path);
 
+double dtw_load_double_file_content_setting_error(const char * path, int *error);
+
 double dtw_load_double_file_content(const char * path);
 
-bool dtw_load_bool_file_content(const char * path);
+bool dtw_load_bool_file_content_setting_error(const char * path, int *error);
 
+
+bool dtw_load_bool_file_content(const char * path);
 
 
 void dtw_write_long_file_content(const char *path, long value);
@@ -4516,7 +4525,11 @@ void DtwTransaction_free(struct DtwTransaction *self);
 
 
 
-
+#define DTW_CACHE_UNUSED 0 
+#define DTW_CACHE_LOADED_ONLY_TYPE 1 
+#define DTW_CACHE_LOADED 2
+#define DTW_LOAD_RESOURCE true
+#define DTW_NOT_LOAD_RESOURCE false
 
 typedef struct DtwResource{
 
@@ -4527,11 +4540,22 @@ typedef struct DtwResource{
     #ifdef  __linux__
         DtwLocker  *locker;
     #endif
-        char *mothhers_path;
+        char *mothers_path;
         char *name;
         char *path;
-
         bool child;
+
+
+    bool loaded;
+    int type;
+    unsigned char *value_any;
+    long value_size;
+    char *value_string;
+    double value_double;
+    long value_long;
+    bool value_bool;
+    //cache implementation
+
 
 
 
@@ -4542,14 +4566,20 @@ typedef struct DtwResource{
 
 DtwResource *new_DtwResource(const char *path);
 
-DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name);
+DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name,bool load_content);
+
+DtwResource * DtwResource_sub_resource_loading(DtwResource *self,const  char *name);
+
+DtwResource * DtwResource_sub_resource_not_loading(DtwResource *self,const  char *name);
+
+
+void DtwResource_unload(DtwResource *self);
+
+void DtwResource_load(DtwResource *self);
 
 void DtwResource_lock(DtwResource *self);
 
 void private_DtwResource_lock_if_auto_lock(DtwResource *self);
-
-
-
 
 void DtwResource_rename(DtwResource *self, char *new_name);
 
@@ -4563,25 +4593,12 @@ void DtwResource_set_double(DtwResource *self,double element);
 
 void DtwResource_set_bool( DtwResource *self,bool element);
 
-unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binary);
-
 void DtwResource_destroy(DtwResource *self);
+
 
 DtwStringArray *DtwResource_list(DtwResource *self);
 
-unsigned char *DtwResource_get_binary(DtwResource *self, long *size);
-
-char *DtwResource_get_string(DtwResource *self);
-
-long DtwResource_get_long(DtwResource *self);
-
-double DtwResource_get_double(DtwResource *self);
-
-int DtwResource_type(DtwResource *self);
-
 const char * DtwResource_type_in_str(DtwResource *self);
-
-bool DtwResource_get_bool(DtwResource *self);
 
 void DtwResource_commit(DtwResource *self);
 
@@ -4911,46 +4928,40 @@ DtwTransactionModule newDtwTransactionModule();
 typedef struct DtwResourceModule{
 
     DtwResource *(*newResource)(const char *path);
-    struct DtwResource * (*sub_resource)(struct DtwResource *self,const  char *path);
+    struct DtwResource * (*sub_resource)(struct DtwResource *self,const  char *path,bool load_content);
+    DtwResource * (*sub_resource_loading)(DtwResource *self,const  char *name);
+    DtwResource * (*sub_resource_not_loading)(DtwResource *self,const  char *name);
 
-    void (*lock)(struct DtwResource *self);
+    void (*load)(DtwResource *self);
+    void (*unload)(DtwResource *self);
 
-    void (*destroy)(struct DtwResource *self);
+    void (*lock)(DtwResource *self);
 
-    void (*set_binary)(struct DtwResource *self, unsigned char *element, long size);
+    void (*destroy)(DtwResource *self);
 
-    void (*set_string)(struct DtwResource *self,const  char *element);
+    void (*set_binary)(DtwResource *self, unsigned char *element, long size);
 
-    void (*set_long)(struct DtwResource *self,long element);
+    void (*set_string)(DtwResource *self,const  char *element);
 
-    void (*set_double)(struct DtwResource *self,double element);
+    void (*set_long)(DtwResource *self,long element);
 
-    void (*set_bool)(struct DtwResource *self,bool element);
+    void (*set_double)(DtwResource *self,double element);
 
-    unsigned char *(*get_any)(struct DtwResource *self, long *size, bool *is_binary);
+    void (*set_bool)(DtwResource *self,bool element);
 
-    unsigned char *(*get_binary)(struct DtwResource *self, long *size);
 
-    char *(*get_string)(struct DtwResource *self);
 
-    long (*get_long)(struct DtwResource *self);
+    DtwStringArray *(*list)(DtwResource *self);
 
-    double (*get_double)(struct DtwResource *self);
 
-    bool (*get_bool)(struct DtwResource *self);
+    const char *(*type_in_str)(DtwResource *self);
+    void (*commit)(DtwResource *self);
 
-    DtwStringArray *(*list)(struct DtwResource *self);
+    void (*represent)(DtwResource *self);
 
-    int (*type)(struct DtwResource *self);
+    void (*rename)(DtwResource *self, char *new_name);
 
-    const char *(*type_in_str)(struct DtwResource *self);
-    void (*commit)(struct DtwResource *self);
-
-    void (*represent)(struct DtwResource *self);
-
-    void (*rename)(struct DtwResource *self, char *new_name);
-
-    void (*free)(struct DtwResource *self);
+    void (*free)(DtwResource *self);
 
 }DtwResourceModule;
 
@@ -5699,7 +5710,7 @@ const char *dtw_convert_entity(int entity_type){
     if(entity_type == DTW_COMPLEX_DOUBLE_TYPE){
         return "double";
     }
-    return NULL;
+    return "invalid";
 }   
 
 bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
@@ -5768,12 +5779,11 @@ bool dtw_move_any(const char* src_path, const char* dest_path,bool merge) {
 
 
 
-
-
-long dtw_load_long_file_content(const char * path){
+long dtw_load_long_file_content_setting_error(const char *path,int *error){
     char *data = dtw_load_string_file_content(path);
     if(!data){
-        return -1;
+        *error = DTW_NOT_FOUND;
+        return DTW_NOT_FOUND;
     }
     long value;
     int result = sscanf(data,"%ld",&value);
@@ -5781,28 +5791,45 @@ long dtw_load_long_file_content(const char * path){
     if(result){
         return value;
     }
-    return -1;
-
+    *error = DTW_NOT_NUMERICAL;
+    return DTW_NOT_NUMERICAL;
 }
 
-double dtw_load_double_file_content(const char * path){
+
+long dtw_load_long_file_content(const char * path){
+   int error;
+   return dtw_load_long_file_content_setting_error(path,&error);
+}
+
+
+double dtw_load_double_file_content_setting_error(const char * path, int *error){
     char *data = dtw_load_string_file_content(path);
     if(!data){
-        return -1;
+        *error = DTW_NOT_FOUND;
+        return DTW_NOT_FOUND;
     }
     double value;
     int result = sscanf(data,"%lf",&value);
     free(data);
     if(result){
+    
         return value;
     }
-    return -1;
+    *error = DTW_NOT_NUMERICAL;
+    return DTW_NOT_NUMERICAL;
 }
 
 
-bool dtw_load_bool_file_content(const char * path){
+double dtw_load_double_file_content(const char * path){
+    int error;
+    return dtw_load_double_file_content_setting_error(path,&error);
+}
+
+
+bool dtw_load_bool_file_content_setting_error(const char * path, int *error){
     char *data = dtw_load_string_file_content(path);
     if(!data){
+        *error = DTW_NOT_FOUND;
         return false;
     }
 
@@ -5810,8 +5837,22 @@ bool dtw_load_bool_file_content(const char * path){
         free(data);
         return true;
     }
+
+    if(strcmp(data,"false") == 0 || strcmp(data,"f") == 0){
+        free(data);
+        return false;
+    }
     free(data);
+    *error = DTW_NOT_BOOL;
     return false;
+
+}
+
+
+bool dtw_load_bool_file_content(const char * path){
+    int error;
+    return dtw_load_bool_file_content_setting_error(path,&error);
+    
 }
 
 
@@ -7970,13 +8011,13 @@ void DtwResource_rename(DtwResource *self, char *new_name){
 
     char *old_path = strdup(self->path);
     free(self->path);
-    self->path  = dtw_concat_path(self->mothhers_path,self->name);
+    self->path  = dtw_concat_path(self->mothers_path, self->name);
 
     if(self->allow_transaction){
         DtwTransaction_move_any(self->transaction,old_path,self->path);
     }
     else{
-        dtw_move_any(old_path,self->path,DTW_NOT_CONCAT_PATH);
+        dtw_move_any(old_path,self->path,DTW_NOT_MERGE);
     }
     free(old_path);
 
@@ -8012,69 +8053,131 @@ void DtwResource_destroy(DtwResource *self){
 
 
 
-
-
 void DtwResource_commit(DtwResource *self){
     DtwTransaction_commit(self->transaction,NULL);
 }
 
-
-int DtwResource_type(DtwResource *self){
-    int type_element =  dtw_complex_entity_type(self->path);
-    return type_element;
-}
 
 DtwStringArray *DtwResource_list(DtwResource *self){
     return dtw_list_all(self->path,DTW_NOT_CONCAT_PATH);
 }
 
 const char * DtwResource_type_in_str(DtwResource *self){
-     return dtw_convert_entity(DtwResource_type(self));
+     return dtw_convert_entity(self->type);
 }
 
 void DtwResource_represent(DtwResource *self){
     printf("path: %s\n", self->path);
     printf("name: %s\n",self->name);
-    printf("type: %s\n",DtwResource_type_in_str(self));
+    if(self->loaded){
+        printf("type: %s\n",DtwResource_type_in_str(self));
+        if(self->type == DTW_COMPLEX_STRING_TYPE){
+            printf("value: %s\n",self->value_string);
+        }
+        if(self->type == DTW_COMPLEX_LONG_TYPE){
+            printf("value: %ld\n",self->value_long);
+        }
+
+        if(self->type == DTW_COMPLEX_DOUBLE_TYPE){
+            printf("value: %lf\n",self->value_double);
+        }
+
+        if(self->type == DTW_COMPLEX_BOOL_TYPE){
+            printf("value: %s\n",self->value_bool ? "true": "false");
+        }
+
+
+
+
+    }
+
 
 }
 
 
 
 
-unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binary){
-    private_DtwResource_lock_if_auto_lock(self);
 
-    return dtw_load_any_content(self->path,size,is_binary);
+void DtwResource_unload(DtwResource *self){
+    if(!self->loaded){
+        return;
+    }
+    if(self->value_any){
+        free(self->value_any);
+    }
+
+    if(self->value_string ){
+        free(self->value_string);
+    }
+    self->type = 0;
+    self->value_any=NULL;
+    self->value_size = 0;
+    self->value_string = NULL;
+    self->value_long = 0;
+    self->value_double =0;
+    self->value_bool = false;
+    self->loaded = false;
 }
 
-unsigned char *DtwResource_get_binary(DtwResource *self, long *size){
-    private_DtwResource_lock_if_auto_lock(self);
-    return dtw_load_binary_content(self->path,size);
+void DtwResource_load(DtwResource *self){
+    DtwResource_unload(self);
+    self->loaded = true;
+    self->type  = dtw_entity_type(self->path);
+    if(self->type != DTW_FILE_TYPE){
+        return;
+    }
+
+    bool is_binary;
+    long value_size;
+    unsigned char *data  = dtw_load_any_content(self->path, &value_size, &is_binary);
+    if(is_binary){
+        self->type = DTW_COMPLEX_BINARY;
+        self->value_size = value_size;
+        self->value_any = data;
+        return;
+    }
+
+    char *data_in_string = (char*)data;
+
+     if(strcmp(data_in_string,"t") == 0 || strcmp(data_in_string,"true") == 0){
+        self->type = DTW_COMPLEX_BOOL_TYPE;
+        self->value_bool = true;
+        free(data);
+        return;
+    }
+
+    if(strcmp(data_in_string,"f") == 0 || strcmp(data_in_string,"false") == 0){
+        self->type = DTW_COMPLEX_BOOL_TYPE;
+        self->value_bool = false;
+        free(data);
+        return;
+    }
+
+    double data_double;
+    int result = sscanf(data_in_string,"%lf",&data_double);
+    if(result == 0){
+        self->type= DTW_COMPLEX_STRING_TYPE;
+        self->value_size = value_size;
+        self->value_string = data_in_string;
+        return;
+    }
+
+
+    for(int i = 0; i < value_size; i++){
+        char current = data_in_string[i];
+        if(current == '.'){
+            free(data);
+            self->type = DTW_COMPLEX_DOUBLE_TYPE;
+            self->value_double = data_double;
+            return;
+        }
+    }
+
+    free(data);
+    self->type = DTW_COMPLEX_LONG_TYPE;
+    self->value_long = (long)data_double;
+
 }
-
-char *DtwResource_get_string(DtwResource *self){
-    private_DtwResource_lock_if_auto_lock(self);
-    return  dtw_load_string_file_content(self->path);
-
-}
-
-long DtwResource_get_long(DtwResource *self){
-    private_DtwResource_lock_if_auto_lock(self);
-    return dtw_load_long_file_content(self->path);
-}
-
-
-double DtwResource_get_double(DtwResource *self){
-    private_DtwResource_lock_if_auto_lock(self);
-    return  dtw_load_double_file_content(self->path);
-}
-
-bool DtwResource_get_bool(DtwResource *self){
-    private_DtwResource_lock_if_auto_lock(self);
-    return  dtw_load_bool_file_content(self->path);
-}
-
 
 //
 // Created by mateusmoutinho on 05/08/23.
@@ -8089,7 +8192,12 @@ void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size
     else{
         dtw_write_any_content(self->path,element,size);
     }
-
+    DtwResource_unload(self);
+    self->loaded = true;
+    self->type = DTW_COMPLEX_BINARY;
+    self->value_size = size;
+    self->value_any = (unsigned  char *) malloc(size+1);
+    memcpy(self->value_any,element,size);
 
 }
 
@@ -8100,6 +8208,13 @@ void DtwResource_set_string(DtwResource *self,const  char *element){
     else{
         dtw_write_string_file_content(self->path,element);
     }
+    DtwResource_unload(self);
+
+    self->loaded = true;
+    self->type = DTW_COMPLEX_STRING_TYPE;
+    self->value_size = (long)strlen(element);
+    self->value_string = strdup(element);
+
 
 }
 
@@ -8110,7 +8225,9 @@ void DtwResource_set_long(DtwResource *self,long element){
     else{
         dtw_write_long_file_content(self->path,element);
     }
-
+    DtwResource_unload(self);
+    self->loaded = true;
+    self->value_long =element;
 
 }
 
@@ -8122,6 +8239,11 @@ void DtwResource_set_double(DtwResource *self,double element){
     else{
         dtw_write_double_file_content(self->path,element);
     }
+    DtwResource_unload(self);
+    self->loaded = true;
+    self->value_double =element;
+
+
 }
 
 void DtwResource_set_bool( DtwResource *self,bool element){
@@ -8132,6 +8254,11 @@ void DtwResource_set_bool( DtwResource *self,bool element){
     else{
         dtw_write_bool_file_content(self->path,element);
     }
+    DtwResource_unload(self);
+    self->loaded = true;
+    self->value_bool = element;
+
+
 }
 
 
@@ -8149,16 +8276,17 @@ DtwResource *new_DtwResource(const char *path){
 #ifdef __linux__
     self->locker = newDtwLocker();
 #endif
+    DtwResource_load(self);
     return self;
 }   
 
-DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name){
+DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name,bool load_content){
     DtwResource *new_element = (DtwResource*) malloc(sizeof (DtwResource));
     *new_element =(DtwResource){0};
     new_element->allow_transaction = self->allow_transaction;
     new_element->transaction = self->transaction;
     new_element->child = true;
-    new_element->mothhers_path = strdup(self->path);
+    new_element->mothers_path = strdup(self->path);
     new_element->path = dtw_concat_path(self->path, name);
     new_element->name = strdup(name);
 
@@ -8168,8 +8296,20 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name){
     new_element->locker = self->locker;
 #endif
     private_DtwResource_lock_if_auto_lock(new_element);
+
+    if(load_content){
+        DtwResource_load(new_element);
+    }
+
     return new_element;
 
+}
+DtwResource * DtwResource_sub_resource_loading(DtwResource *self,const  char *name){
+    return DtwResource_sub_resource(self,name,DTW_LOAD_RESOURCE);
+}
+
+DtwResource * DtwResource_sub_resource_not_loading(DtwResource *self,const  char *name){
+    return DtwResource_sub_resource(self,name,DTW_NOT_LOAD_RESOURCE);
 }
 
 
@@ -8184,10 +8324,16 @@ void DtwResource_free(struct DtwResource *self){
 #endif
     }
 
-    if(self->mothhers_path){
-        free(self->mothhers_path);
+    if(self->mothers_path){
+        free(self->mothers_path);
+    }
+    if(self->value_any){
+        free(self->value_any);
     }
 
+    if(self->value_string ){
+        free(self->value_string);
+    }
     free(self->path);
     free(self->name);
     free(self);
@@ -9027,7 +9173,11 @@ DtwTransactionModule newDtwTransactionModule(){
 DtwResourceModule newDtwResourceModule(){
     DtwResourceModule self = {0};
     self.newResource = new_DtwResource;
+    self.load = DtwResource_load;
+    self.unload = DtwResource_unload;
     self.sub_resource = DtwResource_sub_resource;
+    self.sub_resource_loading = DtwResource_sub_resource_loading;
+    self.sub_resource_not_loading = DtwResource_sub_resource_not_loading;
     self.lock =DtwResource_lock;
     self.destroy = DtwResource_destroy;
     self.set_binary = DtwResource_set_binary;
@@ -9036,15 +9186,8 @@ DtwResourceModule newDtwResourceModule(){
     self.set_double = DtwResource_set_double;
     self.set_bool = DtwResource_set_bool;
 
-    self.get_any = DtwResource_get_any;
-    self.get_binary = DtwResource_get_binary;
-    self.get_string = DtwResource_get_string;
-    self.get_long = DtwResource_get_long;
-    self.get_double = DtwResource_get_double;
-    self.get_bool = DtwResource_get_bool;
-
     self.list = DtwResource_list;
-    self.type = DtwResource_type;
+
     self.type_in_str = DtwResource_type_in_str;
     self.commit =DtwResource_commit;
     self.represent = DtwResource_represent;

@@ -522,30 +522,30 @@ int main (){
 
     DtwResource *values = dtw.resource.newResource("tests/target/new_folder");
 
-    DtwResource *string_element = dtw.resource.sub_resource(values,"text.txt");
+    DtwResource *string_element = dtw.resource.sub_resource_not_loading(values,"text.txt");
     dtw.resource.set_string(string_element,"nothing");
     dtw.resource.free(string_element);
     long size;
     unsigned char *blob = dtw_load_binary_content("tests/target/blob.png",&size);
 
-    DtwResource *blob_element = dtw.resource.sub_resource(values,"blob.png");
+    DtwResource *blob_element = dtw.resource.sub_resource_not_loading(values,"blob.png");
     dtw.resource.set_binary(blob_element,blob,size);
     dtw.resource.free(blob_element);
     free(blob);
-    DtwResource *bInt = dtw.resource.sub_resource(values,"b.txt");
+    DtwResource *bInt = dtw.resource.sub_resource_not_loading(values,"b.txt");
     dtw.resource.set_long(bInt,25);
     dtw.resource.free(bInt);
 
-    DtwResource *cDouble = dtw.resource.sub_resource(values,"c.txt");
+    DtwResource *cDouble = dtw.resource.sub_resource_not_loading(values,"c.txt");
     dtw.resource.set_double(cDouble,10.5);
     dtw.resource.free(cDouble);
 
-    DtwResource *dBool = dtw.resource.sub_resource(values,"b.txt");
+    DtwResource *dBool = dtw.resource.sub_resource_not_loading(values,"b.txt");
     dtw.resource.set_bool(dBool,true);
     dtw.resource.free(dBool);
 
-    DtwResource  *sub_foder = dtw.resource.sub_resource(values,"sub_foder");
-    DtwResource *string_element2 = dtw.resource.sub_resource(sub_foder,"a.txt");
+    DtwResource  *sub_foder = dtw.resource.sub_resource_not_loading(values,"sub_foder");
+    DtwResource *string_element2 = dtw.resource.sub_resource_not_loading(sub_foder,"a.txt");
     dtw.resource.set_string(string_element2,"nothing");
     dtw.resource.free(string_element2);
 
@@ -581,54 +581,49 @@ int main (){
     dtw.string_array.free(sub_elements);
     printf("types:--------------------------------------\n");
 
-    int values_type = dtw.resource.type(values);
-    if(values_type != DTW_FOLDER_TYPE){
+    if(values->type != DTW_FOLDER_TYPE){
         printf("values its not an folder\n");
         dtw.resource.free(values);
         return 1;
     }
 
 
-    DtwResource *string_r = dtw.resource.sub_resource(values, "a.txt");
-    char *value_of_string = dtw.resource.get_string(string_r);
-    if(!value_of_string){
-        printf("unable to locate a.txt\n");
-        dtw.resource.free(values);
-        dtw.resource.free(string_r);
-        free(value_of_string);
-        return 1;
+    DtwResource *string_r = dtw.resource.sub_resource_loading(values, "a.txt");
+    if(string_r->type == DTW_COMPLEX_STRING_TYPE){
+        printf("value string :%s\n",string_r->value_string);
     }
-    printf("value string :%s\n",value_of_string);
-    dtw.resource.free(string_r);
-    free(value_of_string);
 
-    DtwResource  *blob_r = dtw.resource.sub_resource(values,"blob.png");
-    long size;
-    bool is_binary;
-    unsigned  char *blob_value = dtw.resource.get_any(blob_r,&size,&is_binary);
-    printf("blob size: %ld, is_binary:%d\n",size,is_binary);
-    free(blob_value);
+    dtw.resource.free(string_r);
+
+
+    DtwResource  *blob_r = dtw.resource.sub_resource_loading(values,"blob.png");
+    if(blob_r->type == DTW_COMPLEX_BINARY){
+        printf("blob size: %ld\n",blob_r->value_size);
+    }
+
     dtw.resource.free(blob_r);
 
 
-    DtwResource *numerical = dtw.resource.sub_resource(values,"numerical");
 
-    DtwResource  *double_r = dtw.resource.sub_resource(numerical,"double.txt");
-    double  double_value = dtw.resource.get_double(double_r);
-    printf("double value %lf\n",double_value);
-    dtw.resource.free(double_r);
-
-
-    DtwResource  *long_r = dtw.resource.sub_resource(numerical,"integer.txt");
-    long  long_value = dtw.resource.get_long(long_r);
-    printf("long value %ld\n",long_value);
-    dtw.resource.free(long_r);
+    DtwResource *numerical = dtw.resource.sub_resource_loading(values,"numerical");
+    if(numerical->type == DTW_FOLDER_TYPE){
+        DtwResource  *double_r = dtw.resource.sub_resource_loading(numerical,"double.txt");
+        printf("double value %lf\n",double_r->value_double);
+        dtw.resource.free(double_r);
 
 
-    DtwResource  *bool_r = dtw.resource.sub_resource(numerical,"true_normal.txt");
-    bool bool_value = dtw.resource.get_bool(bool_r);
-    printf("bool value %d\n",bool_value);
-    dtw.resource.free(bool_r);
+        DtwResource  *long_r = dtw.resource.sub_resource_loading(numerical,"integer.txt");
+        printf("long value %ld\n",long_r->value_long);
+        dtw.resource.free(long_r);
+
+
+        DtwResource  *bool_r = dtw.resource.sub_resource_loading(numerical,"true_normal.txt");
+        printf("bool value %d\n",bool_r->value_bool);
+        dtw.resource.free(bool_r);
+    }
+
+
+
 
 
     dtw.resource.free(numerical);

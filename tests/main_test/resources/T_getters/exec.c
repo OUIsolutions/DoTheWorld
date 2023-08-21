@@ -27,8 +27,8 @@ int main (){
 
 
     DtwResource  *blob_r = dtw.resource.sub_resource_loading(values,"blob.png");
-    if(blob_r->type != DTW_COMPLEX_BINARY){
-        printf("blob size: %ld",blob_r->value_size);
+    if(blob_r->type == DTW_COMPLEX_BINARY){
+        printf("blob size: %ld\n",blob_r->value_size);
     }
 
     dtw.resource.free(blob_r);

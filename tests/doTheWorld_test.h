@@ -4568,6 +4568,11 @@ DtwResource *new_DtwResource(const char *path);
 
 DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name,bool load_content);
 
+DtwResource * DtwResource_sub_resource_loading(DtwResource *self,const  char *name);
+
+DtwResource * DtwResource_sub_resource_not_loading(DtwResource *self,const  char *name);
+
+
 void DtwResource_unload(DtwResource *self);
 
 void DtwResource_load(DtwResource *self);
@@ -4924,6 +4929,8 @@ typedef struct DtwResourceModule{
 
     DtwResource *(*newResource)(const char *path);
     struct DtwResource * (*sub_resource)(struct DtwResource *self,const  char *path,bool load_content);
+    DtwResource * (*sub_resource_loading)(DtwResource *self,const  char *name);
+    DtwResource * (*sub_resource_not_loading)(DtwResource *self,const  char *name);
 
     void (*load)(DtwResource *self);
     void (*unload)(DtwResource *self);
@@ -4946,7 +4953,6 @@ typedef struct DtwResourceModule{
 
     DtwStringArray *(*list)(DtwResource *self);
 
-    int (*type)(DtwResource *self);
 
     const char *(*type_in_str)(DtwResource *self);
     void (*commit)(DtwResource *self);
@@ -8063,7 +8069,28 @@ const char * DtwResource_type_in_str(DtwResource *self){
 void DtwResource_represent(DtwResource *self){
     printf("path: %s\n", self->path);
     printf("name: %s\n",self->name);
-    printf("type: %s\n",DtwResource_type_in_str(self));
+    if(self->loaded){
+        printf("type: %s\n",DtwResource_type_in_str(self));
+        if(self->type == DTW_COMPLEX_STRING_TYPE){
+            printf("value: %s\n",self->value_string);
+        }
+        if(self->type == DTW_COMPLEX_LONG_TYPE){
+            printf("value: %ld\n",self->value_long);
+        }
+
+        if(self->type == DTW_COMPLEX_DOUBLE_TYPE){
+            printf("value: %lf\n",self->value_double);
+        }
+
+        if(self->type == DTW_COMPLEX_BOOL_TYPE){
+            printf("value: %s\n",self->value_bool ? "true": "false");
+        }
+
+
+
+
+    }
+
 
 }
 
@@ -8169,6 +8196,7 @@ void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size
     self->loaded = true;
     self->type = DTW_COMPLEX_BINARY;
     self->value_size = size;
+    self->value_any = (unsigned  char *) malloc(size+1);
     memcpy(self->value_any,element,size);
 
 }
@@ -8248,6 +8276,7 @@ DtwResource *new_DtwResource(const char *path){
 #ifdef __linux__
     self->locker = newDtwLocker();
 #endif
+    DtwResource_load(self);
     return self;
 }   
 
@@ -8274,6 +8303,13 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name,bool 
 
     return new_element;
 
+}
+DtwResource * DtwResource_sub_resource_loading(DtwResource *self,const  char *name){
+    return DtwResource_sub_resource(self,name,DTW_LOAD_RESOURCE);
+}
+
+DtwResource * DtwResource_sub_resource_not_loading(DtwResource *self,const  char *name){
+    return DtwResource_sub_resource(self,name,DTW_NOT_LOAD_RESOURCE);
 }
 
 
@@ -9140,6 +9176,8 @@ DtwResourceModule newDtwResourceModule(){
     self.load = DtwResource_load;
     self.unload = DtwResource_unload;
     self.sub_resource = DtwResource_sub_resource;
+    self.sub_resource_loading = DtwResource_sub_resource_loading;
+    self.sub_resource_not_loading = DtwResource_sub_resource_not_loading;
     self.lock =DtwResource_lock;
     self.destroy = DtwResource_destroy;
     self.set_binary = DtwResource_set_binary;
