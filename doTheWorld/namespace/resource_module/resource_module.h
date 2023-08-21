@@ -25,7 +25,6 @@ typedef struct DtwResourceModule{
 
     DtwStringArray *(*list)(DtwResource *self);
 
-    int (*type)(DtwResource *self);
 
     const char *(*type_in_str)(DtwResource *self);
     void (*commit)(DtwResource *self);

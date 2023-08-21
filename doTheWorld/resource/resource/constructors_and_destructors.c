@@ -12,6 +12,7 @@ DtwResource *new_DtwResource(const char *path){
 #ifdef __linux__
     self->locker = newDtwLocker();
 #endif
+    DtwResource_load(self);
     return self;
 }   
 
