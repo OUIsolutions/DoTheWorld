@@ -29,6 +29,7 @@ typedef struct DtwResource{
     bool value_bool;
     //cache implementation
 
+    void *sub_resources;
 
 
 

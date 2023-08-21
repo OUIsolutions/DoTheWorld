@@ -5,6 +5,7 @@ DtwResourceArray * newDtwResourceArray(){
     DtwResourceArray *self = (DtwResourceArray*) malloc(sizeof (DtwResourceArray));
     self->resources = (DtwResource**) malloc(0);
     self->size = 0;
+    return self;
 }
 
 

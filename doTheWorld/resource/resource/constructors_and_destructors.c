@@ -17,6 +17,15 @@ DtwResource *new_DtwResource(const char *path){
 }   
 
 DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name,bool load_content){
+
+    DtwResourceArray  *sub_resource = (DtwResourceArray*)self->sub_resources;
+    for(int i = 0; i < sub_resource->size; i++){
+        DtwResource  *current_sub = sub_resource->resources[i];
+        if(strcmp(current_sub->name,name)==0){
+            return current_sub;
+        }
+    }
+
     DtwResource *new_element = (DtwResource*) malloc(sizeof (DtwResource));
     *new_element =(DtwResource){0};
     new_element->allow_transaction = self->allow_transaction;
@@ -36,6 +45,12 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name,bool 
     if(load_content){
         DtwResource_load(new_element);
     }
+
+    DtwResourceArray  *new_sub_resource = newDtwResourceArray();
+    new_element->sub_resources = new_sub_resource;
+
+
+    DtwResourceArray_append(sub_resource,new_element);
 
     return new_element;
 
