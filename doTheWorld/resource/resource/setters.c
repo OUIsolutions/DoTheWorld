@@ -15,6 +15,7 @@ void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size
     self->loaded = true;
     self->type = DTW_COMPLEX_BINARY;
     self->value_size = size;
+    self->value_any = (unsigned  char *) malloc(size+1);
     memcpy(self->value_any,element,size);
 
 }
