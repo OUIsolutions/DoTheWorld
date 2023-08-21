@@ -2,46 +2,39 @@
 typedef struct DtwResourceModule{
 
     DtwResource *(*newResource)(const char *path);
-    struct DtwResource * (*sub_resource)(struct DtwResource *self,const  char *path);
+    struct DtwResource * (*sub_resource)(struct DtwResource *self,const  char *path,bool load_content);
 
-    void (*lock)(struct DtwResource *self);
+    void (*load)(DtwResource *self);
+    void (*unload)(DtwResource *self);
 
-    void (*destroy)(struct DtwResource *self);
+    void (*lock)(DtwResource *self);
 
-    void (*set_binary)(struct DtwResource *self, unsigned char *element, long size);
+    void (*destroy)(DtwResource *self);
 
-    void (*set_string)(struct DtwResource *self,const  char *element);
+    void (*set_binary)(DtwResource *self, unsigned char *element, long size);
 
-    void (*set_long)(struct DtwResource *self,long element);
+    void (*set_string)(DtwResource *self,const  char *element);
 
-    void (*set_double)(struct DtwResource *self,double element);
+    void (*set_long)(DtwResource *self,long element);
 
-    void (*set_bool)(struct DtwResource *self,bool element);
+    void (*set_double)(DtwResource *self,double element);
 
-    unsigned char *(*get_any)(struct DtwResource *self, long *size, bool *is_binary);
+    void (*set_bool)(DtwResource *self,bool element);
 
-    unsigned char *(*get_binary)(struct DtwResource *self, long *size);
 
-    char *(*get_string)(struct DtwResource *self);
 
-    long (*get_long)(struct DtwResource *self);
+    DtwStringArray *(*list)(DtwResource *self);
 
-    double (*get_double)(struct DtwResource *self);
+    int (*type)(DtwResource *self);
 
-    bool (*get_bool)(struct DtwResource *self);
+    const char *(*type_in_str)(DtwResource *self);
+    void (*commit)(DtwResource *self);
 
-    DtwStringArray *(*list)(struct DtwResource *self);
+    void (*represent)(DtwResource *self);
 
-    int (*type)(struct DtwResource *self);
+    void (*rename)(DtwResource *self, char *new_name);
 
-    const char *(*type_in_str)(struct DtwResource *self);
-    void (*commit)(struct DtwResource *self);
-
-    void (*represent)(struct DtwResource *self);
-
-    void (*rename)(struct DtwResource *self, char *new_name);
-
-    void (*free)(struct DtwResource *self);
+    void (*free)(DtwResource *self);
 
 }DtwResourceModule;
 

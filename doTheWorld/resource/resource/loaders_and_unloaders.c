@@ -1,6 +1,6 @@
 
 
-void DtwResource_unload_content(DtwResource *self){
+void DtwResource_unload(DtwResource *self){
     if(!self->loaded){
         return;
     }
@@ -20,7 +20,7 @@ void DtwResource_unload_content(DtwResource *self){
     self->loaded = false;
 }
 
-void DtwResource_load_content(DtwResource *self){
+void DtwResource_load(DtwResource *self){
 
     self->type  = dtw_entity_type(self->path);
     if(self->type != DTW_FILE_TYPE){

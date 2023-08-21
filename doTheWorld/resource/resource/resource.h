@@ -39,9 +39,9 @@ DtwResource *new_DtwResource(const char *path);
 
 DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name,bool load_content);
 
-void DtwResource_unload_content(DtwResource *self);
+void DtwResource_unload(DtwResource *self);
 
-void DtwResource_load_content(DtwResource *self);
+void DtwResource_load(DtwResource *self);
 
 void DtwResource_lock(DtwResource *self);
 

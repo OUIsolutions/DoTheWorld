@@ -33,7 +33,7 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name,bool 
     private_DtwResource_lock_if_auto_lock(new_element);
 
     if(load_content){
-        DtwResource_load_content(new_element);
+        DtwResource_load(new_element);
     }
 
     return new_element;
@@ -55,7 +55,7 @@ void DtwResource_free(struct DtwResource *self){
     if(self->mothers_path){
         free(self->mothers_path);
     }
-    DtwResource_unload_content(self);
+    DtwResource_unload(self);
     free(self->path);
     free(self->name);
     free(self);
