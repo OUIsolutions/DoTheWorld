@@ -7,13 +7,13 @@ void DtwResource_rename(DtwResource *self, char *new_name){
 
     char *old_path = strdup(self->path);
     free(self->path);
-    self->path  = dtw_concat_path(self->mothhers_path,self->name);
+    self->path  = dtw_concat_path(self->mothers_path, self->name);
 
     if(self->allow_transaction){
         DtwTransaction_move_any(self->transaction,old_path,self->path);
     }
     else{
-        dtw_move_any(old_path,self->path,DTW_NOT_CONCAT_PATH);
+        dtw_move_any(old_path,self->path,DTW_NOT_MERGE);
     }
     free(old_path);
 
@@ -49,17 +49,10 @@ void DtwResource_destroy(DtwResource *self){
 
 
 
-
-
 void DtwResource_commit(DtwResource *self){
     DtwTransaction_commit(self->transaction,NULL);
 }
 
-
-int DtwResource_type(DtwResource *self){
-    int type_element =  dtw_complex_entity_type(self->path);
-    return type_element;
-}
 
 DtwStringArray *DtwResource_list(DtwResource *self){
     return dtw_list_all(self->path,DTW_NOT_CONCAT_PATH);
@@ -76,20 +69,3 @@ void DtwResource_represent(DtwResource *self){
 
 }
 
-void DtwResource_clear_cache(DtwResource *self){
-    if(!self->cache_state  == DTW_CACHE_UNUSED){
-        return;
-    }
-    
-
-    if(self->cache_type == DTW_COMPLEX_STRING_TYPE || self->cache_type == DTW_COMPLEX_BINARY){
-        free(self->cache_any);
-    }
-    
-    self->cache_type = 0;
-    self->cache_size = 0;
-    self->cache_state = DTW_CACHE_UNUSED;
-    self->cache_number = 0;
-    self->cache_any = NULL;
-
-}

@@ -15,13 +15,13 @@ DtwResource *new_DtwResource(const char *path){
     return self;
 }   
 
-DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name){
+DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name,bool load_content){
     DtwResource *new_element = (DtwResource*) malloc(sizeof (DtwResource));
     *new_element =(DtwResource){0};
     new_element->allow_transaction = self->allow_transaction;
     new_element->transaction = self->transaction;
     new_element->child = true;
-    new_element->mothhers_path = strdup(self->path);
+    new_element->mothers_path = strdup(self->path);
     new_element->path = dtw_concat_path(self->path, name);
     new_element->name = strdup(name);
 
@@ -31,6 +31,11 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name){
     new_element->locker = self->locker;
 #endif
     private_DtwResource_lock_if_auto_lock(new_element);
+
+    if(load_content){
+        DtwResource_load_content(new_element);
+    }
+
     return new_element;
 
 }
@@ -47,10 +52,10 @@ void DtwResource_free(struct DtwResource *self){
 #endif
     }
 
-    if(self->mothhers_path){
-        free(self->mothhers_path);
+    if(self->mothers_path){
+        free(self->mothers_path);
     }
-    DtwResource_clear_cache(self);
+    DtwResource_unload_content(self);
     free(self->path);
     free(self->name);
     free(self);

@@ -11,19 +11,22 @@ typedef struct DtwResource{
     #ifdef  __linux__
         DtwLocker  *locker;
     #endif
-        char *mothhers_path;
+        char *mothers_path;
         char *name;
         char *path;
-
         bool child;
 
+
+    bool loaded;
+    int type;
+    unsigned char *value_any;
+    long value_size;
+    char *value_string;
+    double value_double;
+    long value_long;
+    bool value_bool;
     //cache implementation
 
-    int  cache_state;
-    int cache_type;
-    int cache_size;
-    unsigned char *cache_any;
-    double cache_number;
 
 
 
@@ -34,15 +37,15 @@ typedef struct DtwResource{
 
 DtwResource *new_DtwResource(const char *path);
 
-DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name);
+DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name,bool load_content);
+
+void DtwResource_unload_content(DtwResource *self);
+
+void DtwResource_load_content(DtwResource *self);
 
 void DtwResource_lock(DtwResource *self);
 
 void private_DtwResource_lock_if_auto_lock(DtwResource *self);
-
-void DtwResource_clear_cache(DtwResource *self);
-
-
 
 void DtwResource_rename(DtwResource *self, char *new_name);
 
@@ -56,25 +59,12 @@ void DtwResource_set_double(DtwResource *self,double element);
 
 void DtwResource_set_bool( DtwResource *self,bool element);
 
-unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binary);
-
 void DtwResource_destroy(DtwResource *self);
+
 
 DtwStringArray *DtwResource_list(DtwResource *self);
 
-unsigned char *DtwResource_get_binary(DtwResource *self, long *size);
-
-char *DtwResource_get_string(DtwResource *self);
-
-long DtwResource_get_long(DtwResource *self);
-
-double DtwResource_get_double(DtwResource *self);
-
-int DtwResource_type(DtwResource *self);
-
 const char * DtwResource_type_in_str(DtwResource *self);
-
-bool DtwResource_get_bool(DtwResource *self);
 
 void DtwResource_commit(DtwResource *self);
 
