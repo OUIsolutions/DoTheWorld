@@ -3,6 +3,8 @@ typedef struct DtwResourceModule{
 
     DtwResource *(*newResource)(const char *path);
     struct DtwResource * (*sub_resource)(struct DtwResource *self,const  char *path,bool load_content);
+    DtwResource * (*sub_resource_loading)(DtwResource *self,const  char *name);
+    DtwResource * (*sub_resource_not_loading)(DtwResource *self,const  char *name);
 
     void (*load)(DtwResource *self);
     void (*unload)(DtwResource *self);

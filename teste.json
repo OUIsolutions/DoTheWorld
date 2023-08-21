@@ -1,0 +1,8 @@
+{
+    "a.txt":"aaaaaaa",
+    "b.txt":"aaaaaaaaaaaa",
+    "c.txt":2,
+    "d":{
+        "d.txt":"aaa"
+    }
+}

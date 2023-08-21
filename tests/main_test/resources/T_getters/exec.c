@@ -18,7 +18,7 @@ int main (){
     }
 
 
-    DtwResource *string_r = dtw.resource.sub_resource(values, "a.txt",DTW_LOAD_RESOURCE);
+    DtwResource *string_r = dtw.resource.sub_resource_loading(values, "a.txt");
     if(string_r->type == DTW_COMPLEX_STRING_TYPE){
         printf("value string :%s\n",string_r->value_string);
     }
@@ -26,7 +26,7 @@ int main (){
     dtw.resource.free(string_r);
 
 
-    DtwResource  *blob_r = dtw.resource.sub_resource(values,"blob.png",DTW_LOAD_RESOURCE);
+    DtwResource  *blob_r = dtw.resource.sub_resource_loading(values,"blob.png");
     if(blob_r->type != DTW_COMPLEX_BINARY){
         printf("blob size: %ld",blob_r->value_size);
     }
@@ -35,19 +35,19 @@ int main (){
 
 
 
-    DtwResource *numerical = dtw.resource.sub_resource(values,"numerical",DTW_LOAD_RESOURCE);
+    DtwResource *numerical = dtw.resource.sub_resource_loading(values,"numerical");
     if(numerical->type == DTW_FOLDER_TYPE){
-        DtwResource  *double_r = dtw.resource.sub_resource(numerical,"double.txt",DTW_LOAD_RESOURCE);
+        DtwResource  *double_r = dtw.resource.sub_resource_loading(numerical,"double.txt");
         printf("double value %lf\n",double_r->value_double);
         dtw.resource.free(double_r);
 
 
-        DtwResource  *long_r = dtw.resource.sub_resource(numerical,"integer.txt",DTW_LOAD_RESOURCE);
+        DtwResource  *long_r = dtw.resource.sub_resource_loading(numerical,"integer.txt");
         printf("long value %ld\n",long_r->value_long);
         dtw.resource.free(long_r);
 
 
-        DtwResource  *bool_r = dtw.resource.sub_resource(numerical,"true_normal.txt",DTW_LOAD_RESOURCE);
+        DtwResource  *bool_r = dtw.resource.sub_resource_loading(numerical,"true_normal.txt");
         printf("bool value %d\n",bool_r->value_bool);
         dtw.resource.free(bool_r);
     }

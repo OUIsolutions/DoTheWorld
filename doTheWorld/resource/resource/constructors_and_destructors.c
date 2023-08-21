@@ -40,6 +40,13 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name,bool 
     return new_element;
 
 }
+DtwResource * DtwResource_sub_resource_loading(DtwResource *self,const  char *name){
+    return DtwResource_sub_resource(self,name,DTW_LOAD_RESOURCE);
+}
+
+DtwResource * DtwResource_sub_resource_not_loading(DtwResource *self,const  char *name){
+    return DtwResource_sub_resource(self,name,DTW_NOT_LOAD_RESOURCE);
+}
 
 
 void DtwResource_free(struct DtwResource *self){
