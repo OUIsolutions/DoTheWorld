@@ -4,10 +4,11 @@ void DtwResource_unload(DtwResource *self){
     if(!self->loaded){
         return;
     }
-    if(self->type == DTW_COMPLEX_BINARY){
+    if(self->value_any){
         free(self->value_any);
     }
-    if(self->type ==DTW_COMPLEX_STRING_TYPE ){
+
+    if(self->value_string ){
         free(self->value_string);
     }
     self->type = 0;
