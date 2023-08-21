@@ -65,7 +65,28 @@ const char * DtwResource_type_in_str(DtwResource *self){
 void DtwResource_represent(DtwResource *self){
     printf("path: %s\n", self->path);
     printf("name: %s\n",self->name);
-    printf("type: %s\n",DtwResource_type_in_str(self));
+    if(self->loaded){
+        printf("type: %s\n",DtwResource_type_in_str(self));
+        if(self->type == DTW_COMPLEX_STRING_TYPE){
+            printf("value: %s\n",self->value_string);
+        }
+        if(self->type == DTW_COMPLEX_LONG_TYPE){
+            printf("value: %ld\n",self->value_long);
+        }
+
+        if(self->type == DTW_COMPLEX_DOUBLE_TYPE){
+            printf("value: %lf\n",self->value_double);
+        }
+
+        if(self->type == DTW_COMPLEX_BOOL_TYPE){
+            printf("value: %s\n",self->value_bool ? "true": "false");
+        }
+
+        
+
+
+    }
+
 
 }
 
