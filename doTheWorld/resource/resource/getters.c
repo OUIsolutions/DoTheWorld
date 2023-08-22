@@ -1,33 +1,54 @@
 
 unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binary){
     private_DtwResource_lock_if_auto_lock(self);
-
-    return dtw_load_any_content(self->path,size,is_binary);
+    DtwResource_load_if_not_loaded(self);
+    *size = self->value_size;
+    *is_binary = self->is_binary;
+    return self->value_any;
 }
 
 unsigned char *DtwResource_get_binary(DtwResource *self, long *size){
-    private_DtwResource_lock_if_auto_lock(self);
-    return dtw_load_binary_content(self->path,size);
+    bool is_binary;
+    return DtwResource_get_any(self,size,&is_binary);
 }
 
 char *DtwResource_get_string(DtwResource *self){
-    private_DtwResource_lock_if_auto_lock(self);
-    return  dtw_load_string_file_content(self->path);
-
+    long size;
+    bool is_binary;
+    return (char *)DtwResource_get_any(self,&size,&is_binary);
 }
 
 long DtwResource_get_long(DtwResource *self){
-    private_DtwResource_lock_if_auto_lock(self);
-    return dtw_load_long_file_content(self->path);
+    char *element = DtwResource_get_string(self);
+    if(!element){
+        return DTW_NOT_FOUND;
+    }
+    long value;
+    int result = sscanf(element,"%ld",&value);
+    if(result == 0){
+        return DTW_NOT_NUMERICAL;
+    }
+    return value;
 }
 
 
 double DtwResource_get_double(DtwResource *self){
-    private_DtwResource_lock_if_auto_lock(self);
-    return  dtw_load_double_file_content(self->path);
+    char *element = DtwResource_get_string(self);
+    if(!element){
+        return DTW_NOT_FOUND;
+    }
+    double value;
+    int result = sscanf(element,"%lf",&value);
+    if(result == 0){
+        return DTW_NOT_NUMERICAL;
+    }
+    return value;
 }
 
 bool DtwResource_get_bool(DtwResource *self){
-    private_DtwResource_lock_if_auto_lock(self);
-    return  dtw_load_bool_file_content(self->path);
+    char *element = DtwResource_get_string(self);
+    if(strcmp(element,"true") == 0 || strcmp(element,"t") == 0){
+        return true;
+    }
+    return false;
 }
