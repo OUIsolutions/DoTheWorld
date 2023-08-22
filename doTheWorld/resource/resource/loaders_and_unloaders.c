@@ -1,28 +1,32 @@
 
 
 void DtwResource_unload(DtwResource *self){
-    if(!self->loaded){
+    if(self->loaded == false){
         return;
     }
     if(self->value_any){
         free(self->value_any);
     }
-
-    if(self->value_string ){
-        free(self->value_string);
-    }
-    self->type = 0;
-    self->value_any=NULL;
-    self->value_size = 0;
-    self->value_string = NULL;
-    self->value_long = 0;
-    self->value_double =0;
-    self->value_bool = false;
-    self->loaded = false;
+    self->is_binary = false;
+    self->value_size = 0;    
 }
 
 void DtwResource_load(DtwResource *self){
+
     DtwResource_unload(self);
+    self->value_any = dtw_load_any_content(self->path,&self->value_size,&self->is_binary);
+    self->loaded = true;
+
+}
+void DtwResource_load_if_not_loaded(DtwResource *self){
+    if(self->loaded == false){
+        DtwResource_load(self);
+    }
+}
+
+/*
+void DtwResource_load_content(DtwResource *self){
+    DtwResource_unload_content(self);
     self->loaded = true;
     self->type  = dtw_entity_type(self->path);
     if(self->type != DTW_FILE_TYPE){
@@ -80,3 +84,4 @@ void DtwResource_load(DtwResource *self){
     self->value_long = (long)data_double;
 
 }
+ */
