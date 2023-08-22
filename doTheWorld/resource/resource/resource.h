@@ -20,13 +20,9 @@ typedef struct DtwResource{
 
 
     bool loaded;
-    int type;
     unsigned char *value_any;
     long value_size;
-    char *value_string;
-    double value_double;
-    long value_long;
-    bool value_bool;
+   
     //cache implementation
 
     void *sub_resources;
