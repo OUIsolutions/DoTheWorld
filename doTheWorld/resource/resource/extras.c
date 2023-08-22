@@ -117,7 +117,7 @@ void DtwResource_represent(DtwResource *self){
         if(type == DTW_COMPLEX_BOOL_TYPE){
             printf("value: %s\n",DtwResource_get_bool(self) ?"true": "false");
         }
-        
+
     }
 
 

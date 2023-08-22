@@ -13,7 +13,6 @@ void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size
     }
     DtwResource_unload(self);
     self->loaded = true;
-    self->type = DTW_COMPLEX_BINARY;
     self->value_size = size;
     self->value_any = (unsigned  char *) malloc(size+1);
     memcpy(self->value_any,element,size);
@@ -30,9 +29,9 @@ void DtwResource_set_string(DtwResource *self,const  char *element){
     DtwResource_unload(self);
 
     self->loaded = true;
-    self->type = DTW_COMPLEX_STRING_TYPE;
+
     self->value_size = (long)strlen(element);
-    self->value_string = strdup(element);
+    self->value_any = (unsigned char*)strdup(element);
 
 
 }
@@ -46,7 +45,9 @@ void DtwResource_set_long(DtwResource *self,long element){
     }
     DtwResource_unload(self);
     self->loaded = true;
-    self->value_long =element;
+    char result[20] ={0};
+    sprintf(result,"%ld",element);
+    self->value_any = (unsigned char *)strdup(result);
 
 }
 
@@ -60,7 +61,9 @@ void DtwResource_set_double(DtwResource *self,double element){
     }
     DtwResource_unload(self);
     self->loaded = true;
-    self->value_double =element;
+    char result[20] ={0};
+    sprintf(result,"%ld",element);
+    self->value_any = (unsigned char *)strdup(result);
 
 
 }
@@ -73,9 +76,15 @@ void DtwResource_set_bool( DtwResource *self,bool element){
     else{
         dtw_write_bool_file_content(self->path,element);
     }
+
     DtwResource_unload(self);
     self->loaded = true;
-    self->value_bool = element;
+    if(element){
+        self->value_any = (unsigned char*)strdup("true");
+    }
+    else{
+        self->value_any = (unsigned char*)strdup("false");
 
+    }
 
 }
