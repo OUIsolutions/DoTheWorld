@@ -6,7 +6,7 @@ DtwResource *new_DtwResource(const char *path){
 
     self->path = strdup(path);
     self->name = strdup(path);
-
+    self->sub_resources = newDtwResourceArray();
     self->allow_transaction = true;
     self->transaction = newDtwTransaction();
 #ifdef __linux__
@@ -17,15 +17,15 @@ DtwResource *new_DtwResource(const char *path){
 }   
 
 DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name){
-/*
-    DtwResourceArray  *sub_resource = (DtwResourceArray*)self->sub_resources;
-    for(int i = 0; i < sub_resource->size; i++){
-        DtwResource  *current_sub = sub_resource->resources[i];
+
+    DtwResourceArray  *sub_resource_array = (DtwResourceArray*)self->sub_resources;
+    for(int i = 0; i < sub_resource_array->size; i++){
+        DtwResource  *current_sub = sub_resource_array->resources[i];
         if(strcmp(current_sub->name,name)==0){
             return current_sub;
         }
     }
-*/
+
     DtwResource *new_element = (DtwResource*) malloc(sizeof (DtwResource));
     *new_element =(DtwResource){0};
     new_element->allow_transaction = self->allow_transaction;
@@ -41,20 +41,18 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name){
     new_element->locker = self->locker;
 #endif
     private_DtwResource_lock_if_auto_lock(new_element);
-
-
- //   DtwResourceArray  *new_sub_resource = newDtwResourceArray();
-  //  new_element->sub_resources = new_sub_resource;
-
-
-  //  DtwResourceArray_append(sub_resource,new_element);
+    new_element->sub_resources = newDtwResourceArray();
+    DtwResourceArray_append(sub_resource_array,new_element);
 
     return new_element;
 
 }
 
 
-void DtwResource_free(struct DtwResource *self){
+void DtwResource_free(DtwResource *self){
+
+
+
     if(!self->child){
         if(self->transaction){
             DtwTransaction_free(self->transaction);
@@ -64,6 +62,12 @@ void DtwResource_free(struct DtwResource *self){
         DtwLocker_free(self->locker);
 #endif
     }
+    DtwResourceArray  *sub_resources = (DtwResourceArray*)self->sub_resources;
+    for(int i = 0;i < sub_resources->size; i++){
+        DtwResource *current = sub_resources->resources[i];
+        DtwResource_free(current);
+    }
+
 
     if(self->mothers_path){
         free(self->mothers_path);
