@@ -64,6 +64,7 @@ long DtwResource_get_long(DtwResource *self);
 
 double DtwResource_get_double(DtwResource *self);
 
+bool DtwResource_get_bool(DtwResource *self);
 
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size);
 

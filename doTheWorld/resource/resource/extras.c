@@ -57,9 +57,44 @@ void DtwResource_commit(DtwResource *self){
 DtwStringArray *DtwResource_list(DtwResource *self){
     return dtw_list_all(self->path,DTW_NOT_CONCAT_PATH);
 }
+int DtwResource_type(DtwResource *self){
+    private_DtwResource_lock_if_auto_lock(self);
+
+
+    if(self->is_binary){
+        return DTW_COMPLEX_BINARY;
+    }
+    char *data_in_string = DtwResource_get_string(self);
+
+    if(
+            strcmp(data_in_string,"t") == 0 || strcmp(data_in_string,"true") == 0  ||
+                    strcmp(data_in_string,"f") == 0 || strcmp(data_in_string,"false") == 0
+
+    ){
+        return DTW_COMPLEX_BOOL_TYPE;
+    }
+
+
+    double data_double;
+    int result = sscanf(data_in_string,"%lf",&data_double);
+    if(result == 0){
+        return DTW_COMPLEX_STRING_TYPE;
+
+    }
+
+
+    for(int i = 0; i < self->value_size; i++){
+        char current = data_in_string[i];
+        if(current == '.'){
+            return  DTW_COMPLEX_DOUBLE_TYPE;
+        }
+    }
+    return  DTW_COMPLEX_LONG_TYPE;
+
+}
 
 const char * DtwResource_type_in_str(DtwResource *self){
-     return dtw_convert_entity(self->type);
+     return dtw_convert_entity(DtwResource_type(self));
 }
 
 void DtwResource_represent(DtwResource *self){
@@ -67,24 +102,22 @@ void DtwResource_represent(DtwResource *self){
     printf("name: %s\n",self->name);
     if(self->loaded){
         printf("type: %s\n",DtwResource_type_in_str(self));
-        if(self->type == DTW_COMPLEX_STRING_TYPE){
-            printf("value: %s\n",self->value_string);
+        int type = DtwResource_type(self);
+        if(type == DTW_COMPLEX_STRING_TYPE){
+            printf("value: %s\n", DtwResource_get_string(self));
         }
-        if(self->type == DTW_COMPLEX_LONG_TYPE){
-            printf("value: %ld\n",self->value_long);
-        }
-
-        if(self->type == DTW_COMPLEX_DOUBLE_TYPE){
-            printf("value: %lf\n",self->value_double);
+        if(type == DTW_COMPLEX_LONG_TYPE){
+            printf("value: %ld\n", DtwResource_get_long(self));
         }
 
-        if(self->type == DTW_COMPLEX_BOOL_TYPE){
-            printf("value: %s\n",self->value_bool ? "true": "false");
+        if(type == DTW_COMPLEX_DOUBLE_TYPE){
+            printf("value: %lf\n", DtwResource_get_double(self));
         }
 
-
-
-
+        if(type == DTW_COMPLEX_BOOL_TYPE){
+            printf("value: %s\n",DtwResource_get_bool(self) ?"true": "false");
+        }
+        
     }
 
 
