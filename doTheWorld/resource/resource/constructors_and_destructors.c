@@ -16,8 +16,8 @@ DtwResource *new_DtwResource(const char *path){
     return self;
 }   
 
-DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name,bool load_content){
-
+DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name){
+/*
     DtwResourceArray  *sub_resource = (DtwResourceArray*)self->sub_resources;
     for(int i = 0; i < sub_resource->size; i++){
         DtwResource  *current_sub = sub_resource->resources[i];
@@ -25,7 +25,7 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name,bool 
             return current_sub;
         }
     }
-
+*/
     DtwResource *new_element = (DtwResource*) malloc(sizeof (DtwResource));
     *new_element =(DtwResource){0};
     new_element->allow_transaction = self->allow_transaction;
@@ -42,25 +42,15 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name,bool 
 #endif
     private_DtwResource_lock_if_auto_lock(new_element);
 
-    if(load_content){
-        DtwResource_load(new_element);
-    }
 
-    DtwResourceArray  *new_sub_resource = newDtwResourceArray();
-    new_element->sub_resources = new_sub_resource;
+ //   DtwResourceArray  *new_sub_resource = newDtwResourceArray();
+  //  new_element->sub_resources = new_sub_resource;
 
 
-    DtwResourceArray_append(sub_resource,new_element);
+  //  DtwResourceArray_append(sub_resource,new_element);
 
     return new_element;
 
-}
-DtwResource * DtwResource_sub_resource_loading(DtwResource *self,const  char *name){
-    return DtwResource_sub_resource(self,name,DTW_LOAD_RESOURCE);
-}
-
-DtwResource * DtwResource_sub_resource_not_loading(DtwResource *self,const  char *name){
-    return DtwResource_sub_resource(self,name,DTW_NOT_LOAD_RESOURCE);
 }
 
 

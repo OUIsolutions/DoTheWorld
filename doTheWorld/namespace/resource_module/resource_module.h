@@ -2,9 +2,7 @@
 typedef struct DtwResourceModule{
 
     DtwResource *(*newResource)(const char *path);
-    struct DtwResource * (*sub_resource)(struct DtwResource *self,const  char *path,bool load_content);
-    DtwResource * (*sub_resource_loading)(DtwResource *self,const  char *name);
-    DtwResource * (*sub_resource_not_loading)(DtwResource *self,const  char *name);
+    struct DtwResource * (*sub_resource)(struct DtwResource *self,const  char *path);
 
     void (*load)(DtwResource *self);
     void (*unload)(DtwResource *self);
@@ -22,6 +20,8 @@ typedef struct DtwResourceModule{
     long (*get_long)(struct DtwResource *self);
 
     double (*get_double)(struct DtwResource *self);
+
+    bool (*get_bool)(struct DtwResource *self);
 
     void (*set_binary)(DtwResource *self, unsigned char *element, long size);
 
