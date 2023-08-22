@@ -31,5 +31,6 @@ void DtwResourceArray_free(DtwResourceArray *self){
     for(int i = 0; i < self->size; i++){
         DtwResource_free(self->resources[i]);
     }
+    free(self->resources);
     free(self);
 }

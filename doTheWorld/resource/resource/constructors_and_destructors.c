@@ -55,9 +55,9 @@ void DtwResource_free(DtwResource *self){
             DtwTransaction_free(self->transaction);
         }
 
-#ifdef  __linux__
-        DtwLocker_free(self->locker);
-#endif
+    #ifdef  __linux__
+            DtwLocker_free(self->locker);
+    #endif
     }
 
     DtwResourceArray_free((DtwResourceArray*)self->sub_resources);
