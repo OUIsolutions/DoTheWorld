@@ -81,10 +81,6 @@ void DtwResource_free(struct DtwResource *self){
     if(self->value_any){
         free(self->value_any);
     }
-
-    if(self->value_string ){
-        free(self->value_string);
-    }
     free(self->path);
     free(self->name);
     free(self);

@@ -18,8 +18,8 @@ typedef struct DtwResource{
         char *path;
         bool child;
 
-
     bool loaded;
+    bool is_binary;
     unsigned char *value_any;
     long value_size;
    
@@ -46,6 +46,8 @@ DtwResource * DtwResource_sub_resource_not_loading(DtwResource *self,const  char
 void DtwResource_unload(DtwResource *self);
 
 void DtwResource_load(DtwResource *self);
+
+void DtwResource_load_if_not_loaded(DtwResource *self);
 
 void DtwResource_lock(DtwResource *self);
 

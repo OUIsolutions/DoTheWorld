@@ -8,7 +8,7 @@ void DtwResource_unload(DtwResource *self){
         free(self->value_any);
     }
     self->is_binary = false;
-    self->value_size = 0;    
+    self->value_size = 0;
 }
 
 void DtwResource_load(DtwResource *self){
