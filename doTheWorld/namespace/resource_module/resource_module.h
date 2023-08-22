@@ -13,6 +13,16 @@ typedef struct DtwResourceModule{
 
     void (*destroy)(DtwResource *self);
 
+    unsigned char *(*get_any)(struct DtwResource *self, long *size, bool *is_binary);
+
+    unsigned char *(*get_binary)(struct DtwResource *self, long *size);
+
+    char *(*get_string)(struct DtwResource *self);
+
+    long (*get_long)(struct DtwResource *self);
+
+    double (*get_double)(struct DtwResource *self);
+
     void (*set_binary)(DtwResource *self, unsigned char *element, long size);
 
     void (*set_string)(DtwResource *self,const  char *element);

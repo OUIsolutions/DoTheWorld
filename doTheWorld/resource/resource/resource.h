@@ -53,6 +53,16 @@ void private_DtwResource_lock_if_auto_lock(DtwResource *self);
 
 void DtwResource_rename(DtwResource *self, char *new_name);
 
+//getters
+unsigned char *DtwResource_get_binary(DtwResource *self, long *size);
+
+char *DtwResource_get_string(DtwResource *self);
+
+long DtwResource_get_long(DtwResource *self);
+
+double DtwResource_get_double(DtwResource *self);
+
+
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size);
 
 void DtwResource_set_string(DtwResource *self,const  char *element);
@@ -67,6 +77,9 @@ void DtwResource_destroy(DtwResource *self);
 
 
 DtwStringArray *DtwResource_list(DtwResource *self);
+
+int DtwResource_type(DtwResource *self);
+
 
 const char * DtwResource_type_in_str(DtwResource *self);
 
