@@ -15,15 +15,21 @@ void DtwResourceArray_append(DtwResourceArray *self, DtwResource *element){
     self->size+=1;
 }
 
-void DtwResourceArray_pop(DtwResourceArray *self, long position){
-    DtwResource_free(self->resources[position]);
-    for(long i = position; i < self->size -1; i++){
-        self->resources[i] = self->resources[i+1];
+
+DtwResource* DtwResourceArray_get_by_name(DtwResourceArray *self, const char *name){
+    for(int i = 0; i < self->size; i++){
+        DtwResource *current = self->resources[i];
+        if(strcmp(current->name,name) ==0){
+            return current;
+        }
     }
+    return NULL;
 }
 
-void DtwResourceArray_free(DtwResourceArray *self, DtwResource *element){
+
+void DtwResourceArray_free(DtwResourceArray *self){
     for(int i = 0; i < self->size; i++){
         DtwResource_free(self->resources[i]);
     }
+    free(self);
 }

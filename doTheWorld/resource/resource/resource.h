@@ -38,9 +38,6 @@ DtwResource *new_DtwResource(const char *path);
 
 DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name);
 
-DtwResource * DtwResource_sub_resource_loading(DtwResource *self,const  char *name);
-
-DtwResource * DtwResource_sub_resource_not_loading(DtwResource *self,const  char *name);
 
 
 void DtwResource_unload(DtwResource *self);

@@ -11,8 +11,8 @@ DtwResourceArray * newDtwResourceArray();
 
 void DtwResourceArray_append(DtwResourceArray *self, DtwResource *element);
 
-void DtwResourceArray_pop(DtwResourceArray *self, long position);
 
+DtwResource * DtwResourceArray_get_by_name(DtwResourceArray *self, const char *name);
 
-void DtwResourceArray_free(DtwResourceArray *self, DtwResource *element);
+void DtwResourceArray_free(DtwResourceArray *self);
 

@@ -18,12 +18,9 @@ DtwResource *new_DtwResource(const char *path){
 
 DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name){
 
-    DtwResourceArray  *sub_resource_array = (DtwResourceArray*)self->sub_resources;
-    for(int i = 0; i < sub_resource_array->size; i++){
-        DtwResource  *current_sub = sub_resource_array->resources[i];
-        if(strcmp(current_sub->name,name)==0){
-            return current_sub;
-        }
+    DtwResource * Already_Exist = DtwResourceArray_get_by_name((DtwResourceArray*)self->sub_resources,name);
+    if(Already_Exist){
+        return Already_Exist;
     }
 
     DtwResource *new_element = (DtwResource*) malloc(sizeof (DtwResource));
@@ -42,7 +39,7 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name){
 #endif
     private_DtwResource_lock_if_auto_lock(new_element);
     new_element->sub_resources = newDtwResourceArray();
-    DtwResourceArray_append(sub_resource_array,new_element);
+    DtwResourceArray_append((DtwResourceArray*)self->sub_resources,new_element);
 
     return new_element;
 
@@ -62,11 +59,8 @@ void DtwResource_free(DtwResource *self){
         DtwLocker_free(self->locker);
 #endif
     }
-    DtwResourceArray  *sub_resources = (DtwResourceArray*)self->sub_resources;
-    for(int i = 0;i < sub_resources->size; i++){
-        DtwResource *current = sub_resources->resources[i];
-        DtwResource_free(current);
-    }
+
+    DtwResourceArray_free((DtwResourceArray*)self->sub_resources);
 
 
     if(self->mothers_path){
