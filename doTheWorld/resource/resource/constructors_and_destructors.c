@@ -17,7 +17,13 @@ DtwResource *new_DtwResource(const char *path){
     return self;
 }   
 
-DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name){
+DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ...){
+    char name[2000] ={0};
+    va_list args;
+    va_start(args, format);
+    vsprintf(name, format, args);
+    va_end(args);
+
 
     DtwResource * Already_Exist = DtwResourceArray_get_by_name((DtwResourceArray*)self->sub_resources,name);
     if(Already_Exist){

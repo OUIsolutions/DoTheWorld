@@ -2,7 +2,7 @@
 typedef struct DtwResourceModule{
 
     DtwResource *(*newResource)(const char *path);
-    struct DtwResource * (*sub_resource)(struct DtwResource *self,const  char *path);
+    struct DtwResource * (*sub_resource)(struct DtwResource *self,const  char *format,...);
 
     void (*load)(DtwResource *self);
 

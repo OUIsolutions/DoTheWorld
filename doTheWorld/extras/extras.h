@@ -14,3 +14,8 @@ struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *path
 void private_dtw_remove_double_bars(struct DtwStringArray*path);
 
 int private_dtw_string_cmp(const void *a, const void *b);
+
+
+
+
+

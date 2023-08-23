@@ -8,6 +8,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <time.h>
+#include <stdarg.h>
 
 #include <errno.h>
 #include <sys/file.h>

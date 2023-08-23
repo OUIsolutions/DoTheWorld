@@ -32,7 +32,7 @@ typedef struct DtwResource{
 
 DtwResource *new_DtwResource(const char *path);
 
-DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name);
+DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ...);
 
 
 
