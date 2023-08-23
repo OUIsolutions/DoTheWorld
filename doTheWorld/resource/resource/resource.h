@@ -8,12 +8,13 @@ typedef struct DtwResource{
 
     DtwTransaction  *transaction;
     #ifdef  __linux__
-        DtwLocker  *locker;
+        DtwLocker *locker;
     #endif
-        char *mothers_path;
-        char *name;
-        char *path;
-        bool child;
+
+    char *mothers_path;
+    char *name;
+    char *path;
+    bool child;
 
     bool loaded;
     bool is_binary;
@@ -23,8 +24,6 @@ typedef struct DtwResource{
     //cache implementation
     bool cache_sub_resources;
     void *sub_resources;
-
-
 
 }DtwResource;
 
