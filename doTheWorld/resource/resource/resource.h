@@ -24,7 +24,7 @@ typedef struct DtwResource{
     long value_size;
    
     //cache implementation
-
+    bool cache_sub_resources;
     void *sub_resources;
 
 

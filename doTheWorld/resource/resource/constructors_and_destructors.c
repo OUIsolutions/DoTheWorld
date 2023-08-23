@@ -8,6 +8,7 @@ DtwResource *new_DtwResource(const char *path){
     self->name = strdup(path);
     self->sub_resources = newDtwResourceArray();
     self->allow_transaction = true;
+    self->cache_sub_resources = true;
     self->transaction = newDtwTransaction();
 #ifdef __linux__
     self->locker = newDtwLocker();
@@ -38,8 +39,12 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *name){
     new_element->locker = self->locker;
 #endif
     private_DtwResource_lock_if_auto_lock(new_element);
+    new_element->cache_sub_resources = self->cache_sub_resources;
     new_element->sub_resources = newDtwResourceArray();
-    DtwResourceArray_append((DtwResourceArray*)self->sub_resources,new_element);
+
+    if(self->cache_sub_resources){
+        DtwResourceArray_append((DtwResourceArray*)self->sub_resources,new_element);
+    }
 
     return new_element;
 
