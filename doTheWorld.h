@@ -4553,6 +4553,7 @@ typedef struct DtwResource{
 
     bool loaded;
     bool is_binary;
+
     unsigned char *value_any;
     long value_size;
    
@@ -4595,6 +4596,9 @@ void DtwResource_rename(DtwResource *self, char *new_name);
 //getters
 unsigned char *DtwResource_get_binary(DtwResource *self, long *size);
 
+
+
+
 char *DtwResource_get_string(DtwResource *self);
 
 long DtwResource_get_long(DtwResource *self);
@@ -4604,6 +4608,7 @@ double DtwResource_get_double(DtwResource *self);
 bool DtwResource_get_bool(DtwResource *self);
 
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size);
+
 
 void DtwResource_set_string(DtwResource *self,const  char *element);
 
@@ -8233,6 +8238,8 @@ void DtwResource_unload(DtwResource *self){
     if(self->value_any){
         free(self->value_any);
     }
+
+    self->value_any = NULL;
     self->is_binary = false;
     self->value_size = 0;
 }
@@ -8271,6 +8278,8 @@ char *DtwResource_get_string(DtwResource *self){
     bool is_binary;
     return (char *)DtwResource_get_any(self,&size,&is_binary);
 }
+
+
 
 long DtwResource_get_long(DtwResource *self){
     char *element = DtwResource_get_string(self);
@@ -8329,6 +8338,8 @@ void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size
 
 }
 
+
+
 void DtwResource_set_string(DtwResource *self,const  char *element){
     if(self->allow_transaction){
         DtwTransaction_write_string(self->transaction,self->path,element);
@@ -8341,6 +8352,7 @@ void DtwResource_set_string(DtwResource *self,const  char *element){
     self->loaded = true;
 
     self->value_size = (long)strlen(element);
+
     self->value_any = (unsigned char*)strdup(element);
 
 
@@ -8518,6 +8530,8 @@ void DtwResource_free(DtwResource *self){
     if(self->value_any){
         free(self->value_any);
     }
+
+
     free(self->path);
     free(self->name);
     free(self);
@@ -9473,7 +9487,6 @@ DtwResourceModule newDtwResourceModule(){
     self.get_double = DtwResource_get_double;
     self.get_long = DtwResource_get_long;
     self.get_bool = DtwResource_get_bool;
-
 
     self.set_binary = DtwResource_set_binary;
     self.set_string = DtwResource_set_string;
