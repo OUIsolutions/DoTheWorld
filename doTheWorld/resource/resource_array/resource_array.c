@@ -10,7 +10,7 @@ DtwResourceArray * newDtwResourceArray(){
 
 
 void DtwResourceArray_append(DtwResourceArray *self, DtwResource *element){
-    self->resources = realloc(self->resources,(self->size +1) * sizeof (DtwResource**));
+    self->resources = (DtwResource**)realloc(self->resources,(self->size +1) * sizeof (DtwResource**));
     self->resources[self->size] = element;
     self->size+=1;
 }
