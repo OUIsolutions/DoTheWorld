@@ -18,6 +18,7 @@ typedef struct DtwResource{
 
     bool loaded;
     bool is_binary;
+    cJSON *value_json;
     unsigned char *value_any;
     long value_size;
    
@@ -60,6 +61,10 @@ void DtwResource_rename(DtwResource *self, char *new_name);
 //getters
 unsigned char *DtwResource_get_binary(DtwResource *self, long *size);
 
+
+
+cJSON *DtwResource_get_json(DtwResource *self);
+
 char *DtwResource_get_string(DtwResource *self);
 
 long DtwResource_get_long(DtwResource *self);
@@ -69,6 +74,8 @@ double DtwResource_get_double(DtwResource *self);
 bool DtwResource_get_bool(DtwResource *self);
 
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size);
+
+void DtwResource_set_json(DtwResource *self,cJSON *element);
 
 void DtwResource_set_string(DtwResource *self,const  char *element);
 

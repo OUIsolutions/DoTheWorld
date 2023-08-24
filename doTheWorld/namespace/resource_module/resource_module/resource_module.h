@@ -12,6 +12,7 @@ typedef struct DtwResourceModule{
     void (*lock)(DtwResource *self);
 
     void (*destroy)(DtwResource *self);
+    cJSON *(*get_json)(DtwResource *self);
 
     unsigned char *(*get_any)(struct DtwResource *self, long *size, bool *is_binary);
 
@@ -26,6 +27,7 @@ typedef struct DtwResourceModule{
     bool (*get_bool)(struct DtwResource *self);
 
     void (*set_binary)(DtwResource *self, unsigned char *element, long size);
+    void (*set_json)(DtwResource *self,cJSON *element);
 
     void (*set_string)(DtwResource *self,const  char *element);
 

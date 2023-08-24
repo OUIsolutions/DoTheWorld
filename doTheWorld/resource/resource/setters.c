@@ -18,7 +18,34 @@ void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size
     memcpy(self->value_any,element,size);
 
 }
+void DtwResource_set_json(DtwResource *self,cJSON *element){
+    char *result = cJSON_Print(element);
+    if(self->allow_transaction){
+        DtwTransaction_write_string(self->transaction,self->path,result);
+    }
+    else{
+        dtw_write_string_file_content(self->path,result);
+    }
 
+    if(self->loaded == true){
+        if(self->value_any){
+            free(self->value_any);
+        }
+        self->value_size = strlen(result);
+        self->is_binary = false;
+        self->value_any =(unsigned  char *)result;
+
+        if(self->value_json != element &&self->value_json){
+            printf("objetos diferents");
+            cJSON_Delete(self->value_json);
+            self->value_json = cJSON_Duplicate(element,true);
+        }
+    }
+
+
+
+
+}
 void DtwResource_set_string(DtwResource *self,const  char *element){
     if(self->allow_transaction){
         DtwTransaction_write_string(self->transaction,self->path,element);
@@ -31,6 +58,7 @@ void DtwResource_set_string(DtwResource *self,const  char *element){
     self->loaded = true;
 
     self->value_size = (long)strlen(element);
+
     self->value_any = (unsigned char*)strdup(element);
 
 

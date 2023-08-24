@@ -10,13 +10,14 @@ DtwResourceModule newDtwResourceModule(){
     self.destroy = DtwResource_destroy;
 
     self.get_any = DtwResource_get_any;
+    self.get_json = DtwResource_get_json;
     self.get_string = DtwResource_get_string;
     self.get_binary = DtwResource_get_binary;
     self.get_double = DtwResource_get_double;
     self.get_long = DtwResource_get_long;
     self.get_bool = DtwResource_get_bool;
 
-
+    self.set_json = DtwResource_set_json;
     self.set_binary = DtwResource_set_binary;
     self.set_string = DtwResource_set_string;
     self.set_long = DtwResource_set_long;
