@@ -117,9 +117,6 @@ void DtwResource_free(DtwResource *self){
         free(self->value_any);
     }
 
-    if(self->value_json){
-        cJSON_Delete(self->value_json);
-    }
 
     free(self->path);
     free(self->name);

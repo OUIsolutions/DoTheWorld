@@ -8,11 +8,7 @@ void DtwResource_unload(DtwResource *self){
         free(self->value_any);
     }
 
-    if(self->value_json){
-        cJSON_Delete(self->value_json);
-    }
     self->value_any = NULL;
-    self->value_json = NULL;
     self->is_binary = false;
     self->value_size = 0;
 }
