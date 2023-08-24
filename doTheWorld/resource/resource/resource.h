@@ -34,6 +34,17 @@ DtwResource *new_DtwResource(const char *path);
 
 DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ...);
 
+DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,const  char *format, ...);
+
+DtwResource * DtwResource_append(DtwResource *self);
+
+DtwResource * DtwResource_now(DtwResource *self);
+
+DtwResource * DtwResource_now_in_unix(DtwResource *self);
+
+DtwResource * DtwResource_random(DtwResource *self);
+
+
 
 
 void DtwResource_unload(DtwResource *self);

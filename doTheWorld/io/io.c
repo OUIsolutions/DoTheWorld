@@ -258,6 +258,18 @@ int dtw_complex_entity_type(const char *path){
     return DTW_COMPLEX_LONG_TYPE;
 }
 
+long dtw_get_total_itens_of_dir(const char *path){
+    DIR *dir = opendir(path);
+    if (dir == NULL) {
+       return -1;
+    }
+    int i = 0;
+    while ((readdir(dir)) != NULL){
+        i++;
+    }
+    closedir(dir);
+    return i -2;
+}
 
 const char *dtw_convert_entity(int entity_type){
     if(entity_type == DTW_FILE_TYPE){

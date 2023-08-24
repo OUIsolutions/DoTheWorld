@@ -26,6 +26,7 @@ bool dtw_remove_any(const char* path);
 
 char *dtw_get_current_dir();
 
+long dtw_get_total_itens_of_dir(const char *path);
 
 unsigned char *dtw_load_any_content(const char * path,long *size,bool *is_binary);
 

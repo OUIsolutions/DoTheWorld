@@ -18,7 +18,11 @@ DtwResource *new_DtwResource(const char *path){
 }   
 
 DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ...){
+
+
+
     char name[2000] ={0};
+
     va_list args;
     va_start(args, format);
     vsprintf(name, format, args);
@@ -29,6 +33,9 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
     if(Already_Exist){
         return Already_Exist;
     }
+
+
+
 
     DtwResource *new_element = (DtwResource*) malloc(sizeof (DtwResource));
     *new_element =(DtwResource){0};
@@ -42,7 +49,7 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
     new_element->locked = self->locked;
     new_element->auto_lock = self->auto_lock;
 #ifdef __linux__
-    new_element->locker = self->locker;
+    new_element->locker = newDtwLocker();
 #endif
     private_DtwResource_lock_if_auto_lock(new_element);
     new_element->cache_sub_resources = self->cache_sub_resources;
@@ -55,7 +62,39 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
     return new_element;
 
 }
+DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,const  char *format, ...){
 
+
+    char name[2000] ={0};
+
+    va_list args;
+    va_start(args, format);
+    vsprintf(name, format, args);
+    va_end(args);
+
+    char *path = dtw_concat_path(self->path,name);
+    if(dtw_entity_type(path) != DTW_NOT_FOUND){
+        free(path);
+        return NULL;
+    }
+
+    bool old_cache_value = self->cache_sub_resources;
+    self->cache_sub_resources = false;
+    DtwResource *e = DtwResource_sub_resource(self,"%s",name);
+    self->cache_sub_resources = old_cache_value;
+
+    int type = DtwResource_type(e);
+    if(type == DTW_NOT_FOUND){
+            if(self->cache_sub_resources){
+                DtwResourceArray_append((DtwResourceArray*)self->sub_resources);
+            }
+            return e;
+    }
+
+    DtwResource_free(e);
+    return  NULL;
+
+}
 
 void DtwResource_free(DtwResource *self){
 
@@ -66,11 +105,12 @@ void DtwResource_free(DtwResource *self){
             DtwTransaction_free(self->transaction);
         }
 
-    #ifdef  __linux__
-            DtwLocker_free(self->locker);
-    #endif
+
     }
 
+#ifdef  __linux__
+    DtwLocker_free(self->locker);
+#endif
     DtwResourceArray_free((DtwResourceArray*)self->sub_resources);
 
 
