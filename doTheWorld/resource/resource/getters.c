@@ -18,15 +18,6 @@ char *DtwResource_get_string(DtwResource *self){
     return (char *)DtwResource_get_any(self,&size,&is_binary);
 }
 
-cJSON *DtwResource_get_json(DtwResource *self){
-    if(self->value_json){
-        return self->value_json;
-    }
-    char *result = DtwResource_get_string(self);
-    self->value_json = cJSON_Parse(result);
-    return self->value_json;
-
-}
 
 
 long DtwResource_get_long(DtwResource *self){
