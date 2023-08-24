@@ -30,31 +30,24 @@ DtwResourceArray * DtwResource_sub_resources(DtwResource *self){
     DtwStringArray  *names  = DtwResource_list_names(self);
     DtwStringArray_sort(names);
     DtwResourceArray *target_array = (DtwResourceArray*)self->sub_resources;
+
     if(self->cache_sub_resources == false){
         target_array = newDtwResourceArray();
     }
 
     for(int i = 0; i < names->size; i++){
         char *current_name = names->strings[i];
-       DtwResource *current_resource;
-        
+
         if(self->cache_sub_resources){
-            current_resource = DtwResourceArray_get_by_name(target_array,current_name);
-            
-            if(!current_resource){
-                //i dont need to append here , because its implicted append when call sub_resource
-                current_resource = DtwResource_sub_resource(self,"%s", current_name);
-            }
-        
+            DtwResource_sub_resource(self,"%s", current_name);
         }
         
         else{
-            current_resource = DtwResource_sub_resource(self,"%s",current_name);
+            DtwResource *current_resource = DtwResource_sub_resource(self,"%s",current_name);
             DtwResourceArray_append(target_array,current_resource);
         }
-        
-        
     }
+
     DtwStringArray_free(names);
     return target_array;
 
