@@ -576,7 +576,7 @@ int main (){
     DtwResource *values = dtw.resource.newResource("tests/target");
 
     printf("elements:---------------------------------\n");
-    DtwStringArray  *sub_elements = dtw.resource.list(values);
+    DtwStringArray  *sub_elements = dtw.resource.list_names(values);
     dtw.string_array.represent(sub_elements);
     dtw.string_array.free(sub_elements);
     printf("types:--------------------------------------\n");

@@ -54,7 +54,7 @@ void DtwResource_commit(DtwResource *self){
 }
 
 
-DtwStringArray *DtwResource_list(DtwResource *self){
+DtwStringArray *DtwResource_list_names(DtwResource *self){
     return dtw_list_all(self->path,DTW_NOT_CONCAT_PATH);
 }
 int DtwResource_type(DtwResource *self){

@@ -36,7 +36,7 @@ typedef struct DtwResourceModule{
 
 
 
-    DtwStringArray *(*list)(DtwResource *self);
+    DtwStringArray *(*list_names)(DtwResource *self);
 
 
     const char *(*type_in_str)(DtwResource *self);
@@ -47,6 +47,9 @@ typedef struct DtwResourceModule{
     void (*rename)(DtwResource *self, char *new_name);
 
     void (*free)(DtwResource *self);
+    DtwResourceArray * (*sub_resources)(DtwResource *self);
+    DtwResourceArrayModule array;
+
 
 }DtwResourceModule;
 

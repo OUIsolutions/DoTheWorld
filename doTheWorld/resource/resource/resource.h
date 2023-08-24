@@ -72,7 +72,7 @@ void DtwResource_set_bool( DtwResource *self,bool element);
 void DtwResource_destroy(DtwResource *self);
 
 
-DtwStringArray *DtwResource_list(DtwResource *self);
+DtwStringArray *DtwResource_list_names(DtwResource *self);
 
 int DtwResource_type(DtwResource *self);
 

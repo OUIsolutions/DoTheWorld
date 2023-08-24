@@ -22,11 +22,15 @@ DtwResourceModule newDtwResourceModule(){
     self.set_bool = DtwResource_set_bool;
 
 
-    self.list = DtwResource_list;
+    self.list_names = DtwResource_list_names;
     self.type_in_str = DtwResource_type_in_str;
     self.commit =DtwResource_commit;
     self.represent = DtwResource_represent;
     self.rename = DtwResource_rename;
     self.free  = DtwResource_free;
+
+    self.sub_resources = DtwResource_sub_resources;
+    self.array = newDtwResourceArrayModule();
+    
     return self;
 }

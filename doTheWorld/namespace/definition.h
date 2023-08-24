@@ -8,5 +8,5 @@
 #endif
 
 #include "transaction_module/definition.h"
-#include "resource_module/resource_module.c"
+#include "resource_module/definition.h"
 #include "namespace/namespace.c"
