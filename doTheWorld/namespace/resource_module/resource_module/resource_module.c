@@ -10,6 +10,7 @@ DtwResourceModule newDtwResourceModule(){
     self.destroy = DtwResource_destroy;
 
     self.get_any = DtwResource_get_any;
+    self.get_string = DtwResource_get_string;
     self.get_binary = DtwResource_get_binary;
     self.get_double = DtwResource_get_double;
     self.get_long = DtwResource_get_long;
@@ -24,6 +25,7 @@ DtwResourceModule newDtwResourceModule(){
 
 
     self.list_names = DtwResource_list_names;
+    self.type = DtwResource_type;
     self.type_in_str = DtwResource_type_in_str;
     self.commit =DtwResource_commit;
     self.represent = DtwResource_represent;
