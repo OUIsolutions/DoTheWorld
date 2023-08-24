@@ -55,7 +55,7 @@ DtwResourceArray * DtwResource_sub_resources(DtwResource *self){
         
         
     }
-    
+    DtwStringArray_free(names);
     return target_array;
 
 
