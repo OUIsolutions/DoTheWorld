@@ -31,6 +31,6 @@ DtwResourceModule newDtwResourceModule(){
 
     self.sub_resources = DtwResource_sub_resources;
     self.array = newDtwResourceArrayModule();
-    
+
     return self;
 }
