@@ -62,7 +62,7 @@ void DtwResource_set_double(DtwResource *self,double element){
     DtwResource_unload(self);
     self->loaded = true;
     char result[20] ={0};
-    sprintf(result,"%ld",element);
+    sprintf(result,"%lf",element);
     self->value_any = (unsigned char *)strdup(result);
 
 

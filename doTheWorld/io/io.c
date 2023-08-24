@@ -8,11 +8,11 @@
 
 
 void dtw_create_dir_recursively(const char *path){
-    bool check = dtw_create_dir(path);
+    dtw_create_dir(path);
   
     long size_path = strlen(path);
     for(int i=0;i <  size_path;i++){
-        if(path[i] == '\\'  || path[i] == '/'   && i != size_path - 1){
+        if((path[i] == '\\'  || path[i] == '/' )  &&( i != size_path - 1)){
             
             char * current_path = (char*)malloc(i + 1);
             current_path[i] = '\0';
