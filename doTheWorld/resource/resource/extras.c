@@ -59,8 +59,13 @@ DtwStringArray *DtwResource_list_names(DtwResource *self){
 }
 int DtwResource_type(DtwResource *self){
     private_DtwResource_lock_if_auto_lock(self);
+    int primitive_type = dtw_entity_type(self->path);
 
+    if(primitive_type != DTW_FILE_TYPE){
+        return  primitive_type;
+    }
 
+    DtwResource_load_if_not_loaded(self);
     if(self->is_binary){
         return DTW_COMPLEX_BINARY;
     }

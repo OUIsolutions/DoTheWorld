@@ -72,26 +72,22 @@ DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,cons
     vsprintf(name, format, args);
     va_end(args);
 
-    char *path = dtw_concat_path(self->path,name);
-    if(dtw_entity_type(path) != DTW_NOT_FOUND){
-        free(path);
-        return NULL;
-    }
-
     bool old_cache_value = self->cache_sub_resources;
     self->cache_sub_resources = false;
-    DtwResource *e = DtwResource_sub_resource(self,"%s",name);
+    DtwResource *possible_emptiy = DtwResource_sub_resource(self,"%s",name);
     self->cache_sub_resources = old_cache_value;
 
-    int type = DtwResource_type(e);
+    int type = DtwResource_type(possible_emptiy);
+
     if(type == DTW_NOT_FOUND){
+
             if(self->cache_sub_resources){
-                DtwResourceArray_append((DtwResourceArray*)self->sub_resources);
+                DtwResourceArray_append((DtwResourceArray*)self->sub_resources,possible_emptiy);
             }
-            return e;
+            return possible_emptiy;
     }
 
-    DtwResource_free(e);
+    DtwResource_free(possible_emptiy);
     return  NULL;
 
 }
