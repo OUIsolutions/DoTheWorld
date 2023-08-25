@@ -51,7 +51,7 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
     new_element->locked = self->locked;
     new_element->auto_lock = self->auto_lock;
 #ifdef __linux__
-    new_element->locker = newDtwLocker();
+    new_element->locker = self->locker;
 #endif
     private_DtwResource_lock_if_auto_lock(new_element);
     new_element->cache_sub_resources = self->cache_sub_resources;
@@ -111,11 +111,13 @@ void DtwResource_free(DtwResource *self){
             DtwTransaction_free(self->transaction);
         }
         DtwRandonizer_free(self->randonizer);
+
+    #ifdef  __linux__
+            DtwLocker_free(self->locker);
+    #endif
     }
 
-#ifdef  __linux__
-    DtwLocker_free(self->locker);
-#endif
+
     DtwResourceArray_free((DtwResourceArray*)self->sub_resources);
 
 
