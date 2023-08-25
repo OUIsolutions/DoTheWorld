@@ -2,9 +2,13 @@
 typedef struct DtwResourceModule{
 
     DtwResource *(*newResource)(const char *path);
+
     struct DtwResource * (*sub_resource)(struct DtwResource *self,const  char *format,...);
+
     DtwResource * (*sub_resource_ensuring_not_exist)(DtwResource *self,const  char *format, ...);
+
     DtwResource * (*sub_resource_next)(DtwResource *self, const char *end_path);
+
     void (*load)(DtwResource *self);
 
     void (*unload)(DtwResource *self);
@@ -39,6 +43,7 @@ typedef struct DtwResourceModule{
 
     DtwStringArray *(*list_names)(DtwResource *self);
 
+    long (*size)(DtwResource *self);
     int (*type)(DtwResource *self);
 
     const char *(*type_in_str)(DtwResource *self);

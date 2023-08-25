@@ -84,6 +84,7 @@ void DtwResource_set_bool( DtwResource *self,bool element);
 
 void DtwResource_destroy(DtwResource *self);
 
+long DtwResource_size(DtwResource *self);
 
 DtwStringArray *DtwResource_list_names(DtwResource *self);
 

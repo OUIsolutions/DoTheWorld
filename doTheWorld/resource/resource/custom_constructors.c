@@ -16,14 +16,12 @@ DtwResource * DtwResource_sub_resource_next(DtwResource *self, const char *end_p
         }
         DtwResource *new_element = DtwResource_sub_resource_ensuring_not_exist(self,"%s",path);
         if(new_element){
-            printf("pegou no %ld\n",size);
             return new_element;
         }
         size = size+1;
     }
-
-
 }
+
 /*
 DtwResource * DtwResource_now(DtwResource *self);
 

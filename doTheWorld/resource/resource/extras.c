@@ -53,10 +53,16 @@ void DtwResource_commit(DtwResource *self){
     DtwTransaction_commit(self->transaction,NULL);
 }
 
+long DtwResource_size(DtwResource *self){
+    return dtw_get_total_itens_of_dir(self->path);
+}
+
+
 
 DtwStringArray *DtwResource_list_names(DtwResource *self){
     return dtw_list_all(self->path,DTW_NOT_CONCAT_PATH);
 }
+
 int DtwResource_type(DtwResource *self){
     private_DtwResource_lock_if_auto_lock(self);
     DtwResource_load_if_not_loaded(self);

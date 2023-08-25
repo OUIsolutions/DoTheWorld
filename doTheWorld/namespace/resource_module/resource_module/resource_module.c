@@ -25,6 +25,7 @@ DtwResourceModule newDtwResourceModule(){
 
 
     self.list_names = DtwResource_list_names;
+    self.size = DtwResource_size;
     self.type = DtwResource_type;
     self.type_in_str = DtwResource_type_in_str;
     self.commit =DtwResource_commit;
