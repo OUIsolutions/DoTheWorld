@@ -1,6 +1,6 @@
 
 
-DtwResource * DtwResource_append(DtwResource *self,char *end_path){
+DtwResource * DtwResource_append(DtwResource *self,const char *end_path){
     long  size = dtw_get_total_itens_of_dir(self->path);
     if(size < 0){
         size = 0;

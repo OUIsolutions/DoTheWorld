@@ -36,7 +36,7 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
 
 DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,const  char *format, ...);
 
-DtwResource * DtwResource_append(DtwResource *self,char *end_path);
+DtwResource * DtwResource_append(DtwResource *self,const char *end_path);
 
 DtwResource * DtwResource_now(DtwResource *self);
 
