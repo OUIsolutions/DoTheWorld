@@ -7,6 +7,8 @@ typedef struct DtwResource{
     bool locked;
 
     DtwTransaction  *transaction;
+    DtwRandonizer  *randonizer;
+
     #ifdef  __linux__
         DtwLocker *locker;
     #endif
