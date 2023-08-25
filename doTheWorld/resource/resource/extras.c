@@ -28,11 +28,7 @@ void DtwResource_lock(DtwResource *self){
         DtwLocker_lock(self->locker,self->path);
     #endif
 }
-void private_DtwResource_lock_if_auto_lock(DtwResource *self){
-    if(self->auto_lock){
-        DtwResource_lock(self);
-    }
-}
+
 
 
 void DtwResource_destroy(DtwResource *self){
@@ -64,7 +60,6 @@ DtwStringArray *DtwResource_list_names(DtwResource *self){
 }
 
 int DtwResource_type(DtwResource *self){
-    private_DtwResource_lock_if_auto_lock(self);
     DtwResource_load_if_not_loaded(self);
 
     if(!self->value_any){

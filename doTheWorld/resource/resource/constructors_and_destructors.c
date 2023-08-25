@@ -44,13 +44,11 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
     new_element->name = strdup(name);
 
     new_element->locked = self->locked;
-    new_element->auto_lock = self->auto_lock;
 
 #ifdef __linux__
     new_element->locker = self->locker;
 #endif
 
-    private_DtwResource_lock_if_auto_lock(new_element);
     new_element->cache_sub_resources = self->cache_sub_resources;
     new_element->sub_resources = newDtwResourceArray();
 

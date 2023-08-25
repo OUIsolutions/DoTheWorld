@@ -3,7 +3,6 @@
 typedef struct DtwResource{
 
     bool allow_transaction;
-    bool auto_lock;
     bool locked;
 
     DtwTransaction  *transaction;
@@ -55,7 +54,6 @@ void DtwResource_load_if_not_loaded(DtwResource *self);
 
 void DtwResource_lock(DtwResource *self);
 
-void private_DtwResource_lock_if_auto_lock(DtwResource *self);
 
 void DtwResource_rename(DtwResource *self, char *new_name);
 

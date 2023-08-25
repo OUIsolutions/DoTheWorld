@@ -1,6 +1,5 @@
 
 unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binary){
-    private_DtwResource_lock_if_auto_lock(self);
     DtwResource_load_if_not_loaded(self);
     *size = self->value_size;
     *is_binary = self->is_binary;
