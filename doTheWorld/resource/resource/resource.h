@@ -40,7 +40,7 @@ DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,cons
 
 DtwResource * DtwResource_sub_resource_next(DtwResource *self, const char *end_path);
 
-DtwResource * DtwResource_now(DtwResource *self);
+DtwResource * DtwResource_sub_resource_now(DtwResource *self, const char *end_path);
 
 DtwResource * DtwResource_now_in_unix(DtwResource *self);
 
