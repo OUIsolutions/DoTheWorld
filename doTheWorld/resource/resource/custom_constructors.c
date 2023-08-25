@@ -57,7 +57,7 @@ DtwResource * DtwResource_sub_resource_now(DtwResource *self, const char *end_pa
 }
 
 
-DtwResource * DtwResource_now_in_unix(DtwResource *self,const char *end_path){
+DtwResource * DtwResource_sub_resource_now_in_unix(DtwResource *self, const char *end_path){
     bool empty_already_exist = false;
 
     while(true){
@@ -86,7 +86,7 @@ DtwResource * DtwResource_now_in_unix(DtwResource *self,const char *end_path){
     }
 }
 
-DtwResource * DtwResource_random(DtwResource *self,const char *end_path){
+DtwResource * DtwResource_sub_resource_random(DtwResource *self, const char *end_path){
 
     while(true){
 
