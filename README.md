@@ -480,7 +480,7 @@ void append_text(char *file,char *text){
 int main(int argc, char *argv[]){
     DtwNamespace dtw = newDtwNamespace();
 
-    char *file = "tests/target/append.txt";
+    char *file = "tests/target/sub_resource_next.txt";
     int total_process  = 20;
 
     dtw.remove_any(file);

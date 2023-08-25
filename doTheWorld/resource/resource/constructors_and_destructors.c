@@ -72,9 +72,18 @@ DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,cons
     vsprintf(name, format, args);
     va_end(args);
 
+    DtwResource *possible_emptiy  = DtwResourceArray_get_by_name(
+            (DtwResourceArray*)self->sub_resources,
+            name
+    );
+    if(possible_emptiy){
+        return NULL;
+    }
+
     bool old_cache_value = self->cache_sub_resources;
     self->cache_sub_resources = false;
-    DtwResource *possible_emptiy = DtwResource_sub_resource(self,"%s",name);
+    possible_emptiy = DtwResource_sub_resource(self,"%s",name);
+    possible_emptiy->cache_sub_resources = old_cache_value;
     self->cache_sub_resources = old_cache_value;
 
     int type = DtwResource_type(possible_emptiy);
@@ -84,6 +93,7 @@ DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,cons
             if(self->cache_sub_resources){
                 DtwResourceArray_append((DtwResourceArray*)self->sub_resources,possible_emptiy);
             }
+
             return possible_emptiy;
     }
 

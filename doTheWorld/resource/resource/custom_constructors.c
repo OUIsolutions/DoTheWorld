@@ -1,6 +1,6 @@
 
 
-DtwResource * DtwResource_append(DtwResource *self,const char *end_path){
+DtwResource * DtwResource_sub_resource_next(DtwResource *self, const char *end_path){
     long  size = dtw_get_total_itens_of_dir(self->path);
     if(size < 0){
         size = 0;
@@ -14,18 +14,20 @@ DtwResource * DtwResource_append(DtwResource *self,const char *end_path){
         else{
             sprintf(path,"%ld",size);
         }
-        DtwResource *new_element = DtwResource_sub_resource_ensuring_not_exist(self,path);
+        DtwResource *new_element = DtwResource_sub_resource_ensuring_not_exist(self,"%s",path);
         if(new_element){
+            printf("pegou no %ld\n",size);
             return new_element;
         }
-        size++;
+        size = size+1;
     }
 
 
 }
-
+/*
 DtwResource * DtwResource_now(DtwResource *self);
 
 DtwResource * DtwResource_now_in_unix(DtwResource *self);
 
 DtwResource * DtwResource_random(DtwResource *self);
+*/
