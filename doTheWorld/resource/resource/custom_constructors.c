@@ -36,7 +36,7 @@ DtwResource * DtwResource_sub_resource_now(DtwResource *self, const char *end_pa
 
         if(empty_already_exist){
             char *token = DtwRandonizer_generate_token(self->randonizer,10);
-            sprintf(path,"%s-%s",time,token);
+            sprintf(path,"%s--%s",time,token);
             free(token);
         }
         else{
