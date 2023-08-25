@@ -56,8 +56,53 @@ DtwResource * DtwResource_sub_resource_now(DtwResource *self, const char *end_pa
     }
 }
 
-/*
-DtwResource * DtwResource_now_in_unix(DtwResource *self);
 
-DtwResource * DtwResource_random(DtwResource *self);
-*/
+DtwResource * DtwResource_now_in_unix(DtwResource *self,const char *end_path){
+    bool empty_already_exist = false;
+
+    while(true){
+
+        long now = time(NULL);
+        char path[1000] ={0};
+
+        if(empty_already_exist){
+            char *token = DtwRandonizer_generate_token(self->randonizer,10);
+            sprintf(path,"%ld--%s",now,token);
+            free(token);
+        }
+        else{
+            sprintf(path,"%ld",now);
+        }
+
+        if(end_path){
+            strcat(path,end_path);
+        }
+
+        DtwResource *new_element = DtwResource_sub_resource_ensuring_not_exist(self,"%s",path);
+        if(new_element){
+            return new_element;
+        }
+        empty_already_exist = true;
+    }
+}
+
+DtwResource * DtwResource_random(DtwResource *self,const char *end_path){
+
+    while(true){
+
+        char path[1000] ={0};
+        char *token = DtwRandonizer_generate_token(self->randonizer,10);
+        sprintf(path,"%s",token);
+        free(token);
+
+        if(end_path){
+            strcat(path,end_path);
+        }
+
+        DtwResource *new_element = DtwResource_sub_resource_ensuring_not_exist(self,"%s",path);
+        if(new_element){
+            return new_element;
+        }
+
+    }
+}
