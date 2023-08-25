@@ -91,7 +91,7 @@ DtwResource * DtwResource_random(DtwResource *self,const char *end_path){
     while(true){
 
         char path[1000] ={0};
-        char *token = DtwRandonizer_generate_token(self->randonizer,10);
+        char *token = DtwRandonizer_generate_token(self->randonizer,15);
         sprintf(path,"%s",token);
         free(token);
 
