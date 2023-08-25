@@ -18,7 +18,6 @@ typedef struct DtwResource{
 
     bool loaded;
     bool is_binary;
-
     unsigned char *value_any;
     long value_size;
    
