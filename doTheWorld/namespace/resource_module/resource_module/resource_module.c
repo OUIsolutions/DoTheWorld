@@ -6,6 +6,7 @@ DtwResourceModule newDtwResourceModule(){
     self.unload = DtwResource_unload;
     self.sub_resource = DtwResource_sub_resource;
     self.sub_resource_ensuring_not_exist = DtwResource_sub_resource_ensuring_not_exist;
+    self.append = DtwResource_append;
     self.lock =DtwResource_lock;
     self.destroy = DtwResource_destroy;
 
