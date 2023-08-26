@@ -9,9 +9,8 @@ typedef struct DtwResource{
     DtwTransaction  *transaction;
     DtwRandonizer  *randonizer;
 
-    #ifdef  __linux__
-        DtwLocker *locker;
-    #endif
+    DtwLocker *locker;
+
 
     char *mothers_path;
     char *name;

@@ -3,9 +3,8 @@
 #include "string_array_module/string_array_module.h"
 #include "tree_module/declaration.h"
 
-#ifdef __linux__
-    #include "locker/locker.h"
-#endif
+#include "locker/locker.h"
+
 
 #include "transaction_module/declaration.h"
 #include "resource_module/declaration.h"

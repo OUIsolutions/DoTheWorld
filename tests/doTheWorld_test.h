@@ -4376,7 +4376,7 @@ struct  DtwTree * newDtwTree();
 
 
 
-#ifdef __linux__
+
 
 
 
@@ -4404,7 +4404,7 @@ void DtwLocker_represemt(struct DtwLocker *self);
 void DtwLocker_free(struct DtwLocker *self);
 
 
-#endif
+
 
 
 enum {
@@ -4550,9 +4550,8 @@ typedef struct DtwResource{
     DtwTransaction  *transaction;
     DtwRandonizer  *randonizer;
 
-    #ifdef  __linux__
-        DtwLocker *locker;
-    #endif
+    DtwLocker *locker;
+
 
     char *mothers_path;
     char *name;
@@ -4896,7 +4895,6 @@ typedef struct DtwTreeModule{
 DtwTreeModule newDtwTreeModule();
 
 
-#ifdef __linux__
 
 
 
@@ -4910,7 +4908,7 @@ typedef struct DtwLockerModule{
 }DtwLockerModule;
 
 DtwLockerModule newDtwLockerModule();
-#endif
+
 
 
 
@@ -5792,16 +5790,40 @@ int dtw_complex_entity_type(const char *path){
 }
 
 long dtw_get_total_itens_of_dir(const char *path){
-    DIR *dir = opendir(path);
-    if (dir == NULL) {
-       return -1;
-    }
-    int i = 0;
-    while ((readdir(dir)) != NULL){
-        i++;
-    }
-    closedir(dir);
-    return i -2;
+
+    #ifdef __linux__
+
+        DIR *dir = opendir(path);
+        if (dir == NULL) {
+        return -1;
+        }
+        int i = 0;
+        while ((readdir(dir)) != NULL){
+            i++;
+        }
+        closedir(dir);
+        return i -2;
+    #endif
+    #ifdef _WIN32
+
+        WIN32_FIND_DATA findFileData;
+            HANDLE hFind = FindFirstFile(path, &findFileData);
+
+            if (hFind == INVALID_HANDLE_VALUE) {
+                return -1;
+            }
+
+            int i = 0;
+            do {
+                if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+                    i++;
+                }
+            } while (FindNextFile(hFind, &findFileData) != 0);
+
+            FindClose(hFind);
+            return i;
+    
+    #endif 
 }
 
 const char *dtw_convert_entity(int entity_type){
@@ -8003,7 +8025,7 @@ void DtwTree_hardware_commit_tree(struct DtwTree *self){
 }
 
 
-#ifdef __linux__
+
 
 
 
@@ -8146,7 +8168,7 @@ void DtwLocker_free(struct DtwLocker *self){
     DtwStringArray_free(self->locked_elements);
     free(self);
 }
-#endif
+
 
 
 
@@ -8175,9 +8197,9 @@ void DtwResource_lock(DtwResource *self){
     if(self->locked){
         return;
     }
-    #ifdef __linux__
-        DtwLocker_lock(self->locker,self->path);
-    #endif
+    
+    DtwLocker_lock(self->locker,self->path);
+    
     self->locked = true;
 }
 
@@ -8185,9 +8207,9 @@ void DtwResource_unlock(DtwResource *self){
     if(self->locked == false){
         return;
     }
-    #ifdef __linux__
-        DtwLocker_unlock(self->locker,self->path);
-    #endif
+    
+    DtwLocker_unlock(self->locker,self->path);
+    
     self->locked = false;
 }
 
@@ -8488,9 +8510,8 @@ DtwResource *new_DtwResource(const char *path){
     self->cache_sub_resources = true;
     self->transaction = newDtwTransaction();
     self->randonizer = newDtwRandonizer();
-#ifdef __linux__
     self->locker = newDtwLocker();
-#endif
+
     DtwResource_load(self);
     return self;
 }   
@@ -8523,9 +8544,7 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
 
     new_element->locked = self->locked;
 
-#ifdef __linux__
     new_element->locker = self->locker;
-#endif
 
     new_element->cache_sub_resources = self->cache_sub_resources;
     new_element->sub_resources = newDtwResourceArray();
@@ -8589,9 +8608,9 @@ void DtwResource_free(DtwResource *self){
         }
         DtwRandonizer_free(self->randonizer);
 
-    #ifdef  __linux__
-            DtwLocker_free(self->locker);
-    #endif
+
+     DtwLocker_free(self->locker);
+    
 
     }
 
@@ -9553,7 +9572,6 @@ DtwTreeModule newDtwTreeModule(){
 }
 
 
-#ifdef __linux__
 
 
 DtwLockerModule newDtwLockerModule(){
@@ -9565,7 +9583,7 @@ DtwLockerModule newDtwLockerModule(){
     self.free = DtwLocker_free;
     return self;
 }
-#endif
+
 
 
 

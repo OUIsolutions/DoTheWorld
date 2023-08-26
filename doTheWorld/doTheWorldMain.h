@@ -53,9 +53,9 @@ SOFTWARE.
 #include "multidimension_listage/multidimension_listage.h"
 #include "path/path.h"
 #include "tree/declarations.h"
-#ifdef __linux__
+
 #include "locker/locker.h"
-#endif
+
 #include "transaction/declaration.h"
 #include "resource/declaration.h"
 #include "namespace/declaration.h"
@@ -73,9 +73,9 @@ SOFTWARE.
 #include "path/path.c"
 #include "string_array/string_array.c"
 #include "tree/definitions.h"
-#ifdef __linux__
+
 #include "locker/locker.c"
-#endif
+
 #include "resource/definition.h"
 #include "transaction/definition.h"
 #include "namespace/definition.h"

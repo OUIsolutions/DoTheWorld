@@ -12,9 +12,8 @@ DtwResource *new_DtwResource(const char *path){
     self->cache_sub_resources = true;
     self->transaction = newDtwTransaction();
     self->randonizer = newDtwRandonizer();
-#ifdef __linux__
     self->locker = newDtwLocker();
-#endif
+
     DtwResource_load(self);
     return self;
 }   
@@ -47,9 +46,7 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
 
     new_element->locked = self->locked;
 
-#ifdef __linux__
     new_element->locker = self->locker;
-#endif
 
     new_element->cache_sub_resources = self->cache_sub_resources;
     new_element->sub_resources = newDtwResourceArray();
@@ -113,9 +110,9 @@ void DtwResource_free(DtwResource *self){
         }
         DtwRandonizer_free(self->randonizer);
 
-    #ifdef  __linux__
-            DtwLocker_free(self->locker);
-    #endif
+
+     DtwLocker_free(self->locker);
+    
 
     }
 

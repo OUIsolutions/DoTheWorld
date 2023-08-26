@@ -5,7 +5,7 @@ exemple
 a/
 # object files
 *.o
-
+side_effect_copy
 *.ko
 out_folder
 *.obj

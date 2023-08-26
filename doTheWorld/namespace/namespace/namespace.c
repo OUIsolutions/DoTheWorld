@@ -47,9 +47,8 @@ DtwNamespace newDtwNamespace(){
 
     self.string_array = newDtwStringArrayModule();
     self.path = newDtwPathModule();
-    #ifdef __linux__
-        self.locker = newDtwLockerModule();
-    #endif
+    self.locker = newDtwLockerModule();
+    
 
     self.tree = newDtwTreeModule();
     self.transaction = newDtwTransactionModule();
