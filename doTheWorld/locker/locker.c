@@ -105,10 +105,28 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 }
 
 void DtwLocker_unlock(struct DtwLocker *self, const  char *element){
+    char  *formated_path = (char*)calloc(sizeof(char),strlen(element)+10);
+    sprintf(formated_path,"%s.lock",element);
+    int position = DtwStringArray_find_position(self->locked_elements,formated_path);
+
+    if(position != -1){
+        dtw_remove_any(formated_path);
+        DtwStringArray_pop(self->locked_elements,position);
+    }
+
+    free(formated_path);
 
 }
 
-
+void DtwLocker_represemt(struct DtwLocker *self){
+    printf("locked:\n");
+    for(int i = 0 ; i < self->locked_elements->size;i++){
+        char *element = self->locked_elements->strings[i];
+        char *unformated = dtw_replace_string(element,".lock","");
+        printf("\t%s\n",unformated);
+        free(unformated);
+    }
+}
 
 void DtwLocker_free(struct DtwLocker *self){
 
