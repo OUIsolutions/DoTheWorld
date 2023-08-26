@@ -21,7 +21,7 @@ void DtwResource_rename(DtwResource *self, char *new_name){
 
 
 void DtwResource_lock(DtwResource *self){
-    if(self->locked || self->allow_locker == false){
+    if(self->locked){
         return;
     }
     #ifdef __linux__
