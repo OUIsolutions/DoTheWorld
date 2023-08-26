@@ -17,6 +17,7 @@ DtwLocker *newDtwLocker();
 
 void DtwLocker_lock(struct DtwLocker *self, const  char *element);
 
+void DtwLocker_unlock(struct DtwLocker *self, const  char *element);
 
 void DtwLocker_free(struct DtwLocker *self);
 

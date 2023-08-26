@@ -3,6 +3,7 @@
 typedef struct DtwResource{
 
     bool allow_transaction;
+    bool allow_locker;
     bool locked;
 
     DtwTransaction  *transaction;

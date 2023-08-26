@@ -35,6 +35,13 @@ void DtwStringArray_append(struct DtwStringArray *self, const  char *string){
     self->size+=1;
 }
 
+void DtwStringArray_pop(struct DtwStringArray *self, int position){
+    free(self->strings[position]);
+    for(int i = position; i < self->size -1; i++){
+        self->strings[i] = self->strings[i+1];
+    }
+    self->size-=1;
+}
 
 void DtwStringArray_merge(struct DtwStringArray *self, struct DtwStringArray *other){
     for(int i = 0; i < other->size; i++){

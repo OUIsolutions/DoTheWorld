@@ -11,6 +11,9 @@ typedef struct DtwStringArray {
 // End the structure with a semicolon
 int  DtwStringArray_find_position(struct DtwStringArray *self, const char *string);
 void DtwStringArray_append(struct DtwStringArray *self, const char *string);
+
+void DtwStringArray_pop(struct DtwStringArray *self, int position);
+
 void DtwStringArray_merge(struct DtwStringArray *self, struct DtwStringArray *other);
 void DtwStringArray_represent(struct DtwStringArray *self);
 void DtwStringArray_free(struct DtwStringArray *self);
