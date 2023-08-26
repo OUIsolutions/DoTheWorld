@@ -27,6 +27,7 @@ void DtwResource_lock(DtwResource *self){
     #ifdef __linux__
         DtwLocker_lock(self->locker,self->path);
     #endif
+    self->locked = true;
 }
 
 void DtwResource_unlock(DtwResource *self){
@@ -36,6 +37,7 @@ void DtwResource_unlock(DtwResource *self){
     #ifdef __linux__
         DtwLocker_unlock(self->locker,self->path);
     #endif
+    self->locked = false;
 }
 
 
