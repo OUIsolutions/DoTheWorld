@@ -55,6 +55,8 @@ void DtwResource_load_if_not_loaded(DtwResource *self);
 
 void DtwResource_lock(DtwResource *self);
 
+void DtwResource_unlock(DtwResource *self);
+
 
 void DtwResource_rename(DtwResource *self, char *new_name);
 

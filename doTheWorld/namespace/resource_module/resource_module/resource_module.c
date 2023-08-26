@@ -11,6 +11,7 @@ DtwResourceModule newDtwResourceModule(){
     self.sub_resource_now_in_unix = DtwResource_sub_resource_now_in_unix;
     self.sub_resource_random = DtwResource_sub_resource_random;
     self.lock =DtwResource_lock;
+    self.unlock = DtwResource_unlock;
     self.destroy = DtwResource_destroy;
 
     self.get_any = DtwResource_get_any;

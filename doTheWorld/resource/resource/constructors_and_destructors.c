@@ -83,7 +83,6 @@ DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,cons
     possible_emptiy->cache_sub_resources = old_cache_value;
     self->cache_sub_resources = old_cache_value;
     DtwResource_lock(possible_emptiy);
-
     int type = DtwResource_type(possible_emptiy);
 
     if(type == DTW_NOT_FOUND){

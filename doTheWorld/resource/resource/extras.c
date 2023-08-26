@@ -29,6 +29,14 @@ void DtwResource_lock(DtwResource *self){
     #endif
 }
 
+void DtwResource_unlock(DtwResource *self){
+    if(self->locked == false){
+        return;
+    }
+    #ifdef __linux__
+        DtwLocker_unlock(self->locker,self->path);
+    #endif
+}
 
 
 void DtwResource_destroy(DtwResource *self){
