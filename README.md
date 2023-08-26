@@ -560,6 +560,9 @@ int main (){
 
 
 ~~~
+
+
+### Getting values of Resource
 <!--codeof:exemples/resources/getters.c-->
 ~~~c
 #include "doTheWorld.h"
