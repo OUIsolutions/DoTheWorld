@@ -79,6 +79,9 @@ class FolderTestPressetExecution(FolderTestPressetCreation):
 
             if isdir(path):
 
+                if e.startswith('S_'):
+                    continue
+                
                 if e.startswith('T_'):
                     try:
                         self._execute_test_presset(path)
@@ -90,6 +93,8 @@ class FolderTestPressetExecution(FolderTestPressetCreation):
 
                 self._execute_loop_test(path)
                 continue
+
+            
 
             if path.endswith('.c') or path.endswith('.cpp'):
                 self._rebase_side_effect_folder()

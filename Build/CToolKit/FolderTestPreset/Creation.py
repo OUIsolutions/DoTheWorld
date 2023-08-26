@@ -65,7 +65,7 @@ class FolderTestPressetCreation(FolderTestPresetExtras):
             if not isdir(path):
                 continue
 
-            if e.startswith('T_') :
+            if e.startswith('T_') or e.startswith('S_'):
                 try:
                     self._execute_test_presset_creating_output(path,reconstruct)
                 except Exception as ex:
