@@ -8,7 +8,7 @@ DtwResource *new_DtwResource(const char *path){
     self->name = strdup(path);
     self->sub_resources = newDtwResourceArray();
     self->allow_transaction = true;
-    self->use_locke_on_unique_values = true;
+    self->use_locker_on_unique_values = true;
     self->cache_sub_resources = true;
     self->transaction = newDtwTransaction();
     self->randonizer = newDtwRandonizer();
@@ -37,7 +37,7 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
     DtwResource *new_element = (DtwResource*) malloc(sizeof (DtwResource));
     *new_element =(DtwResource){0};
     new_element->allow_transaction = self->allow_transaction;
-    new_element->use_locke_on_unique_values = self->use_locke_on_unique_values;
+    new_element->use_locker_on_unique_values = self->use_locker_on_unique_values;
     new_element->transaction = self->transaction;
     new_element->randonizer = self->randonizer;
     new_element->child = true;
@@ -84,7 +84,7 @@ DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,cons
     possible_emptiy = DtwResource_sub_resource(self,"%s",name);
     possible_emptiy->cache_sub_resources = old_cache_value;
     self->cache_sub_resources = old_cache_value;
-    if(self->use_locke_on_unique_values){
+    if(self->use_locker_on_unique_values){
         DtwResource_lock(possible_emptiy);
     }
 

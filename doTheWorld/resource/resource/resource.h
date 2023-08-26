@@ -3,7 +3,7 @@
 typedef struct DtwResource{
 
     bool allow_transaction;
-    bool use_locke_on_unique_values;
+    bool use_locker_on_unique_values;
     bool locked;
 
     DtwTransaction  *transaction;
