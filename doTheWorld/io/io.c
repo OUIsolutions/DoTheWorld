@@ -259,16 +259,40 @@ int dtw_complex_entity_type(const char *path){
 }
 
 long dtw_get_total_itens_of_dir(const char *path){
-    DIR *dir = opendir(path);
-    if (dir == NULL) {
-       return -1;
-    }
-    int i = 0;
-    while ((readdir(dir)) != NULL){
-        i++;
-    }
-    closedir(dir);
-    return i -2;
+
+    #ifdef __linux__
+
+        DIR *dir = opendir(path);
+        if (dir == NULL) {
+        return -1;
+        }
+        int i = 0;
+        while ((readdir(dir)) != NULL){
+            i++;
+        }
+        closedir(dir);
+        return i -2;
+    #endif
+    #ifdef _WIN32
+
+        WIN32_FIND_DATA findFileData;
+            HANDLE hFind = FindFirstFile(path, &findFileData);
+
+            if (hFind == INVALID_HANDLE_VALUE) {
+                return -1;
+            }
+
+            int i = 0;
+            do {
+                if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+                    i++;
+                }
+            } while (FindNextFile(hFind, &findFileData) != 0);
+
+            FindClose(hFind);
+            return i;
+    
+    #endif 
 }
 
 const char *dtw_convert_entity(int entity_type){
