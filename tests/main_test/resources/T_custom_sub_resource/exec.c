@@ -4,8 +4,8 @@
 int main (){
     DtwNamespace dtw = newDtwNamespace();
     DtwResource *test = dtw.resource.newResource("tests/target");
-    test->allow_locker = true;
-    
+    test->use_locke_on_unique_values = true;
+
     DtwResource *next = dtw.resource.sub_resource_next(test,".txt");
     dtw.resource.set_string(next,"next-value");
 
