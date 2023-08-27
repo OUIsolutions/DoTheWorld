@@ -37,7 +37,7 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
     while(true){
         time_t  now = time(NULL);
         unsigned long long startTime = private_dtw_getMicroseconds();
-        long last_modification = dtw_get_file_last_motification_in_unix(formated_path);
+        long last_modification = dtw_get_entity_last_motification_in_unix(formated_path);
         bool not_exist = (dtw_entity_type(formated_path) == DTW_NOT_FOUND);
 
 

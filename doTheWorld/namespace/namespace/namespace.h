@@ -64,7 +64,7 @@ typedef struct DtwNamespace{
 
     char * (*generate_sha_from_any)(void *anything , long size);
 
-    long int (*get_file_last_motification_in_unix)(const char *path);
+    long int (*get_entity_last_motification_in_unix)(const char *path);
 
     char * (*convert_unix_time_to_string)(long int unix_time);
 

@@ -25,7 +25,7 @@ struct DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps *props){
         if(formated_props.hadware_data == DTW_INCLUDE && self->content_exist_in_memory){
 
             self->metadata_loaded = true;
-            self->last_modification_time = dtw_get_file_last_motification_in_unix(path);
+            self->last_modification_time = dtw_get_entity_last_motification_in_unix(path);
             free(self->hawdware_content_sha);
             self->hawdware_content_sha = dtw_generate_sha_from_string((const char*)self->content);
         }

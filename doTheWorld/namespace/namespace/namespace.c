@@ -37,7 +37,7 @@ DtwNamespace newDtwNamespace(){
     self.generate_sha_from_file = dtw_generate_sha_from_file;
     self.generate_sha_from_string = dtw_generate_sha_from_string;
     self.generate_sha_from_any = dtw_generate_sha_from_any;
-    self.get_file_last_motification_in_unix = dtw_get_file_last_motification_in_unix;
+    self.get_entity_last_motification_in_unix = dtw_get_entity_last_motification_in_unix;
     self.get_file_last_motification_in_string = dtw_get_file_last_motification_in_string;
     self.concat_path = dtw_concat_path;
     //bas64
