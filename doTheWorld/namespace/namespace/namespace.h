@@ -68,7 +68,7 @@ typedef struct DtwNamespace{
 
     char * (*convert_unix_time_to_string)(long int unix_time);
 
-    char * (*get_file_last_motification_in_string)(const char *path);
+    char * (*get_entity_last_motification_in_string)(const char *path);
 
     char *(*concat_path)(const char *path1, const char *path2);
 

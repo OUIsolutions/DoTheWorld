@@ -37,7 +37,7 @@ char * dtw_convert_unix_time_to_string(long int unix_time){
     return time_string;
 }
 
-char * dtw_get_file_last_motification_in_string(const char *path){
+char * dtw_get_entity_last_motification_in_string(const char *path){
     long int last_modification_in_unix = dtw_get_entity_last_motification_in_unix(path);
     char *last_modification_in_string = dtw_convert_unix_time_to_string(last_modification_in_unix);
     return last_modification_in_string;
