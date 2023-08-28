@@ -58,6 +58,7 @@ SOFTWARE.
 
 #include "transaction/declaration.h"
 #include "resource/declaration.h"
+#include "hash/hash.h"
 #include "namespace/declaration.h"
 
 #include "base64/base64.c"
@@ -78,6 +79,7 @@ SOFTWARE.
 
 #include "resource/definition.h"
 #include "transaction/definition.h"
+#include "hash/hash.c"
 #include "namespace/definition.h"
 
 #endif //DO_THE_WORLD_H

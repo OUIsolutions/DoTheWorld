@@ -65,6 +65,14 @@ void DtwStringArray_sort(struct DtwStringArray *self) {
 
 }
 
+struct DtwStringArray * DtwStringArray_clone(DtwStringArray *self){
+    DtwStringArray  *clone = newDtwStringArray();
+    for(int i = 0; i< self->size; i++){
+        DtwStringArray_append(clone,self->strings[i]);
+    }
+    return clone;
+}
+
 
 void DtwStringArray_free(struct DtwStringArray *self){
     for(int i = 0; i < self->size; i++){
