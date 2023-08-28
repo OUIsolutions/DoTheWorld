@@ -32,7 +32,7 @@ void  DtwHash_digest_file(DtwHash * self, const char *path){
     free(content);
 }
 
-void  DtwHash_digest_last_modification(DtwHash * self, const char *path){
+void  DtwHash_digest_entity_last_modification(DtwHash * self, const char *path){
     long last = dtw_get_entity_last_motification_in_unix(path);
     char formated[20] ={0};
     sprintf(formated,"%ld",last);
@@ -53,11 +53,22 @@ void  DtwHash_digest_string_array_last_modifications(DtwHash *self,DtwStringArra
     DtwStringArray  *clone = DtwStringArray_clone(element);
     DtwStringArray_sort(clone);
     for(int i =0 ; i < clone->size; i++){
-        DtwHash_digest_last_modification(self,clone->strings[i]);
+        DtwHash_digest_entity_last_modification(self, clone->strings[i]);
     }
     DtwStringArray_free(clone);
 
 }
+
+void DtwHash_digest_string_array_last_modifications_adding_name(DtwHash *self,DtwStringArray *element){
+    DtwStringArray  *clone = DtwStringArray_clone(element);
+    DtwStringArray_sort(clone);
+    for(int i =0 ; i < clone->size; i++){
+        DtwHash_digest_string(self,clone->strings[i]);
+        DtwHash_digest_entity_last_modification(self, clone->strings[i]);
+    }
+    DtwStringArray_free(clone);
+}
+
 
 void DtwHash_digest_string_array_content(DtwHash *self,DtwStringArray *element){
     DtwStringArray  *clone = DtwStringArray_clone(element);
@@ -68,6 +79,36 @@ void DtwHash_digest_string_array_content(DtwHash *self,DtwStringArray *element){
     DtwStringArray_free(clone);
 }
 
+void DtwHash_digest_string_array_content_adding_name(DtwHash *self,DtwStringArray *element){
+    DtwStringArray  *clone = DtwStringArray_clone(element);
+    DtwStringArray_sort(clone);
+    for(int i =0; i < clone->size; i++){
+        DtwHash_digest_string(self,clone->strings[i]);
+        DtwHash_digest_file(self,clone->strings[i]);
+    }
+    DtwStringArray_free(clone);
+}
+
+
+void DtwHash_digest_folder_by_last_modification(DtwHash *self,const char *path){
+    DtwStringArray  *folder = DtwTree_list_all_recursively(path,DTW_NOT_CONCAT_PATH);
+    DtwStringArray_sort(folder);
+    for(int i =0; i < folder->size; i++){
+        DtwHash_digest_string(self,folder->strings[i]);
+        DtwHash_digest_entity_last_modification(self, folder->strings[i]);
+    }
+    DtwStringArray_free(folder);
+}
+
+void DtwHash_digest_folder_by_content(DtwHash *self,const char *path){
+    DtwStringArray  *folder = DtwTree_list_all_recursively(path,DTW_NOT_CONCAT_PATH);
+    DtwStringArray_sort(folder);
+    for(int i =0; i < folder->size; i++){
+        DtwHash_digest_string(self,folder->strings[i]);
+        DtwHash_digest_file(self,folder->strings[i]);
+    }
+    DtwStringArray_free(folder);
+}
 
 void  DtwHash_free(DtwHash *self){
     free(self->hash);

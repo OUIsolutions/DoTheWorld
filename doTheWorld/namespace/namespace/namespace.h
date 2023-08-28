@@ -90,7 +90,7 @@ typedef struct DtwNamespace{
 
 
     DtwTreeModule tree;
-
+    DtwHashModule  hash;
     DtwTransactionModule transaction;
 
     DtwResourceModule resource;

@@ -51,6 +51,7 @@ DtwNamespace newDtwNamespace(){
     
 
     self.tree = newDtwTreeModule();
+    self.hash = newDtwHashModule();
     self.transaction = newDtwTransactionModule();
     self.resource = newDtwResourceModule();
     self.randonizer = newDtwRandonizerModule();
