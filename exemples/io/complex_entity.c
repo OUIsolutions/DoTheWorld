@@ -2,11 +2,15 @@
 
 
 
+
+
 int main (){
     DtwNamespace dtw = newDtwNamespace();
     const char *blob = dtw.convert_entity(
             dtw.complex_entity_type("tests/target/blob.png")
     );
+
+
 
     printf("blob.png: %s\n",blob);
 
