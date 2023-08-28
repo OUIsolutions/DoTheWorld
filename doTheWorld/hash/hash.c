@@ -26,6 +26,24 @@ void  DtwHash_digest_string(DtwHash * self, const char *content){
     DtwHash_digest_any(self,(unsigned char *)content, (long)strlen(content));
 }
 
+void DtwHash_digest_long(DtwHash * self,long content){
+    char formated[20] ={0};
+    sprintf(formated,"%ld",content);
+    DtwHash_digest_string(self,formated);
+}
+
+void DtwHash_digest_double(DtwHash * self,double content){
+    char formated[20] ={0};
+    sprintf(formated,"%lf",content);
+    DtwHash_digest_string(self,formated);
+}
+
+void DtwHash_digest_bool(DtwHash * self,bool content){
+    char formated[20] ={0};
+    sprintf(formated,"%d",(bool)content);
+    DtwHash_digest_string(self,formated);
+}
+
 void  DtwHash_digest_file(DtwHash * self, const char *path){
 
     long size;
@@ -36,8 +54,7 @@ void  DtwHash_digest_file(DtwHash * self, const char *path){
 
 void  DtwHash_digest_entity_last_modification(DtwHash * self, const char *path){
     long last = dtw_get_entity_last_motification_in_unix(path);
-    char formated[20] ={0};
-    sprintf(formated,"%ld",last);
+
     DtwHash_digest_string(self,formated);
 }
 

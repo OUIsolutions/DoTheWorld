@@ -5,6 +5,9 @@ DtwHashModule newDtwHashModule(){
     self.newHash =newDtwHash;
     self.digest_any = DtwHash_digest_any;
     self.digest_string = DtwHash_digest_string;
+    self.digest_long = DtwHash_digest_long;
+    self.digest_double = DtwHash_digest_double;
+    self.digest_bool = DtwHash_digest_bool;
     self.digest_file = DtwHash_digest_file;
     self.digest_entity_last_modification =DtwHash_digest_entity_last_modification;
     self.digest_string_array = DtwHash_digest_string_array;

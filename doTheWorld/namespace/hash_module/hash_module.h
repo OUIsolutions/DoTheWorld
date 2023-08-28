@@ -3,6 +3,9 @@ typedef struct DtwHashModule{
     DtwHash * (*newHash)();
     void  (*digest_any)(DtwHash *self,unsigned char *content,long size);
     void (*digest_string)(DtwHash * self, const char *content);
+    void (*digest_long)(DtwHash * self,long content);
+    void (*digest_double)(DtwHash * self,double content);
+    void (*digest_bool)(DtwHash * self,bool content);
     void  (*digest_file)(DtwHash * self, const char *path);
     void  (*digest_entity_last_modification)(DtwHash * self, const char *path);
     void (*digest_string_array)(DtwHash *self,DtwStringArray *element);
