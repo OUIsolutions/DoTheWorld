@@ -421,7 +421,7 @@ int main(int argc, char *argv[]){
 ~~~
 ### Unix
 
-<!--codeof:exemples/extras/get_file_last_modification_in_unix.c-->
+<!--codeof:exemples/extras/S_entity_last_modification_in_unix.c-->
 ~~~c
 
 #include "doTheWorld.h"
@@ -433,7 +433,7 @@ int main(int argc, char *argv[]){
     printf("Last modification: %d\n", last_modification_in_unix);
 }
 ~~~
-<!--codeof:exemples/extras/get_file_last_modification.c-->
+<!--codeof:exemples/extras/S_get_entity_last_modification.c-->
 ~~~c
 #include "doTheWorld.h"
 
@@ -1407,6 +1407,19 @@ int main(){
 }
 ~~~
 
+## Hash
+
+By using hash Object you can digest values,( its very usefull in dynamic programing)
+or to avoid recomputation in compilers or bundlers
+
+### Simple Hashing
+<!--codeof:exemples/hash/simple_digest.c-->
+
+### Fle Hasging
+<!--codeof:exemples/hash/file_hashing.c-->
+
+### File Hashing by Last Modification
+<!--codeof:exemples/hash/S_file_hashing_by_last_modification.c-->
 
 
 DoTheWorld includes all self dependecies in the single file, so you dont need to care about it, but if you will use one of these librarys, dont include it in your code to avoid circular imports
