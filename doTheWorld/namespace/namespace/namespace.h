@@ -12,7 +12,7 @@ typedef struct DtwNamespace{
     char *(*load_string_file_content)(const char * path);
 
     unsigned char *(*load_binary_content)(const char * path,long *size);
-
+    
     bool (*write_any_content)(const char *path,unsigned  char *content,long size);
 
     bool (*write_string_file_content)(const char *path,const char *content);

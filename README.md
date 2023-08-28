@@ -421,7 +421,7 @@ int main(int argc, char *argv[]){
 ~~~
 ### Unix
 
-<!--codeof:exemples/extras/S_entity_last_modification_in_unix.c-->
+<!--codeof:exemples/extras/S_get_entity_last_modification_in_unix.c-->
 ~~~c
 
 #include "doTheWorld.h"
@@ -577,6 +577,9 @@ int main (){
     dtw.string_array.represent(sub_elements);
     dtw.string_array.free(sub_elements);
     printf("types:--------------------------------------\n");
+
+
+
 
     int type  = dtw.resource.type(values);
 
@@ -1414,15 +1417,87 @@ or to avoid recomputation in compilers or bundlers
 
 ### Simple Hashing
 <!--codeof:exemples/hash/simple_digest.c-->
+~~~c
+#include "doTheWorld.h"
 
-### Fle Hasging
+
+
+
+
+int main (){
+    DtwNamespace dtw = newDtwNamespace();
+
+    DtwHash *my_hash = dtw.hash.newHash();
+
+    dtw.hash.digest_string(my_hash,"my string");
+    printf("value after digest string %s\n",my_hash->hash);
+
+    dtw.hash.digest_long(my_hash,10);
+    printf("value after long: %s\n",my_hash->hash);
+
+    dtw.hash.digest_double(my_hash,15.6);
+    printf("value after double: %s\n",my_hash->hash);
+
+    dtw.hash.digest_bool(my_hash,true);
+    printf("value after digest bool %s\n",my_hash->hash);
+
+    DtwStringArray *test = dtw.string_array.newStringArray();
+    dtw.string_array.append(test,"b");
+    dtw.string_array.append(test,"a");
+
+    dtw.hash.digest_string_array(my_hash,test);
+    printf("value after string array %s\n",my_hash->hash);
+    dtw.string_array.free(test);
+
+    dtw.hash.free(my_hash);
+}
+~~~
 <!--codeof:exemples/hash/file_hashing.c-->
+~~~c
+#include "doTheWorld.h"
 
-### File Hashing by Last Modification
+
+
+
+
+int main (){
+    DtwNamespace dtw = newDtwNamespace();
+
+    DtwHash *my_hash = dtw.hash.newHash();
+
+    dtw.hash.digest_file(my_hash,"tests/target/a.txt");
+
+    printf("after a file :%s\n",my_hash->hash);
+
+    dtw.hash.digest_folder_by_content(my_hash,"tests/target");
+    printf("after a folder %s\n",my_hash->hash);
+
+    dtw.hash.free(my_hash);
+}
+~~~
 <!--codeof:exemples/hash/S_file_hashing_by_last_modification.c-->
+~~~c
+#include "doTheWorld.h"
 
 
-DoTheWorld includes all self dependecies in the single file, so you dont need to care about it, but if you will use one of these librarys, dont include it in your code to avoid circular imports
+
+
+
+int main (){
+    DtwNamespace dtw = newDtwNamespace();
+
+    DtwHash *my_hash = dtw.hash.newHash();
+
+    dtw.hash.digest_entity_last_modification(my_hash,"tests/target/a.txt");
+
+    printf("after a file :%s\n",my_hash->hash);
+
+    dtw.hash.digest_folder_by_last_modification(my_hash,"tests/target");
+    printf("after a folder %s\n",my_hash->hash);
+    
+    dtw.hash.free(my_hash);
+}
+~~~
 
 ## CJson<br><br>
 **CJson**: from https://github.com/DaveGamble/cJSON <br>

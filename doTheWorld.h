@@ -3936,6 +3936,7 @@ void DtwStringArray_set_value(struct DtwStringArray *self, int index, const char
 
 struct DtwStringArray * newDtwStringArray();
 
+struct DtwStringArray * DtwStringArray_clone(DtwStringArray *self);
 
 
 
@@ -3972,9 +3973,9 @@ char * dtw_generate_sha_from_file(const char *path);
 char * dtw_generate_sha_from_string(const char *string);
 char * dtw_generate_sha_from_any(void *anything , long size);
 
-long int dtw_get_file_last_motification_in_unix(const char *path);
+long int dtw_get_entity_last_motification_in_unix(const char *path);
 char * dtw_convert_unix_time_to_string(long int unix_time);
-char * dtw_get_file_last_motification_in_string(const char *path);
+char * dtw_get_entity_last_motification_in_string(const char *path);
 const char * private_dtw_convert_action_to_string(short action);
 short private_dtw_convert_string_to_action(const char *action);
 void private_dtw_add_end_bar_to_dirs_string_array(struct DtwStringArray * dirs);
@@ -4669,6 +4670,49 @@ void DtwResourceArray_free(DtwResourceArray *self);
 
 
 
+typedef  struct DtwHash{
+    char *hash;
+}DtwHash;
+
+
+DtwHash * newDtwHash();
+
+void  DtwHash_digest_any(DtwHash *self,unsigned char *content,long size);
+
+void DtwHash_digest_string(DtwHash * self, const char *content);
+
+void DtwHash_digest_long(DtwHash * self,long content);
+
+void DtwHash_digest_double(DtwHash * self,double content);
+
+void DtwHash_digest_bool(DtwHash * self,bool content);
+
+void  DtwHash_digest_file(DtwHash * self, const char *path);
+
+void  DtwHash_digest_entity_last_modification(DtwHash * self, const char *path);
+
+
+void DtwHash_digest_string_array(DtwHash *self,DtwStringArray *element);
+
+void DtwHash_digest_string_array_last_modifications(DtwHash *self,DtwStringArray *element);
+
+void DtwHash_digest_string_array_last_modifications_adding_name(DtwHash *self,DtwStringArray *element);
+
+
+void DtwHash_digest_string_array_content(DtwHash *self,DtwStringArray *element);
+
+void DtwHash_digest_string_array_content_adding_name(DtwHash *self,DtwStringArray *element);
+
+void DtwHash_digest_folder_by_last_modification(DtwHash *self,const char *path);
+
+void DtwHash_digest_folder_by_content(DtwHash *self,const char *path);
+
+void  DtwHash_free(DtwHash *self);
+
+
+
+
+
 typedef struct  DtwRandonizerModule{
     DtwRandonizer * (*newRandonizer)();
 
@@ -4897,7 +4941,6 @@ DtwTreeModule newDtwTreeModule();
 
 
 
-
 typedef struct DtwLockerModule{
     DtwLocker * (*newLocker)();
     void (*lock)(struct DtwLocker *self, const  char *element);
@@ -4908,8 +4951,6 @@ typedef struct DtwLockerModule{
 }DtwLockerModule;
 
 DtwLockerModule newDtwLockerModule();
-
-
 
 
 
@@ -5073,6 +5114,29 @@ DtwResourceModule newDtwResourceModule();
 
 
 
+typedef struct DtwHashModule{
+    DtwHash * (*newHash)();
+    void  (*digest_any)(DtwHash *self,unsigned char *content,long size);
+    void (*digest_string)(DtwHash * self, const char *content);
+    void (*digest_long)(DtwHash * self,long content);
+    void (*digest_double)(DtwHash * self,double content);
+    void (*digest_bool)(DtwHash * self,bool content);
+    void  (*digest_file)(DtwHash * self, const char *path);
+    void  (*digest_entity_last_modification)(DtwHash * self, const char *path);
+    void (*digest_string_array)(DtwHash *self,DtwStringArray *element);
+    void (*digest_string_array_last_modifications)(DtwHash *self,DtwStringArray *element);
+    void (*digest_string_array_last_modifications_adding_name)(DtwHash *self,DtwStringArray *element);
+    void (*digest_string_array_content)(DtwHash *self,DtwStringArray *element);
+    void (*digest_string_array_content_adding_name)(DtwHash *self,DtwStringArray *element);
+    void (*digest_folder_by_last_modification)(DtwHash *self,const char *path);
+    void (*digest_folder_by_content)(DtwHash *self,const char *path);
+    void  (*free)(DtwHash *self);
+
+}DtwHashModule;
+
+DtwHashModule newDtwHashModule();
+
+
 typedef struct DtwNamespace{
     //IO
     void (*create_dir_recursively)(const char *path);
@@ -5086,7 +5150,7 @@ typedef struct DtwNamespace{
     char *(*load_string_file_content)(const char * path);
 
     unsigned char *(*load_binary_content)(const char * path,long *size);
-
+    
     bool (*write_any_content)(const char *path,unsigned  char *content,long size);
 
     bool (*write_string_file_content)(const char *path,const char *content);
@@ -5138,11 +5202,11 @@ typedef struct DtwNamespace{
 
     char * (*generate_sha_from_any)(void *anything , long size);
 
-    long int (*get_file_last_motification_in_unix)(const char *path);
+    long int (*get_entity_last_motification_in_unix)(const char *path);
 
     char * (*convert_unix_time_to_string)(long int unix_time);
 
-    char * (*get_file_last_motification_in_string)(const char *path);
+    char * (*get_entity_last_motification_in_string)(const char *path);
 
     char *(*concat_path)(const char *path1, const char *path2);
 
@@ -5164,7 +5228,7 @@ typedef struct DtwNamespace{
 
 
     DtwTreeModule tree;
-
+    DtwHashModule  hash;
     DtwTransactionModule transaction;
 
     DtwResourceModule resource;
@@ -5307,7 +5371,7 @@ char * dtw_generate_sha_from_string(const char *string){
 }
 
 
-long int dtw_get_file_last_motification_in_unix(const char *path){
+long int dtw_get_entity_last_motification_in_unix(const char *path){
     struct stat attr;
     if(stat(path, &attr) != 0) {
         return -1;
@@ -5332,8 +5396,8 @@ char * dtw_convert_unix_time_to_string(long int unix_time){
     return time_string;
 }
 
-char * dtw_get_file_last_motification_in_string(const char *path){
-    long int last_modification_in_unix = dtw_get_file_last_motification_in_unix(path);
+char * dtw_get_entity_last_motification_in_string(const char *path){
+    long int last_modification_in_unix = dtw_get_entity_last_motification_in_unix(path);
     char *last_modification_in_string = dtw_convert_unix_time_to_string(last_modification_in_unix);
     return last_modification_in_string;
 }
@@ -6659,6 +6723,14 @@ void DtwStringArray_sort(struct DtwStringArray *self) {
 
 }
 
+struct DtwStringArray * DtwStringArray_clone(DtwStringArray *self){
+    DtwStringArray  *clone = newDtwStringArray();
+    for(int i = 0; i< self->size; i++){
+        DtwStringArray_append(clone,self->strings[i]);
+    }
+    return clone;
+}
+
 
 void DtwStringArray_free(struct DtwStringArray *self){
     for(int i = 0; i < self->size; i++){
@@ -6899,7 +6971,7 @@ struct DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps *props){
         if(formated_props.hadware_data == DTW_INCLUDE && self->content_exist_in_memory){
 
             self->metadata_loaded = true;
-            self->last_modification_time = dtw_get_file_last_motification_in_unix(path);
+            self->last_modification_time = dtw_get_entity_last_motification_in_unix(path);
             free(self->hawdware_content_sha);
             self->hawdware_content_sha = dtw_generate_sha_from_string((const char*)self->content);
         }
@@ -8065,7 +8137,7 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
     while(true){
         time_t  now = time(NULL);
         unsigned long long startTime = private_dtw_getMicroseconds();
-        long last_modification = dtw_get_file_last_motification_in_unix(formated_path);
+        long last_modification = dtw_get_entity_last_motification_in_unix(formated_path);
         bool not_exist = (dtw_entity_type(formated_path) == DTW_NOT_FOUND);
 
 
@@ -9433,6 +9505,147 @@ void DtwTransaction_represent(struct DtwTransaction *self){
 
 
 
+
+
+
+DtwHash * newDtwHash(){
+    DtwHash *self = (DtwHash*) malloc(sizeof(DtwHash));
+    self->hash = dtw_generate_sha_from_string("");
+    return self;
+}
+
+void  DtwHash_digest_any(DtwHash *self,unsigned char *content,long size){
+    if(content == NULL){
+        return;
+    }
+    char *generated = dtw_generate_sha_from_any(content,size);
+    char result[300] ={0};
+    sprintf(result,"%s%s",self->hash,generated);
+    free(generated);
+    free(self->hash);
+    self->hash = dtw_generate_sha_from_string(result);
+}
+
+void  DtwHash_digest_string(DtwHash * self, const char *content){
+    DtwHash_digest_any(self,(unsigned char *)content, (long)strlen(content));
+}
+
+void DtwHash_digest_long(DtwHash * self,long content){
+    char formated[20] ={0};
+    sprintf(formated,"%ld",content);
+    DtwHash_digest_string(self,formated);
+}
+
+void DtwHash_digest_double(DtwHash * self,double content){
+    char formated[20] ={0};
+    sprintf(formated,"%lf",content);
+    DtwHash_digest_string(self,formated);
+}
+
+void DtwHash_digest_bool(DtwHash * self,bool content){
+    char formated[20] ={0};
+    sprintf(formated,"%d",(bool)content);
+    DtwHash_digest_string(self,formated);
+}
+
+void  DtwHash_digest_file(DtwHash * self, const char *path){
+
+    long size;
+    unsigned  char *content = dtw_load_binary_content(path,&size);
+    DtwHash_digest_any(self,content,size);
+    free(content);
+}
+
+void  DtwHash_digest_entity_last_modification(DtwHash * self, const char *path){
+    long last_modification = dtw_get_entity_last_motification_in_unix(path);
+    DtwHash_digest_long(self,last_modification);
+}
+
+
+void  DtwHash_digest_string_array(DtwHash *self,DtwStringArray *element){
+    DtwStringArray  *clone = DtwStringArray_clone(element);
+    DtwStringArray_sort(clone);
+
+    for(int i =0 ; i < clone->size; i++){
+        DtwHash_digest_string(self,clone->strings[i]);
+    }
+    DtwStringArray_free(clone);
+}
+
+void  DtwHash_digest_string_array_last_modifications(DtwHash *self,DtwStringArray *element){
+    DtwStringArray  *clone = DtwStringArray_clone(element);
+    DtwStringArray_sort(clone);
+    for(int i =0 ; i < clone->size; i++){
+        DtwHash_digest_entity_last_modification(self, clone->strings[i]);
+    }
+    DtwStringArray_free(clone);
+
+}
+
+void DtwHash_digest_string_array_last_modifications_adding_name(DtwHash *self,DtwStringArray *element){
+    DtwStringArray  *clone = DtwStringArray_clone(element);
+    DtwStringArray_sort(clone);
+    for(int i =0 ; i < clone->size; i++){
+        DtwHash_digest_string(self,clone->strings[i]);
+        DtwHash_digest_entity_last_modification(self, clone->strings[i]);
+    }
+    DtwStringArray_free(clone);
+}
+
+
+void DtwHash_digest_string_array_content(DtwHash *self,DtwStringArray *element){
+    DtwStringArray  *clone = DtwStringArray_clone(element);
+    DtwStringArray_sort(clone);
+    for(int i =0 ; i < clone->size; i++){
+        DtwHash_digest_file(self,clone->strings[i]);
+    }
+    DtwStringArray_free(clone);
+}
+
+void DtwHash_digest_string_array_content_adding_name(DtwHash *self,DtwStringArray *element){
+    DtwStringArray  *clone = DtwStringArray_clone(element);
+    DtwStringArray_sort(clone);
+    for(int i =0; i < clone->size; i++){
+        DtwHash_digest_string(self,clone->strings[i]);
+        DtwHash_digest_file(self,clone->strings[i]);
+    }
+    DtwStringArray_free(clone);
+}
+
+
+void DtwHash_digest_folder_by_last_modification(DtwHash *self,const char *path){
+    DtwStringArray  *folder = dtw_list_all_recursively(path,DTW_NOT_CONCAT_PATH);
+    DtwStringArray_sort(folder);
+    for(int i =0; i < folder->size; i++){
+        DtwHash_digest_string(self,folder->strings[i]);
+        char *formated_path = dtw_concat_path(path,folder->strings[i]);
+
+        DtwHash_digest_entity_last_modification(self, formated_path);
+        free(formated_path);
+    }
+    DtwStringArray_free(folder);
+}
+
+void DtwHash_digest_folder_by_content(DtwHash *self,const char *path){
+    DtwStringArray  *folder = dtw_list_all_recursively(path,DTW_NOT_CONCAT_PATH);
+    DtwStringArray_sort(folder);
+    for(int i =0; i < folder->size; i++){
+        DtwHash_digest_string(self,folder->strings[i]);
+        char *formated_path = dtw_concat_path(path,folder->strings[i]);
+        DtwHash_digest_file(self,formated_path);
+        free(formated_path);
+    }
+    DtwStringArray_free(folder);
+}
+
+void  DtwHash_free(DtwHash *self){
+    free(self->hash);
+    free(self);
+}
+
+
+
+
 DtwRandonizerModule newDtwRandonizerModule(){
     DtwRandonizerModule self = {0};
     self.newRandonizer = newDtwRandonizer;
@@ -9572,7 +9785,6 @@ DtwTreeModule newDtwTreeModule(){
 
 
 
-
 DtwLockerModule newDtwLockerModule(){
     DtwLockerModule  self = {0};
     self.newLocker = newDtwLocker;
@@ -9582,8 +9794,6 @@ DtwLockerModule newDtwLockerModule(){
     self.free = DtwLocker_free;
     return self;
 }
-
-
 
 
 
@@ -9703,6 +9913,29 @@ DtwResourceModule newDtwResourceModule(){
 
 
 
+
+DtwHashModule newDtwHashModule(){
+    DtwHashModule self = {0};
+    self.newHash =newDtwHash;
+    self.digest_any = DtwHash_digest_any;
+    self.digest_string = DtwHash_digest_string;
+    self.digest_long = DtwHash_digest_long;
+    self.digest_double = DtwHash_digest_double;
+    self.digest_bool = DtwHash_digest_bool;
+    self.digest_file = DtwHash_digest_file;
+    self.digest_entity_last_modification =DtwHash_digest_entity_last_modification;
+    self.digest_string_array = DtwHash_digest_string_array;
+    self.digest_string_array_last_modifications = DtwHash_digest_string_array_last_modifications;
+    self.digest_string_array_last_modifications_adding_name = DtwHash_digest_string_array_last_modifications_adding_name;
+    self.digest_string_array_content = DtwHash_digest_string_array_content;
+    self.digest_string_array_content_adding_name = DtwHash_digest_string_array_content_adding_name;
+    self.digest_folder_by_last_modification = DtwHash_digest_folder_by_last_modification;
+    self.digest_folder_by_content = DtwHash_digest_folder_by_content;
+    self.free = DtwHash_free;
+    return self;
+}
+
+
 DtwNamespace newDtwNamespace(){
     DtwNamespace self = {0};
     //io
@@ -9741,8 +9974,8 @@ DtwNamespace newDtwNamespace(){
     self.generate_sha_from_file = dtw_generate_sha_from_file;
     self.generate_sha_from_string = dtw_generate_sha_from_string;
     self.generate_sha_from_any = dtw_generate_sha_from_any;
-    self.get_file_last_motification_in_unix = dtw_get_file_last_motification_in_unix;
-    self.get_file_last_motification_in_string = dtw_get_file_last_motification_in_string;
+    self.get_entity_last_motification_in_unix = dtw_get_entity_last_motification_in_unix;
+    self.get_entity_last_motification_in_string = dtw_get_entity_last_motification_in_string;
     self.concat_path = dtw_concat_path;
     //bas64
     self.base64_encode = dtw_base64_encode;
@@ -9755,6 +9988,7 @@ DtwNamespace newDtwNamespace(){
     
 
     self.tree = newDtwTreeModule();
+    self.hash = newDtwHashModule();
     self.transaction = newDtwTransactionModule();
     self.resource = newDtwResourceModule();
     self.randonizer = newDtwRandonizerModule();
