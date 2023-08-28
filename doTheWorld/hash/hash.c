@@ -53,10 +53,10 @@ void  DtwHash_digest_file(DtwHash * self, const char *path){
 }
 
 void  DtwHash_digest_entity_last_modification(DtwHash * self, const char *path){
-    long last = dtw_get_entity_last_motification_in_unix(path);
-
-    DtwHash_digest_string(self,formated);
+    long last_modification = dtw_get_entity_last_motification_in_unix(path);
+    DtwHash_digest_long(self,last_modification);
 }
+
 
 void  DtwHash_digest_string_array(DtwHash *self,DtwStringArray *element){
     DtwStringArray  *clone = DtwStringArray_clone(element);
