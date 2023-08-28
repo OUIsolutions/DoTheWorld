@@ -11,6 +11,9 @@ int main (){
     dtw.string_array.free(sub_elements);
     printf("types:--------------------------------------\n");
 
+
+
+
     int type  = dtw.resource.type(values);
 
     if(type != DTW_FOLDER_TYPE){

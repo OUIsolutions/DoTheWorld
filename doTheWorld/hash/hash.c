@@ -7,6 +7,7 @@
 DtwHash * newDtwHash(){
     DtwHash *self = (DtwHash*) malloc(sizeof(DtwHash));
     self->hash = dtw_generate_sha_from_string("");
+    return self;
 }
 
 void  DtwHash_digest_any(DtwHash *self,unsigned char *content,long size){
@@ -26,6 +27,7 @@ void  DtwHash_digest_string(DtwHash * self, const char *content){
 }
 
 void  DtwHash_digest_file(DtwHash * self, const char *path){
+
     long size;
     unsigned  char *content = dtw_load_binary_content(path,&size);
     DtwHash_digest_any(self,content,size);
@@ -91,21 +93,26 @@ void DtwHash_digest_string_array_content_adding_name(DtwHash *self,DtwStringArra
 
 
 void DtwHash_digest_folder_by_last_modification(DtwHash *self,const char *path){
-    DtwStringArray  *folder = DtwTree_list_all_recursively(path,DTW_NOT_CONCAT_PATH);
+    DtwStringArray  *folder = dtw_list_all_recursively(path,DTW_NOT_CONCAT_PATH);
     DtwStringArray_sort(folder);
     for(int i =0; i < folder->size; i++){
         DtwHash_digest_string(self,folder->strings[i]);
-        DtwHash_digest_entity_last_modification(self, folder->strings[i]);
+        char *formated_path = dtw_concat_path(path,folder->strings[i]);
+
+        DtwHash_digest_entity_last_modification(self, formated_path);
+        free(formated_path);
     }
     DtwStringArray_free(folder);
 }
 
 void DtwHash_digest_folder_by_content(DtwHash *self,const char *path){
-    DtwStringArray  *folder = DtwTree_list_all_recursively(path,DTW_NOT_CONCAT_PATH);
+    DtwStringArray  *folder = dtw_list_all_recursively(path,DTW_NOT_CONCAT_PATH);
     DtwStringArray_sort(folder);
     for(int i =0; i < folder->size; i++){
         DtwHash_digest_string(self,folder->strings[i]);
-        DtwHash_digest_file(self,folder->strings[i]);
+        char *formated_path = dtw_concat_path(path,folder->strings[i]);
+        DtwHash_digest_file(self,formated_path);
+        free(formated_path);
     }
     DtwStringArray_free(folder);
 }
