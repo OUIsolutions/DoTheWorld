@@ -12,6 +12,14 @@ typedef struct DtwResourceModule{
     bool (*get_bool_from_sub_resource)(DtwResource *self,char *format,...);
 
 
+    void (*set_binary_in_sub_resource)(DtwResource *self, unsigned char *element, long size,char *format,...);
+    void (*set_string_in_sub_resource)(DtwResource *self,const  char *element,char *format,...);
+    void (*set_long_in_sub_resource)(DtwResource *self,long element,char *format,...);
+    void (*set_double_in_sub_resource)(DtwResource *self,double element,char *format,...);
+    void (*set_bool_in_sub_resource)( DtwResource *self,bool element,char *format,...);
+
+
+
     DtwResource * (*sub_resource_ensuring_not_exist)(DtwResource *self,const  char *format, ...);
 
     DtwResource * (*sub_resource_next)(DtwResource *self, const char *end_path);
