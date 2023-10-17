@@ -4602,18 +4602,32 @@ void DtwResource_unlock(DtwResource *self);
 void DtwResource_rename(DtwResource *self, char *new_name);
 
 //getters
+
+unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binary);
+unsigned char *DtwResource_get_any_from_sub_resource(DtwResource *self, long *size, bool *is_binary,char *format,...);
+
+
 unsigned char *DtwResource_get_binary(DtwResource *self, long *size);
 
-
+unsigned char *DtwResource_get_binary_from_sub_resource(DtwResource *self, long *size,char *format,...);
 
 
 char *DtwResource_get_string(DtwResource *self);
+char *DtwResource_get_string_from_sub_resource(DtwResource *self,char *format,...);
 
 long DtwResource_get_long(DtwResource *self);
 
+long DtwResource_get_long_from_sub_resource(DtwResource *self,char *format,...);
+
 double DtwResource_get_double(DtwResource *self);
+double DtwResource_get_double_from_sub_resource(DtwResource *self,char *format,...);
+
 
 bool DtwResource_get_bool(DtwResource *self);
+
+bool DtwResource_get_bool_from_sub_resource(DtwResource *self,char *format,...);
+
+
 
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size);
 
@@ -5048,6 +5062,13 @@ typedef struct DtwResourceModule{
     DtwResource *(*newResource)(const char *path);
 
     struct DtwResource * (*sub_resource)(struct DtwResource *self,const  char *format,...);
+    unsigned char *(*get_any_from_sub_resource)(DtwResource *self, long *size, bool *is_binary,char *format,...);
+    unsigned char *(*get_binary_from_sub_resource)(DtwResource *self, long *size,char *format,...);
+    char *(*get_string_from_sub_resource)(DtwResource *self,char *format,...);
+    long (*get_long_from_sub_resource)(DtwResource *self,char *format,...);
+    double (*get_double_from_sub_resource)(DtwResource *self,char *format,...);
+    bool (*get_bool_from_sub_resource)(DtwResource *self,char *format,...);
+
 
     DtwResource * (*sub_resource_ensuring_not_exist)(DtwResource *self,const  char *format, ...);
 
@@ -8423,10 +8444,36 @@ unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binar
     return self->value_any;
 }
 
+unsigned char *DtwResource_get_any_from_sub_resource(DtwResource *self, long *size, bool *is_binary,char *format,...){
+    char name[2000] ={0};
+
+    va_list args;
+    va_start(args, format);
+    vsprintf(name, format, args);
+    va_end(args);
+
+    DtwResource *element = DtwResource_sub_resource(self,"%s",name);
+    return DtwResource_get_any(element,size,is_binary);
+
+}
+
 unsigned char *DtwResource_get_binary(DtwResource *self, long *size){
     bool is_binary;
     return DtwResource_get_any(self,size,&is_binary);
 }
+
+unsigned char *DtwResource_get_binary_from_sub_resource(DtwResource *self, long *size,char *format,...){
+    char name[2000] ={0};
+
+    va_list args;
+    va_start(args, format);
+    vsprintf(name, format, args);
+    va_end(args);
+
+    DtwResource *element = DtwResource_sub_resource(self,"%s",name);
+    return DtwResource_get_binary(element,size);
+}
+
 
 char *DtwResource_get_string(DtwResource *self){
     long size;
@@ -8434,6 +8481,18 @@ char *DtwResource_get_string(DtwResource *self){
     return (char *)DtwResource_get_any(self,&size,&is_binary);
 }
 
+char *DtwResource_get_string_from_sub_resource(DtwResource *self,char *format,...){
+
+    char name[2000] ={0};
+
+    va_list args;
+    va_start(args, format);
+    vsprintf(name, format, args);
+    va_end(args);
+
+    DtwResource *element = DtwResource_sub_resource(self,"%s",name);
+    return DtwResource_get_string(element);
+}
 
 
 long DtwResource_get_long(DtwResource *self){
@@ -8447,6 +8506,18 @@ long DtwResource_get_long(DtwResource *self){
         return DTW_NOT_NUMERICAL;
     }
     return value;
+}
+
+long DtwResource_get_long_from_sub_resource(DtwResource *self,char *format,...){
+    char name[2000] ={0};
+
+    va_list args;
+    va_start(args, format);
+    vsprintf(name, format, args);
+    va_end(args);
+
+    DtwResource *element = DtwResource_sub_resource(self,"%s",name);
+    return DtwResource_get_long(element);
 }
 
 
@@ -8463,6 +8534,19 @@ double DtwResource_get_double(DtwResource *self){
     return value;
 }
 
+double DtwResource_get_double_from_sub_resource(DtwResource *self,char *format,...){
+    char name[2000] ={0};
+
+    va_list args;
+    va_start(args, format);
+    vsprintf(name, format, args);
+    va_end(args);
+
+    DtwResource *element = DtwResource_sub_resource(self,"%s",name);
+    return DtwResource_get_double(element);
+}
+
+
 bool DtwResource_get_bool(DtwResource *self){
     char *element = DtwResource_get_string(self);
     if(strcmp(element,"true") == 0 || strcmp(element,"t") == 0){
@@ -8470,7 +8554,17 @@ bool DtwResource_get_bool(DtwResource *self){
     }
     return false;
 }
+bool DtwResource_get_bool_from_sub_resource(DtwResource *self,char *format,...){
+    char name[2000] ={0};
 
+    va_list args;
+    va_start(args, format);
+    vsprintf(name, format, args);
+    va_end(args);
+
+    DtwResource *element = DtwResource_sub_resource(self,"%s",name);
+    return DtwResource_get_bool(element);
+}
 
 //
 // Created by mateusmoutinho on 05/08/23.
@@ -9873,6 +9967,13 @@ DtwResourceModule newDtwResourceModule(){
     self.load = DtwResource_load;
     self.unload = DtwResource_unload;
     self.sub_resource = DtwResource_sub_resource;
+    self.get_any_from_sub_resource = DtwResource_get_any_from_sub_resource;
+    self.get_binary_from_sub_resource = DtwResource_get_binary_from_sub_resource;
+    self.get_string_from_sub_resource = DtwResource_get_string_from_sub_resource;
+    self.get_long_from_sub_resource = DtwResource_get_long_from_sub_resource;
+    self.get_double_from_sub_resource = DtwResource_get_double_from_sub_resource;
+    self.get_bool_from_sub_resource = DtwResource_get_bool_from_sub_resource;
+
     self.sub_resource_ensuring_not_exist = DtwResource_sub_resource_ensuring_not_exist;
     self.sub_resource_next = DtwResource_sub_resource_next;
     self.sub_resource_now  = DtwResource_sub_resource_now;

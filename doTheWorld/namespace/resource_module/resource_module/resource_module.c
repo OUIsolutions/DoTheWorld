@@ -11,7 +11,7 @@ DtwResourceModule newDtwResourceModule(){
     self.get_long_from_sub_resource = DtwResource_get_long_from_sub_resource;
     self.get_double_from_sub_resource = DtwResource_get_double_from_sub_resource;
     self.get_bool_from_sub_resource = DtwResource_get_bool_from_sub_resource;
-    
+
     self.sub_resource_ensuring_not_exist = DtwResource_sub_resource_ensuring_not_exist;
     self.sub_resource_next = DtwResource_sub_resource_next;
     self.sub_resource_now  = DtwResource_sub_resource_now;
