@@ -38,6 +38,20 @@ void DtwResource_set_string(DtwResource *self,const  char *element){
 
 
 }
+void DtwResource_set_string_in_sub_resource(DtwResource *self,const  char *element,char *format,...){
+    char name[2000] ={0};
+
+    va_list args;
+    va_start(args, format);
+    vsprintf(name, format, args);
+    va_end(args);
+
+    DtwResource *created = DtwResource_sub_resource(self,"%s",name);
+    DtwResource_set_string(created,element);
+}
+
+
+
 
 void DtwResource_set_long(DtwResource *self,long element){
     if(self->allow_transaction){

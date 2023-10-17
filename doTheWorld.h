@@ -4634,6 +4634,7 @@ void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size
 
 void DtwResource_set_string(DtwResource *self,const  char *element);
 
+
 void DtwResource_set_long(DtwResource *self,long element);
 
 void DtwResource_set_double(DtwResource *self,double element);
