@@ -21,7 +21,7 @@ int main (){
 
     dtw.resource.commit(values);
     dtw.resource.free(values);
-    
+
 
 
 }
