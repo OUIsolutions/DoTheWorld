@@ -4,6 +4,13 @@ typedef struct DtwResourceModule{
     DtwResource *(*newResource)(const char *path);
 
     struct DtwResource * (*sub_resource)(struct DtwResource *self,const  char *format,...);
+    unsigned char *(*get_any_from_sub_resource)(DtwResource *self, long *size, bool *is_binary,char *format,...);
+    unsigned char *(*get_binary_from_sub_resource)(DtwResource *self, long *size,char *format,...);
+    char *(*get_string_from_sub_resource)(DtwResource *self,char *format,...);
+    long (*get_long_from_sub_resource)(DtwResource *self,char *format,...);
+    double (*get_double_from_sub_resource)(DtwResource *self,char *format,...);
+    bool (*get_bool_from_sub_resource)(DtwResource *self,char *format,...);
+
 
     DtwResource * (*sub_resource_ensuring_not_exist)(DtwResource *self,const  char *format, ...);
 

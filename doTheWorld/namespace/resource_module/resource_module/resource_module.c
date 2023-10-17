@@ -5,6 +5,13 @@ DtwResourceModule newDtwResourceModule(){
     self.load = DtwResource_load;
     self.unload = DtwResource_unload;
     self.sub_resource = DtwResource_sub_resource;
+    self.get_any_from_sub_resource = DtwResource_get_any_from_sub_resource;
+    self.get_binary_from_sub_resource = DtwResource_get_binary_from_sub_resource;
+    self.get_string_from_sub_resource = DtwResource_get_string_from_sub_resource;
+    self.get_long_from_sub_resource = DtwResource_get_long_from_sub_resource;
+    self.get_double_from_sub_resource = DtwResource_get_double_from_sub_resource;
+    self.get_bool_from_sub_resource = DtwResource_get_bool_from_sub_resource;
+    
     self.sub_resource_ensuring_not_exist = DtwResource_sub_resource_ensuring_not_exist;
     self.sub_resource_next = DtwResource_sub_resource_next;
     self.sub_resource_now  = DtwResource_sub_resource_now;
