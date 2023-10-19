@@ -18,11 +18,11 @@ DtwLocker *newDtwLocker(const char *shared_lock_file);
 void DtwLocker_create_shared_file(const char *location);
 
 
-int privateDtwLocker_json_enssure_correct(struct DtwLocker *self, cJSON *elements);
+int privateDtwLocker_json_enssure_correct(cJSON *elements);
 
 void  privateDtwLocker_remove_expireds(struct DtwLocker *self,cJSON *elements);
 
-int  privateDtwLocker_get_locked_position_from_json(struct DtwLocker *self,cJSON *elements,const char *element);
+int  privateDtwLocker_get_locked_position_from_json(cJSON *elements,const char *element);
 
 
 

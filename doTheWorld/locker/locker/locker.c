@@ -13,7 +13,7 @@ DtwLocker *newDtwLocker(const char *shared_lock_file){
 void DtwLocker_create_shared_file(const char *location) {
     dtw_write_string_file_content(location,"[]");
 }
-int privateDtwLocker_json_enssure_correct(struct DtwLocker *self, cJSON *elements){
+int privateDtwLocker_json_enssure_correct( cJSON *elements){
     if(elements->type != cJSON_Array){
         return  DTW_FILE_NOT_CORRECT;
     }
@@ -59,13 +59,14 @@ void privateDtwLocker_remove_expireds(struct DtwLocker *self,cJSON *elements){
         }
     }
 }
-int  privateDtwLocker_get_locked_position_from_json(struct DtwLocker *self,cJSON *elements,const char *element){
+int  privateDtwLocker_get_locked_position_from_json(cJSON *elements,const char *element){
     const int FILE = 1;
     int size = cJSON_GetArraySize(elements);
     for(int i =0; i < size; i++){
         cJSON *current = cJSON_GetArrayItem(elements,i);
-        cJSON *time = cJSON_GetArrayItem(current,FILE);
-        if(strcmp(time->valuestring,element) == 0){
+        cJSON *file = cJSON_GetArrayItem(current,FILE);
+
+        if(strcmp(file->valuestring,element) == 0){
             return i;
         }
     }
@@ -90,26 +91,42 @@ int DtwLocker_lock(struct DtwLocker *self, const  char *element,int max_time){
         }
 
         cJSON *elements = stream->elements;
-        error = privateDtwLocker_json_enssure_correct(self,elements);
+        error = privateDtwLocker_json_enssure_correct(elements);
         if(error){
             privatenewDtwLockerStream_free(stream);
             return error;
         }
         privateDtwLocker_remove_expireds(self,elements);
         //means doesnt exist
-        bool not_exist = privateDtwLocker_get_locked_position_from_json(self,elements,element)== -1;
+        int position = privateDtwLocker_get_locked_position_from_json(elements,element);
+        bool exist =position != -1;
+        bool not_exist = !exist;
 
         if(not_exist){
             cJSON *created_locked = cJSON_CreateArray();
             cJSON_AddItemToArray(created_locked, cJSON_CreateNumber(self->process));
             cJSON_AddItemToArray(created_locked, cJSON_CreateString(element));
             long now = time(NULL);
-            cJSON_AddItemToArray(created_locked,cJSON_CreateNumber(now));
+            cJSON_AddItemToArray(created_locked,cJSON_CreateNumber((double)now));
             cJSON_AddItemToArray(elements,created_locked);
-            privatenewDtwLockerStream_set_elements(stream,elements);
+            privatenewDtwLockerStream_set_elements(self->shared_lock_file,elements);
             privatenewDtwLockerStream_free(stream);
-
             return 0;
+        }
+        if(exist){
+            const int PROCESS = 0;
+            cJSON *founded_element = cJSON_GetArrayItem(elements,position);
+            cJSON *process = cJSON_GetArrayItem(founded_element,PROCESS);
+            bool is_the_same = process->valueint == self->process;
+            if(is_the_same){
+                //generaating an udate in the process
+                long now = time(NULL);
+                cJSON_AddItemToArray(founded_element,cJSON_CreateNumber((double )now));
+                privatenewDtwLockerStream_set_elements(self->shared_lock_file,elements);
+                privatenewDtwLockerStream_free(stream);
+                return 0;
+            }
+
         }
 
         privatenewDtwLockerStream_free(stream);
@@ -132,14 +149,13 @@ int DtwLocker_unlock(struct DtwLocker *self, const  char *element){
         return error;
     }
     cJSON *elements = stream->elements;
-    error = privateDtwLocker_json_enssure_correct(self,elements);
+    error = privateDtwLocker_json_enssure_correct(elements);
     if(error){
         privatenewDtwLockerStream_free(stream);
         return error;
     }
 
-    int position = privateDtwLocker_get_locked_position_from_json(self,elements,element);
-
+    int position = privateDtwLocker_get_locked_position_from_json(elements,element);
     if(position == -1){
         privatenewDtwLockerStream_free(stream);
         return DTW_ELEMENT_NOT_LOCKED;
@@ -147,7 +163,7 @@ int DtwLocker_unlock(struct DtwLocker *self, const  char *element){
 
     cJSON_DeleteItemFromArray(elements,position);
 
-    privatenewDtwLockerStream_set_elements(stream,elements);
+    privatenewDtwLockerStream_set_elements(self->shared_lock_file,elements);
     privatenewDtwLockerStream_free(stream);
 
     return 0;
