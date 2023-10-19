@@ -11,7 +11,7 @@ void append_once(int num){
 
     DtwLocker *locker = newDtwLocker("lock");
     locker->process= num;
-    locker->lock(locker,target);
+    DtwLocker_lock(locker,target,DTW_WAIT_ALL);
     printf("processo %d bloqueou\n",num);
     char *elelement = dtw_load_string_file_content(target);
     char *formated = (char*) calloc(30000,sizeof(char*));
@@ -27,17 +27,15 @@ void append_once(int num){
     dtw_write_string_file_content(target,formated);
     free(elelement);
     free(formated);
-    locker->free(locker);
+DtwLocker_free(locker);
 }
 
 int main(int argc, char *argv[]){
 
     total_process  = atoi(argv[1]);
     creation_per_process = atoi(argv[2]);
-    reverifation_delay = atof(argv[3]);
-    wait_delay = atof(argv[4]);
-
-
+    
+    DtwLocker_create_shared_file("lock");
     dtw_remove_any(target);
     dtw_write_string_file_content(target,"");
 
