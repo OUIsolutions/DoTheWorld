@@ -3,8 +3,7 @@
 
 int total_process;
 int creation_per_process;
-double reverifation_delay;
-double wait_delay;
+
 char *target = "a.txt";
 
 void append_once(int num){
@@ -23,11 +22,11 @@ void append_once(int num){
         strcat(formated,current_num);
     }
 
-
     dtw_write_string_file_content(target,formated);
     free(elelement);
     free(formated);
-DtwLocker_free(locker);
+    DtwLocker_unlock(locker,"a.txt");
+    DtwLocker_free(locker);
 }
 
 int main(int argc, char *argv[]){
@@ -36,7 +35,6 @@ int main(int argc, char *argv[]){
     creation_per_process = atoi(argv[2]);
     
     DtwLocker_create_shared_file("lock");
-    dtw_remove_any(target);
     dtw_write_string_file_content(target,"");
 
     for(int i = 0; i < total_process; i ++){
