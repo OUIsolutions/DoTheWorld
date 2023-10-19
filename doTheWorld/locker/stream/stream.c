@@ -57,6 +57,13 @@ DtwLockerStream * privatenewDtwLockerStream(const char *file){
     free(content);
 }
 
+void  privatenewDtwLockerStream_set_elements(DtwLockerStream *self,cJSON *elements){
+    char *result  = cJSON_PrintUnformatted(elements);
+    fwrite(result,sizeof(char), strlen(result),self->file);
+    free(result);
+}
+
+
 void  privatenewDtwLockerStream_free(DtwLockerStream *self){
     if(self->error){
         free(self);

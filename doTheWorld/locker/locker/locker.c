@@ -50,6 +50,7 @@ int DtwLocker_lock(struct DtwLocker *self, const  char *element,int time){
     cJSON_AddNumberToObject(created_locked,PROCESS,self->process);
     cJSON_AddStringToObject(created_locked,FILE, element);
     cJSON_AddNumberToObject(created_locked,LAST_UPDATE, time(NULL));
+    cJSON_AddItemToArray(elements,created_locked);
 
 
     privatenewDtwLockerStream_free(stream);
