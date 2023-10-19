@@ -97,7 +97,9 @@ int DtwLocker_lock(struct DtwLocker *self, const  char *element,int max_time){
         }
         privateDtwLocker_remove_expireds(self,elements);
         //means doesnt exist
-        if(privateDtwLocker_get_locked_position_from_json(self,elements,element)== -1){
+        bool not_exist = privateDtwLocker_get_locked_position_from_json(self,elements,element)== -1;
+
+        if(not_exist){
             cJSON *created_locked = cJSON_CreateArray();
             cJSON_AddItemToArray(created_locked, cJSON_CreateNumber(self->process));
             cJSON_AddItemToArray(created_locked, cJSON_CreateString(element));
