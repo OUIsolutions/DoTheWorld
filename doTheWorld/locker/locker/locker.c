@@ -1,10 +1,10 @@
 
 
-DtwLocker *newDtwLocker(const char *shared_lock_file,int expiration){
+DtwLocker *newDtwLocker(const char *shared_lock_file){
 
     DtwLocker *self = (DtwLocker*) malloc(sizeof (DtwLocker));
     self->shared_lock_file = strdup(shared_lock_file);
-    self->expiration = expiration;
+    self->expiration = 5;
     self->process = getpid();
 
     return self;
@@ -15,7 +15,7 @@ void DtwLocker_create_shared_file(const char *location) {
 }
 
 
-int DtwLocker_lock(struct DtwLocker *self, const  char *element,int time){
+int DtwLocker_lock(struct DtwLocker *self, const  char *element,int max_time){
 
     DtwLockerStream  *stream = privatenewDtwLockerStream(self->shared_lock_file);
 

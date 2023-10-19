@@ -25,7 +25,7 @@ void DtwResource_lock(DtwResource *self){
         return;
     }
     
-    DtwLocker_lock(self->locker,self->path);
+    DtwLocker_lock(self->locker,self->path,DTW_WAIT_ALL);
     
     self->locked = true;
 }
