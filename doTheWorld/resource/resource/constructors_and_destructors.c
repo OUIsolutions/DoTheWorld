@@ -12,8 +12,10 @@ DtwResource *new_DtwResource(const char *path){
     self->cache_sub_resources = true;
     self->transaction = newDtwTransaction();
     self->randonizer = newDtwRandonizer();
-    self->locker = newDtwLocker();
-
+    char *lock_file = dtw_concat_path(self->path,".lock");
+    DtwLocker_create_shared_file(lock_file);
+    self->locker = newDtwLocker(lock_file);
+    free(lock_file);
     DtwResource_load(self);
     return self;
 }   
