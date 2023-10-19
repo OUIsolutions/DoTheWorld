@@ -35,13 +35,13 @@ int DtwLocker_lock(struct DtwLocker *self, const  char *element,int time){
     const char *FILE  = "f";
     const char *LAST_UPDATE = "l";
 
-    cJSON *timeout = cJSON_GetObjectItem(stream->elements,"t");
+    cJSON *timeout = cJSON_GetObjectItem(stream->elements,TIME);
     if(timeout->type != cJSON_Number){
         privatenewDtwLockerStream_free(stream);
         return DTW_FILE_NOT_CORRECT;
     }
 
-    cJSON *elements = cJSON_GetObjectItem(stream->elements,"t");
+    cJSON *elements = cJSON_GetObjectItem(stream->elements,ELEMENTS);
     if(elements->type != cJSON_Array){
         privatenewDtwLockerStream_free(stream);
         return DTW_FILE_NOT_CORRECT;
@@ -49,7 +49,8 @@ int DtwLocker_lock(struct DtwLocker *self, const  char *element,int time){
     cJSON *created_locked = cJSON_CreateObject();
     cJSON_AddNumberToObject(created_locked,PROCESS,self->process);
     cJSON_AddStringToObject(created_locked,FILE, element);
-    cJSON_AddNumberToObject(created_locked,LAST_UPDATE, time(NULL));
+    long now = time(NULL);
+    cJSON_AddNumberToObject(created_locked,LAST_UPDATE, (double)now);
     cJSON_AddItemToArray(elements,created_locked);
 
 

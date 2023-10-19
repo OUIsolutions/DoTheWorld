@@ -1,10 +1,9 @@
 
 
 typedef struct DtwLockerModule{
-    DtwLocker * (*newLocker)();
-    void (*lock)(struct DtwLocker *self, const  char *element);
+    DtwLocker * (*newLocker)(const char *shared_lock_file);
+    int (*lock)(struct DtwLocker *self, const  char *element,int time);
     void (*unlock)(struct DtwLocker *self, const  char *element);
-    void (*represemt)(struct DtwLocker *self);
     void (*free)(struct DtwLocker *self);
 
 }DtwLockerModule;
