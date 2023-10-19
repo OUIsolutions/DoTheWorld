@@ -8,3 +8,5 @@ typedef struct DtwStream{
 }DtwLockerStream;
 
 DtwLockerStream * privatenewDtwLockerStream(const char *file);
+
+void  privatenewDtwLocker_free(DtwLockerStream *self);
