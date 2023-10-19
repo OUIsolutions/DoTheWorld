@@ -131,7 +131,7 @@ int DtwLocker_lock(struct DtwLocker *self, const  char *element,int max_time){
 
         privatenewDtwLockerStream_free(stream);
 
-        if(start_time == DTW_DONT_WAIT){
+        if(max_time == DTW_DONT_WAIT){
             return DTW_TIMEOUT_ERROR;
         }
 
