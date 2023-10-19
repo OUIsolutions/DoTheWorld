@@ -11,7 +11,7 @@ DtwLocker *newDtwLocker(const char *shared_lock_file){
     return self;
 }
 
-void dtw_create_lock_shared_file(const char *location,long max_lock_time){
+void DtwLocker_create_shared_file(const char *location, long max_lock_time){
     cJSON *central = cJSON_CreateObject();
     const char *TIME = "t";
     const char *ELEMENTS = "e";
@@ -53,6 +53,7 @@ int DtwLocker_lock(struct DtwLocker *self, const  char *element,int time){
     cJSON_AddItemToArray(elements,created_locked);
 
 
+    privatenewDtwLockerStream_set_elements(stream,elements);
     privatenewDtwLockerStream_free(stream);
 
 
@@ -60,37 +61,11 @@ int DtwLocker_lock(struct DtwLocker *self, const  char *element,int time){
 }
 
 void DtwLocker_unlock(struct DtwLocker *self, const  char *element){
-    char  *formated_path = (char*)calloc(sizeof(char),strlen(element)+10);
-    sprintf(formated_path,"%s.lock",element);
-    int position = DtwStringArray_find_position(self->locked_elements,formated_path);
-
-    if(position != -1){
-        dtw_write_string_file_content(formated_path,"");
-        DtwStringArray_pop(self->locked_elements,position);
-    }
-
-    free(formated_path);
 
 }
 
-void DtwLocker_represemt(struct DtwLocker *self){
-    printf("locked:\n");
-    for(int i = 0 ; i < self->locked_elements->size;i++){
-        char *element = self->locked_elements->strings[i];
-        char *unformated = dtw_replace_string(element,".lock","");
-        printf("\t%s\n",unformated);
-        free(unformated);
-    }
-}
 
 void DtwLocker_free(struct DtwLocker *self){
-
-    for(int i = 0 ; i < self->locked_elements->size;i++){
-        char *element = self->locked_elements->strings[i];
-        dtw_write_string_file_content(element,"");
-
-    }
-
-    DtwStringArray_free(self->locked_elements);
+    free(self->shared_lock_file);
     free(self);
 }

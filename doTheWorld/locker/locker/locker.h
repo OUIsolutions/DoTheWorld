@@ -13,15 +13,13 @@ typedef struct DtwLocker{
 
 DtwLocker *newDtwLocker(const char *shared_lock_file);
 
-void dtw_create_lock_shared_file(const char *location,long max_lock_time);
-
+void DtwLocker_create_shared_file(const char *location, long max_lock_time);
 
 
 int DtwLocker_lock(struct DtwLocker *self, const  char *element,int time);
 
 void DtwLocker_unlock(struct DtwLocker *self, const  char *element);
 
-void DtwLocker_represemt(struct DtwLocker *self);
 
 void DtwLocker_free(struct DtwLocker *self);
 
