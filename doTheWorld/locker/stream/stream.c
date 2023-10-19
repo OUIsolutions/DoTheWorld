@@ -49,12 +49,21 @@ DtwLockerStream * privatenewDtwLockerStream(const char *file){
     }
 
     self->elements = cJSON_Parse(content);
+    free(content);
+
     if(!self->elements){
         flock(self->fd, LOCK_UN);
         fclose(self->file);
+        cJSON_Delete(self->elements);
         self->error = DTW_FILE_NOT_CORRECT;
     }
-    free(content);
+    if(self->elements->type != cJSON_Array){
+        flock(self->fd, LOCK_UN);
+        fclose(self->file);
+        cJSON_Delete(self->elements);
+        self->error = DTW_FILE_NOT_CORRECT;
+    }
+    return self;
 }
 
 void  privatenewDtwLockerStream_set_elements(DtwLockerStream *self,cJSON *elements){

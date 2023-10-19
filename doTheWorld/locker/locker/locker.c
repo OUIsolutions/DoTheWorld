@@ -18,9 +18,13 @@ void DtwLocker_create_shared_file(const char *location) {
 int DtwLocker_lock(struct DtwLocker *self, const  char *element,int max_time){
 
     DtwLockerStream  *stream = privatenewDtwLockerStream(self->shared_lock_file);
+    int error = stream->error;
+    if(error){
+        printf("pegou aqui\n");
 
-    const char *TIME = "t";
-    const char *ELEMENTS = "e";
+        privatenewDtwLockerStream_free(stream);
+        return error;
+    }
     const char *PROCESS = "p";
     const char *FILE  = "f";
     const char *LAST_UPDATE = "l";
@@ -36,7 +40,7 @@ int DtwLocker_lock(struct DtwLocker *self, const  char *element,int max_time){
     privatenewDtwLockerStream_set_elements(stream,elements);
     privatenewDtwLockerStream_free(stream);
 
-
+    return 0;
 
 }
 
