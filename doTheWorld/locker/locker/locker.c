@@ -107,6 +107,7 @@ int DtwLocker_lock(struct DtwLocker *self, const  char *element,int max_time){
             cJSON_AddItemToArray(created_locked,cJSON_CreateNumber(now));
             cJSON_AddItemToArray(elements,created_locked);
             privatenewDtwLockerStream_set_elements(stream,elements);
+            return 0;
         }
 
         privatenewDtwLockerStream_free(stream);
@@ -121,9 +122,33 @@ int DtwLocker_lock(struct DtwLocker *self, const  char *element,int max_time){
 
 }
 
-void DtwLocker_unlock(struct DtwLocker *self, const  char *element){
+int DtwLocker_unlock(struct DtwLocker *self, const  char *element){
+    DtwLockerStream  *stream = privatenewDtwLockerStream(self->shared_lock_file);
+    int error = stream->error;
+    if(error){
+        privatenewDtwLockerStream_free(stream);
+        return error;
+    }
 
+    cJSON *elements = stream->elements;
+    error = privateDtwLocker_json_enssure_correct(self,elements);
+    if(error){
+        privatenewDtwLockerStream_free(stream);
+        return error;
+    }
+
+    int position = privateDtwLocker_get_locked_position_from_json(self,elements,element);
+
+    if(position == -1){
+        privatenewDtwLockerStream_free(stream);
+        return DTW_ELEMENT_NOT_LOCKED;
+    }
+
+    cJSON_DeleteItemFromArray(elements,position);
+    privatenewDtwLockerStream_set_elements(stream,elements);
+    return 0;
 }
+
 
 
 void DtwLocker_free(struct DtwLocker *self){
