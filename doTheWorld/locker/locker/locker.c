@@ -78,7 +78,7 @@ int DtwLocker_lock(struct DtwLocker *self, const  char *element,int max_time){
     long start_time = time(NULL);
     while (true){
         long now_v = time(NULL);
-        if(start_time != DTW_WAIT_ALL && start_time !=  DTW_DONT_WAIT){
+        if(max_time != DTW_WAIT_ALL && max_time !=  DTW_DONT_WAIT){
             if(now_v > start_time + max_time){
                 return DTW_TIMEOUT_ERROR;
             }
