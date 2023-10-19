@@ -36,21 +36,6 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 
 
     while(true){
-        time_t  now = time(NULL);
-        long last_modification = dtw_get_entity_last_motification_in_unix(formated_path);
-        bool not_exist = (dtw_entity_type(formated_path) == DTW_NOT_FOUND);
-        bool exist = !not_exist;
-        bool expired = false;
-
-        if(exist){
-            expired = last_modification < (now - self->max_lock_time);
-        }
-
-        if(not_exist || expired){
-            FILE  *file = fopen(formated_path,"w");
-            fclose(file);
-            exist = true;
-        }
 
         FILE  *file = fopen(formated_path,"r+");
         if(!file){
@@ -95,6 +80,7 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
             DtwStringArray_append(self->locked_elements,formated_path);
             free(formated_path);
             fclose(file);
+
             return;
         }
 
@@ -134,7 +120,7 @@ void DtwLocker_unlock(struct DtwLocker *self, const  char *element){
     int position = DtwStringArray_find_position(self->locked_elements,formated_path);
 
     if(position != -1){
-        dtw_remove_any(formated_path);
+        dtw_write_string_file_content(formated_path,"");
         DtwStringArray_pop(self->locked_elements,position);
     }
 
@@ -156,8 +142,8 @@ void DtwLocker_free(struct DtwLocker *self){
 
     for(int i = 0 ; i < self->locked_elements->size;i++){
         char *element = self->locked_elements->strings[i];
+        dtw_write_string_file_content(element,"");
 
-        dtw_remove_any(element);
     }
 
     DtwStringArray_free(self->locked_elements);
