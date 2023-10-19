@@ -48,89 +48,76 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 
         if(not_exist || expired){
             FILE  *file = fopen(formated_path,"w");
-            int fd = fileno(file);
-            int lock_result = flock(fd, LOCK_EX);
-
-            if(lock_result != 0){
-                fclose(file);
-                continue;
-            }
-            fwrite(process_string,sizeof (char), strlen(process_string),file);
             fclose(file);
-
             exist = true;
+        }
+
+        FILE  *file = fopen(formated_path,"r+");
+        if(!file){
+            printf("pegou aqui 1\n");
+            continue;
+        }
+
+        int fd = fileno(file);
+        int lock_result = flock(fd, LOCK_EX);
+
+        if(lock_result != 0){
+            fclose(file);
+            continue;
+        }
+
+        if(fseek(file,0,SEEK_END) == -1){
+            fclose(file);
+            printf("pegou aqui2\n");
+
+            continue;
 
         }
 
-        if(exist){
-            FILE  *file = fopen(formated_path,"r");
-            if(!file){
-                printf("pegou aqui 1\n");
-                continue;
-            }
 
-            int fd = fileno(file);
-            int lock_result = flock(fd, LOCK_EX);
+        long size = ftell(file);
 
-            if(lock_result != 0){
-                fclose(file);
-                continue;
-            }
-
-            if(fseek(file,0,SEEK_END) == -1){
-                fclose(file);
-                printf("pegou aqui2\n");
-
-                continue;
-
-            }
+        if(size == -1){
+            fclose(file);
+            printf("pegou aqui3\n");
+            continue;
+        }
 
 
-            long size = ftell(file);
+        if(fseek(file,0,SEEK_SET) == -1){
+            fclose(file);
+            continue;
+        }
 
-            if(size == -1){
-                fclose(file);
-                printf("pegou aqui3\n");
+        if(size == 0){
+            printf("escreveu o processo l%d\n",self->process);
+            fwrite(process_string, sizeof(char), strlen(process_string),file);
+            DtwStringArray_append(self->locked_elements,formated_path);
+            free(formated_path);
+            fclose(file);
+            return;
+        }
 
-                continue;
-            }
-
-            if(size == 0){
-                fclose(file);
-                printf("pegou aqui4\n");
-
-                continue;
-
-            }
-
-
-            if(fseek(file,0,SEEK_SET) == -1){
-                fclose(file);
-
-                continue;
-            }
-
-            char *content = (char*)malloc(size +1);
-            long bytes_read = fread(content,sizeof(char),size,file);
-            if(bytes_read <=0 ){
-                free(content);
-                fclose(file);
-                continue;
-            }
-
-            content[size] = '\0';
-
-            if(strcmp(content,process_string) == 0){
-                printf("liberou o processo l%d\n",self->process);
-                DtwStringArray_append(self->locked_elements,formated_path);
-                free(content);
-                free(formated_path);
-                fclose(file);
-                return;
-            }
+        char *content = (char*)malloc(size +1);
+        long bytes_read = fread(content,sizeof(char),size,file);
+        if(bytes_read <=0 ){
             free(content);
             fclose(file);
+            continue;
         }
+        content[size] = '\0';
+        bool is_already_locked_by_same = strcmp(content,process_string) == 0;
+        if(is_already_locked_by_same) {
+            free(formated_path);
+            free(content);
+            fclose(file);
+            return;
+        }
+
+        
+        free(content);
+        fclose(file);
+
 
     }
 
