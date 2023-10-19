@@ -57,7 +57,7 @@ DtwLockerStream * privatenewDtwLockerStream(const char *file){
     free(content);
 }
 
-void  privatenewDtwLocker_free(DtwLockerStream *self){
+void  privatenewDtwLockerStream_free(DtwLockerStream *self){
     if(self->error){
         free(self);
         return;

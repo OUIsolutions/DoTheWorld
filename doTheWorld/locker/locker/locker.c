@@ -24,13 +24,27 @@ void dtw_create_lock_shared_file(const char *location,long max_lock_time){
     free(printed);
 }
 
+
 int DtwLocker_lock(struct DtwLocker *self, const  char *element,int time){
 
+    DtwLockerStream  *stream = privatenewDtwLockerStream(self->shared_lock_file);
+    const char *TIME = "t";
+    const char *ELEMENTS = "e";
+    cJSON *timeout = cJSON_GetObjectItem(stream->elements,"t");
+    if(timeout->type != cJSON_Number){
+        privatenewDtwLockerStream_free(stream);
+        return DTW_FILE_NOT_CORRECT;
+    }
 
-        
-        free(content);
-        fclose(file);
-        flock(fd, LOCK_UN);
+    cJSON *elements = cJSON_GetObjectItem(stream->elements,"t");
+    if(elements->type != cJSON_Array){
+        privatenewDtwLockerStream_free(stream);
+        return DTW_FILE_NOT_CORRECT;
+    }
+
+
+    privatenewDtwLockerStream_free(stream);
+
 
 
 }

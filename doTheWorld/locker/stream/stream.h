@@ -9,4 +9,4 @@ typedef struct DtwStream{
 
 DtwLockerStream * privatenewDtwLockerStream(const char *file);
 
-void  privatenewDtwLocker_free(DtwLockerStream *self);
+void  privatenewDtwLockerStream_free(DtwLockerStream *self);
