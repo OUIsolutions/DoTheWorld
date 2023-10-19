@@ -1,8 +1,6 @@
 
 
 typedef struct DtwLocker{
-   double reverifcation_delay;
-   double wait_delay;
    int process;
    int max_lock_time;
    DtwStringArray *locked_elements;
