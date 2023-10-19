@@ -36,7 +36,7 @@ DtwLockerStream * privatenewDtwLockerStream(const char *file){
     if(fseek(self->file,0,SEEK_SET) == -1){
         flock(self->fd, LOCK_UN);
         fclose(self->file);
-        self->error =DTW_INTERNAL_ERROR
+        self->error =DTW_INTERNAL_ERROR;
     }
     char *content = (char*)malloc(size +1);
     long bytes_read = fread(content,sizeof(char),size,self->file);
