@@ -9,6 +9,7 @@ typedef struct DtwStream{
 
 DtwLockerStream * privatenewDtwLockerStream(const char *file);
 
-int  privatenewDtwLockerStream_set_elements(const char *filename,cJSON *elements);
+//void  privatenewDtwLockerStream_set_elements(DtwLockerStream *self,cJSON *elements);
+int   privatenewDtwLockerStream_set_elements(const char *filename,cJSON *elements);
 
 void  privatenewDtwLockerStream_free(DtwLockerStream *self);

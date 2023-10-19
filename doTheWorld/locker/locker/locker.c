@@ -148,6 +148,7 @@ int DtwLocker_unlock(struct DtwLocker *self, const  char *element){
         privatenewDtwLockerStream_free(stream);
         return error;
     }
+
     cJSON *elements = stream->elements;
     error = privateDtwLocker_json_enssure_correct(elements);
     if(error){
@@ -155,15 +156,23 @@ int DtwLocker_unlock(struct DtwLocker *self, const  char *element){
         return error;
     }
 
+
     int position = privateDtwLocker_get_locked_position_from_json(elements,element);
     if(position == -1){
+
         privatenewDtwLockerStream_free(stream);
         return DTW_ELEMENT_NOT_LOCKED;
     }
-
     cJSON_DeleteItemFromArray(elements,position);
+    char *r = cJSON_Print(elements);
+    printf("%s\n",r);
+    free(r);
+    error =privatenewDtwLockerStream_set_elements(self->shared_lock_file,elements);
+    if(error){
+        privatenewDtwLockerStream_free(stream);
 
-    privatenewDtwLockerStream_set_elements(self->shared_lock_file,elements);
+        return error;
+    }
     privatenewDtwLockerStream_free(stream);
 
     return 0;

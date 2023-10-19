@@ -71,21 +71,10 @@ DtwLockerStream * privatenewDtwLockerStream(const char *file){
     return self;
 }
 
-int  privatenewDtwLockerStream_set_elements(const char *filename,cJSON *elements){
+int   privatenewDtwLockerStream_set_elements(const char *filename,cJSON *elements){
     char *result  = cJSON_PrintUnformatted(elements);
-    FILE  *file  = fopen(filename,"w+");
-    if(!file){
-        free(result);
-        return DTW_INTERNAL_ERROR;
-    }
-
-    unsigned long  bytes = fwrite(result,sizeof(char), strlen(result),file);
+    dtw_write_string_file_content(filename,result);
     free(result);
-
-    if(bytes <=0){
-        return DTW_INTERNAL_ERROR;
-    }
-    return 0;
 }
 
 
