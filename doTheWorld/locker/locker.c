@@ -34,7 +34,7 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
     char process_string[20] = {0};
     sprintf(process_string,"%d",self->process);
 
-    /*
+
     while(true){
         time_t  now = time(NULL);
         long last_modification = dtw_get_entity_last_motification_in_unix(formated_path);
@@ -47,23 +47,76 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
         }
 
         if(not_exist || expired){
-            FILE  *file = fopen()
+            dtw_write_long_file_content(formated_path,self->process);
+            exist = true;
+
         }
 
-
         if(exist){
-            long process_owner = dtw_load_long_file_content(formated_path);
-            if(process_owner == self->process ){
-                if(DtwStringArray_find_position(self->locked_elements,formated_path) == -1){
-                    DtwStringArray_append(self->locked_elements,formated_path);
-                    free(formated_path);
-                }
+            FILE  *file = fopen(formated_path,"rb");
+            if(!file){
+                printf("pegou aqui 1\n");
+
+                continue;
+            }
+
+            if(fseek(file,0,SEEK_END) == -1){
+                fclose(file);
+                printf("pegou aqui2\n");
+
+                continue;
+
+            }
+
+
+            long size = ftell(file);
+
+            if(size == -1){
+                fclose(file);
+                printf("pegou aqui3\n");
+
+                continue;
+            }
+
+            if(size == 0){
+                fclose(file);
+                printf("pegou aqui4\n");
+
+                continue;
+
+            }
+
+
+            if(fseek(file,0,SEEK_SET) == -1){
+                fclose(file);
+                printf("pegou aqui3\n");
+
+                continue;
+            }
+
+            char *content = (char*)malloc(size +1);
+            long bytes_read = fread(content,sizeof(char),size,file);
+            if(bytes_read <=0 ){
+                free(content);
+                fclose(file);
+                printf("pegou aqui5\n");
+                continue;
+            }
+
+            content[size] = '\0';
+
+            if(strcmp(content,process_string) == 0){
+                free(content);
+                free(formated_path);
+                fclose(file);
                 return;
             }
+            free(content);
+            fclose(file);
         }
 
     }
-    */
+
 
 
 
