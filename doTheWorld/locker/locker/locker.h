@@ -15,11 +15,14 @@ DtwLocker *newDtwLocker(const char *shared_lock_file);
 
 void DtwLocker_create_shared_file(const char *location);
 
+int privateDtwLocker_json_enssure_correct(struct DtwLocker *self, cJSON *elements);
 
-int DtwLocker_lock(struct DtwLocker *self, const  char *element,int max_time);
+int privateDtwLocker_remove_expireds(struct DtwLocker *self,cJSON *elements);
 
-void DtwLocker_unlock(struct DtwLocker *self, const  char *element);
+int DtwLocker_lock(DtwLocker *self, const  char *element,int max_time);
+
+void DtwLocker_unlock(DtwLocker *self, const  char *element);
 
 
-void DtwLocker_free(struct DtwLocker *self);
+void DtwLocker_free(DtwLocker *self);
 
