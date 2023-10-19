@@ -48,6 +48,16 @@ int privateDtwLocker_json_enssure_correct(struct DtwLocker *self, cJSON *element
 }
 int privateDtwLocker_remove_expireds(struct DtwLocker *self,cJSON *elements){
 
+    const int LAST_UPDATE = 2;
+    int size = cJSON_GetArraySize(elements);
+    for(int i =0; i < size; i++){
+        cJSON *current = cJSON_GetArrayItem(elements,i);
+        cJSON *last_update = cJSON_GetArrayItem(current,LAST_UPDATE);
+        long now = time(NULL);
+        if(now > last_update->valueint + self->expiration){
+            cJSON_DeleteItemFromArray(elements,i);
+        }
+    }
 }
 int DtwLocker_lock(struct DtwLocker *self, const  char *element,int max_time){
 
@@ -66,7 +76,7 @@ int DtwLocker_lock(struct DtwLocker *self, const  char *element,int max_time){
         privatenewDtwLockerStream_free(stream);
         return error;
     }
-
+    privateDtwLocker_remove_expireds(self,elements);
 
     cJSON *created_locked = cJSON_CreateArray();
     cJSON_AddItemToArray(created_locked, cJSON_CreateNumber(self->process));
