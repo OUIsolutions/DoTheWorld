@@ -3,6 +3,7 @@
 #define DTW_DONT_WAIT -2
 #define DTW_FILE_NOT_CORRECT -1
 #define DTW_INTERNAL_ERROR -2
+#define DTW_TIMEOUT_ERROR -3
 typedef struct DtwLocker{
    int expiration;
    char *shared_lock_file;

@@ -74,35 +74,46 @@ int  privateDtwLocker_get_locked_position_from_json(struct DtwLocker *self,cJSON
 
 
 int DtwLocker_lock(struct DtwLocker *self, const  char *element,int max_time){
+    long start_time = time(NULL);
+    while (true){
+        long now_v = time(NULL);
+        if(start_time != DTW_WAIT_ALL && start_time !=  DTW_DONT_WAIT){
+            if(now_v > start_time + max_time){
+                return DTW_TIMEOUT_ERROR;
+            }
+        }
+        DtwLockerStream  *stream = privatenewDtwLockerStream(self->shared_lock_file);
+        int error = stream->error;
+        if(error){
+            privatenewDtwLockerStream_free(stream);
+            return error;
+        }
 
-    DtwLockerStream  *stream = privatenewDtwLockerStream(self->shared_lock_file);
-    int error = stream->error;
-    if(error){
+        cJSON *elements = stream->elements;
+        error = privateDtwLocker_json_enssure_correct(self,elements);
+        if(error){
+            privatenewDtwLockerStream_free(stream);
+            return error;
+        }
+        privateDtwLocker_remove_expireds(self,elements);
+        //means doesnt exist
+        if(privateDtwLocker_get_locked_position_from_json(self,elements,element)== -1){
+            cJSON *created_locked = cJSON_CreateArray();
+            cJSON_AddItemToArray(created_locked, cJSON_CreateNumber(self->process));
+            cJSON_AddItemToArray(created_locked, cJSON_CreateString(element));
+            long now = time(NULL);
+            cJSON_AddItemToArray(created_locked,cJSON_CreateNumber(now));
+            cJSON_AddItemToArray(elements,created_locked);
+            privatenewDtwLockerStream_set_elements(stream,elements);
+        }
 
         privatenewDtwLockerStream_free(stream);
-        return error;
-    }
 
+        if(start_time == DTW_DONT_WAIT){
+            return DTW_TIMEOUT_ERROR;
+        }
 
-    cJSON *elements = stream->elements;
-    error = privateDtwLocker_json_enssure_correct(self,elements);
-    if(error){
-        privatenewDtwLockerStream_free(stream);
-        return error;
     }
-    privateDtwLocker_remove_expireds(self,elements);
-    //means doesnt exist
-    if(privateDtwLocker_get_locked_position_from_json(self,elements,element)== -1){
-        cJSON *created_locked = cJSON_CreateArray();
-        cJSON_AddItemToArray(created_locked, cJSON_CreateNumber(self->process));
-        cJSON_AddItemToArray(created_locked, cJSON_CreateString(element));
-        long now = time(NULL);
-        cJSON_AddItemToArray(created_locked,cJSON_CreateNumber(now));
-        cJSON_AddItemToArray(elements,created_locked);
-        privatenewDtwLockerStream_set_elements(stream,elements);
-    }
-    
-    privatenewDtwLockerStream_free(stream);
 
     return 0;
 
