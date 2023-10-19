@@ -165,7 +165,6 @@ int DtwLocker_unlock(struct DtwLocker *self, const  char *element){
     }
     cJSON_DeleteItemFromArray(elements,position);
     char *r = cJSON_Print(elements);
-    printf("%s\n",r);
     free(r);
     error =privatenewDtwLockerStream_set_elements(self->shared_lock_file,elements);
     if(error){
