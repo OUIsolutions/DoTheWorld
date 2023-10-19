@@ -47,16 +47,33 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
         }
 
         if(not_exist || expired){
-            dtw_write_long_file_content(formated_path,self->process);
+            FILE  *file = fopen(formated_path,"w");
+            int fd = fileno(file);
+            int lock_result = flock(fd, LOCK_EX);
+
+            if(lock_result != 0){
+                fclose(file);
+                continue;
+            }
+            fwrite(process_string,sizeof (char), strlen(process_string),file);
+            fclose(file);
+
             exist = true;
 
         }
 
         if(exist){
-            FILE  *file = fopen(formated_path,"rb");
+            FILE  *file = fopen(formated_path,"r");
             if(!file){
                 printf("pegou aqui 1\n");
+                continue;
+            }
 
+            int fd = fileno(file);
+            int lock_result = flock(fd, LOCK_EX);
+
+            if(lock_result != 0){
+                fclose(file);
                 continue;
             }
 
@@ -89,7 +106,6 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
 
             if(fseek(file,0,SEEK_SET) == -1){
                 fclose(file);
-                printf("pegou aqui3\n");
 
                 continue;
             }
@@ -99,13 +115,14 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
             if(bytes_read <=0 ){
                 free(content);
                 fclose(file);
-                printf("pegou aqui5\n");
                 continue;
             }
 
             content[size] = '\0';
 
             if(strcmp(content,process_string) == 0){
+                printf("liberou o processo l%d\n",self->process);
+                DtwStringArray_append(self->locked_elements,formated_path);
                 free(content);
                 free(formated_path);
                 fclose(file);
