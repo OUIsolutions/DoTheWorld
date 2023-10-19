@@ -54,8 +54,7 @@ SOFTWARE.
 #include "path/path.h"
 #include "tree/declarations.h"
 
-#include "locker/locker.h"
-
+#include "locker/declaration.h"
 #include "transaction/declaration.h"
 #include "resource/declaration.h"
 #include "hash/hash.h"
@@ -74,8 +73,7 @@ SOFTWARE.
 #include "path/path.c"
 #include "string_array/string_array.c"
 #include "tree/definitions.h"
-
-#include "locker/locker.c"
+#include "locker/definition.h"
 
 #include "resource/definition.h"
 #include "transaction/definition.h"
