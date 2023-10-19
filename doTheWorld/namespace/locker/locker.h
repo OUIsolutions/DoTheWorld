@@ -5,7 +5,7 @@ typedef struct DtwLockerModule{
     void (*create_shared_file)(const char *location);
 
     int (*lock)(struct DtwLocker *self, const  char *element,int max_time);
-    void (*unlock)(struct DtwLocker *self, const  char *element);
+    int (*unlock)(struct DtwLocker *self, const  char *element);
     void (*free)(struct DtwLocker *self);
 
 }DtwLockerModule;
