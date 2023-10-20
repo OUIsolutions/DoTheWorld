@@ -13,7 +13,7 @@ void append_once(int num){
     locker->reverifcation_delay =  reverifation_delay;
     locker->wait_delay = wait_delay;
     locker->process= num;
-    locker->lock(locker,target);
+    DtwLocker_lock(locker,target);
     printf("processo %d bloqueou\n",num);
     char *elelement = dtw_load_string_file_content(target);
     char *formated = (char*) calloc(30000,sizeof(char*));
@@ -29,7 +29,7 @@ void append_once(int num){
     dtw_write_string_file_content(target,formated);
     free(elelement);
     free(formated);
-    locker->free(locker);
+    DtwLocker_free(locker);
 }
 
 int main(int argc, char *argv[]){
