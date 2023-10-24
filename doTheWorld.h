@@ -4599,58 +4599,58 @@ void DtwResource_lock(DtwResource *self);
 void DtwResource_unlock(DtwResource *self);
 
 
-void DtwResource_rename(DtwResource *self, char *new_name);
+void DtwResource_rename(DtwResource *self,const  char *new_name);
 
 //getters
 
 unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binary);
-unsigned char *DtwResource_get_any_from_sub_resource(DtwResource *self, long *size, bool *is_binary,char *format,...);
+unsigned char *DtwResource_get_any_from_sub_resource(DtwResource *self, long *size, bool *is_binary,const char *format,...);
 
 
 unsigned char *DtwResource_get_binary(DtwResource *self, long *size);
 
-unsigned char *DtwResource_get_binary_from_sub_resource(DtwResource *self, long *size,char *format,...);
+unsigned char *DtwResource_get_binary_from_sub_resource(DtwResource *self, long *size,const char *format,...);
 
 
 char *DtwResource_get_string(DtwResource *self);
-char *DtwResource_get_string_from_sub_resource(DtwResource *self,char *format,...);
+char *DtwResource_get_string_from_sub_resource(DtwResource *self,const char *format,...);
 
 long DtwResource_get_long(DtwResource *self);
 
-long DtwResource_get_long_from_sub_resource(DtwResource *self,char *format,...);
+long DtwResource_get_long_from_sub_resource(DtwResource *self,const char *format,...);
 
 double DtwResource_get_double(DtwResource *self);
-double DtwResource_get_double_from_sub_resource(DtwResource *self,char *format,...);
+double DtwResource_get_double_from_sub_resource(DtwResource *self,const char *format,...);
 
 
 bool DtwResource_get_bool(DtwResource *self);
 
-bool DtwResource_get_bool_from_sub_resource(DtwResource *self,char *format,...);
+bool DtwResource_get_bool_from_sub_resource(DtwResource *self,const char *format,...);
 
 
 
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size);
 
-void DtwResource_set_binary_in_sub_resource(DtwResource *self, unsigned char *element, long size,char *format,...);
+void DtwResource_set_binary_in_sub_resource(DtwResource *self, unsigned char *element, long size,const char *format,...);
 
 
 
 void DtwResource_set_string(DtwResource *self,const  char *element);
 
-void DtwResource_set_string_in_sub_resource(DtwResource *self,const  char *element,char *format,...);
+void DtwResource_set_string_in_sub_resource(DtwResource *self,const  char *element,const char *format,...);
 
 void DtwResource_set_long(DtwResource *self,long element);
 
-void DtwResource_set_long_in_sub_resource(DtwResource *self,long element,char *format,...);
+void DtwResource_set_long_in_sub_resource(DtwResource *self,long element,const char *format,...);
 
 
 void DtwResource_set_double(DtwResource *self,double element);
 
-void DtwResource_set_double_in_sub_resource(DtwResource *self,double element,char *format,...);
+void DtwResource_set_double_in_sub_resource(DtwResource *self,double element,const char *format,...);
 
 void DtwResource_set_bool( DtwResource *self,bool element);
 
-void DtwResource_set_bool_in_sub_resource( DtwResource *self,bool element,char *format,...);
+void DtwResource_set_bool_in_sub_resource( DtwResource *self,bool element,const char *format,...);
 
 
 void DtwResource_destroy(DtwResource *self);
@@ -5075,20 +5075,19 @@ typedef struct DtwResourceModule{
     DtwResource *(*newResource)(const char *path);
 
     struct DtwResource * (*sub_resource)(struct DtwResource *self,const  char *format,...);
-    unsigned char *(*get_any_from_sub_resource)(DtwResource *self, long *size, bool *is_binary,char *format,...);
-    unsigned char *(*get_binary_from_sub_resource)(DtwResource *self, long *size,char *format,...);
-    char *(*get_string_from_sub_resource)(DtwResource *self,char *format,...);
-    long (*get_long_from_sub_resource)(DtwResource *self,char *format,...);
-    double (*get_double_from_sub_resource)(DtwResource *self,char *format,...);
-    bool (*get_bool_from_sub_resource)(DtwResource *self,char *format,...);
+    unsigned char *(*get_any_from_sub_resource)(DtwResource *self, long *size, bool *is_binary,const char *format,...);
+    unsigned char *(*get_binary_from_sub_resource)(DtwResource *self, long *size,const char *format,...);
+    char *(*get_string_from_sub_resource)(DtwResource *self,const char *format,...);
+    long (*get_long_from_sub_resource)(DtwResource *self,const char *format,...);
+    double (*get_double_from_sub_resource)(DtwResource *self,const char *format,...);
+    bool (*get_bool_from_sub_resource)(DtwResource *self,const char *format,...);
 
 
-    void (*set_binary_in_sub_resource)(DtwResource *self, unsigned char *element, long size,char *format,...);
-    void (*set_string_in_sub_resource)(DtwResource *self,const  char *element,char *format,...);
-    void (*set_long_in_sub_resource)(DtwResource *self,long element,char *format,...);
-    void (*set_double_in_sub_resource)(DtwResource *self,double element,char *format,...);
-    void (*set_bool_in_sub_resource)( DtwResource *self,bool element,char *format,...);
-
+    void (*set_binary_in_sub_resource)(DtwResource *self, unsigned char *element, long size,const char *format,...);
+    void (*set_string_in_sub_resource)(DtwResource *self,const  char *element,const char *format,...);
+    void (*set_long_in_sub_resource)(DtwResource *self,long element,const char *format,...);
+    void (*set_double_in_sub_resource)(DtwResource *self,double element,const char *format,...);
+    void (*set_bool_in_sub_resource)( DtwResource *self,bool element,const char *format,...);
 
 
     DtwResource * (*sub_resource_ensuring_not_exist)(DtwResource *self,const  char *format, ...);
@@ -5143,7 +5142,7 @@ typedef struct DtwResourceModule{
 
     void (*represent)(DtwResource *self);
 
-    void (*rename)(DtwResource *self, char *new_name);
+    void (*rename)(DtwResource *self,const char *new_name);
 
     void (*free)(DtwResource *self);
     DtwResourceArray * (*sub_resources)(DtwResource *self);
@@ -8289,11 +8288,11 @@ void DtwLocker_free(struct DtwLocker *self){
 
 
 
-void DtwResource_rename(DtwResource *self, char *new_name){
+void DtwResource_rename(DtwResource *self,const char *new_name){
 
     char *old_path = strdup(self->path);
     free(self->path);
-    self->path  = dtw_concat_path(self->mothers_path, self->name);
+    self->path  = dtw_concat_path(self->mothers_path, new_name);
 
     if(self->allow_transaction){
         DtwTransaction_move_any(self->transaction,old_path,self->path);
@@ -8465,7 +8464,7 @@ unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binar
     return self->value_any;
 }
 
-unsigned char *DtwResource_get_any_from_sub_resource(DtwResource *self, long *size, bool *is_binary,char *format,...){
+unsigned char *DtwResource_get_any_from_sub_resource(DtwResource *self, long *size, bool *is_binary,const char *format,...){
     char name[2000] ={0};
 
     va_list args;
@@ -8483,7 +8482,7 @@ unsigned char *DtwResource_get_binary(DtwResource *self, long *size){
     return DtwResource_get_any(self,size,&is_binary);
 }
 
-unsigned char *DtwResource_get_binary_from_sub_resource(DtwResource *self, long *size,char *format,...){
+unsigned char *DtwResource_get_binary_from_sub_resource(DtwResource *self, long *size,const char *format,...){
     char name[2000] ={0};
 
     va_list args;
@@ -8502,7 +8501,7 @@ char *DtwResource_get_string(DtwResource *self){
     return (char *)DtwResource_get_any(self,&size,&is_binary);
 }
 
-char *DtwResource_get_string_from_sub_resource(DtwResource *self,char *format,...){
+char *DtwResource_get_string_from_sub_resource(DtwResource *self,const char *format,...){
 
     char name[2000] ={0};
 
@@ -8529,7 +8528,7 @@ long DtwResource_get_long(DtwResource *self){
     return value;
 }
 
-long DtwResource_get_long_from_sub_resource(DtwResource *self,char *format,...){
+long DtwResource_get_long_from_sub_resource(DtwResource *self,const char *format,...){
     char name[2000] ={0};
 
     va_list args;
@@ -8555,7 +8554,7 @@ double DtwResource_get_double(DtwResource *self){
     return value;
 }
 
-double DtwResource_get_double_from_sub_resource(DtwResource *self,char *format,...){
+double DtwResource_get_double_from_sub_resource(DtwResource *self,const char *format,...){
     char name[2000] ={0};
 
     va_list args;
@@ -8575,7 +8574,7 @@ bool DtwResource_get_bool(DtwResource *self){
     }
     return false;
 }
-bool DtwResource_get_bool_from_sub_resource(DtwResource *self,char *format,...){
+bool DtwResource_get_bool_from_sub_resource(DtwResource *self,const char *format,...){
     char name[2000] ={0};
 
     va_list args;
@@ -8628,7 +8627,7 @@ void DtwResource_set_string(DtwResource *self,const  char *element){
 
 }
 
-void DtwResource_set_binary_in_sub_resource(DtwResource *self, unsigned char *element, long size,char *format,...){
+void DtwResource_set_binary_in_sub_resource(DtwResource *self, unsigned char *element, long size,const char *format,...){
     char name[2000] ={0};
 
     va_list args;
@@ -8640,7 +8639,7 @@ void DtwResource_set_binary_in_sub_resource(DtwResource *self, unsigned char *el
     DtwResource_set_binary(created,element,size);
 }
 
-void DtwResource_set_string_in_sub_resource(DtwResource *self,const  char *element,char *format,...){
+void DtwResource_set_string_in_sub_resource(DtwResource *self,const  char *element,const char *format,...){
     char name[2000] ={0};
 
     va_list args;
@@ -8669,7 +8668,7 @@ void DtwResource_set_long(DtwResource *self,long element){
     self->value_any = (unsigned char *)strdup(result);
 
 }
-void DtwResource_set_long_in_sub_resource(DtwResource *self,long element,char *format,...){
+void DtwResource_set_long_in_sub_resource(DtwResource *self,long element,const char *format,...){
     char name[2000] ={0};
 
     va_list args;
@@ -8697,7 +8696,7 @@ void DtwResource_set_double(DtwResource *self,double element){
 
 
 }
-void DtwResource_set_double_in_sub_resource(DtwResource *self,double element,char *format,...){
+void DtwResource_set_double_in_sub_resource(DtwResource *self,double element,const char *format,...){
     char name[2000] ={0};
 
     va_list args;
@@ -8729,7 +8728,7 @@ void DtwResource_set_bool( DtwResource *self,bool element){
     }
 
 }
-void DtwResource_set_bool_in_sub_resource( DtwResource *self,bool element,char *format,...){
+void DtwResource_set_bool_in_sub_resource( DtwResource *self,bool element,const char *format,...){
     char name[2000] ={0};
 
     va_list args;

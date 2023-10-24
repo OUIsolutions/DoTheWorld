@@ -39,7 +39,7 @@ void DtwResource_set_string(DtwResource *self,const  char *element){
 
 }
 
-void DtwResource_set_binary_in_sub_resource(DtwResource *self, unsigned char *element, long size,char *format,...){
+void DtwResource_set_binary_in_sub_resource(DtwResource *self, unsigned char *element, long size,const char *format,...){
     char name[2000] ={0};
 
     va_list args;
@@ -51,7 +51,7 @@ void DtwResource_set_binary_in_sub_resource(DtwResource *self, unsigned char *el
     DtwResource_set_binary(created,element,size);
 }
 
-void DtwResource_set_string_in_sub_resource(DtwResource *self,const  char *element,char *format,...){
+void DtwResource_set_string_in_sub_resource(DtwResource *self,const  char *element,const char *format,...){
     char name[2000] ={0};
 
     va_list args;
@@ -80,7 +80,7 @@ void DtwResource_set_long(DtwResource *self,long element){
     self->value_any = (unsigned char *)strdup(result);
 
 }
-void DtwResource_set_long_in_sub_resource(DtwResource *self,long element,char *format,...){
+void DtwResource_set_long_in_sub_resource(DtwResource *self,long element,const char *format,...){
     char name[2000] ={0};
 
     va_list args;
@@ -108,7 +108,7 @@ void DtwResource_set_double(DtwResource *self,double element){
 
 
 }
-void DtwResource_set_double_in_sub_resource(DtwResource *self,double element,char *format,...){
+void DtwResource_set_double_in_sub_resource(DtwResource *self,double element,const char *format,...){
     char name[2000] ={0};
 
     va_list args;
@@ -140,7 +140,7 @@ void DtwResource_set_bool( DtwResource *self,bool element){
     }
 
 }
-void DtwResource_set_bool_in_sub_resource( DtwResource *self,bool element,char *format,...){
+void DtwResource_set_bool_in_sub_resource( DtwResource *self,bool element,const char *format,...){
     char name[2000] ={0};
 
     va_list args;

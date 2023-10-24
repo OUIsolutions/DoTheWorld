@@ -6,7 +6,7 @@ unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binar
     return self->value_any;
 }
 
-unsigned char *DtwResource_get_any_from_sub_resource(DtwResource *self, long *size, bool *is_binary,char *format,...){
+unsigned char *DtwResource_get_any_from_sub_resource(DtwResource *self, long *size, bool *is_binary,const char *format,...){
     char name[2000] ={0};
 
     va_list args;
@@ -24,7 +24,7 @@ unsigned char *DtwResource_get_binary(DtwResource *self, long *size){
     return DtwResource_get_any(self,size,&is_binary);
 }
 
-unsigned char *DtwResource_get_binary_from_sub_resource(DtwResource *self, long *size,char *format,...){
+unsigned char *DtwResource_get_binary_from_sub_resource(DtwResource *self, long *size,const char *format,...){
     char name[2000] ={0};
 
     va_list args;
@@ -43,7 +43,7 @@ char *DtwResource_get_string(DtwResource *self){
     return (char *)DtwResource_get_any(self,&size,&is_binary);
 }
 
-char *DtwResource_get_string_from_sub_resource(DtwResource *self,char *format,...){
+char *DtwResource_get_string_from_sub_resource(DtwResource *self,const char *format,...){
 
     char name[2000] ={0};
 
@@ -70,7 +70,7 @@ long DtwResource_get_long(DtwResource *self){
     return value;
 }
 
-long DtwResource_get_long_from_sub_resource(DtwResource *self,char *format,...){
+long DtwResource_get_long_from_sub_resource(DtwResource *self,const char *format,...){
     char name[2000] ={0};
 
     va_list args;
@@ -96,7 +96,7 @@ double DtwResource_get_double(DtwResource *self){
     return value;
 }
 
-double DtwResource_get_double_from_sub_resource(DtwResource *self,char *format,...){
+double DtwResource_get_double_from_sub_resource(DtwResource *self,const char *format,...){
     char name[2000] ={0};
 
     va_list args;
@@ -116,7 +116,7 @@ bool DtwResource_get_bool(DtwResource *self){
     }
     return false;
 }
-bool DtwResource_get_bool_from_sub_resource(DtwResource *self,char *format,...){
+bool DtwResource_get_bool_from_sub_resource(DtwResource *self,const char *format,...){
     char name[2000] ={0};
 
     va_list args;

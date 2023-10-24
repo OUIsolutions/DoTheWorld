@@ -57,58 +57,58 @@ void DtwResource_lock(DtwResource *self);
 void DtwResource_unlock(DtwResource *self);
 
 
-void DtwResource_rename(DtwResource *self, char *new_name);
+void DtwResource_rename(DtwResource *self,const  char *new_name);
 
 //getters
 
 unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binary);
-unsigned char *DtwResource_get_any_from_sub_resource(DtwResource *self, long *size, bool *is_binary,char *format,...);
+unsigned char *DtwResource_get_any_from_sub_resource(DtwResource *self, long *size, bool *is_binary,const char *format,...);
 
 
 unsigned char *DtwResource_get_binary(DtwResource *self, long *size);
 
-unsigned char *DtwResource_get_binary_from_sub_resource(DtwResource *self, long *size,char *format,...);
+unsigned char *DtwResource_get_binary_from_sub_resource(DtwResource *self, long *size,const char *format,...);
 
 
 char *DtwResource_get_string(DtwResource *self);
-char *DtwResource_get_string_from_sub_resource(DtwResource *self,char *format,...);
+char *DtwResource_get_string_from_sub_resource(DtwResource *self,const char *format,...);
 
 long DtwResource_get_long(DtwResource *self);
 
-long DtwResource_get_long_from_sub_resource(DtwResource *self,char *format,...);
+long DtwResource_get_long_from_sub_resource(DtwResource *self,const char *format,...);
 
 double DtwResource_get_double(DtwResource *self);
-double DtwResource_get_double_from_sub_resource(DtwResource *self,char *format,...);
+double DtwResource_get_double_from_sub_resource(DtwResource *self,const char *format,...);
 
 
 bool DtwResource_get_bool(DtwResource *self);
 
-bool DtwResource_get_bool_from_sub_resource(DtwResource *self,char *format,...);
+bool DtwResource_get_bool_from_sub_resource(DtwResource *self,const char *format,...);
 
 
 
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size);
 
-void DtwResource_set_binary_in_sub_resource(DtwResource *self, unsigned char *element, long size,char *format,...);
+void DtwResource_set_binary_in_sub_resource(DtwResource *self, unsigned char *element, long size,const char *format,...);
 
 
 
 void DtwResource_set_string(DtwResource *self,const  char *element);
 
-void DtwResource_set_string_in_sub_resource(DtwResource *self,const  char *element,char *format,...);
+void DtwResource_set_string_in_sub_resource(DtwResource *self,const  char *element,const char *format,...);
 
 void DtwResource_set_long(DtwResource *self,long element);
 
-void DtwResource_set_long_in_sub_resource(DtwResource *self,long element,char *format,...);
+void DtwResource_set_long_in_sub_resource(DtwResource *self,long element,const char *format,...);
 
 
 void DtwResource_set_double(DtwResource *self,double element);
 
-void DtwResource_set_double_in_sub_resource(DtwResource *self,double element,char *format,...);
+void DtwResource_set_double_in_sub_resource(DtwResource *self,double element,const char *format,...);
 
 void DtwResource_set_bool( DtwResource *self,bool element);
 
-void DtwResource_set_bool_in_sub_resource( DtwResource *self,bool element,char *format,...);
+void DtwResource_set_bool_in_sub_resource( DtwResource *self,bool element,const char *format,...);
 
 
 void DtwResource_destroy(DtwResource *self);

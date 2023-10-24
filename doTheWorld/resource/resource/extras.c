@@ -3,11 +3,11 @@
 
 
 
-void DtwResource_rename(DtwResource *self, char *new_name){
+void DtwResource_rename(DtwResource *self,const char *new_name){
 
     char *old_path = strdup(self->path);
     free(self->path);
-    self->path  = dtw_concat_path(self->mothers_path, self->name);
+    self->path  = dtw_concat_path(self->mothers_path, new_name);
 
     if(self->allow_transaction){
         DtwTransaction_move_any(self->transaction,old_path,self->path);
