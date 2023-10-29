@@ -32,7 +32,13 @@ void DtwTransaction_remove_from_index(DtwTransaction *self,long index){
 
 }
 void DtwTransaction_filter(DtwTransaction *self,bool (*callback)(DtwActionTransaction *action)){
-
+    for(long i = 0; i < self->size; i++){
+        DtwActionTransaction *current = self->actions[i];
+        if(!callback(current)){
+            DtwTransaction_remove_from_index(self,i);
+            i-=1;
+        }
+    }
 }
 
 void DtwTransaction_remove_from_source(DtwTransaction *self,const char *source){

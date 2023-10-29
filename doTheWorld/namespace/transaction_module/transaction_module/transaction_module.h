@@ -5,6 +5,10 @@ typedef struct DtwTransactionModule{
     DtwTransaction * (*newTransaction_from_json_file)(const char *filename);
     DtwJsonTransactionError * (*validate_json_transaction_file)(const char *filename);
 
+    void (*remove_from_index)(DtwTransaction *self,long index);
+    void (*remove_from_source)(DtwTransaction *self,const char *source);
+    void (*filter)(DtwTransaction *self,bool (*callback)(DtwActionTransaction *action));
+
     void (*append_action)(struct DtwTransaction *self,struct DtwActionTransaction  *action);
     void (*write_any)(struct DtwTransaction *self,const char *path,unsigned char *content, long size,bool is_binary);
     void (*write_string)(struct DtwTransaction *self,const char *path,const char *content);

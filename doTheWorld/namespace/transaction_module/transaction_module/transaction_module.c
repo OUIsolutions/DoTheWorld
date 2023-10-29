@@ -6,6 +6,9 @@ DtwTransactionModule newDtwTransactionModule(){
     self.newTransaction_from_json = newDtwTransaction_from_json;
     self.newTransaction_from_json_file = newDtwTransaction_from_json_file;
     self.validate_json_transaction_file = dtw_validate_json_transaction_file;
+    self.remove_from_index = DtwTransaction_remove_from_index;
+    self.remove_from_source = DtwTransaction_remove_from_source;
+    self.filter = DtwTransaction_filter;
     self.append_action = DtwTransaction_append_action;
     self.write_any = DtwTransaction_write_any;
     self.write_string = DtwTransaction_write_string;
