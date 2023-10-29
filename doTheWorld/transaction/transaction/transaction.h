@@ -19,6 +19,11 @@ DtwJsonTransactionError * dtw_validate_json_transaction_file(const char *filenam
 
 DtwTransaction * newDtwTransaction_from_json_file(const char *filename);
 
+void DtwTransaction_remove_from_index(DtwTransaction *self,long index);
+
+void DtwTransaction_remove_from_source(DtwTransaction *self,const char *source);
+
+void DtwTransaction_filter(DtwTransaction *self,bool (*callback)(DtwActionTransaction *action));
 
 void DtwTransaction_append_action(struct DtwTransaction *self,struct DtwActionTransaction  *action);
 

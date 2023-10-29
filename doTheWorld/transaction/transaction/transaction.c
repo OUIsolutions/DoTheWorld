@@ -18,7 +18,32 @@ void DtwTransaction_append_action(struct DtwTransaction *self,struct DtwActionTr
 }
 
 
+void DtwTransaction_remove_from_index(DtwTransaction *self,long index){
 
+
+    DtwActionTransaction_free(self->actions[index]);
+    self->size -=1;
+    if(self->size == 0){
+        return;
+    }
+    for(long i = index; i < self->size; i++){
+        self->actions[i] = self->actions[i+1];
+    }
+
+}
+void DtwTransaction_filter(DtwTransaction *self,bool (*callback)(DtwActionTransaction *action)){
+
+}
+
+void DtwTransaction_remove_from_source(DtwTransaction *self,const char *source){
+    for(long i = 0; i < self->size; i++){
+        DtwActionTransaction *current = self->actions[i];
+        if(strcmp(current->source,source) ==0){
+            DtwTransaction_remove_from_index(self,i);
+            i-=1;
+        }
+    }
+}
 
 
 void DtwTransaction_write_any(struct DtwTransaction *self,const char *path,unsigned char *content, long size,bool is_binary){
@@ -30,6 +55,7 @@ void DtwTransaction_write_string(struct DtwTransaction *self,const char *path,co
     DtwActionTransaction * action = DtwActionTransaction_write_any(path,(unsigned char*)content, strlen(content),false);
     DtwTransaction_append_action(self,action);
 }
+
 
 void DtwTransaction_write_long(struct DtwTransaction *self,const char *path,long value){
     char converted[20] ={0};
