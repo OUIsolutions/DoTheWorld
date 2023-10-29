@@ -4507,6 +4507,11 @@ DtwJsonTransactionError * dtw_validate_json_transaction_file(const char *filenam
 
 DtwTransaction * newDtwTransaction_from_json_file(const char *filename);
 
+void DtwTransaction_remove_from_index(DtwTransaction *self,long index);
+
+void DtwTransaction_remove_from_source(DtwTransaction *self,const char *source);
+
+void DtwTransaction_filter(DtwTransaction *self,bool (*callback)(DtwActionTransaction *action));
 
 void DtwTransaction_append_action(struct DtwTransaction *self,struct DtwActionTransaction  *action);
 
@@ -5024,6 +5029,10 @@ typedef struct DtwTransactionModule{
     DtwTransaction * (*newTransaction_from_json)(cJSON *json_entry);
     DtwTransaction * (*newTransaction_from_json_file)(const char *filename);
     DtwJsonTransactionError * (*validate_json_transaction_file)(const char *filename);
+
+    void (*remove_from_index)(DtwTransaction *self,long index);
+    void (*remove_from_source)(DtwTransaction *self,const char *source);
+    void (*filter)(DtwTransaction *self,bool (*callback)(DtwActionTransaction *action));
 
     void (*append_action)(struct DtwTransaction *self,struct DtwActionTransaction  *action);
     void (*write_any)(struct DtwTransaction *self,const char *path,unsigned char *content, long size,bool is_binary);
@@ -9471,7 +9480,38 @@ void DtwTransaction_append_action(struct DtwTransaction *self,struct DtwActionTr
 }
 
 
+void DtwTransaction_remove_from_index(DtwTransaction *self,long index){
 
+
+    DtwActionTransaction_free(self->actions[index]);
+    self->size -=1;
+    if(self->size == 0){
+        return;
+    }
+    for(long i = index; i < self->size; i++){
+        self->actions[i] = self->actions[i+1];
+    }
+
+}
+void DtwTransaction_filter(DtwTransaction *self,bool (*callback)(DtwActionTransaction *action)){
+    for(long i = 0; i < self->size; i++){
+        DtwActionTransaction *current = self->actions[i];
+        if(!callback(current)){
+            DtwTransaction_remove_from_index(self,i);
+            i-=1;
+        }
+    }
+}
+
+void DtwTransaction_remove_from_source(DtwTransaction *self,const char *source){
+    for(long i = 0; i < self->size; i++){
+        DtwActionTransaction *current = self->actions[i];
+        if(strcmp(current->source,source) ==0){
+            DtwTransaction_remove_from_index(self,i);
+            i-=1;
+        }
+    }
+}
 
 
 void DtwTransaction_write_any(struct DtwTransaction *self,const char *path,unsigned char *content, long size,bool is_binary){
@@ -9483,6 +9523,7 @@ void DtwTransaction_write_string(struct DtwTransaction *self,const char *path,co
     DtwActionTransaction * action = DtwActionTransaction_write_any(path,(unsigned char*)content, strlen(content),false);
     DtwTransaction_append_action(self,action);
 }
+
 
 void DtwTransaction_write_long(struct DtwTransaction *self,const char *path,long value){
     char converted[20] ={0};
@@ -10002,6 +10043,9 @@ DtwTransactionModule newDtwTransactionModule(){
     self.newTransaction_from_json = newDtwTransaction_from_json;
     self.newTransaction_from_json_file = newDtwTransaction_from_json_file;
     self.validate_json_transaction_file = dtw_validate_json_transaction_file;
+    self.remove_from_index = DtwTransaction_remove_from_index;
+    self.remove_from_source = DtwTransaction_remove_from_source;
+    self.filter = DtwTransaction_filter;
     self.append_action = DtwTransaction_append_action;
     self.write_any = DtwTransaction_write_any;
     self.write_string = DtwTransaction_write_string;
