@@ -4554,7 +4554,7 @@ typedef struct {
 
 }privateDtwResourceRootProps;
 
-privateDtwResourceRootProps *newDtwResourceRootProps();
+privateDtwResourceRootProps *private_newDtwResourceRootProps();
 
 
 void privateDtwResourceRootProps_free(privateDtwResourceRootProps *self);
@@ -8304,7 +8304,7 @@ void DtwLocker_free(struct DtwLocker *self){
 
 
 
-privateDtwResourceRootProps *newDtwResourceRootProps(){
+privateDtwResourceRootProps *private_newDtwResourceRootProps(){
     privateDtwResourceRootProps *self  = (privateDtwResourceRootProps*) malloc(sizeof (privateDtwResourceRootProps));
     self->transaction = newDtwTransaction();
     self->randonizer = newDtwRandonizer();

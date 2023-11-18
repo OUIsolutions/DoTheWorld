@@ -1,6 +1,6 @@
 
 
-privateDtwResourceRootProps *newDtwResourceRootProps(){
+privateDtwResourceRootProps *private_newDtwResourceRootProps(){
     privateDtwResourceRootProps *self  = (privateDtwResourceRootProps*) malloc(sizeof (privateDtwResourceRootProps));
     *self = (privateDtwResourceRootProps){0};
     self->transaction = newDtwTransaction();

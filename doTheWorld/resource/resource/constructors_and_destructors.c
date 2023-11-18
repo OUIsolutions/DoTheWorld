@@ -10,7 +10,7 @@ DtwResource *new_DtwResource(const char *path){
     self->allow_transaction = true;
     self->use_locker_on_unique_values = true;
     self->cache_sub_resources = true;
-    self->root_props = newDtwResourceRootProps();
+    self->root_props = private_newDtwResourceRootProps();
 
     DtwResource_load(self);
     return self;

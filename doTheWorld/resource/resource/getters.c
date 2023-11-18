@@ -8,7 +8,7 @@ unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binar
     *size = self->value_size;
     *is_binary = self->is_binary;
 
-    if(self->value_any){
+    if(!self->value_any){
         private_DtwResource_raise_error(
                 self,
                 DTW_RESOURCE_ELEMENT_NOT_EXIST,
@@ -73,6 +73,7 @@ char *DtwResource_get_string(DtwResource *self){
     long size;
     bool is_binary;
     char *result =  (char *)DtwResource_get_any(self,&size,&is_binary);
+
     if(is_binary){
         private_DtwResource_raise_error(
                 self,
