@@ -5114,6 +5114,10 @@ DtwResourceArrayModule newDtwResourceArrayModule();
 typedef struct DtwResourceModule{
 
     DtwResource *(*newResource)(const char *path);
+    int (*get_error_code)(DtwResource *self);
+    bool (*error)(DtwResource *self);
+
+    char * (*get_error_message)(DtwResource *self);
 
     struct DtwResource * (*sub_resource)(struct DtwResource *self,const  char *format,...);
     unsigned char *(*get_any_from_sub_resource)(DtwResource *self, long *size, bool *is_binary,const char *format,...);
@@ -10337,6 +10341,9 @@ DtwResourceArrayModule newDtwResourceArrayModule(){
 DtwResourceModule newDtwResourceModule(){
     DtwResourceModule self = {0};
     self.newResource = new_DtwResource;
+    self.get_error_code = DtwResource_get_error_code;
+    self.get_error_message = DtwResource_get_error_message;
+    self.error = DtwResource_error;
     self.load = DtwResource_load;
     self.unload = DtwResource_unload;
     self.sub_resource = DtwResource_sub_resource;

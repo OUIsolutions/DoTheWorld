@@ -2,6 +2,9 @@
 DtwResourceModule newDtwResourceModule(){
     DtwResourceModule self = {0};
     self.newResource = new_DtwResource;
+    self.get_error_code = DtwResource_get_error_code;
+    self.get_error_message = DtwResource_get_error_message;
+    self.error = DtwResource_error;
     self.load = DtwResource_load;
     self.unload = DtwResource_unload;
     self.sub_resource = DtwResource_sub_resource;
