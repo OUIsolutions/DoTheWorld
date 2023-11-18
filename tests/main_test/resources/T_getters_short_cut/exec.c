@@ -23,29 +23,30 @@ int main (){
     }
 
     char *a = dtw.resource.get_string_from_sub_resource(values,"a.txt");
-    if(a){
-        printf("value string :%s\n",a);
-    }
+
 
     long blob_size;
     unsigned char *value  = dtw.resource.get_binary_from_sub_resource(values,&blob_size,"blob.png");
-    if(values){
-        printf("blob size: %ld\n",blob_size);
-    }
 
 
     DtwResource *numerical = dtw.resource.sub_resource(values,"numerical");
-    if(dtw.resource.type(numerical) == DTW_FOLDER_TYPE){
-        double double_value = dtw.resource.get_double_from_sub_resource(numerical,"double.txt");
+    double double_value = dtw.resource.get_double_from_sub_resource(numerical,"double.txt");
+    long long_value = dtw.resource.get_long_from_sub_resource(numerical,"integer.txt");
+    bool bool_value = dtw.resource.get_bool_from_sub_resource(numerical,"true_normal.txt");
+
+    DtwResource_protected(values){
+        printf("value string :%s\n",a);
+        printf("blob size: %ld\n",blob_size);
         printf("double value %lf\n",double_value);
-
-        long long_value = dtw.resource.get_long_from_sub_resource(numerical,"integer.txt");
         printf("long value %ld\n",long_value);
-
-
-        bool bool_value = dtw.resource.get_bool_from_sub_resource(numerical,"true_normal.txt");
         printf("bool value %d\n",bool_value);
     }
+    DtwResource_catch(values){
+        char *message = DtwResource_get_error_message(values);
+        printf("%s",message);
+    }
+
+
 
 
     dtw.resource.free(values);

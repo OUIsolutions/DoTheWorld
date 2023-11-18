@@ -91,7 +91,7 @@ void DtwResource_commit(DtwResource *self){
 
 long DtwResource_size(DtwResource *self){
     if(DtwResource_error(self)){
-        return ;
+        return -1;
     }
     return dtw_get_total_itens_of_dir(self->path);
 }
