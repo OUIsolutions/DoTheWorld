@@ -1,2 +1,0 @@
- 
-value string :Hello World!
