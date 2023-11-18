@@ -35,7 +35,7 @@ DtwResource * DtwResource_sub_resource_now(DtwResource *self, const char *end_pa
         char path[1000] ={0};
 
         if(empty_already_exist){
-            char *token = DtwRandonizer_generate_token(self->randonizer,10);
+            char *token = DtwRandonizer_generate_token(self->root_props->randonizer,10);
             sprintf(path,"%s--%s",time,token);
             free(token);
         }
@@ -66,7 +66,7 @@ DtwResource * DtwResource_sub_resource_now_in_unix(DtwResource *self, const char
         char path[1000] ={0};
 
         if(empty_already_exist){
-            char *token = DtwRandonizer_generate_token(self->randonizer,10);
+            char *token = DtwRandonizer_generate_token(self->root_props->randonizer,10);
             sprintf(path,"%ld--%s",now,token);
             free(token);
         }
@@ -91,7 +91,7 @@ DtwResource * DtwResource_sub_resource_random(DtwResource *self, const char *end
     while(true){
 
         char path[1000] ={0};
-        char *token = DtwRandonizer_generate_token(self->randonizer,15);
+        char *token = DtwRandonizer_generate_token(self->root_props->randonizer,15);
         sprintf(path,"%s",token);
         free(token);
 

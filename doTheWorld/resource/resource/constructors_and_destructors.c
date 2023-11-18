@@ -10,9 +10,7 @@ DtwResource *new_DtwResource(const char *path){
     self->allow_transaction = true;
     self->use_locker_on_unique_values = true;
     self->cache_sub_resources = true;
-    self->transaction = newDtwTransaction();
-    self->randonizer = newDtwRandonizer();
-    self->locker = newDtwLocker();
+    self->root_props = newDtwResourceRootProps();
 
     DtwResource_load(self);
     return self;
@@ -37,16 +35,15 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
     *new_element =(DtwResource){0};
     new_element->allow_transaction = self->allow_transaction;
     new_element->use_locker_on_unique_values = self->use_locker_on_unique_values;
-    new_element->transaction = self->transaction;
-    new_element->randonizer = self->randonizer;
+    new_element->root_props = self->root_props;
+    //copied elements
+
     new_element->child = true;
     new_element->mothers_path = strdup(self->path);
     new_element->path = dtw_concat_path(self->path, name);
     new_element->name = strdup(name);
-
     new_element->locked = self->locked;
 
-    new_element->locker = self->locker;
 
     new_element->cache_sub_resources = self->cache_sub_resources;
     new_element->sub_resources = newDtwResourceArray();
@@ -103,17 +100,10 @@ DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,cons
 }
 
 void DtwResource_free(DtwResource *self){
+    bool is_root = !self->child;
+    if(is_root){
 
-    if(!self->child){
-        if(self->transaction){
-            DtwTransaction_free(self->transaction);
-        }
-        DtwRandonizer_free(self->randonizer);
-
-
-     DtwLocker_free(self->locker);
-    
-
+        privateDtwResourceRootProps_free(self->root_props);
     }
 
 

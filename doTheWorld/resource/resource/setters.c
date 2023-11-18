@@ -6,7 +6,7 @@
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size){
 
     if(self->allow_transaction){
-        DtwTransaction_write_any(self->transaction,self->path,element,size,true);
+        DtwTransaction_write_any(self->root_props->transaction,self->path,element,size,true);
     }
     else{
         dtw_write_any_content(self->path,element,size);
@@ -23,7 +23,7 @@ void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size
 
 void DtwResource_set_string(DtwResource *self,const  char *element){
     if(self->allow_transaction){
-        DtwTransaction_write_string(self->transaction,self->path,element);
+        DtwTransaction_write_string(self->root_props->transaction,self->path,element);
     }
     else{
         dtw_write_string_file_content(self->path,element);
@@ -68,7 +68,7 @@ void DtwResource_set_string_in_sub_resource(DtwResource *self,const  char *eleme
 
 void DtwResource_set_long(DtwResource *self,long element){
     if(self->allow_transaction){
-        DtwTransaction_write_long(self->transaction,self->path,element);
+        DtwTransaction_write_long(self->root_props->transaction,self->path,element);
     }
     else{
         dtw_write_long_file_content(self->path,element);
@@ -95,7 +95,7 @@ void DtwResource_set_long_in_sub_resource(DtwResource *self,long element,const c
 void DtwResource_set_double(DtwResource *self,double element){
 
     if(self->allow_transaction){
-        DtwTransaction_write_double(self->transaction,self->path,element);
+        DtwTransaction_write_double(self->root_props->transaction,self->path,element);
     }
     else{
         dtw_write_double_file_content(self->path,element);
@@ -123,7 +123,7 @@ void DtwResource_set_double_in_sub_resource(DtwResource *self,double element,con
 void DtwResource_set_bool( DtwResource *self,bool element){
 
     if(self->allow_transaction){
-        DtwTransaction_write_bool(self->transaction,self->path,element);
+        DtwTransaction_write_bool(self->root_props->transaction,self->path,element);
     }
     else{
         dtw_write_bool_file_content(self->path,element);

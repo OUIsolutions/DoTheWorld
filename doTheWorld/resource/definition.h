@@ -1,3 +1,5 @@
+#include "root_props/root_props.c"
+
 #include "resource/extras.c"
 #include "resource/loaders_and_unloaders.c"
 #include "resource/getters.c"

@@ -10,7 +10,7 @@ void DtwResource_rename(DtwResource *self,const char *new_name){
     self->path  = dtw_concat_path(self->mothers_path, new_name);
 
     if(self->allow_transaction){
-        DtwTransaction_move_any(self->transaction,old_path,self->path);
+        DtwTransaction_move_any(self->root_props->transaction,old_path,self->path);
     }
     else{
         dtw_move_any(old_path,self->path,DTW_NOT_MERGE);
@@ -25,7 +25,7 @@ void DtwResource_lock(DtwResource *self){
         return;
     }
     
-    DtwLocker_lock(self->locker,self->path);
+    DtwLocker_lock(self->root_props->locker,self->path);
     
     self->locked = true;
 }
@@ -35,7 +35,7 @@ void DtwResource_unlock(DtwResource *self){
         return;
     }
     
-    DtwLocker_unlock(self->locker,self->path);
+    DtwLocker_unlock(self->root_props->locker,self->path);
     
     self->locked = false;
 }
@@ -44,7 +44,7 @@ void DtwResource_unlock(DtwResource *self){
 void DtwResource_destroy(DtwResource *self){
 
     if(self->allow_transaction){
-        DtwTransaction_delete_any(self->transaction,self->path);
+        DtwTransaction_delete_any(self->root_props->transaction,self->path);
     }
     else{
         dtw_remove_any(self->path);
@@ -56,7 +56,7 @@ void DtwResource_destroy(DtwResource *self){
 
 
 void DtwResource_commit(DtwResource *self){
-    DtwTransaction_commit(self->transaction,NULL);
+    DtwTransaction_commit(self->root_props->transaction,NULL);
 }
 
 long DtwResource_size(DtwResource *self){
