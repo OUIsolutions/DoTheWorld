@@ -27,6 +27,12 @@ typedef struct DtwResource{
 
 DtwResource *new_DtwResource(const char *path);
 
+bool DtwResource_error(DtwResource *self);
+
+int DtwResource_get_error_code(DtwResource *self);
+
+char * DtwResource_get_error_message(DtwResource *self);
+
 DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ...);
 
 DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,const  char *format, ...);

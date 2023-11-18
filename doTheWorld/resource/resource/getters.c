@@ -1,9 +1,16 @@
 
 unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binary){
+    if(DtwResource_error(self)){
+        return NULL;
+    }
+
     DtwResource_load_if_not_loaded(self);
     *size = self->value_size;
     *is_binary = self->is_binary;
+    
     return self->value_any;
+
+
 }
 
 unsigned char *DtwResource_get_any_from_sub_resource(DtwResource *self, long *size, bool *is_binary,const char *format,...){

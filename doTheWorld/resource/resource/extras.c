@@ -1,6 +1,20 @@
 
 
 
+bool DtwResource_error(DtwResource *self){
+    if(self->root_props->error_code == DTW_RESOURCE_OK){
+        return false;
+    }
+    return true;
+}
+
+int DtwResource_get_error_code(DtwResource *self){
+    return self->root_props->error_code;
+}
+
+char * DtwResource_get_error_message(DtwResource *self){
+    return self->root_props->error_message;
+}
 
 
 void DtwResource_rename(DtwResource *self,const char *new_name){
