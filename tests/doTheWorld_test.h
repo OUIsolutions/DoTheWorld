@@ -4545,7 +4545,7 @@ void DtwTransaction_free(struct DtwTransaction *self);
 
 
 
-
+#define DTW_RESOURCE_ELEMENT_IS_NULL -1;
 #define DTW_RESOURCE_OK 0
 #define DTW_RESOURCE_ELEMENT_NOT_EXIST 1
 #define DTW_RESOURCE_ELEMENT_NOT_BOOL 2
@@ -4609,7 +4609,7 @@ int DtwResource_get_error_code(DtwResource *self);
 
 char * DtwResource_get_error_message(DtwResource *self);
 
-void  private_DtwResource_raise_error(DtwResource *self,int error_code,char *error_message);
+void  private_DtwResource_raise_error(DtwResource *self, int error_code, const char *error_message);
 
 
 DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ...);
@@ -8360,6 +8360,9 @@ void privateDtwResourceRootProps_free(privateDtwResourceRootProps *self){
 
 
 bool DtwResource_error(DtwResource *self){
+    if(!self){
+        return true;
+    }
     if(DtwResource_get_error_code(self) == DTW_RESOURCE_OK){
         return false;
     }
@@ -8367,14 +8370,22 @@ bool DtwResource_error(DtwResource *self){
 }
 
 int DtwResource_get_error_code(DtwResource *self){
+    if(!self){
+        return DTW_RESOURCE_ELEMENT_IS_NULL;
+    }
     return self->root_props->error_code;
 }
 
 char * DtwResource_get_error_message(DtwResource *self){
+
+    if(!self){
+        return (char*)"element its null";
+    }
+
     return self->root_props->error_message;
 }
 
-void  private_DtwResource_raise_error(DtwResource *self,int error_code,char *error_message){
+void  private_DtwResource_raise_error(DtwResource *self, int error_code, const char *error_message){
     self->root_props->error_code = error_code;
     self->root_props->error_message = dtw_replace_string(error_message,"#path#",self->path);
 
@@ -8632,6 +8643,7 @@ unsigned char *DtwResource_get_binary(DtwResource *self, long *size){
     }
 
     bool is_binary;
+
     return DtwResource_get_any(self,size,&is_binary);
 }
 

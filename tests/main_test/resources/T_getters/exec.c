@@ -17,6 +17,8 @@ int main (){
     DtwResource *string_r = dtw.resource.sub_resource(values, "a.txt");
     char *string_r_value = dtw.resource.get_string(string_r);
     DtwResource  *blob_r = dtw.resource.sub_resource(values,"blob.png");
+    long blob_size;
+    unsigned  char *blob_r_value = dtw.resource.get_binary(blob_r,&blob_size);
 
     DtwResource *numerical = dtw.resource.sub_resource(values,"numerical");
     DtwResource  *double_r = dtw.resource.sub_resource(numerical,"double.txt");

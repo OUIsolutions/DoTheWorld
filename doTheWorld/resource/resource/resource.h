@@ -36,7 +36,7 @@ int DtwResource_get_error_code(DtwResource *self);
 
 char * DtwResource_get_error_message(DtwResource *self);
 
-void  private_DtwResource_raise_error(DtwResource *self,int error_code,char *error_message);
+void  private_DtwResource_raise_error(DtwResource *self, int error_code, const char *error_message);
 
 
 DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ...);

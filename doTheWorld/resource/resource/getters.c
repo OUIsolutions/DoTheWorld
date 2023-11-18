@@ -45,6 +45,7 @@ unsigned char *DtwResource_get_binary(DtwResource *self, long *size){
     }
 
     bool is_binary;
+
     return DtwResource_get_any(self,size,&is_binary);
 }
 
