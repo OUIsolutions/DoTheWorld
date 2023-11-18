@@ -9,7 +9,12 @@ int main (){
             DtwResource *test = dtw.resource.newResource("tests/target");
             DtwResource *a = dtw.resource.sub_resource(test,"numerical.txt");
             dtw.resource.lock(a);
-            char *content = dtw.resource.get_string(a);
+            char *content = NULL;
+
+            if(dtw.resource.type(a) != DTW_NOT_FOUND){
+                content = dtw.resource.get_string(a);
+            }
+
             char formated[2000] ={0};
             if(content){
                 sprintf(formated,"%s\n%d",content,i);
@@ -17,6 +22,7 @@ int main (){
             else{
                 sprintf(formated,"%d",i);
             }
+
             dtw.resource.set_string(a,formated);
             dtw.resource.commit(test);
             dtw.resource.free(test);

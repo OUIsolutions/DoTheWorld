@@ -12,8 +12,6 @@ int main (){
     printf("types:--------------------------------------\n");
 
 
-
-
     int type  = dtw.resource.type(values);
 
     if(type != DTW_FOLDER_TYPE){

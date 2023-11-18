@@ -4,7 +4,9 @@
 
 
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size){
-
+    if(DtwResource_error(self)){
+        return ;
+    }
     if(self->allow_transaction){
         DtwTransaction_write_any(self->root_props->transaction,self->path,element,size,true);
     }
@@ -22,6 +24,9 @@ void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size
 
 
 void DtwResource_set_string(DtwResource *self,const  char *element){
+    if(DtwResource_error(self)){
+        return ;
+    }
     if(self->allow_transaction){
         DtwTransaction_write_string(self->root_props->transaction,self->path,element);
     }
@@ -40,6 +45,9 @@ void DtwResource_set_string(DtwResource *self,const  char *element){
 }
 
 void DtwResource_set_binary_in_sub_resource(DtwResource *self, unsigned char *element, long size,const char *format,...){
+    if(DtwResource_error(self)){
+        return ;
+    }
     char name[2000] ={0};
 
     va_list args;
@@ -52,6 +60,9 @@ void DtwResource_set_binary_in_sub_resource(DtwResource *self, unsigned char *el
 }
 
 void DtwResource_set_string_in_sub_resource(DtwResource *self,const  char *element,const char *format,...){
+    if(DtwResource_error(self)){
+        return ;
+    }
     char name[2000] ={0};
 
     va_list args;
@@ -67,6 +78,9 @@ void DtwResource_set_string_in_sub_resource(DtwResource *self,const  char *eleme
 
 
 void DtwResource_set_long(DtwResource *self,long element){
+    if(DtwResource_error(self)){
+        return ;
+    }
     if(self->allow_transaction){
         DtwTransaction_write_long(self->root_props->transaction,self->path,element);
     }
@@ -81,6 +95,9 @@ void DtwResource_set_long(DtwResource *self,long element){
 
 }
 void DtwResource_set_long_in_sub_resource(DtwResource *self,long element,const char *format,...){
+    if(DtwResource_error(self)){
+        return ;
+    }
     char name[2000] ={0};
 
     va_list args;
@@ -93,7 +110,9 @@ void DtwResource_set_long_in_sub_resource(DtwResource *self,long element,const c
 }
 
 void DtwResource_set_double(DtwResource *self,double element){
-
+    if(DtwResource_error(self)){
+        return ;
+    }
     if(self->allow_transaction){
         DtwTransaction_write_double(self->root_props->transaction,self->path,element);
     }
@@ -109,6 +128,9 @@ void DtwResource_set_double(DtwResource *self,double element){
 
 }
 void DtwResource_set_double_in_sub_resource(DtwResource *self,double element,const char *format,...){
+    if(DtwResource_error(self)){
+        return ;
+    }
     char name[2000] ={0};
 
     va_list args;
@@ -121,6 +143,9 @@ void DtwResource_set_double_in_sub_resource(DtwResource *self,double element,con
 }
 
 void DtwResource_set_bool( DtwResource *self,bool element){
+    if(DtwResource_error(self)){
+        return ;
+    }
 
     if(self->allow_transaction){
         DtwTransaction_write_bool(self->root_props->transaction,self->path,element);
@@ -141,6 +166,9 @@ void DtwResource_set_bool( DtwResource *self,bool element){
 
 }
 void DtwResource_set_bool_in_sub_resource( DtwResource *self,bool element,const char *format,...){
+    if(DtwResource_error(self)){
+        return ;
+    }
     char name[2000] ={0};
 
     va_list args;

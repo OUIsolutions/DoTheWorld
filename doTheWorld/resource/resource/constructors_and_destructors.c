@@ -17,7 +17,10 @@ DtwResource *new_DtwResource(const char *path){
 }   
 
 DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ...){
-
+    if(DtwResource_error(self)){
+        return NULL;
+    }
+    
     char name[2000] ={0};
 
     va_list args;

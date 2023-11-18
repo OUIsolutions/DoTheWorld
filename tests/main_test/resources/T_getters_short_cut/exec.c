@@ -26,6 +26,7 @@ int main (){
     if(a){
         printf("value string :%s\n",a);
     }
+
     long blob_size;
     unsigned char *value  = dtw.resource.get_binary_from_sub_resource(values,&blob_size,"blob.png");
     if(values){

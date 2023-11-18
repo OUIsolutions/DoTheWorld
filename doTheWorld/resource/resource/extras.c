@@ -40,6 +40,9 @@ void DtwResource_rename(DtwResource *self,const char *new_name){
 
 
 void DtwResource_lock(DtwResource *self){
+    if(DtwResource_error(self)){
+        return ;
+    }
     if(self->locked){
         return;
     }
@@ -50,6 +53,9 @@ void DtwResource_lock(DtwResource *self){
 }
 
 void DtwResource_unlock(DtwResource *self){
+    if(DtwResource_error(self)){
+        return ;
+    }
     if(self->locked == false){
         return;
     }
@@ -61,7 +67,9 @@ void DtwResource_unlock(DtwResource *self){
 
 
 void DtwResource_destroy(DtwResource *self){
-
+    if(DtwResource_error(self)){
+        return ;
+    }
     if(self->allow_transaction){
         DtwTransaction_delete_any(self->root_props->transaction,self->path);
     }
@@ -75,20 +83,32 @@ void DtwResource_destroy(DtwResource *self){
 
 
 void DtwResource_commit(DtwResource *self){
+    if(DtwResource_error(self)){
+        return ;
+    }
     DtwTransaction_commit(self->root_props->transaction,NULL);
 }
 
 long DtwResource_size(DtwResource *self){
+    if(DtwResource_error(self)){
+        return ;
+    }
     return dtw_get_total_itens_of_dir(self->path);
 }
 
 
 
 DtwStringArray *DtwResource_list_names(DtwResource *self){
+    if(DtwResource_error(self)){
+        return NULL;
+    }
     return dtw_list_all(self->path,DTW_NOT_CONCAT_PATH);
 }
 
 int DtwResource_type(DtwResource *self){
+    if(DtwResource_error(self)){
+        return -1;
+    }
     DtwResource_load_if_not_loaded(self);
 
     if(!self->value_any){
@@ -129,10 +149,19 @@ int DtwResource_type(DtwResource *self){
 }
 
 const char * DtwResource_type_in_str(DtwResource *self){
+    if(DtwResource_error(self)){
+        return NULL;
+    }
      return dtw_convert_entity(DtwResource_type(self));
 }
 
 void DtwResource_represent(DtwResource *self){
+    if(DtwResource_error(self)){
+        printf("error code: %d\n", DtwResource_get_error_code(self));
+        printf("error message: %s\n", DtwResource_get_error_message(self));
+        return ;
+    }
+
     printf("path: %s\n", self->path);
     printf("name: %s\n",self->name);
     if(self->loaded){
