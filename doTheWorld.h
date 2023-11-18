@@ -4547,18 +4547,28 @@ void DtwTransaction_free(struct DtwTransaction *self);
 
 
 
+typedef struct {
+    DtwTransaction  *transaction;
+    DtwRandonizer  *randonizer;
+    DtwLocker *locker;
+
+}privateDtwResourceRootProps;
+
+privateDtwResourceRootProps *newDtwResourceRootProps();
+
+
+void privateDtwResourceRootProps_free(privateDtwResourceRootProps *self);
+
+
+
+
+
 typedef struct DtwResource{
 
     bool allow_transaction;
     bool use_locker_on_unique_values;
     bool locked;
-
-    DtwTransaction  *transaction;
-    DtwRandonizer  *randonizer;
-
-    DtwLocker *locker;
-
-
+    privateDtwResourceRootProps *root_props;
     char *mothers_path;
     char *name;
     char *path;
@@ -8294,6 +8304,25 @@ void DtwLocker_free(struct DtwLocker *self){
 
 
 
+privateDtwResourceRootProps *newDtwResourceRootProps(){
+    privateDtwResourceRootProps *self  = (privateDtwResourceRootProps*) malloc(sizeof (privateDtwResourceRootProps));
+    self->transaction = newDtwTransaction();
+    self->randonizer = newDtwRandonizer();
+    self->locker = newDtwLocker();
+    return self;
+}
+
+
+void privateDtwResourceRootProps_free(privateDtwResourceRootProps *self){
+    DtwTransaction_free(self->transaction);
+    DtwRandonizer_free(self->randonizer);
+    DtwLocker_free(self->locker);
+    free(self);
+}
+
+
+
+
 
 
 
@@ -8304,7 +8333,7 @@ void DtwResource_rename(DtwResource *self,const char *new_name){
     self->path  = dtw_concat_path(self->mothers_path, new_name);
 
     if(self->allow_transaction){
-        DtwTransaction_move_any(self->transaction,old_path,self->path);
+        DtwTransaction_move_any(self->root_props->transaction,old_path,self->path);
     }
     else{
         dtw_move_any(old_path,self->path,DTW_NOT_MERGE);
@@ -8319,7 +8348,7 @@ void DtwResource_lock(DtwResource *self){
         return;
     }
     
-    DtwLocker_lock(self->locker,self->path);
+    DtwLocker_lock(self->root_props->locker,self->path);
     
     self->locked = true;
 }
@@ -8329,7 +8358,7 @@ void DtwResource_unlock(DtwResource *self){
         return;
     }
     
-    DtwLocker_unlock(self->locker,self->path);
+    DtwLocker_unlock(self->root_props->locker,self->path);
     
     self->locked = false;
 }
@@ -8338,7 +8367,7 @@ void DtwResource_unlock(DtwResource *self){
 void DtwResource_destroy(DtwResource *self){
 
     if(self->allow_transaction){
-        DtwTransaction_delete_any(self->transaction,self->path);
+        DtwTransaction_delete_any(self->root_props->transaction,self->path);
     }
     else{
         dtw_remove_any(self->path);
@@ -8350,7 +8379,7 @@ void DtwResource_destroy(DtwResource *self){
 
 
 void DtwResource_commit(DtwResource *self){
-    DtwTransaction_commit(self->transaction,NULL);
+    DtwTransaction_commit(self->root_props->transaction,NULL);
 }
 
 long DtwResource_size(DtwResource *self){
@@ -8603,7 +8632,7 @@ bool DtwResource_get_bool_from_sub_resource(DtwResource *self,const char *format
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size){
 
     if(self->allow_transaction){
-        DtwTransaction_write_any(self->transaction,self->path,element,size,true);
+        DtwTransaction_write_any(self->root_props->transaction,self->path,element,size,true);
     }
     else{
         dtw_write_any_content(self->path,element,size);
@@ -8620,7 +8649,7 @@ void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size
 
 void DtwResource_set_string(DtwResource *self,const  char *element){
     if(self->allow_transaction){
-        DtwTransaction_write_string(self->transaction,self->path,element);
+        DtwTransaction_write_string(self->root_props->transaction,self->path,element);
     }
     else{
         dtw_write_string_file_content(self->path,element);
@@ -8665,7 +8694,7 @@ void DtwResource_set_string_in_sub_resource(DtwResource *self,const  char *eleme
 
 void DtwResource_set_long(DtwResource *self,long element){
     if(self->allow_transaction){
-        DtwTransaction_write_long(self->transaction,self->path,element);
+        DtwTransaction_write_long(self->root_props->transaction,self->path,element);
     }
     else{
         dtw_write_long_file_content(self->path,element);
@@ -8692,7 +8721,7 @@ void DtwResource_set_long_in_sub_resource(DtwResource *self,long element,const c
 void DtwResource_set_double(DtwResource *self,double element){
 
     if(self->allow_transaction){
-        DtwTransaction_write_double(self->transaction,self->path,element);
+        DtwTransaction_write_double(self->root_props->transaction,self->path,element);
     }
     else{
         dtw_write_double_file_content(self->path,element);
@@ -8720,7 +8749,7 @@ void DtwResource_set_double_in_sub_resource(DtwResource *self,double element,con
 void DtwResource_set_bool( DtwResource *self,bool element){
 
     if(self->allow_transaction){
-        DtwTransaction_write_bool(self->transaction,self->path,element);
+        DtwTransaction_write_bool(self->root_props->transaction,self->path,element);
     }
     else{
         dtw_write_bool_file_content(self->path,element);
@@ -8762,9 +8791,7 @@ DtwResource *new_DtwResource(const char *path){
     self->allow_transaction = true;
     self->use_locker_on_unique_values = true;
     self->cache_sub_resources = true;
-    self->transaction = newDtwTransaction();
-    self->randonizer = newDtwRandonizer();
-    self->locker = newDtwLocker();
+    self->root_props = newDtwResourceRootProps();
 
     DtwResource_load(self);
     return self;
@@ -8789,16 +8816,15 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
     *new_element =(DtwResource){0};
     new_element->allow_transaction = self->allow_transaction;
     new_element->use_locker_on_unique_values = self->use_locker_on_unique_values;
-    new_element->transaction = self->transaction;
-    new_element->randonizer = self->randonizer;
+    new_element->root_props = self->root_props;
+    //copied elements
+
     new_element->child = true;
     new_element->mothers_path = strdup(self->path);
     new_element->path = dtw_concat_path(self->path, name);
     new_element->name = strdup(name);
-
     new_element->locked = self->locked;
 
-    new_element->locker = self->locker;
 
     new_element->cache_sub_resources = self->cache_sub_resources;
     new_element->sub_resources = newDtwResourceArray();
@@ -8855,17 +8881,10 @@ DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,cons
 }
 
 void DtwResource_free(DtwResource *self){
+    bool is_root = !self->child;
+    if(is_root){
 
-    if(!self->child){
-        if(self->transaction){
-            DtwTransaction_free(self->transaction);
-        }
-        DtwRandonizer_free(self->randonizer);
-
-
-     DtwLocker_free(self->locker);
-    
-
+        privateDtwResourceRootProps_free(self->root_props);
     }
 
 
@@ -8922,7 +8941,7 @@ DtwResource * DtwResource_sub_resource_now(DtwResource *self, const char *end_pa
         char path[1000] ={0};
 
         if(empty_already_exist){
-            char *token = DtwRandonizer_generate_token(self->randonizer,10);
+            char *token = DtwRandonizer_generate_token(self->root_props->randonizer,10);
             sprintf(path,"%s--%s",time,token);
             free(token);
         }
@@ -8953,7 +8972,7 @@ DtwResource * DtwResource_sub_resource_now_in_unix(DtwResource *self, const char
         char path[1000] ={0};
 
         if(empty_already_exist){
-            char *token = DtwRandonizer_generate_token(self->randonizer,10);
+            char *token = DtwRandonizer_generate_token(self->root_props->randonizer,10);
             sprintf(path,"%ld--%s",now,token);
             free(token);
         }
@@ -8978,7 +8997,7 @@ DtwResource * DtwResource_sub_resource_random(DtwResource *self, const char *end
     while(true){
 
         char path[1000] ={0};
-        char *token = DtwRandonizer_generate_token(self->randonizer,15);
+        char *token = DtwRandonizer_generate_token(self->root_props->randonizer,15);
         sprintf(path,"%s",token);
         free(token);
 
