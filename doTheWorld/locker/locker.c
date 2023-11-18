@@ -48,6 +48,7 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
             expired = last_modification < (now - self->max_lock_time);
         }
 
+
         if(not_exist || expired){
 
             DtwPath *path = newDtwPath(formated_path);
@@ -77,7 +78,6 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
             usleep(verification_deley);
             continue;
         }
-
 
         if(exist){
             char *content = dtw_load_string_file_content(formated_path);
