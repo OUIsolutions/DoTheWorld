@@ -15,7 +15,11 @@ int DtwResource_get_error_code(DtwResource *self){
 char * DtwResource_get_error_message(DtwResource *self){
     return self->root_props->error_message;
 }
+void  private_DtwResource_raise_error(DtwResource *self,int error_code,char *error_message){
+    self->root_props->error_code = error_code;
+    self->root_props->error_message = dtw_replace_string(error_message,"#path#",self->path);
 
+}
 
 void DtwResource_rename(DtwResource *self,const char *new_name){
 
