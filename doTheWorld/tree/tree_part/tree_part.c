@@ -93,7 +93,7 @@ void DtwTreePart_set_any_content(struct DtwTreePart *self, unsigned char *conten
     DtwTreePart_free_content(self);
     self->content_exist_in_memory = true;
     self->is_binary = is_binary;
-    self->content = (unsigned char *)realloc(self->content,content_size+2);
+    self->content = (unsigned char *)malloc(content_size+2);
     memcpy(self->content,content,content_size);
     self->content_size = content_size;
 
@@ -173,7 +173,10 @@ void DtwTreePart_represent(struct DtwTreePart *self){
 
 void DtwTreePart_free_content(struct DtwTreePart *self){
     self->content_exist_in_memory = false;
-    self->content = (unsigned char *)realloc(self->content,0);
+    if(self->content){
+        free(self->content);
+    }
+
 }
 void DtwTreePart_free(struct DtwTreePart *self){
     DtwPath_free(self->path);

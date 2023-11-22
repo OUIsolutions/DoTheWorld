@@ -85,7 +85,7 @@ bool DtwTreePart_hardware_write(struct DtwTreePart *self, int transaction){
     free(self->hawdware_content_sha);
     self->hawdware_content_sha = dtw_generate_sha_from_string((const char  *)self->content);
     self->content_exist_in_hardware = true;
-    int now = time(NULL);
+    int now = dtw_get_time();
     self->last_modification_time = now;
 
     free(path);
@@ -143,7 +143,7 @@ bool DtwTreePart_hardware_modify(struct DtwTreePart *self, int transaction){
         free(self->hawdware_content_sha);
         self->hawdware_content_sha = dtw_generate_sha_from_string((const char *)self->content);
         self->content_exist_in_hardware = true;
-        int now = time(NULL);
+        int now = dtw_get_time();
         self->last_modification_time = now;
 
         free(path);

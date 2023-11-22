@@ -3985,8 +3985,9 @@ void private_dtw_remove_double_bars(struct DtwStringArray*path);
 
 int private_dtw_string_cmp(const void *a, const void *b);
 
+long  dtw_now = -1;
 
-
+long dtw_get_time();
 
 
 
@@ -5410,7 +5411,7 @@ char *dtw_convert_binary_file_to_base64(const char *path){
 
 DtwRandonizer * newDtwRandonizer(){
     DtwRandonizer *self = (DtwRandonizer*) malloc(sizeof (DtwRandonizer));
-    self->seed = time(NULL);
+    self->seed = dtw_get_time();
     self->actual_generation = 0;
 
     return self;
@@ -5602,6 +5603,13 @@ int private_dtw_string_cmp(const void *a, const void *b){
     const char *str_a = *(const char **)a;
     const char *str_b = *(const char **)b;
     return strcmp(str_a, str_b);
+}
+
+long dtw_get_time(){
+    if(dtw_now != -1){
+        return dtw_now;
+    }
+    return time(NULL);
 }
 
 
@@ -7125,7 +7133,7 @@ void DtwTreePart_set_any_content(struct DtwTreePart *self, unsigned char *conten
     DtwTreePart_free_content(self);
     self->content_exist_in_memory = true;
     self->is_binary = is_binary;
-    self->content = (unsigned char *)realloc(self->content,content_size+2);
+    self->content = (unsigned char *)malloc(content_size+2);
     memcpy(self->content,content,content_size);
     self->content_size = content_size;
 
@@ -7205,7 +7213,10 @@ void DtwTreePart_represent(struct DtwTreePart *self){
 
 void DtwTreePart_free_content(struct DtwTreePart *self){
     self->content_exist_in_memory = false;
-    self->content = (unsigned char *)realloc(self->content,0);
+    if(self->content){
+        free(self->content);
+    }
+
 }
 void DtwTreePart_free(struct DtwTreePart *self){
     DtwPath_free(self->path);
@@ -7320,7 +7331,7 @@ bool DtwTreePart_hardware_write(struct DtwTreePart *self, int transaction){
     free(self->hawdware_content_sha);
     self->hawdware_content_sha = dtw_generate_sha_from_string((const char  *)self->content);
     self->content_exist_in_hardware = true;
-    int now = time(NULL);
+    int now = dtw_get_time();
     self->last_modification_time = now;
 
     free(path);
@@ -7378,7 +7389,7 @@ bool DtwTreePart_hardware_modify(struct DtwTreePart *self, int transaction){
         free(self->hawdware_content_sha);
         self->hawdware_content_sha = dtw_generate_sha_from_string((const char *)self->content);
         self->content_exist_in_hardware = true;
-        int now = time(NULL);
+        int now = dtw_get_time();
         self->last_modification_time = now;
 
         free(path);
@@ -8221,7 +8232,7 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
     long verification_deley = (long)(self->reverifcation_delay * 1000000);
 
     while(true){
-        time_t  now = time(NULL);
+        time_t  now = dtw_get_time();
         unsigned long long startTime = private_dtw_getMicroseconds();
         long last_modification = dtw_get_entity_last_motification_in_unix(formated_path);
         bool not_exist = (dtw_entity_type(formated_path) == DTW_NOT_FOUND);
@@ -9170,7 +9181,7 @@ DtwResource * DtwResource_sub_resource_now(DtwResource *self, const char *end_pa
 
     while(true){
 
-        long now = time(NULL);
+        long now = dtw_get_time();
         char *time = dtw_convert_unix_time_to_string(now);
         char path[1000] ={0};
 
@@ -9202,7 +9213,7 @@ DtwResource * DtwResource_sub_resource_now_in_unix(DtwResource *self, const char
 
     while(true){
 
-        long now = time(NULL);
+        long now = dtw_get_time();
         char path[1000] ={0};
 
         if(empty_already_exist){

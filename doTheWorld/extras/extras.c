@@ -158,3 +158,10 @@ int private_dtw_string_cmp(const void *a, const void *b){
     const char *str_b = *(const char **)b;
     return strcmp(str_a, str_b);
 }
+
+long dtw_get_time(){
+    if(dtw_now != -1){
+        return dtw_now;
+    }
+    return time(NULL);
+}

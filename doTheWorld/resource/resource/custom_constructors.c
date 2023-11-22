@@ -30,7 +30,7 @@ DtwResource * DtwResource_sub_resource_now(DtwResource *self, const char *end_pa
 
     while(true){
 
-        long now = time(NULL);
+        long now = dtw_get_time();
         char *time = dtw_convert_unix_time_to_string(now);
         char path[1000] ={0};
 
@@ -62,7 +62,7 @@ DtwResource * DtwResource_sub_resource_now_in_unix(DtwResource *self, const char
 
     while(true){
 
-        long now = time(NULL);
+        long now = dtw_get_time();
         char path[1000] ={0};
 
         if(empty_already_exist){

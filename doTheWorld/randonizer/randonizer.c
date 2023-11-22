@@ -4,7 +4,7 @@
 
 DtwRandonizer * newDtwRandonizer(){
     DtwRandonizer *self = (DtwRandonizer*) malloc(sizeof (DtwRandonizer));
-    self->seed = time(NULL);
+    self->seed = dtw_get_time();
     self->actual_generation = 0;
 
     return self;

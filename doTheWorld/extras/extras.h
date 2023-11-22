@@ -15,7 +15,8 @@ void private_dtw_remove_double_bars(struct DtwStringArray*path);
 
 int private_dtw_string_cmp(const void *a, const void *b);
 
+long  dtw_now = -1;
 
-
+long dtw_get_time();
 
 

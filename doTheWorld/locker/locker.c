@@ -35,7 +35,7 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
     long verification_deley = (long)(self->reverifcation_delay * 1000000);
 
     while(true){
-        time_t  now = time(NULL);
+        time_t  now = dtw_get_time();
         unsigned long long startTime = private_dtw_getMicroseconds();
         long last_modification = dtw_get_entity_last_motification_in_unix(formated_path);
         bool not_exist = (dtw_entity_type(formated_path) == DTW_NOT_FOUND);
