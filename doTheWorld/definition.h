@@ -1,4 +1,10 @@
 
+#ifndef cJSON__h
+#include "dependencies/cJSON/cJSON.h"
+#endif //cJSON__h
+
+
+
 
 #include "base64/base64.c"
 #include "randonizer/randonizer.c"

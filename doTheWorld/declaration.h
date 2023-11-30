@@ -1,4 +1,11 @@
 
+#ifndef cJSON__h
+#include "dependencies/cJSON/cJSON.h"
+
+#endif //cJSON__h
+
+
+
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdio.h>
