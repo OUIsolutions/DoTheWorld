@@ -4,6 +4,12 @@
 #include "dependencies/cJSON/cJSON.c"
 #endif //cJSON__h
 
+#undef true
+#define true 1
+
+#undef false
+#define false 0
+
 
 #ifndef SHA_256_H
 #define SHA_256_H
