@@ -29,7 +29,6 @@ SOFTWARE.
 
 #ifndef DO_THE_WORLD_H
 #define DO_THE_WORLD_H
-#include "dependencies.h"
 #include "declaration.h"
 #include "definition.h"
 #endif //DO_THE_WORLD_H

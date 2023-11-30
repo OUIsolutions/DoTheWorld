@@ -39,6 +39,8 @@
         "dotheworldmain.h": "c",
         "istream": "c",
         "dotheworld_test.h": "c",
-        "locker.h": "c"
+        "locker.h": "c",
+        "extras.c": "cpp",
+        "cjson.c": "cpp"
     }
 }

@@ -30,6 +30,38 @@ SOFTWARE.
 #ifndef DO_THE_WORLD_H
 #define DO_THE_WORLD_H
 
+
+
+
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <time.h>
+#include <stdarg.h>
+
+#include <errno.h>
+#include <sys/file.h>
+#include <sys/time.h>
+
+
+
+#ifdef __linux__
+#include <sys/wait.h>
+  #include <dirent.h>
+  #include <unistd.h>
+#elif _WIN32
+  #include <windows.h>
+  #include <tchar.h>
+  #include <wchar.h>
+  #include <locale.h>
+  #include <direct.h>
+#endif
+
 #ifndef cJSON__h
 
 /*
@@ -332,6 +364,1570 @@ CJSON_PUBLIC(void) cJSON_free(void *object);
 #endif
 
 #endif
+#undef cJSON__h
+#endif //cJSON__h
+
+#ifndef SHA_256_H
+
+#ifndef SHA_256_H
+#define SHA_256_H
+
+#include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/*
+ * @brief Size of the SHA-256 sum. This times eight is 256 bits.
+ */
+#define SIZE_OF_SHA_256_HASH 32
+
+/*
+ * @brief Size of the chunks used for the calculations.
+ *
+ * @note This should mostly be ignored by the user, although when using the streaming API, it has an impact for
+ * performance. Add chunks whose size is a multiple of this, and you will avoid a lot of superfluous copying in RAM!
+ */
+#define SIZE_OF_SHA_256_CHUNK 64
+
+/*
+ * @brief The opaque SHA-256 type, that should be instantiated when using the streaming API.
+ *
+ * @note Although the details are exposed here, in order to make instantiation easy, you should refrain from directly
+ * accessing the fields, as they may change in the future.
+ */
+struct Sha_256 {
+	uint8_t *hash;
+	uint8_t chunk[SIZE_OF_SHA_256_CHUNK];
+	uint8_t *chunk_pos;
+	size_t space_left;
+	size_t total_len;
+	uint32_t h[8];
+};
+
+/*
+ * @brief The simple SHA-256 calculation function.
+ * @param hash Hash array, where the result is delivered.
+ * @param input Pointer to the data the hash shall be calculated on.
+ * @param len Length of the input data, in byte.
+ *
+ * @note If all of the data you are calculating the hash value on is available in a contiguous buffer in memory, this is
+ * the function you should use.
+ *
+ * @note If either of the passed pointers is NULL, the results are unpredictable.
+ */
+void calc_sha_256(uint8_t hash[SIZE_OF_SHA_256_HASH], const void *input, size_t len);
+
+/*
+ * @brief Initialize a SHA-256 streaming calculation.
+ * @param sha_256 A pointer to a SHA-256 structure.
+ * @param hash Hash array, where the result will be delivered.
+ *
+ * @note If all of the data you are calculating the hash value on is not available in a contiguous buffer in memory, this is
+ * where you should start. Instantiate a SHA-256 structure, for instance by simply declaring it locally, make your hash
+ * buffer available, and invoke this function. Once a SHA-256 hash has been calculated (see further below) a SHA-256
+ * structure can be initialized again for the next calculation.
+ *
+ * @note If either of the passed pointers is NULL, the results are unpredictable.
+ */
+
+char * calc_sha_256_returning_string(const void *input, size_t len);
+/*
+	@param input: the string to be hashed
+	@param len: the length of the string
+	@return: the hash of the string
+	@note: if the input string is NULL, the results are unpredictable
+*/
+
+void calc_sha_256_from_string(uint8_t hash[SIZE_OF_SHA_256_HASH], const char *input);
+/*
+	@param hash: the hash array, where the result is delivered
+	@param input: the string to be hashed
+	@note: if the input string is NULL, the results are unpredictable
+*/
+
+int calc_sha_256_from_file(uint8_t hash[SIZE_OF_SHA_256_HASH], const char *filename);
+/*
+	@param hash: the hash array, where the result is delivered
+	@param filename: the name of the file to be hashed
+	@return: 0 if the file was hashed successfully, -1 otherwise
+*/
+
+char * calc_sha_256_from_file_returning_string(const char *filename);
+/*
+	@param filename: the name of the file to be hashed
+	@return: the hash of the file
+	@note: if the filename is NULL, the return value is NULL
+*/
+
+void sha_256_init(struct Sha_256 *sha_256, uint8_t hash[SIZE_OF_SHA_256_HASH]);
+
+/*
+ * @brief Stream more input data for an on-going SHA-256 calculation.
+ * @param sha_256 A pointer to a previously initialized SHA-256 structure.
+ * @param data Pointer to the data to be added to the calculation.
+ * @param len Length of the data to add, in byte.
+ *
+ * @note This function may be invoked an arbitrary number of times between initialization and closing, but the maximum
+ * data length is limited by the SHA-256 algorithm: the total number of bits (i.e. the total number of bytes times
+ * eight) must be representable by a 64-bit unsigned integer. While that is not a practical limitation, the results are
+ * unpredictable if that limit is exceeded.
+ *
+ * @note This function may be invoked on empty data (zero length), although that obviously will not add any data.
+ *
+ * @note If either of the passed pointers is NULL, the results are unpredictable.
+ */
+void sha_256_write(struct Sha_256 *sha_256, const void *data, size_t len);
+
+/*
+ * @brief Conclude a SHA-256 streaming calculation, making the hash value available.
+ * @param sha_256 A pointer to a previously initialized SHA-256 structure.
+ * @return Pointer to the hash array, where the result is delivered.
+ *
+ * @note After this function has been invoked, the result is available in the hash buffer that initially was provided. A
+ * pointer to the hash value is returned for convenience, but you should feel free to ignore it: it is simply a pointer
+ * to the first byte of your initially provided hash array.
+ *
+ * @note If the passed pointer is NULL, the results are unpredictable.
+ *
+ * @note Invoking this function for a calculation with no data (the writing function has never been invoked, or it only
+ * has been invoked with empty data) is legal. It will calculate the SHA-256 value of the empty string.
+ */
+uint8_t *sha_256_close(struct Sha_256 *sha_256);
+
+
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif
+#undef SHA_256_H
+#endif  //SHA_256_H
+
+
+
+typedef struct DtwStringArray {
+  int size;
+
+  char **strings;
+
+
+
+}DtwStringArray;
+
+// End the structure with a semicolon
+int  DtwStringArray_find_position(struct DtwStringArray *self, const char *string);
+void DtwStringArray_append(struct DtwStringArray *self, const char *string);
+
+void DtwStringArray_pop(struct DtwStringArray *self, int position);
+
+void DtwStringArray_merge(struct DtwStringArray *self, struct DtwStringArray *other);
+void DtwStringArray_represent(struct DtwStringArray *self);
+void DtwStringArray_free(struct DtwStringArray *self);
+void DtwStringArray_sort(struct DtwStringArray *self);
+
+void DtwStringArray_set_value(struct DtwStringArray *self, int index, const char *value);
+
+struct DtwStringArray * newDtwStringArray();
+
+struct DtwStringArray * DtwStringArray_clone(DtwStringArray *self);
+
+
+
+const char base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+
+char *dtw_base64_encode(unsigned char *data, long input_length);
+
+
+unsigned char *dtw_base64_decode(const char *data, long *output_length);
+
+
+char *dtw_convert_binary_file_to_base64(const char *path);
+
+
+
+
+typedef struct DtwRandonizer{
+    long seed;
+    long actual_generation;
+
+}DtwRandonizer;
+
+
+DtwRandonizer * newDtwRandonizer();
+char * DtwRandonizer_generate_token(struct DtwRandonizer*self, int size);
+void DtwRandonizer_free(struct DtwRandonizer *self);
+
+
+
+
+
+char * dtw_generate_sha_from_file(const char *path);
+char * dtw_generate_sha_from_string(const char *string);
+char * dtw_generate_sha_from_any(void *anything , long size);
+
+long int dtw_get_entity_last_motification_in_unix(const char *path);
+char * dtw_convert_unix_time_to_string(long int unix_time);
+char * dtw_get_entity_last_motification_in_string(const char *path);
+const char * private_dtw_convert_action_to_string(short action);
+short private_dtw_convert_string_to_action(const char *action);
+void private_dtw_add_end_bar_to_dirs_string_array(struct DtwStringArray * dirs);
+char *dtw_concat_path(const char *path1, const char *path2);
+struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *paths,const char *path_to_remove);
+void private_dtw_remove_double_bars(struct DtwStringArray*path);
+
+int private_dtw_string_cmp(const void *a, const void *b);
+
+long  dtw_now = -1;
+
+long dtw_get_time();
+
+
+
+
+
+bool dtw_starts_with(const char *string, const char *prefix);
+bool dtw_ends_with(const char *string, const char *suffix);
+char *private_dtw_replace_string_once(const char *target, const char *old_element, const char *new_element);
+char* dtw_replace_string(const char *target, const char *old_element, const char *new_element);
+
+char *private_dtw_change_beginning_of_string(const char *target,int start_element_to_remove_size, const char *new_element);
+
+
+
+#define DTW_FILE_TYPE 1
+#define DTW_FOLDER_TYPE 2
+#define DTW_ALL_TYPE 3
+#define DTW_NOT_FOUND -1
+
+#define DTW_COMPLEX_BINARY 10
+#define DTW_COMPLEX_STRING_TYPE 11
+#define DTW_COMPLEX_LONG_TYPE 12
+#define DTW_COMPLEX_DOUBLE_TYPE 13
+#define DTW_COMPLEX_BOOL_TYPE 14
+
+#define DTW_MERGE true
+
+
+#define DTW_NOT_MERGE false
+#ifdef __linux__
+#define dtw_create_dir(path) mkdir(path,0777)
+#elif _WIN32
+#define dtw_create_dir(path) _mkdir(path)
+#endif
+
+void dtw_create_dir_recursively(const char *path);
+
+bool dtw_remove_any(const char* path);
+
+char *dtw_get_current_dir();
+
+long dtw_get_total_itens_of_dir(const char *path);
+
+unsigned char *dtw_load_any_content(const char * path,long *size,bool *is_binary);
+
+char *dtw_load_string_file_content(const char * path);
+
+unsigned char *dtw_load_binary_content(const char * path,long *size);
+
+
+bool dtw_write_any_content(const char *path,unsigned  char *content,long size);
+bool dtw_write_string_file_content(const char *path,const char *content);
+
+
+
+int dtw_entity_type(const char *path);
+
+
+
+int dtw_complex_entity_type(const char *path);
+
+const char *dtw_convert_entity(int entity_type);
+
+
+bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge);
+
+
+bool dtw_move_any(const char* src_path, const char* dest_path,bool merge);
+
+
+
+#define DTW_NOT_NUMERICAL -2
+#define DTW_NOT_BOOL -3
+
+long dtw_load_long_file_content_setting_error(const char *path,int *error);
+
+long dtw_load_long_file_content(const char * path);
+
+double dtw_load_double_file_content_setting_error(const char * path, int *error);
+
+double dtw_load_double_file_content(const char * path);
+
+bool dtw_load_bool_file_content_setting_error(const char * path, int *error);
+
+
+bool dtw_load_bool_file_content(const char * path);
+
+
+void dtw_write_long_file_content(const char *path, long value);
+
+void dtw_write_bool_file_content(const char *path, bool value);
+
+void dtw_write_double_file_content(const char *path,double value);
+
+
+
+#define DTW_CONCAT_PATH true
+#define DTW_NOT_CONCAT_PATH false
+
+
+ DtwStringArray * dtw_list_files(const char *path, bool concat_path);
+DtwStringArray * dtw_list_dirs(const char *path, bool concat_path);
+
+DtwStringArray *  dtw_list_all(const char *path,  bool concat_path);
+
+
+#ifdef __linux__
+
+bool private_dtw_verify_if_add(const int expected_type, int d_type);
+bool private_dtw_verify_if_skip(struct dirent *entry);
+
+#endif
+
+
+#ifdef _WIN32
+
+bool private_dtw_verify_if_add(const int expected_type, WIN32_FIND_DATAA entry);
+bool private_dtw_verify_if_skip(WIN32_FIND_DATAA *entry);
+#endif
+
+
+
+struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool concat_path);
+ 
+
+
+ DtwStringArray * dtw_list_dirs_recursively(const char *path,bool concat_path);
+
+
+ DtwStringArray *  dtw_list_files_recursively(const char *path,bool concat_path);
+
+
+ DtwStringArray * dtw_list_all_recursively(const char *path,bool concat_path);
+
+
+
+typedef struct DtwPath {
+    char *original_path;
+    char *dir;
+    char *name;
+    char *extension;
+    bool dir_exists;
+    bool name_exists;
+    bool extension_exists;
+
+
+}DtwPath;
+struct DtwPath * newDtwPath(const char *path);
+bool  DtwPath_changed(struct DtwPath *self);
+char *DtwPath_get_full_name(struct DtwPath *self);
+char *DtwPath_get_name(struct DtwPath *self);
+char *DtwPath_get_extension(struct DtwPath *self);
+char *DtwPath_get_path(struct DtwPath *self);
+char *DtwPath_get_dir(struct DtwPath *self);
+
+void DtwPath_set_extension(struct DtwPath *self, const char *extension);
+void DtwPath_set_name(struct DtwPath * self, const char * name);
+void DtwPath_set_dir(struct DtwPath *self, const char *path);
+
+void DtwPath_set_full_name(struct DtwPath * self, const char * full_name);
+void DtwPath_set_path(struct DtwPath *self, const char *target_path);
+
+void DtwPath_add_start_dir(struct DtwPath *self, const char *start_dir);
+void DtwPath_add_end_dir(struct DtwPath *self, const char *end_dir);
+
+void DtwPath_represent(struct DtwPath *self);
+void DtwPath_free(struct DtwPath *self);
+
+
+
+
+
+
+
+#define DTW_NOT_MIMIFY 1
+#define DTW_MIMIFY 2
+
+#define DTW_NOT_LOAD 1
+#define DTW_LOAD 2
+
+#define DTW_HIDE 1
+#define DTW_INCLUDE 2
+
+typedef struct DtwTreeProps{
+   int minification;
+   int content;
+   int path_atributes;
+   int hadware_data;
+   int content_data;
+   int ignored_elements;
+
+}DtwTreeProps;
+
+
+
+DtwTreeProps DtwTreeProps_format_props(DtwTreeProps *props);
+
+
+#define DTW_JSON_ERROR_CODE_OK 0
+#define DTW_JSON_TYPE_ERROR 1
+#define DTW_JSON_SYNTAX_ERROR 2
+#define DTW_JSON_REQUIRED_KEY_ERROR 3
+#define DTW_JSON_REQUIRED_VALUE_ERROR 4
+#define DTW_JSON_NOT_FOUND_ERROR 5
+#define DTW_ACTION_ERROR (-1)
+
+
+typedef struct DtwJsonTreeError {
+    int code;
+    int position;
+    const char *menssage;
+
+
+}DtwJsonTreeError;
+
+struct DtwJsonTreeError * newDtwJsonError();
+struct DtwJsonTreeError * DtwJsonTreeError_validate_json_tree(char *content);
+void DtwJsonTreeError_represent(struct DtwJsonTreeError *self);
+void DtwJsonTreeError_free(struct DtwJsonTreeError *self);
+
+
+
+typedef struct DtwTreeTransactionReport{
+    DtwStringArray *write;
+    DtwStringArray *modify;
+    DtwStringArray *remove;
+
+}DtwTreeTransactionReport;
+
+struct DtwTreeTransactionReport * newDtwTreeTransactionReport();
+void  DtwTreeTransactionReport_represent(struct DtwTreeTransactionReport *report);
+void  DtwTreeTransactionReport_free(struct DtwTreeTransactionReport *report);
+
+
+
+#define DTW_IS_BINARY true
+#define DTW_IS_NOT_BINARY false
+#define DTW_IGNORE true
+#define DTW_NOT_IGNORE false
+
+#define DTW_SET_AS_ACTION 1
+#define DTW_EXECUTE_NOW 2
+
+#define DTW_MODIFY 1
+#define DTW_WRITE 2
+#define DTW_REMOVE 3
+
+typedef struct DtwTreePart{
+    
+    struct DtwPath *path;
+    bool content_exist_in_memory;
+    size_t  hardware_content_size; 
+    long last_modification_time;
+    bool content_exist_in_hardware;
+    bool ignore;
+    bool is_binary;
+    bool metadata_loaded;
+    char *hawdware_content_sha;
+
+    unsigned char *content;
+    int pending_action;
+
+    size_t content_size;
+
+}DtwTreePart;
+
+
+char *DtwTreePart_get_content_string_by_reference(struct DtwTreePart *self);
+unsigned char *DtwTreePart_get_content_binary_by_reference(struct DtwTreePart *self);
+char *DtwTreePart_get_content_sha(struct DtwTreePart *self);
+char *DtwTreePart_last_modification_time_in_string(struct DtwTreePart *self);
+void DtwTreePart_set_any_content(struct DtwTreePart *self, unsigned char *content, int content_size, bool is_binary);
+void DtwTreePart_set_string_content(struct DtwTreePart *self, const char *content);
+void DtwTreePart_set_binary_content(struct DtwTreePart *self, unsigned char *content, int content_size);
+void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self);
+void DtwTreePart_free_content(struct DtwTreePart *self);
+void DtwTreePart_represent(struct DtwTreePart *self);
+
+bool DtwTreePart_hardware_remove(struct DtwTreePart *self,int transaction);
+bool DtwTreePart_hardware_write(struct DtwTreePart *self,int transaction);
+bool DtwTreePart_hardware_modify(struct DtwTreePart *self,int transaction);
+
+
+bool DtwTreePart_hardware_commit(struct DtwTreePart *self);
+
+void DtwTreePart_free(struct DtwTreePart *self);
+struct DtwTreePart * DtwTreePart_self_copy(struct DtwTreePart *self);
+
+struct DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps *props);
+struct DtwTreePart * newDtwTreePartEmpty(const char *path);
+struct DtwTreePart * newDtwTreePartLoading(const char *path);
+
+
+
+
+
+typedef struct  DtwTree{
+    int size;
+    struct DtwTreePart **tree_parts;
+
+
+}DtwTree;
+
+
+struct DtwTree *DtwTree_get_sub_tree(
+    struct DtwTree *self,
+    const char *path,
+    bool copy_content
+);
+
+struct DtwTreePart *DtwTree_find_tree_part_by_function(
+        struct DtwTree *self,
+        bool (*caller)(struct  DtwTreePart *part)
+        );
+
+struct DtwTree *DtwTree_map(
+        struct DtwTree *self,
+        struct  DtwTreePart* (*caller)(struct  DtwTreePart *part)
+);
+
+struct DtwTree *DtwTree_filter(
+        struct DtwTree *self,
+        bool (*caller)(struct  DtwTreePart *part)
+);
+
+
+struct DtwTreePart *DtwTree_find_tree_part_by_name(struct DtwTree *self, const char *name);
+struct DtwTreePart *DtwTree_find_tree_part_by_path(struct DtwTree *self, const char *path);
+
+//listages
+struct DtwStringArray *DtwTree_list_files(struct DtwTree *self, const char *path,bool concat_path);
+
+struct DtwStringArray *DtwTree_list_dirs(struct DtwTree *self, const char *path,bool concat_path);
+
+struct DtwStringArray *DtwTree_list_all(struct DtwTree *self, const char *path,bool concat_path);
+
+struct DtwStringArray *DtwTree_list_files_recursively(struct DtwTree *self, const char *path,bool concat_path);
+
+struct DtwStringArray *DtwTree_list_dirs_recursively(struct DtwTree *self, const char *path,bool concat_path);
+
+struct DtwStringArray *DtwTree_list_all_recursively(struct DtwTree *self, const char *path,bool concat_path);
+
+
+void DtwTree_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_part);
+void DtwTree_remove_tree_part(struct DtwTree *self, int position);
+void DtwTree_add_tree_part_by_reference(struct DtwTree *self, struct DtwTreePart *tree_part);
+void DtwTree_free(struct DtwTree *self);
+void DtwTree_represent(struct DtwTree *self);
+
+void DtwTree_add_tree_parts_from_string_array(
+    struct DtwTree *self,
+    struct DtwStringArray *paths,
+    DtwTreeProps *props
+);
+
+void DtwTree_add_tree_from_hardware(
+    struct DtwTree *self,
+    const char *path,
+    DtwTreeProps *props
+);
+
+struct DtwTreeTransactionReport * DtwTree_create_report(struct DtwTree *self);
+
+
+
+void DtwTree_insecure_hardware_remove_tree(struct DtwTree *self);
+
+void DtwTree_insecure_hardware_write_tree(struct DtwTree *self);
+
+void DtwTree_hardware_commit_tree(struct DtwTree *self);
+
+void DtwTree_loads_json_tree(struct DtwTree *self, const char *content);
+
+void DtwTree_loads_json_tree_from_file(struct DtwTree *self, const char *path);
+
+char * DtwTree_dumps_tree_json(
+        struct DtwTree *self,
+        DtwTreeProps * props
+    );
+
+void DtwTree_dumps_tree_json_to_file(
+        struct DtwTree *self,
+        const char *path,
+        DtwTreeProps * props
+    );
+
+struct  DtwTree * newDtwTree();
+
+
+
+
+
+
+
+typedef struct DtwLocker{
+   double reverifcation_delay;
+   double wait_delay;
+   int process;
+   int max_lock_time;
+   DtwStringArray *locked_elements;
+
+
+}DtwLocker;
+
+
+DtwLocker *newDtwLocker();
+
+
+
+void DtwLocker_lock(struct DtwLocker *self, const  char *element);
+
+void DtwLocker_unlock(struct DtwLocker *self, const  char *element);
+
+void DtwLocker_represemt(struct DtwLocker *self);
+
+void DtwLocker_free(struct DtwLocker *self);
+
+
+
+
+
+enum {
+
+    JSON_TRANSACTION_WRONG_TYPE,
+    JSON_TRANSACTION_NOT_PRESENT_VALUE,
+    JSON_TRANSACTION_INVALID_ACTION
+};
+typedef struct DtwJsonTransactionError{
+    int code;
+    char *mensage;
+    char *path;
+
+
+}DtwJsonTransactionError;
+
+DtwJsonTransactionError * private_new_DtwJsonTransactionError( int code,const char *mensage,const  char *path);
+
+void DtwJsonTransactionError_represent(struct DtwJsonTransactionError *self);
+
+void DtwJsonTransactionError_prepend_path(struct DtwJsonTransactionError *self,char *path);
+
+void DtwJsonTransactionError_free(struct DtwJsonTransactionError *self);
+
+
+
+
+enum {
+    DTW_ACTION_FILE_NOT_FOUND,
+    DTW_ACTION_ITS_NOT_JSON,
+    DTW_ACTION_WRITE,
+    DTW_ACTION_MOVE,
+    DTW_ACTION_COPY,
+    DTW_ACTION_DELETE
+};
+
+
+typedef struct DtwActionTransaction{
+    short action_type;
+    unsigned  char *content;
+    long size;
+    bool is_binary;
+
+    char *dest;
+    char *source;
+
+}DtwActionTransaction;
+
+DtwActionTransaction *newDtwActionTransaction();
+
+DtwJsonTransactionError * private_dtw_validate_json_action_transaction(cJSON *json_obj);
+
+
+DtwActionTransaction * private_DtwActionTransaction_parse_json_object(cJSON *json_obj);
+
+
+DtwActionTransaction * DtwActionTransaction_write_any(const char *source,unsigned  char *content,long size,bool is_binary);
+
+DtwActionTransaction * DtwActionTransaction_move_any(const char *source, const char *dest);
+
+DtwActionTransaction * DtwActionTransaction_copy_any(const char *source, const char *dest);
+
+DtwActionTransaction * DtwActionTransaction_delete_any(const char *source);
+
+short DtwActionTransaction_convert_action_to_integer(char *action);
+
+
+const char * DtwActionTransaction_convert_action_to_string(int action);
+
+
+cJSON *  private_DtwActionTransaction_create_json_object(DtwActionTransaction* self);
+
+
+void DtwActionTransaction_commit(DtwActionTransaction* self,const char *path);
+
+void DtwActionTransaction_represent(DtwActionTransaction* self);
+
+void DtwActionTransaction_free(DtwActionTransaction* self);
+
+
+
+typedef struct DtwTransaction{
+
+    DtwActionTransaction  **actions;
+    long size;
+
+
+
+}DtwTransaction;
+
+DtwTransaction * newDtwTransaction();
+
+DtwTransaction * newDtwTransaction_from_json(cJSON *json_entry);
+
+DtwJsonTransactionError * dtw_validate_json_transaction(cJSON *json_entry);
+
+DtwJsonTransactionError * dtw_validate_json_transaction_file(const char *filename);
+
+
+DtwTransaction * newDtwTransaction_from_json_file(const char *filename);
+
+void DtwTransaction_remove_from_index(DtwTransaction *self,long index);
+
+void DtwTransaction_remove_from_source(DtwTransaction *self,const char *source);
+
+void DtwTransaction_filter(DtwTransaction *self,bool (*callback)(DtwActionTransaction *action));
+
+void DtwTransaction_append_action(struct DtwTransaction *self,struct DtwActionTransaction  *action);
+
+void DtwTransaction_write_any(struct DtwTransaction *self,const char *path,unsigned char *content, long size,bool is_binary);
+
+void DtwTransaction_write_string(struct DtwTransaction *self,const char *path,const char *content);
+
+void DtwTransaction_write_long(struct DtwTransaction *self,const char *path,long value);
+
+void DtwTransaction_write_bool(struct DtwTransaction *self,const char *path,bool value);
+
+void DtwTransaction_write_double(struct DtwTransaction *self,const char *path,double value);
+
+void DtwTransaction_move_any(struct DtwTransaction *self,const char *source,const char *dest);
+
+void DtwTransaction_copy_any(struct DtwTransaction *self,const char *source,const char *dest);
+
+void DtwTransaction_delete_any(struct DtwTransaction *self,const char *source);
+
+cJSON * DtwTransaction_dumps_to_json(struct DtwTransaction *self);
+
+void DtwTransaction_dumps_to_json_file(struct DtwTransaction *self,const char *filename);
+
+void DtwTransaction_commit(struct DtwTransaction *self,const char *path);
+
+void DtwTransaction_represent(struct DtwTransaction *self);
+
+
+void DtwTransaction_free(struct DtwTransaction *self);
+
+
+
+
+#define DTW_RESOURCE_ELEMENT_IS_NULL -1;
+#define DTW_RESOURCE_OK 0
+#define DTW_RESOURCE_ELEMENT_NOT_EXIST 1
+#define DTW_RESOURCE_ELEMENT_NOT_BOOL 2
+#define DTW_RESOURCE_ELEMENT_NOT_LONG 3
+#define DTW_RESOURCE_ELEMENT_NOT_DOUBLE 4
+#define DTW_RESOURCE_ELEMENT_NOT_STRING 5
+
+
+
+typedef struct {
+    DtwTransaction  *transaction;
+    DtwRandonizer  *randonizer;
+    DtwLocker *locker;
+    int error_code;
+    char *error_path;
+    char *error_message;
+}privateDtwResourceRootProps;
+
+privateDtwResourceRootProps *private_newDtwResourceRootProps();
+
+
+void privateDtwResourceRootProps_free(privateDtwResourceRootProps *self);
+
+
+
+
+
+typedef struct DtwResource{
+
+    bool allow_transaction;
+    bool use_locker_on_unique_values;
+    bool locked;
+    privateDtwResourceRootProps *root_props;
+    char *mothers_path;
+    char *name;
+    char *path;
+    bool child;
+
+    bool loaded;
+    bool is_binary;
+    unsigned char *value_any;
+    long value_size;
+   
+    //cache implementation
+    bool cache_sub_resources;
+    void *sub_resources;
+
+}DtwResource;
+
+
+
+
+DtwResource *new_DtwResource(const char *path);
+
+bool DtwResource_error(DtwResource *self);
+
+#define DtwResource_protected(self)  if(!DtwResource_error(self))
+#define DtwResource_catch(self)  if(DtwResource_error(self))
+
+int DtwResource_get_error_code(DtwResource *self);
+
+char * DtwResource_get_error_message(DtwResource *self);
+
+void  private_DtwResource_raise_error(DtwResource *self, int error_code, const char *error_message);
+
+
+DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ...);
+
+DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,const  char *format, ...);
+
+DtwResource * DtwResource_sub_resource_next(DtwResource *self, const char *end_path);
+
+DtwResource * DtwResource_sub_resource_now(DtwResource *self, const char *end_path);
+
+DtwResource * DtwResource_sub_resource_now_in_unix(DtwResource *self, const char *end_path);
+
+DtwResource * DtwResource_sub_resource_random(DtwResource *self, const char *end_path);
+
+
+void DtwResource_unload(DtwResource *self);
+
+void DtwResource_load(DtwResource *self);
+
+void DtwResource_load_if_not_loaded(DtwResource *self);
+
+void DtwResource_lock(DtwResource *self);
+
+void DtwResource_unlock(DtwResource *self);
+
+
+void DtwResource_rename(DtwResource *self,const  char *new_name);
+
+//getters
+
+unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binary);
+unsigned char *DtwResource_get_any_from_sub_resource(DtwResource *self, long *size, bool *is_binary,const char *format,...);
+
+
+unsigned char *DtwResource_get_binary(DtwResource *self, long *size);
+
+unsigned char *DtwResource_get_binary_from_sub_resource(DtwResource *self, long *size,const char *format,...);
+
+
+char *DtwResource_get_string(DtwResource *self);
+char *DtwResource_get_string_from_sub_resource(DtwResource *self,const char *format,...);
+
+long DtwResource_get_long(DtwResource *self);
+
+long DtwResource_get_long_from_sub_resource(DtwResource *self,const char *format,...);
+
+double DtwResource_get_double(DtwResource *self);
+double DtwResource_get_double_from_sub_resource(DtwResource *self,const char *format,...);
+
+
+bool DtwResource_get_bool(DtwResource *self);
+
+bool DtwResource_get_bool_from_sub_resource(DtwResource *self,const char *format,...);
+
+
+
+void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size);
+
+void DtwResource_set_binary_in_sub_resource(DtwResource *self, unsigned char *element, long size,const char *format,...);
+
+
+
+void DtwResource_set_string(DtwResource *self,const  char *element);
+
+void DtwResource_set_string_in_sub_resource(DtwResource *self,const  char *element,const char *format,...);
+
+void DtwResource_set_long(DtwResource *self,long element);
+
+void DtwResource_set_long_in_sub_resource(DtwResource *self,long element,const char *format,...);
+
+
+void DtwResource_set_double(DtwResource *self,double element);
+
+void DtwResource_set_double_in_sub_resource(DtwResource *self,double element,const char *format,...);
+
+void DtwResource_set_bool( DtwResource *self,bool element);
+
+void DtwResource_set_bool_in_sub_resource( DtwResource *self,bool element,const char *format,...);
+
+
+void DtwResource_destroy(DtwResource *self);
+
+long DtwResource_size(DtwResource *self);
+
+DtwStringArray *DtwResource_list_names(DtwResource *self);
+
+int DtwResource_type(DtwResource *self);
+
+
+const char * DtwResource_type_in_str(DtwResource *self);
+
+void DtwResource_commit(DtwResource *self);
+
+void DtwResource_represent(DtwResource *self);
+
+void DtwResource_free(struct DtwResource *self);
+
+
+
+
+typedef struct DtwResourceArray{
+    DtwResource **resources;
+    long size;
+
+}DtwResourceArray;
+
+DtwResourceArray * newDtwResourceArray();
+
+void DtwResourceArray_append(DtwResourceArray *self, DtwResource *element);
+
+
+DtwResource * DtwResourceArray_get_by_name(DtwResourceArray *self, const char *name);
+
+DtwResourceArray * DtwResource_sub_resources(DtwResource *self);
+
+void DtwResourceArray_represent(DtwResourceArray *self);
+
+void DtwResourceArray_free(DtwResourceArray *self);
+
+
+
+
+
+
+typedef  struct DtwHash{
+    char *hash;
+}DtwHash;
+
+
+DtwHash * newDtwHash();
+
+void  DtwHash_digest_any(DtwHash *self,unsigned char *content,long size);
+
+void DtwHash_digest_string(DtwHash * self, const char *content);
+
+void DtwHash_digest_long(DtwHash * self,long content);
+
+void DtwHash_digest_double(DtwHash * self,double content);
+
+void DtwHash_digest_bool(DtwHash * self,bool content);
+
+void  DtwHash_digest_file(DtwHash * self, const char *path);
+
+void  DtwHash_digest_entity_last_modification(DtwHash * self, const char *path);
+
+
+void DtwHash_digest_string_array(DtwHash *self,DtwStringArray *element);
+
+void DtwHash_digest_string_array_last_modifications(DtwHash *self,DtwStringArray *element);
+
+void DtwHash_digest_string_array_last_modifications_adding_name(DtwHash *self,DtwStringArray *element);
+
+
+void DtwHash_digest_string_array_content(DtwHash *self,DtwStringArray *element);
+
+void DtwHash_digest_string_array_content_adding_name(DtwHash *self,DtwStringArray *element);
+
+void DtwHash_digest_folder_by_last_modification(DtwHash *self,const char *path);
+
+void DtwHash_digest_folder_by_content(DtwHash *self,const char *path);
+
+void  DtwHash_free(DtwHash *self);
+
+
+
+
+
+typedef struct  DtwRandonizerModule{
+    DtwRandonizer * (*newRandonizer)();
+
+    char * (*generate_token)(DtwRandonizer*self, int size);
+    void (*free)(DtwRandonizer *self);
+}DtwRandonizerModule;
+
+DtwRandonizerModule newDtwRandonizerModule();
+
+
+
+typedef struct DtwPathModule{
+    //Getters
+
+    DtwPath * (*newPath)(const char *path);
+    bool  (*changed)(struct DtwPath *self);
+    char *(*get_full_name) (struct DtwPath *self);
+    char *(*get_name) (struct DtwPath *self);
+    char *(*get_extension) (struct DtwPath *self);
+
+    char *(*get_path) (struct DtwPath *self);
+    char *(*get_dir) (struct DtwPath *self);
+
+    
+    //Setters
+    void (*set_extension) (struct DtwPath *self, const char *extension);
+    void (*set_name) (struct DtwPath *self, const char *name);
+    void (*set_dir) (struct DtwPath *self, const char *path);
+    void (*set_full_name) (struct DtwPath *self, const char *full_name);
+    void (*set_path) (struct DtwPath *self, const char *target_path);
+    
+    void (*add_start_dir)(struct DtwPath *self, const char *start_dir);
+    void (*add_end_dir)(struct DtwPath *self, const char *end_dir);
+
+    void (*represent)(struct DtwPath *self);
+    void (*free) (struct DtwPath *self);
+
+}DtwPathModule;
+
+DtwPathModule newDtwPathModule();
+
+
+typedef struct DtwStringArrayModule{
+    DtwStringArray *(*newStringArray)();
+
+    void (*set_value)(struct DtwStringArray *self,int index,const char *value);
+
+    void (*append)(struct DtwStringArray *self,const char *string);
+
+    void (*pop)(struct DtwStringArray *self, int position);
+
+    void (*merge)(struct DtwStringArray *self, struct DtwStringArray *other);
+
+    void (*represent)(struct DtwStringArray *self);
+
+    int (*find_position)(struct DtwStringArray *self,const char *string);
+
+    void (*sort)(struct DtwStringArray *self);
+
+    void (*free)(struct DtwStringArray *self);
+
+
+}DtwStringArrayModule;
+
+DtwStringArrayModule newDtwStringArrayModule();
+
+
+
+
+typedef struct DtwTreePartModule{
+
+    DtwTreePart  *(*newPart)(const char *path, DtwTreeProps *props);
+    DtwTreePart  *(*newPartEmpty)(const char *path);
+    DtwTreePart * (*newPartLoading)(const char *path);
+
+    char *(*get_content_string_by_reference)(struct DtwTreePart *self);
+    unsigned char *(*get_content_binary_by_reference)(struct DtwTreePart *self);
+
+    char *(*get_content_sha)(struct DtwTreePart *self);
+    char *(*last_modification_time_in_string)(struct DtwTreePart *self);
+    void (*set_any_content)(struct DtwTreePart *self,unsigned char *content,int content_size,bool is_binary);
+    void (*set_string_content)(struct DtwTreePart *self,const char *content);
+    void (*set_binary_content)(struct DtwTreePart *self,unsigned char *content,int content_size);
+    void (*load_content_from_hardware)(struct DtwTreePart *self);
+    void (*free_content)(struct DtwTreePart *self);
+    void(*represent)(struct DtwTreePart *self);
+
+    bool(*hardware_remove)(struct DtwTreePart *self, int transaction);
+    bool(*hardware_write)(struct DtwTreePart *self, int transaction);
+    bool(*hardware_modify)(struct DtwTreePart *self, int transaction);
+    bool(*hardware_commit)(struct DtwTreePart *self);
+
+    void (*free)(struct DtwTreePart *self);
+    struct DtwTreePart *(*self_copy)(struct DtwTreePart *self);
+}DtwTreePartModule;
+
+
+DtwTreePartModule newDtwTreePartModule();
+
+
+
+typedef struct DtwJsonTreeErrorModule{
+    void (*free)(struct DtwJsonTreeError *self);
+    void (*represent)(struct DtwJsonTreeError *self);
+
+}DtwJsonTreeErrorModule;
+
+DtwJsonTreeErrorModule newDtwJsonTreeErrorModule();
+
+
+typedef struct  DtwTreeTransactionReportModule{
+
+    void (*represent)(struct DtwTreeTransactionReport *report);
+    void (*free)(struct DtwTreeTransactionReport *report);
+
+}DtwTreeTransactionReportModule;
+
+DtwTreeTransactionReportModule newDtwTreeTransactionReportModule();
+
+
+typedef struct DtwTreeModule{
+
+    DtwTree  *(*newTree)();
+    void (*add_tree_part_by_copy)(
+            struct DtwTree *self,
+            struct DtwTreePart *tree_part
+    );
+
+    void (*remove_tree_part)(
+            struct DtwTree *self,
+            int position
+    );
+
+    void (*add_tree_part_by_reference)(
+            struct DtwTree *self,
+            struct DtwTreePart *tree_part
+    );
+
+    void (*add_tree_parts_from_string_array)(
+            struct DtwTree *self,
+            struct DtwStringArray *paths,
+            DtwTreeProps *props
+    );
+
+    struct DtwTree *(*get_sub_tree)(
+            struct DtwTree *self,
+            const char *path,
+            bool copy_content
+    );
+
+    void (*add_tree_from_hardware)(
+            struct DtwTree *self,
+            const char *path,
+            DtwTreeProps *props
+    );
+    //Listage Functions
+
+    DtwTreePart *(*find_tree_part_by_function)(
+            struct DtwTree *self,
+            bool (*caller)(struct  DtwTreePart *part)
+    );
+
+    DtwTree *(*filter)(
+            struct DtwTree *self,
+            bool (*caller)(struct  DtwTreePart *part)
+    );
+
+    DtwTree *(*map)(
+            struct DtwTree *self,
+            struct  DtwTreePart*(*caller)(struct  DtwTreePart *part)
+    );
+
+
+    DtwStringArray * (*list_files)(struct DtwTree *self, const char *path,bool concat_path);
+    DtwStringArray * (*list_dirs)(struct DtwTree *self, const char *path,bool concat_path);
+    DtwStringArray * (*list_all)(struct DtwTree *self, const char *path,bool concat_path);
+
+    DtwStringArray * (*list_files_recursively)(struct DtwTree *self, const char *path,bool concat_path);
+    DtwStringArray * (*list_dirs_recursively)(struct DtwTree *self, const char *path,bool concat_path);
+    DtwStringArray * (*list_all_recursively)(struct DtwTree *self, const char *path,bool concat_path);
+
+
+    struct DtwTreePart *(*find_tree_part_by_name)( struct DtwTree *self,const char *name);
+    struct DtwTreePart *(*find_tree_part_by_path)(   struct DtwTree *self,const char *path);
+
+
+    struct DtwTreeTransactionReport * (*create_report)(struct DtwTree *self);
+
+    void (*loads_json_tree)(
+            struct DtwTree *self,
+            const char *content
+    );
+
+
+    void (*loads_json_tree_from_file)(
+            struct DtwTree *self,
+            const char *path
+    );
+
+    char *(*dumps_json_tree)(
+            struct DtwTree *self,
+            DtwTreeProps * props
+    );
+
+    void (*dumps_json_tree_to_file)(
+            struct DtwTree *self,
+            const char *path,
+            DtwTreeProps * props
+    );
+
+    void (*represent)(struct DtwTree *self);
+    void (*insecure_hardware_remove_tree)(struct DtwTree *self);
+    void (*insecure_hardware_write_tree)(struct DtwTree *self);
+    void (*hardware_commit_tree)(struct DtwTree *self);
+    void (*free)(struct DtwTree *self);
+
+    DtwTreeTransactionReportModule transaction_report;
+
+    DtwTreePartModule part;
+    DtwJsonTreeErrorModule json_error;
+
+}DtwTreeModule;
+
+DtwTreeModule newDtwTreeModule();
+
+
+
+
+typedef struct DtwLockerModule{
+    DtwLocker * (*newLocker)();
+    void (*lock)(struct DtwLocker *self, const  char *element);
+    void (*unlock)(struct DtwLocker *self, const  char *element);
+    void (*represemt)(struct DtwLocker *self);
+    void (*free)(struct DtwLocker *self);
+
+}DtwLockerModule;
+
+DtwLockerModule newDtwLockerModule();
+
+
+
+
+typedef struct DtwActionTransactionModule{
+
+    DtwActionTransaction *(*newAction)();
+
+    DtwActionTransaction * (*write_any)(const char *source,unsigned  char *content,long size,bool is_binary);
+
+    DtwActionTransaction * (*move_any)(const char *source, const char *dest);
+
+    DtwActionTransaction * (*copy_any)(const char *source, const char *dest);
+
+    DtwActionTransaction * (*delete_any)(const char *source);
+
+    short (*convert_action_to_integer)(char *action);
+
+    const char * (*convert_action_to_string)(int action);
+
+    void (*commit)(DtwActionTransaction* self,const char *path);
+
+    void (*represent)(DtwActionTransaction* self);
+
+    void (*free)(DtwActionTransaction* self);
+
+}DtwActionTransactionModule;
+
+DtwActionTransactionModule newDtwActionTransactionModule();
+
+
+
+typedef struct DtwJsonTransactionErrorModule{
+    void (*represent)(struct DtwJsonTransactionError *self);
+    void (*free)(struct DtwJsonTransactionError *self);
+
+}DtwJsonTransactionErrorModule;
+
+DtwJsonTransactionErrorModule newDtwJsonTransactionErrorModule();
+
+
+typedef struct DtwTransactionModule{
+    DtwTransaction *(*newTransaction)();
+    DtwTransaction * (*newTransaction_from_json)(cJSON *json_entry);
+    DtwTransaction * (*newTransaction_from_json_file)(const char *filename);
+    DtwJsonTransactionError * (*validate_json_transaction_file)(const char *filename);
+
+    void (*remove_from_index)(DtwTransaction *self,long index);
+    void (*remove_from_source)(DtwTransaction *self,const char *source);
+    void (*filter)(DtwTransaction *self,bool (*callback)(DtwActionTransaction *action));
+
+    void (*append_action)(struct DtwTransaction *self,struct DtwActionTransaction  *action);
+    void (*write_any)(struct DtwTransaction *self,const char *path,unsigned char *content, long size,bool is_binary);
+    void (*write_string)(struct DtwTransaction *self,const char *path,const char *content);
+
+    void (*write_long)(struct DtwTransaction *self,const char *path,long value);
+    void (*write_bool)(struct DtwTransaction *self,const char *path,bool value);
+    void (*write_double)(struct DtwTransaction *self,const char *path,double value);
+
+
+    void (*move_any)(struct DtwTransaction *self,const char *source,const char *dest);
+    void (*copy_any)(struct DtwTransaction *self,const char *source,const char *dest);
+    void (*delete_any)(struct DtwTransaction *self,const char *source);
+
+    cJSON *(*dumps_transaction_to_json)(struct DtwTransaction *self);
+    void (*dumps_transaction_to_json_file)(struct DtwTransaction *self,const char *filename);
+
+    void (*commit)(struct DtwTransaction *self,const char *source);
+    void (*represent)(struct DtwTransaction *self);
+    void (*free)(struct DtwTransaction *self);
+
+    DtwActionTransactionModule action;
+    DtwJsonTransactionErrorModule json_error;
+
+
+}DtwTransactionModule;
+
+DtwTransactionModule newDtwTransactionModule();
+
+
+
+
+
+typedef struct DtwResourceArrayModule{
+
+    void (*append)(DtwResourceArray *self, DtwResource *element);
+    DtwResource * (*get_by_name)(DtwResourceArray *self, const char *name);
+    void (*represent)(DtwResourceArray *self);
+    void (*free)(DtwResourceArray *self);
+
+}DtwResourceArrayModule;
+
+DtwResourceArrayModule newDtwResourceArrayModule();
+
+
+
+typedef struct DtwResourceModule{
+
+    DtwResource *(*newResource)(const char *path);
+    int (*get_error_code)(DtwResource *self);
+    bool (*error)(DtwResource *self);
+
+    char * (*get_error_message)(DtwResource *self);
+
+    struct DtwResource * (*sub_resource)(struct DtwResource *self,const  char *format,...);
+    unsigned char *(*get_any_from_sub_resource)(DtwResource *self, long *size, bool *is_binary,const char *format,...);
+    unsigned char *(*get_binary_from_sub_resource)(DtwResource *self, long *size,const char *format,...);
+    char *(*get_string_from_sub_resource)(DtwResource *self,const char *format,...);
+    long (*get_long_from_sub_resource)(DtwResource *self,const char *format,...);
+    double (*get_double_from_sub_resource)(DtwResource *self,const char *format,...);
+    bool (*get_bool_from_sub_resource)(DtwResource *self,const char *format,...);
+
+
+    void (*set_binary_in_sub_resource)(DtwResource *self, unsigned char *element, long size,const char *format,...);
+    void (*set_string_in_sub_resource)(DtwResource *self,const  char *element,const char *format,...);
+    void (*set_long_in_sub_resource)(DtwResource *self,long element,const char *format,...);
+    void (*set_double_in_sub_resource)(DtwResource *self,double element,const char *format,...);
+    void (*set_bool_in_sub_resource)( DtwResource *self,bool element,const char *format,...);
+
+
+    DtwResource * (*sub_resource_ensuring_not_exist)(DtwResource *self,const  char *format, ...);
+
+    DtwResource * (*sub_resource_next)(DtwResource *self, const char *end_path);
+    DtwResource * (*sub_resource_now)(DtwResource *self, const char *end_path);
+
+    DtwResource * (*sub_resource_now_in_unix)(DtwResource *self,const char *end_path);
+    DtwResource * (*sub_resource_random)(DtwResource *self,const char *end_path);
+
+
+    void (*load)(DtwResource *self);
+
+    void (*unload)(DtwResource *self);
+
+    void (*lock)(DtwResource *self);
+    void (*unlock)(DtwResource *self);
+
+    void (*destroy)(DtwResource *self);
+
+    unsigned char *(*get_any)(struct DtwResource *self, long *size, bool *is_binary);
+
+    unsigned char *(*get_binary)(struct DtwResource *self, long *size);
+
+    char *(*get_string)(struct DtwResource *self);
+
+    long (*get_long)(struct DtwResource *self);
+
+    double (*get_double)(struct DtwResource *self);
+
+    bool (*get_bool)(struct DtwResource *self);
+
+    void (*set_binary)(DtwResource *self, unsigned char *element, long size);
+
+    void (*set_string)(DtwResource *self,const  char *element);
+
+    void (*set_long)(DtwResource *self,long element);
+
+    void (*set_double)(DtwResource *self,double element);
+
+    void (*set_bool)(DtwResource *self,bool element);
+
+
+
+    DtwStringArray *(*list_names)(DtwResource *self);
+
+    long (*size)(DtwResource *self);
+    int (*type)(DtwResource *self);
+
+    const char *(*type_in_str)(DtwResource *self);
+    void (*commit)(DtwResource *self);
+
+    void (*represent)(DtwResource *self);
+
+    void (*rename)(DtwResource *self,const char *new_name);
+
+    void (*free)(DtwResource *self);
+    DtwResourceArray * (*sub_resources)(DtwResource *self);
+    DtwResourceArrayModule array;
+
+
+}DtwResourceModule;
+
+DtwResourceModule newDtwResourceModule();
+
+
+
+typedef struct DtwHashModule{
+    DtwHash * (*newHash)();
+    void  (*digest_any)(DtwHash *self,unsigned char *content,long size);
+    void (*digest_string)(DtwHash * self, const char *content);
+    void (*digest_long)(DtwHash * self,long content);
+    void (*digest_double)(DtwHash * self,double content);
+    void (*digest_bool)(DtwHash * self,bool content);
+    void  (*digest_file)(DtwHash * self, const char *path);
+    void  (*digest_entity_last_modification)(DtwHash * self, const char *path);
+    void (*digest_string_array)(DtwHash *self,DtwStringArray *element);
+    void (*digest_string_array_last_modifications)(DtwHash *self,DtwStringArray *element);
+    void (*digest_string_array_last_modifications_adding_name)(DtwHash *self,DtwStringArray *element);
+    void (*digest_string_array_content)(DtwHash *self,DtwStringArray *element);
+    void (*digest_string_array_content_adding_name)(DtwHash *self,DtwStringArray *element);
+    void (*digest_folder_by_last_modification)(DtwHash *self,const char *path);
+    void (*digest_folder_by_content)(DtwHash *self,const char *path);
+    void  (*free)(DtwHash *self);
+
+}DtwHashModule;
+
+DtwHashModule newDtwHashModule();
+
+
+typedef struct DtwNamespace{
+    //IO
+    void (*create_dir_recursively)(const char *path);
+
+    bool (*remove_any)(const char* path);
+
+    char *(*get_current_dir)();
+
+    unsigned char *(*load_any_content)(const char * path,long *size,bool *is_binary);
+
+    char *(*load_string_file_content)(const char * path);
+
+    unsigned char *(*load_binary_content)(const char * path,long *size);
+    
+    bool (*write_any_content)(const char *path,unsigned  char *content,long size);
+
+    bool (*write_string_file_content)(const char *path,const char *content);
+
+    int (*entity_type)(const char *path);
+
+    int (*complex_entity_type)(const char *path);
+
+    const char *(*convert_entity)(int entity_type);
+
+    bool (*copy_any)(const char* src_path,const  char* dest_path,bool merge);
+
+    bool (*move_any)(const char* src_path, const char* dest_path,bool merge);
+
+    //numeral io
+
+    long (*load_long_file_content)(const char * path);
+
+    double (*load_double_file_content)(const char * path);
+
+    bool (*load_bool_file_content)(const char * path);
+
+
+
+    void (*write_long_file_content)(const char *path, long value);
+
+    void (*write_bool_file_content)(const char *path, bool value);
+
+    void (*write_double_file_content)(const char *path,double value);
+
+
+
+    //listage
+
+    DtwStringArray * (*list_files)(const char *path, bool concat_path);
+    DtwStringArray * (*list_dirs)(const char *path, bool concat_path);
+
+    DtwStringArray *  (*list_all)(const char *path,  bool concat_path);
+    DtwStringArray * (*list_dirs_recursively)(const char *path,bool concat_path);
+    DtwStringArray *  (*list_files_recursively)(const char *path,bool concat_path);
+    DtwStringArray * (*list_all_recursively)(const char *path,bool concat_path);
+
+
+    //extras
+
+    char * (*generate_sha_from_file)(const char *path);
+
+    char * (*generate_sha_from_string)(const char *string);
+
+    char * (*generate_sha_from_any)(void *anything , long size);
+
+    long int (*get_entity_last_motification_in_unix)(const char *path);
+
+    char * (*convert_unix_time_to_string)(long int unix_time);
+
+    char * (*get_entity_last_motification_in_string)(const char *path);
+
+    char *(*concat_path)(const char *path1, const char *path2);
+
+
+    //base64
+
+    char *(*base64_encode)(unsigned char *data, long input_length);
+
+    unsigned char *(*base64_decode)(const char *data, long *output_length);
+
+    char *(*convert_binary_file_to_base64)(const char *path);
+    //string array
+
+    DtwStringArrayModule string_array;
+
+    DtwPathModule path;
+
+    DtwLockerModule  locker;
+
+
+    DtwTreeModule tree;
+    DtwHashModule  hash;
+    DtwTransactionModule transaction;
+
+    DtwResourceModule resource;
+    DtwRandonizerModule randonizer;
+
+}DtwNamespace;
+
+DtwNamespace newDtwNamespace();
+
+
+
+
+#ifndef cJSON__h
+#define cJSON__h
 
 /*
   Copyright (c) 2009-2017 Dave Gamble and cJSON contributors
@@ -3452,144 +5048,10 @@ CJSON_PUBLIC(void) cJSON_free(void *object)
     global_hooks.deallocate(object);
 }
 #endif //cJSON__h
-#ifndef SHA_256_H
+
 
 #ifndef SHA_256_H
 #define SHA_256_H
-
-#include <stdint.h>
-#include <string.h>
-#include <stdlib.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-/*
- * @brief Size of the SHA-256 sum. This times eight is 256 bits.
- */
-#define SIZE_OF_SHA_256_HASH 32
-
-/*
- * @brief Size of the chunks used for the calculations.
- *
- * @note This should mostly be ignored by the user, although when using the streaming API, it has an impact for
- * performance. Add chunks whose size is a multiple of this, and you will avoid a lot of superfluous copying in RAM!
- */
-#define SIZE_OF_SHA_256_CHUNK 64
-
-/*
- * @brief The opaque SHA-256 type, that should be instantiated when using the streaming API.
- *
- * @note Although the details are exposed here, in order to make instantiation easy, you should refrain from directly
- * accessing the fields, as they may change in the future.
- */
-struct Sha_256 {
-	uint8_t *hash;
-	uint8_t chunk[SIZE_OF_SHA_256_CHUNK];
-	uint8_t *chunk_pos;
-	size_t space_left;
-	size_t total_len;
-	uint32_t h[8];
-};
-
-/*
- * @brief The simple SHA-256 calculation function.
- * @param hash Hash array, where the result is delivered.
- * @param input Pointer to the data the hash shall be calculated on.
- * @param len Length of the input data, in byte.
- *
- * @note If all of the data you are calculating the hash value on is available in a contiguous buffer in memory, this is
- * the function you should use.
- *
- * @note If either of the passed pointers is NULL, the results are unpredictable.
- */
-void calc_sha_256(uint8_t hash[SIZE_OF_SHA_256_HASH], const void *input, size_t len);
-
-/*
- * @brief Initialize a SHA-256 streaming calculation.
- * @param sha_256 A pointer to a SHA-256 structure.
- * @param hash Hash array, where the result will be delivered.
- *
- * @note If all of the data you are calculating the hash value on is not available in a contiguous buffer in memory, this is
- * where you should start. Instantiate a SHA-256 structure, for instance by simply declaring it locally, make your hash
- * buffer available, and invoke this function. Once a SHA-256 hash has been calculated (see further below) a SHA-256
- * structure can be initialized again for the next calculation.
- *
- * @note If either of the passed pointers is NULL, the results are unpredictable.
- */
-
-char * calc_sha_256_returning_string(const void *input, size_t len);
-/*
-	@param input: the string to be hashed
-	@param len: the length of the string
-	@return: the hash of the string
-	@note: if the input string is NULL, the results are unpredictable
-*/
-
-void calc_sha_256_from_string(uint8_t hash[SIZE_OF_SHA_256_HASH], const char *input);
-/*
-	@param hash: the hash array, where the result is delivered
-	@param input: the string to be hashed
-	@note: if the input string is NULL, the results are unpredictable
-*/
-
-int calc_sha_256_from_file(uint8_t hash[SIZE_OF_SHA_256_HASH], const char *filename);
-/*
-	@param hash: the hash array, where the result is delivered
-	@param filename: the name of the file to be hashed
-	@return: 0 if the file was hashed successfully, -1 otherwise
-*/
-
-char * calc_sha_256_from_file_returning_string(const char *filename);
-/*
-	@param filename: the name of the file to be hashed
-	@return: the hash of the file
-	@note: if the filename is NULL, the return value is NULL
-*/
-
-void sha_256_init(struct Sha_256 *sha_256, uint8_t hash[SIZE_OF_SHA_256_HASH]);
-
-/*
- * @brief Stream more input data for an on-going SHA-256 calculation.
- * @param sha_256 A pointer to a previously initialized SHA-256 structure.
- * @param data Pointer to the data to be added to the calculation.
- * @param len Length of the data to add, in byte.
- *
- * @note This function may be invoked an arbitrary number of times between initialization and closing, but the maximum
- * data length is limited by the SHA-256 algorithm: the total number of bits (i.e. the total number of bytes times
- * eight) must be representable by a 64-bit unsigned integer. While that is not a practical limitation, the results are
- * unpredictable if that limit is exceeded.
- *
- * @note This function may be invoked on empty data (zero length), although that obviously will not add any data.
- *
- * @note If either of the passed pointers is NULL, the results are unpredictable.
- */
-void sha_256_write(struct Sha_256 *sha_256, const void *data, size_t len);
-
-/*
- * @brief Conclude a SHA-256 streaming calculation, making the hash value available.
- * @param sha_256 A pointer to a previously initialized SHA-256 structure.
- * @return Pointer to the hash array, where the result is delivered.
- *
- * @note After this function has been invoked, the result is available in the hash buffer that initially was provided. A
- * pointer to the hash value is returned for convenience, but you should feel free to ignore it: it is simply a pointer
- * to the first byte of your initially provided hash array.
- *
- * @note If the passed pointer is NULL, the results are unpredictable.
- *
- * @note Invoking this function for a calculation with no data (the writing function has never been invoked, or it only
- * has been invoked with empty data) is legal. It will calculate the SHA-256 value of the empty string.
- */
-uint8_t *sha_256_close(struct Sha_256 *sha_256);
-
-
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif
 
 
 
@@ -3879,1451 +5341,6 @@ char * calc_sha_256_from_file_returning_string(const char *filename)
 }
 #endif  //SHA_256_H
 
-
-
-#include <unistd.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <time.h>
-#include <stdarg.h>
-
-#include <errno.h>
-#include <sys/file.h>
-#include <sys/time.h>
-
-
-
-#ifdef __linux__
-#include <sys/wait.h>
-  #include <dirent.h>
-  #include <unistd.h>
-#elif _WIN32
-  #include <windows.h>
-  #include <tchar.h>
-  #include <wchar.h>
-  #include <locale.h>
-  #include <direct.h>
-#endif
-
-
-
-typedef struct DtwStringArray {
-  int size;
-
-  char **strings;
-
-
-
-}DtwStringArray;
-
-// End the structure with a semicolon
-int  DtwStringArray_find_position(struct DtwStringArray *self, const char *string);
-void DtwStringArray_append(struct DtwStringArray *self, const char *string);
-
-void DtwStringArray_pop(struct DtwStringArray *self, int position);
-
-void DtwStringArray_merge(struct DtwStringArray *self, struct DtwStringArray *other);
-void DtwStringArray_represent(struct DtwStringArray *self);
-void DtwStringArray_free(struct DtwStringArray *self);
-void DtwStringArray_sort(struct DtwStringArray *self);
-
-void DtwStringArray_set_value(struct DtwStringArray *self, int index, const char *value);
-
-struct DtwStringArray * newDtwStringArray();
-
-struct DtwStringArray * DtwStringArray_clone(DtwStringArray *self);
-
-
-
-const char base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-
-
-char *dtw_base64_encode(unsigned char *data, long input_length);
-
-
-unsigned char *dtw_base64_decode(const char *data, long *output_length);
-
-
-char *dtw_convert_binary_file_to_base64(const char *path);
-
-
-
-
-typedef struct DtwRandonizer{
-    long seed;
-    long actual_generation;
-
-}DtwRandonizer;
-
-
-DtwRandonizer * newDtwRandonizer();
-char * DtwRandonizer_generate_token(struct DtwRandonizer*self, int size);
-void DtwRandonizer_free(struct DtwRandonizer *self);
-
-
-
-
-
-char * dtw_generate_sha_from_file(const char *path);
-char * dtw_generate_sha_from_string(const char *string);
-char * dtw_generate_sha_from_any(void *anything , long size);
-
-long int dtw_get_entity_last_motification_in_unix(const char *path);
-char * dtw_convert_unix_time_to_string(long int unix_time);
-char * dtw_get_entity_last_motification_in_string(const char *path);
-const char * private_dtw_convert_action_to_string(short action);
-short private_dtw_convert_string_to_action(const char *action);
-void private_dtw_add_end_bar_to_dirs_string_array(struct DtwStringArray * dirs);
-char *dtw_concat_path(const char *path1, const char *path2);
-struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *paths,const char *path_to_remove);
-void private_dtw_remove_double_bars(struct DtwStringArray*path);
-
-int private_dtw_string_cmp(const void *a, const void *b);
-
-long  dtw_now = -1;
-
-long dtw_get_time();
-
-
-
-
-
-bool dtw_starts_with(const char *string, const char *prefix);
-bool dtw_ends_with(const char *string, const char *suffix);
-char *private_dtw_replace_string_once(const char *target, const char *old_element, const char *new_element);
-char* dtw_replace_string(const char *target, const char *old_element, const char *new_element);
-
-char *private_dtw_change_beginning_of_string(const char *target,int start_element_to_remove_size, const char *new_element);
-
-
-
-#define DTW_FILE_TYPE 1
-#define DTW_FOLDER_TYPE 2
-#define DTW_ALL_TYPE 3
-#define DTW_NOT_FOUND -1
-
-#define DTW_COMPLEX_BINARY 10
-#define DTW_COMPLEX_STRING_TYPE 11
-#define DTW_COMPLEX_LONG_TYPE 12
-#define DTW_COMPLEX_DOUBLE_TYPE 13
-#define DTW_COMPLEX_BOOL_TYPE 14
-
-#define DTW_MERGE true
-
-
-#define DTW_NOT_MERGE false
-#ifdef __linux__
-#define dtw_create_dir(path) mkdir(path,0777)
-#elif _WIN32
-#define dtw_create_dir(path) _mkdir(path)
-#endif
-
-void dtw_create_dir_recursively(const char *path);
-
-bool dtw_remove_any(const char* path);
-
-char *dtw_get_current_dir();
-
-long dtw_get_total_itens_of_dir(const char *path);
-
-unsigned char *dtw_load_any_content(const char * path,long *size,bool *is_binary);
-
-char *dtw_load_string_file_content(const char * path);
-
-unsigned char *dtw_load_binary_content(const char * path,long *size);
-
-
-bool dtw_write_any_content(const char *path,unsigned  char *content,long size);
-bool dtw_write_string_file_content(const char *path,const char *content);
-
-
-
-int dtw_entity_type(const char *path);
-
-
-
-int dtw_complex_entity_type(const char *path);
-
-const char *dtw_convert_entity(int entity_type);
-
-
-bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge);
-
-
-bool dtw_move_any(const char* src_path, const char* dest_path,bool merge);
-
-
-
-#define DTW_NOT_NUMERICAL -2
-#define DTW_NOT_BOOL -3
-
-long dtw_load_long_file_content_setting_error(const char *path,int *error);
-
-long dtw_load_long_file_content(const char * path);
-
-double dtw_load_double_file_content_setting_error(const char * path, int *error);
-
-double dtw_load_double_file_content(const char * path);
-
-bool dtw_load_bool_file_content_setting_error(const char * path, int *error);
-
-
-bool dtw_load_bool_file_content(const char * path);
-
-
-void dtw_write_long_file_content(const char *path, long value);
-
-void dtw_write_bool_file_content(const char *path, bool value);
-
-void dtw_write_double_file_content(const char *path,double value);
-
-
-
-#define DTW_CONCAT_PATH true
-#define DTW_NOT_CONCAT_PATH false
-
-
- DtwStringArray * dtw_list_files(const char *path, bool concat_path);
-DtwStringArray * dtw_list_dirs(const char *path, bool concat_path);
-
-DtwStringArray *  dtw_list_all(const char *path,  bool concat_path);
-
-
-#ifdef __linux__
-
-bool private_dtw_verify_if_add(const int expected_type, int d_type);
-bool private_dtw_verify_if_skip(struct dirent *entry);
-
-#endif
-
-
-#ifdef _WIN32
-
-bool private_dtw_verify_if_add(const int expected_type, WIN32_FIND_DATAA entry);
-bool private_dtw_verify_if_skip(WIN32_FIND_DATAA *entry);
-#endif
-
-
-
-struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool concat_path);
- 
-
-
- DtwStringArray * dtw_list_dirs_recursively(const char *path,bool concat_path);
-
-
- DtwStringArray *  dtw_list_files_recursively(const char *path,bool concat_path);
-
-
- DtwStringArray * dtw_list_all_recursively(const char *path,bool concat_path);
-
-
-
-typedef struct DtwPath {
-    char *original_path;
-    char *dir;
-    char *name;
-    char *extension;
-    bool dir_exists;
-    bool name_exists;
-    bool extension_exists;
-
-
-}DtwPath;
-struct DtwPath * newDtwPath(const char *path);
-bool  DtwPath_changed(struct DtwPath *self);
-char *DtwPath_get_full_name(struct DtwPath *self);
-char *DtwPath_get_name(struct DtwPath *self);
-char *DtwPath_get_extension(struct DtwPath *self);
-char *DtwPath_get_path(struct DtwPath *self);
-char *DtwPath_get_dir(struct DtwPath *self);
-
-void DtwPath_set_extension(struct DtwPath *self, const char *extension);
-void DtwPath_set_name(struct DtwPath * self, const char * name);
-void DtwPath_set_dir(struct DtwPath *self, const char *path);
-
-void DtwPath_set_full_name(struct DtwPath * self, const char * full_name);
-void DtwPath_set_path(struct DtwPath *self, const char *target_path);
-
-void DtwPath_add_start_dir(struct DtwPath *self, const char *start_dir);
-void DtwPath_add_end_dir(struct DtwPath *self, const char *end_dir);
-
-void DtwPath_represent(struct DtwPath *self);
-void DtwPath_free(struct DtwPath *self);
-
-
-
-
-
-
-
-#define DTW_NOT_MIMIFY 1
-#define DTW_MIMIFY 2
-
-#define DTW_NOT_LOAD 1
-#define DTW_LOAD 2
-
-#define DTW_HIDE 1
-#define DTW_INCLUDE 2
-
-typedef struct DtwTreeProps{
-   int minification;
-   int content;
-   int path_atributes;
-   int hadware_data;
-   int content_data;
-   int ignored_elements;
-
-}DtwTreeProps;
-
-
-
-DtwTreeProps DtwTreeProps_format_props(DtwTreeProps *props);
-
-
-#define DTW_JSON_ERROR_CODE_OK 0
-#define DTW_JSON_TYPE_ERROR 1
-#define DTW_JSON_SYNTAX_ERROR 2
-#define DTW_JSON_REQUIRED_KEY_ERROR 3
-#define DTW_JSON_REQUIRED_VALUE_ERROR 4
-#define DTW_JSON_NOT_FOUND_ERROR 5
-#define DTW_ACTION_ERROR (-1)
-
-
-typedef struct DtwJsonTreeError {
-    int code;
-    int position;
-    const char *menssage;
-
-
-}DtwJsonTreeError;
-
-struct DtwJsonTreeError * newDtwJsonError();
-struct DtwJsonTreeError * DtwJsonTreeError_validate_json_tree(char *content);
-void DtwJsonTreeError_represent(struct DtwJsonTreeError *self);
-void DtwJsonTreeError_free(struct DtwJsonTreeError *self);
-
-
-
-typedef struct DtwTreeTransactionReport{
-    DtwStringArray *write;
-    DtwStringArray *modify;
-    DtwStringArray *remove;
-
-}DtwTreeTransactionReport;
-
-struct DtwTreeTransactionReport * newDtwTreeTransactionReport();
-void  DtwTreeTransactionReport_represent(struct DtwTreeTransactionReport *report);
-void  DtwTreeTransactionReport_free(struct DtwTreeTransactionReport *report);
-
-
-
-#define DTW_IS_BINARY true
-#define DTW_IS_NOT_BINARY false
-#define DTW_IGNORE true
-#define DTW_NOT_IGNORE false
-
-#define DTW_SET_AS_ACTION 1
-#define DTW_EXECUTE_NOW 2
-
-#define DTW_MODIFY 1
-#define DTW_WRITE 2
-#define DTW_REMOVE 3
-
-typedef struct DtwTreePart{
-    
-    struct DtwPath *path;
-    bool content_exist_in_memory;
-    size_t  hardware_content_size; 
-    long last_modification_time;
-    bool content_exist_in_hardware;
-    bool ignore;
-    bool is_binary;
-    bool metadata_loaded;
-    char *hawdware_content_sha;
-
-    unsigned char *content;
-    int pending_action;
-
-    size_t content_size;
-
-}DtwTreePart;
-
-
-char *DtwTreePart_get_content_string_by_reference(struct DtwTreePart *self);
-unsigned char *DtwTreePart_get_content_binary_by_reference(struct DtwTreePart *self);
-char *DtwTreePart_get_content_sha(struct DtwTreePart *self);
-char *DtwTreePart_last_modification_time_in_string(struct DtwTreePart *self);
-void DtwTreePart_set_any_content(struct DtwTreePart *self, unsigned char *content, int content_size, bool is_binary);
-void DtwTreePart_set_string_content(struct DtwTreePart *self, const char *content);
-void DtwTreePart_set_binary_content(struct DtwTreePart *self, unsigned char *content, int content_size);
-void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self);
-void DtwTreePart_free_content(struct DtwTreePart *self);
-void DtwTreePart_represent(struct DtwTreePart *self);
-
-bool DtwTreePart_hardware_remove(struct DtwTreePart *self,int transaction);
-bool DtwTreePart_hardware_write(struct DtwTreePart *self,int transaction);
-bool DtwTreePart_hardware_modify(struct DtwTreePart *self,int transaction);
-
-
-bool DtwTreePart_hardware_commit(struct DtwTreePart *self);
-
-void DtwTreePart_free(struct DtwTreePart *self);
-struct DtwTreePart * DtwTreePart_self_copy(struct DtwTreePart *self);
-
-struct DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps *props);
-struct DtwTreePart * newDtwTreePartEmpty(const char *path);
-struct DtwTreePart * newDtwTreePartLoading(const char *path);
-
-
-
-
-
-typedef struct  DtwTree{
-    int size;
-    struct DtwTreePart **tree_parts;
-
-
-}DtwTree;
-
-
-struct DtwTree *DtwTree_get_sub_tree(
-    struct DtwTree *self,
-    const char *path,
-    bool copy_content
-);
-
-struct DtwTreePart *DtwTree_find_tree_part_by_function(
-        struct DtwTree *self,
-        bool (*caller)(struct  DtwTreePart *part)
-        );
-
-struct DtwTree *DtwTree_map(
-        struct DtwTree *self,
-        struct  DtwTreePart* (*caller)(struct  DtwTreePart *part)
-);
-
-struct DtwTree *DtwTree_filter(
-        struct DtwTree *self,
-        bool (*caller)(struct  DtwTreePart *part)
-);
-
-
-struct DtwTreePart *DtwTree_find_tree_part_by_name(struct DtwTree *self, const char *name);
-struct DtwTreePart *DtwTree_find_tree_part_by_path(struct DtwTree *self, const char *path);
-
-//listages
-struct DtwStringArray *DtwTree_list_files(struct DtwTree *self, const char *path,bool concat_path);
-
-struct DtwStringArray *DtwTree_list_dirs(struct DtwTree *self, const char *path,bool concat_path);
-
-struct DtwStringArray *DtwTree_list_all(struct DtwTree *self, const char *path,bool concat_path);
-
-struct DtwStringArray *DtwTree_list_files_recursively(struct DtwTree *self, const char *path,bool concat_path);
-
-struct DtwStringArray *DtwTree_list_dirs_recursively(struct DtwTree *self, const char *path,bool concat_path);
-
-struct DtwStringArray *DtwTree_list_all_recursively(struct DtwTree *self, const char *path,bool concat_path);
-
-
-void DtwTree_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_part);
-void DtwTree_remove_tree_part(struct DtwTree *self, int position);
-void DtwTree_add_tree_part_by_reference(struct DtwTree *self, struct DtwTreePart *tree_part);
-void DtwTree_free(struct DtwTree *self);
-void DtwTree_represent(struct DtwTree *self);
-
-void DtwTree_add_tree_parts_from_string_array(
-    struct DtwTree *self,
-    struct DtwStringArray *paths,
-    DtwTreeProps *props
-);
-
-void DtwTree_add_tree_from_hardware(
-    struct DtwTree *self,
-    const char *path,
-    DtwTreeProps *props
-);
-
-struct DtwTreeTransactionReport * DtwTree_create_report(struct DtwTree *self);
-
-
-
-void DtwTree_insecure_hardware_remove_tree(struct DtwTree *self);
-
-void DtwTree_insecure_hardware_write_tree(struct DtwTree *self);
-
-void DtwTree_hardware_commit_tree(struct DtwTree *self);
-
-void DtwTree_loads_json_tree(struct DtwTree *self, const char *content);
-
-void DtwTree_loads_json_tree_from_file(struct DtwTree *self, const char *path);
-
-char * DtwTree_dumps_tree_json(
-        struct DtwTree *self,
-        DtwTreeProps * props
-    );
-
-void DtwTree_dumps_tree_json_to_file(
-        struct DtwTree *self,
-        const char *path,
-        DtwTreeProps * props
-    );
-
-struct  DtwTree * newDtwTree();
-
-
-
-
-
-
-
-typedef struct DtwLocker{
-   double reverifcation_delay;
-   double wait_delay;
-   int process;
-   int max_lock_time;
-   DtwStringArray *locked_elements;
-
-
-}DtwLocker;
-
-
-DtwLocker *newDtwLocker();
-
-
-
-void DtwLocker_lock(struct DtwLocker *self, const  char *element);
-
-void DtwLocker_unlock(struct DtwLocker *self, const  char *element);
-
-void DtwLocker_represemt(struct DtwLocker *self);
-
-void DtwLocker_free(struct DtwLocker *self);
-
-
-
-
-
-enum {
-
-    JSON_TRANSACTION_WRONG_TYPE,
-    JSON_TRANSACTION_NOT_PRESENT_VALUE,
-    JSON_TRANSACTION_INVALID_ACTION
-};
-typedef struct DtwJsonTransactionError{
-    int code;
-    char *mensage;
-    char *path;
-
-
-}DtwJsonTransactionError;
-
-DtwJsonTransactionError * private_new_DtwJsonTransactionError( int code,const char *mensage,const  char *path);
-
-void DtwJsonTransactionError_represent(struct DtwJsonTransactionError *self);
-
-void DtwJsonTransactionError_prepend_path(struct DtwJsonTransactionError *self,char *path);
-
-void DtwJsonTransactionError_free(struct DtwJsonTransactionError *self);
-
-
-
-
-enum {
-    DTW_ACTION_FILE_NOT_FOUND,
-    DTW_ACTION_ITS_NOT_JSON,
-    DTW_ACTION_WRITE,
-    DTW_ACTION_MOVE,
-    DTW_ACTION_COPY,
-    DTW_ACTION_DELETE
-};
-
-
-typedef struct DtwActionTransaction{
-    short action_type;
-    unsigned  char *content;
-    long size;
-    bool is_binary;
-
-    char *dest;
-    char *source;
-
-}DtwActionTransaction;
-
-DtwActionTransaction *newDtwActionTransaction();
-
-DtwJsonTransactionError * private_dtw_validate_json_action_transaction(cJSON *json_obj);
-
-
-DtwActionTransaction * private_DtwActionTransaction_parse_json_object(cJSON *json_obj);
-
-
-DtwActionTransaction * DtwActionTransaction_write_any(const char *source,unsigned  char *content,long size,bool is_binary);
-
-DtwActionTransaction * DtwActionTransaction_move_any(const char *source, const char *dest);
-
-DtwActionTransaction * DtwActionTransaction_copy_any(const char *source, const char *dest);
-
-DtwActionTransaction * DtwActionTransaction_delete_any(const char *source);
-
-short DtwActionTransaction_convert_action_to_integer(char *action);
-
-
-const char * DtwActionTransaction_convert_action_to_string(int action);
-
-
-cJSON *  private_DtwActionTransaction_create_json_object(DtwActionTransaction* self);
-
-
-void DtwActionTransaction_commit(DtwActionTransaction* self,const char *path);
-
-void DtwActionTransaction_represent(DtwActionTransaction* self);
-
-void DtwActionTransaction_free(DtwActionTransaction* self);
-
-
-
-typedef struct DtwTransaction{
-
-    DtwActionTransaction  **actions;
-    long size;
-
-
-
-}DtwTransaction;
-
-DtwTransaction * newDtwTransaction();
-
-DtwTransaction * newDtwTransaction_from_json(cJSON *json_entry);
-
-DtwJsonTransactionError * dtw_validate_json_transaction(cJSON *json_entry);
-
-DtwJsonTransactionError * dtw_validate_json_transaction_file(const char *filename);
-
-
-DtwTransaction * newDtwTransaction_from_json_file(const char *filename);
-
-void DtwTransaction_remove_from_index(DtwTransaction *self,long index);
-
-void DtwTransaction_remove_from_source(DtwTransaction *self,const char *source);
-
-void DtwTransaction_filter(DtwTransaction *self,bool (*callback)(DtwActionTransaction *action));
-
-void DtwTransaction_append_action(struct DtwTransaction *self,struct DtwActionTransaction  *action);
-
-void DtwTransaction_write_any(struct DtwTransaction *self,const char *path,unsigned char *content, long size,bool is_binary);
-
-void DtwTransaction_write_string(struct DtwTransaction *self,const char *path,const char *content);
-
-void DtwTransaction_write_long(struct DtwTransaction *self,const char *path,long value);
-
-void DtwTransaction_write_bool(struct DtwTransaction *self,const char *path,bool value);
-
-void DtwTransaction_write_double(struct DtwTransaction *self,const char *path,double value);
-
-void DtwTransaction_move_any(struct DtwTransaction *self,const char *source,const char *dest);
-
-void DtwTransaction_copy_any(struct DtwTransaction *self,const char *source,const char *dest);
-
-void DtwTransaction_delete_any(struct DtwTransaction *self,const char *source);
-
-cJSON * DtwTransaction_dumps_to_json(struct DtwTransaction *self);
-
-void DtwTransaction_dumps_to_json_file(struct DtwTransaction *self,const char *filename);
-
-void DtwTransaction_commit(struct DtwTransaction *self,const char *path);
-
-void DtwTransaction_represent(struct DtwTransaction *self);
-
-
-void DtwTransaction_free(struct DtwTransaction *self);
-
-
-
-
-#define DTW_RESOURCE_ELEMENT_IS_NULL -1;
-#define DTW_RESOURCE_OK 0
-#define DTW_RESOURCE_ELEMENT_NOT_EXIST 1
-#define DTW_RESOURCE_ELEMENT_NOT_BOOL 2
-#define DTW_RESOURCE_ELEMENT_NOT_LONG 3
-#define DTW_RESOURCE_ELEMENT_NOT_DOUBLE 4
-#define DTW_RESOURCE_ELEMENT_NOT_STRING 5
-
-
-
-typedef struct {
-    DtwTransaction  *transaction;
-    DtwRandonizer  *randonizer;
-    DtwLocker *locker;
-    int error_code;
-    char *error_path;
-    char *error_message;
-}privateDtwResourceRootProps;
-
-privateDtwResourceRootProps *private_newDtwResourceRootProps();
-
-
-void privateDtwResourceRootProps_free(privateDtwResourceRootProps *self);
-
-
-
-
-
-typedef struct DtwResource{
-
-    bool allow_transaction;
-    bool use_locker_on_unique_values;
-    bool locked;
-    privateDtwResourceRootProps *root_props;
-    char *mothers_path;
-    char *name;
-    char *path;
-    bool child;
-
-    bool loaded;
-    bool is_binary;
-    unsigned char *value_any;
-    long value_size;
-   
-    //cache implementation
-    bool cache_sub_resources;
-    void *sub_resources;
-
-}DtwResource;
-
-
-
-
-DtwResource *new_DtwResource(const char *path);
-
-bool DtwResource_error(DtwResource *self);
-
-#define DtwResource_protected(self)  if(!DtwResource_error(self))
-#define DtwResource_catch(self)  if(DtwResource_error(self))
-
-int DtwResource_get_error_code(DtwResource *self);
-
-char * DtwResource_get_error_message(DtwResource *self);
-
-void  private_DtwResource_raise_error(DtwResource *self, int error_code, const char *error_message);
-
-
-DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ...);
-
-DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,const  char *format, ...);
-
-DtwResource * DtwResource_sub_resource_next(DtwResource *self, const char *end_path);
-
-DtwResource * DtwResource_sub_resource_now(DtwResource *self, const char *end_path);
-
-DtwResource * DtwResource_sub_resource_now_in_unix(DtwResource *self, const char *end_path);
-
-DtwResource * DtwResource_sub_resource_random(DtwResource *self, const char *end_path);
-
-
-void DtwResource_unload(DtwResource *self);
-
-void DtwResource_load(DtwResource *self);
-
-void DtwResource_load_if_not_loaded(DtwResource *self);
-
-void DtwResource_lock(DtwResource *self);
-
-void DtwResource_unlock(DtwResource *self);
-
-
-void DtwResource_rename(DtwResource *self,const  char *new_name);
-
-//getters
-
-unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binary);
-unsigned char *DtwResource_get_any_from_sub_resource(DtwResource *self, long *size, bool *is_binary,const char *format,...);
-
-
-unsigned char *DtwResource_get_binary(DtwResource *self, long *size);
-
-unsigned char *DtwResource_get_binary_from_sub_resource(DtwResource *self, long *size,const char *format,...);
-
-
-char *DtwResource_get_string(DtwResource *self);
-char *DtwResource_get_string_from_sub_resource(DtwResource *self,const char *format,...);
-
-long DtwResource_get_long(DtwResource *self);
-
-long DtwResource_get_long_from_sub_resource(DtwResource *self,const char *format,...);
-
-double DtwResource_get_double(DtwResource *self);
-double DtwResource_get_double_from_sub_resource(DtwResource *self,const char *format,...);
-
-
-bool DtwResource_get_bool(DtwResource *self);
-
-bool DtwResource_get_bool_from_sub_resource(DtwResource *self,const char *format,...);
-
-
-
-void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size);
-
-void DtwResource_set_binary_in_sub_resource(DtwResource *self, unsigned char *element, long size,const char *format,...);
-
-
-
-void DtwResource_set_string(DtwResource *self,const  char *element);
-
-void DtwResource_set_string_in_sub_resource(DtwResource *self,const  char *element,const char *format,...);
-
-void DtwResource_set_long(DtwResource *self,long element);
-
-void DtwResource_set_long_in_sub_resource(DtwResource *self,long element,const char *format,...);
-
-
-void DtwResource_set_double(DtwResource *self,double element);
-
-void DtwResource_set_double_in_sub_resource(DtwResource *self,double element,const char *format,...);
-
-void DtwResource_set_bool( DtwResource *self,bool element);
-
-void DtwResource_set_bool_in_sub_resource( DtwResource *self,bool element,const char *format,...);
-
-
-void DtwResource_destroy(DtwResource *self);
-
-long DtwResource_size(DtwResource *self);
-
-DtwStringArray *DtwResource_list_names(DtwResource *self);
-
-int DtwResource_type(DtwResource *self);
-
-
-const char * DtwResource_type_in_str(DtwResource *self);
-
-void DtwResource_commit(DtwResource *self);
-
-void DtwResource_represent(DtwResource *self);
-
-void DtwResource_free(struct DtwResource *self);
-
-
-
-
-typedef struct DtwResourceArray{
-    DtwResource **resources;
-    long size;
-
-}DtwResourceArray;
-
-DtwResourceArray * newDtwResourceArray();
-
-void DtwResourceArray_append(DtwResourceArray *self, DtwResource *element);
-
-
-DtwResource * DtwResourceArray_get_by_name(DtwResourceArray *self, const char *name);
-
-DtwResourceArray * DtwResource_sub_resources(DtwResource *self);
-
-void DtwResourceArray_represent(DtwResourceArray *self);
-
-void DtwResourceArray_free(DtwResourceArray *self);
-
-
-
-
-
-
-typedef  struct DtwHash{
-    char *hash;
-}DtwHash;
-
-
-DtwHash * newDtwHash();
-
-void  DtwHash_digest_any(DtwHash *self,unsigned char *content,long size);
-
-void DtwHash_digest_string(DtwHash * self, const char *content);
-
-void DtwHash_digest_long(DtwHash * self,long content);
-
-void DtwHash_digest_double(DtwHash * self,double content);
-
-void DtwHash_digest_bool(DtwHash * self,bool content);
-
-void  DtwHash_digest_file(DtwHash * self, const char *path);
-
-void  DtwHash_digest_entity_last_modification(DtwHash * self, const char *path);
-
-
-void DtwHash_digest_string_array(DtwHash *self,DtwStringArray *element);
-
-void DtwHash_digest_string_array_last_modifications(DtwHash *self,DtwStringArray *element);
-
-void DtwHash_digest_string_array_last_modifications_adding_name(DtwHash *self,DtwStringArray *element);
-
-
-void DtwHash_digest_string_array_content(DtwHash *self,DtwStringArray *element);
-
-void DtwHash_digest_string_array_content_adding_name(DtwHash *self,DtwStringArray *element);
-
-void DtwHash_digest_folder_by_last_modification(DtwHash *self,const char *path);
-
-void DtwHash_digest_folder_by_content(DtwHash *self,const char *path);
-
-void  DtwHash_free(DtwHash *self);
-
-
-
-
-
-typedef struct  DtwRandonizerModule{
-    DtwRandonizer * (*newRandonizer)();
-
-    char * (*generate_token)(DtwRandonizer*self, int size);
-    void (*free)(DtwRandonizer *self);
-}DtwRandonizerModule;
-
-DtwRandonizerModule newDtwRandonizerModule();
-
-
-
-typedef struct DtwPathModule{
-    //Getters
-
-    DtwPath * (*newPath)(const char *path);
-    bool  (*changed)(struct DtwPath *self);
-    char *(*get_full_name) (struct DtwPath *self);
-    char *(*get_name) (struct DtwPath *self);
-    char *(*get_extension) (struct DtwPath *self);
-
-    char *(*get_path) (struct DtwPath *self);
-    char *(*get_dir) (struct DtwPath *self);
-
-    
-    //Setters
-    void (*set_extension) (struct DtwPath *self, const char *extension);
-    void (*set_name) (struct DtwPath *self, const char *name);
-    void (*set_dir) (struct DtwPath *self, const char *path);
-    void (*set_full_name) (struct DtwPath *self, const char *full_name);
-    void (*set_path) (struct DtwPath *self, const char *target_path);
-    
-    void (*add_start_dir)(struct DtwPath *self, const char *start_dir);
-    void (*add_end_dir)(struct DtwPath *self, const char *end_dir);
-
-    void (*represent)(struct DtwPath *self);
-    void (*free) (struct DtwPath *self);
-
-}DtwPathModule;
-
-DtwPathModule newDtwPathModule();
-
-
-typedef struct DtwStringArrayModule{
-    DtwStringArray *(*newStringArray)();
-
-    void (*set_value)(struct DtwStringArray *self,int index,const char *value);
-
-    void (*append)(struct DtwStringArray *self,const char *string);
-
-    void (*pop)(struct DtwStringArray *self, int position);
-
-    void (*merge)(struct DtwStringArray *self, struct DtwStringArray *other);
-
-    void (*represent)(struct DtwStringArray *self);
-
-    int (*find_position)(struct DtwStringArray *self,const char *string);
-
-    void (*sort)(struct DtwStringArray *self);
-
-    void (*free)(struct DtwStringArray *self);
-
-
-}DtwStringArrayModule;
-
-DtwStringArrayModule newDtwStringArrayModule();
-
-
-
-
-typedef struct DtwTreePartModule{
-
-    DtwTreePart  *(*newPart)(const char *path, DtwTreeProps *props);
-    DtwTreePart  *(*newPartEmpty)(const char *path);
-    DtwTreePart * (*newPartLoading)(const char *path);
-
-    char *(*get_content_string_by_reference)(struct DtwTreePart *self);
-    unsigned char *(*get_content_binary_by_reference)(struct DtwTreePart *self);
-
-    char *(*get_content_sha)(struct DtwTreePart *self);
-    char *(*last_modification_time_in_string)(struct DtwTreePart *self);
-    void (*set_any_content)(struct DtwTreePart *self,unsigned char *content,int content_size,bool is_binary);
-    void (*set_string_content)(struct DtwTreePart *self,const char *content);
-    void (*set_binary_content)(struct DtwTreePart *self,unsigned char *content,int content_size);
-    void (*load_content_from_hardware)(struct DtwTreePart *self);
-    void (*free_content)(struct DtwTreePart *self);
-    void(*represent)(struct DtwTreePart *self);
-
-    bool(*hardware_remove)(struct DtwTreePart *self, int transaction);
-    bool(*hardware_write)(struct DtwTreePart *self, int transaction);
-    bool(*hardware_modify)(struct DtwTreePart *self, int transaction);
-    bool(*hardware_commit)(struct DtwTreePart *self);
-
-    void (*free)(struct DtwTreePart *self);
-    struct DtwTreePart *(*self_copy)(struct DtwTreePart *self);
-}DtwTreePartModule;
-
-
-DtwTreePartModule newDtwTreePartModule();
-
-
-
-typedef struct DtwJsonTreeErrorModule{
-    void (*free)(struct DtwJsonTreeError *self);
-    void (*represent)(struct DtwJsonTreeError *self);
-
-}DtwJsonTreeErrorModule;
-
-DtwJsonTreeErrorModule newDtwJsonTreeErrorModule();
-
-
-typedef struct  DtwTreeTransactionReportModule{
-
-    void (*represent)(struct DtwTreeTransactionReport *report);
-    void (*free)(struct DtwTreeTransactionReport *report);
-
-}DtwTreeTransactionReportModule;
-
-DtwTreeTransactionReportModule newDtwTreeTransactionReportModule();
-
-
-typedef struct DtwTreeModule{
-
-    DtwTree  *(*newTree)();
-    void (*add_tree_part_by_copy)(
-            struct DtwTree *self,
-            struct DtwTreePart *tree_part
-    );
-
-    void (*remove_tree_part)(
-            struct DtwTree *self,
-            int position
-    );
-
-    void (*add_tree_part_by_reference)(
-            struct DtwTree *self,
-            struct DtwTreePart *tree_part
-    );
-
-    void (*add_tree_parts_from_string_array)(
-            struct DtwTree *self,
-            struct DtwStringArray *paths,
-            DtwTreeProps *props
-    );
-
-    struct DtwTree *(*get_sub_tree)(
-            struct DtwTree *self,
-            const char *path,
-            bool copy_content
-    );
-
-    void (*add_tree_from_hardware)(
-            struct DtwTree *self,
-            const char *path,
-            DtwTreeProps *props
-    );
-    //Listage Functions
-
-    DtwTreePart *(*find_tree_part_by_function)(
-            struct DtwTree *self,
-            bool (*caller)(struct  DtwTreePart *part)
-    );
-
-    DtwTree *(*filter)(
-            struct DtwTree *self,
-            bool (*caller)(struct  DtwTreePart *part)
-    );
-
-    DtwTree *(*map)(
-            struct DtwTree *self,
-            struct  DtwTreePart*(*caller)(struct  DtwTreePart *part)
-    );
-
-
-    DtwStringArray * (*list_files)(struct DtwTree *self, const char *path,bool concat_path);
-    DtwStringArray * (*list_dirs)(struct DtwTree *self, const char *path,bool concat_path);
-    DtwStringArray * (*list_all)(struct DtwTree *self, const char *path,bool concat_path);
-
-    DtwStringArray * (*list_files_recursively)(struct DtwTree *self, const char *path,bool concat_path);
-    DtwStringArray * (*list_dirs_recursively)(struct DtwTree *self, const char *path,bool concat_path);
-    DtwStringArray * (*list_all_recursively)(struct DtwTree *self, const char *path,bool concat_path);
-
-
-    struct DtwTreePart *(*find_tree_part_by_name)( struct DtwTree *self,const char *name);
-    struct DtwTreePart *(*find_tree_part_by_path)(   struct DtwTree *self,const char *path);
-
-
-    struct DtwTreeTransactionReport * (*create_report)(struct DtwTree *self);
-
-    void (*loads_json_tree)(
-            struct DtwTree *self,
-            const char *content
-    );
-
-
-    void (*loads_json_tree_from_file)(
-            struct DtwTree *self,
-            const char *path
-    );
-
-    char *(*dumps_json_tree)(
-            struct DtwTree *self,
-            DtwTreeProps * props
-    );
-
-    void (*dumps_json_tree_to_file)(
-            struct DtwTree *self,
-            const char *path,
-            DtwTreeProps * props
-    );
-
-    void (*represent)(struct DtwTree *self);
-    void (*insecure_hardware_remove_tree)(struct DtwTree *self);
-    void (*insecure_hardware_write_tree)(struct DtwTree *self);
-    void (*hardware_commit_tree)(struct DtwTree *self);
-    void (*free)(struct DtwTree *self);
-
-    DtwTreeTransactionReportModule transaction_report;
-
-    DtwTreePartModule part;
-    DtwJsonTreeErrorModule json_error;
-
-}DtwTreeModule;
-
-DtwTreeModule newDtwTreeModule();
-
-
-
-
-typedef struct DtwLockerModule{
-    DtwLocker * (*newLocker)();
-    void (*lock)(struct DtwLocker *self, const  char *element);
-    void (*unlock)(struct DtwLocker *self, const  char *element);
-    void (*represemt)(struct DtwLocker *self);
-    void (*free)(struct DtwLocker *self);
-
-}DtwLockerModule;
-
-DtwLockerModule newDtwLockerModule();
-
-
-
-
-typedef struct DtwActionTransactionModule{
-
-    DtwActionTransaction *(*newAction)();
-
-    DtwActionTransaction * (*write_any)(const char *source,unsigned  char *content,long size,bool is_binary);
-
-    DtwActionTransaction * (*move_any)(const char *source, const char *dest);
-
-    DtwActionTransaction * (*copy_any)(const char *source, const char *dest);
-
-    DtwActionTransaction * (*delete_any)(const char *source);
-
-    short (*convert_action_to_integer)(char *action);
-
-    const char * (*convert_action_to_string)(int action);
-
-    void (*commit)(DtwActionTransaction* self,const char *path);
-
-    void (*represent)(DtwActionTransaction* self);
-
-    void (*free)(DtwActionTransaction* self);
-
-}DtwActionTransactionModule;
-
-DtwActionTransactionModule newDtwActionTransactionModule();
-
-
-
-typedef struct DtwJsonTransactionErrorModule{
-    void (*represent)(struct DtwJsonTransactionError *self);
-    void (*free)(struct DtwJsonTransactionError *self);
-
-}DtwJsonTransactionErrorModule;
-
-DtwJsonTransactionErrorModule newDtwJsonTransactionErrorModule();
-
-
-typedef struct DtwTransactionModule{
-    DtwTransaction *(*newTransaction)();
-    DtwTransaction * (*newTransaction_from_json)(cJSON *json_entry);
-    DtwTransaction * (*newTransaction_from_json_file)(const char *filename);
-    DtwJsonTransactionError * (*validate_json_transaction_file)(const char *filename);
-
-    void (*remove_from_index)(DtwTransaction *self,long index);
-    void (*remove_from_source)(DtwTransaction *self,const char *source);
-    void (*filter)(DtwTransaction *self,bool (*callback)(DtwActionTransaction *action));
-
-    void (*append_action)(struct DtwTransaction *self,struct DtwActionTransaction  *action);
-    void (*write_any)(struct DtwTransaction *self,const char *path,unsigned char *content, long size,bool is_binary);
-    void (*write_string)(struct DtwTransaction *self,const char *path,const char *content);
-
-    void (*write_long)(struct DtwTransaction *self,const char *path,long value);
-    void (*write_bool)(struct DtwTransaction *self,const char *path,bool value);
-    void (*write_double)(struct DtwTransaction *self,const char *path,double value);
-
-
-    void (*move_any)(struct DtwTransaction *self,const char *source,const char *dest);
-    void (*copy_any)(struct DtwTransaction *self,const char *source,const char *dest);
-    void (*delete_any)(struct DtwTransaction *self,const char *source);
-
-    cJSON *(*dumps_transaction_to_json)(struct DtwTransaction *self);
-    void (*dumps_transaction_to_json_file)(struct DtwTransaction *self,const char *filename);
-
-    void (*commit)(struct DtwTransaction *self,const char *source);
-    void (*represent)(struct DtwTransaction *self);
-    void (*free)(struct DtwTransaction *self);
-
-    DtwActionTransactionModule action;
-    DtwJsonTransactionErrorModule json_error;
-
-
-}DtwTransactionModule;
-
-DtwTransactionModule newDtwTransactionModule();
-
-
-
-
-
-typedef struct DtwResourceArrayModule{
-
-    void (*append)(DtwResourceArray *self, DtwResource *element);
-    DtwResource * (*get_by_name)(DtwResourceArray *self, const char *name);
-    void (*represent)(DtwResourceArray *self);
-    void (*free)(DtwResourceArray *self);
-
-}DtwResourceArrayModule;
-
-DtwResourceArrayModule newDtwResourceArrayModule();
-
-
-
-typedef struct DtwResourceModule{
-
-    DtwResource *(*newResource)(const char *path);
-    int (*get_error_code)(DtwResource *self);
-    bool (*error)(DtwResource *self);
-
-    char * (*get_error_message)(DtwResource *self);
-
-    struct DtwResource * (*sub_resource)(struct DtwResource *self,const  char *format,...);
-    unsigned char *(*get_any_from_sub_resource)(DtwResource *self, long *size, bool *is_binary,const char *format,...);
-    unsigned char *(*get_binary_from_sub_resource)(DtwResource *self, long *size,const char *format,...);
-    char *(*get_string_from_sub_resource)(DtwResource *self,const char *format,...);
-    long (*get_long_from_sub_resource)(DtwResource *self,const char *format,...);
-    double (*get_double_from_sub_resource)(DtwResource *self,const char *format,...);
-    bool (*get_bool_from_sub_resource)(DtwResource *self,const char *format,...);
-
-
-    void (*set_binary_in_sub_resource)(DtwResource *self, unsigned char *element, long size,const char *format,...);
-    void (*set_string_in_sub_resource)(DtwResource *self,const  char *element,const char *format,...);
-    void (*set_long_in_sub_resource)(DtwResource *self,long element,const char *format,...);
-    void (*set_double_in_sub_resource)(DtwResource *self,double element,const char *format,...);
-    void (*set_bool_in_sub_resource)( DtwResource *self,bool element,const char *format,...);
-
-
-    DtwResource * (*sub_resource_ensuring_not_exist)(DtwResource *self,const  char *format, ...);
-
-    DtwResource * (*sub_resource_next)(DtwResource *self, const char *end_path);
-    DtwResource * (*sub_resource_now)(DtwResource *self, const char *end_path);
-
-    DtwResource * (*sub_resource_now_in_unix)(DtwResource *self,const char *end_path);
-    DtwResource * (*sub_resource_random)(DtwResource *self,const char *end_path);
-
-
-    void (*load)(DtwResource *self);
-
-    void (*unload)(DtwResource *self);
-
-    void (*lock)(DtwResource *self);
-    void (*unlock)(DtwResource *self);
-
-    void (*destroy)(DtwResource *self);
-
-    unsigned char *(*get_any)(struct DtwResource *self, long *size, bool *is_binary);
-
-    unsigned char *(*get_binary)(struct DtwResource *self, long *size);
-
-    char *(*get_string)(struct DtwResource *self);
-
-    long (*get_long)(struct DtwResource *self);
-
-    double (*get_double)(struct DtwResource *self);
-
-    bool (*get_bool)(struct DtwResource *self);
-
-    void (*set_binary)(DtwResource *self, unsigned char *element, long size);
-
-    void (*set_string)(DtwResource *self,const  char *element);
-
-    void (*set_long)(DtwResource *self,long element);
-
-    void (*set_double)(DtwResource *self,double element);
-
-    void (*set_bool)(DtwResource *self,bool element);
-
-
-
-    DtwStringArray *(*list_names)(DtwResource *self);
-
-    long (*size)(DtwResource *self);
-    int (*type)(DtwResource *self);
-
-    const char *(*type_in_str)(DtwResource *self);
-    void (*commit)(DtwResource *self);
-
-    void (*represent)(DtwResource *self);
-
-    void (*rename)(DtwResource *self,const char *new_name);
-
-    void (*free)(DtwResource *self);
-    DtwResourceArray * (*sub_resources)(DtwResource *self);
-    DtwResourceArrayModule array;
-
-
-}DtwResourceModule;
-
-DtwResourceModule newDtwResourceModule();
-
-
-
-typedef struct DtwHashModule{
-    DtwHash * (*newHash)();
-    void  (*digest_any)(DtwHash *self,unsigned char *content,long size);
-    void (*digest_string)(DtwHash * self, const char *content);
-    void (*digest_long)(DtwHash * self,long content);
-    void (*digest_double)(DtwHash * self,double content);
-    void (*digest_bool)(DtwHash * self,bool content);
-    void  (*digest_file)(DtwHash * self, const char *path);
-    void  (*digest_entity_last_modification)(DtwHash * self, const char *path);
-    void (*digest_string_array)(DtwHash *self,DtwStringArray *element);
-    void (*digest_string_array_last_modifications)(DtwHash *self,DtwStringArray *element);
-    void (*digest_string_array_last_modifications_adding_name)(DtwHash *self,DtwStringArray *element);
-    void (*digest_string_array_content)(DtwHash *self,DtwStringArray *element);
-    void (*digest_string_array_content_adding_name)(DtwHash *self,DtwStringArray *element);
-    void (*digest_folder_by_last_modification)(DtwHash *self,const char *path);
-    void (*digest_folder_by_content)(DtwHash *self,const char *path);
-    void  (*free)(DtwHash *self);
-
-}DtwHashModule;
-
-DtwHashModule newDtwHashModule();
-
-
-typedef struct DtwNamespace{
-    //IO
-    void (*create_dir_recursively)(const char *path);
-
-    bool (*remove_any)(const char* path);
-
-    char *(*get_current_dir)();
-
-    unsigned char *(*load_any_content)(const char * path,long *size,bool *is_binary);
-
-    char *(*load_string_file_content)(const char * path);
-
-    unsigned char *(*load_binary_content)(const char * path,long *size);
-    
-    bool (*write_any_content)(const char *path,unsigned  char *content,long size);
-
-    bool (*write_string_file_content)(const char *path,const char *content);
-
-    int (*entity_type)(const char *path);
-
-    int (*complex_entity_type)(const char *path);
-
-    const char *(*convert_entity)(int entity_type);
-
-    bool (*copy_any)(const char* src_path,const  char* dest_path,bool merge);
-
-    bool (*move_any)(const char* src_path, const char* dest_path,bool merge);
-
-    //numeral io
-
-    long (*load_long_file_content)(const char * path);
-
-    double (*load_double_file_content)(const char * path);
-
-    bool (*load_bool_file_content)(const char * path);
-
-
-
-    void (*write_long_file_content)(const char *path, long value);
-
-    void (*write_bool_file_content)(const char *path, bool value);
-
-    void (*write_double_file_content)(const char *path,double value);
-
-
-
-    //listage
-
-    DtwStringArray * (*list_files)(const char *path, bool concat_path);
-    DtwStringArray * (*list_dirs)(const char *path, bool concat_path);
-
-    DtwStringArray *  (*list_all)(const char *path,  bool concat_path);
-    DtwStringArray * (*list_dirs_recursively)(const char *path,bool concat_path);
-    DtwStringArray *  (*list_files_recursively)(const char *path,bool concat_path);
-    DtwStringArray * (*list_all_recursively)(const char *path,bool concat_path);
-
-
-    //extras
-
-    char * (*generate_sha_from_file)(const char *path);
-
-    char * (*generate_sha_from_string)(const char *string);
-
-    char * (*generate_sha_from_any)(void *anything , long size);
-
-    long int (*get_entity_last_motification_in_unix)(const char *path);
-
-    char * (*convert_unix_time_to_string)(long int unix_time);
-
-    char * (*get_entity_last_motification_in_string)(const char *path);
-
-    char *(*concat_path)(const char *path1, const char *path2);
-
-
-    //base64
-
-    char *(*base64_encode)(unsigned char *data, long input_length);
-
-    unsigned char *(*base64_decode)(const char *data, long *output_length);
-
-    char *(*convert_binary_file_to_base64)(const char *path);
-    //string array
-
-    DtwStringArrayModule string_array;
-
-    DtwPathModule path;
-
-    DtwLockerModule  locker;
-
-
-    DtwTreeModule tree;
-    DtwHashModule  hash;
-    DtwTransactionModule transaction;
-
-    DtwResourceModule resource;
-    DtwRandonizerModule randonizer;
-
-}DtwNamespace;
-
-DtwNamespace newDtwNamespace();
 
 
 
@@ -10493,6 +10510,12 @@ DtwNamespace newDtwNamespace(){
 
     return self;
 }
+
+
+
+
+
+
 
 
 #endif //DO_THE_WORLD_H

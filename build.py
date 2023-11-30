@@ -4,7 +4,7 @@ from Build.exemple_build import create_exemples
 from Build.full_folder_zip import zip_folder
 from Build.locker_test import execute_locker_test
 
-STARTER = 'doTheWorld/one.h'
+STARTER = 'src/one.h'
 TEST_NAME  = 'doTheWorld_test.h'
 
 OUTPUT_TEST = 'tests/doTheWorld_test.h'
