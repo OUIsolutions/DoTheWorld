@@ -34,53 +34,15 @@ SOFTWARE.
 #include "dependencies/cJSON/cJSON.h"
 #include "dependencies/cJSON/cJSON.c"
 #endif //cJSON__h
+
 #ifndef SHA_256_H
 #include "dependencies/sha256/sha-256.h"
 #include "dependencies/sha256/sha-256.c"
 #endif  //SHA_256_H
 
-#include "imports.h"
-#include "string_array/string_array.h"
 
-#include "base64/base64.h"
-#include "randonizer/randonizer.h"
-#include "extras/extras.h"
-#include "string_functions/string_functions.h"
-#include "io/io.h"
-#include "numeral_io/numeral_io.h"
-#include "listage_wrappers/listage_wrappers.h"
-#include "monodimension_listage/monodimension_listage.h"
-#include "multidimension_listage/multidimension_listage.h"
-#include "path/path.h"
-#include "tree/declarations.h"
-
-#include "locker/locker.h"
-
-#include "transaction/declaration.h"
-#include "resource/declaration.h"
-#include "hash/hash.h"
-#include "namespace/declaration.h"
-
-#include "base64/base64.c"
-#include "randonizer/randonizer.c"
-#include "extras/extras.c"
-#include "string_functions/string_functions.c"
-#include "io/io.c"
-#include "numeral_io/numeral_io.c"
-#include "listage_wrappers/listage_wrappers.c"
-#include "monodimension_listage/monodimension_listage_linux.c"
-#include "monodimension_listage/monodimension_listage_win32.c"
-#include "multidimension_listage/multidimension_listage.c"
-#include "path/path.c"
-#include "string_array/string_array.c"
-#include "tree/definitions.h"
-
-#include "locker/locker.c"
-
-#include "resource/definition.h"
-#include "transaction/definition.h"
-#include "hash/hash.c"
-#include "namespace/definition.h"
+#include "declaration.h"
+#include "definition.h"
 
 #endif //DO_THE_WORLD_H
 
