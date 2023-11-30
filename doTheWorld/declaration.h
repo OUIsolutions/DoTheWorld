@@ -1,9 +1,4 @@
 
-#ifndef cJSON__h
-#include "dependencies/cJSON/cJSON.h"
-
-#endif //cJSON__h
-
 
 
 #include <unistd.h>

@@ -29,18 +29,9 @@ SOFTWARE.
 
 #ifndef DO_THE_WORLD_H
 #define DO_THE_WORLD_H
-
-
-
-#ifndef SHA_256_H
-#include "dependencies/sha256/sha-256.h"
-#include "dependencies/sha256/sha-256.c"
-#endif  //SHA_256_H
-
-
+#include "dependencies.h"
 #include "declaration.h"
 #include "definition.h"
-
 #endif //DO_THE_WORLD_H
 
 
