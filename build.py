@@ -19,7 +19,6 @@ if osname() == 'Windows':
     use_valgrind = False
 
 
-
 test = ct.FolderTestPreset(
     folder='tests/main_test',
     side_effect_folder='tests/target',
