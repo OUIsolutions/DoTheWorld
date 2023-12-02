@@ -8,8 +8,18 @@
 
 
 void dtw_create_dir_recursively(const char *path){
-    dtw_create_dir(path);
-  
+
+    int entity =dtw_entity_type(path);
+
+    if(entity == DTW_FOLDER_TYPE){
+        return;
+    }
+
+    if(entity == DTW_FILE_TYPE){
+        remove(path);
+    }
+
+
     long size_path = strlen(path);
     for(int i=0;i <  size_path;i++){
         if((path[i] == '\\'  || path[i] == '/' )  &&( i != size_path - 1)){
@@ -17,14 +27,17 @@ void dtw_create_dir_recursively(const char *path){
             char * current_path = (char*)malloc(i + 1);
             current_path[i] = '\0';
             strncpy(current_path,path,i);
-          
+
+            if(dtw_entity_type(current_path) == DTW_FILE_TYPE){
+                remove(current_path);
+            }
+
             dtw_create_dir(current_path);
+
             free(current_path);
         }
     }
 
-
-    
     dtw_create_dir(path);
 }
 
@@ -162,18 +175,26 @@ unsigned char *dtw_load_binary_content(const char * path,long *size){
 
 bool dtw_write_any_content(const char *path,unsigned  char *content,long size){
     //Iterate through the path and create directories if they don't exist
-    
-    for(long i = strlen(path)-1;i > 0;i--){
-        //runs in negative mode til / or \ is found
-        if(path[i] == '\\' || path[i] == '/'){
-            char *dir_path =(char*)malloc(i +2);
-            dir_path[i] = '\0';
-            strncpy(dir_path,path,i);
-            
-            dtw_create_dir_recursively(dir_path);
-            free(dir_path);
-        
-            break;
+    int entity_type =dtw_entity_type(path);
+    if(entity_type == DTW_FOLDER_TYPE){
+        dtw_remove_any(path);
+    }
+
+
+    if(entity_type == DTW_NOT_FOUND){
+        long path_size = (long)strlen(path);
+        for(long i = path_size-1;i > 0;i--){
+            //runs in negative mode til / or \ is found
+            if(path[i] == '\\' || path[i] == '/'){
+                char *dir_path =(char*)malloc(i +2);
+                dir_path[i] = '\0';
+                strncpy(dir_path,path,i);
+
+                dtw_create_dir_recursively(dir_path);
+                free(dir_path);
+
+                break;
+            }
         }
     }
 
@@ -191,15 +212,16 @@ bool dtw_write_any_content(const char *path,unsigned  char *content,long size){
 
 
 bool dtw_write_string_file_content(const char *path,const char *content){
-    int size;
+    long size;
     if(content == NULL){
         size = 0;
     }
     else{
-        size = strlen(content);
+        size = (long)strlen(content);
     }
     return dtw_write_any_content(path,(unsigned char*)content,size);
 }
+
 
 int dtw_entity_type(const char *path){
     //returns 1 for file, 2 for directory, -1 for not found

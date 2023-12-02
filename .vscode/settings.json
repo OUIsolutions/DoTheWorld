@@ -42,5 +42,10 @@
         "locker.h": "c",
         "extras.c": "cpp",
         "cjson.c": "cpp"
+    },
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#382C04",
+        "titleBar.activeBackground": "#4F3E05",
+        "titleBar.activeForeground": "#FEFAEC"
     }
 }
