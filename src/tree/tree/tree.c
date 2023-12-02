@@ -37,6 +37,7 @@ void DtwTree_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_p
     self->tree_parts[self->size - 1] = DtwTreePart_self_copy(tree_part);
        
 }
+
 void DtwTree_remove_tree_part(struct DtwTree *self, int position){
 
     self->size--;

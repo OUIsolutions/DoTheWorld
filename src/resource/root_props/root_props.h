@@ -15,6 +15,7 @@ typedef struct {
     int error_code;
     char *error_path;
     char *error_message;
+    
 }privateDtwResourceRootProps;
 
 privateDtwResourceRootProps *private_newDtwResourceRootProps();

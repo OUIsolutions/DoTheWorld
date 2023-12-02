@@ -29,6 +29,7 @@ char * DtwResource_get_error_message(DtwResource *self){
 
 void  private_DtwResource_raise_error(DtwResource *self, int error_code, const char *error_message){
     self->root_props->error_code = error_code;
+    self->root_props->error_path = strdup(self->path);
     self->root_props->error_message = dtw_replace_string(error_message,"#path#",self->path);
 
 }
