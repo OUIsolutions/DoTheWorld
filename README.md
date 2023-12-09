@@ -574,6 +574,7 @@ int main (){
 
     printf("elements:---------------------------------\n");
     DtwStringArray  *sub_elements = dtw.resource.list_names(values);
+    DtwStringArray_sort(sub_elements);
     DtwResource_protected(values){
         dtw.string_array.represent(sub_elements);
         dtw.string_array.free(sub_elements);
@@ -773,11 +774,6 @@ int main(){
     printf("dir : %s\n",dir);
     printf("full_path : %s\n",full_path);
 
-
-    free(name);
-    free(extension);
-    free(dir);
-    free(full_path);
     dtw.tree.part.free(part);
 }
 ~~~
@@ -1067,10 +1063,8 @@ bool filter_txt(struct DtwTreePart *part){
         return false;
     }
     if(strcmp(extension,"txt") == 0){
-        free(extension);
         return true;
     }
-    free(extension);
     return false;
 }
 
@@ -1182,7 +1176,6 @@ int main(){
             dtw.tree.part.hardware_modify(part,DTW_SET_AS_ACTION);
 
         }
-        free(extension);
     }
 
     dtw.tree.hardware_commit_tree(tree);
@@ -1224,7 +1217,6 @@ int main(){
             dtw.tree.part.hardware_modify(part,DTW_SET_AS_ACTION);
 
         }
-        free(extension);
     }
     DtwTreeTransactionReport *report = dtw.tree.create_report(tree);
     dtw.tree.transaction_report.represent(report);

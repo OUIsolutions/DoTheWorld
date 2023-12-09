@@ -11,10 +11,8 @@ bool filter_txt(struct DtwTreePart *part){
         return false;
     }
     if(strcmp(extension,"txt") == 0){
-        free(extension);
         return true;
     }
-    free(extension);
     return false;
 }
 

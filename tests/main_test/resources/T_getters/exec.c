@@ -7,6 +7,7 @@ int main (){
 
     printf("elements:---------------------------------\n");
     DtwStringArray  *sub_elements = dtw.resource.list_names(values);
+    DtwStringArray_sort(sub_elements);
     DtwResource_protected(values){
         dtw.string_array.represent(sub_elements);
         dtw.string_array.free(sub_elements);

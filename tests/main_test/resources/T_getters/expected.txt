@@ -2,10 +2,10 @@
 elements:---------------------------------
 a.txt
 blob.png
+numerical
+sub_folder
 transaction.json
 wrong_transaction.json
-sub_folder
-numerical
 types:--------------------------------------
 value string :Hello World!
 blob size: 36577

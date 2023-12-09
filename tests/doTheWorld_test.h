@@ -6642,7 +6642,7 @@ char * DtwPath_get_path(struct DtwPath *self){
 
     }
     if(FULL_NAME_NOT_EXIST && DIR_EXIST){
-        char *path = dtw_concat_path(dir, "");
+        path = dtw_concat_path(dir, "");
         DtwStringArray_append_getting_ownership(self->garbage,path);
     }
     
@@ -7966,6 +7966,7 @@ struct DtwStringArray *DtwTree_list_files_recursively(struct DtwTree *self, cons
         DtwTreePart *current = self->tree_parts[i];
         DtwPath *current_path = current->path;
         char *current_path_string = DtwPath_get_path(current_path);
+
 
         long size = strlen(current_path_string);
         char last_char = current_path_string[size-1];
