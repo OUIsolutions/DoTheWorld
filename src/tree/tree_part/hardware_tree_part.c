@@ -8,9 +8,11 @@ void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self){
     long size;
     bool is_binary;
     char *path = DtwPath_get_path(self->path);
-    
+
+    if(!path){
+        return;
+    }
     if(dtw_entity_type(path) != DTW_FILE_TYPE){
-        free(path);
         return;
     }
 
@@ -28,8 +30,7 @@ void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self){
     self->hardware_content_size = size;
     self->content_exist_in_hardware = true;
 
-    free(path);
-    
+
 }
 
 
@@ -47,7 +48,6 @@ bool DtwTreePart_hardware_remove(struct DtwTreePart *self, int transaction){
 
     dtw_remove_any(path);
     
-    free(path);
     self->content_exist_in_hardware = false;
     return true;
 }
@@ -70,12 +70,7 @@ bool DtwTreePart_hardware_write(struct DtwTreePart *self, int transaction){
             dtw_create_dir_recursively(dir);
         
         }
-        if(path!=NULL){
-            free(path);
-        }
-        if(dir!=NULL){
-            free(dir);
-        }
+ 
 
         return true;
     }
@@ -88,7 +83,6 @@ bool DtwTreePart_hardware_write(struct DtwTreePart *self, int transaction){
     int now = dtw_get_time();
     self->last_modification_time = now;
 
-    free(path);
     return true;
   
 }
@@ -108,7 +102,6 @@ bool DtwTreePart_hardware_modify(struct DtwTreePart *self, int transaction){
         char *old_path = self->path->original_path;
         char *new_path = DtwPath_get_path(self->path);
         dtw_move_any(old_path,new_path,true);
-        free(new_path);
         return true;
     }
     bool write = false;
@@ -146,7 +139,6 @@ bool DtwTreePart_hardware_modify(struct DtwTreePart *self, int transaction){
         int now = dtw_get_time();
         self->last_modification_time = now;
 
-        free(path);
         return true;
     }
     return false;

@@ -26,6 +26,11 @@ void DtwStringArray_set_value(struct DtwStringArray *self, int index, const char
         strcpy(self->strings[index], value);
     }
 }
+void DtwStringArray_append_getting_ownership(struct DtwStringArray *self, char *string){
+    self->strings =  (char**)realloc(self->strings, (self->size+ 1) * sizeof(char*));
+    self->strings[self->size] = string;
+    self->size+=1;
+}
 
 // Function prototypes
 void DtwStringArray_append(struct DtwStringArray *self, const  char *string){

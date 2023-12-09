@@ -521,6 +521,10 @@ typedef struct DtwStringArray {
 
 // End the structure with a semicolon
 int  DtwStringArray_find_position(struct DtwStringArray *self, const char *string);
+
+
+void DtwStringArray_append_getting_ownership(struct DtwStringArray *self, char *string);
+
 void DtwStringArray_append(struct DtwStringArray *self, const char *string);
 
 void DtwStringArray_pop(struct DtwStringArray *self, int position);
@@ -730,6 +734,7 @@ typedef struct DtwPath {
     bool dir_exists;
     bool name_exists;
     bool extension_exists;
+    DtwStringArray *garbage;
 
 
 }DtwPath;
@@ -6533,6 +6538,7 @@ struct DtwPath * newDtwPath(const char *path) {
     self->name_exists = false;
     self->extension_exists = false;
 
+    self->garbage = newDtwStringArray();
 
 
     DtwPath_set_path(self, path);
@@ -6541,12 +6547,22 @@ struct DtwPath * newDtwPath(const char *path) {
     return self;
 }
 bool DtwPath_changed(struct DtwPath *self){
+
     char *path = DtwPath_get_path(self);
+    if(!path && !self->original_path){
+        return  false;
+    }
+    if(!path && self->original_path){
+        return true;
+    }
+
+    if(path && !self->original_path){
+        return true;
+    }
+
     if(strcmp(self->original_path,path ) == 0){
-        free(path);
         return false;
     }
-    free(path);
     return true;
 }
 
@@ -6555,8 +6571,9 @@ char * DtwPath_get_name(struct DtwPath *self){
     if(self->name_exists == false){
         return NULL;
     }
-    char *name = (char *)malloc(strlen(self->name) + 1);
-    strcpy(name, self->name);
+
+    char *name = strdup(self->name);
+    DtwStringArray_append_getting_ownership(self->garbage,name);
 
     return name;
 }
@@ -6564,39 +6581,38 @@ char * DtwPath_get_extension(struct DtwPath *self){
     if(self->extension_exists == false){
         return NULL;
     }
-    char *extension = (char *)malloc(strlen(self->extension) + 1);
-    strcpy(extension, self->extension);
-    return extension;
+    char *extension = strdup(self->extension);
+    DtwStringArray_append_getting_ownership(self->garbage,extension);
+    return extension;   
 }
 
 char * DtwPath_get_full_name(struct DtwPath *self){
-
+    char *full_name = NULL;
     if(self->name_exists == true &&  self->extension_exists == true){
-        char *full_name = (char *)malloc(strlen(self->name) + strlen(self->extension) + 2);
+        full_name = (char *)malloc(strlen(self->name) + strlen(self->extension) + 2);
         sprintf(full_name, "%s.%s",self->name, self->extension);
-        return full_name;
     }
 
     if(self->name_exists == true &&  self->extension_exists == false){
-        char *full_name = (char *)malloc(strlen(self->name) + 1);
-        sprintf(full_name, "%s",self->name);
-        return full_name;
+        full_name = strdup(self->name);
     }
     
     if(self->name_exists == false &&  self->extension_exists == true){
-        char *full_name = (char *)malloc(strlen(self->extension) + 1);
-        sprintf(full_name, "%s",self->extension);
-        return full_name;
-    }    
-    return NULL;
+        full_name = strdup(self->extension);
+        
+    }   
+    if(full_name){
+        DtwStringArray_append_getting_ownership(self->garbage,full_name);
+    } 
+    return full_name;
 }
 
 char * DtwPath_get_dir(struct DtwPath *self){
     if(self->dir_exists == false){
         return NULL;
     }
-    char *dir = (char *)malloc(strlen(self->dir) + 1);
-    strcpy(dir, self->dir);
+    char *dir = strdup(self->dir);
+    DtwStringArray_append_getting_ownership(self->garbage,dir);
     return dir;
 }
 
@@ -6609,29 +6625,22 @@ char * DtwPath_get_path(struct DtwPath *self){
     #define FULL_NAME_NOT_EXIST full_name == NULL
     #define DIR_EXIST dir != NULL
     #define DIR_NOT_EXIST dir == NULL
-
+    char *path = NULL;
     if(FULL_NAME_EXIST && DIR_EXIST){
-        char *path = dtw_concat_path(dir, full_name);
-        free(dir);
-        free(full_name);
-        return path;
+        path = dtw_concat_path(dir, full_name);
+        DtwStringArray_append_getting_ownership(self->garbage,path);
     }
     if(FULL_NAME_EXIST && DIR_NOT_EXIST){
-        char *path = (char *)malloc(strlen(full_name) + 1);
-        sprintf(path, "%s",full_name);
-        free(dir);
-        free(full_name);
-        return path;
+        path = strdup(full_name);
+        DtwStringArray_append_getting_ownership(self->garbage,path);
+
     }
     if(FULL_NAME_NOT_EXIST && DIR_EXIST){
         char *path = dtw_concat_path(dir, "");
-        free(dir);
-        free(full_name);
-        return path;
+        DtwStringArray_append_getting_ownership(self->garbage,path);
     }
-    free(dir);
-    free(full_name);
-    return NULL;
+    
+    return path;
 }
 
 
@@ -6737,7 +6746,6 @@ void DtwPath_add_start_dir(struct DtwPath *self, const char *start_dir){
         char *path = dtw_concat_path(start_dir, dir);
         DtwPath_set_dir(self, path);
         free(path);
-        free(dir);
     }
     else{
         DtwPath_set_dir(self,start_dir);
@@ -6751,7 +6759,6 @@ void DtwPath_add_end_dir(struct DtwPath *self, const char *end_dir){
         char *path = dtw_concat_path(dir, end_dir);
         DtwPath_set_dir(self, path);
         free(path);
-        free(dir);
     }
     else{
         DtwPath_set_dir(self,end_dir);
@@ -6776,18 +6783,13 @@ void DtwPath_represent(struct DtwPath *self){
     printf("Name: %s\n", name ? name : "NULL");
     printf("Extension: %s\n", extension ? extension : "NULL");
 
-    free(dir);
-    free(name);
-    free(extension);
-    free(path);
-    free(full_name);
     
 }
 
 
 
 void DtwPath_free(struct DtwPath *self) {
-    free(self->original_path);
+    DtwStringArray_free(self->garbage);
     free(self->dir);
     free(self->name);
     free(self->extension);
@@ -6823,6 +6825,11 @@ void DtwStringArray_set_value(struct DtwStringArray *self, int index, const char
         self->strings[index][size] = '\0';
         strcpy(self->strings[index], value);
     }
+}
+void DtwStringArray_append_getting_ownership(struct DtwStringArray *self, char *string){
+    self->strings =  (char**)realloc(self->strings, (self->size+ 1) * sizeof(char*));
+    self->strings[self->size] = string;
+    self->size+=1;
 }
 
 // Function prototypes
@@ -7145,7 +7152,6 @@ struct  DtwTreePart * DtwTreePart_self_copy(struct DtwTreePart *self){
             path,
             &props
     );
-    free(path);
 
     new_tree_part->content_exist_in_memory = self->content_exist_in_memory;
     new_tree_part->content_exist_in_hardware = self->content_exist_in_hardware;
@@ -7217,7 +7223,6 @@ char *DtwTreePart_last_modification_time_in_string(struct DtwTreePart *self){
 
 
 void DtwTreePart_represent(struct DtwTreePart *self){
-    char *path = DtwPath_get_path(self->path);
     printf("------------------------------------------------------------\n");
     DtwPath_represent(self->path);
     printf("Content Exist in Memory: %s\n",self->content_exist_in_memory ? "true" : "false");
@@ -7252,7 +7257,6 @@ void DtwTreePart_represent(struct DtwTreePart *self){
         printf("Pending Action: %s\n",action);
 
     }
-    free(path);
 
 }
 
@@ -7300,9 +7304,11 @@ void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self){
     long size;
     bool is_binary;
     char *path = DtwPath_get_path(self->path);
-    
+
+    if(!path){
+        return;
+    }
     if(dtw_entity_type(path) != DTW_FILE_TYPE){
-        free(path);
         return;
     }
 
@@ -7320,8 +7326,7 @@ void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self){
     self->hardware_content_size = size;
     self->content_exist_in_hardware = true;
 
-    free(path);
-    
+
 }
 
 
@@ -7339,7 +7344,6 @@ bool DtwTreePart_hardware_remove(struct DtwTreePart *self, int transaction){
 
     dtw_remove_any(path);
     
-    free(path);
     self->content_exist_in_hardware = false;
     return true;
 }
@@ -7362,12 +7366,7 @@ bool DtwTreePart_hardware_write(struct DtwTreePart *self, int transaction){
             dtw_create_dir_recursively(dir);
         
         }
-        if(path!=NULL){
-            free(path);
-        }
-        if(dir!=NULL){
-            free(dir);
-        }
+ 
 
         return true;
     }
@@ -7380,7 +7379,6 @@ bool DtwTreePart_hardware_write(struct DtwTreePart *self, int transaction){
     int now = dtw_get_time();
     self->last_modification_time = now;
 
-    free(path);
     return true;
   
 }
@@ -7400,7 +7398,6 @@ bool DtwTreePart_hardware_modify(struct DtwTreePart *self, int transaction){
         char *old_path = self->path->original_path;
         char *new_path = DtwPath_get_path(self->path);
         dtw_move_any(old_path,new_path,true);
-        free(new_path);
         return true;
     }
     bool write = false;
@@ -7438,7 +7435,6 @@ bool DtwTreePart_hardware_modify(struct DtwTreePart *self, int transaction){
         int now = dtw_get_time();
         self->last_modification_time = now;
 
-        free(path);
         return true;
     }
     return false;
@@ -7625,10 +7621,7 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwTreeProps * props){
                     cJSON_CreateString(extension_string)
                 );
 
-                free(dir_string);
-                free(full_name_string);
-                free(name_string);
-                free(extension_string);
+
         }
 
 
@@ -7716,7 +7709,6 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwTreeProps * props){
         } 
         //Add json_tree_part  
         cJSON_AddItemToArray(json_array,json_tree_part);
-        free(path_string);
 
     }
     
@@ -7797,10 +7789,8 @@ struct DtwTreePart *DtwTree_find_tree_part_by_name(struct DtwTree *self, const c
         if(current_name){
 
             if(strcmp(current_name, name) == 0){
-                free(current_name);
                 return current;
             }
-            free(current_name);
         }
 
     }
@@ -7815,10 +7805,8 @@ struct DtwTreePart *DtwTree_find_tree_part_by_path(struct DtwTree *self, const c
         char *current_path_string = DtwPath_get_path(current_path);
         if(current_path_string){
             if(strcmp(current_path_string, path) == 0){
-                free(current_path_string);
                 return current;
             }
-            free(current_path_string);
         }
 
     }
@@ -8106,6 +8094,7 @@ void DtwTree_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_p
     self->tree_parts[self->size - 1] = DtwTreePart_self_copy(tree_part);
        
 }
+
 void DtwTree_remove_tree_part(struct DtwTree *self, int position){
 
     self->size--;
@@ -8297,7 +8286,6 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
             char *dirname = DtwPath_get_dir(path);
             if(dirname){
                 dtw_create_dir_recursively(dirname);
-                free(dirname);
             }
             DtwPath_free(path);
 

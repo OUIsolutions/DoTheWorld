@@ -161,10 +161,7 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwTreeProps * props){
                     cJSON_CreateString(extension_string)
                 );
 
-                free(dir_string);
-                free(full_name_string);
-                free(name_string);
-                free(extension_string);
+
         }
 
 
@@ -252,7 +249,6 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwTreeProps * props){
         } 
         //Add json_tree_part  
         cJSON_AddItemToArray(json_array,json_tree_part);
-        free(path_string);
 
     }
     

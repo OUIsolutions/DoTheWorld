@@ -10,6 +10,10 @@ typedef struct DtwStringArray {
 
 // End the structure with a semicolon
 int  DtwStringArray_find_position(struct DtwStringArray *self, const char *string);
+
+
+void DtwStringArray_append_getting_ownership(struct DtwStringArray *self, char *string);
+
 void DtwStringArray_append(struct DtwStringArray *self, const char *string);
 
 void DtwStringArray_pop(struct DtwStringArray *self, int position);

@@ -59,7 +59,6 @@ struct  DtwTreePart * DtwTreePart_self_copy(struct DtwTreePart *self){
             path,
             &props
     );
-    free(path);
 
     new_tree_part->content_exist_in_memory = self->content_exist_in_memory;
     new_tree_part->content_exist_in_hardware = self->content_exist_in_hardware;
@@ -131,7 +130,6 @@ char *DtwTreePart_last_modification_time_in_string(struct DtwTreePart *self){
 
 
 void DtwTreePart_represent(struct DtwTreePart *self){
-    char *path = DtwPath_get_path(self->path);
     printf("------------------------------------------------------------\n");
     DtwPath_represent(self->path);
     printf("Content Exist in Memory: %s\n",self->content_exist_in_memory ? "true" : "false");
@@ -166,7 +164,6 @@ void DtwTreePart_represent(struct DtwTreePart *self){
         printf("Pending Action: %s\n",action);
 
     }
-    free(path);
 
 }
 

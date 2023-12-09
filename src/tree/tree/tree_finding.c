@@ -60,10 +60,8 @@ struct DtwTreePart *DtwTree_find_tree_part_by_name(struct DtwTree *self, const c
         if(current_name){
 
             if(strcmp(current_name, name) == 0){
-                free(current_name);
                 return current;
             }
-            free(current_name);
         }
 
     }
@@ -78,10 +76,8 @@ struct DtwTreePart *DtwTree_find_tree_part_by_path(struct DtwTree *self, const c
         char *current_path_string = DtwPath_get_path(current_path);
         if(current_path_string){
             if(strcmp(current_path_string, path) == 0){
-                free(current_path_string);
                 return current;
             }
-            free(current_path_string);
         }
 
     }

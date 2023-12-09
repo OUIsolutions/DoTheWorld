@@ -30,7 +30,6 @@ int main(){
             dtw.tree.part.hardware_modify(part,DTW_SET_AS_ACTION);
 
         }
-        free(extension);
     }
 
     dtw.tree.hardware_commit_tree(tree);

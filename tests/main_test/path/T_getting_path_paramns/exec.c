@@ -18,10 +18,5 @@ int main(){
     printf("dir : %s\n",dir);
     printf("full_path : %s\n",full_path);
 
-
-    free(name);
-    free(extension);
-    free(dir);
-    free(full_path);
     dtw.tree.part.free(part);
 }

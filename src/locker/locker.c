@@ -54,7 +54,6 @@ void DtwLocker_lock(struct DtwLocker *self, const char *element) {
             char *dirname = DtwPath_get_dir(path);
             if(dirname){
                 dtw_create_dir_recursively(dirname);
-                free(dirname);
             }
             DtwPath_free(path);
 
