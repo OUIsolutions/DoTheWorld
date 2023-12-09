@@ -143,9 +143,7 @@ struct DtwStringArray *DtwTree_list_files_recursively(struct DtwTree *self, cons
         DtwTreePart *current = self->tree_parts[i];
         DtwPath *current_path = current->path;
         char *current_path_string = DtwPath_get_path(current_path);
-        if(!current_path_string){
-            continue;
-        }
+
 
         long size = strlen(current_path_string);
         char last_char = current_path_string[size-1];
