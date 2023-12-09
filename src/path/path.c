@@ -13,7 +13,10 @@ struct DtwPath * newDtwPath(const char *path) {
     self->garbage = newDtwStringArray();
 
 
-    DtwPath_set_path(self, path);
+    if(path){
+        DtwPath_set_path(self, path);
+    }
+
     self->original_path = DtwPath_get_path(self);
     
     return self;

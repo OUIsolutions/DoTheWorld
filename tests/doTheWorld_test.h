@@ -6541,7 +6541,10 @@ struct DtwPath * newDtwPath(const char *path) {
     self->garbage = newDtwStringArray();
 
 
-    DtwPath_set_path(self, path);
+    if(path){
+        DtwPath_set_path(self, path);
+    }
+
     self->original_path = DtwPath_get_path(self);
     
     return self;
@@ -7483,8 +7486,9 @@ void DtwTree_loads_json_tree(struct DtwTree *self, const char *content){
                 );
 
         if(original_path != NULL){
-            part->path->original_path = (char *)realloc(part->path->original_path,strlen(original_path->valuestring)+1);
-            strcpy(part->path->original_path,original_path->valuestring);
+            part->path->original_path = strdup(original_path->valuestring);
+            DtwStringArray_append_getting_ownership(part->path->garbage,part->path->original_path);
+
         }
 
         if(hardware_sha != NULL){
@@ -8126,8 +8130,7 @@ struct DtwTreeTransactionReport * DtwTree_create_report(struct DtwTree *self){
             DtwStringArray_append(report->remove, path);
         }
 
-        free(path);
-    
+
     }
     return report;
 }

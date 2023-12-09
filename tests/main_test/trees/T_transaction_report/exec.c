@@ -29,7 +29,6 @@ int main(){
             dtw.tree.part.hardware_modify(part,DTW_SET_AS_ACTION);
 
         }
-        free(extension);
     }
     DtwTreeTransactionReport *report = dtw.tree.create_report(tree);
     dtw.tree.transaction_report.represent(report);

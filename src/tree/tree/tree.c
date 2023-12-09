@@ -69,8 +69,7 @@ struct DtwTreeTransactionReport * DtwTree_create_report(struct DtwTree *self){
             DtwStringArray_append(report->remove, path);
         }
 
-        free(path);
-    
+
     }
     return report;
 }

@@ -23,8 +23,9 @@ void DtwTree_loads_json_tree(struct DtwTree *self, const char *content){
                 );
 
         if(original_path != NULL){
-            part->path->original_path = (char *)realloc(part->path->original_path,strlen(original_path->valuestring)+1);
-            strcpy(part->path->original_path,original_path->valuestring);
+            part->path->original_path = strdup(original_path->valuestring);
+            DtwStringArray_append_getting_ownership(part->path->garbage,part->path->original_path);
+
         }
 
         if(hardware_sha != NULL){
