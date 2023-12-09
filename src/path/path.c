@@ -111,7 +111,7 @@ char * DtwPath_get_path(struct DtwPath *self){
 
     }
     if(FULL_NAME_NOT_EXIST && DIR_EXIST){
-        char *path = dtw_concat_path(dir, "");
+        path = dtw_concat_path(dir, "");
         DtwStringArray_append_getting_ownership(self->garbage,path);
     }
     

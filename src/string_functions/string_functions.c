@@ -2,6 +2,9 @@
 
 
 bool dtw_starts_with(const char *string, const char *prefix){
+    if(!string || !prefix){
+        return false;
+    }
     if(strncmp(string, prefix, strlen(prefix)) == 0){
         return true;
     }

@@ -10,7 +10,6 @@ struct DtwStringArray *DtwTree_list_files(struct DtwTree *self, const char *path
         long size = strlen(current_path_string);
         char last_char = current_path_string[size-1];
         if(last_char =='/'){
-            free(current_path_string);
             continue;
         }
 
@@ -32,7 +31,6 @@ struct DtwStringArray *DtwTree_list_files(struct DtwTree *self, const char *path
 
         }
 
-        free(current_path_string);
 
     }
     if(!concat_path){
@@ -57,7 +55,6 @@ struct DtwStringArray *DtwTree_list_dirs(struct DtwTree *self, const char *path,
         long size = strlen(current_path_string);
         char last_char = current_path_string[size-1];
         if(last_char !='/'){
-            free(current_path_string);
             continue;
         }
 
@@ -79,7 +76,6 @@ struct DtwStringArray *DtwTree_list_dirs(struct DtwTree *self, const char *path,
 
         }
 
-        free(current_path_string);
 
     }
     if(!concat_path){
@@ -127,7 +123,6 @@ struct DtwStringArray *DtwTree_list_all(struct DtwTree *self, const char *path,b
 
         }
 
-        free(current_path_string);
 
     }
     if(!concat_path){
@@ -148,11 +143,13 @@ struct DtwStringArray *DtwTree_list_files_recursively(struct DtwTree *self, cons
         DtwTreePart *current = self->tree_parts[i];
         DtwPath *current_path = current->path;
         char *current_path_string = DtwPath_get_path(current_path);
+        if(!current_path_string){
+            continue;
+        }
 
         long size = strlen(current_path_string);
         char last_char = current_path_string[size-1];
         if(last_char =='/'){
-            free(current_path_string);
             continue;
         }
 
@@ -161,7 +158,6 @@ struct DtwStringArray *DtwTree_list_files_recursively(struct DtwTree *self, cons
 
         }
 
-        free(current_path_string);
 
     }
     if(!concat_path){
@@ -185,7 +181,6 @@ struct DtwStringArray *DtwTree_list_dirs_recursively(struct DtwTree *self, const
         long size = strlen(current_path_string);
         char last_char = current_path_string[size-1];
         if(last_char !='/'){
-            free(current_path_string);
             continue;
         }
 
@@ -193,9 +188,6 @@ struct DtwStringArray *DtwTree_list_dirs_recursively(struct DtwTree *self, const
             DtwStringArray_append(formated_elements,current_path_string);
 
         }
-
-
-        free(current_path_string);
 
     }
     if(!concat_path){
@@ -218,12 +210,11 @@ struct DtwStringArray *DtwTree_list_all_recursively(struct DtwTree *self, const 
         char *current_path_string = DtwPath_get_path(current_path);
 
 
+
         if(dtw_starts_with(current_path_string,path)){
             DtwStringArray_append(formated_elements,current_path_string);
 
         }
-
-        free(current_path_string);
 
     }
     if(!concat_path){
