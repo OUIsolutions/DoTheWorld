@@ -7,6 +7,7 @@ typedef struct DtwPath {
     bool dir_exists;
     bool name_exists;
     bool extension_exists;
+    DtwStringArray *garbage;
 
 
 }DtwPath;

@@ -10,6 +10,7 @@ struct DtwPath * newDtwPath(const char *path) {
     self->name_exists = false;
     self->extension_exists = false;
 
+    
 
 
     DtwPath_set_path(self, path);
