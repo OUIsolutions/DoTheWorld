@@ -74,7 +74,7 @@ int  DtwLocker_lock(DtwLocker *self, const char *element) {
 
     }
 
-
+    return 0;
 
 }
 
