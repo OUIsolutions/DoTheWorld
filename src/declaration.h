@@ -54,7 +54,7 @@
 #include "path/path.h"
 #include "tree/declarations.h"
 
-#include "locker/locker.h"
+#include "locker/declaration.h"
 
 #include "transaction/declaration.h"
 #include "resource/declaration.h"

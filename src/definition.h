@@ -32,7 +32,7 @@
 #include "string_array/string_array.c"
 #include "tree/definitions.h"
 
-#include "locker/locker.c"
+#include "locker/definition.h"
 
 #include "resource/definition.h"
 #include "transaction/definition.h"
