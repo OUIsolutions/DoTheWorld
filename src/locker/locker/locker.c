@@ -79,9 +79,27 @@ int  DtwLocker_lock(DtwLocker *self, const char *element) {
 }
 
 void DtwLocker_unlock( DtwLocker *self, const  char *element){
+    bool found = false;
+    for(long i = 0; i < self->locked_elements->size;i++){
+        if(strcmp(self->locked_elements->strings[i],element)==0){
+            found = true;
+            break;
+        }
+    }
+
+    if(!found){
+        return;
+    }
 
 
+    const char *LOCK_FOLDER = ".lock";
+    const int LOCK_FOLDER_SIZE = (int)strlen(LOCK_FOLDER);
+    char *file = (char*)malloc(strlen(element) +  LOCK_FOLDER_SIZE + 10);
+    sprintf(file,"%s%s",element,LOCK_FOLDER);
+    dtw_remove_any(file);
+    free(file);
 }
+
 
 void DtwLocker_represemt( DtwLocker *self){
     printf("locked:\n");
@@ -101,6 +119,7 @@ void DtwLocker_free( DtwLocker *self){
         char *file = (char*)malloc(strlen(element) +  LOCK_FOLDER_SIZE + 10);
         sprintf(file,"%s%s",element,LOCK_FOLDER);
         dtw_remove_any(file);
+        free(file);
     }
 
     DtwStringArray_free(self->locked_elements);

@@ -26,7 +26,7 @@ void DtwLockerPidList_add_pid(DtwLockerPidList *self,long pid){
 
 }
 
-int DtwLockerPidList_get_higher_pid(DtwLockerPidList *self){
+long DtwLockerPidList_get_higher_pid(DtwLockerPidList *self){
     DtwLockerPidElement *higher = NULL;
 
     for(int i =0; i  < self->size; i++){
@@ -51,6 +51,7 @@ void DtwLockerPidList_free(DtwLockerPidList *self){
         DtwLockerPidElement *current = self->pids[i];
         DtwLockerPidElement_free(current);
     }
+
     free(self->pids);
     free(self);
 }
