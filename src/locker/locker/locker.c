@@ -4,7 +4,7 @@ DtwLocker *newDtwLocker(){
     DtwLocker *self = (DtwLocker*) malloc(sizeof (DtwLocker));
 
     self->process = getpid();
-    self->total_checks = 100;
+    self->total_checks = 200;
     self->max_lock_time = 10;
     self->locked_elements = newDtwStringArray();
 
@@ -32,7 +32,7 @@ int  DtwLocker_lock(DtwLocker *self, const char *element) {
 
          else if(entity_type== DTW_FILE_TYPE){
              long last_modification  = dtw_get_entity_last_motification_in_unix(file);
-             if ((now - last_modification) > self->max_lock_time) {
+             if ((now - self->max_lock_time) > last_modification ) {
                  write = true;
              }
          }
@@ -46,18 +46,23 @@ int  DtwLocker_lock(DtwLocker *self, const char *element) {
              continue;
          }
         dtw_write_long_file_content(file,self->process);
-        for(int i = 0;i < self->total_checks;i++){
+        bool break_loop = true;
+         for(int i = 0;i < self->total_checks;i++){
             long result = dtw_load_long_file_content(file);
-            if(result != self->process){
-                continue;
+            if(result != self->process && result != -1){
+                break_loop = false;
+                break;
             }
         }
 
-        break;
+        if(break_loop){
+            break;
+
+        }
 
 
     }
-    
+    DtwStringArray_append(self->locked_elements,element);
     free(file);
     return 0;
 
@@ -97,14 +102,10 @@ void DtwLocker_represemt( DtwLocker *self){
 }
 
 void DtwLocker_free( DtwLocker *self){
-    const char *LOCK_FOLDER = ".lock";
-    const int LOCK_FOLDER_SIZE = (int)strlen(LOCK_FOLDER);
+
     for(int i = 0 ; i < self->locked_elements->size;i++){
         char *element = self->locked_elements->strings[i];
-        char *file = (char*)malloc(strlen(element) +  LOCK_FOLDER_SIZE + 10);
-        sprintf(file,"%s%s",element,LOCK_FOLDER);
-        dtw_remove_any(file);
-        free(file);
+        DtwLocker_unlock(self,element);
     }
 
     DtwStringArray_free(self->locked_elements);
