@@ -5,7 +5,7 @@ DtwLocker *newDtwLocker(){
 
     self->process = getpid();
     self->total_checks = 10;
-    self->max_lock_time = 5;
+    self->max_lock_time = 10;
     self->locked_elements = newDtwStringArray();
 
     return self;
@@ -100,7 +100,7 @@ void DtwLocker_free( DtwLocker *self){
         char *element = self->locked_elements->strings[i];
         char *file = (char*)malloc(strlen(element) +  LOCK_FOLDER_SIZE + 10);
         sprintf(file,"%s%s",element,LOCK_FOLDER);
-        dtw_remove_any(element);
+        dtw_remove_any(file);
     }
 
     DtwStringArray_free(self->locked_elements);
