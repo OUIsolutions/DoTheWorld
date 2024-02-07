@@ -34,6 +34,7 @@ long DtwLockerPidList_get_higher_pid(DtwLockerPidList *self){
         DtwLockerPidElement *current = self->pids[i];
         if(i == 0){
             higher = current;
+            continue;
         }
         if(current->total_locked > higher->total_locked){
             higher = current;
