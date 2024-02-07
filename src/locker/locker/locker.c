@@ -20,14 +20,45 @@ int  DtwLocker_lock(DtwLocker *self, const char *element) {
     const int LOCK_FOLDER_SIZE = (int)strlen(LOCK_FOLDER);
     char *file = (char*)malloc(strlen(element) +  LOCK_FOLDER_SIZE + 10);
     sprintf(file,"%s%s",element,LOCK_FOLDER);
+
     while (true){
 
-         long now = time(NULL);
+        long now = time(NULL);
+         bool write = false;
+         int entity_type = dtw_entity_type(file);
+         if(entity_type== DTW_NOT_FOUND){
+            write = true;
+         }
+
+         else if(entity_type== DTW_FILE_TYPE){
+             long last_modification  = dtw_get_entity_last_motification_in_unix(file);
+             if ((now - last_modification) > self->max_lock_time) {
+                 write = true;
+             }
+         }
+
+         else{
+             free(file);
+             return -1;
+         }
+
+         if(!write) {
+             continue;
+         }
+        dtw_write_long_file_content(file,self->process);
+        for(int i = 0;i < self->total_checks;i++){
+            long result = dtw_load_long_file_content(file);
+            if(result != self->process){
+                continue;
+            }
+        }
+
+        break;
 
 
     }
+    
     free(file);
-
     return 0;
 
 }
