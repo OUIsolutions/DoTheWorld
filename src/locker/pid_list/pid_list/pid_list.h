@@ -7,7 +7,7 @@ typedef struct{
 
 DtwLockerPidList * newDtwLockerPidList();
 
-void DtwLockerPidList_add_pid(DtwLockerPidList *self,int pid);
+void DtwLockerPidList_add_pid(DtwLockerPidList *self,long pid);
 
 int DtwLockerPidList_get_higher_pid(DtwLockerPidList *self);
 

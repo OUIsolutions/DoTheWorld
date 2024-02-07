@@ -1,10 +1,10 @@
 typedef struct {
 
-    int pid;
+    long pid;
     int total_locked;
 
 }DtwLockerPidElement;
 
-DtwLockerPidElement * newDtwLockerPidElement(int pid);
+DtwLockerPidElement * newDtwLockerPidElement(long pid);
 
 void DtwLockerPidElement_free(DtwLockerPidElement *self);

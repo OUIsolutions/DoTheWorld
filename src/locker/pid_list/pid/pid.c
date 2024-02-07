@@ -1,5 +1,5 @@
 
-DtwLockerPidElement * newDtwLockerPidElement(int pid){
+DtwLockerPidElement * newDtwLockerPidElement(long pid){
     DtwLockerPidElement *self  = (DtwLockerPidElement*) malloc(sizeof (DtwLockerPidElement));
     self->pid = pid;
     self->total_locked = 1;

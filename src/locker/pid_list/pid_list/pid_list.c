@@ -6,7 +6,7 @@ DtwLockerPidList * newDtwLockerPidList(){
     self->pids = (DtwLockerPidElement**) malloc(0);
 }
 
-void DtwLockerPidList_add_pid(DtwLockerPidList *self,int pid){
+void DtwLockerPidList_add_pid(DtwLockerPidList *self,long pid){
     for(int i =0; i  < self->size; i++){
         DtwLockerPidElement *current = self->pids[i];
         if(current->pid ==pid){
