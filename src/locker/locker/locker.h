@@ -13,7 +13,7 @@ typedef struct {
 
 DtwLocker *newDtwLocker();
 
-void DtwLocker_lock( DtwLocker *self, const  char *element);
+int DtwLocker_lock( DtwLocker *self, const  char *element);
 
 void DtwLocker_unlock( DtwLocker *self, const  char *element);
 
