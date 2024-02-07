@@ -4,7 +4,7 @@ DtwLocker *newDtwLocker(){
     DtwLocker *self = (DtwLocker*) malloc(sizeof (DtwLocker));
 
     self->process = getpid();
-    self->total_checks = 10;
+    self->total_checks = 30;
     self->max_lock_time = 10;
     self->locked_elements = newDtwStringArray();
 
@@ -18,6 +18,7 @@ int  DtwLocker_lock(DtwLocker *self, const char *element) {
 
     const char *LOCK_FOLDER = ".lock";
     const int LOCK_FOLDER_SIZE = (int)strlen(LOCK_FOLDER);
+
     while (true){
 
         long now = time(NULL);
@@ -35,6 +36,7 @@ int  DtwLocker_lock(DtwLocker *self, const char *element) {
                 if(last_modification + self->max_lock_time < now){
                     write = true;
                 }
+
             }
             else{
                 free(file);

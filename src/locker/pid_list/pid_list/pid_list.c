@@ -37,10 +37,12 @@ long DtwLockerPidList_get_higher_pid(DtwLockerPidList *self){
             continue;
         }
         if(current->total_locked > higher->total_locked){
+
             higher = current;
         }
     }
-    if(higher){
+    if(higher ){
+        printf("pid: %ld higher: %ld\n",higher->pid, higher->total_locked);
         return higher->pid;
     }
     return -1;
