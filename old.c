@@ -3,15 +3,16 @@
 
 int total_process;
 int creation_per_process;
-long total_checks;
+double reverifation_delay;
+double wait_delay;
 char *target = "a.txt";
 
 void append_once(int num){
 
     DtwLocker *locker = newDtwLocker();
-
+    locker->reverifcation_delay =  reverifation_delay;
+    locker->wait_delay = wait_delay;
     locker->process= num;
-    locker->total_checks = total_checks;
     DtwLocker_lock(locker,target);
     printf("processo %d bloqueou\n",num);
     char *elelement = dtw_load_string_file_content(target);
@@ -35,8 +36,8 @@ int main(int argc, char *argv[]){
 
     total_process  = atoi(argv[1]);
     creation_per_process = atoi(argv[2]);
-    total_checks = atoi(argv[3]);
-
+    reverifation_delay = atof(argv[3]);
+    wait_delay = atof(argv[4]);
 
 
     dtw_remove_any(target);

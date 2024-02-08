@@ -41,7 +41,9 @@
         "dotheworld_test.h": "c",
         "locker.h": "c",
         "extras.c": "cpp",
-        "cjson.c": "cpp"
+        "cjson.c": "cpp",
+        "one.h": "c",
+        "wait.h": "c"
     },
     "workbench.colorCustomizations": {
         "activityBar.background": "#382C04",
