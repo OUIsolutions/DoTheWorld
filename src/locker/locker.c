@@ -28,9 +28,9 @@ int  DtwLocker_lock(DtwLocker *self, const char *element) {
         long now = time(NULL);
         if((now - started_time) > DTW_LOCKER_MAX_WAIT){
             free(file);
-            return DTW_LOCKER_MAX_WAIT;
+            return DTW_LOCKER_WAIT_ERROR;
         }
-        
+
          bool write = false;
          int entity_type = dtw_entity_type(file);
          if(entity_type== DTW_NOT_FOUND){

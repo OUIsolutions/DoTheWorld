@@ -983,10 +983,10 @@ struct  DtwTree * newDtwTree();
 
 
 
-#define DTW_LOCKER_TOTAL_CHECK 300
+#define DTW_LOCKER_TOTAL_CHECK 500
 
-#define DTW_LOCKER_MAX_TIMEOUT 10
-#define DTW_LOCKER_MAX_WAIT 10
+#define DTW_LOCKER_MAX_TIMEOUT 30
+#define DTW_LOCKER_MAX_WAIT 30
 #define DTW_LOCKER_LOCKED 0
 
 #define DTW_LOCKER_WAIT_ERROR 1
@@ -6144,7 +6144,7 @@ long dtw_load_long_file_content_setting_error(const char *path,int *error){
         *error = DTW_NOT_FOUND;
         return DTW_NOT_FOUND;
     }
-    long value;
+    long value = -1;
     int result = sscanf(data,"%ld",&value);
     free(data);
     if(result){
@@ -6167,7 +6167,7 @@ double dtw_load_double_file_content_setting_error(const char * path, int *error)
         *error = DTW_NOT_FOUND;
         return DTW_NOT_FOUND;
     }
-    double value;
+    double value = -1;
     int result = sscanf(data,"%lf",&value);
     free(data);
     if(result){
@@ -8262,9 +8262,9 @@ int  DtwLocker_lock(DtwLocker *self, const char *element) {
         long now = time(NULL);
         if((now - started_time) > DTW_LOCKER_MAX_WAIT){
             free(file);
-            return DTW_LOCKER_MAX_WAIT;
+            return DTW_LOCKER_WAIT_ERROR;
         }
-        
+
          bool write = false;
          int entity_type = dtw_entity_type(file);
          if(entity_type== DTW_NOT_FOUND){

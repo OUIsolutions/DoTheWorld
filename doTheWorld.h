@@ -983,12 +983,21 @@ struct  DtwTree * newDtwTree();
 
 
 
+#define DTW_LOCKER_TOTAL_CHECK 500
+
+#define DTW_LOCKER_MAX_TIMEOUT 30
+#define DTW_LOCKER_MAX_WAIT 30
+#define DTW_LOCKER_LOCKED 0
+
+#define DTW_LOCKER_WAIT_ERROR 1
 
 
-typedef struct DtwLocker{
-   double reverifcation_delay;
-   double wait_delay;
+
+typedef struct {
+
+   int total_checks;
    int process;
+   int max_wait;
    int max_lock_time;
    DtwStringArray *locked_elements;
 
@@ -998,15 +1007,13 @@ typedef struct DtwLocker{
 
 DtwLocker *newDtwLocker();
 
+int DtwLocker_lock( DtwLocker *self, const  char *element);
 
+void DtwLocker_unlock( DtwLocker *self, const  char *element);
 
-void DtwLocker_lock(struct DtwLocker *self, const  char *element);
+void DtwLocker_represemt( DtwLocker *self);
 
-void DtwLocker_unlock(struct DtwLocker *self, const  char *element);
-
-void DtwLocker_represemt(struct DtwLocker *self);
-
-void DtwLocker_free(struct DtwLocker *self);
+void DtwLocker_free( DtwLocker *self);
 
 
 
@@ -1612,10 +1619,10 @@ DtwTreeModule newDtwTreeModule();
 
 typedef struct DtwLockerModule{
     DtwLocker * (*newLocker)();
-    void (*lock)(struct DtwLocker *self, const  char *element);
-    void (*unlock)(struct DtwLocker *self, const  char *element);
-    void (*represemt)(struct DtwLocker *self);
-    void (*free)(struct DtwLocker *self);
+    int (*lock)( DtwLocker *self, const  char *element);
+    void (*unlock)( DtwLocker *self, const  char *element);
+    void (*represemt)( DtwLocker *self);
+    void (*free)( DtwLocker *self);
 
 }DtwLockerModule;
 
@@ -6137,7 +6144,7 @@ long dtw_load_long_file_content_setting_error(const char *path,int *error){
         *error = DTW_NOT_FOUND;
         return DTW_NOT_FOUND;
     }
-    long value;
+    long value = -1;
     int result = sscanf(data,"%ld",&value);
     free(data);
     if(result){
@@ -6160,7 +6167,7 @@ double dtw_load_double_file_content_setting_error(const char * path, int *error)
         *error = DTW_NOT_FOUND;
         return DTW_NOT_FOUND;
     }
-    double value;
+    double value = -1;
     int result = sscanf(data,"%lf",&value);
     free(data);
     if(result){
@@ -8231,12 +8238,9 @@ DtwLocker *newDtwLocker(){
     DtwLocker *self = (DtwLocker*) malloc(sizeof (DtwLocker));
 
     self->process = getpid();
-
-    self->max_lock_time = 5;
-    self->reverifcation_delay= 0.1;
-    self->wait_delay = 1;
-
-    //methods
+    self->total_checks = DTW_LOCKER_TOTAL_CHECK;
+    self->max_lock_time = DTW_LOCKER_MAX_TIMEOUT;
+    self->max_wait = DTW_LOCKER_MAX_WAIT;
     self->locked_elements = newDtwStringArray();
 
     return self;
@@ -8244,107 +8248,92 @@ DtwLocker *newDtwLocker(){
 
 
 
-unsigned long long int private_dtw_getMicroseconds() {
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    return ((unsigned long long int)tv.tv_sec * 1000000) + tv.tv_usec;
-}
 
+int  DtwLocker_lock(DtwLocker *self, const char *element) {
 
-void DtwLocker_lock(struct DtwLocker *self, const char *element) {
+    const char *LOCK_FOLDER = ".lock";
+    const int LOCK_FOLDER_SIZE = (int)strlen(LOCK_FOLDER);
+    char *file = (char*)malloc(strlen(element) +  LOCK_FOLDER_SIZE + 10);
+    sprintf(file,"%s%s",element,LOCK_FOLDER);
+    long started_time = time(NULL);
 
-    char  *formated_path = (char*)calloc(sizeof(char),strlen(element)+10);
-    sprintf(formated_path,"%s.lock",element);
+    while (true){
 
-    char process_string[20] = {0};
-    sprintf(process_string,"%d",self->process);
-    int total_fails = 0;
-    long verification_deley = (long)(self->reverifcation_delay * 1000000);
-
-    while(true){
-        time_t  now = dtw_get_time();
-        unsigned long long startTime = private_dtw_getMicroseconds();
-        long last_modification = dtw_get_entity_last_motification_in_unix(formated_path);
-        bool not_exist = (dtw_entity_type(formated_path) == DTW_NOT_FOUND);
-
-
-        bool exist = !not_exist;
-        bool expired = false;
-
-        if(exist){
-            expired = last_modification < (now - self->max_lock_time);
+        long now = time(NULL);
+        if((now - started_time) > DTW_LOCKER_MAX_WAIT){
+            free(file);
+            return DTW_LOCKER_WAIT_ERROR;
         }
 
-        if(not_exist || expired){
+         bool write = false;
+         int entity_type = dtw_entity_type(file);
+         if(entity_type== DTW_NOT_FOUND){
+            write = true;
+         }
 
-            DtwPath *path = newDtwPath(formated_path);
-            char *dirname = DtwPath_get_dir(path);
-            if(dirname){
-                dtw_create_dir_recursively(dirname);
-            }
-            DtwPath_free(path);
+         if(entity_type== DTW_FILE_TYPE){
+             long last_modification  = dtw_get_entity_last_motification_in_unix(file);
+             if ((now - self->max_lock_time) > last_modification ) {
+                 write = true;
+             }
+         }
 
-            unsigned long long end_time = private_dtw_getMicroseconds();
-            unsigned long long controled_duration = end_time - startTime;
-
-            if(verification_deley != 0){
-                if(controled_duration > (long)(verification_deley/2)){
-                   // printf("controle de uração excedito\n");
-                    continue;
-                }
-            }
-
-            FILE *file = fopen(formated_path,"wb");
-            if(!file){
-                continue;
-            }
-            fwrite(process_string, sizeof(char),strlen(process_string), file);
-            fclose(file);
-            usleep(verification_deley);
-            continue;
-        }
+         if(entity_type == DTW_FOLDER_TYPE){
+             dtw_remove_any(file);
+             continue;
+         }
 
 
-        if(exist){
-            char *content = dtw_load_string_file_content(formated_path);
-
-            if(!content){
-                continue;
-            }
-            int process_owner = atoi(content);
-            free(content);
-
-            if(process_owner == self->process ){
-                //printf("process %d get ownership\n",self->process);
-                DtwStringArray_append(self->locked_elements,formated_path);
-                free(formated_path);
-                return;
-            }
-            else{
-                total_fails+=1;
-                usleep((long)(self->wait_delay * 1000000));
+         if(!write) {
+             continue;
+         }
+        dtw_write_long_file_content(file,self->process);
+        bool break_loop = true;
+         for(int i = 0;i < self->total_checks;i++){
+            long result = dtw_load_long_file_content(file);
+            if(result != self->process && result != -1){
+                break_loop = false;
+                break;
             }
         }
+
+        if(break_loop){
+            break;
+
+        }
+
 
     }
+    DtwStringArray_append(self->locked_elements,element);
+    free(file);
+    return DTW_LOCKER_LOCKED;
 
 }
 
-void DtwLocker_unlock(struct DtwLocker *self, const  char *element){
-    char  *formated_path = (char*)calloc(sizeof(char),strlen(element)+10);
-    sprintf(formated_path,"%s.lock",element);
-    int position = DtwStringArray_find_position(self->locked_elements,formated_path);
-
-    if(position != -1){
-        dtw_remove_any(formated_path);
-        DtwStringArray_pop(self->locked_elements,position);
+void DtwLocker_unlock( DtwLocker *self, const  char *element){
+    bool found = false;
+    for(long i = 0; i < self->locked_elements->size;i++){
+        if(strcmp(self->locked_elements->strings[i],element)==0){
+            found = true;
+            break;
+        }
     }
 
-    free(formated_path);
+    if(!found){
+        return;
+    }
 
+
+    const char *LOCK_FOLDER = ".lock";
+    const int LOCK_FOLDER_SIZE = (int)strlen(LOCK_FOLDER);
+    char *file = (char*)malloc(strlen(element) +  LOCK_FOLDER_SIZE + 10);
+    sprintf(file,"%s%s",element,LOCK_FOLDER);
+    dtw_remove_any(file);
+    free(file);
 }
 
-void DtwLocker_represemt(struct DtwLocker *self){
+
+void DtwLocker_represemt( DtwLocker *self){
     printf("locked:\n");
     for(int i = 0 ; i < self->locked_elements->size;i++){
         char *element = self->locked_elements->strings[i];
@@ -8354,12 +8343,11 @@ void DtwLocker_represemt(struct DtwLocker *self){
     }
 }
 
-void DtwLocker_free(struct DtwLocker *self){
+void DtwLocker_free( DtwLocker *self){
 
     for(int i = 0 ; i < self->locked_elements->size;i++){
         char *element = self->locked_elements->strings[i];
-
-        dtw_remove_any(element);
+        DtwLocker_unlock(self,element);
     }
 
     DtwStringArray_free(self->locked_elements);
