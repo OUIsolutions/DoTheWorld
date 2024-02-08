@@ -1,7 +1,6 @@
 from platform import system as osname
 import Build.CToolKit as ct
 from Build.exemple_build import create_exemples
-from Build.full_folder_zip import zip_folder
 from Build.locker_test import execute_locker_test
 
 STARTER = 'src/one.h'
@@ -9,7 +8,6 @@ TEST_NAME  = 'doTheWorld_test.h'
 
 OUTPUT_TEST = 'tests/doTheWorld_test.h'
 OUTPUT = 'doTheWorld.h'
-ZIP_NAME ='DoTheWorld'
 
 
 ct.generate_amalgamated_code(STARTER,OUTPUT_TEST)
@@ -34,4 +32,3 @@ ct.include_code_in_markdown('README.md',save_file=True)
 ct.generate_amalgamated_code(STARTER,OUTPUT)
 
 
-zip_folder(ZIP_NAME)
