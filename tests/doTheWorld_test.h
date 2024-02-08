@@ -8229,7 +8229,7 @@ DtwLocker *newDtwLocker(){
     DtwLocker *self = (DtwLocker*) malloc(sizeof (DtwLocker));
 
     self->process = getpid();
-    self->total_checks = 300;
+    self->total_checks = 500;
     self->max_lock_time = 10;
     self->locked_elements = newDtwStringArray();
 

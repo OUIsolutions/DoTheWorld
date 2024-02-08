@@ -1,9 +1,18 @@
+#define DTW_LOCKER_TOTAL_CHECK 300
+
+#define DTW_LOCKER_MAX_TIMEOUT 10
+#define DTW_LOCKER_MAX_WAIT 1
+#define DTW_LOCKER_LOCKED 0
+
+#define DTW_LOCKER_WAIT_ERROR 1
+
 
 
 typedef struct {
 
    int total_checks;
    int process;
+   int max_wait;
    int max_lock_time;
    DtwStringArray *locked_elements;
 
