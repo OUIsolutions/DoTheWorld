@@ -983,12 +983,21 @@ struct  DtwTree * newDtwTree();
 
 
 
+#define DTW_LOCKER_TOTAL_CHECK 300
+
+#define DTW_LOCKER_MAX_TIMEOUT 10
+#define DTW_LOCKER_MAX_WAIT 10
+#define DTW_LOCKER_LOCKED 0
+
+#define DTW_LOCKER_WAIT_ERROR 1
+
 
 
 typedef struct {
 
    int total_checks;
    int process;
+   int max_wait;
    int max_lock_time;
    DtwStringArray *locked_elements;
 
@@ -8229,8 +8238,9 @@ DtwLocker *newDtwLocker(){
     DtwLocker *self = (DtwLocker*) malloc(sizeof (DtwLocker));
 
     self->process = getpid();
-    self->total_checks = 500;
-    self->max_lock_time = 10;
+    self->total_checks = DTW_LOCKER_TOTAL_CHECK;
+    self->max_lock_time = DTW_LOCKER_MAX_TIMEOUT;
+    self->max_wait = DTW_LOCKER_MAX_WAIT;
     self->locked_elements = newDtwStringArray();
 
     return self;
@@ -8245,27 +8255,34 @@ int  DtwLocker_lock(DtwLocker *self, const char *element) {
     const int LOCK_FOLDER_SIZE = (int)strlen(LOCK_FOLDER);
     char *file = (char*)malloc(strlen(element) +  LOCK_FOLDER_SIZE + 10);
     sprintf(file,"%s%s",element,LOCK_FOLDER);
+    long started_time = time(NULL);
 
     while (true){
 
         long now = time(NULL);
+        if((now - started_time) > DTW_LOCKER_MAX_WAIT){
+            free(file);
+            return DTW_LOCKER_MAX_WAIT;
+        }
+        
          bool write = false;
          int entity_type = dtw_entity_type(file);
          if(entity_type== DTW_NOT_FOUND){
             write = true;
          }
 
-         else if(entity_type== DTW_FILE_TYPE){
+         if(entity_type== DTW_FILE_TYPE){
              long last_modification  = dtw_get_entity_last_motification_in_unix(file);
              if ((now - self->max_lock_time) > last_modification ) {
                  write = true;
              }
          }
 
-         else{
-             free(file);
-             return -1;
+         if(entity_type == DTW_FOLDER_TYPE){
+             dtw_remove_any(file);
+             continue;
          }
+
 
          if(!write) {
              continue;
@@ -8289,7 +8306,7 @@ int  DtwLocker_lock(DtwLocker *self, const char *element) {
     }
     DtwStringArray_append(self->locked_elements,element);
     free(file);
-    return 0;
+    return DTW_LOCKER_LOCKED;
 
 }
 

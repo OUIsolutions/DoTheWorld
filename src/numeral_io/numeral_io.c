@@ -5,7 +5,7 @@ long dtw_load_long_file_content_setting_error(const char *path,int *error){
         *error = DTW_NOT_FOUND;
         return DTW_NOT_FOUND;
     }
-    long value;
+    long value = -1;
     int result = sscanf(data,"%ld",&value);
     free(data);
     if(result){
@@ -28,7 +28,7 @@ double dtw_load_double_file_content_setting_error(const char * path, int *error)
         *error = DTW_NOT_FOUND;
         return DTW_NOT_FOUND;
     }
-    double value;
+    double value = -1;
     int result = sscanf(data,"%lf",&value);
     free(data);
     if(result){
