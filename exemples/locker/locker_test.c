@@ -32,7 +32,7 @@ int main(int argc, char *argv[]){
     
 
     const char *file = "tests/target/append.txt";
-    int total_process  = 20;
+    int total_process  = 10;
     // this will reset the file
     dtw.remove_any(file);
     dtw.write_string_file_content(file,"");

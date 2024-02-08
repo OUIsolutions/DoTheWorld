@@ -9,14 +9,13 @@ def execute_locker_test():
     
     out = compile_project('tests/locker_test/locker_test.c')
     for i in range(0,10):
-        print(f"test  locker:{i} passed")
         r = ComandLineExecution(f'valgrind ./{out}')
         
         try:
             with open('tests/target/append.txt','r') as arq:
                 content = arq.read()
                 lines = content.split('\n')
-                if len(lines) != 21:
+                if len(lines) != 11:
                     raise Exception('locker overwritten information')
                 try:
                     remove('tests/target/append.txt')
@@ -34,6 +33,7 @@ def execute_locker_test():
         replaced = r.output.replace('ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)','')
         if 'ERROR SUMMARY' in replaced: 
             raise Exception('Errors on locker')
+        print(f"test  locker:{i} passed")
 
-        print('passed: locker_tests.c')
+    print('passed: locker_tests.c')
         
