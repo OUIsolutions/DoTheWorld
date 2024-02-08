@@ -1,0 +1,46 @@
+{
+    "times": 1000,
+    "tests": [
+        {
+            "total_checks": 10,
+            "duration": 7.545280694961548
+        },
+        {
+            "total_checks": 10,
+            "duration": 9.001543045043945
+        },
+        {
+            "total_checks": 220,
+            "duration": 50.43133211135864
+        },
+        {
+            "total_checks": 290,
+            "duration": 108.65308332443237
+        },
+        {
+            "total_checks": 360,
+            "duration": 113.91365885734558
+        },
+        {
+            "total_checks": 470,
+            "duration": 100.24766993522644
+        },
+        {
+            "total_checks": 380,
+            "duration": 111.29956126213074
+        },
+        {
+            "total_checks": 510,
+            "duration": 176.3683295249939
+        },
+        {
+            "total_checks": 570,
+            "duration": 243.07743501663208
+        },
+        {
+            "total_checks": 630,
+            "duration": 318.97923493385315
+        }
+    ],
+    "testesd with": 10
+}

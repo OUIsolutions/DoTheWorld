@@ -1,0 +1,22 @@
+{
+    "times": 10000,
+    "tests": [
+        {
+            "total_checks": 10,
+            "duration": 72.78499269485474
+        },
+        {
+            "total_checks": 130,
+            "duration": 133.53766679763794
+        },
+        {
+            "total_checks": 300,
+            "duration": 283.51048707962036
+        },
+        {
+            "total_checks": 390,
+            "duration": 621.8065383434296
+        }
+    ],
+    "testesd with": 5
+}
