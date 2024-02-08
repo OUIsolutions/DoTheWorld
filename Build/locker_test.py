@@ -9,8 +9,11 @@ def execute_locker_test():
     
     out = compile_project('tests/locker_test/locker_test.c')
     for i in range(0,10):
+        try:
+            remove('tests/target/append.txt')
+        except:pass     
         r = ComandLineExecution(f'valgrind ./{out}')
-        
+     
         try:
             with open('tests/target/append.txt','r') as arq:
                 content = arq.read()
