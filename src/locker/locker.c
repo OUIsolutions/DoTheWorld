@@ -17,6 +17,10 @@ DtwLocker *newDtwLocker(){
 
 int  DtwLocker_lock(DtwLocker *self, const char *element) {
 
+    if(DtwStringArray_find_position(self->locked_elements,element) != -1){
+        return DTW_LOCKER_LOCKED;
+    }
+
     const char *LOCK_FOLDER = ".lock";
     const int LOCK_FOLDER_SIZE = (int)strlen(LOCK_FOLDER);
     char *file = (char*)malloc(strlen(element) +  LOCK_FOLDER_SIZE + 10);
