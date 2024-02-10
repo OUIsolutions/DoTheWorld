@@ -593,6 +593,8 @@ long dtw_get_time();
 
 
 
+int private_dtw_msleep(long msec);
+
 
 
 bool dtw_starts_with(const char *string, const char *prefix);
@@ -988,6 +990,7 @@ struct  DtwTree * newDtwTree();
 #define DTW_LOCKER_MAX_TIMEOUT 10
 #define DTW_LOCKER_MAX_WAIT 10
 #define DTW_LOCKER_LOCKED 0
+#define DTW_LOCKER_FAIL_INTERVAL_MAX 50
 
 #define DTW_LOCKER_WAIT_ERROR 1
 
@@ -998,6 +1001,7 @@ typedef struct {
    int total_checks;
    int process;
    int max_wait;
+   int fail_delay;
    int max_lock_time;
    DtwStringArray *locked_elements;
 
@@ -5648,6 +5652,27 @@ long dtw_get_time(){
     return time(NULL);
 }
 
+int private_dtw_msleep(long msec)
+{
+    struct timespec ts;
+    int res;
+
+    if (msec < 0)
+    {
+        errno = EINVAL;
+        return -1;
+    }
+
+    ts.tv_sec = msec / 1000;
+    ts.tv_nsec = (msec % 1000) * 1000000;
+
+    do {
+        res = nanosleep(&ts, &ts);
+    } while (res && errno == EINTR);
+
+    return res;
+}
+
 
 
 
@@ -8241,6 +8266,7 @@ DtwLocker *newDtwLocker(){
     self->total_checks = DTW_LOCKER_TOTAL_CHECK;
     self->max_lock_time = DTW_LOCKER_MAX_TIMEOUT;
     self->max_wait = DTW_LOCKER_MAX_WAIT;
+    self->fail_delay = DTW_LOCKER_FAIL_INTERVAL_MAX;
     self->locked_elements = newDtwStringArray();
 
     return self;
@@ -8261,13 +8287,22 @@ int  DtwLocker_lock(DtwLocker *self, const char *element) {
     sprintf(file,"%s%s",element,LOCK_FOLDER);
     long started_time = time(NULL);
 
+    int tota_execution = 0;
     while (true){
+
 
         long now = time(NULL);
         if((now - started_time) > self->max_wait){
             free(file);
             return DTW_LOCKER_WAIT_ERROR;
         }
+        if(tota_execution> 0){
+            srand(tota_execution + now + getpid());
+            int sleep_time = rand()%self->fail_delay;
+            private_dtw_msleep(sleep_time);
+        }
+
+        tota_execution+=1;
 
          bool write = false;
          int entity_type = dtw_entity_type(file);

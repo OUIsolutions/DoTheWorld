@@ -7,6 +7,7 @@ DtwLocker *newDtwLocker(){
     self->total_checks = DTW_LOCKER_TOTAL_CHECK;
     self->max_lock_time = DTW_LOCKER_MAX_TIMEOUT;
     self->max_wait = DTW_LOCKER_MAX_WAIT;
+    self->fail_delay = DTW_LOCKER_FAIL_INTERVAL_MAX;
     self->locked_elements = newDtwStringArray();
 
     return self;
@@ -38,10 +39,10 @@ int  DtwLocker_lock(DtwLocker *self, const char *element) {
         }
         if(tota_execution> 0){
             srand(tota_execution + now + getpid());
-            int sleep_time = rand()%1000;
+            int sleep_time = rand()%self->fail_delay;
             private_dtw_msleep(sleep_time);
         }
-        
+
         tota_execution+=1;
 
          bool write = false;
