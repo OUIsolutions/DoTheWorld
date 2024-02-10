@@ -20,3 +20,5 @@ long  dtw_now = -1;
 long dtw_get_time();
 
 
+
+int private_dtw_msleep(long msec);

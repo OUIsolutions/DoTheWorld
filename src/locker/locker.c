@@ -27,13 +27,22 @@ int  DtwLocker_lock(DtwLocker *self, const char *element) {
     sprintf(file,"%s%s",element,LOCK_FOLDER);
     long started_time = time(NULL);
 
+    int tota_execution = 0;
     while (true){
+
 
         long now = time(NULL);
         if((now - started_time) > self->max_wait){
             free(file);
             return DTW_LOCKER_WAIT_ERROR;
         }
+        if(tota_execution> 0){
+            srand(tota_execution + now + getpid());
+            int sleep_time = rand()%1000;
+            private_dtw_msleep(sleep_time);
+        }
+        
+        tota_execution+=1;
 
          bool write = false;
          int entity_type = dtw_entity_type(file);
