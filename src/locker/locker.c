@@ -30,7 +30,7 @@ int  DtwLocker_lock(DtwLocker *self, const char *element) {
     while (true){
 
         long now = time(NULL);
-        if((now - started_time) > DTW_LOCKER_MAX_WAIT){
+        if((now - started_time) > self->max_wait){
             free(file);
             return DTW_LOCKER_WAIT_ERROR;
         }
