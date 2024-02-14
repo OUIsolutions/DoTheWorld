@@ -593,7 +593,7 @@ long dtw_get_time();
 
 
 
-int private_dtw_msleep(long msec);
+void private_dtw_msleep(long msec);
 
 
 
@@ -5652,7 +5652,7 @@ long dtw_get_time(){
     return time(NULL);
 }
 
-int private_dtw_msleep(long msec)
+void private_dtw_msleep(long msec)
 {
 
 #ifdef __linux__
@@ -5663,7 +5663,7 @@ int private_dtw_msleep(long msec)
     if (msec < 0)
     {
         errno = EINVAL;
-        return -1;
+        return;
     }
 
     ts.tv_sec = msec / 1000;
@@ -5673,7 +5673,6 @@ int private_dtw_msleep(long msec)
         res = nanosleep(&ts, &ts);
     } while (res && errno == EINTR);
 
-    return res;
 #elif _WIN32
     Sleep(msec);
 #endif
