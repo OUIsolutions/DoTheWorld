@@ -5654,6 +5654,9 @@ long dtw_get_time(){
 
 int private_dtw_msleep(long msec)
 {
+
+#ifdef __linux__
+
     struct timespec ts;
     int res;
 
@@ -5671,6 +5674,9 @@ int private_dtw_msleep(long msec)
     } while (res && errno == EINTR);
 
     return res;
+#elif _WIN32
+    Sleep(msec);
+#endif
 }
 
 
