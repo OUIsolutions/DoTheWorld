@@ -14,18 +14,18 @@ char *dtw_base64_encode(unsigned char *data, long input_length){
         unsigned char b2 = i < input_length ? data[i++] : 0;
 
         unsigned char b = b0 >> 2;
-        encoded_data[j++] = base64_table[b];
+        encoded_data[j++] = dtw_base64_table[b];
 
         b = (b0 << 4) & 0x3F;
         b |= b1 >> 4;
-        encoded_data[j++] = base64_table[b];
+        encoded_data[j++] = dtw_base64_table[b];
 
         b = (b1 << 2) & 0x3F;
         b |= b2 >> 6;
-        encoded_data[j++] = i <= input_length + 1 ? base64_table[b] : '=';
+        encoded_data[j++] = i <= input_length + 1 ? dtw_base64_table[b] : '=';
 
         b = b2 & 0x3F;
-        encoded_data[j++] = i <= input_length ? base64_table[b] : '=';
+        encoded_data[j++] = i <= input_length ? dtw_base64_table[b] : '=';
     }
 
     encoded_data[j] = '\0';
@@ -46,10 +46,10 @@ unsigned char *dtw_base64_decode(const char *data, long *output_length){
 
     size_t i, j;
     for (i = 0, j = 0; i < input_length; ) {
-        unsigned char b0 = data[i] == '=' ? 0 & i++ : strchr(base64_table, data[i++]) - base64_table;
-        unsigned char b1 = data[i] == '=' ? 0 & i++ : strchr(base64_table, data[i++]) - base64_table;
-        unsigned char b2 = data[i] == '=' ? 0 & i++ : strchr(base64_table, data[i++]) - base64_table;
-        unsigned char b3 = data[i] == '=' ? 0 & i++ : strchr(base64_table, data[i++]) - base64_table;
+        unsigned char b0 = data[i] == '=' ? 0 & i++ : strchr(dtw_base64_table, data[i++]) - dtw_base64_table;
+        unsigned char b1 = data[i] == '=' ? 0 & i++ : strchr(dtw_base64_table, data[i++]) - dtw_base64_table;
+        unsigned char b2 = data[i] == '=' ? 0 & i++ : strchr(dtw_base64_table, data[i++]) - dtw_base64_table;
+        unsigned char b3 = data[i] == '=' ? 0 & i++ : strchr(dtw_base64_table, data[i++]) - dtw_base64_table;
 
         unsigned char b = (b0 << 2) | (b1 >> 4);
         decoded_data[j++] = b;

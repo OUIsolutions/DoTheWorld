@@ -3,15 +3,18 @@ import Build.CToolKit as ct
 from Build.exemple_build import create_exemples
 from Build.locker_test import execute_locker_test
 
-STARTER = 'src/one.h'
-TEST_NAME  = 'doTheWorld_test.h'
+STARTER = 'src/one.c'
+TEST_NAME = 'doTheWorld_test.h'
+
 
 OUTPUT_TEST = 'tests/doTheWorld_test.h'
-OUTPUT = 'doTheWorld.h'
+OUTPUT_FULL = 'doTheWorld.h'
+
+
 
 
 ct.generate_amalgamated_code(STARTER,OUTPUT_TEST)
-use_valgrind = True 
+use_valgrind = True
 
 if osname() == 'Windows':
     use_valgrind = False
@@ -26,9 +29,8 @@ test = ct.FolderTestPreset(
 test.generate_ouptut(reconstruct=False)
 test.start_test()
 execute_locker_test()
-create_exemples(TEST_NAME,OUTPUT)
+create_exemples(TEST_NAME,OUTPUT_FULL)
 
 ct.include_code_in_markdown('README.md',save_file=True)
-ct.generate_amalgamated_code(STARTER,OUTPUT)
-
+ct.generate_amalgamated_code(STARTER,OUTPUT_FULL)
 
