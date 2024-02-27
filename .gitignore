@@ -2,6 +2,7 @@
 *.d
 exemple
 *.pyc
+bin
 a/
 # object files
 *.o

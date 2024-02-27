@@ -294,9 +294,7 @@ long dtw_get_total_itens_of_dir(const char *path){
         }
         closedir(dir);
         return i -2;
-    #endif
-    #ifdef _WIN32
-
+    #else 
         WIN32_FIND_DATA findFileData;
             HANDLE hFind = FindFirstFile(path, &findFileData);
 
