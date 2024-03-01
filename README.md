@@ -21,7 +21,7 @@ int main(int argc, char *argv[]){
 ~~~
 
 ## Full Folder
-Alternatively you can download the entire **doTheWorld** folder and include the **src/one.c** file
+Alternatively you can download the entire **src** folder and include the **src/one.c** file
 
 ~~~c
 
