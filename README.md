@@ -21,11 +21,11 @@ int main(int argc, char *argv[]){
 ~~~
 
 ## Full Folder
-Alternatively you can download the entire **doTheWorld** folder and include the **src/one.h** file
+Alternatively you can download the entire **doTheWorld** folder and include the **src/one.c** file
 
 ~~~c
 
-#include "src/one.h"
+#include "src/one.c"
 
 int main(int argc, char *argv[]){
 
