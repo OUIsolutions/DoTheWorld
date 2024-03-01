@@ -6055,9 +6055,7 @@ long dtw_get_total_itens_of_dir(const char *path){
         }
         closedir(dir);
         return i -2;
-    #endif
-    #ifdef _WIN32
-
+    #else 
         WIN32_FIND_DATA findFileData;
             HANDLE hFind = FindFirstFile(path, &findFileData);
 
@@ -6635,22 +6633,25 @@ char * DtwPath_get_extension(struct DtwPath *self){
 
 char * DtwPath_get_full_name(struct DtwPath *self){
     char *full_name = NULL;
+    
     if(self->name_exists == true &&  self->extension_exists == true){
         full_name = (char *)malloc(strlen(self->name) + strlen(self->extension) + 2);
         sprintf(full_name, "%s.%s",self->name, self->extension);
     }
 
-    if(self->name_exists == true &&  self->extension_exists == false){
+    else if(self->name_exists == true &&  self->extension_exists == false){
         full_name = strdup(self->name);
     }
     
-    if(self->name_exists == false &&  self->extension_exists == true){
+    else if(self->name_exists == false &&  self->extension_exists == true){
         full_name = strdup(self->extension);
         
     }   
+    
     if(full_name){
         DtwStringArray_append_getting_ownership(self->garbage,full_name);
     } 
+
     return full_name;
 }
 
