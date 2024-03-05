@@ -20,6 +20,7 @@ int DtwLocker_lock(DtwLocker *self, const  char *element){
 #ifdef _WIN32
     return DtwMultiFIleLocker_lock(self->locker,element);
 #endif
+    return  DTW_LOCKER_OS_NOT_PREDICTIBLE;
 }
 
 void DtwLocker_unlock(DtwLocker *self, const  char *element){

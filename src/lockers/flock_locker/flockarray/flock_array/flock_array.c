@@ -3,6 +3,7 @@ privateDtwFlockArray * private_new_privateFlockArray(){
     privateDtwFlockArray * self = (privateDtwFlockArray*) malloc(sizeof (privateDtwFlockArray));
     self->elements = (privateDtwFlockLockedElement **) malloc(0);
     self->size = 0;
+    return self;
 }
 
 
