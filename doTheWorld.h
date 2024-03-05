@@ -1256,7 +1256,7 @@ void DtwTransaction_free(struct DtwTransaction *self);
 typedef struct {
     DtwTransaction  *transaction;
     DtwRandonizer  *randonizer;
-    DtwMultiFileLocker *locker;
+    DtwLocker *locker;
     int error_code;
     char *error_path;
     char *error_message;
@@ -8674,7 +8674,7 @@ privateDtwResourceRootProps *private_newDtwResourceRootProps(){
     *self = (privateDtwResourceRootProps){0};
     self->transaction = newDtwTransaction();
     self->randonizer = newDtwRandonizer();
-    self->locker = newDtwMultiFileLocker();
+    self->locker = newDtwLocker();
     self->error_code = DTW_RESOURCE_OK;
 
     return self;
@@ -8684,7 +8684,7 @@ privateDtwResourceRootProps *private_newDtwResourceRootProps(){
 void privateDtwResourceRootProps_free(privateDtwResourceRootProps *self){
     DtwTransaction_free(self->transaction);
     DtwRandonizer_free(self->randonizer);
-    DtwMultiFileLocker_free(self->locker);
+    DtwLocker_free(self->locker);
     if(self->error_path){
         free(self->error_path);
     }
@@ -8760,7 +8760,7 @@ void DtwResource_lock(DtwResource *self){
         return;
     }
 
-    DtwMultiFIleLocker_lock(self->root_props->locker, self->path);
+    DtwLocker_lock(self->root_props->locker, self->path);
     
     self->locked = true;
 }
@@ -8773,7 +8773,7 @@ void DtwResource_unlock(DtwResource *self){
         return;
     }
 
-    DtwMultifileLocker_unlock(self->root_props->locker, self->path);
+    DtwLocker_lock(self->root_props->locker, self->path);
     
     self->locked = false;
 }

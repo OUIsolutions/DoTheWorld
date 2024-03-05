@@ -11,7 +11,7 @@
 typedef struct {
     DtwTransaction  *transaction;
     DtwRandonizer  *randonizer;
-    DtwMultiFileLocker *locker;
+    DtwLocker *locker;
     int error_code;
     char *error_path;
     char *error_message;
