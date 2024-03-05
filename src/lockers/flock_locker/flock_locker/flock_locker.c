@@ -30,6 +30,7 @@ int  DtwFlockLocker_lock(DtwFlockLocker *self, const char *filename) {
         return DTW_LOCKER_IMPOSSIBLE_TO_CREATE_FILE_DESCRIPTOR;
     }
     if (flock(fd, LOCK_EX) == -1) {
+        close(fd);
         return DTW_LOCKER_FLCTL_FAIL;
     }
     privateDtwFlockArray_append(self->locked_files, filename, fd);
