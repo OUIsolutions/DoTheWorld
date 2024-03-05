@@ -18,7 +18,7 @@ DtwMultiFileLocker *newDtwMultiFileLocker(){
 int  DtwMultiFIleLocker_lock(DtwMultiFileLocker *self, const char *element) {
 
     if(DtwStringArray_find_position(self->locked_elements,element) != -1){
-        return DTW_MULFILE_LOCKER_LOCKED;
+        return DTW_LOCKER_LOCKED;
     }
 
     const char *LOCK_FOLDER = ".lock";
@@ -34,7 +34,7 @@ int  DtwMultiFIleLocker_lock(DtwMultiFileLocker *self, const char *element) {
         long now = time(NULL);
         if((now - started_time) > self->max_wait){
             free(file);
-            return DTW_MULTIFILE_LOCKER_WAIT_ERROR;
+            return DTW_LOCKER_WAIT_ERROR;
         }
 
         tota_execution+=1;
@@ -80,7 +80,7 @@ int  DtwMultiFIleLocker_lock(DtwMultiFileLocker *self, const char *element) {
     }
     DtwStringArray_append(self->locked_elements,element);
     free(file);
-    return DTW_MULFILE_LOCKER_LOCKED;
+    return DTW_LOCKER_LOCKED;
 
 }
 

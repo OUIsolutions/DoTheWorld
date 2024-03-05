@@ -1,8 +1,7 @@
 #include "src/one.c"
 
 void append(int num){
-    //int fd = open("lcok.txt", O_RDWR | O_CREAT, 0644);
-    int fd  = mkstemp("aaaXXXXXX");
+    int fd = open("lcok.txt", O_RDWR | O_CREAT, 0644);
     if (fd == -1) {
         perror("Erro ao abrir o arquivo");
         exit(EXIT_FAILURE);
