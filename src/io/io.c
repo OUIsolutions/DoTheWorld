@@ -82,6 +82,7 @@ bool dtw_remove_any(const char* path) {
 }
 
 
+
 unsigned char *dtw_load_any_content(const char * path,long *size,bool *is_binary){
 
     *is_binary = false;
