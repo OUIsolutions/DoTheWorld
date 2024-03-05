@@ -41,7 +41,9 @@ void privateFlockArray_destroy_by_index(privateFlockArray *self, int position){
 
 void privateFlockArray_represent(privateFlockArray *self){
     for(int i = 0 ; i <self->size;i++){
+
         privateFlockLockedElement  *current = self->elements[i];
+        printf("=============================\n");
         privateFlockLockedElement_represent(current);
     }
 }
