@@ -167,27 +167,3 @@ long dtw_get_time(){
 }
 
 void private_dtw_msleep(long msec)
-{
-
-#ifdef __linux__
-
-    struct timespec ts;
-    int res;
-
-    if (msec < 0)
-    {
-        errno = EINVAL;
-        return;
-    }
-
-    ts.tv_sec = msec / 1000;
-    ts.tv_nsec = (msec % 1000) * 1000000;
-
-    do {
-        res = nanosleep(&ts, &ts);
-    } while (res && errno == EINTR);
-
-#elif _WIN32
-    Sleep(msec);
-#endif
-}

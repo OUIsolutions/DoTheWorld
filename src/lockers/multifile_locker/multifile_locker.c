@@ -7,7 +7,6 @@ DtwMultiFileLocker *newDtwMultiFileLocker(){
     self->total_checks = DTW_MULTIFILE_LOCKER_TOTAL_CHECK;
     self->max_lock_time = DTW_MULTIFILE_LOCKER_MAX_TIMEOUT;
     self->max_wait = DTW_MULFILE_LOCKER_MAX_WAIT;
-    self->fail_delay = DTW_MULTIFILE_LOCKER_FAIL_INTERVAL_MAX;
     self->locked_elements = newDtwStringArray();
 
     return self;
@@ -36,11 +35,6 @@ int  DtwMultiFIleLocker_lock(DtwMultiFileLocker *self, const char *element) {
         if((now - started_time) > self->max_wait){
             free(file);
             return DTW_MULTIFILE_LOCKER_WAIT_ERROR;
-        }
-        if(tota_execution> 0){
-            srand(tota_execution + now + getpid());
-            int sleep_time = rand()%self->fail_delay;
-            private_dtw_msleep(sleep_time);
         }
 
         tota_execution+=1;

@@ -21,4 +21,3 @@ long dtw_get_time();
 
 
 
-void private_dtw_msleep(long msec);
