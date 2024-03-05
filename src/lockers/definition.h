@@ -1,4 +1,7 @@
 
 #include "multifile_locker/multifile_locker.c"
-#include "flock_locker/definition.h"
+#ifdef __linux__
+    #include "flock_locker/definition.h"
+#endif
+
 #include "locker/locker.c"
