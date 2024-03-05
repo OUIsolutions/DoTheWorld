@@ -1,10 +1,10 @@
 
-DtwMultiFileLockerModule newDtwLockerModule(){
-    DtwMultiFileLockerModule  self = {0};
-    self.newLocker = newDtwMultiFileLocker;
-    self.lock = DtwMultiFIleLocker_lock;
-    self.unlock = DtwMultifileLocker_unlock;
-    self.represemt = DtwMultiFileLocker_represemt;
-    self.free = DtwMultiFileLocker_free;
+DtwLockerModule newDtwLockerModule(){
+    DtwLockerModule  self = {0};
+    self.newLocker = newDtwLocker;
+    self.lock = DtwLocker_lock;
+    self.unlock = DtwLocker_lock;
+    self.represemt = DtwLocker_represemt;
+    self.free = DtwLocker_free;
     return self;
 }

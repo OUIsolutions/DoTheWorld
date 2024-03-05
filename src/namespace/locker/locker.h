@@ -1,12 +1,12 @@
 
 
-typedef struct DtwMultiFileLockerModule{
-    DtwMultiFileLocker * (*newLocker)();
-    int (*lock)(DtwMultiFileLocker *self, const  char *element);
-    void (*unlock)(DtwMultiFileLocker *self, const  char *element);
-    void (*represemt)(DtwMultiFileLocker *self);
-    void (*free)(DtwMultiFileLocker *self);
+typedef struct DtwLockerModule{
+    DtwLocker * (*newLocker)();
+    int (*lock)(DtwLocker *self, const  char *element);
+    void (*unlock)(DtwLocker *self, const  char *element);
+    void (*represemt)(DtwLocker *self);
+    void (*free)(DtwLocker *self);
 
-}DtwMultiFileLockerModule;
+}DtwLockerModule;
 
-DtwMultiFileLockerModule newDtwLockerModule();
+DtwLockerModule newDtwLockerModule();

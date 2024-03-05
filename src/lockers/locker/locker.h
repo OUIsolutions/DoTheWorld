@@ -9,7 +9,7 @@ typedef struct {
 } DtwLocker;
 
 
-DtwLocker *newDtwMLocker();
+DtwLocker *newDtwLocker();
 
 int DtwLocker_lock(DtwLocker *self, const  char *element);
 

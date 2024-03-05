@@ -1,6 +1,6 @@
 
 
-DtwLocker *newDtwMLocker(){
+DtwLocker *newDtwLocker(){
 
     DtwLocker *locker = (DtwLocker*)malloc(sizeof(DtwLocker));
 
