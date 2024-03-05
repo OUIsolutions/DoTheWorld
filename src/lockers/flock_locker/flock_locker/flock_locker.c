@@ -22,6 +22,7 @@ int  DtwFlockLocker_lock(DtwFlockLocker *self, const char *filename) {
             3
     );
     sprintf(formatted, "%s/%s.%s", self->temp_folder, file_sha, EXTENSION);
+
     free(file_sha);
     int fd = open(formatted, O_RDWR | O_CREAT, 0644);
     free(formatted);
@@ -38,6 +39,7 @@ int  DtwFlockLocker_lock(DtwFlockLocker *self, const char *filename) {
 void private_FlockLocker_unlock_by_index(DtwFlockLocker *self, int index){
     privateDtwFlockLockedElement  *element = self->locked_files->elements[index];
     flock(element->file_descriptor, LOCK_UN);
+    close(element->file_descriptor);
 }
 void DtwFlockLocker_unlock(DtwFlockLocker *self, const char *filename){
     int index = privateDtwFlockArray_index_of(self->locked_files, filename);

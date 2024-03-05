@@ -15,7 +15,7 @@ DtwLocker *newDtwLocker(){
 int DtwLocker_lock(DtwLocker *self, const  char *element){
 
 #ifdef __linux__
-    DtwFlockLocker_lock(self->locker,element);
+    return DtwFlockLocker_lock(self->locker,element);
 #endif
 #ifdef _WIN32
     return DtwMultiFIleLocker_lock(self->locker,element);

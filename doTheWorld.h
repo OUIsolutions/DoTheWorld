@@ -1330,7 +1330,7 @@ void DtwResource_load(DtwResource *self);
 
 void DtwResource_load_if_not_loaded(DtwResource *self);
 
-void DtwResource_lock(DtwResource *self);
+int DtwResource_lock(DtwResource *self);
 
 void DtwResource_unlock(DtwResource *self);
 
@@ -1847,7 +1847,7 @@ typedef struct DtwResourceModule{
 
     void (*unload)(DtwResource *self);
 
-    void (*lock)(DtwResource *self);
+    int (*lock)(DtwResource *self);
     void (*unlock)(DtwResource *self);
 
     void (*destroy)(DtwResource *self);
@@ -8568,6 +8568,7 @@ int  DtwFlockLocker_lock(DtwFlockLocker *self, const char *filename) {
             3
     );
     sprintf(formatted, "%s/%s.%s", self->temp_folder, file_sha, EXTENSION);
+
     free(file_sha);
     int fd = open(formatted, O_RDWR | O_CREAT, 0644);
     free(formatted);
@@ -8584,6 +8585,7 @@ int  DtwFlockLocker_lock(DtwFlockLocker *self, const char *filename) {
 void private_FlockLocker_unlock_by_index(DtwFlockLocker *self, int index){
     privateDtwFlockLockedElement  *element = self->locked_files->elements[index];
     flock(element->file_descriptor, LOCK_UN);
+    close(element->file_descriptor);
 }
 void DtwFlockLocker_unlock(DtwFlockLocker *self, const char *filename){
     int index = privateDtwFlockArray_index_of(self->locked_files, filename);
@@ -8623,7 +8625,7 @@ DtwLocker *newDtwLocker(){
 int DtwLocker_lock(DtwLocker *self, const  char *element){
 
 #ifdef __linux__
-    DtwFlockLocker_lock(self->locker,element);
+    return DtwFlockLocker_lock(self->locker,element);
 #endif
 #ifdef _WIN32
     return DtwMultiFIleLocker_lock(self->locker,element);
@@ -8752,17 +8754,19 @@ void DtwResource_rename(DtwResource *self,const char *new_name){
 }
 
 
-void DtwResource_lock(DtwResource *self){
+int DtwResource_lock(DtwResource *self){
     if(DtwResource_error(self)){
-        return ;
+        return -1;
     }
     if(self->locked){
-        return;
+        return DTW_LOCKER_LOCKED;
     }
 
-    DtwLocker_lock(self->root_props->locker, self->path);
-    
-    self->locked = true;
+   int lock_result =  DtwLocker_lock(self->root_props->locker, self->path);
+    if(!lock_result){
+        self->locked = true;
+    }
+    return lock_result;
 }
 
 void DtwResource_unlock(DtwResource *self){

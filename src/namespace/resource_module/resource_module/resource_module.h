@@ -36,7 +36,7 @@ typedef struct DtwResourceModule{
 
     void (*unload)(DtwResource *self);
 
-    void (*lock)(DtwResource *self);
+    int (*lock)(DtwResource *self);
     void (*unlock)(DtwResource *self);
 
     void (*destroy)(DtwResource *self);

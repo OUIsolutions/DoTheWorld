@@ -9,7 +9,7 @@ void append_text(const char *file,char *text){
 
 
     DtwLocker *locker = newDtwLocker();
-    dtw.locker.lock(locker,file);
+    while(dtw.locker.lock(locker,file));
     //printf("process %d get the ownership\n",locker->process);
 
     char *content = dtw.load_string_file_content(file);

@@ -51,17 +51,19 @@ void DtwResource_rename(DtwResource *self,const char *new_name){
 }
 
 
-void DtwResource_lock(DtwResource *self){
+int DtwResource_lock(DtwResource *self){
     if(DtwResource_error(self)){
-        return ;
+        return -1;
     }
     if(self->locked){
-        return;
+        return DTW_LOCKER_LOCKED;
     }
 
-    DtwLocker_lock(self->root_props->locker, self->path);
-    
-    self->locked = true;
+   int lock_result =  DtwLocker_lock(self->root_props->locker, self->path);
+    if(!lock_result){
+        self->locked = true;
+    }
+    return lock_result;
 }
 
 void DtwResource_unlock(DtwResource *self){

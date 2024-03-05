@@ -58,7 +58,7 @@ void DtwResource_load(DtwResource *self);
 
 void DtwResource_load_if_not_loaded(DtwResource *self);
 
-void DtwResource_lock(DtwResource *self);
+int DtwResource_lock(DtwResource *self);
 
 void DtwResource_unlock(DtwResource *self);
 
