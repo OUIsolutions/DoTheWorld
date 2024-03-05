@@ -2,7 +2,7 @@
 
 typedef struct {
 
-#ifdef windows
+#ifdef _WIN32
     DtwMultiFileLocker  *locker;
 #endif
 
