@@ -58,8 +58,8 @@ void DtwResource_lock(DtwResource *self){
     if(self->locked){
         return;
     }
-    
-    DtwLocker_lock(self->root_props->locker,self->path);
+
+    DtwMultiFIleLocker_lock(self->root_props->locker, self->path);
     
     self->locked = true;
 }
@@ -71,8 +71,8 @@ void DtwResource_unlock(DtwResource *self){
     if(self->locked == false){
         return;
     }
-    
-    DtwLocker_unlock(self->root_props->locker,self->path);
+
+    DtwMultifileLocker_unlock(self->root_props->locker, self->path);
     
     self->locked = false;
 }

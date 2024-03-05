@@ -86,7 +86,7 @@ typedef struct DtwNamespace{
 
     DtwPathModule path;
 
-    DtwLockerModule  locker;
+    DtwMultiFileLockerModule  locker;
 
 
     DtwTreeModule tree;

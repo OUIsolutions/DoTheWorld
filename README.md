@@ -462,7 +462,7 @@ void append_text(const char *file,char *text){
     DtwNamespace dtw = newDtwNamespace();
 
 
-    DtwLocker *locker = newDtwLocker();
+    DtwLocker *locker = newDtwMultiFileLocker();
     dtw.locker.lock(locker,file);
     //printf("process %d get the ownership\n",locker->process);
 

@@ -5,7 +5,7 @@ privateDtwResourceRootProps *private_newDtwResourceRootProps(){
     *self = (privateDtwResourceRootProps){0};
     self->transaction = newDtwTransaction();
     self->randonizer = newDtwRandonizer();
-    self->locker = newDtwLocker();
+    self->locker = newDtwMultiFileLocker();
     self->error_code = DTW_RESOURCE_OK;
 
     return self;
@@ -15,7 +15,7 @@ privateDtwResourceRootProps *private_newDtwResourceRootProps(){
 void privateDtwResourceRootProps_free(privateDtwResourceRootProps *self){
     DtwTransaction_free(self->transaction);
     DtwRandonizer_free(self->randonizer);
-    DtwLocker_free(self->locker);
+    DtwMultiFileLocker_free(self->locker);
     if(self->error_path){
         free(self->error_path);
     }

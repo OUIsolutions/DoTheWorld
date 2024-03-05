@@ -1008,15 +1008,15 @@ typedef struct {
 }DtwLocker;
 
 
-DtwLocker *newDtwLocker();
+DtwLocker *newDtwMultiFileLocker();
 
-int DtwLocker_lock( DtwLocker *self, const  char *element);
+int DtwMultiFIleLocker_lock(DtwMultiFileLocker *self, const  char *element);
 
-void DtwLocker_unlock( DtwLocker *self, const  char *element);
+void DtwMultifileLocker_unlock(DtwMultiFileLocker *self, const  char *element);
 
-void DtwLocker_represemt( DtwLocker *self);
+void DtwMultiFileLocker_represemt(DtwMultiFileLocker *self);
 
-void DtwLocker_free( DtwLocker *self);
+void DtwMultiFileLocker_free(DtwMultiFileLocker *self);
 
 
 
@@ -8269,7 +8269,7 @@ void DtwTree_hardware_commit_tree(struct DtwTree *self){
 
 
 
-DtwLocker *newDtwLocker(){
+DtwLocker *newDtwMultiFileLocker(){
     DtwLocker *self = (DtwLocker*) malloc(sizeof (DtwLocker));
 
     self->process = getpid();
@@ -8285,7 +8285,7 @@ DtwLocker *newDtwLocker(){
 
 
 
-int  DtwLocker_lock(DtwLocker *self, const char *element) {
+int  DtwMultiFIleLocker_lock(DtwMultiFileLocker *self, const char *element) {
 
     if(DtwStringArray_find_position(self->locked_elements,element) != -1){
         return DTW_LOCKER_LOCKED;
@@ -8359,7 +8359,7 @@ int  DtwLocker_lock(DtwLocker *self, const char *element) {
 
 }
 
-void DtwLocker_unlock( DtwLocker *self, const  char *element){
+void DtwMultifileLocker_unlock(DtwMultiFileLocker *self, const  char *element){
     bool found = false;
     for(long i = 0; i < self->locked_elements->size;i++){
         if(strcmp(self->locked_elements->strings[i],element)==0){
@@ -8382,7 +8382,7 @@ void DtwLocker_unlock( DtwLocker *self, const  char *element){
 }
 
 
-void DtwLocker_represemt( DtwLocker *self){
+void DtwMultiFileLocker_represemt(DtwMultiFileLocker *self){
     printf("locked:\n");
     for(int i = 0 ; i < self->locked_elements->size;i++){
         char *element = self->locked_elements->strings[i];
@@ -8392,7 +8392,7 @@ void DtwLocker_represemt( DtwLocker *self){
     }
 }
 
-void DtwLocker_free( DtwLocker *self){
+void DtwMultiFileLocker_free(DtwMultiFileLocker *self){
 
     for(int i = 0 ; i < self->locked_elements->size;i++){
         char *element = self->locked_elements->strings[i];
