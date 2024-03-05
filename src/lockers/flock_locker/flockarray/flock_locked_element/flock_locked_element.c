@@ -7,6 +7,11 @@ privateFlockLockedElement * private_new_privateFlockLockedElement(const char *fi
     return  self;
 }
 
+void privateFlockLockedElement_represent(privateFlockLockedElement *self){
+    printf("\tfile: %s",self->filename);
+    printf("\tif: %d",self->file_descriptor);
+
+}
 void privateFlockLockedElement_free(privateFlockLockedElement *self){
     free(self->filename);
     free(self);

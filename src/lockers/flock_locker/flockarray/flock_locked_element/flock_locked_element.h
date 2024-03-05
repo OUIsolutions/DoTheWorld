@@ -9,4 +9,6 @@ typedef struct {
 
 privateFlockLockedElement * private_new_privateFlockLockedElement(const char *filename,int file_descriptor);
 
+void privateFlockLockedElement_represent(privateFlockLockedElement *self);
+
 void privateFlockLockedElement_free(privateFlockLockedElement *self);

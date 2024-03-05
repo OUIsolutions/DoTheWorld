@@ -26,9 +26,31 @@ void privateFlockArray_append(privateFlockArray *self,const char *filename, int 
     self->size+=1;
 }
 
-privateFlockLockedElement * privateFlockArray_destroy_by_index(privateFlockArray *self, int position);
+void privateFlockArray_destroy_by_index(privateFlockArray *self, int position){
+    if(position >= self->size){
+        return ;
+    }
+    privateFlockLockedElement *finded = self->elements[position];
+    privateFlockLockedElement_free(finded);
+    for(int i = position; i  < self->size-1; i++){
+        self->elements[i] = self->elements[i+1];
+    }
+    self->size-=1;
+}
 
 
-void privateFlockArray_represent(privateFlockArray *self);
+void privateFlockArray_represent(privateFlockArray *self){
+    for(int i = 0 ; i <self->size;i++){
+        privateFlockLockedElement  *current = self->elements[i];
+        privateFlockLockedElement_represent(current);
+    }
+}
 
-void privateFlockArray_free(privateFlockArray *self);
+void privateFlockArray_free(privateFlockArray *self){
+    for(int i = 0 ; i <self->size;i++){
+        privateFlockLockedElement  *current = self->elements[i];
+        privateFlockLockedElement_free(current);
+    }
+    free(self->elements);
+    free(self);
+}
