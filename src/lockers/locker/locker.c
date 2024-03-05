@@ -2,34 +2,52 @@
 
 DtwLocker *newDtwLocker(){
 
-    DtwLocker *locker = (DtwLocker*)malloc(sizeof(DtwLocker));
-
+    DtwLocker *self = (DtwLocker*)malloc(sizeof(DtwLocker));
+#ifdef __linux__
+    self->locker = newFlockLocker();
+#endif
 #ifdef _WIN32
     locker->locker = newDtwMultiFileLocker();
 #endif
-    return locker;
+    return self;
 }
 
 int DtwLocker_lock(DtwLocker *self, const  char *element){
 
+#ifdef __linux__
+    DtwFlockLocker_lock(self->locker,element);
+#endif
 #ifdef _WIN32
     return DtwMultiFIleLocker_lock(self->locker,element);
 #endif
 }
 
 void DtwLocker_unlock(DtwLocker *self, const  char *element){
+
+#ifdef __linux__
+    DtwFlockLocker_unlock(self->locker,element);
+#endif
     #ifdef _WIN32
          DtwMultifileLocker_unlock(self->locker,element);
     #endif
 }
 
 void DtwLocker_represemt(DtwLocker *self){
+
+#ifdef __linux__
+    DtwFlockLocker_represent(self->locker);
+#endif
 #ifdef _WIN32
      DtwMultiFileLocker_represemt(self->locker);
 #endif
 }
 
 void DtwLocker_free(DtwLocker *self){
+
+#ifdef __linux__
+    DtwFlockLocker_free(self->locker);
+#endif
+
 #ifdef _WIN32
      DtwMultiFileLocker_free(self->locker);
 #endif

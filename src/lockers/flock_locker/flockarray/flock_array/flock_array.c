@@ -1,37 +1,37 @@
 
-privateFlockArray * private_new_privateFlockArray(){
-    privateFlockArray * self = (privateFlockArray*) malloc(sizeof (privateFlockArray));
-    self->elements = (privateFlockLockedElement **) malloc(0);
+privateDtwFlockArray * private_new_privateFlockArray(){
+    privateDtwFlockArray * self = (privateDtwFlockArray*) malloc(sizeof (privateDtwFlockArray));
+    self->elements = (privateDtwFlockLockedElement **) malloc(0);
     self->size = 0;
 }
 
 
-int  privateFlockArray_index_of(privateFlockArray *self, const char *filename){
+int  privateDtwFlockArray_index_of(privateDtwFlockArray *self, const char *filename){
     for(int i = 0 ; i <self->size;i++){
-        privateFlockLockedElement  *current = self->elements[i];
+        privateDtwFlockLockedElement  *current = self->elements[i];
         if(strcmp(current->filename,filename) ==0){
             return  i;
         }
     }
     return  -1;
 }
-void privateFlockArray_append(privateFlockArray *self,const char *filename, int file_descriptor){
+void privateDtwFlockArray_append(privateDtwFlockArray *self, const char *filename, int file_descriptor){
 
-    self->elements = (privateFlockLockedElement**) realloc(
+    self->elements = (privateDtwFlockLockedElement**) realloc(
             self->elements,
-            sizeof(privateFlockLockedElement**) * (self->size +1)
+            sizeof(privateDtwFlockLockedElement**) * (self->size + 1)
             );
-    privateFlockLockedElement  *created = private_new_privateFlockLockedElement(filename,file_descriptor);
+    privateDtwFlockLockedElement  *created = private_new_privateDtwFlockLockedElement(filename, file_descriptor);
     self->elements[self->size] = created;
     self->size+=1;
 }
 
-void privateFlockArray_destroy_by_index(privateFlockArray *self, int position){
+void privateDtwFlockArray_destroy_by_index(privateDtwFlockArray *self, int position){
     if(position >= self->size){
         return ;
     }
-    privateFlockLockedElement *finded = self->elements[position];
-    privateFlockLockedElement_free(finded);
+    privateDtwFlockLockedElement *finded = self->elements[position];
+    privateDtwFlockLockedElement_free(finded);
     for(int i = position; i  < self->size-1; i++){
         self->elements[i] = self->elements[i+1];
     }
@@ -39,19 +39,19 @@ void privateFlockArray_destroy_by_index(privateFlockArray *self, int position){
 }
 
 
-void privateFlockArray_represent(privateFlockArray *self){
+void privateDtwFlockArray_represent(privateDtwFlockArray *self){
     for(int i = 0 ; i <self->size;i++){
 
-        privateFlockLockedElement  *current = self->elements[i];
+        privateDtwFlockLockedElement  *current = self->elements[i];
         printf("=============================\n");
-        privateFlockLockedElement_represent(current);
+        privateDtwFlockLockedElement_represent(current);
     }
 }
 
-void privateFlockArray_free(privateFlockArray *self){
+void privateDtwFlockArray_free(privateDtwFlockArray *self){
     for(int i = 0 ; i <self->size;i++){
-        privateFlockLockedElement  *current = self->elements[i];
-        privateFlockLockedElement_free(current);
+        privateDtwFlockLockedElement  *current = self->elements[i];
+        privateDtwFlockLockedElement_free(current);
     }
     free(self->elements);
     free(self);

@@ -1,15 +1,15 @@
 
-FlockLocker * newFlockLocker(){
+DtwFlockLocker * newFlockLocker(){
 
-    FlockLocker *self = (FlockLocker*) malloc(sizeof (FlockLocker));
-    *self  = (FlockLocker){0};
+    DtwFlockLocker *self = (DtwFlockLocker*) malloc(sizeof (DtwFlockLocker));
+    *self  = (DtwFlockLocker){0};
     self->locked_files = private_new_privateFlockArray();
     self->temp_folder = "/tmp/";
 
     return self;
 }
-int  FlockLocker_lock(FlockLocker *self, const char *filename) {
-    if (privateFlockArray_index_of(self->locked_files, filename) != -1) {
+int  DtwFlockLocker_lock(DtwFlockLocker *self, const char *filename) {
+    if (privateDtwFlockArray_index_of(self->locked_files, filename) != -1) {
         return DTW_LOCKER_LOCKED;
     }
 
@@ -31,26 +31,28 @@ int  FlockLocker_lock(FlockLocker *self, const char *filename) {
     if (flock(fd, LOCK_EX) == -1) {
         return DTW_LOCKER_FLCTL_FAIL;
     }
-    privateFlockArray_append(self->locked_files,filename,fd);
+    privateDtwFlockArray_append(self->locked_files, filename, fd);
     return  DTW_LOCKER_LOCKED;
 }
 
-void private_FlockLocker_unlock_by_index(FlockLocker *self, int index){
-    privateFlockLockedElement  *element = self->locked_files->elements[index];
+void private_FlockLocker_unlock_by_index(DtwFlockLocker *self, int index){
+    privateDtwFlockLockedElement  *element = self->locked_files->elements[index];
     flock(element->file_descriptor, LOCK_UN);
 }
-void FlockLocker_unlock(FlockLocker *self, const char *filename){
-    int index = privateFlockArray_index_of(self->locked_files, filename);
+void DtwFlockLocker_unlock(DtwFlockLocker *self, const char *filename){
+    int index = privateDtwFlockArray_index_of(self->locked_files, filename);
     if(index == -1){
         return;
     }
     private_FlockLocker_unlock_by_index(self,index);
 }
-
-void  FlockLocker_free(FlockLocker *self){
+void  DtwFlockLocker_represent(DtwFlockLocker *self){
+    privateDtwFlockArray_represent(self->locked_files);
+}
+void  DtwFlockLocker_free(DtwFlockLocker *self){
     for(int i = 0 ; i < self->locked_files->size; i++){
         private_FlockLocker_unlock_by_index(self,i);
     }
-    privateFlockArray_free(self->locked_files);
+    privateDtwFlockArray_free(self->locked_files);
     free(self);
 }

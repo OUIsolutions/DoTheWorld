@@ -1,15 +1,17 @@
 
 typedef struct {
    const char *temp_folder;
-   privateFlockArray  *locked_files;
-}FlockLocker;
+   privateDtwFlockArray  *locked_files;
+}DtwFlockLocker;
 
-FlockLocker * newFlockLocker();
+DtwFlockLocker * newFlockLocker();
 
-void private_FlockLocker_unlock_by_index(FlockLocker *self, int index);
+void private_FlockLocker_unlock_by_index(DtwFlockLocker *self, int index);
 
-void FlockLocker_unlock(FlockLocker *self, const char *filename);
+void DtwFlockLocker_unlock(DtwFlockLocker *self, const char *filename);
 
-int FlockLocker_lock(FlockLocker *self, const char *filename);
+int DtwFlockLocker_lock(DtwFlockLocker *self, const char *filename);
 
-void  FlockLocker_free(FlockLocker *self);
+void  DtwFlockLocker_represent(DtwFlockLocker *self);
+
+void  DtwFlockLocker_free(DtwFlockLocker *self);

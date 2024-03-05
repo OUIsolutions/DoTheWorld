@@ -5,10 +5,10 @@ typedef struct {
     int file_descriptor;
 
 
-}privateFlockLockedElement;
+}privateDtwFlockLockedElement;
 
-privateFlockLockedElement * private_new_privateFlockLockedElement(const char *filename,int file_descriptor);
+privateDtwFlockLockedElement * private_new_privateDtwFlockLockedElement(const char *filename, int file_descriptor);
 
-void privateFlockLockedElement_represent(privateFlockLockedElement *self);
+void privateDtwFlockLockedElement_represent(privateDtwFlockLockedElement *self);
 
-void privateFlockLockedElement_free(privateFlockLockedElement *self);
+void privateDtwFlockLockedElement_free(privateDtwFlockLockedElement *self);
