@@ -592,7 +592,6 @@ long dtw_get_time();
 
 
 
-void private_dtw_msleep(long msec);
 
 
 
@@ -656,6 +655,7 @@ const char *dtw_convert_entity(int entity_type);
 
 
 bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge);
+
 
 
 bool dtw_move_any(const char* src_path, const char* dest_path,bool merge);
@@ -984,15 +984,10 @@ struct  DtwTree * newDtwTree();
 
 
 
-#define DTW_LOCKER_TOTAL_CHECK 500
 
-#define DTW_LOCKER_MAX_TIMEOUT 10
-#define DTW_LOCKER_MAX_WAIT 10
-#define DTW_LOCKER_LOCKED 0
-#define DTW_LOCKER_FAIL_INTERVAL_MAX 50
-
-#define DTW_LOCKER_WAIT_ERROR 1
-
+#define DTW_MULTIFILE_LOCKER_TOTAL_CHECK 500
+#define DTW_MULTIFILE_LOCKER_MAX_TIMEOUT 10
+#define DTW_MULFILE_LOCKER_MAX_WAIT 10
 
 
 typedef struct {
@@ -1000,15 +995,14 @@ typedef struct {
    int total_checks;
    int process;
    int max_wait;
-   int fail_delay;
    int max_lock_time;
    DtwStringArray *locked_elements;
 
 
-}DtwLocker;
+}DtwMultiFileLocker;
 
 
-DtwLocker *newDtwMultiFileLocker();
+DtwMultiFileLocker *newDtwMultiFileLocker();
 
 int DtwMultiFIleLocker_lock(DtwMultiFileLocker *self, const  char *element);
 
@@ -1017,6 +1011,96 @@ void DtwMultifileLocker_unlock(DtwMultiFileLocker *self, const  char *element);
 void DtwMultiFileLocker_represemt(DtwMultiFileLocker *self);
 
 void DtwMultiFileLocker_free(DtwMultiFileLocker *self);
+
+
+#ifdef __linux__
+
+
+
+
+typedef struct {
+
+    char *filename;
+    int file_descriptor;
+
+
+}privateDtwFlockLockedElement;
+
+privateDtwFlockLockedElement * private_new_privateDtwFlockLockedElement(const char *filename, int file_descriptor);
+
+void privateDtwFlockLockedElement_represent(privateDtwFlockLockedElement *self);
+
+void privateDtwFlockLockedElement_free(privateDtwFlockLockedElement *self);
+
+
+
+
+typedef struct {
+    privateDtwFlockLockedElement **elements;
+    int size;
+}privateDtwFlockArray;
+
+
+privateDtwFlockArray * private_new_privateFlockArray();
+
+int  privateDtwFlockArray_index_of(privateDtwFlockArray *self, const char *filename);
+
+void privateDtwFlockArray_append(privateDtwFlockArray *self, const char *filename, int file_descriptor);
+
+void privateDtwFlockArray_destroy_by_index(privateDtwFlockArray *self, int position);
+
+void privateDtwFlockArray_represent(privateDtwFlockArray *self);
+
+void privateDtwFlockArray_free(privateDtwFlockArray *self);
+
+
+
+typedef struct {
+   const char *temp_folder;
+   privateDtwFlockArray  *locked_files;
+}DtwFlockLocker;
+
+DtwFlockLocker * newFlockLocker();
+
+void private_FlockLocker_unlock_by_index(DtwFlockLocker *self, int index);
+
+void DtwFlockLocker_unlock(DtwFlockLocker *self, const char *filename);
+
+int DtwFlockLocker_lock(DtwFlockLocker *self, const char *filename);
+
+void  DtwFlockLocker_represent(DtwFlockLocker *self);
+
+void  DtwFlockLocker_free(DtwFlockLocker *self);
+
+#endif
+
+
+#define DTW_LOCKER_LOCKED 0
+#define DTW_LOCKER_IMPOSSIBLE_TO_CREATE_FILE_DESCRIPTOR 5
+#define DTW_LOCKER_FLCTL_FAIL 6
+#define DTW_LOCKER_WAIT_ERROR 21
+#define DTW_LOCKER_OS_NOT_PREDICTIBLE -1
+typedef struct {
+#ifdef __linux__
+    DtwFlockLocker *locker;
+#endif
+#ifdef _WIN32
+    DtwMultiFileLocker  *locker;
+#endif
+
+} DtwLocker;
+
+
+DtwLocker *newDtwLocker();
+
+int DtwLocker_lock(DtwLocker *self, const  char *element);
+
+void DtwLocker_unlock(DtwLocker *self, const  char *element);
+
+void DtwLocker_represemt(DtwLocker *self);
+
+void DtwLocker_free(DtwLocker *self);
+
 
 
 
@@ -1172,7 +1256,7 @@ void DtwTransaction_free(struct DtwTransaction *self);
 typedef struct {
     DtwTransaction  *transaction;
     DtwRandonizer  *randonizer;
-    DtwLocker *locker;
+    DtwMultiFileLocker *locker;
     int error_code;
     char *error_path;
     char *error_message;
@@ -1622,10 +1706,10 @@ DtwTreeModule newDtwTreeModule();
 
 typedef struct DtwLockerModule{
     DtwLocker * (*newLocker)();
-    int (*lock)( DtwLocker *self, const  char *element);
-    void (*unlock)( DtwLocker *self, const  char *element);
-    void (*represemt)( DtwLocker *self);
-    void (*free)( DtwLocker *self);
+    int (*lock)(DtwLocker *self, const  char *element);
+    void (*unlock)(DtwLocker *self, const  char *element);
+    void (*represemt)(DtwLocker *self);
+    void (*free)(DtwLocker *self);
 
 }DtwLockerModule;
 
@@ -1925,7 +2009,7 @@ typedef struct DtwNamespace{
 
     DtwPathModule path;
 
-    DtwLockerModule  locker;
+    DtwLockerModule locker;
 
 
     DtwTreeModule tree;
@@ -5656,31 +5740,7 @@ long dtw_get_time(){
     return time(NULL);
 }
 
-void private_dtw_msleep(long msec)
-{
 
-#ifdef __linux__
-
-    struct timespec ts;
-    int res;
-
-    if (msec < 0)
-    {
-        errno = EINVAL;
-        return;
-    }
-
-    ts.tv_sec = msec / 1000;
-    ts.tv_nsec = (msec % 1000) * 1000000;
-
-    do {
-        res = nanosleep(&ts, &ts);
-    } while (res && errno == EINTR);
-
-#elif _WIN32
-    Sleep(msec);
-#endif
-}
 
 
 
@@ -5841,6 +5901,7 @@ bool dtw_remove_any(const char* path) {
     
  
 }
+
 
 
 unsigned char *dtw_load_any_content(const char * path,long *size,bool *is_binary){
@@ -8269,14 +8330,15 @@ void DtwTree_hardware_commit_tree(struct DtwTree *self){
 
 
 
-DtwLocker *newDtwMultiFileLocker(){
-    DtwLocker *self = (DtwLocker*) malloc(sizeof (DtwLocker));
+
+
+DtwMultiFileLocker *newDtwMultiFileLocker(){
+    DtwMultiFileLocker *self = (DtwMultiFileLocker*) malloc(sizeof (DtwMultiFileLocker));
 
     self->process = getpid();
-    self->total_checks = DTW_LOCKER_TOTAL_CHECK;
-    self->max_lock_time = DTW_LOCKER_MAX_TIMEOUT;
-    self->max_wait = DTW_LOCKER_MAX_WAIT;
-    self->fail_delay = DTW_LOCKER_FAIL_INTERVAL_MAX;
+    self->total_checks = DTW_MULTIFILE_LOCKER_TOTAL_CHECK;
+    self->max_lock_time = DTW_MULTIFILE_LOCKER_MAX_TIMEOUT;
+    self->max_wait = DTW_MULFILE_LOCKER_MAX_WAIT;
     self->locked_elements = newDtwStringArray();
 
     return self;
@@ -8305,11 +8367,6 @@ int  DtwMultiFIleLocker_lock(DtwMultiFileLocker *self, const char *element) {
         if((now - started_time) > self->max_wait){
             free(file);
             return DTW_LOCKER_WAIT_ERROR;
-        }
-        if(tota_execution> 0){
-            srand(tota_execution + now + getpid());
-            int sleep_time = rand()%self->fail_delay;
-            private_dtw_msleep(sleep_time);
         }
 
         tota_execution+=1;
@@ -8396,12 +8453,217 @@ void DtwMultiFileLocker_free(DtwMultiFileLocker *self){
 
     for(int i = 0 ; i < self->locked_elements->size;i++){
         char *element = self->locked_elements->strings[i];
-        DtwLocker_unlock(self,element);
+        DtwMultifileLocker_unlock(self, element);
     }
 
     DtwStringArray_free(self->locked_elements);
     free(self);
 }
+#ifdef __linux__
+
+
+
+
+
+privateDtwFlockLockedElement * private_new_privateDtwFlockLockedElement(const char *filename, int file_descriptor){
+    privateDtwFlockLockedElement *self = (privateDtwFlockLockedElement*) malloc(sizeof (privateDtwFlockLockedElement));
+    self->filename = strdup(filename);
+    self->file_descriptor = file_descriptor;
+    return  self;
+}
+
+void privateDtwFlockLockedElement_represent(privateDtwFlockLockedElement *self){
+    printf("file: %s\n",self->filename);
+    printf("if: %d\n",self->file_descriptor);
+
+}
+void privateDtwFlockLockedElement_free(privateDtwFlockLockedElement *self){
+    free(self->filename);
+    free(self);
+
+}
+
+
+privateDtwFlockArray * private_new_privateFlockArray(){
+    privateDtwFlockArray * self = (privateDtwFlockArray*) malloc(sizeof (privateDtwFlockArray));
+    self->elements = (privateDtwFlockLockedElement **) malloc(0);
+    self->size = 0;
+    return self;
+}
+
+
+int  privateDtwFlockArray_index_of(privateDtwFlockArray *self, const char *filename){
+    for(int i = 0 ; i <self->size;i++){
+        privateDtwFlockLockedElement  *current = self->elements[i];
+        if(strcmp(current->filename,filename) ==0){
+            return  i;
+        }
+    }
+    return  -1;
+}
+void privateDtwFlockArray_append(privateDtwFlockArray *self, const char *filename, int file_descriptor){
+
+    self->elements = (privateDtwFlockLockedElement**) realloc(
+            self->elements,
+            sizeof(privateDtwFlockLockedElement**) * (self->size + 1)
+            );
+    privateDtwFlockLockedElement  *created = private_new_privateDtwFlockLockedElement(filename, file_descriptor);
+    self->elements[self->size] = created;
+    self->size+=1;
+}
+
+void privateDtwFlockArray_destroy_by_index(privateDtwFlockArray *self, int position){
+    if(position >= self->size){
+        return ;
+    }
+    privateDtwFlockLockedElement *finded = self->elements[position];
+    privateDtwFlockLockedElement_free(finded);
+    for(int i = position; i  < self->size-1; i++){
+        self->elements[i] = self->elements[i+1];
+    }
+    self->size-=1;
+}
+
+
+void privateDtwFlockArray_represent(privateDtwFlockArray *self){
+    for(int i = 0 ; i <self->size;i++){
+
+        privateDtwFlockLockedElement  *current = self->elements[i];
+        printf("=============================\n");
+        privateDtwFlockLockedElement_represent(current);
+    }
+}
+
+void privateDtwFlockArray_free(privateDtwFlockArray *self){
+    for(int i = 0 ; i <self->size;i++){
+        privateDtwFlockLockedElement  *current = self->elements[i];
+        privateDtwFlockLockedElement_free(current);
+    }
+    free(self->elements);
+    free(self);
+}
+
+
+
+DtwFlockLocker * newFlockLocker(){
+
+    DtwFlockLocker *self = (DtwFlockLocker*) malloc(sizeof (DtwFlockLocker));
+    *self  = (DtwFlockLocker){0};
+    self->locked_files = private_new_privateFlockArray();
+    self->temp_folder = "/tmp/";
+
+    return self;
+}
+int  DtwFlockLocker_lock(DtwFlockLocker *self, const char *filename) {
+    if (privateDtwFlockArray_index_of(self->locked_files, filename) != -1) {
+        return DTW_LOCKER_LOCKED;
+    }
+
+    char *file_sha = dtw_generate_sha_from_string(filename);
+    const char *EXTENSION = "lock";
+    char *formatted = (char *) malloc(
+            strlen(file_sha) +
+            strlen(self->temp_folder) +
+            strlen(EXTENSION) +
+            3
+    );
+    sprintf(formatted, "%s/%s.%s", self->temp_folder, file_sha, EXTENSION);
+    free(file_sha);
+    int fd = open(formatted, O_RDWR | O_CREAT, 0644);
+    free(formatted);
+    if (fd == -1) {
+        return DTW_LOCKER_IMPOSSIBLE_TO_CREATE_FILE_DESCRIPTOR;
+    }
+    if (flock(fd, LOCK_EX) == -1) {
+        return DTW_LOCKER_FLCTL_FAIL;
+    }
+    privateDtwFlockArray_append(self->locked_files, filename, fd);
+    return  DTW_LOCKER_LOCKED;
+}
+
+void private_FlockLocker_unlock_by_index(DtwFlockLocker *self, int index){
+    privateDtwFlockLockedElement  *element = self->locked_files->elements[index];
+    flock(element->file_descriptor, LOCK_UN);
+}
+void DtwFlockLocker_unlock(DtwFlockLocker *self, const char *filename){
+    int index = privateDtwFlockArray_index_of(self->locked_files, filename);
+    if(index == -1){
+        return;
+    }
+    private_FlockLocker_unlock_by_index(self,index);
+}
+void  DtwFlockLocker_represent(DtwFlockLocker *self){
+    privateDtwFlockArray_represent(self->locked_files);
+}
+void  DtwFlockLocker_free(DtwFlockLocker *self){
+    for(int i = 0 ; i < self->locked_files->size; i++){
+        private_FlockLocker_unlock_by_index(self,i);
+    }
+    privateDtwFlockArray_free(self->locked_files);
+    free(self);
+}
+
+#endif
+
+
+
+
+DtwLocker *newDtwLocker(){
+
+    DtwLocker *self = (DtwLocker*)malloc(sizeof(DtwLocker));
+#ifdef __linux__
+    self->locker = newFlockLocker();
+#endif
+#ifdef _WIN32
+    locker->locker = newDtwMultiFileLocker();
+#endif
+    return self;
+}
+
+int DtwLocker_lock(DtwLocker *self, const  char *element){
+
+#ifdef __linux__
+    DtwFlockLocker_lock(self->locker,element);
+#endif
+#ifdef _WIN32
+    return DtwMultiFIleLocker_lock(self->locker,element);
+#endif
+    return  DTW_LOCKER_OS_NOT_PREDICTIBLE;
+}
+
+void DtwLocker_unlock(DtwLocker *self, const  char *element){
+
+#ifdef __linux__
+    DtwFlockLocker_unlock(self->locker,element);
+#endif
+    #ifdef _WIN32
+         DtwMultifileLocker_unlock(self->locker,element);
+    #endif
+}
+
+void DtwLocker_represemt(DtwLocker *self){
+
+#ifdef __linux__
+    DtwFlockLocker_represent(self->locker);
+#endif
+#ifdef _WIN32
+     DtwMultiFileLocker_represemt(self->locker);
+#endif
+}
+
+void DtwLocker_free(DtwLocker *self){
+
+#ifdef __linux__
+    DtwFlockLocker_free(self->locker);
+#endif
+
+#ifdef _WIN32
+     DtwMultiFileLocker_free(self->locker);
+#endif
+    free(self);
+}
+
+
 
 
 
@@ -8412,7 +8674,7 @@ privateDtwResourceRootProps *private_newDtwResourceRootProps(){
     *self = (privateDtwResourceRootProps){0};
     self->transaction = newDtwTransaction();
     self->randonizer = newDtwRandonizer();
-    self->locker = newDtwLocker();
+    self->locker = newDtwMultiFileLocker();
     self->error_code = DTW_RESOURCE_OK;
 
     return self;
@@ -8422,7 +8684,7 @@ privateDtwResourceRootProps *private_newDtwResourceRootProps(){
 void privateDtwResourceRootProps_free(privateDtwResourceRootProps *self){
     DtwTransaction_free(self->transaction);
     DtwRandonizer_free(self->randonizer);
-    DtwLocker_free(self->locker);
+    DtwMultiFileLocker_free(self->locker);
     if(self->error_path){
         free(self->error_path);
     }
@@ -8497,8 +8759,8 @@ void DtwResource_lock(DtwResource *self){
     if(self->locked){
         return;
     }
-    
-    DtwLocker_lock(self->root_props->locker,self->path);
+
+    DtwMultiFIleLocker_lock(self->root_props->locker, self->path);
     
     self->locked = true;
 }
@@ -8510,8 +8772,8 @@ void DtwResource_unlock(DtwResource *self){
     if(self->locked == false){
         return;
     }
-    
-    DtwLocker_unlock(self->root_props->locker,self->path);
+
+    DtwMultifileLocker_unlock(self->root_props->locker, self->path);
     
     self->locked = false;
 }
