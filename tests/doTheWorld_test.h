@@ -8917,12 +8917,10 @@ void DtwResource_load(DtwResource *self){
     }
     DtwResource_unload(self);
     self->value_any = dtw_load_any_content(self->path,&self->value_size,&self->is_binary);
-    /*
-    if(!self->value_any && dtw_entity_type(self->path) == DTW_FILE_TYPE){
-        self->value_any = (unsigned char*) strdup("");
+    //means its a empty string
+    if(dtw_entity_type(self->path) == DTW_FILE_TYPE  && self->value_size ==0 ){
+        self->value_any = (unsigned char*)strdup("");
     }
-     */
-
     self->loaded = true;
 
 }
@@ -9022,6 +9020,7 @@ char *DtwResource_get_string(DtwResource *self){
         );
         return NULL;
     }
+
     return result;
 }
 
@@ -9361,7 +9360,6 @@ DtwResource *new_DtwResource(const char *path){
     self->cache_sub_resources = true;
     self->root_props = private_newDtwResourceRootProps();
 
-    DtwResource_load(self);
     return self;
 }   
 

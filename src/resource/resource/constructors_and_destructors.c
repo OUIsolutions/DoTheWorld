@@ -12,7 +12,6 @@ DtwResource *new_DtwResource(const char *path){
     self->cache_sub_resources = true;
     self->root_props = private_newDtwResourceRootProps();
 
-    DtwResource_load(self);
     return self;
 }   
 
