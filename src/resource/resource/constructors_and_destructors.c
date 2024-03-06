@@ -45,7 +45,6 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
     new_element->mothers_path = strdup(self->path);
     new_element->path = dtw_concat_path(self->path, name);
     new_element->name = strdup(name);
-    new_element->locked = self->locked;
 
 
     new_element->cache_sub_resources = self->cache_sub_resources;

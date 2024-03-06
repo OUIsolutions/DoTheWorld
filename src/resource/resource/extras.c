@@ -55,28 +55,15 @@ int DtwResource_lock(DtwResource *self){
     if(DtwResource_error(self)){
         return -1;
     }
-    if(self->locked){
-        return DTW_LOCKER_LOCKED;
-    }
-
-   int lock_result =  DtwLocker_lock(self->root_props->locker, self->path);
-    if(!lock_result){
-        self->locked = true;
-    }
-    return lock_result;
+    return DtwLocker_lock(self->root_props->locker, self->path);
 }
 
 void DtwResource_unlock(DtwResource *self){
     if(DtwResource_error(self)){
         return ;
     }
-    if(self->locked == false){
-        return;
-    }
-
-    DtwLocker_lock(self->root_props->locker, self->path);
+    DtwLocker_unlock(self->root_props->locker, self->path);
     
-    self->locked = false;
 }
 
 

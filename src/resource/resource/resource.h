@@ -4,7 +4,6 @@ typedef struct DtwResource{
 
     bool allow_transaction;
     bool use_locker_on_unique_values;
-    bool locked;
     privateDtwResourceRootProps *root_props;
     char *mothers_path;
     char *name;

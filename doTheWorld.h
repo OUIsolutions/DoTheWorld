@@ -1276,7 +1276,6 @@ typedef struct DtwResource{
 
     bool allow_transaction;
     bool use_locker_on_unique_values;
-    bool locked;
     privateDtwResourceRootProps *root_props;
     char *mothers_path;
     char *name;
@@ -8759,28 +8758,15 @@ int DtwResource_lock(DtwResource *self){
     if(DtwResource_error(self)){
         return -1;
     }
-    if(self->locked){
-        return DTW_LOCKER_LOCKED;
-    }
-
-   int lock_result =  DtwLocker_lock(self->root_props->locker, self->path);
-    if(!lock_result){
-        self->locked = true;
-    }
-    return lock_result;
+    return DtwLocker_lock(self->root_props->locker, self->path);
 }
 
 void DtwResource_unlock(DtwResource *self){
     if(DtwResource_error(self)){
         return ;
     }
-    if(self->locked == false){
-        return;
-    }
-
-    DtwLocker_lock(self->root_props->locker, self->path);
+    DtwLocker_unlock(self->root_props->locker, self->path);
     
-    self->locked = false;
 }
 
 
@@ -9402,7 +9388,6 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
     new_element->mothers_path = strdup(self->path);
     new_element->path = dtw_concat_path(self->path, name);
     new_element->name = strdup(name);
-    new_element->locked = self->locked;
 
 
     new_element->cache_sub_resources = self->cache_sub_resources;
