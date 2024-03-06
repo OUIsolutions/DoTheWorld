@@ -114,7 +114,7 @@ unsigned char *dtw_load_any_content(const char * path,long *size,bool *is_binary
 
     if(*size == 0){
         fclose(file);
-        return (unsigned  char*)strdup("");
+        return NULL;
     }
 
 
@@ -152,6 +152,13 @@ char *dtw_load_string_file_content(const char * path){
     long size;
     bool is_binary;
     unsigned char *element = dtw_load_any_content(path,&size,&is_binary);
+    if(!element){
+
+        if(dtw_entity_type(path) == DTW_FILE_TYPE){
+            return strdup("");
+        }
+        return NULL;
+    }
 
     if(is_binary){
         free(element);

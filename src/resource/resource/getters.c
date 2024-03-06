@@ -83,6 +83,7 @@ char *DtwResource_get_string(DtwResource *self){
         );
         return NULL;
     }
+
     return result;
 }
 
