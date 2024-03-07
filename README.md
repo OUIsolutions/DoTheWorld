@@ -8,7 +8,11 @@ In These Current Markdown you will see some basic exemples of usage of these lib
 but if you want to get an deep knolege see at **exemples** folder, you will find an lot of exemplos of how you can use DoTheWorld
 
 # Installation
-The installation of DoTheWorld is made to be as dumb as possible, just  download the file  amalgamation **doTheWorld.h**  and include in your project.
+The installation of DoTheWorld is made to be as dumb as possible, just  download the file  **doTheWorld.h** :
+
+[Download link](https://github.com/OUIsolutions/DoTheWorld/releases/download/v1.51/doTheWorld.h)
+
+ And include in your project.
 if this compiles then the library will work:
 ~~~c
 #include "doTheWorld.h"
