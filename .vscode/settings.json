@@ -43,7 +43,8 @@
         "extras.c": "cpp",
         "cjson.c": "cpp",
         "one.h": "c",
-        "wait.h": "c"
+        "wait.h": "c",
+        "random": "c"
     },
     "workbench.colorCustomizations": {
         "activityBar.background": "#382C04",
