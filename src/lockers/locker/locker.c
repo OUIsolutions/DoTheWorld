@@ -7,7 +7,7 @@ DtwLocker *newDtwLocker(){
     self->locker = newFlockLocker();
 #endif
 #ifdef _WIN32
-    locker->locker = newDtwMultiFileLocker();
+    self->locker = newDtwMultiFileLocker();
 #endif
     return self;
 }
