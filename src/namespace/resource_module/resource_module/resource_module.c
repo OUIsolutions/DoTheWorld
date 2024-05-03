@@ -6,6 +6,7 @@ DtwResourceModule newDtwResourceModule(){
     self.get_error_message = DtwResource_get_error_message;
     self.error = DtwResource_error;
     self.load = DtwResource_load;
+    self.clear_errors = DtwResource_clear_errors;
     self.unload = DtwResource_unload;
     self.sub_resource = DtwResource_sub_resource;
     self.get_any_from_sub_resource = DtwResource_get_any_from_sub_resource;

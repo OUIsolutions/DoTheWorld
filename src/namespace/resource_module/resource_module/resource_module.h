@@ -40,7 +40,7 @@ typedef struct DtwResourceModule{
     void (*unlock)(DtwResource *self);
 
     void (*destroy)(DtwResource *self);
-
+    void  (*clear_errors)(DtwResource *self);
     unsigned char *(*get_any)(struct DtwResource *self, long *size, bool *is_binary);
 
     unsigned char *(*get_binary)(struct DtwResource *self, long *size);

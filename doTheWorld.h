@@ -1309,6 +1309,7 @@ char * DtwResource_get_error_message(DtwResource *self);
 
 void  private_DtwResource_raise_error(DtwResource *self, int error_code, const char *error_message);
 
+void  DtwResource_clear_errors(DtwResource *self);
 
 DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ...);
 
@@ -1851,7 +1852,7 @@ typedef struct DtwResourceModule{
     void (*unlock)(DtwResource *self);
 
     void (*destroy)(DtwResource *self);
-
+    void  (*clear_errors)(DtwResource *self);
     unsigned char *(*get_any)(struct DtwResource *self, long *size, bool *is_binary);
 
     unsigned char *(*get_binary)(struct DtwResource *self, long *size);
@@ -8730,6 +8731,17 @@ char * DtwResource_get_error_message(DtwResource *self){
 
     return self->root_props->error_message;
 }
+void  DtwResource_clear_errors(DtwResource *self){
+    if(!DtwResource_error(self)){
+        return;
+    }
+    free(self->root_props->error_message);
+    self->root_props->error_message = NULL;
+    free(self->root_props->error_path);
+    self->root_props->error_path = NULL;
+    self->root_props->error_code = DTW_RESOURCE_OK;
+
+}
 
 void  private_DtwResource_raise_error(DtwResource *self, int error_code, const char *error_message){
     self->root_props->error_code = error_code;
@@ -10719,6 +10731,7 @@ DtwResourceModule newDtwResourceModule(){
     self.get_error_message = DtwResource_get_error_message;
     self.error = DtwResource_error;
     self.load = DtwResource_load;
+    self.clear_errors = DtwResource_clear_errors;
     self.unload = DtwResource_unload;
     self.sub_resource = DtwResource_sub_resource;
     self.get_any_from_sub_resource = DtwResource_get_any_from_sub_resource;

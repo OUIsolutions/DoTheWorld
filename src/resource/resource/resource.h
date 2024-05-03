@@ -37,6 +37,7 @@ char * DtwResource_get_error_message(DtwResource *self);
 
 void  private_DtwResource_raise_error(DtwResource *self, int error_code, const char *error_message);
 
+void  DtwResource_clear_errors(DtwResource *self);
 
 DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ...);
 

@@ -26,6 +26,17 @@ char * DtwResource_get_error_message(DtwResource *self){
 
     return self->root_props->error_message;
 }
+void  DtwResource_clear_errors(DtwResource *self){
+    if(!DtwResource_error(self)){
+        return;
+    }
+    free(self->root_props->error_message);
+    self->root_props->error_message = NULL;
+    free(self->root_props->error_path);
+    self->root_props->error_path = NULL;
+    self->root_props->error_code = DTW_RESOURCE_OK;
+
+}
 
 void  private_DtwResource_raise_error(DtwResource *self, int error_code, const char *error_message){
     self->root_props->error_code = error_code;
