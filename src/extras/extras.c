@@ -105,8 +105,9 @@ char *dtw_concat_path(const char *path1, const char *path2){
     return path;
 }
 
-struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *paths,const char *path_to_remove){
+struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *paths,const char *rm_path){
 
+    char *path_to_remove = dtw_replace_string(rm_path,"//","/");
 
     int size_to_remove = strlen(path_to_remove) +1;
 
@@ -140,6 +141,7 @@ struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *path
         free(new_string);
 
     }
+    free(path_to_remove);
     return new_array;
 }
 
