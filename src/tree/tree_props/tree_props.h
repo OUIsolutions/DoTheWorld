@@ -1,4 +1,5 @@
 
+
 #define DTW_NOT_MIMIFY 1
 #define DTW_MIMIFY 2
 
@@ -20,4 +21,4 @@ typedef struct DtwTreeProps{
 
 
 
-DtwTreeProps DtwTreeProps_format_props(DtwTreeProps *props);
+DtwTreeProps DtwTreeProps_format_props(DtwTreeProps props);

@@ -93,7 +93,7 @@ void DtwTree_represent( DtwTree *self){
     }
 }
 
-void DtwTree_add_tree_parts_from_string_array( DtwTree *self,  DtwStringArray *paths,DtwTreeProps *props){
+void DtwTree_add_tree_parts_from_string_array( DtwTree *self,  DtwStringArray *paths,DtwTreeProps props){
     for(int i = 0; i < paths->size; i++){
 
         const char *current_path = paths->strings[i];
@@ -107,7 +107,7 @@ void DtwTree_add_tree_parts_from_string_array( DtwTree *self,  DtwStringArray *p
 }
 
 
-void DtwTree_add_tree_from_hardware( DtwTree *self,const char *path, DtwTreeProps *props){
+void DtwTree_add_tree_from_hardware( DtwTree *self,const char *path, DtwTreeProps props){
     DtwTreeProps formated_props = DtwTreeProps_format_props(props);
     struct DtwStringArray *path_array = dtw_list_all_recursively(path,DTW_CONCAT_PATH);
     DtwStringArray_sort(path_array);

@@ -4,7 +4,7 @@
 typedef struct  DtwTree{
     int size;
      DtwTreePart **tree_parts;
- 
+
 }DtwTree;
 
 
@@ -51,9 +51,9 @@ void DtwTree_add_tree_part_referencing( DtwTree *self,  DtwTreePart *tree_part);
 void DtwTree_free( DtwTree *self);
 void DtwTree_represent( DtwTree *self);
 
-void DtwTree_add_tree_parts_from_string_array(DtwTree *self,DtwStringArray *paths,DtwTreeProps *props);
+void DtwTree_add_tree_parts_from_string_array(DtwTree *self,DtwStringArray *paths,DtwTreeProps props);
 
-void DtwTree_add_tree_from_hardware(DtwTree *self,const char *path,DtwTreeProps *props);
+void DtwTree_add_tree_from_hardware(DtwTree *self,const char *path,DtwTreeProps props);
 
  DtwTreeTransactionReport * DtwTree_create_report( DtwTree *self);
 
@@ -69,9 +69,9 @@ void DtwTree_loads_json_tree( DtwTree *self, const char *content);
 
 void DtwTree_loads_json_tree_from_file( DtwTree *self, const char *path);
 
-char * DtwTree_dumps_tree_json(DtwTree *self,DtwTreeProps * props);
+char * DtwTree_dumps_tree_json(DtwTree *self,DtwTreeProps  props);
 
-void DtwTree_dumps_tree_json_to_file(DtwTree *self,const char *path,DtwTreeProps * props);
+void DtwTree_dumps_tree_json_to_file(DtwTree *self,const char *path,DtwTreeProps  props);
 
   DtwTree * newDtwTree();
 

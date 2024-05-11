@@ -2,7 +2,7 @@
 
 typedef struct DtwTreePartModule{
 
-    DtwTreePart  *(*newPart)(const char *path, DtwTreeProps *props);
+    DtwTreePart  *(*newPart)(const char *path, DtwTreeProps props);
     DtwTreePart  *(*newPartEmpty)(const char *path);
     DtwTreePart * (*newPartLoading)(const char *path);
 

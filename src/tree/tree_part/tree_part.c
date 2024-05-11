@@ -1,7 +1,7 @@
 
 
 
-struct DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps *props){
+struct DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps props){
     DtwTreeProps formated_props = DtwTreeProps_format_props(props);
 
     DtwTreePart *self = (DtwTreePart *)malloc(sizeof(struct DtwTreePart));
@@ -42,7 +42,7 @@ struct  DtwTreePart * DtwTreePart_self_copy( DtwTreePart *self){
     DtwTreeProps props = {.content =DTW_NOT_LOAD,.hadware_data = DTW_NOT_LOAD};
     DtwTreePart *new_tree_part = newDtwTreePart(
             path,
-            &props
+            props
     );
 
     new_tree_part->content_exist_in_hardware = self->content_exist_in_hardware;
@@ -196,7 +196,7 @@ void DtwTreePart_free(struct DtwTreePart *self){
     DtwTreeProps  props = {.content =DTW_NOT_LOAD,.hadware_data = DTW_NOT_LOAD};
     return newDtwTreePart(
             path,
-         &props
+         props
     );
 
 }
@@ -206,6 +206,6 @@ void DtwTreePart_free(struct DtwTreePart *self){
     DtwTreeProps  props = {.content =DTW_LOAD,.hadware_data = DTW_LOAD};
     return newDtwTreePart(
             path,
-            &props
+            props
     );
 }

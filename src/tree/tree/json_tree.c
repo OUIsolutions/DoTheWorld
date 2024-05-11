@@ -1,8 +1,8 @@
 
 
-void DtwTree_loads_json_tree(struct DtwTree *self, const char *content){
+void DtwTree_loads_json_tree(struct DtwTree *self, const char *all_tree){
     //load json
-    cJSON *json_tree = cJSON_Parse(content);
+    cJSON *json_tree = cJSON_Parse(all_tree);
     int size = cJSON_GetArraySize(json_tree);
     for(int i = 0; i < size; i++){
 
@@ -60,7 +60,7 @@ void DtwTree_loads_json_tree(struct DtwTree *self, const char *content){
                     content->valuestring,
                     &out_size
                 );
-                DtwTreePart_set_binary_content(part,decoded,(int)out_size);
+                DtwTreePart_set_binary_content(part,decoded,out_size);
                 free(decoded);
             }
            else{
@@ -84,13 +84,13 @@ void DtwTree_loads_json_tree(struct DtwTree *self, const char *content){
 }
 
 
-void DtwTree_loads_json_tree_from_file(struct DtwTree *self, const char *path){
+void DtwTree_loads_json_tree_from_file( DtwTree *self, const char *path){
     char *content = dtw_load_string_file_content(path);
     DtwTree_loads_json_tree(self,content);
     free(content);
 }
 
-char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwTreeProps * props){
+char * DtwTree_dumps_tree_json( DtwTree *self, DtwTreeProps  props){
 
 
     DtwTreeProps formated_props = DtwTreeProps_format_props(props);
@@ -99,12 +99,13 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwTreeProps * props){
     for(int i = 0; i < self->size; i++){
        
         cJSON *json_tree_part = cJSON_CreateObject();
-        struct DtwTreePart *tree_part = self->tree_parts[i];
+        DtwTreePart *tree_part = self->tree_parts[i];
         char *path_string = DtwPath_get_path(tree_part->path);
         if(path_string ==NULL){
             cJSON_Delete(json_tree_part);
             continue;
         }
+
         if(formated_props.ignored_elements == DTW_INCLUDE && tree_part->ignore){
             continue;
         }
@@ -208,7 +209,6 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwTreeProps * props){
                 cJSON_CreateString(content_sha)
             );
 
-            free(content_sha);
         }
 
         if(formated_props.content == DTW_INCLUDE && tree_part->content){
@@ -261,7 +261,7 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwTreeProps * props){
     return json_string;
 }
 
-void  DtwTree_dumps_tree_json_to_file(struct DtwTree *self, const char *path, DtwTreeProps * props){
+void  DtwTree_dumps_tree_json_to_file(struct DtwTree *self, const char *path, DtwTreeProps  props){
     char *json_string = DtwTree_dumps_tree_json(self,props);
     dtw_write_string_file_content(path,json_string);
     free(json_string);

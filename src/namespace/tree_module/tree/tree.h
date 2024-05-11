@@ -23,7 +23,7 @@ typedef struct DtwTreeModule{
         void (*add_tree_parts_from_string_array)(
             struct DtwTree *self,
             struct DtwStringArray *paths,
-            DtwTreeProps *props
+            DtwTreeProps props
     );
 
     struct DtwTree *(*get_sub_tree)(
@@ -35,7 +35,7 @@ typedef struct DtwTreeModule{
     void (*add_tree_from_hardware)(
             struct DtwTree *self,
             const char *path,
-            DtwTreeProps *props
+            DtwTreeProps props
     );
     //Listage Functions
 
@@ -83,13 +83,13 @@ typedef struct DtwTreeModule{
 
     char *(*dumps_json_tree)(
             struct DtwTree *self,
-            DtwTreeProps * props
+            DtwTreeProps props
     );
 
     void (*dumps_json_tree_to_file)(
             struct DtwTree *self,
             const char *path,
-            DtwTreeProps * props
+            DtwTreeProps  props
     );
 
     void (*represent)(struct DtwTree *self);
