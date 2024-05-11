@@ -40,8 +40,7 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
     new_element->root_props = self->root_props;
     //copied elements
 
-    new_element->child = true;
-    new_element->mothers_path = strdup(self->path);
+    new_element->mother = self;
     new_element->path = dtw_concat_path(self->path, name);
     new_element->name = strdup(name);
 
@@ -101,9 +100,8 @@ DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,cons
 }
 
 void DtwResource_free(DtwResource *self){
-    bool is_root = !self->child;
+    bool is_root = self->mother == NULL;
     if(is_root){
-
         privateDtwResourceRootProps_free(self->root_props);
     }
 
@@ -111,9 +109,7 @@ void DtwResource_free(DtwResource *self){
     DtwResourceArray_free((DtwResourceArray*)self->sub_resources);
 
 
-    if(self->mothers_path){
-        free(self->mothers_path);
-    }
+
     if(self->value_any){
         free(self->value_any);
     }
