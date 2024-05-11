@@ -4,7 +4,8 @@ DtwTreeModule newDtwTreeModule(){
     self.newTree = newDtwTree;
     self.add_tree_part_by_copy = DtwTree_add_tree_part_copy;
     self.remove_tree_part  = DtwTree_remove_tree_part;
-    self.add_tree_part_by_reference = DtwTree_add_tree_part_by_reference;
+    self.add_tree_part_getting_owenership = DtwTree_add_tree_part_getting_onwership;
+    self.add_tree_part_referencing = DtwTree_add_tree_part_referencing;
     self.add_tree_parts_from_string_array = DtwTree_add_tree_parts_from_string_array;
     self.get_sub_tree = DtwTree_get_sub_tree;
     self.add_tree_from_hardware = DtwTree_add_tree_from_hardware;

@@ -240,6 +240,8 @@ void calc_sha_256(uint8_t hash[SIZE_OF_SHA_256_HASH], const void *input, size_t 
 
 char * calc_sha_256_returning_string(const void *input, size_t len)
 {
+
+
 	uint8_t hash[SIZE_OF_SHA_256_HASH];
 	calc_sha_256(hash, input, len);
 	char *hash_string = (char*)malloc(SIZE_OF_SHA_256_HASH * 2 + 1);

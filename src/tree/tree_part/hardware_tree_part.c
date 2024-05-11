@@ -23,8 +23,7 @@ void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self){
         self->content = (unsigned char *)strdup("");
     }    
 
-    self->content_exist_in_memory = true;
-    
+
     self->is_binary = is_binary;
     self->content_size = size;
     self->hardware_content_size = size;
@@ -61,7 +60,7 @@ bool DtwTreePart_hardware_write(struct DtwTreePart *self, int transaction){
         return false;
     }   
     //means that the content not exist in memory
-    if(self->content_exist_in_memory == false){
+    if(self->content == NULL){
         char *path = DtwPath_get_path(self->path);
         char *dir = DtwPath_get_dir(self->path);
         int entity_type = dtw_entity_type(path);
@@ -98,7 +97,7 @@ bool DtwTreePart_hardware_modify(struct DtwTreePart *self, int transaction){
     bool changed_path =DtwPath_changed(self->path);
 
     
-    if(changed_path == true && self->content_exist_in_memory == false){
+    if(changed_path == true && self->content == NULL){
         char *old_path = self->path->original_path;
         char *new_path = DtwPath_get_path(self->path);
         dtw_move_any(old_path,new_path,true);
@@ -106,13 +105,13 @@ bool DtwTreePart_hardware_modify(struct DtwTreePart *self, int transaction){
     }
     bool write = false;
 
-    if(changed_path == true && self->content_exist_in_memory == true ){
+    if(changed_path == true && self->content ){
         char *old_path = self->path->original_path;
         dtw_remove_any(old_path);
         write = true;
     }
 
-    if(changed_path== false && self->content_exist_in_memory == true ){
+    if(changed_path== false && self->content ){
     
         if(self->metadata_loaded == true){
             char *hardware_sha = self->hawdware_content_sha;

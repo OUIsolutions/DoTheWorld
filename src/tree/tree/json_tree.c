@@ -53,8 +53,7 @@ void DtwTree_loads_json_tree(struct DtwTree *self, const char *content){
         }
 
         if(content != NULL){
-            part->content_exist_in_memory = true;
-        
+
             if(part->is_binary){
                 long out_size;
                 unsigned char *decoded =dtw_base64_decode(
@@ -78,7 +77,7 @@ void DtwTree_loads_json_tree(struct DtwTree *self, const char *content){
             part->ignore = ignore->valueint;
         }
 
-        DtwTree_add_tree_part_by_reference(self, part);
+        DtwTree_add_tree_part_getting_onwership(self, part);
         
     }
     cJSON_Delete(json_tree);
@@ -102,7 +101,7 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwTreeProps * props){
         cJSON *json_tree_part = cJSON_CreateObject();
         struct DtwTreePart *tree_part = self->tree_parts[i];
         char *path_string = DtwPath_get_path(tree_part->path);
-        if(!path_string){
+        if(path_string ==NULL){
             cJSON_Delete(json_tree_part);
             continue;
         }
@@ -195,7 +194,7 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwTreeProps * props){
             
         }
 
-        if(formated_props.content_data == DTW_INCLUDE && tree_part->content_exist_in_memory){
+        if(formated_props.content_data == DTW_INCLUDE && tree_part->content){
             char *content_sha = DtwTreePart_get_content_sha(tree_part);
             cJSON_AddItemToObject(
                 json_tree_part, 
@@ -212,7 +211,7 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwTreeProps * props){
             free(content_sha);
         }
 
-        if(formated_props.content == DTW_INCLUDE && tree_part->content_exist_in_memory){
+        if(formated_props.content == DTW_INCLUDE && tree_part->content){
 
             cJSON_AddItemToObject(
                 json_tree_part, 

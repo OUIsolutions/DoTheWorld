@@ -18,11 +18,10 @@ struct DtwTree *DtwTree_get_sub_tree(struct DtwTree *self, const char *path, boo
         char *current_path =  DtwPath_get_path(tree_part->path);
         if(dtw_starts_with(current_path,path)){
             if(copy_content){
-                DtwTree_add_tree_part_copy(sub_tree,DtwTreePart_self_copy(tree_part));
+                DtwTree_add_tree_part_copy(sub_tree,tree_part);
             }
-            else{
-                DtwTree_add_tree_part_by_reference(sub_tree, tree_part);
-
+            if(!copy_content){
+                DtwTree_add_tree_part_referencing(sub_tree, tree_part);
             }
         }
         free(current_path);
@@ -30,11 +29,18 @@ struct DtwTree *DtwTree_get_sub_tree(struct DtwTree *self, const char *path, boo
     return sub_tree;
 }
 
-
-void DtwTree_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_part){
+void DtwTree_add_tree_part_referencing(struct DtwTree *self, struct DtwTreePart *tree_part) {
     self->size++;
     self->tree_parts =  (struct DtwTreePart**)realloc(self->tree_parts, self->size * sizeof(struct DtwTreePart *));
-    self->tree_parts[self->size - 1] = DtwTreePart_self_copy(tree_part);
+    self->tree_parts[self->size - 1] = tree_part;
+}
+
+void DtwTree_add_tree_part_copy( DtwTree *self,  DtwTreePart *tree_part){
+    self->size++;
+    self->tree_parts =  (struct DtwTreePart**)realloc(self->tree_parts, self->size * sizeof(struct DtwTreePart *));
+    DtwTreePart *copy = DtwTreePart_self_copy(tree_part);
+    copy->owner = (void*)self;
+    self->tree_parts[self->size - 1] = copy;
        
 }
 
@@ -75,34 +81,34 @@ struct DtwTreeTransactionReport * DtwTree_create_report(struct DtwTree *self){
 }
 
 
-void DtwTree_add_tree_part_by_reference(struct DtwTree *self, struct DtwTreePart *tree_part){
-    self->size++;
-    self->tree_parts =  (struct DtwTreePart**)realloc(self->tree_parts, self->size * sizeof(struct DtwTreePart *));
-    self->tree_parts[self->size - 1] = tree_part;
+void DtwTree_add_tree_part_getting_onwership( DtwTree *self,  DtwTreePart *tree_part){
+    DtwTree_add_tree_part_referencing(self,tree_part);
+    tree_part->owner = (void*)self;
 }
 
 
-void DtwTree_represent(struct DtwTree *self){
+
+void DtwTree_represent( DtwTree *self){
     for(int i = 0; i < self->size; i++){
         DtwTreePart_represent(self->tree_parts[i]);
     }
 }
 
-void DtwTree_add_tree_parts_from_string_array(struct DtwTree *self, struct DtwStringArray *paths,DtwTreeProps *props){
+void DtwTree_add_tree_parts_from_string_array( DtwTree *self,  DtwStringArray *paths,DtwTreeProps *props){
     for(int i = 0; i < paths->size; i++){
 
         const char *current_path = paths->strings[i];
-        struct DtwTreePart *tree_part = newDtwTreePart(
+         DtwTreePart *tree_part = newDtwTreePart(
                 current_path,
                 props
         );
 
-        DtwTree_add_tree_part_by_reference(self, tree_part);
+        DtwTree_add_tree_part_getting_onwership(self, tree_part);
     }
 }
 
 
-void DtwTree_add_tree_from_hardware(struct DtwTree *self,const char *path, DtwTreeProps *props){
+void DtwTree_add_tree_from_hardware( DtwTree *self,const char *path, DtwTreeProps *props){
     DtwTreeProps formated_props = DtwTreeProps_format_props(props);
     struct DtwStringArray *path_array = dtw_list_all_recursively(path,DTW_CONCAT_PATH);
     DtwStringArray_sort(path_array);
@@ -141,9 +147,14 @@ void DtwTree_add_tree_from_hardware(struct DtwTree *self,const char *path, DtwTr
 
 }
 
-void DtwTree_free(struct DtwTree *self){
+void DtwTree_free( DtwTree *self){
     for(int i = 0; i < self->size; i++){
-        DtwTreePart_free(self->tree_parts[i]);
+        DtwTreePart * part = self->tree_parts[i];
+        if(part->owner == (void*)self) {
+            DtwTreePart_free(part);
+
+        }
+
     }
     
     free(self->tree_parts);

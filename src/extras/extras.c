@@ -4,10 +4,16 @@ char * dtw_generate_sha_from_file(const char *path){
 }
 
 char * dtw_generate_sha_from_any(void *anything , long size){
+    if(anything ==NULL) {
+        return NULL;
+    }
     return calc_sha_256_returning_string(anything,size);
 }   
 
 char * dtw_generate_sha_from_string(const char *string){
+    if(string == NULL) {
+        return  NULL;
+    }
     return calc_sha_256_from_string_returning_string(string);
 }
 

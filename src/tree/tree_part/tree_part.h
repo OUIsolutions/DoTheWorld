@@ -15,8 +15,8 @@
 typedef struct DtwTreePart{
     
     struct DtwPath *path;
-    bool content_exist_in_memory;
-    size_t  hardware_content_size; 
+    void *owner;
+    size_t  hardware_content_size;
     long last_modification_time;
     bool content_exist_in_hardware;
     bool ignore;

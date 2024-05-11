@@ -4,25 +4,15 @@
 struct DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps *props){
     DtwTreeProps formated_props = DtwTreeProps_format_props(props);
 
-    struct DtwTreePart *self = (struct DtwTreePart *)malloc(sizeof(struct DtwTreePart));
+    DtwTreePart *self = (DtwTreePart *)malloc(sizeof(struct DtwTreePart));
+    *self = (DtwTreePart){0};
     self->path = newDtwPath(path);
-    self->content_exist_in_memory = false;
-    self->content_exist_in_hardware = false;
-    self->last_modification_time = 0;
-    self->is_binary = false;
-    self->ignore = false;
-    self->metadata_loaded = false;
-    self->pending_action = 0;
-    self->hawdware_content_sha = (char *)malloc(0);
-    self->content = (unsigned char *)malloc(0);
-    self->content_size = 0;
-    self->hardware_content_size = 0;
 
 
     if(formated_props.content == DTW_INCLUDE || formated_props.hadware_data == DTW_INCLUDE){
         
         DtwTreePart_load_content_from_hardware(self);
-        if(formated_props.hadware_data == DTW_INCLUDE && self->content_exist_in_memory){
+        if(formated_props.hadware_data == DTW_INCLUDE && self->content){
 
             self->metadata_loaded = true;
             self->last_modification_time = dtw_get_entity_last_motification_in_unix(path);
@@ -38,21 +28,15 @@ struct DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps *props){
     return self;
 }
 char *DtwTreePart_get_content_string_by_reference(struct DtwTreePart *self){
-    if(self->content_exist_in_memory == true){
-        return (char *)self->content;
-    }
-    return NULL;
+    return (char *)self->content;
 }
 
 unsigned char *DtwTreePart_get_content_binary_by_reference(struct DtwTreePart *self){
-    if(self->content_exist_in_memory == true){
-        return self->content;
-    }
-    return NULL;
+    return self->content;
 }
 
 
-struct  DtwTreePart * DtwTreePart_self_copy(struct DtwTreePart *self){
+struct  DtwTreePart * DtwTreePart_self_copy( DtwTreePart *self){
     char *path = DtwPath_get_path(self->path);
     DtwTreeProps props = {.content =DTW_NOT_LOAD,.hadware_data = DTW_NOT_LOAD};
     DtwTreePart *new_tree_part = newDtwTreePart(
@@ -60,7 +44,6 @@ struct  DtwTreePart * DtwTreePart_self_copy(struct DtwTreePart *self){
             &props
     );
 
-    new_tree_part->content_exist_in_memory = self->content_exist_in_memory;
     new_tree_part->content_exist_in_hardware = self->content_exist_in_hardware;
     new_tree_part->is_binary = self->is_binary;
     new_tree_part->ignore = self->ignore;
@@ -87,10 +70,9 @@ struct  DtwTreePart * DtwTreePart_self_copy(struct DtwTreePart *self){
     return new_tree_part;
 }
 
-void DtwTreePart_set_any_content(struct DtwTreePart *self, unsigned char *content, int content_size, bool is_binary){
+void DtwTreePart_set_any_content( DtwTreePart *self, unsigned char *content, int content_size, bool is_binary){
 
     DtwTreePart_free_content(self);
-    self->content_exist_in_memory = true;
     self->is_binary = is_binary;
     self->content = (unsigned char *)malloc(content_size+2);
     memcpy(self->content,content,content_size);
@@ -99,7 +81,7 @@ void DtwTreePart_set_any_content(struct DtwTreePart *self, unsigned char *conten
 
 }
 
-void DtwTreePart_set_string_content(struct DtwTreePart *self, const char *content){
+void DtwTreePart_set_string_content( DtwTreePart *self, const char *content){
     DtwTreePart_set_any_content(
         self,
         (unsigned char*)content,
@@ -116,11 +98,7 @@ void DtwTreePart_set_binary_content(struct DtwTreePart *self, unsigned char *con
 
 
 char *DtwTreePart_get_content_sha(struct DtwTreePart *self){
-    if(self->content_exist_in_memory){
-
-        return dtw_generate_sha_from_string((char *)self->content);
-    }
-    return NULL;
+    return dtw_generate_sha_from_string((char *)self->content);
 }
 
 char *DtwTreePart_last_modification_time_in_string(struct DtwTreePart *self){
@@ -132,7 +110,7 @@ char *DtwTreePart_last_modification_time_in_string(struct DtwTreePart *self){
 void DtwTreePart_represent(struct DtwTreePart *self){
     printf("------------------------------------------------------------\n");
     DtwPath_represent(self->path);
-    printf("Content Exist in Memory: %s\n",self->content_exist_in_memory ? "true" : "false");
+    printf("Content Exist in Memory: %s\n",self->content ? "true" : "false");
     printf("Ignore: %s\n",self->ignore ? "true" : "false");
 
     printf("Content Exist In Hardware: %s\n",self->content_exist_in_hardware ? "true" : "false");
@@ -152,9 +130,10 @@ void DtwTreePart_represent(struct DtwTreePart *self){
         printf("Content SHA:  %s\n",content_sha);
         free(content_sha);
     }
-    if(self->content_exist_in_memory && self->is_binary == false){
-        printf ("Content: %s\n",self->content);
+    if(self->content && self->is_binary == false){
+        printf ("Content: %s\n",(char*)self->content);
     }
+
     if(self->is_binary == true){
         printf("Content: Binary\n");
     }
@@ -169,20 +148,27 @@ void DtwTreePart_represent(struct DtwTreePart *self){
 
 
 void DtwTreePart_free_content(struct DtwTreePart *self){
-    self->content_exist_in_memory = false;
     if(self->content){
         free(self->content);
     }
 
 }
 void DtwTreePart_free(struct DtwTreePart *self){
-    DtwPath_free(self->path);
-    free(self->hawdware_content_sha);
-    free(self->content);
+    if(self->path) {
+        DtwPath_free(self->path);
+    }
+
+    if(self->hawdware_content_sha) {
+        free(self->hawdware_content_sha);
+    }
+
+    if(self->content) {
+        free(self->content);
+    }
     free(self);
 }
 
-struct DtwTreePart * newDtwTreePartEmpty(const char *path){
+ DtwTreePart * newDtwTreePartEmpty(const char *path){
     DtwTreeProps  props = {.content =DTW_NOT_LOAD,.hadware_data = DTW_NOT_LOAD};
     return newDtwTreePart(
             path,
@@ -192,7 +178,7 @@ struct DtwTreePart * newDtwTreePartEmpty(const char *path){
 }
 
 
-struct DtwTreePart * newDtwTreePartLoading(const char *path){
+ DtwTreePart * newDtwTreePartLoading(const char *path){
     DtwTreeProps  props = {.content =DTW_LOAD,.hadware_data = DTW_LOAD};
     return newDtwTreePart(
             path,

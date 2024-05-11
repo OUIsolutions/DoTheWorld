@@ -3,21 +3,24 @@ typedef struct DtwTreeModule{
 
     DtwTree  *(*newTree)();
     void (*add_tree_part_by_copy)(
-            struct DtwTree *self,
-            struct DtwTreePart *tree_part
+             DtwTree *self,
+             DtwTreePart *tree_part
     );
 
     void (*remove_tree_part)(
-            struct DtwTree *self,
+             DtwTree *self,
             int position
     );
 
-    void (*add_tree_part_by_reference)(
-            struct DtwTree *self,
-            struct DtwTreePart *tree_part
+    void (*add_tree_part_getting_owenership)(
+             DtwTree *self,
+             DtwTreePart *tree_part
     );
-
-    void (*add_tree_parts_from_string_array)(
+    void (*add_tree_part_referencing)(
+            DtwTree *self,
+            DtwTreePart *tree_part
+    );
+        void (*add_tree_parts_from_string_array)(
             struct DtwTree *self,
             struct DtwStringArray *paths,
             DtwTreeProps *props

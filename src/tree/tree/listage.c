@@ -1,6 +1,6 @@
 
 //listages
-struct DtwStringArray *DtwTree_list_files(struct DtwTree *self, const char *path,bool concat_path){
+ DtwStringArray *DtwTree_list_files( DtwTree *self, const char *path,bool concat_path){
     DtwStringArray *formated_elements = newDtwStringArray();
     for(int i = 0; i < self->size; i++){
         DtwTreePart *current = self->tree_parts[i];
@@ -44,7 +44,7 @@ struct DtwStringArray *DtwTree_list_files(struct DtwTree *self, const char *path
     return formated_elements;
 }
 
-struct DtwStringArray *DtwTree_list_dirs(struct DtwTree *self, const char *path,bool concat_path){
+ DtwStringArray *DtwTree_list_dirs( DtwTree *self, const char *path,bool concat_path){
 
     DtwStringArray *formated_elements = newDtwStringArray();
     for(int i = 0; i < self->size; i++){
@@ -89,7 +89,7 @@ struct DtwStringArray *DtwTree_list_dirs(struct DtwTree *self, const char *path,
     return formated_elements;
 }
 
-struct DtwStringArray *DtwTree_list_all(struct DtwTree *self, const char *path,bool concat_path){
+struct DtwStringArray *DtwTree_list_all( DtwTree *self, const char *path,bool concat_path){
 
     DtwStringArray *formated_elements = newDtwStringArray();
     for(int i = 0; i < self->size; i++){
@@ -137,7 +137,7 @@ struct DtwStringArray *DtwTree_list_all(struct DtwTree *self, const char *path,b
 
 }
 
-struct DtwStringArray *DtwTree_list_files_recursively(struct DtwTree *self, const char *path,bool concat_path){
+ DtwStringArray *DtwTree_list_files_recursively( DtwTree *self, const char *path,bool concat_path){
     DtwStringArray *formated_elements = newDtwStringArray();
     for(int i = 0; i < self->size; i++){
         DtwTreePart *current = self->tree_parts[i];
@@ -169,7 +169,7 @@ struct DtwStringArray *DtwTree_list_files_recursively(struct DtwTree *self, cons
     return formated_elements;
 }
 
-struct DtwStringArray *DtwTree_list_dirs_recursively(struct DtwTree *self, const char *path,bool concat_path){
+ DtwStringArray *DtwTree_list_dirs_recursively( DtwTree *self, const char *path,bool concat_path){
     DtwStringArray *formated_elements = newDtwStringArray();
     for(int i = 0; i < self->size; i++){
         DtwTreePart *current = self->tree_parts[i];
@@ -200,7 +200,7 @@ struct DtwStringArray *DtwTree_list_dirs_recursively(struct DtwTree *self, const
 }
 
 
-struct DtwStringArray *DtwTree_list_all_recursively(struct DtwTree *self, const char *path,bool concat_path){
+ DtwStringArray *DtwTree_list_all_recursively( DtwTree *self, const char *path,bool concat_path){
     DtwStringArray *formated_elements = newDtwStringArray();
     for(int i = 0; i < self->size; i++){
         DtwTreePart *current = self->tree_parts[i];
