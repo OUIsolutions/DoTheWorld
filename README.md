@@ -425,7 +425,7 @@ int main(int argc, char *argv[]){
 ~~~
 ### Unix
 
-<!--codeof:exemples/extras/S_get_entity_last_modification_in_unix.c-->
+<!--codeof:exemples/extras/get_entity_last_modification_in_unix.c-->
 ~~~c
 
 #include "doTheWorld.h"
@@ -437,7 +437,7 @@ int main(int argc, char *argv[]){
     printf("Last modification: %d\n", last_modification_in_unix);
 }
 ~~~
-<!--codeof:exemples/extras/S_get_entity_last_modification.c-->
+<!--codeof:exemples/extras/get_entity_last_modification.c-->
 ~~~c
 #include "doTheWorld.h"
 
@@ -1468,7 +1468,7 @@ int main (){
     dtw.hash.free(my_hash);
 }
 ~~~
-<!--codeof:exemples/hash/S_file_hashing_by_last_modification.c-->
+<!--codeof:exemples/hash/file_hashing_by_last_modification.c-->
 ~~~c
 #include "doTheWorld.h"
 
