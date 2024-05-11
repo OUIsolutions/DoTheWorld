@@ -49,7 +49,7 @@ void DtwResource_rename(DtwResource *self,const char *new_name){
 
     char *old_path = strdup(self->path);
     free(self->path);
-    self->path  = dtw_concat_path(self->mothers_path, new_name);
+    self->path  = dtw_concat_path(self->mother->path, new_name);
 
     if(self->allow_transaction){
         DtwTransaction_move_any(self->root_props->transaction,old_path,self->path);
