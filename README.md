@@ -897,7 +897,7 @@ int main(){
     dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target/",
-            &(DtwTreeProps){
+            (DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
@@ -922,7 +922,7 @@ int main(){
     dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target",
-            &(DtwTreeProps){
+            (DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
@@ -953,7 +953,7 @@ int main(){
     dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target",
-            &(DtwTreeProps){
+            (DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
@@ -984,7 +984,7 @@ int main(){
     dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target/",
-            &(DtwTreeProps){
+            (DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
@@ -1033,7 +1033,7 @@ int main(){
     dtw.tree.add_tree_from_hardware(
             tree,
             "exemple_folder",
-            &(DtwTreeProps){
+            (DtwTreeProps){
                 .content = DTW_INCLUDE,
                 .hadware_data=DTW_HIDE,
                 .path_atributes=DTW_INCLUDE
@@ -1084,7 +1084,7 @@ int main(){
     dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target",
-            &(DtwTreeProps){
+            (DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
@@ -1112,7 +1112,7 @@ int main(){
 DtwTreePart * concat_test(struct DtwTreePart *part){
     DtwNamespace dtw = newDtwNamespace();
 
-    if(part->content_exist_in_memory && part->is_binary == false){
+    if(part->content && part->is_binary == false){
         char *content = dtw.tree.part.get_content_string_by_reference(part);
         const char *mensage = " test";
         char *new_content = (char*)malloc(strlen(content) + strlen(mensage)+ 2);
@@ -1131,7 +1131,7 @@ int main(){
     dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target",
-            &(DtwTreeProps){
+            (DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
@@ -1166,7 +1166,7 @@ int main(){
     dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target",
-            &(DtwTreeProps){
+            (DtwTreeProps){
                 .content = DTW_INCLUDE,
                 .hadware_data=DTW_HIDE,
                 .path_atributes=DTW_INCLUDE
@@ -1207,7 +1207,7 @@ int main(){
     dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target",
-            &(DtwTreeProps){
+            (DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_INCLUDE,
                     .path_atributes=DTW_INCLUDE
@@ -1252,7 +1252,7 @@ int main(){
     dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target/",
-            &(DtwTreeProps){
+            (DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
@@ -1262,7 +1262,7 @@ int main(){
     dtw.tree.dumps_json_tree_to_file(
             tree,
             "tests/target/out.json",
-            &(DtwTreeProps){
+            (DtwTreeProps){
                     .minification = DTW_NOT_MIMIFY,
                     .ignored_elements=DTW_HIDE,
                     .content = DTW_INCLUDE,
@@ -1286,7 +1286,7 @@ int main(){
     dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target/",
-            &(DtwTreeProps){
+            (DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
@@ -1295,7 +1295,7 @@ int main(){
 
     char *content = dtw.tree.dumps_json_tree(
             tree,
-            &(DtwTreeProps){
+            (DtwTreeProps){
                     .minification = DTW_NOT_MIMIFY,
                     .ignored_elements=DTW_HIDE,
                     .content = DTW_INCLUDE,
@@ -1325,7 +1325,7 @@ void dumps_tree(){
     dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target",
-            &(DtwTreeProps){
+            (DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
@@ -1335,7 +1335,7 @@ void dumps_tree(){
     dtw.tree.dumps_json_tree_to_file(
             tree,
             "tests/target/out.json",
-            &(DtwTreeProps){
+            (DtwTreeProps){
                     .minification = DTW_MIMIFY,
                     .ignored_elements=DTW_HIDE,
                     .content = DTW_INCLUDE,
@@ -1372,7 +1372,7 @@ char *dumps_tree(){
     dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target",
-            &(DtwTreeProps){
+            (DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_INCLUDE,
                     .path_atributes=DTW_INCLUDE
@@ -1380,7 +1380,7 @@ char *dumps_tree(){
     );
     char *content = dtw.tree.dumps_json_tree(
             tree,
-            &(DtwTreeProps){
+            (DtwTreeProps){
                     .minification = DTW_MIMIFY,
                     .ignored_elements=DTW_HIDE,
                     .content = DTW_INCLUDE,

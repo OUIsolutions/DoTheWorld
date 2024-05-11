@@ -10,7 +10,7 @@ int main(){
     dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target",
-            &(DtwTreeProps){
+            (DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_INCLUDE,
                     .path_atributes=DTW_INCLUDE

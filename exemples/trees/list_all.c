@@ -8,7 +8,7 @@ int main(int argc, char *argv[]){
     dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target/",
-            &(DtwTreeProps){
+            (DtwTreeProps){
                     .content = DTW_HIDE,
                     .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE

@@ -766,6 +766,7 @@ void DtwPath_free(struct DtwPath *self);
 
 
 
+
 #define DTW_NOT_MIMIFY 1
 #define DTW_MIMIFY 2
 
@@ -787,7 +788,7 @@ typedef struct DtwTreeProps{
 
 
 
-DtwTreeProps DtwTreeProps_format_props(DtwTreeProps *props);
+DtwTreeProps DtwTreeProps_format_props(DtwTreeProps props);
 
 
 #define DTW_JSON_ERROR_CODE_OK 0
@@ -842,13 +843,15 @@ void  DtwTreeTransactionReport_free(struct DtwTreeTransactionReport *report);
 typedef struct DtwTreePart{
     
     struct DtwPath *path;
-    bool content_exist_in_memory;
-    size_t  hardware_content_size; 
+    void *owner;
+    size_t  hardware_content_size;
     long last_modification_time;
     bool content_exist_in_hardware;
     bool ignore;
     bool is_binary;
     bool metadata_loaded;
+    char *current_sha;
+    char * last_modification_in_str;
     char *hawdware_content_sha;
 
     unsigned char *content;
@@ -880,7 +883,7 @@ bool DtwTreePart_hardware_commit(struct DtwTreePart *self);
 void DtwTreePart_free(struct DtwTreePart *self);
 struct DtwTreePart * DtwTreePart_self_copy(struct DtwTreePart *self);
 
-struct DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps *props);
+struct DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps props);
 struct DtwTreePart * newDtwTreePartEmpty(const char *path);
 struct DtwTreePart * newDtwTreePartLoading(const char *path);
 
@@ -890,95 +893,77 @@ struct DtwTreePart * newDtwTreePartLoading(const char *path);
 
 typedef struct  DtwTree{
     int size;
-    struct DtwTreePart **tree_parts;
-
+     DtwTreePart **tree_parts;
 
 }DtwTree;
 
 
-struct DtwTree *DtwTree_get_sub_tree(
-    struct DtwTree *self,
+ DtwTree *DtwTree_get_sub_tree(
+     DtwTree *self,
     const char *path,
     bool copy_content
 );
 
-struct DtwTreePart *DtwTree_find_tree_part_by_function(
-        struct DtwTree *self,
-        bool (*caller)(struct  DtwTreePart *part)
-        );
-
-struct DtwTree *DtwTree_map(
-        struct DtwTree *self,
-        struct  DtwTreePart* (*caller)(struct  DtwTreePart *part)
-);
-
-struct DtwTree *DtwTree_filter(
-        struct DtwTree *self,
-        bool (*caller)(struct  DtwTreePart *part)
-);
+ DtwTreePart *DtwTree_find_tree_part_by_function(DtwTree *self,bool (*caller)(  DtwTreePart *part));
 
 
-struct DtwTreePart *DtwTree_find_tree_part_by_name(struct DtwTree *self, const char *name);
-struct DtwTreePart *DtwTree_find_tree_part_by_path(struct DtwTree *self, const char *path);
+ DtwTree *DtwTree_map(DtwTree *self, DtwTreePart* (*caller)( DtwTreePart *part));
+
+
+ DtwTree *DtwTree_filter(DtwTree *self,bool (*caller)(struct  DtwTreePart *part));
+
+
+ DtwTreePart *DtwTree_find_tree_part_by_name( DtwTree *self, const char *name);
+ DtwTreePart *DtwTree_find_tree_part_by_path( DtwTree *self, const char *path);
 
 //listages
-struct DtwStringArray *DtwTree_list_files(struct DtwTree *self, const char *path,bool concat_path);
+ DtwStringArray *DtwTree_list_files( DtwTree *self, const char *path,bool concat_path);
 
-struct DtwStringArray *DtwTree_list_dirs(struct DtwTree *self, const char *path,bool concat_path);
+ DtwStringArray *DtwTree_list_dirs( DtwTree *self, const char *path,bool concat_path);
 
-struct DtwStringArray *DtwTree_list_all(struct DtwTree *self, const char *path,bool concat_path);
+ DtwStringArray *DtwTree_list_all( DtwTree *self, const char *path,bool concat_path);
 
-struct DtwStringArray *DtwTree_list_files_recursively(struct DtwTree *self, const char *path,bool concat_path);
+ DtwStringArray *DtwTree_list_files_recursively( DtwTree *self, const char *path,bool concat_path);
 
-struct DtwStringArray *DtwTree_list_dirs_recursively(struct DtwTree *self, const char *path,bool concat_path);
+ DtwStringArray *DtwTree_list_dirs_recursively( DtwTree *self, const char *path,bool concat_path);
 
-struct DtwStringArray *DtwTree_list_all_recursively(struct DtwTree *self, const char *path,bool concat_path);
+ DtwStringArray *DtwTree_list_all_recursively( DtwTree *self, const char *path,bool concat_path);
 
 
-void DtwTree_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_part);
-void DtwTree_remove_tree_part(struct DtwTree *self, int position);
-void DtwTree_add_tree_part_by_reference(struct DtwTree *self, struct DtwTreePart *tree_part);
-void DtwTree_free(struct DtwTree *self);
-void DtwTree_represent(struct DtwTree *self);
+void DtwTree_remove_tree_part( DtwTree *self, int position);
 
-void DtwTree_add_tree_parts_from_string_array(
-    struct DtwTree *self,
-    struct DtwStringArray *paths,
-    DtwTreeProps *props
-);
+void DtwTree_add_tree_part_copy( DtwTree *self,  DtwTreePart *tree_part);
 
-void DtwTree_add_tree_from_hardware(
-    struct DtwTree *self,
-    const char *path,
-    DtwTreeProps *props
-);
+void DtwTree_add_tree_part_getting_onwership( DtwTree *self,  DtwTreePart *tree_part);
 
-struct DtwTreeTransactionReport * DtwTree_create_report(struct DtwTree *self);
+void DtwTree_add_tree_part_referencing( DtwTree *self,  DtwTreePart *tree_part);
+
+void DtwTree_free( DtwTree *self);
+void DtwTree_represent( DtwTree *self);
+
+void DtwTree_add_tree_parts_from_string_array(DtwTree *self,DtwStringArray *paths,DtwTreeProps props);
+
+void DtwTree_add_tree_from_hardware(DtwTree *self,const char *path,DtwTreeProps props);
+
+ DtwTreeTransactionReport * DtwTree_create_report( DtwTree *self);
 
 
 
-void DtwTree_insecure_hardware_remove_tree(struct DtwTree *self);
+void DtwTree_insecure_hardware_remove_tree( DtwTree *self);
 
-void DtwTree_insecure_hardware_write_tree(struct DtwTree *self);
+void DtwTree_insecure_hardware_write_tree( DtwTree *self);
 
-void DtwTree_hardware_commit_tree(struct DtwTree *self);
+void DtwTree_hardware_commit_tree( DtwTree *self);
 
-void DtwTree_loads_json_tree(struct DtwTree *self, const char *content);
+void DtwTree_loads_json_tree( DtwTree *self, const char *content);
 
-void DtwTree_loads_json_tree_from_file(struct DtwTree *self, const char *path);
+void DtwTree_loads_json_tree_from_file( DtwTree *self, const char *path);
 
-char * DtwTree_dumps_tree_json(
-        struct DtwTree *self,
-        DtwTreeProps * props
-    );
+char * DtwTree_dumps_tree_json(DtwTree *self,DtwTreeProps  props);
 
-void DtwTree_dumps_tree_json_to_file(
-        struct DtwTree *self,
-        const char *path,
-        DtwTreeProps * props
-    );
+void DtwTree_dumps_tree_json_to_file(DtwTree *self,const char *path,DtwTreeProps  props);
 
-struct  DtwTree * newDtwTree();
+  DtwTree * newDtwTree();
 
 
 
@@ -1548,7 +1533,7 @@ DtwStringArrayModule newDtwStringArrayModule();
 
 typedef struct DtwTreePartModule{
 
-    DtwTreePart  *(*newPart)(const char *path, DtwTreeProps *props);
+    DtwTreePart  *(*newPart)(const char *path, DtwTreeProps props);
     DtwTreePart  *(*newPartEmpty)(const char *path);
     DtwTreePart * (*newPartLoading)(const char *path);
 
@@ -1601,24 +1586,27 @@ typedef struct DtwTreeModule{
 
     DtwTree  *(*newTree)();
     void (*add_tree_part_by_copy)(
-            struct DtwTree *self,
-            struct DtwTreePart *tree_part
+             DtwTree *self,
+             DtwTreePart *tree_part
     );
 
     void (*remove_tree_part)(
-            struct DtwTree *self,
+             DtwTree *self,
             int position
     );
 
-    void (*add_tree_part_by_reference)(
-            struct DtwTree *self,
-            struct DtwTreePart *tree_part
+    void (*add_tree_part_getting_owenership)(
+             DtwTree *self,
+             DtwTreePart *tree_part
     );
-
-    void (*add_tree_parts_from_string_array)(
+    void (*add_tree_part_referencing)(
+            DtwTree *self,
+            DtwTreePart *tree_part
+    );
+        void (*add_tree_parts_from_string_array)(
             struct DtwTree *self,
             struct DtwStringArray *paths,
-            DtwTreeProps *props
+            DtwTreeProps props
     );
 
     struct DtwTree *(*get_sub_tree)(
@@ -1630,7 +1618,7 @@ typedef struct DtwTreeModule{
     void (*add_tree_from_hardware)(
             struct DtwTree *self,
             const char *path,
-            DtwTreeProps *props
+            DtwTreeProps props
     );
     //Listage Functions
 
@@ -1678,13 +1666,13 @@ typedef struct DtwTreeModule{
 
     char *(*dumps_json_tree)(
             struct DtwTree *self,
-            DtwTreeProps * props
+            DtwTreeProps props
     );
 
     void (*dumps_json_tree_to_file)(
             struct DtwTree *self,
             const char *path,
-            DtwTreeProps * props
+            DtwTreeProps  props
     );
 
     void (*represent)(struct DtwTree *self);
@@ -5407,6 +5395,8 @@ void calc_sha_256(uint8_t hash[SIZE_OF_SHA_256_HASH], const void *input, size_t 
 
 char * calc_sha_256_returning_string(const void *input, size_t len)
 {
+
+
 	uint8_t hash[SIZE_OF_SHA_256_HASH];
 	calc_sha_256(hash, input, len);
 	char *hash_string = (char*)malloc(SIZE_OF_SHA_256_HASH * 2 + 1);
@@ -5579,10 +5569,16 @@ char * dtw_generate_sha_from_file(const char *path){
 }
 
 char * dtw_generate_sha_from_any(void *anything , long size){
+    if(anything ==NULL) {
+        return NULL;
+    }
     return calc_sha_256_returning_string(anything,size);
 }   
 
 char * dtw_generate_sha_from_string(const char *string){
+    if(string == NULL) {
+        return  NULL;
+    }
     return calc_sha_256_from_string_returning_string(string);
 }
 
@@ -7006,12 +7002,9 @@ void DtwStringArray_free(struct DtwStringArray *self){
 // Created by jurandi on 01-07-2023.
 //
 
-DtwTreeProps DtwTreeProps_format_props(DtwTreeProps *props){
-    DtwTreeProps result = {0};
+DtwTreeProps DtwTreeProps_format_props(DtwTreeProps props){
+    DtwTreeProps result = props;
 
-    if(props){
-        result = *props;
-    }
     if(!result.minification){
         result.minification = DTW_NOT_MIMIFY;
     }
@@ -7206,28 +7199,18 @@ void  DtwTreeTransactionReport_free(struct DtwTreeTransactionReport *report){
 
 
 
-struct DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps *props){
+struct DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps props){
     DtwTreeProps formated_props = DtwTreeProps_format_props(props);
 
-    struct DtwTreePart *self = (struct DtwTreePart *)malloc(sizeof(struct DtwTreePart));
+    DtwTreePart *self = (DtwTreePart *)malloc(sizeof(struct DtwTreePart));
+    *self = (DtwTreePart){0};
     self->path = newDtwPath(path);
-    self->content_exist_in_memory = false;
-    self->content_exist_in_hardware = false;
-    self->last_modification_time = 0;
-    self->is_binary = false;
-    self->ignore = false;
-    self->metadata_loaded = false;
-    self->pending_action = 0;
-    self->hawdware_content_sha = (char *)malloc(0);
-    self->content = (unsigned char *)malloc(0);
-    self->content_size = 0;
-    self->hardware_content_size = 0;
 
 
     if(formated_props.content == DTW_INCLUDE || formated_props.hadware_data == DTW_INCLUDE){
         
         DtwTreePart_load_content_from_hardware(self);
-        if(formated_props.hadware_data == DTW_INCLUDE && self->content_exist_in_memory){
+        if(formated_props.hadware_data == DTW_INCLUDE && self->content){
 
             self->metadata_loaded = true;
             self->last_modification_time = dtw_get_entity_last_motification_in_unix(path);
@@ -7243,59 +7226,56 @@ struct DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps *props){
     return self;
 }
 char *DtwTreePart_get_content_string_by_reference(struct DtwTreePart *self){
-    if(self->content_exist_in_memory == true){
-        return (char *)self->content;
-    }
-    return NULL;
+    return (char *)self->content;
 }
 
 unsigned char *DtwTreePart_get_content_binary_by_reference(struct DtwTreePart *self){
-    if(self->content_exist_in_memory == true){
-        return self->content;
-    }
-    return NULL;
+    return self->content;
 }
 
 
-struct  DtwTreePart * DtwTreePart_self_copy(struct DtwTreePart *self){
+struct  DtwTreePart * DtwTreePart_self_copy( DtwTreePart *self){
     char *path = DtwPath_get_path(self->path);
+
     DtwTreeProps props = {.content =DTW_NOT_LOAD,.hadware_data = DTW_NOT_LOAD};
     DtwTreePart *new_tree_part = newDtwTreePart(
             path,
-            &props
+            props
     );
 
-    new_tree_part->content_exist_in_memory = self->content_exist_in_memory;
     new_tree_part->content_exist_in_hardware = self->content_exist_in_hardware;
     new_tree_part->is_binary = self->is_binary;
     new_tree_part->ignore = self->ignore;
     new_tree_part->content_size = self->content_size;
 
-    char * possible_sha = DtwTreePart_get_content_sha(self);
+    char * current_sha = DtwTreePart_get_content_sha(self);
 
-    if(possible_sha){
-        free(new_tree_part->hawdware_content_sha);
-        new_tree_part->hawdware_content_sha = possible_sha;
+    if(current_sha) {
+        new_tree_part->current_sha = strdup(current_sha);
     }
 
-
-    free(new_tree_part->content);
-    new_tree_part->content = (unsigned char *)malloc(self->content_size + 2);
-    
-    if(new_tree_part->is_binary == false){
-            new_tree_part->content[self->content_size] = '\0';    
+    if(self->hawdware_content_sha){
+        new_tree_part->hawdware_content_sha = strdup(self->hawdware_content_sha);
     }
-    
-    memcpy(new_tree_part->content,self->content,self->content_size);
+
+    if(self->content) {
+        new_tree_part->content = (unsigned char *)malloc(self->content_size + 2);
+        memcpy(new_tree_part->content,self->content,self->content_size);
+
+        if(self->is_binary == false){
+            new_tree_part->content[self->content_size] = '\0';
+        }
+
+    }
+
 
     
     return new_tree_part;
 }
 
-void DtwTreePart_set_any_content(struct DtwTreePart *self, unsigned char *content, int content_size, bool is_binary){
+void DtwTreePart_set_any_content( DtwTreePart *self, unsigned char *content, int content_size, bool is_binary){
 
     DtwTreePart_free_content(self);
-    self->content_exist_in_memory = true;
     self->is_binary = is_binary;
     self->content = (unsigned char *)malloc(content_size+2);
     memcpy(self->content,content,content_size);
@@ -7304,7 +7284,7 @@ void DtwTreePart_set_any_content(struct DtwTreePart *self, unsigned char *conten
 
 }
 
-void DtwTreePart_set_string_content(struct DtwTreePart *self, const char *content){
+void DtwTreePart_set_string_content( DtwTreePart *self, const char *content){
     DtwTreePart_set_any_content(
         self,
         (unsigned char*)content,
@@ -7315,29 +7295,38 @@ void DtwTreePart_set_string_content(struct DtwTreePart *self, const char *conten
     self->content[self->content_size] = '\0';
 }
 
-void DtwTreePart_set_binary_content(struct DtwTreePart *self, unsigned char *content, int content_size){
+void DtwTreePart_set_binary_content( DtwTreePart *self, unsigned char *content, int content_size){
     DtwTreePart_set_any_content(self,content,content_size,true);
 }
 
 
-char *DtwTreePart_get_content_sha(struct DtwTreePart *self){
-    if(self->content_exist_in_memory){
-
-        return dtw_generate_sha_from_string((char *)self->content);
+char *DtwTreePart_get_content_sha( DtwTreePart *self){
+    if(self->content == NULL) {
+        return NULL;
     }
-    return NULL;
+    if(self->current_sha) {
+        free(self->current_sha);
+    }
+    self->current_sha =dtw_generate_sha_from_any(self->content,self->content_size);;
+    return self->current_sha;
 }
 
-char *DtwTreePart_last_modification_time_in_string(struct DtwTreePart *self){
-    return dtw_convert_unix_time_to_string(self->last_modification_time);
+
+char *DtwTreePart_last_modification_time_in_string(DtwTreePart *self){
+    if(self->last_modification_in_str) {
+        free(self->last_modification_in_str);
+    }
+    self->last_modification_in_str = dtw_convert_unix_time_to_string(self->last_modification_time);
+    return self->last_modification_in_str;
 }
+
 
 
 
 void DtwTreePart_represent(struct DtwTreePart *self){
     printf("------------------------------------------------------------\n");
     DtwPath_represent(self->path);
-    printf("Content Exist in Memory: %s\n",self->content_exist_in_memory ? "true" : "false");
+    printf("Content Exist in Memory: %s\n",self->content ? "true" : "false");
     printf("Ignore: %s\n",self->ignore ? "true" : "false");
 
     printf("Content Exist In Hardware: %s\n",self->content_exist_in_hardware ? "true" : "false");
@@ -7347,7 +7336,6 @@ void DtwTreePart_represent(struct DtwTreePart *self){
         printf("Last Modification Time in Unix: %li\n",self->last_modification_time);
         char *last_moditication_in_string = DtwTreePart_last_modification_time_in_string(self);
         printf("Last Modification Time: %s\n",last_moditication_in_string);
-        free(last_moditication_in_string);
     }
 
     printf("Content Size: %li\n",self->content_size);
@@ -7355,11 +7343,15 @@ void DtwTreePart_represent(struct DtwTreePart *self){
     char *content_sha = DtwTreePart_get_content_sha(self);
     if(content_sha){
         printf("Content SHA:  %s\n",content_sha);
-        free(content_sha);
     }
-    if(self->content_exist_in_memory && self->is_binary == false){
-        printf ("Content: %s\n",self->content);
+    if(self->content && self->is_binary == false){
+        printf ("Content: %s\n",(char*)self->content);
     }
+
+    if(self->hawdware_content_sha) {
+        printf("Original Hardware SHA:%s\n",self->hawdware_content_sha);
+    }
+
     if(self->is_binary == true){
         printf("Content: Binary\n");
     }
@@ -7374,34 +7366,45 @@ void DtwTreePart_represent(struct DtwTreePart *self){
 
 
 void DtwTreePart_free_content(struct DtwTreePart *self){
-    self->content_exist_in_memory = false;
     if(self->content){
         free(self->content);
     }
+    self->content = NULL;
 
 }
 void DtwTreePart_free(struct DtwTreePart *self){
-    DtwPath_free(self->path);
-    free(self->hawdware_content_sha);
-    free(self->content);
+    if(self->path) {
+        DtwPath_free(self->path);
+    }
+
+    if(self->hawdware_content_sha) {
+        free(self->hawdware_content_sha);
+    }
+    if(self->current_sha) {
+        free(self->current_sha);
+    }
+    if(self->last_modification_in_str) {
+        free(self->last_modification_in_str);
+    }
+    DtwTreePart_free_content(self);
     free(self);
 }
 
-struct DtwTreePart * newDtwTreePartEmpty(const char *path){
+ DtwTreePart * newDtwTreePartEmpty(const char *path){
     DtwTreeProps  props = {.content =DTW_NOT_LOAD,.hadware_data = DTW_NOT_LOAD};
     return newDtwTreePart(
             path,
-         &props
+         props
     );
 
 }
 
 
-struct DtwTreePart * newDtwTreePartLoading(const char *path){
+ DtwTreePart * newDtwTreePartLoading(const char *path){
     DtwTreeProps  props = {.content =DTW_LOAD,.hadware_data = DTW_LOAD};
     return newDtwTreePart(
             path,
-            &props
+            props
     );
 }
 
@@ -7431,8 +7434,7 @@ void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self){
         self->content = (unsigned char *)strdup("");
     }    
 
-    self->content_exist_in_memory = true;
-    
+
     self->is_binary = is_binary;
     self->content_size = size;
     self->hardware_content_size = size;
@@ -7469,7 +7471,7 @@ bool DtwTreePart_hardware_write(struct DtwTreePart *self, int transaction){
         return false;
     }   
     //means that the content not exist in memory
-    if(self->content_exist_in_memory == false){
+    if(self->content == NULL){
         char *path = DtwPath_get_path(self->path);
         char *dir = DtwPath_get_dir(self->path);
         int entity_type = dtw_entity_type(path);
@@ -7506,7 +7508,7 @@ bool DtwTreePart_hardware_modify(struct DtwTreePart *self, int transaction){
     bool changed_path =DtwPath_changed(self->path);
 
     
-    if(changed_path == true && self->content_exist_in_memory == false){
+    if(changed_path == true && self->content == NULL){
         char *old_path = self->path->original_path;
         char *new_path = DtwPath_get_path(self->path);
         dtw_move_any(old_path,new_path,true);
@@ -7514,13 +7516,13 @@ bool DtwTreePart_hardware_modify(struct DtwTreePart *self, int transaction){
     }
     bool write = false;
 
-    if(changed_path == true && self->content_exist_in_memory == true ){
+    if(changed_path == true && self->content ){
         char *old_path = self->path->original_path;
         dtw_remove_any(old_path);
         write = true;
     }
 
-    if(changed_path== false && self->content_exist_in_memory == true ){
+    if(changed_path== false && self->content ){
     
         if(self->metadata_loaded == true){
             char *hardware_sha = self->hawdware_content_sha;
@@ -7572,9 +7574,9 @@ bool DtwTreePart_hardware_commit(struct DtwTreePart *self){
 
 
 
-void DtwTree_loads_json_tree(struct DtwTree *self, const char *content){
+void DtwTree_loads_json_tree(struct DtwTree *self, const char *all_tree){
     //load json
-    cJSON *json_tree = cJSON_Parse(content);
+    cJSON *json_tree = cJSON_Parse(all_tree);
     int size = cJSON_GetArraySize(json_tree);
     for(int i = 0; i < size; i++){
 
@@ -7625,15 +7627,14 @@ void DtwTree_loads_json_tree(struct DtwTree *self, const char *content){
         }
 
         if(content != NULL){
-            part->content_exist_in_memory = true;
-        
+
             if(part->is_binary){
                 long out_size;
                 unsigned char *decoded =dtw_base64_decode(
                     content->valuestring,
                     &out_size
                 );
-                DtwTreePart_set_binary_content(part,decoded,(int)out_size);
+                DtwTreePart_set_binary_content(part,decoded,out_size);
                 free(decoded);
             }
            else{
@@ -7650,20 +7651,20 @@ void DtwTree_loads_json_tree(struct DtwTree *self, const char *content){
             part->ignore = ignore->valueint;
         }
 
-        DtwTree_add_tree_part_by_reference(self, part);
+        DtwTree_add_tree_part_getting_onwership(self, part);
         
     }
     cJSON_Delete(json_tree);
 }
 
 
-void DtwTree_loads_json_tree_from_file(struct DtwTree *self, const char *path){
+void DtwTree_loads_json_tree_from_file( DtwTree *self, const char *path){
     char *content = dtw_load_string_file_content(path);
     DtwTree_loads_json_tree(self,content);
     free(content);
 }
 
-char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwTreeProps * props){
+char * DtwTree_dumps_tree_json( DtwTree *self, DtwTreeProps  props){
 
 
     DtwTreeProps formated_props = DtwTreeProps_format_props(props);
@@ -7672,12 +7673,13 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwTreeProps * props){
     for(int i = 0; i < self->size; i++){
        
         cJSON *json_tree_part = cJSON_CreateObject();
-        struct DtwTreePart *tree_part = self->tree_parts[i];
+        DtwTreePart *tree_part = self->tree_parts[i];
         char *path_string = DtwPath_get_path(tree_part->path);
-        if(!path_string){
+        if(path_string ==NULL){
             cJSON_Delete(json_tree_part);
             continue;
         }
+
         if(formated_props.ignored_elements == DTW_INCLUDE && tree_part->ignore){
             continue;
         }
@@ -7767,7 +7769,7 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwTreeProps * props){
             
         }
 
-        if(formated_props.content_data == DTW_INCLUDE && tree_part->content_exist_in_memory){
+        if(formated_props.content_data == DTW_INCLUDE && tree_part->content){
             char *content_sha = DtwTreePart_get_content_sha(tree_part);
             cJSON_AddItemToObject(
                 json_tree_part, 
@@ -7781,10 +7783,9 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwTreeProps * props){
                 cJSON_CreateString(content_sha)
             );
 
-            free(content_sha);
         }
 
-        if(formated_props.content == DTW_INCLUDE && tree_part->content_exist_in_memory){
+        if(formated_props.content == DTW_INCLUDE && tree_part->content){
 
             cJSON_AddItemToObject(
                 json_tree_part, 
@@ -7834,7 +7835,7 @@ char * DtwTree_dumps_tree_json(struct DtwTree *self, DtwTreeProps * props){
     return json_string;
 }
 
-void  DtwTree_dumps_tree_json_to_file(struct DtwTree *self, const char *path, DtwTreeProps * props){
+void  DtwTree_dumps_tree_json_to_file(struct DtwTree *self, const char *path, DtwTreeProps  props){
     char *json_string = DtwTree_dumps_tree_json(self,props);
     dtw_write_string_file_content(path,json_string);
     free(json_string);
@@ -7878,26 +7879,23 @@ struct DtwTree *DtwTree_filter(
 }
 
 
-struct DtwTree *DtwTree_map(
-        struct DtwTree *self,
-        struct DtwTreePart *(*caller)(struct  DtwTreePart *part)
-){
-    struct DtwTree *mapped_tree = newDtwTree();
+ DtwTree *DtwTree_map(DtwTree *self,DtwTreePart *(*caller)( DtwTreePart *part)){
+     DtwTree *mapped_tree = newDtwTree();
 
     for(int i = 0;i < self->size; i++){
-        struct DtwTreePart *current = self->tree_parts[i];
-        struct DtwTreePart *copy = DtwTreePart_self_copy(current);
-        struct DtwTreePart *result = caller(copy);
-        DtwTree_add_tree_part_by_reference(mapped_tree, result);
+         DtwTreePart *current = self->tree_parts[i];
+         DtwTreePart *copy = DtwTreePart_self_copy(current);
+         DtwTreePart *result = caller(copy);
+        DtwTree_add_tree_part_getting_onwership(mapped_tree, result);
     }
     return mapped_tree;
 }
 
 
-struct DtwTreePart *DtwTree_find_tree_part_by_name(struct DtwTree *self, const char *name){
+ DtwTreePart *DtwTree_find_tree_part_by_name( DtwTree *self, const char *name){
     for(int i = 0;i < self->size; i++){
-        struct DtwTreePart *current = self->tree_parts[i];
-        struct DtwPath *current_path = current->path;
+        DtwTreePart *current = self->tree_parts[i];
+        DtwPath *current_path = current->path;
         char *current_name = DtwPath_get_full_name(current_path);
         if(current_name){
 
@@ -7911,10 +7909,10 @@ struct DtwTreePart *DtwTree_find_tree_part_by_name(struct DtwTree *self, const c
     return NULL;
 }
 
-struct DtwTreePart *DtwTree_find_tree_part_by_path(struct DtwTree *self, const char *path){
+ DtwTreePart *DtwTree_find_tree_part_by_path( DtwTree *self, const char *path){
     for(int i = 0;i < self->size; i++){
-        struct DtwTreePart *current = self->tree_parts[i];
-        struct DtwPath *current_path = current->path;
+         DtwTreePart *current = self->tree_parts[i];
+         DtwPath *current_path = current->path;
         char *current_path_string = DtwPath_get_path(current_path);
         if(current_path_string){
             if(strcmp(current_path_string, path) == 0){
@@ -7929,7 +7927,7 @@ struct DtwTreePart *DtwTree_find_tree_part_by_path(struct DtwTree *self, const c
 
 
 //listages
-struct DtwStringArray *DtwTree_list_files(struct DtwTree *self, const char *path,bool concat_path){
+ DtwStringArray *DtwTree_list_files( DtwTree *self, const char *path,bool concat_path){
     DtwStringArray *formated_elements = newDtwStringArray();
     for(int i = 0; i < self->size; i++){
         DtwTreePart *current = self->tree_parts[i];
@@ -7973,7 +7971,7 @@ struct DtwStringArray *DtwTree_list_files(struct DtwTree *self, const char *path
     return formated_elements;
 }
 
-struct DtwStringArray *DtwTree_list_dirs(struct DtwTree *self, const char *path,bool concat_path){
+ DtwStringArray *DtwTree_list_dirs( DtwTree *self, const char *path,bool concat_path){
 
     DtwStringArray *formated_elements = newDtwStringArray();
     for(int i = 0; i < self->size; i++){
@@ -8018,7 +8016,7 @@ struct DtwStringArray *DtwTree_list_dirs(struct DtwTree *self, const char *path,
     return formated_elements;
 }
 
-struct DtwStringArray *DtwTree_list_all(struct DtwTree *self, const char *path,bool concat_path){
+struct DtwStringArray *DtwTree_list_all( DtwTree *self, const char *path,bool concat_path){
 
     DtwStringArray *formated_elements = newDtwStringArray();
     for(int i = 0; i < self->size; i++){
@@ -8066,7 +8064,7 @@ struct DtwStringArray *DtwTree_list_all(struct DtwTree *self, const char *path,b
 
 }
 
-struct DtwStringArray *DtwTree_list_files_recursively(struct DtwTree *self, const char *path,bool concat_path){
+ DtwStringArray *DtwTree_list_files_recursively( DtwTree *self, const char *path,bool concat_path){
     DtwStringArray *formated_elements = newDtwStringArray();
     for(int i = 0; i < self->size; i++){
         DtwTreePart *current = self->tree_parts[i];
@@ -8098,7 +8096,7 @@ struct DtwStringArray *DtwTree_list_files_recursively(struct DtwTree *self, cons
     return formated_elements;
 }
 
-struct DtwStringArray *DtwTree_list_dirs_recursively(struct DtwTree *self, const char *path,bool concat_path){
+ DtwStringArray *DtwTree_list_dirs_recursively( DtwTree *self, const char *path,bool concat_path){
     DtwStringArray *formated_elements = newDtwStringArray();
     for(int i = 0; i < self->size; i++){
         DtwTreePart *current = self->tree_parts[i];
@@ -8129,7 +8127,7 @@ struct DtwStringArray *DtwTree_list_dirs_recursively(struct DtwTree *self, const
 }
 
 
-struct DtwStringArray *DtwTree_list_all_recursively(struct DtwTree *self, const char *path,bool concat_path){
+ DtwStringArray *DtwTree_list_all_recursively( DtwTree *self, const char *path,bool concat_path){
     DtwStringArray *formated_elements = newDtwStringArray();
     for(int i = 0; i < self->size; i++){
         DtwTreePart *current = self->tree_parts[i];
@@ -8177,23 +8175,28 @@ struct DtwTree *DtwTree_get_sub_tree(struct DtwTree *self, const char *path, boo
         char *current_path =  DtwPath_get_path(tree_part->path);
         if(dtw_starts_with(current_path,path)){
             if(copy_content){
-                DtwTree_add_tree_part_copy(sub_tree,DtwTreePart_self_copy(tree_part));
+                DtwTree_add_tree_part_copy(sub_tree,tree_part);
             }
-            else{
-                DtwTree_add_tree_part_by_reference(sub_tree, tree_part);
-
+            if(!copy_content){
+                DtwTree_add_tree_part_referencing(sub_tree, tree_part);
             }
         }
-        free(current_path);
     }
     return sub_tree;
 }
 
-
-void DtwTree_add_tree_part_copy(struct DtwTree *self, struct DtwTreePart *tree_part){
+void DtwTree_add_tree_part_referencing(struct DtwTree *self, struct DtwTreePart *tree_part) {
     self->size++;
     self->tree_parts =  (struct DtwTreePart**)realloc(self->tree_parts, self->size * sizeof(struct DtwTreePart *));
-    self->tree_parts[self->size - 1] = DtwTreePart_self_copy(tree_part);
+    self->tree_parts[self->size - 1] = tree_part;
+}
+
+void DtwTree_add_tree_part_copy( DtwTree *self,  DtwTreePart *tree_part){
+    self->size++;
+    self->tree_parts =  (struct DtwTreePart**)realloc(self->tree_parts, self->size * sizeof(struct DtwTreePart *));
+    DtwTreePart *copy = DtwTreePart_self_copy(tree_part);
+    copy->owner = (void*)self;
+    self->tree_parts[self->size - 1] = copy;
        
 }
 
@@ -8234,34 +8237,34 @@ struct DtwTreeTransactionReport * DtwTree_create_report(struct DtwTree *self){
 }
 
 
-void DtwTree_add_tree_part_by_reference(struct DtwTree *self, struct DtwTreePart *tree_part){
-    self->size++;
-    self->tree_parts =  (struct DtwTreePart**)realloc(self->tree_parts, self->size * sizeof(struct DtwTreePart *));
-    self->tree_parts[self->size - 1] = tree_part;
+void DtwTree_add_tree_part_getting_onwership( DtwTree *self,  DtwTreePart *tree_part){
+    DtwTree_add_tree_part_referencing(self,tree_part);
+    tree_part->owner = (void*)self;
 }
 
 
-void DtwTree_represent(struct DtwTree *self){
+
+void DtwTree_represent( DtwTree *self){
     for(int i = 0; i < self->size; i++){
         DtwTreePart_represent(self->tree_parts[i]);
     }
 }
 
-void DtwTree_add_tree_parts_from_string_array(struct DtwTree *self, struct DtwStringArray *paths,DtwTreeProps *props){
+void DtwTree_add_tree_parts_from_string_array( DtwTree *self,  DtwStringArray *paths,DtwTreeProps props){
     for(int i = 0; i < paths->size; i++){
 
         const char *current_path = paths->strings[i];
-        struct DtwTreePart *tree_part = newDtwTreePart(
+         DtwTreePart *tree_part = newDtwTreePart(
                 current_path,
                 props
         );
 
-        DtwTree_add_tree_part_by_reference(self, tree_part);
+        DtwTree_add_tree_part_getting_onwership(self, tree_part);
     }
 }
 
 
-void DtwTree_add_tree_from_hardware(struct DtwTree *self,const char *path, DtwTreeProps *props){
+void DtwTree_add_tree_from_hardware( DtwTree *self,const char *path, DtwTreeProps props){
     DtwTreeProps formated_props = DtwTreeProps_format_props(props);
     struct DtwStringArray *path_array = dtw_list_all_recursively(path,DTW_CONCAT_PATH);
     DtwStringArray_sort(path_array);
@@ -8300,9 +8303,14 @@ void DtwTree_add_tree_from_hardware(struct DtwTree *self,const char *path, DtwTr
 
 }
 
-void DtwTree_free(struct DtwTree *self){
+void DtwTree_free( DtwTree *self){
     for(int i = 0; i < self->size; i++){
-        DtwTreePart_free(self->tree_parts[i]);
+        DtwTreePart * part = self->tree_parts[i];
+        if(part->owner == (void*)self) {
+            DtwTreePart_free(part);
+
+        }
+
     }
     
     free(self->tree_parts);
@@ -10608,7 +10616,8 @@ DtwTreeModule newDtwTreeModule(){
     self.newTree = newDtwTree;
     self.add_tree_part_by_copy = DtwTree_add_tree_part_copy;
     self.remove_tree_part  = DtwTree_remove_tree_part;
-    self.add_tree_part_by_reference = DtwTree_add_tree_part_by_reference;
+    self.add_tree_part_getting_owenership = DtwTree_add_tree_part_getting_onwership;
+    self.add_tree_part_referencing = DtwTree_add_tree_part_referencing;
     self.add_tree_parts_from_string_array = DtwTree_add_tree_parts_from_string_array;
     self.get_sub_tree = DtwTree_get_sub_tree;
     self.add_tree_from_hardware = DtwTree_add_tree_from_hardware;
