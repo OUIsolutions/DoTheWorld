@@ -6,7 +6,7 @@
 DtwTreePart * concat_test(struct DtwTreePart *part){
     DtwNamespace dtw = newDtwNamespace();
 
-    if(part->content_exist_in_memory && part->is_binary == false){
+    if(part->content && part->is_binary == false){
         char *content = dtw.tree.part.get_content_string_by_reference(part);
         const char *mensage = " test";
         char *new_content = (char*)malloc(strlen(content) + strlen(mensage)+ 2);
@@ -25,7 +25,7 @@ int main(){
     dtw.tree.add_tree_from_hardware(
             tree,
             "tests/target",
-            &(DtwTreeProps){
+            (DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
