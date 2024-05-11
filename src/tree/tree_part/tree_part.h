@@ -22,6 +22,8 @@ typedef struct DtwTreePart{
     bool ignore;
     bool is_binary;
     bool metadata_loaded;
+    char *current_sha;
+    char * last_modification_in_str;
     char *hawdware_content_sha;
 
     unsigned char *content;
