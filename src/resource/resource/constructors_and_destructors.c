@@ -104,6 +104,10 @@ void DtwResource_free(DtwResource *self){
     if(is_root){
         privateDtwResourceRootProps_free(self->root_props);
     }
+    if(self->schema){
+        DtwSchema  *schema = (DtwSchema*)self->schema;
+        privateDtwSchema_free_self_props(schema);
+    }
 
 
     DtwResourceArray_free((DtwResourceArray*)self->sub_resources);
