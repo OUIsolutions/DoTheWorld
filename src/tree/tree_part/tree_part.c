@@ -38,6 +38,7 @@ unsigned char *DtwTreePart_get_content_binary_by_reference(struct DtwTreePart *s
 
 struct  DtwTreePart * DtwTreePart_self_copy( DtwTreePart *self){
     char *path = DtwPath_get_path(self->path);
+
     DtwTreeProps props = {.content =DTW_NOT_LOAD,.hadware_data = DTW_NOT_LOAD};
     DtwTreePart *new_tree_part = newDtwTreePart(
             path,
@@ -49,10 +50,14 @@ struct  DtwTreePart * DtwTreePart_self_copy( DtwTreePart *self){
     new_tree_part->ignore = self->ignore;
     new_tree_part->content_size = self->content_size;
 
-    char * possible_sha = DtwTreePart_get_content_sha(self);
+    char * current_sha = DtwTreePart_get_content_sha(self);
 
-    if(possible_sha){
-        new_tree_part->hawdware_content_sha = possible_sha;
+    if(current_sha) {
+        new_tree_part->current_sha = strdup(current_sha);
+    }
+
+    if(self->hawdware_content_sha){
+        new_tree_part->hawdware_content_sha = strdup(self->hawdware_content_sha);
     }
 
     if(self->content) {

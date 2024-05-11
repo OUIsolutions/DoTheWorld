@@ -24,7 +24,6 @@ struct DtwTree *DtwTree_get_sub_tree(struct DtwTree *self, const char *path, boo
                 DtwTree_add_tree_part_referencing(sub_tree, tree_part);
             }
         }
-        free(current_path);
     }
     return sub_tree;
 }
