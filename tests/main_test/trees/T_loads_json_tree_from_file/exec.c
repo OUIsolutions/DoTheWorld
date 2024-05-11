@@ -20,7 +20,7 @@ void dumps_tree(){
     dtw.tree.dumps_json_tree_to_file(
             tree,
             "tests/target/out.json",
-            &(DtwTreeProps){
+            (DtwTreeProps){
                     .minification = DTW_MIMIFY,
                     .ignored_elements=DTW_HIDE,
                     .content = DTW_INCLUDE,
