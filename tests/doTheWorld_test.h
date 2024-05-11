@@ -1262,10 +1262,9 @@ typedef struct DtwResource{
     bool allow_transaction;
     bool use_locker_on_unique_values;
     privateDtwResourceRootProps *root_props;
-    char *mothers_path;
+    struct DtwResource *mother;
     char *name;
     char *path;
-    bool child;
 
     bool loaded;
     bool is_binary;
@@ -8764,7 +8763,7 @@ void DtwResource_rename(DtwResource *self,const char *new_name){
 
     char *old_path = strdup(self->path);
     free(self->path);
-    self->path  = dtw_concat_path(self->mothers_path, new_name);
+    self->path  = dtw_concat_path(self->mother->path, new_name);
 
     if(self->allow_transaction){
         DtwTransaction_move_any(self->root_props->transaction,old_path,self->path);
@@ -9411,8 +9410,7 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
     new_element->root_props = self->root_props;
     //copied elements
 
-    new_element->child = true;
-    new_element->mothers_path = strdup(self->path);
+    new_element->mother = self;
     new_element->path = dtw_concat_path(self->path, name);
     new_element->name = strdup(name);
 
@@ -9472,9 +9470,8 @@ DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,cons
 }
 
 void DtwResource_free(DtwResource *self){
-    bool is_root = !self->child;
+    bool is_root = self->mother == NULL;
     if(is_root){
-
         privateDtwResourceRootProps_free(self->root_props);
     }
 
@@ -9482,9 +9479,7 @@ void DtwResource_free(DtwResource *self){
     DtwResourceArray_free((DtwResourceArray*)self->sub_resources);
 
 
-    if(self->mothers_path){
-        free(self->mothers_path);
-    }
+
     if(self->value_any){
         free(self->value_any);
     }

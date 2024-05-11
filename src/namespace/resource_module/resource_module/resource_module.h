@@ -7,15 +7,13 @@ typedef struct DtwResourceModule{
 
     char * (*get_error_message)(DtwResource *self);
 
-    struct DtwResource * (*sub_resource)(struct DtwResource *self,const  char *format,...);
+    DtwResource * (*sub_resource)(struct DtwResource *self,const  char *format,...);
     unsigned char *(*get_any_from_sub_resource)(DtwResource *self, long *size, bool *is_binary,const char *format,...);
     unsigned char *(*get_binary_from_sub_resource)(DtwResource *self, long *size,const char *format,...);
     char *(*get_string_from_sub_resource)(DtwResource *self,const char *format,...);
     long (*get_long_from_sub_resource)(DtwResource *self,const char *format,...);
     double (*get_double_from_sub_resource)(DtwResource *self,const char *format,...);
     bool (*get_bool_from_sub_resource)(DtwResource *self,const char *format,...);
-
-
     void (*set_binary_in_sub_resource)(DtwResource *self, unsigned char *element, long size,const char *format,...);
     void (*set_string_in_sub_resource)(DtwResource *self,const  char *element,const char *format,...);
     void (*set_long_in_sub_resource)(DtwResource *self,long element,const char *format,...);
