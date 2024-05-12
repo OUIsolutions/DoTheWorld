@@ -6,4 +6,5 @@
 #include "transaction_module/definition.h"
 #include "resource_module/definition.h"
 #include "hash_module/hash_module.c"
+#include "schema_module/schema_module.c"
 #include "namespace/namespace.c"

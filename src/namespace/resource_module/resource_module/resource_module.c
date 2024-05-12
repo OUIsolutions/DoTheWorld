@@ -27,6 +27,8 @@ DtwResourceModule newDtwResourceModule(){
     self.sub_resource_now  = DtwResource_sub_resource_now;
     self.sub_resource_now_in_unix = DtwResource_sub_resource_now_in_unix;
     self.sub_resource_random = DtwResource_sub_resource_random;
+    self.sub_schema = DtwResource_sub_schema;
+
     self.lock =DtwResource_lock;
     self.unlock = DtwResource_unlock;
     self.destroy = DtwResource_destroy;
@@ -53,7 +55,6 @@ DtwResourceModule newDtwResourceModule(){
     self.represent = DtwResource_represent;
     self.rename = DtwResource_rename;
     self.free  = DtwResource_free;
-
     self.sub_resources = DtwResource_sub_resources;
     self.array = newDtwResourceArrayModule();
 

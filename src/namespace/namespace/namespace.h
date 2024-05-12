@@ -88,7 +88,7 @@ typedef struct DtwNamespace{
 
     DtwLockerModule locker;
 
-
+    DtwSchemaModule schema;
     DtwTreeModule tree;
     DtwHashModule  hash;
     DtwTransactionModule transaction;

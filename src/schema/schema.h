@@ -10,7 +10,7 @@ typedef struct {
     DtwStringArray  *primary_keys;
 }DtwSchema;
 
-DtwSchema * DtwResource_new_schema(DtwResource *self, const char *name);
+DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *name);
 
 DtwSchema * newDtwSchema(const char *path);
 
@@ -19,6 +19,9 @@ void DtwSchema_free(DtwSchema *self);
 void privateDtwSchema_free_self_props(DtwSchema *self);
 
 DtwResource * DtwSchema_new_insertion(DtwSchema *schema);
+
+void DtwSchema_add_primary_key(DtwSchema *self,const char *primary_key);
+
 
 DtwResourceArray * DtwSchema_get_values(DtwSchema *schema);
 

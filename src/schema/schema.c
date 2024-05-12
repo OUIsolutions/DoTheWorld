@@ -17,6 +17,12 @@ DtwSchema * newDtwSchema(const char *path){
     return schema;
 }
 
+void DtwSchema_add_primary_key(DtwSchema *self,const char *primary_key){
+    if(DtwStringArray_find_position(self->primary_keys,primary_key)!=-1){
+        DtwStringArray_append(self->primary_keys,primary_key);
+    }
+}
+
 void DtwSchema_free(DtwSchema *self){
     if(self->owner){
         //the resource call the privateDtwSchema_free_self_props, and frees

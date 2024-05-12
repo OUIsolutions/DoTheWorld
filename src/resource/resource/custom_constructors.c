@@ -108,7 +108,7 @@ DtwResource * DtwResource_sub_resource_random(DtwResource *self, const char *end
 }
 
 
-DtwSchema * DtwResource_new_schema(DtwResource *self, const char *name){
+DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *name){
     DtwSchema *schema = (DtwSchema*) malloc(sizeof(DtwSchema));
     *schema = (DtwSchema){0};
 
