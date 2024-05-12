@@ -121,8 +121,6 @@ DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *format,...){
         return NULL;
     }
 
-    DtwSchema *schema = (DtwSchema*) malloc(sizeof(DtwSchema));
-    *schema = (DtwSchema){0};
 
     va_list args;
     va_start(args, format);
@@ -132,8 +130,12 @@ DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *format,...){
     //make both reference each other
     DtwResource *master =DtwResource_sub_resource(self,"%s",name);
     if(master->schema){
+        free(name);
         return master->schema;
     }
+
+    DtwSchema *schema = (DtwSchema*) malloc(sizeof(DtwSchema));
+    *schema = (DtwSchema){0};
 
     free(name);
     master->schema = schema;

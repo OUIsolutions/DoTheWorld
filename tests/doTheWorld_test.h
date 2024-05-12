@@ -1498,6 +1498,7 @@ typedef struct {
     DtwStringArray  *primary_keys;
 }DtwSchema;
 
+bool privateDtwSchema_error(DtwSchema *self);
 
 DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *format,...);
 
@@ -1512,11 +1513,11 @@ DtwResource * DtwSchema_new_insertion(DtwSchema *schema);
 void DtwSchema_add_primary_key(DtwSchema *self,const char *primary_key);
 
 
-DtwResourceArray * DtwSchema_get_values(DtwSchema *schema);
+DtwResourceArray * DtwSchema_get_values(DtwSchema *self);
 
-DtwResource * DtwSchema_find_by_primary_key_with_binary(DtwSchema *schema, const char *primary_key, unsigned  char *value, long size);
+DtwResource * DtwSchema_find_by_primary_key_with_binary(DtwSchema *self, const char *primary_key, unsigned  char *value, long size);
 
-DtwResource * DtwSchema_find_by_primary_key_with_string(DtwSchema *schema,const char *key,const char *value);
+DtwResource * DtwSchema_find_by_primary_key_with_string(DtwSchema *self, const char *key, const char *value);
 
 
 
@@ -8816,7 +8817,7 @@ void privateDtwResourceRootProps_free(privateDtwResourceRootProps *self){
 
 
 bool DtwResource_error(DtwResource *self){
-    if(!self){
+    if(self==NULL){
         return true;
     }
     if(DtwResource_get_error_code(self) == DTW_RESOURCE_OK){
@@ -10863,7 +10864,9 @@ DtwSchema * newDtwSchema(const char *path){
 }
 
 void DtwSchema_add_primary_key(DtwSchema *self,const char *primary_key){
-
+    if(privateDtwSchema_error(self)){
+        return ;
+    }
     bool not_found =DtwStringArray_find_position(self->primary_keys,primary_key)==-1;
 
     if(not_found){
@@ -10872,6 +10875,9 @@ void DtwSchema_add_primary_key(DtwSchema *self,const char *primary_key){
 }
 
 void DtwSchema_free(DtwSchema *self){
+    if(privateDtwSchema_error(self)){
+        return;
+    }
     if(self->owner){
         //the resource call the privateDtwSchema_free_self_props, and frees
         //everything
@@ -10879,7 +10885,15 @@ void DtwSchema_free(DtwSchema *self){
     }
 
 }
-
+bool privateDtwSchema_error(DtwSchema *self){
+    if(!self){
+        return true;
+    }
+    if(DtwResource_error(self->master)){
+        return true;
+    }
+    return false;
+}
 
 void privateDtwSchema_free_self_props(DtwSchema *self){
     DtwStringArray_free(self->primary_keys);
@@ -10888,18 +10902,26 @@ void privateDtwSchema_free_self_props(DtwSchema *self){
 
 
 DtwResource * DtwSchema_new_insertion(DtwSchema *schema){
+    if(privateDtwSchema_error(schema)){
+        return NULL;
+    }
     DtwResource  *created = DtwResource_sub_resource_random(schema->values_resource,NULL);
 
     return created;
 }
 
-DtwResourceArray * DtwSchema_get_values(DtwSchema *schema){
-    return DtwResource_sub_resources(schema->values_resource);
+DtwResourceArray * DtwSchema_get_values(DtwSchema *self){
+    if(privateDtwSchema_error(self)){
+        return NULL;
+    }
+    return DtwResource_sub_resources(self->values_resource);
 }
 
-DtwResource * DtwSchema_find_by_primary_key_with_binary(DtwSchema *schema, const char *primary_key, unsigned  char *value, long size){
-
-    DtwResource *primary_key_folder = DtwResource_sub_resource(schema->index_resource,"%s",primary_key);
+DtwResource * DtwSchema_find_by_primary_key_with_binary(DtwSchema *self, const char *primary_key, unsigned  char *value, long size){
+    if(privateDtwSchema_error(self)){
+        return NULL;
+    }
+    DtwResource *primary_key_folder = DtwResource_sub_resource(self->index_resource, "%s", primary_key);
     char *sha = dtw_generate_sha_from_any(value,size);
     DtwResource *index_value = DtwResource_sub_resource(primary_key_folder,"%s",sha);
     free(sha);
@@ -10907,20 +10929,22 @@ DtwResource * DtwSchema_find_by_primary_key_with_binary(DtwSchema *schema, const
         return NULL;
     }
     char *element_folder = DtwResource_get_string(index_value);
-    if(DtwResource_error(schema->master)){
+    if(DtwResource_error(self->master)){
         return NULL;
     }
     if(!element_folder){
         return NULL;
     }
-    DtwResource *founded_resource = DtwResource_sub_resource(schema->values_resource,"%s",element_folder);
+    DtwResource *founded_resource = DtwResource_sub_resource(self->values_resource, "%s", element_folder);
     return founded_resource;
 }
 
-DtwResource * DtwSchema_find_by_primary_key_with_string(DtwSchema *schema,const char *key,const char *value){
-
+DtwResource * DtwSchema_find_by_primary_key_with_string(DtwSchema *self, const char *key, const char *value){
+    if(privateDtwSchema_error(self)){
+        return NULL;
+    }
     return DtwSchema_find_by_primary_key_with_binary(
-            schema,
+            self,
             key,
             (unsigned char *) value,
             (long) strlen(value)
