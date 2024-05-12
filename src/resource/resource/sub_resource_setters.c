@@ -1,5 +1,5 @@
 void DtwResource_set_binary_in_sub_resource(DtwResource *self,const char *key, unsigned char *element, long size){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return ;
     }
 
@@ -8,7 +8,7 @@ void DtwResource_set_binary_in_sub_resource(DtwResource *self,const char *key, u
 }
 
 void DtwResource_set_binary_sha_in_sub_resource(DtwResource *self, const char *key, unsigned  char *value, long size){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return ;
     }
     DtwResource *created = DtwResource_sub_resource(self,"%s",key);
@@ -17,7 +17,7 @@ void DtwResource_set_binary_sha_in_sub_resource(DtwResource *self, const char *k
 
 
 void DtwResource_set_string_sha_in_sub_resource(DtwResource *self, const char *key, const char *value){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return ;
     }
     DtwResource *created = DtwResource_sub_resource(self,"%s",key);
@@ -25,7 +25,7 @@ void DtwResource_set_string_sha_in_sub_resource(DtwResource *self, const char *k
 }
 
 void DtwResource_set_string_in_sub_resource(DtwResource *self, const char *key, const  char *element){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return ;
     }
 
@@ -34,7 +34,7 @@ void DtwResource_set_string_in_sub_resource(DtwResource *self, const char *key, 
 }
 
 void DtwResource_set_long_in_sub_resource(DtwResource *self, const char *key, long element){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return ;
     }
     DtwResource *created = DtwResource_sub_resource(self,"%s",key);
@@ -42,7 +42,7 @@ void DtwResource_set_long_in_sub_resource(DtwResource *self, const char *key, lo
 }
 
 void DtwResource_set_double_in_sub_resource(DtwResource *self, const char *key, double element){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return ;
     }
 
@@ -51,7 +51,7 @@ void DtwResource_set_double_in_sub_resource(DtwResource *self, const char *key, 
 }
 
 void DtwResource_set_bool_in_sub_resource(DtwResource *self,const char *key, bool element){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return ;
     }
 

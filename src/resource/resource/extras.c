@@ -10,16 +10,7 @@ bool DtwResource_error(DtwResource *self){
     }
     return true;
 }
-int private_DtwResource_ensure_no_errors(DtwResource  *self){
-    if(DtwResource_error(self) == false){
-        return 0;
-    }
-    if(!self){
-        private_DtwResource_raise_error(self,DTW_RESOURCE_ELEMENT_IS_NULL,"argument its null");
-        return -1;
-    }
-    return -1;
-}
+
 
 
 int DtwResource_get_error_code(DtwResource *self){
@@ -70,7 +61,7 @@ void  private_DtwResource_raise_error(DtwResource *self, int error_code, const c
 }
 
 void DtwResource_rename(DtwResource *self,const char *new_name){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return;
     }
     if(private_dtw_resource_its_a_primary_key(self)){
@@ -101,7 +92,7 @@ void DtwResource_rename(DtwResource *self,const char *new_name){
 }
 
 void DtwResource_rename_sub_resource(DtwResource *self,const char *old_name,const  char *new_name){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return;
     }
     DtwResource *created = DtwResource_sub_resource(self,"name");
@@ -109,14 +100,14 @@ void DtwResource_rename_sub_resource(DtwResource *self,const char *old_name,cons
 }
 
 int DtwResource_lock(DtwResource *self){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return -1;
     }
     return DtwLocker_lock(self->root_props->locker, self->path);
 }
 
 void DtwResource_unlock(DtwResource *self){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return ;
     }
     DtwLocker_unlock(self->root_props->locker, self->path);
@@ -124,7 +115,7 @@ void DtwResource_unlock(DtwResource *self){
 }
 
 DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *format,...){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return  NULL;
     }
     if(private_dtw_resource_its_a_primary_key(self)){
@@ -166,14 +157,14 @@ DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *format,...){
 }
 
 void DtwResource_commit(DtwResource *self){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return ;
     }
     DtwTransaction_commit(self->root_props->transaction,NULL);
 }
 
 long DtwResource_size(DtwResource *self){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return -1;
     }
     return dtw_get_total_itens_of_dir(self->path);
@@ -182,14 +173,14 @@ long DtwResource_size(DtwResource *self){
 
 
 DtwStringArray *DtwResource_list_names(DtwResource *self){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return NULL;
     }
     return dtw_list_all(self->path,DTW_NOT_CONCAT_PATH);
 }
 
 int DtwResource_type(DtwResource *self){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return -1;
     }
     DtwResource_load_if_not_loaded(self);
@@ -231,7 +222,7 @@ int DtwResource_type(DtwResource *self){
 
 }
 bool DtwResource_is_file(DtwResource *self){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return -1;
     }
     DtwResource_load_if_not_loaded(self);
@@ -244,14 +235,14 @@ bool DtwResource_is_file(DtwResource *self){
 }
 
 const char * DtwResource_type_in_str(DtwResource *self){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return NULL;
     }
      return dtw_convert_entity(DtwResource_type(self));
 }
 
 void DtwResource_represent(DtwResource *self){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return;
     }
 

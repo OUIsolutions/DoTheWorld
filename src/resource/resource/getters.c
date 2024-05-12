@@ -1,6 +1,6 @@
 
 unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binary){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return NULL;
     }
     DtwResource_load_if_not_loaded(self);
@@ -22,7 +22,7 @@ unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binar
 }
 
 unsigned char *DtwResource_get_any_from_sub_resource(DtwResource *self, long *size, bool *is_binary,const char *format,...){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return NULL;
     }
     va_list args;
@@ -37,7 +37,7 @@ unsigned char *DtwResource_get_any_from_sub_resource(DtwResource *self, long *si
 }
 
 unsigned char *DtwResource_get_binary(DtwResource *self, long *size){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return NULL;
     }
     bool is_binary;
@@ -46,7 +46,7 @@ unsigned char *DtwResource_get_binary(DtwResource *self, long *size){
 }
 
 unsigned char *DtwResource_get_binary_from_sub_resource(DtwResource *self, long *size,const char *format,...){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return NULL;
     }
 
@@ -62,7 +62,7 @@ unsigned char *DtwResource_get_binary_from_sub_resource(DtwResource *self, long 
 
 
 char *DtwResource_get_string(DtwResource *self){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return NULL;
     }
 
@@ -84,7 +84,7 @@ char *DtwResource_get_string(DtwResource *self){
 
 
 char *DtwResource_get_string_from_sub_resource(DtwResource *self,const char *format,...){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return NULL;
     }
 
@@ -102,7 +102,7 @@ char *DtwResource_get_string_from_sub_resource(DtwResource *self,const char *for
 
 long DtwResource_get_long(DtwResource *self){
 
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return -1;
     }
 
@@ -127,7 +127,7 @@ long DtwResource_get_long(DtwResource *self){
 
 
 long DtwResource_get_long_from_sub_resource(DtwResource *self,const char *format,...){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return -1;
     }
     va_list args;
@@ -143,12 +143,12 @@ long DtwResource_get_long_from_sub_resource(DtwResource *self,const char *format
 
 
 double DtwResource_get_double(DtwResource *self){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return -1;
     }
 
     char *element = DtwResource_get_string(self);
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return -1;
     }
 
@@ -167,7 +167,7 @@ double DtwResource_get_double(DtwResource *self){
 
 double DtwResource_get_double_from_sub_resource(DtwResource *self,const char *format,...){
 
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return -1;
     }
 
@@ -184,11 +184,11 @@ double DtwResource_get_double_from_sub_resource(DtwResource *self,const char *fo
 
 
 bool DtwResource_get_bool(DtwResource *self){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return false;
     }
     char *element = DtwResource_get_string(self);
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return false;
     }
 
@@ -208,7 +208,7 @@ bool DtwResource_get_bool(DtwResource *self){
 }
 
 bool DtwResource_get_bool_from_sub_resource(DtwResource *self,const char *format,...){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return false;
     }
 

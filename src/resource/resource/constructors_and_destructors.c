@@ -16,7 +16,7 @@ DtwResource *new_DtwResource(const char *path){
 }   
 
 DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ...){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return NULL;
     }
 
@@ -74,7 +74,7 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
 
 }
 DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,const  char *format, ...){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return NULL;
     }
     va_list args;

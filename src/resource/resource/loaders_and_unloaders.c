@@ -1,7 +1,7 @@
 
 
 void DtwResource_unload(DtwResource *self){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return ;
     }
     if(self->loaded == false){
@@ -17,7 +17,7 @@ void DtwResource_unload(DtwResource *self){
 }
 
 void DtwResource_load(DtwResource *self){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return ;
     }
     DtwResource_unload(self);
@@ -30,7 +30,7 @@ void DtwResource_load(DtwResource *self){
 
 }
 void DtwResource_load_if_not_loaded(DtwResource *self){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return ;
     }
     if(self->loaded == false){

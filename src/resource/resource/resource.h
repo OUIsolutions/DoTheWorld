@@ -30,7 +30,6 @@ DtwResource *new_DtwResource(const char *path);
 
 bool DtwResource_error(DtwResource *self);
 
-int private_DtwResource_ensure_no_errors(DtwResource  *self);
 
 #define DtwResource_protected(self)  if(!DtwResource_error(self))
 #define DtwResource_catch(self)  if(DtwResource_error(self))

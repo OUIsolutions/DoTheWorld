@@ -31,7 +31,7 @@ void private_DtwResource_destroy_all_primary_keys(DtwResource *self){
     }
 }
 void DtwResource_destroy(DtwResource *self){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return;
     }
 
@@ -55,7 +55,7 @@ void DtwResource_destroy(DtwResource *self){
 }
 
 void DtwResource_destroy_sub_resource(DtwResource *self, const char *key){
-    if(private_DtwResource_ensure_no_errors(self)){
+    if(DtwResource_error(self)){
         return;
     }
     DtwResource *son = DtwResource_sub_resource(self, "%s",key);
