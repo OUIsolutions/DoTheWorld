@@ -5,7 +5,7 @@ int main (){
     DtwNamespace dtw = newDtwNamespace();
 
     DtwResource *values = dtw.resource.newResource("tests/target/new_folder");
-    dtw.resource.set_string_in_sub_resource(values,"nothing","text.txt");
+    dtw.resource.set_string_in_sub_resource(values,"text.txt","nothing");
 
     long size;
     unsigned char *blob = dtw_load_binary_content("tests/target/blob.png",&size);

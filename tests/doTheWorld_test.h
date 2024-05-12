@@ -556,6 +556,7 @@ char *dtw_convert_binary_file_to_base64(const char *path);
 
 
 typedef struct DtwRandonizer{
+    long time_seed;
     long seed;
     long actual_generation;
 
@@ -2084,7 +2085,7 @@ DtwNamespace newDtwNamespace();
 
 
 
-long  dtw_now = -1;
+bool dtw_debug_time = false;
 const char dtw_base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 
@@ -5600,9 +5601,8 @@ char *dtw_convert_binary_file_to_base64(const char *path){
 
 DtwRandonizer * newDtwRandonizer(){
     DtwRandonizer *self = (DtwRandonizer*) malloc(sizeof (DtwRandonizer));
-    self->seed = dtw_get_time();
-    self->actual_generation = 0;
-
+    *self =(DtwRandonizer){0};
+    self->time_seed = dtw_get_time();
     return self;
 }
 
@@ -5616,7 +5616,7 @@ char * DtwRandonizer_generate_token(struct DtwRandonizer*self, int size){
     int total_size = sizeof(chars) - 1;
     char *token = (char*)malloc(size +1);
 
-    srand(  self->seed + self->actual_generation);
+    srand(  self->time_seed + self->actual_generation + self->seed);
 
     for (int i = 0; i < size; ++i) {
         int index = rand() % total_size;
@@ -5813,8 +5813,8 @@ int private_dtw_string_cmp(const void *a, const void *b){
 }
 
 long dtw_get_time(){
-    if(dtw_now != -1){
-        return dtw_now;
+    if(dtw_debug_time == true){
+        return 0;
     }
     return time(NULL);
 }
@@ -7123,7 +7123,6 @@ struct DtwJsonTreeError * DtwJsonTreeError_validate_json_tree(char *content){
     //verifiy if json_tre is not null
     if(json_tree == NULL){
         json_error->code = DTW_JSON_SYNTAX_ERROR;
-        json_error->position = cJSON_GetErrorPtr() - content;
         json_error->menssage = "json_tree is null";
         return json_error;
     }

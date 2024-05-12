@@ -3,7 +3,7 @@
 
 int main (){
     DtwNamespace dtw = newDtwNamespace();
-    dtw_now = 0;
+    dtw_debug_time = true;
     DtwResource *test = dtw.resource.newResource("tests/target");
 
     DtwResource *next = dtw.resource.sub_resource_next(test,".txt");

@@ -15,7 +15,6 @@ struct DtwJsonTreeError * DtwJsonTreeError_validate_json_tree(char *content){
     //verifiy if json_tre is not null
     if(json_tree == NULL){
         json_error->code = DTW_JSON_SYNTAX_ERROR;
-        json_error->position = cJSON_GetErrorPtr() - content;
         json_error->menssage = "json_tree is null";
         return json_error;
     }
