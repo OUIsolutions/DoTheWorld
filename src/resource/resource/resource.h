@@ -125,6 +125,7 @@ DtwStringArray *DtwResource_list_names(DtwResource *self);
 
 int DtwResource_type(DtwResource *self);
 
+DtwSchema * DtwResource_new_schema(DtwResource *self, const char *name);
 
 const char * DtwResource_type_in_str(DtwResource *self);
 

@@ -4,14 +4,16 @@
 
 typedef struct {
     DtwResource *master;
+    bool owner;
     DtwResource  *values_resource;
     DtwResource  *index_resource;
     DtwStringArray  *keys;
 }DtwSchema;
 
-DtwSchema * DtwResource_new_schema(DtwResource *self, const char *name);
 
 DtwSchema * newDtwSchema(const char *path);
+
+void DtwSchema_free(DtwSchema *self);
 
 void privateDtwSchema_free_self_props(DtwSchema *self);
 
@@ -24,4 +26,3 @@ DtwResource * DtwSchema_find_by_primary_key_with_any(DtwSchema *schema,const cha
 DtwResource * DtwSchema_find_by_primary_key_with_string(DtwSchema *schema,const char *key,const char *value);
 
 
-void DtwSchema_free(DtwSchema *self);
