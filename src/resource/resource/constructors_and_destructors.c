@@ -20,16 +20,15 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
         return NULL;
     }
 
-    char name[2000] ={0};
-
     va_list args;
     va_start(args, format);
-    vsprintf(name, format, args);
+    char *name = private_dtw_format_vaarg(format,args);
     va_end(args);
-
+    ;
 
     DtwResource * Already_Exist = DtwResourceArray_get_by_name((DtwResourceArray*)self->sub_resources,name);
     if(Already_Exist){
+        free(name);
         return Already_Exist;
     }
 
@@ -51,19 +50,17 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
     if(self->cache_sub_resources){
         DtwResourceArray_append((DtwResourceArray*)self->sub_resources,new_element);
     }
-
+    free(name);
     return new_element;
 
 }
 DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,const  char *format, ...){
 
-
-    char name[2000] ={0};
-
     va_list args;
     va_start(args, format);
-    vsprintf(name, format, args);
+    char *name = private_dtw_format_vaarg(format,args);
     va_end(args);
+;
 
     DtwResource *possible_emptiy  = DtwResourceArray_get_by_name(
             (DtwResourceArray*)self->sub_resources,
@@ -90,11 +87,12 @@ DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,cons
             if(self->cache_sub_resources){
                 DtwResourceArray_append((DtwResourceArray*)self->sub_resources,possible_emptiy);
             }
-
+            free(name);
             return possible_emptiy;
     }
     DtwResource_unlock(possible_emptiy);
     DtwResource_free(possible_emptiy);
+    free(name);
     return  NULL;
 
 }

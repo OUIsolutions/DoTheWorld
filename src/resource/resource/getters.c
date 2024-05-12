@@ -27,14 +27,13 @@ unsigned char *DtwResource_get_any_from_sub_resource(DtwResource *self, long *si
         return NULL;
     }
 
-    char name[2000] ={0};
-
     va_list args;
     va_start(args, format);
-    vsprintf(name, format, args);
+    char *name = private_dtw_format_vaarg(format,args);
     va_end(args);
 
     DtwResource *element = DtwResource_sub_resource(self,"%s",name);
+    free(name);
     return DtwResource_get_any(element,size,is_binary);
 
 }
@@ -54,14 +53,13 @@ unsigned char *DtwResource_get_binary_from_sub_resource(DtwResource *self, long 
         return NULL;
     }
 
-    char name[2000] ={0};
-
     va_list args;
     va_start(args, format);
-    vsprintf(name, format, args);
+    char *name = private_dtw_format_vaarg(format,args);
     va_end(args);
 
     DtwResource *element = DtwResource_sub_resource(self,"%s",name);
+    free(name);
     return DtwResource_get_binary(element,size);
 }
 
@@ -93,14 +91,14 @@ char *DtwResource_get_string_from_sub_resource(DtwResource *self,const char *for
         return NULL;
     }
 
-    char name[2000] ={0};
-
     va_list args;
     va_start(args, format);
-    vsprintf(name, format, args);
+    char *name = private_dtw_format_vaarg(format,args);
     va_end(args);
 
+
     DtwResource *element = DtwResource_sub_resource(self,"%s",name);
+    free(name);
     return DtwResource_get_string(element);
 }
 
@@ -135,14 +133,14 @@ long DtwResource_get_long_from_sub_resource(DtwResource *self,const char *format
     if(DtwResource_error(self)){
         return -1;
     }
-    char name[2000] ={0};
-
     va_list args;
     va_start(args, format);
-    vsprintf(name, format, args);
+    char *name = private_dtw_format_vaarg(format,args);
     va_end(args);
 
+
     DtwResource *element = DtwResource_sub_resource(self,"%s",name);
+    free(name);
     return DtwResource_get_long(element);
 }
 
@@ -175,14 +173,15 @@ double DtwResource_get_double_from_sub_resource(DtwResource *self,const char *fo
     if(DtwResource_error(self)){
         return -1;
     }
-    char name[2000] ={0};
 
     va_list args;
     va_start(args, format);
-    vsprintf(name, format, args);
+    char *name = private_dtw_format_vaarg(format,args);
     va_end(args);
 
+
     DtwResource *element = DtwResource_sub_resource(self,"%s",name);
+    free(name);
     return DtwResource_get_double(element);
 }
 
@@ -215,13 +214,13 @@ bool DtwResource_get_bool_from_sub_resource(DtwResource *self,const char *format
     if(DtwResource_error(self)){
         return false;
     }
-    char name[2000] ={0};
 
     va_list args;
     va_start(args, format);
-    vsprintf(name, format, args);
+    char *name = private_dtw_format_vaarg(format,args);
     va_end(args);
 
     DtwResource *element = DtwResource_sub_resource(self,"%s",name);
+    free(name);
     return DtwResource_get_bool(element);
 }
