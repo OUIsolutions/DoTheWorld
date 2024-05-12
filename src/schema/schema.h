@@ -10,6 +10,7 @@ typedef struct {
     DtwStringArray  *keys;
 }DtwSchema;
 
+DtwSchema * DtwResource_new_schema(DtwResource *self, const char *name);
 
 DtwSchema * newDtwSchema(const char *path);
 
