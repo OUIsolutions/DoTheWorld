@@ -7,14 +7,21 @@ DtwResource * DtwResource_sub_resource_next(DtwResource *self, const char *end_p
     }
     while(true){
 
-        char path[300] ={0};
+        char *path = NULL;
         if(end_path){
-            sprintf(path,"%ld%s",size,end_path);
+            path = private_dtw_realoc_formatting(path,"%ld%s",size,end_path);
         }
+
         else{
-            sprintf(path,"%ld",size);
+            path = private_dtw_realoc_formatting(path,"%ld",size);
         }
+
         DtwResource *new_element = DtwResource_sub_resource_ensuring_not_exist(self,"%s",path);
+        free(path);
+        if(DtwResource_error(self)){
+            return NULL;
+        }
+
         if(new_element){
             return new_element;
         }
@@ -32,23 +39,31 @@ DtwResource * DtwResource_sub_resource_now(DtwResource *self, const char *end_pa
 
         long now = dtw_get_time();
         char *time = dtw_convert_unix_time_to_string(now);
-        char path[1000] ={0};
+        char *path = NULL;
 
         if(empty_already_exist){
             char *token = DtwRandonizer_generate_token(self->root_props->randonizer,10);
-            sprintf(path,"%s--%s",time,token);
+            path = private_dtw_realoc_formatting(path,"%s--%s",time,token);
             free(token);
         }
         else{
-            sprintf(path,"%s",time);
+            path = private_dtw_realoc_formatting(path,"%s",time);
         }
+
         free(time);
 
         if(end_path){
-            strcat(path,end_path);
+            path = private_dtw_realoc_formatting(path,"%s%s",path,end_path);
         }
 
         DtwResource *new_element = DtwResource_sub_resource_ensuring_not_exist(self,"%s",path);
+
+        free(path);
+
+
+        if(DtwResource_error(self)){
+            return NULL;
+        }
         if(new_element){
             return new_element;
         }
@@ -63,22 +78,29 @@ DtwResource * DtwResource_sub_resource_now_in_unix(DtwResource *self, const char
     while(true){
 
         long now = dtw_get_time();
-        char path[1000] ={0};
+        char *path = NULL;
 
         if(empty_already_exist){
             char *token = DtwRandonizer_generate_token(self->root_props->randonizer,10);
-            sprintf(path,"%ld--%s",now,token);
+            path = private_dtw_realoc_formatting(path,"%ld--%s",now,token);
             free(token);
         }
         else{
-            sprintf(path,"%ld",now);
+            path = private_dtw_realoc_formatting(path,"%ld",now);
         }
 
         if(end_path){
-            strcat(path,end_path);
+            path = private_dtw_realoc_formatting(path,"%s%s",path,end_path);
         }
 
         DtwResource *new_element = DtwResource_sub_resource_ensuring_not_exist(self,"%s",path);
+
+        free(path);
+
+
+        if(DtwResource_error(self)){
+            return NULL;
+        }
         if(new_element){
             return new_element;
         }
@@ -90,16 +112,21 @@ DtwResource * DtwResource_sub_resource_random(DtwResource *self, const char *end
 
     while(true){
 
-        char path[1000] ={0};
+        char *path = NULL;
         char *token = DtwRandonizer_generate_token(self->root_props->randonizer,15);
-        sprintf(path,"%s",token);
+        path = private_dtw_realoc_formatting(path,"%s",token);
         free(token);
 
         if(end_path){
-            strcat(path,end_path);
+            path = private_dtw_realoc_formatting(path,"%s%s",path,end_path);
         }
 
         DtwResource *new_element = DtwResource_sub_resource_ensuring_not_exist(self,"%s",path);
+        free(path);
+        if(DtwResource_error(self)){
+            return NULL;
+        }
+
         if(new_element){
             return new_element;
         }

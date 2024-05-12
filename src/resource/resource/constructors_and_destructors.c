@@ -20,10 +20,21 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
         return NULL;
     }
 
+    if(private_dtw_resource_its_a_primary_key(self)){
+        private_DtwResource_raise_error(
+                self,
+                DTW_RESOURCE_PRIMARY_KEY_CANNOT_HAVE_SUB_RESOURCE,
+                "primary key %s cannot have a sub resource",
+                self->name
+        );
+        return NULL;
+    }
+
     va_list args;
     va_start(args, format);
     char *name = private_dtw_format_vaarg(format,args);
     va_end(args);
+
 
     DtwResource * Already_Exist = DtwResourceArray_get_by_name((DtwResourceArray*)self->sub_resources,name);
     if(Already_Exist){

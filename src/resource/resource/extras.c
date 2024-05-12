@@ -37,6 +37,13 @@ void  DtwResource_clear_errors(DtwResource *self){
     self->root_props->error_code = DTW_RESOURCE_OK;
 
 }
+bool private_dtw_resource_its_a_primary_key(DtwResource *self){
+    if(self->its_a_write_point == false){
+        return false;
+    }
+    DtwSchema * schema = (DtwSchema*)self->mother->mother->mother->schema;
+    return DtwStringArray_find_position(schema->primary_keys,self->name) !=-1;
+}
 
 void  private_DtwResource_raise_error(DtwResource *self, int error_code, const char *format,...){
 
@@ -53,9 +60,14 @@ void  private_DtwResource_raise_error(DtwResource *self, int error_code, const c
 
 void DtwResource_rename(DtwResource *self,const char *new_name){
 
+
+
     char *old_path = strdup(self->path);
     free(self->path);
     self->path  = dtw_concat_path(self->mother->path, new_name);
+
+    free(self->name);
+    self->name = strdup(new_name);
 
     if(self->allow_transaction){
         DtwTransaction_move_any(self->root_props->transaction,old_path,self->path);
@@ -82,68 +94,6 @@ void DtwResource_unlock(DtwResource *self){
     DtwLocker_unlock(self->root_props->locker, self->path);
     
 }
-void private_DtwResurce_destroy_primary_key(DtwResource *self,void *vschma) {
-
-    DtwSchema  *schema = (DtwSchema*)vschma;
-
-    if (!DtwResource_is_file(self)) {
-        return;
-    }
-    DtwResource *pk_index_folder = DtwResource_sub_resource(schema->index_resource, "%s", self->name);
-    long size;
-    bool is_binary;
-    unsigned char *possible_pk_value = DtwResource_get_any(self, &size, &is_binary);
-    char *pk_sha = dtw_generate_sha_from_any(possible_pk_value, size);
-
-    DtwResource *pk_index_value = DtwResource_sub_resource(pk_index_folder, "%s", pk_sha);
-
-    if (self->allow_transaction) {
-        DtwTransaction_delete_any(self->root_props->transaction, pk_index_value->path);
-    } else {
-        dtw_remove_any(pk_index_value->path);
-    }
-
-
-}
-void private_DtwResource_destroy_all_primary_keys(DtwResource *self){
-    DtwSchema * schema = (DtwSchema*)self->mother->mother->schema;
-    for(int i = 0; i < schema->primary_keys->size; i++){
-        char *current_pk = schema->primary_keys->strings[i];
-        DtwResource *son = DtwResource_sub_resource(self,"%s",current_pk);
-        private_DtwResurce_destroy_primary_key(son,schema);
-    }
-}
-void DtwResource_destroy(DtwResource *self){
-    if(DtwResource_error(self)){
-        return;
-    }
-
-    if(self->its_a_element_folder){
-        private_DtwResource_destroy_all_primary_keys(self);
-    }
-    if(self->its_a_write_point){
-        DtwSchema * schema = (DtwSchema*)self->mother->mother->mother->schema;
-        bool its_a_pk = DtwStringArray_find_position(schema->primary_keys,self->name) !=-1;
-        if(its_a_pk){
-            private_DtwResurce_destroy_primary_key(self,schema);
-        }
-    }
-
-
-    if(self->allow_transaction){
-        DtwTransaction_delete_any(self->root_props->transaction,self->path);
-    }
-    else{
-        dtw_remove_any(self->path);
-    }
-
-}
-
-void DtwResource_destroy_sub_resource(DtwResource *self, const char *key){
-    DtwResource *son = DtwResource_sub_resource(self, "%s",key);
-    DtwResource_destroy(son);
-}
-
 
 DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *format,...){
 

@@ -1,12 +1,8 @@
 //
 // Created by mateusmoutinho on 05/08/23.
 //
-void private_dtw_resource_set_primary_key_if_exist_primary_key(DtwResource *self,unsigned  char *element,long size){
+void private_dtw_resource_set_primary_key(DtwResource *self, unsigned  char *element, long size){
     DtwSchema * schema = (DtwSchema*)self->mother->mother->mother->schema;
-    bool its_a_pk = DtwStringArray_find_position(schema->primary_keys,self->name) !=-1;
-    if(!its_a_pk){
-        return;
-    }
     DtwResource *pk_folder = DtwResource_sub_resource(schema->index_resource,"%s",self->name);
     char *sha = dtw_generate_sha_from_any(element,size);
     DtwResource  *pk_value = DtwResource_sub_resource(pk_folder,sha);
@@ -40,8 +36,8 @@ void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size
         return ;
     }
 
-    if(self->its_a_write_point){
-        private_dtw_resource_set_primary_key_if_exist_primary_key(self,element,size);
+    if(private_dtw_resource_its_a_primary_key(self)){
+        private_dtw_resource_set_primary_key(self, element, size);
     }
 
     if(DtwResource_error(self)){
@@ -69,9 +65,8 @@ void DtwResource_set_string(DtwResource *self,const  char *element){
         return ;
     }
 
-
-    if(self->its_a_write_point){
-        private_dtw_resource_set_primary_key_if_exist_primary_key(self,(unsigned  char*)element,(long) strlen(element));
+    if(private_dtw_resource_its_a_primary_key(self)){
+        private_dtw_resource_set_primary_key(self, (unsigned char *) element, (long) strlen(element));
     }
 
     if(DtwResource_error(self)){

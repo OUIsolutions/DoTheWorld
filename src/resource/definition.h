@@ -6,5 +6,6 @@
 #include "resource/sub_resource_setters.c"
 #include "resource/constructors_and_destructors.c"
 #include "resource/custom_constructors.c"
+#include "resource/destroy.c"
 
 #include "resource_array/resource_array.c"
