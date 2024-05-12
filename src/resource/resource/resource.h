@@ -74,8 +74,8 @@ unsigned char *DtwResource_get_any_from_sub_resource(DtwResource *self, long *si
 void DtwResource_set_binary_sha(DtwResource *self, unsigned  char *value, long size);
 void DtwResource_set_string_sha(DtwResource *self,const char *value);
 
-void DtwResource_set_binary_sha_in_sub_resource(DtwResource *self, unsigned  char *value, long size, const char *format, ...);
-void DtwResource_set_string_sha_in_sub_resource(DtwResource *self,const char *value,const char *format,...);
+void DtwResource_set_binary_sha_in_sub_resource(DtwResource *self, const char *key, unsigned  char *value, long size);
+void DtwResource_set_string_sha_in_sub_resource(DtwResource *self, const char *key, const char *value);
 
 
 unsigned char *DtwResource_get_binary(DtwResource *self, long *size);
@@ -104,26 +104,26 @@ bool DtwResource_get_bool_from_sub_resource(DtwResource *self,const char *format
 
 void DtwResource_set_normal_binary(DtwResource *self, unsigned char *element, long size);
 
-void DtwResource_set_binary_in_sub_resource(DtwResource *self, unsigned char *element, long size,const char *format,...);
+void DtwResource_set_binary_in_sub_resource(DtwResource *self,const char *key, unsigned char *element, long size);
 
 
 
 void DtwResource_set_string(DtwResource *self,const  char *element);
 
-void DtwResource_set_string_in_sub_resource(DtwResource *self,const  char *element,const char *format,...);
+void DtwResource_set_string_in_sub_resource(DtwResource *self, const char *key, const  char *element);
 
 void DtwResource_set_long(DtwResource *self,long element);
 
-void DtwResource_set_long_in_sub_resource(DtwResource *self,long element,const char *format,...);
+void DtwResource_set_long_in_sub_resource(DtwResource *self, const char *key, long element);
 
 
 void DtwResource_set_double(DtwResource *self,double element);
 
-void DtwResource_set_double_in_sub_resource(DtwResource *self,double element,const char *format,...);
+void DtwResource_set_double_in_sub_resource(DtwResource *self, const char *key, double element);
 
 void DtwResource_set_bool( DtwResource *self,bool element);
 
-void DtwResource_set_bool_in_sub_resource( DtwResource *self,bool element,const char *format,...);
+void DtwResource_set_bool_in_sub_resource_by_key(DtwResource *self,const char *key, bool element);
 
 
 void DtwResource_destroy(DtwResource *self);

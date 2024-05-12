@@ -14,15 +14,16 @@ typedef struct DtwResourceModule{
     long (*get_long_from_sub_resource)(DtwResource *self,const char *format,...);
     double (*get_double_from_sub_resource)(DtwResource *self,const char *format,...);
     bool (*get_bool_from_sub_resource)(DtwResource *self,const char *format,...);
-    void (*set_binary_in_sub_resource)(DtwResource *self, unsigned char *element, long size,const char *format,...);
-    void (*set_string_in_sub_resource)(DtwResource *self,const  char *element,const char *format,...);
-    void (*set_long_in_sub_resource)(DtwResource *self,long element,const char *format,...);
-    void (*set_double_in_sub_resource)(DtwResource *self,double element,const char *format,...);
-    void (*set_bool_in_sub_resource)( DtwResource *self,bool element,const char *format,...);
+    void (*set_binary_in_sub_resource)(DtwResource *self,const char *key, unsigned char *element, long size);
+    void (*set_string_in_sub_resource)(DtwResource *self,const char *key,const  char *element);
+    void (*set_long_in_sub_resource)(DtwResource *self,const char *key,long element);
+    void (*set_double_in_sub_resource)(DtwResource *self,const char *key,double element);
+    void (*set_bool_in_sub_resource)( DtwResource *self,const char *key,bool element);
     void (*set_binary_sha)(DtwResource *self, unsigned  char *value, long size);
     void (*set_string_sha)(DtwResource *self,const char *value);
-    void (*set_binary_sha_in_sub_resource)(DtwResource *self, unsigned  char *value, long size, const char *format, ...);
-    void (*set_string_sha_in_sub_resource)(DtwResource *self,const char *value,const char *format,...);
+
+    void (*set_binary_sha_in_sub_resource)(DtwResource *self,const char *key, unsigned  char *value, long size);
+    void (*set_string_sha_in_sub_resource)(DtwResource *self,const char *key,const char *value);
 
 
     DtwResource * (*sub_resource_ensuring_not_exist)(DtwResource *self,const  char *format, ...);
