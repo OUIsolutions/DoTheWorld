@@ -317,7 +317,7 @@ CJSON_PUBLIC(cJSON *) cJSON_Duplicate(const cJSON *item, cJSON_bool recurse);
  * need to be released. With recurse!=0, it will duplicate any children connected to the item.
  * The item->next and ->prev pointers are always zero on return from Duplicate. */
 /* Recursively compare two cJSON items for equality. If either a or b is NULL or invalid, they will be considered unequal.
- * case_sensitive determines if object keys are treated case sensitive (1) or case insensitive (0) */
+ * case_sensitive determines if object primary_keys are treated case sensitive (1) or case insensitive (0) */
 CJSON_PUBLIC(cJSON_bool) cJSON_Compare(const cJSON * const a, const cJSON * const b, const cJSON_bool case_sensitive);
 
 /* Minify a strings, remove blank characters(such as ' ', '\t', '\r', '\n') from strings.
@@ -586,7 +586,7 @@ void private_dtw_remove_double_bars(struct DtwStringArray*path);
 
 int private_dtw_string_cmp(const void *a, const void *b);
 
-
+char * private_dtw_format_vaarg(const char *expresion, va_list args);
 
 long dtw_get_time();
 
@@ -1261,11 +1261,14 @@ typedef struct DtwResource{
 
     bool allow_transaction;
     bool use_locker_on_unique_values;
+    void *schema;
     privateDtwResourceRootProps *root_props;
     struct DtwResource *mother;
     char *name;
     char *path;
-
+    bool its_a_write_point;
+    bool its_a_element_folder;
+    bool its_value_folder;
     bool loaded;
     bool is_binary;
     unsigned char *value_any;
@@ -1327,7 +1330,15 @@ unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binar
 unsigned char *DtwResource_get_any_from_sub_resource(DtwResource *self, long *size, bool *is_binary,const char *format,...);
 
 
+void DtwResource_set_binary_sha(DtwResource *self, unsigned  char *value, long size);
+void DtwResource_set_string_sha(DtwResource *self,const char *value);
+
+void DtwResource_set_binary_sha_in_sub_resource(DtwResource *self, const char *key, unsigned  char *value, long size);
+void DtwResource_set_string_sha_in_sub_resource(DtwResource *self, const char *key, const char *value);
+
+
 unsigned char *DtwResource_get_binary(DtwResource *self, long *size);
+
 
 unsigned char *DtwResource_get_binary_from_sub_resource(DtwResource *self, long *size,const char *format,...);
 
@@ -1348,30 +1359,32 @@ bool DtwResource_get_bool(DtwResource *self);
 bool DtwResource_get_bool_from_sub_resource(DtwResource *self,const char *format,...);
 
 
-
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size);
 
-void DtwResource_set_binary_in_sub_resource(DtwResource *self, unsigned char *element, long size,const char *format,...);
+void DtwResource_set_binary_in_sub_resource(DtwResource *self,const char *key, unsigned char *element, long size);
 
 
 
 void DtwResource_set_string(DtwResource *self,const  char *element);
 
-void DtwResource_set_string_in_sub_resource(DtwResource *self,const  char *element,const char *format,...);
+void DtwResource_set_string_in_sub_resource(DtwResource *self, const char *key, const  char *element);
 
 void DtwResource_set_long(DtwResource *self,long element);
 
-void DtwResource_set_long_in_sub_resource(DtwResource *self,long element,const char *format,...);
+void DtwResource_set_long_in_sub_resource(DtwResource *self, const char *key, long element);
 
 
 void DtwResource_set_double(DtwResource *self,double element);
 
-void DtwResource_set_double_in_sub_resource(DtwResource *self,double element,const char *format,...);
+void DtwResource_set_double_in_sub_resource(DtwResource *self, const char *key, double element);
 
 void DtwResource_set_bool( DtwResource *self,bool element);
 
-void DtwResource_set_bool_in_sub_resource( DtwResource *self,bool element,const char *format,...);
+void DtwResource_set_bool_in_sub_resource(DtwResource *self,const char *key, bool element);
 
+void private_DtwResurce_destroy_primary_key(DtwResource *self,void *schema,const char *current_pk);
+
+void private_DtwResource_destroy_all_primary_keys(DtwResource *self);
 
 void DtwResource_destroy(DtwResource *self);
 
@@ -1381,6 +1394,8 @@ DtwStringArray *DtwResource_list_names(DtwResource *self);
 
 int DtwResource_type(DtwResource *self);
 
+bool DtwResource_is_file(DtwResource *self);
+
 
 const char * DtwResource_type_in_str(DtwResource *self);
 
@@ -1389,6 +1404,7 @@ void DtwResource_commit(DtwResource *self);
 void DtwResource_represent(DtwResource *self);
 
 void DtwResource_free(struct DtwResource *self);
+
 
 
 
@@ -1456,6 +1472,41 @@ bool DtwHash_digest_string_array_content_adding_name(DtwHash *self,DtwStringArra
 
 
 void  DtwHash_free(DtwHash *self);
+
+
+
+
+#define DTW_SCHEMA_VALUES_NAME "value"
+#define DTW_SCHEMA_INDEX_NAME "index"
+
+typedef struct {
+    DtwResource *master;
+    bool owner;
+    DtwResource  *values_resource;
+    DtwResource  *index_resource;
+    DtwStringArray  *primary_keys;
+}DtwSchema;
+
+
+DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *format,...);
+
+DtwSchema * newDtwSchema(const char *path);
+
+void DtwSchema_free(DtwSchema *self);
+
+void privateDtwSchema_free_self_props(DtwSchema *self);
+
+DtwResource * DtwSchema_new_insertion(DtwSchema *schema);
+
+void DtwSchema_add_primary_key(DtwSchema *self,const char *primary_key);
+
+
+DtwResourceArray * DtwSchema_get_values(DtwSchema *schema);
+
+DtwResource * DtwSchema_find_by_primary_key_with_binary(DtwSchema *schema, const char *primary_key, unsigned  char *value, long size);
+
+DtwResource * DtwSchema_find_by_primary_key_with_string(DtwSchema *schema,const char *key,const char *value);
+
 
 
 
@@ -1805,25 +1856,28 @@ typedef struct DtwResourceModule{
     bool (*error)(DtwResource *self);
 
     char * (*get_error_message)(DtwResource *self);
-
-    struct DtwResource * (*sub_resource)(struct DtwResource *self,const  char *format,...);
+    bool (*is_file)(DtwResource *self);
+    DtwResource * (*sub_resource)(struct DtwResource *self,const  char *format,...);
     unsigned char *(*get_any_from_sub_resource)(DtwResource *self, long *size, bool *is_binary,const char *format,...);
     unsigned char *(*get_binary_from_sub_resource)(DtwResource *self, long *size,const char *format,...);
     char *(*get_string_from_sub_resource)(DtwResource *self,const char *format,...);
     long (*get_long_from_sub_resource)(DtwResource *self,const char *format,...);
     double (*get_double_from_sub_resource)(DtwResource *self,const char *format,...);
     bool (*get_bool_from_sub_resource)(DtwResource *self,const char *format,...);
+    void (*set_binary_in_sub_resource)(DtwResource *self,const char *key, unsigned char *element, long size);
+    void (*set_string_in_sub_resource)(DtwResource *self,const char *key,const  char *element);
+    void (*set_long_in_sub_resource)(DtwResource *self,const char *key,long element);
+    void (*set_double_in_sub_resource)(DtwResource *self,const char *key,double element);
+    void (*set_bool_in_sub_resource)( DtwResource *self,const char *key,bool element);
+    void (*set_binary_sha)(DtwResource *self, unsigned  char *value, long size);
+    void (*set_string_sha)(DtwResource *self,const char *value);
 
-
-    void (*set_binary_in_sub_resource)(DtwResource *self, unsigned char *element, long size,const char *format,...);
-    void (*set_string_in_sub_resource)(DtwResource *self,const  char *element,const char *format,...);
-    void (*set_long_in_sub_resource)(DtwResource *self,long element,const char *format,...);
-    void (*set_double_in_sub_resource)(DtwResource *self,double element,const char *format,...);
-    void (*set_bool_in_sub_resource)( DtwResource *self,bool element,const char *format,...);
+    void (*set_binary_sha_in_sub_resource)(DtwResource *self,const char *key, unsigned  char *value, long size);
+    void (*set_string_sha_in_sub_resource)(DtwResource *self,const char *key,const char *value);
 
 
     DtwResource * (*sub_resource_ensuring_not_exist)(DtwResource *self,const  char *format, ...);
-
+    DtwSchema * (*sub_schema)(DtwResource *self, const char *format,...);
     DtwResource * (*sub_resource_next)(DtwResource *self, const char *end_path);
     DtwResource * (*sub_resource_now)(DtwResource *self, const char *end_path);
 
@@ -1908,6 +1962,21 @@ typedef struct DtwHashModule{
 }DtwHashModule;
 
 DtwHashModule newDtwHashModule();
+
+
+typedef struct {
+
+    DtwSchema * (*newSchema)(const char *path);
+    void (*free)(DtwSchema *self);
+    DtwResource * (*new_insertion)(DtwSchema *schema);
+    DtwResourceArray * (*get_values)(DtwSchema *schema);
+    void (*add_primary_key)(DtwSchema *self,const char *primary_key);
+
+    DtwResource * (*find_by_primary_key_with_binary)(DtwSchema *schema, const char *key, unsigned  char *value, long size);
+    DtwResource * (*find_by_primary_key_with_string)(DtwSchema *schema,const char *key,const char *value);
+}DtwSchemaModule;
+
+DtwSchemaModule newDtwSchemaModule();
 
 
 typedef struct DtwNamespace{
@@ -1999,7 +2068,7 @@ typedef struct DtwNamespace{
 
     DtwLockerModule locker;
 
-
+    DtwSchemaModule schema;
     DtwTreeModule tree;
     DtwHashModule  hash;
     DtwTransactionModule transaction;
@@ -5724,6 +5793,16 @@ void private_dtw_remove_double_bars(struct DtwStringArray*path){
     }
 }
 
+char * private_dtw_format_vaarg(const char *expresion, va_list args){
+
+    va_list args_copy;
+    va_copy(args_copy, args);
+    long required_size = vsnprintf(NULL, 0,expresion,args_copy);
+    va_end(args_copy);
+    char *buffer = (char*)malloc(sizeof(char) * required_size + 2);
+    vsnprintf(buffer,sizeof (char) * required_size+1,expresion,args);
+    return buffer;
+}
 
 int private_dtw_string_cmp(const void *a, const void *b){
     const char *str_a = *(const char **)a;
@@ -8714,7 +8793,6 @@ void privateDtwResourceRootProps_free(privateDtwResourceRootProps *self){
 
 
 
-
 bool DtwResource_error(DtwResource *self){
     if(!self){
         return true;
@@ -8790,12 +8868,47 @@ void DtwResource_unlock(DtwResource *self){
     DtwLocker_unlock(self->root_props->locker, self->path);
     
 }
+void private_DtwResurce_destroy_primary_key(DtwResource *self,void *vschma,const char *current_pk) {
+
+    DtwSchema  *schema = (DtwSchema*)vschma;
+
+    DtwResource *possible_pk = DtwResource_sub_resource(self, "%s", current_pk);
+    if (!DtwResource_is_file(possible_pk)) {
+        return;
+    }
+    DtwResource *pk_index_folder = DtwResource_sub_resource(schema->index_resource, "%s", current_pk);
+    long size;
+    bool is_binary;
+    unsigned char *possible_pk_value = DtwResource_get_any(possible_pk, &size, &is_binary);
+    char *pk_sha = dtw_generate_sha_from_any(possible_pk_value, size);
+
+    DtwResource *pk_index_value = DtwResource_sub_resource(pk_index_folder, "%s", pk_sha);
+
+    if (self->allow_transaction) {
+        DtwTransaction_delete_any(self->root_props->transaction, pk_index_value->path);
+    } else {
+        dtw_remove_any(pk_index_value->path);
+    }
 
 
+}
+void private_DtwResource_destroy_all_primary_keys(DtwResource *self){
+    DtwSchema * schema = (DtwSchema*)self->mother->mother->schema;
+
+    for(int i = 0; i < schema->primary_keys->size; i++){
+        char *current_pk = schema->primary_keys->strings[i];
+        private_DtwResurce_destroy_primary_key(self,schema,current_pk);
+    }
+}
 void DtwResource_destroy(DtwResource *self){
     if(DtwResource_error(self)){
-        return ;
+        return;
     }
+
+    if(self->its_value_folder){
+        private_DtwResource_destroy_all_primary_keys(self);
+    }
+
     if(self->allow_transaction){
         DtwTransaction_delete_any(self->root_props->transaction,self->path);
     }
@@ -8806,7 +8919,29 @@ void DtwResource_destroy(DtwResource *self){
 }
 
 
+DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *format,...){
 
+    DtwSchema *schema = (DtwSchema*) malloc(sizeof(DtwSchema));
+    *schema = (DtwSchema){0};
+
+    va_list args;
+    va_start(args, format);
+    char *name = private_dtw_format_vaarg(format,args);
+    va_end(args);
+
+    //make both reference each other
+    DtwResource *master =DtwResource_sub_resource(self,"%s",name);
+    free(name);
+    master->schema = schema;
+    schema->master = master;
+
+    schema->master->schema = schema;
+    schema->values_resource = DtwResource_sub_resource(master,"%s",DTW_SCHEMA_VALUES_NAME);
+    schema->values_resource->its_value_folder = true;
+    schema->index_resource = DtwResource_sub_resource(master,"%s",DTW_SCHEMA_INDEX_NAME);
+    schema->primary_keys = newDtwStringArray();
+    return schema;
+}
 
 void DtwResource_commit(DtwResource *self){
     if(DtwResource_error(self)){
@@ -8871,6 +9006,18 @@ int DtwResource_type(DtwResource *self){
         }
     }
     return  DTW_COMPLEX_LONG_TYPE;
+
+}
+bool DtwResource_is_file(DtwResource *self){
+    if(DtwResource_error(self)){
+        return -1;
+    }
+    DtwResource_load_if_not_loaded(self);
+
+    if(self->value_any){
+        return true;
+    }
+    return  false;
 
 }
 
@@ -8986,14 +9133,13 @@ unsigned char *DtwResource_get_any_from_sub_resource(DtwResource *self, long *si
         return NULL;
     }
 
-    char name[2000] ={0};
-
     va_list args;
     va_start(args, format);
-    vsprintf(name, format, args);
+    char *name = private_dtw_format_vaarg(format,args);
     va_end(args);
 
     DtwResource *element = DtwResource_sub_resource(self,"%s",name);
+    free(name);
     return DtwResource_get_any(element,size,is_binary);
 
 }
@@ -9013,14 +9159,13 @@ unsigned char *DtwResource_get_binary_from_sub_resource(DtwResource *self, long 
         return NULL;
     }
 
-    char name[2000] ={0};
-
     va_list args;
     va_start(args, format);
-    vsprintf(name, format, args);
+    char *name = private_dtw_format_vaarg(format,args);
     va_end(args);
 
     DtwResource *element = DtwResource_sub_resource(self,"%s",name);
+    free(name);
     return DtwResource_get_binary(element,size);
 }
 
@@ -9052,14 +9197,14 @@ char *DtwResource_get_string_from_sub_resource(DtwResource *self,const char *for
         return NULL;
     }
 
-    char name[2000] ={0};
-
     va_list args;
     va_start(args, format);
-    vsprintf(name, format, args);
+    char *name = private_dtw_format_vaarg(format,args);
     va_end(args);
 
+
     DtwResource *element = DtwResource_sub_resource(self,"%s",name);
+    free(name);
     return DtwResource_get_string(element);
 }
 
@@ -9094,14 +9239,14 @@ long DtwResource_get_long_from_sub_resource(DtwResource *self,const char *format
     if(DtwResource_error(self)){
         return -1;
     }
-    char name[2000] ={0};
-
     va_list args;
     va_start(args, format);
-    vsprintf(name, format, args);
+    char *name = private_dtw_format_vaarg(format,args);
     va_end(args);
 
+
     DtwResource *element = DtwResource_sub_resource(self,"%s",name);
+    free(name);
     return DtwResource_get_long(element);
 }
 
@@ -9134,14 +9279,15 @@ double DtwResource_get_double_from_sub_resource(DtwResource *self,const char *fo
     if(DtwResource_error(self)){
         return -1;
     }
-    char name[2000] ={0};
 
     va_list args;
     va_start(args, format);
-    vsprintf(name, format, args);
+    char *name = private_dtw_format_vaarg(format,args);
     va_end(args);
 
+
     DtwResource *element = DtwResource_sub_resource(self,"%s",name);
+    free(name);
     return DtwResource_get_double(element);
 }
 
@@ -9174,14 +9320,14 @@ bool DtwResource_get_bool_from_sub_resource(DtwResource *self,const char *format
     if(DtwResource_error(self)){
         return false;
     }
-    char name[2000] ={0};
 
     va_list args;
     va_start(args, format);
-    vsprintf(name, format, args);
+    char *name = private_dtw_format_vaarg(format,args);
     va_end(args);
 
     DtwResource *element = DtwResource_sub_resource(self,"%s",name);
+    free(name);
     return DtwResource_get_bool(element);
 }
 
@@ -9189,17 +9335,33 @@ bool DtwResource_get_bool_from_sub_resource(DtwResource *self,const char *format
 // Created by mateusmoutinho on 05/08/23.
 //
 
-
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size){
     if(DtwResource_error(self)){
         return ;
     }
+
+    if(self->its_a_write_point){
+        DtwSchema * schema = (DtwSchema*)self->mother->mother->mother->schema;
+        bool its_a_pk = DtwStringArray_find_position(schema->primary_keys,self->name) !=-1;
+
+        if(its_a_pk){
+            DtwResource *pk_folder = DtwResource_sub_resource(schema->index_resource,"%s",self->name);
+            char *sha = dtw_generate_sha_from_any(element,size);
+            DtwResource  *pk_value = DtwResource_sub_resource(pk_folder,sha);
+            free(sha);
+            char *mothers_name =self->mother->name;
+            DtwResource_set_string(pk_value,mothers_name);
+        }
+    }
+
+
     if(self->allow_transaction){
         DtwTransaction_write_any(self->root_props->transaction,self->path,element,size,true);
     }
     else{
         dtw_write_any_content(self->path,element,size);
     }
+
     DtwResource_unload(self);
     self->loaded = true;
     self->value_size = size;
@@ -9209,11 +9371,27 @@ void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size
 }
 
 
-
 void DtwResource_set_string(DtwResource *self,const  char *element){
     if(DtwResource_error(self)){
         return ;
     }
+
+
+    if(self->its_a_write_point){
+        DtwSchema * schema = (DtwSchema*)self->mother->mother->mother->schema;
+        bool its_a_pk = DtwStringArray_find_position(schema->primary_keys,self->name) !=-1;
+
+        if(its_a_pk){
+            DtwResource *pk_folder = DtwResource_sub_resource(schema->index_resource,"%s",self->name);
+            char *sha = dtw_generate_sha_from_string(element);
+            DtwResource  *pk_value = DtwResource_sub_resource(pk_folder,sha);
+            free(sha);
+            char *mothers_name =self->mother->name;
+            DtwResource_set_string(pk_value,mothers_name);
+        }
+    }
+
+
     if(self->allow_transaction){
         DtwTransaction_write_string(self->root_props->transaction,self->path,element);
     }
@@ -9231,35 +9409,23 @@ void DtwResource_set_string(DtwResource *self,const  char *element){
 
 }
 
-void DtwResource_set_binary_in_sub_resource(DtwResource *self, unsigned char *element, long size,const char *format,...){
+
+void DtwResource_set_binary_sha(DtwResource *self, unsigned  char *value, long size){
     if(DtwResource_error(self)){
         return ;
     }
-    char name[2000] ={0};
-
-    va_list args;
-    va_start(args, format);
-    vsprintf(name, format, args);
-    va_end(args);
-
-    DtwResource *created = DtwResource_sub_resource(self,"%s",name);
-    DtwResource_set_binary(created,element,size);
+    char *generated_sha = dtw_generate_sha_from_any(value,size);
+    DtwResource_set_string(self,generated_sha);
+    free(generated_sha);
 }
 
-void DtwResource_set_string_in_sub_resource(DtwResource *self,const  char *element,const char *format,...){
-    if(DtwResource_error(self)){
-        return ;
-    }
-    char name[2000] ={0};
-
-    va_list args;
-    va_start(args, format);
-    vsprintf(name, format, args);
-    va_end(args);
-
-    DtwResource *created = DtwResource_sub_resource(self,"%s",name);
-    DtwResource_set_string(created,element);
+void DtwResource_set_string_sha(DtwResource *self,const char *value){
+    DtwResource_set_binary_sha(self,(unsigned char*)value, (long)strlen(value));
 }
+
+
+
+
 
 
 
@@ -9281,20 +9447,6 @@ void DtwResource_set_long(DtwResource *self,long element){
     self->value_any = (unsigned char *)strdup(result);
 
 }
-void DtwResource_set_long_in_sub_resource(DtwResource *self,long element,const char *format,...){
-    if(DtwResource_error(self)){
-        return ;
-    }
-    char name[2000] ={0};
-
-    va_list args;
-    va_start(args, format);
-    vsprintf(name, format, args);
-    va_end(args);
-
-    DtwResource *created = DtwResource_sub_resource(self,"%s",name);
-    DtwResource_set_long(created,element);
-}
 
 void DtwResource_set_double(DtwResource *self,double element){
     if(DtwResource_error(self)){
@@ -9313,20 +9465,6 @@ void DtwResource_set_double(DtwResource *self,double element){
     self->value_any = (unsigned char *)strdup(result);
 
 
-}
-void DtwResource_set_double_in_sub_resource(DtwResource *self,double element,const char *format,...){
-    if(DtwResource_error(self)){
-        return ;
-    }
-    char name[2000] ={0};
-
-    va_list args;
-    va_start(args, format);
-    vsprintf(name, format, args);
-    va_end(args);
-
-    DtwResource *created = DtwResource_sub_resource(self,"%s",name);
-    DtwResource_set_double(created,element);
 }
 
 void DtwResource_set_bool( DtwResource *self,bool element){
@@ -9352,18 +9490,68 @@ void DtwResource_set_bool( DtwResource *self,bool element){
     }
 
 }
-void DtwResource_set_bool_in_sub_resource( DtwResource *self,bool element,const char *format,...){
+
+
+void DtwResource_set_binary_in_sub_resource(DtwResource *self,const char *key, unsigned char *element, long size){
     if(DtwResource_error(self)){
         return ;
     }
-    char name[2000] ={0};
 
-    va_list args;
-    va_start(args, format);
-    vsprintf(name, format, args);
-    va_end(args);
+    DtwResource *created = DtwResource_sub_resource(self,"%s",key);
+    DtwResource_set_binary(created, element, size);
+}
 
-    DtwResource *created = DtwResource_sub_resource(self,"%s",name);
+void DtwResource_set_binary_sha_in_sub_resource(DtwResource *self, const char *key, unsigned  char *value, long size){
+    if(DtwResource_error(self)){
+        return;
+    }
+    DtwResource *created = DtwResource_sub_resource(self,"%s",key);
+    DtwResource_set_binary_sha(created,value,size);
+}
+
+
+void DtwResource_set_string_sha_in_sub_resource(DtwResource *self, const char *key, const char *value){
+    if(DtwResource_error(self)){
+        return;
+    }
+
+    DtwResource *created = DtwResource_sub_resource(self,"%s",key);
+    DtwResource_set_string_sha(created,value);
+}
+
+void DtwResource_set_string_in_sub_resource(DtwResource *self, const char *key, const  char *element){
+    if(DtwResource_error(self)){
+        return ;
+    }
+
+    DtwResource *created = DtwResource_sub_resource(self,"%s",key);
+    DtwResource_set_string(created,element);
+}
+
+void DtwResource_set_long_in_sub_resource(DtwResource *self, const char *key, long element){
+    if(DtwResource_error(self)){
+        return ;
+    }
+
+    DtwResource *created = DtwResource_sub_resource(self,"%s",key);
+    DtwResource_set_long(created,element);
+}
+
+void DtwResource_set_double_in_sub_resource(DtwResource *self, const char *key, double element){
+    if(DtwResource_error(self)){
+        return ;
+    }
+
+    DtwResource *created = DtwResource_sub_resource(self,"%s",key);
+    DtwResource_set_double(created,element);
+}
+
+void DtwResource_set_bool_in_sub_resource(DtwResource *self,const char *key, bool element){
+    if(DtwResource_error(self)){
+        return ;
+    }
+
+    DtwResource *created = DtwResource_sub_resource(self,"%s",key);
     DtwResource_set_bool(created,element);
 }
 
@@ -9390,21 +9578,28 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
         return NULL;
     }
 
-    char name[2000] ={0};
-
     va_list args;
     va_start(args, format);
-    vsprintf(name, format, args);
+    char *name = private_dtw_format_vaarg(format,args);
     va_end(args);
-
 
     DtwResource * Already_Exist = DtwResourceArray_get_by_name((DtwResourceArray*)self->sub_resources,name);
     if(Already_Exist){
+        free(name);
         return Already_Exist;
     }
 
     DtwResource *new_element = (DtwResource*) malloc(sizeof (DtwResource));
     *new_element =(DtwResource){0};
+
+    if(self->its_value_folder){
+        new_element->its_a_element_folder = true;
+    }
+    if(self->its_a_element_folder){
+        new_element->its_a_write_point =true;
+    }
+
+
     new_element->allow_transaction = self->allow_transaction;
     new_element->use_locker_on_unique_values = self->use_locker_on_unique_values;
     new_element->root_props = self->root_props;
@@ -9421,19 +9616,17 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
     if(self->cache_sub_resources){
         DtwResourceArray_append((DtwResourceArray*)self->sub_resources,new_element);
     }
-
+    free(name);
     return new_element;
 
 }
 DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,const  char *format, ...){
 
-
-    char name[2000] ={0};
-
     va_list args;
     va_start(args, format);
-    vsprintf(name, format, args);
+    char *name = private_dtw_format_vaarg(format,args);
     va_end(args);
+;
 
     DtwResource *possible_emptiy  = DtwResourceArray_get_by_name(
             (DtwResourceArray*)self->sub_resources,
@@ -9460,11 +9653,12 @@ DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,cons
             if(self->cache_sub_resources){
                 DtwResourceArray_append((DtwResourceArray*)self->sub_resources,possible_emptiy);
             }
-
+            free(name);
             return possible_emptiy;
     }
     DtwResource_unlock(possible_emptiy);
     DtwResource_free(possible_emptiy);
+    free(name);
     return  NULL;
 
 }
@@ -9473,6 +9667,10 @@ void DtwResource_free(DtwResource *self){
     bool is_root = self->mother == NULL;
     if(is_root){
         privateDtwResourceRootProps_free(self->root_props);
+    }
+    if(self->schema){
+        DtwSchema  *schema = (DtwSchema*)self->schema;
+        privateDtwSchema_free_self_props(schema);
     }
 
 
@@ -9598,6 +9796,9 @@ DtwResource * DtwResource_sub_resource_random(DtwResource *self, const char *end
 
     }
 }
+
+
+
 
 
 
@@ -10510,6 +10711,95 @@ void  DtwHash_free(DtwHash *self){
 
 
 
+DtwSchema * newDtwSchema(const char *path){
+    DtwSchema *schema = (DtwSchema*) malloc(sizeof(DtwSchema));
+    *schema = (DtwSchema){0};
+
+    //make both reference each other
+    DtwResource *master = new_DtwResource(path);
+    master->schema = schema;
+    schema->master = master;
+
+    schema->master->schema = schema;
+    schema->values_resource = DtwResource_sub_resource(master,"%s",DTW_SCHEMA_VALUES_NAME);
+    schema->values_resource->its_value_folder = true;
+    schema->index_resource = DtwResource_sub_resource(master,"%s",DTW_SCHEMA_INDEX_NAME);
+    schema->primary_keys = newDtwStringArray();
+
+    return schema;
+}
+
+void DtwSchema_add_primary_key(DtwSchema *self,const char *primary_key){
+
+    bool not_found =DtwStringArray_find_position(self->primary_keys,primary_key)==-1;
+
+    if(not_found){
+        DtwStringArray_append(self->primary_keys,primary_key);
+    }
+}
+
+void DtwSchema_free(DtwSchema *self){
+    if(self->owner){
+        //the resource call the privateDtwSchema_free_self_props, and frees
+        //everything
+        DtwResource_free(self->master);
+    }
+
+}
+
+
+void privateDtwSchema_free_self_props(DtwSchema *self){
+    DtwStringArray_free(self->primary_keys);
+    free(self);
+}
+
+
+DtwResource * DtwSchema_new_insertion(DtwSchema *schema){
+    DtwResource  *created = DtwResource_sub_resource_random(schema->values_resource,NULL);
+
+    return created;
+}
+
+DtwResourceArray * DtwSchema_get_values(DtwSchema *schema){
+    return DtwResource_sub_resources(schema->values_resource);
+}
+
+DtwResource * DtwSchema_find_by_primary_key_with_binary(DtwSchema *schema, const char *primary_key, unsigned  char *value, long size){
+
+    DtwResource *primary_key_folder = DtwResource_sub_resource(schema->index_resource,"%s",primary_key);
+    char *sha = dtw_generate_sha_from_any(value,size);
+    DtwResource *index_value = DtwResource_sub_resource(primary_key_folder,"%s",sha);
+    free(sha);
+    if(DtwResource_type(index_value) == DTW_NOT_FOUND){
+        return NULL;
+    }
+    char *element_folder = DtwResource_get_string(index_value);
+    if(DtwResource_error(schema->master)){
+        return NULL;
+    }
+    if(!element_folder){
+        return NULL;
+    }
+    DtwResource *founded_resource = DtwResource_sub_resource(schema->values_resource,"%s",element_folder);
+    return founded_resource;
+}
+
+DtwResource * DtwSchema_find_by_primary_key_with_string(DtwSchema *schema,const char *key,const char *value){
+
+    return DtwSchema_find_by_primary_key_with_binary(
+            schema,
+            key,
+            (unsigned char *) value,
+            (long) strlen(value)
+    );
+}
+
+
+
+
+
+
+
 DtwRandonizerModule newDtwRandonizerModule(){
     DtwRandonizerModule self = {0};
     self.newRandonizer = newDtwRandonizer;
@@ -10757,12 +11047,18 @@ DtwResourceModule newDtwResourceModule(){
     self.set_long_in_sub_resource = DtwResource_set_long_in_sub_resource;
     self.set_double_in_sub_resource = DtwResource_set_double_in_sub_resource;
     self.set_bool_in_sub_resource = DtwResource_set_bool_in_sub_resource;
-
+    self.is_file = DtwResource_is_file;
     self.sub_resource_ensuring_not_exist = DtwResource_sub_resource_ensuring_not_exist;
     self.sub_resource_next = DtwResource_sub_resource_next;
     self.sub_resource_now  = DtwResource_sub_resource_now;
     self.sub_resource_now_in_unix = DtwResource_sub_resource_now_in_unix;
     self.sub_resource_random = DtwResource_sub_resource_random;
+    self.sub_schema = DtwResource_sub_schema;
+    self.set_binary_sha =DtwResource_set_binary_sha;
+    self.set_string_sha = DtwResource_set_string_sha;
+    self.set_binary_sha_in_sub_resource = DtwResource_set_binary_sha_in_sub_resource;
+    self.set_string_sha_in_sub_resource = DtwResource_set_string_sha_in_sub_resource;
+
     self.lock =DtwResource_lock;
     self.unlock = DtwResource_unlock;
     self.destroy = DtwResource_destroy;
@@ -10789,7 +11085,6 @@ DtwResourceModule newDtwResourceModule(){
     self.represent = DtwResource_represent;
     self.rename = DtwResource_rename;
     self.free  = DtwResource_free;
-
     self.sub_resources = DtwResource_sub_resources;
     self.array = newDtwResourceArrayModule();
 
@@ -10818,6 +11113,20 @@ DtwHashModule newDtwHashModule(){
     self.digest_folder_by_content = DtwHash_digest_folder_by_content;
     self.free = DtwHash_free;
     return self;
+}
+
+
+
+DtwSchemaModule newDtwSchemaModule(){
+    DtwSchemaModule  self = {0};
+    self.find_by_primary_key_with_binary = DtwSchema_find_by_primary_key_with_binary;
+    self.find_by_primary_key_with_string = DtwSchema_find_by_primary_key_with_string;
+    self.new_insertion = DtwSchema_new_insertion;
+    self.get_values =DtwSchema_get_values;
+    self.add_primary_key = DtwSchema_add_primary_key;
+    self.newSchema = newDtwSchema;
+    self.free = DtwSchema_free;
+    return  self;
 }
 
 
@@ -10871,7 +11180,7 @@ DtwNamespace newDtwNamespace(){
     self.path = newDtwPathModule();
     self.locker = newDtwLockerModule();
     
-
+    self.schema = newDtwSchemaModule();
     self.tree = newDtwTreeModule();
     self.hash = newDtwHashModule();
     self.transaction = newDtwTransactionModule();

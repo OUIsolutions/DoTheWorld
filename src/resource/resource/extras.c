@@ -116,6 +116,14 @@ void DtwResource_destroy(DtwResource *self){
     if(self->its_value_folder){
         private_DtwResource_destroy_all_primary_keys(self);
     }
+    if(self->its_a_write_point){
+        DtwSchema * schema = (DtwSchema*)self->mother->mother->mother->schema;
+        bool its_a_pk = DtwStringArray_find_position(schema->primary_keys,self->name) !=-1;
+        if(its_a_pk){
+            private_DtwResurce_destroy_primary_key(self,schema,self->name);
+        }
+    }
+
 
     if(self->allow_transaction){
         DtwTransaction_delete_any(self->root_props->transaction,self->path);
