@@ -6,8 +6,11 @@ int main (){
 
     DtwResource *values = dtw.resource.newResource("tests/target/");
     DtwResource *password = dtw.resource.sub_resource(values,"password");
-    dtw.resource.set_string_sha(password,"1234");
+    long size;
+    unsigned   char *content = dtw_load_binary_content("tests/target/blob.png",&size);
 
+    dtw.resource.set_binary_sha(password,content,size);
+    free(content);
     dtw.resource.commit(values);
     dtw.resource.free(values);
 

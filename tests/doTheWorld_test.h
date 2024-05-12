@@ -1336,6 +1336,7 @@ void DtwResource_set_string_sha(DtwResource *self,const char *value);
 void DtwResource_set_binary_sha_in_sub_resource(DtwResource *self, const char *key, unsigned  char *value, long size);
 void DtwResource_set_string_sha_in_sub_resource(DtwResource *self, const char *key, const char *value);
 
+void DtwResource_destroy_sub_resource(DtwResource *self, const char *key);
 
 unsigned char *DtwResource_get_binary(DtwResource *self, long *size);
 
@@ -1382,7 +1383,7 @@ void DtwResource_set_bool( DtwResource *self,bool element);
 
 void DtwResource_set_bool_in_sub_resource(DtwResource *self,const char *key, bool element);
 
-void private_DtwResurce_destroy_primary_key(DtwResource *self,void *schema,const char *current_pk);
+void private_DtwResurce_destroy_primary_key(DtwResource *self,void *schema);
 
 void private_DtwResource_destroy_all_primary_keys(DtwResource *self);
 
@@ -1857,6 +1858,7 @@ typedef struct DtwResourceModule{
 
     char * (*get_error_message)(DtwResource *self);
     bool (*is_file)(DtwResource *self);
+    void (*destroy_sub_resource)(DtwResource *self, const char *key);
     DtwResource * (*sub_resource)(struct DtwResource *self,const  char *format,...);
     unsigned char *(*get_any_from_sub_resource)(DtwResource *self, long *size, bool *is_binary,const char *format,...);
     unsigned char *(*get_binary_from_sub_resource)(DtwResource *self, long *size,const char *format,...);
@@ -8868,18 +8870,17 @@ void DtwResource_unlock(DtwResource *self){
     DtwLocker_unlock(self->root_props->locker, self->path);
     
 }
-void private_DtwResurce_destroy_primary_key(DtwResource *self,void *vschma,const char *current_pk) {
+void private_DtwResurce_destroy_primary_key(DtwResource *self,void *vschma) {
 
     DtwSchema  *schema = (DtwSchema*)vschma;
 
-    DtwResource *possible_pk = DtwResource_sub_resource(self, "%s", current_pk);
-    if (!DtwResource_is_file(possible_pk)) {
+    if (!DtwResource_is_file(self)) {
         return;
     }
-    DtwResource *pk_index_folder = DtwResource_sub_resource(schema->index_resource, "%s", current_pk);
+    DtwResource *pk_index_folder = DtwResource_sub_resource(schema->index_resource, "%s", self->name);
     long size;
     bool is_binary;
-    unsigned char *possible_pk_value = DtwResource_get_any(possible_pk, &size, &is_binary);
+    unsigned char *possible_pk_value = DtwResource_get_any(self, &size, &is_binary);
     char *pk_sha = dtw_generate_sha_from_any(possible_pk_value, size);
 
     DtwResource *pk_index_value = DtwResource_sub_resource(pk_index_folder, "%s", pk_sha);
@@ -8894,10 +8895,10 @@ void private_DtwResurce_destroy_primary_key(DtwResource *self,void *vschma,const
 }
 void private_DtwResource_destroy_all_primary_keys(DtwResource *self){
     DtwSchema * schema = (DtwSchema*)self->mother->mother->schema;
-
     for(int i = 0; i < schema->primary_keys->size; i++){
         char *current_pk = schema->primary_keys->strings[i];
-        private_DtwResurce_destroy_primary_key(self,schema,current_pk);
+        DtwResource *son = DtwResource_sub_resource(self,"%s",current_pk);
+        private_DtwResurce_destroy_primary_key(son,schema);
     }
 }
 void DtwResource_destroy(DtwResource *self){
@@ -8905,9 +8906,17 @@ void DtwResource_destroy(DtwResource *self){
         return;
     }
 
-    if(self->its_value_folder){
+    if(self->its_a_element_folder){
         private_DtwResource_destroy_all_primary_keys(self);
     }
+    if(self->its_a_write_point){
+        DtwSchema * schema = (DtwSchema*)self->mother->mother->mother->schema;
+        bool its_a_pk = DtwStringArray_find_position(schema->primary_keys,self->name) !=-1;
+        if(its_a_pk){
+            private_DtwResurce_destroy_primary_key(self,schema);
+        }
+    }
+
 
     if(self->allow_transaction){
         DtwTransaction_delete_any(self->root_props->transaction,self->path);
@@ -8916,6 +8925,11 @@ void DtwResource_destroy(DtwResource *self){
         dtw_remove_any(self->path);
     }
 
+}
+
+void DtwResource_destroy_sub_resource(DtwResource *self, const char *key){
+    DtwResource *son = DtwResource_sub_resource(self, "%s",key);
+    DtwResource_destroy(son);
 }
 
 
@@ -11050,6 +11064,7 @@ DtwResourceModule newDtwResourceModule(){
     self.is_file = DtwResource_is_file;
     self.sub_resource_ensuring_not_exist = DtwResource_sub_resource_ensuring_not_exist;
     self.sub_resource_next = DtwResource_sub_resource_next;
+    self.destroy_sub_resource = DtwResource_destroy_sub_resource;
     self.sub_resource_now  = DtwResource_sub_resource_now;
     self.sub_resource_now_in_unix = DtwResource_sub_resource_now_in_unix;
     self.sub_resource_random = DtwResource_sub_resource_random;
