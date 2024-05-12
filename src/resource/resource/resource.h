@@ -71,7 +71,15 @@ unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binar
 unsigned char *DtwResource_get_any_from_sub_resource(DtwResource *self, long *size, bool *is_binary,const char *format,...);
 
 
+void DtwResource_set_binary_sha(DtwResource *self, unsigned  char *value, long size);
+void DtwResource_set_string_sha(DtwResource *self,const char *value);
+
+void DtwResource_set_binary_sha_in_sub_resource(DtwResource *self, unsigned  char *value, long size, const char *format, ...);
+void DtwResource_set_string_sha_in_sub_resource(DtwResource *self,const char *value,const char *format,...);
+
+
 unsigned char *DtwResource_get_binary(DtwResource *self, long *size);
+
 
 unsigned char *DtwResource_get_binary_from_sub_resource(DtwResource *self, long *size,const char *format,...);
 

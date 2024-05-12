@@ -36,7 +36,6 @@ void DtwResource_set_normal_binary(DtwResource *self, unsigned char *element, lo
 }
 
 
-
 void DtwResource_set_string(DtwResource *self,const  char *element){
     if(DtwResource_error(self)){
         return ;
@@ -73,20 +72,22 @@ void DtwResource_set_binary_in_sub_resource(DtwResource *self, unsigned char *el
     DtwResource_set_normal_binary(created, element, size);
 }
 
-void DtwResource_set_string_in_sub_resource(DtwResource *self,const  char *element,const char *format,...){
+void DtwResource_set_binary_sha(DtwResource *self, unsigned  char *value, long size){
     if(DtwResource_error(self)){
         return ;
     }
-    char name[2000] ={0};
-
-    va_list args;
-    va_start(args, format);
-    vsprintf(name, format, args);
-    va_end(args);
-
-    DtwResource *created = DtwResource_sub_resource(self,"%s",name);
-    DtwResource_set_string(created,element);
+    char *generated_sha = dtw_generate_sha_from_any(value,size);
+    DtwResource_set_string(self,generated_sha);
+    free(generated_sha);
 }
+
+void DtwResource_set_string_sha(DtwResource *self,const char *value){
+    DtwResource_set_binary_sha(self,(unsigned char*)value, (long)strlen(value));
+}
+
+
+
+
 
 
 
@@ -108,20 +109,6 @@ void DtwResource_set_long(DtwResource *self,long element){
     self->value_any = (unsigned char *)strdup(result);
 
 }
-void DtwResource_set_long_in_sub_resource(DtwResource *self,long element,const char *format,...){
-    if(DtwResource_error(self)){
-        return ;
-    }
-    char name[2000] ={0};
-
-    va_list args;
-    va_start(args, format);
-    vsprintf(name, format, args);
-    va_end(args);
-
-    DtwResource *created = DtwResource_sub_resource(self,"%s",name);
-    DtwResource_set_long(created,element);
-}
 
 void DtwResource_set_double(DtwResource *self,double element){
     if(DtwResource_error(self)){
@@ -140,20 +127,6 @@ void DtwResource_set_double(DtwResource *self,double element){
     self->value_any = (unsigned char *)strdup(result);
 
 
-}
-void DtwResource_set_double_in_sub_resource(DtwResource *self,double element,const char *format,...){
-    if(DtwResource_error(self)){
-        return ;
-    }
-    char name[2000] ={0};
-
-    va_list args;
-    va_start(args, format);
-    vsprintf(name, format, args);
-    va_end(args);
-
-    DtwResource *created = DtwResource_sub_resource(self,"%s",name);
-    DtwResource_set_double(created,element);
 }
 
 void DtwResource_set_bool( DtwResource *self,bool element){
@@ -178,18 +151,4 @@ void DtwResource_set_bool( DtwResource *self,bool element){
 
     }
 
-}
-void DtwResource_set_bool_in_sub_resource( DtwResource *self,bool element,const char *format,...){
-    if(DtwResource_error(self)){
-        return ;
-    }
-    char name[2000] ={0};
-
-    va_list args;
-    va_start(args, format);
-    vsprintf(name, format, args);
-    va_end(args);
-
-    DtwResource *created = DtwResource_sub_resource(self,"%s",name);
-    DtwResource_set_bool(created,element);
 }
