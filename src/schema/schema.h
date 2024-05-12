@@ -10,6 +10,7 @@ typedef struct {
     DtwStringArray  *primary_keys;
 }DtwSchema;
 
+bool privateDtwSchema_error(DtwSchema *self);
 
 DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *format,...);
 
@@ -24,10 +25,10 @@ DtwResource * DtwSchema_new_insertion(DtwSchema *schema);
 void DtwSchema_add_primary_key(DtwSchema *self,const char *primary_key);
 
 
-DtwResourceArray * DtwSchema_get_values(DtwSchema *schema);
+DtwResourceArray * DtwSchema_get_values(DtwSchema *self);
 
-DtwResource * DtwSchema_find_by_primary_key_with_binary(DtwSchema *schema, const char *primary_key, unsigned  char *value, long size);
+DtwResource * DtwSchema_find_by_primary_key_with_binary(DtwSchema *self, const char *primary_key, unsigned  char *value, long size);
 
-DtwResource * DtwSchema_find_by_primary_key_with_string(DtwSchema *schema,const char *key,const char *value);
+DtwResource * DtwSchema_find_by_primary_key_with_string(DtwSchema *self, const char *key, const char *value);
 
 

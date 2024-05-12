@@ -2,7 +2,7 @@
 
 
 bool DtwResource_error(DtwResource *self){
-    if(!self){
+    if(self==NULL){
         return true;
     }
     if(DtwResource_get_error_code(self) == DTW_RESOURCE_OK){
