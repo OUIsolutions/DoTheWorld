@@ -126,7 +126,7 @@ void DtwResource_set_bool( DtwResource *self,bool element);
 
 void DtwResource_set_bool_in_sub_resource(DtwResource *self,const char *key, bool element);
 
-void private_DtwResurce_destroy_primary_key(DtwResource *self,void *schema,const char *current_pk);
+void private_DtwResurce_destroy_primary_key(DtwResource *self,void *schema);
 
 void private_DtwResource_destroy_all_primary_keys(DtwResource *self);
 

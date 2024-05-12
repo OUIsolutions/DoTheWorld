@@ -76,18 +76,17 @@ void DtwResource_unlock(DtwResource *self){
     DtwLocker_unlock(self->root_props->locker, self->path);
     
 }
-void private_DtwResurce_destroy_primary_key(DtwResource *self,void *vschma,const char *current_pk) {
+void private_DtwResurce_destroy_primary_key(DtwResource *self,void *vschma) {
 
     DtwSchema  *schema = (DtwSchema*)vschma;
 
-    DtwResource *possible_pk = DtwResource_sub_resource(self, "%s", current_pk);
-    if (!DtwResource_is_file(possible_pk)) {
+    if (!DtwResource_is_file(self)) {
         return;
     }
-    DtwResource *pk_index_folder = DtwResource_sub_resource(schema->index_resource, "%s", current_pk);
+    DtwResource *pk_index_folder = DtwResource_sub_resource(schema->index_resource, "%s", self->name);
     long size;
     bool is_binary;
-    unsigned char *possible_pk_value = DtwResource_get_any(possible_pk, &size, &is_binary);
+    unsigned char *possible_pk_value = DtwResource_get_any(self, &size, &is_binary);
     char *pk_sha = dtw_generate_sha_from_any(possible_pk_value, size);
 
     DtwResource *pk_index_value = DtwResource_sub_resource(pk_index_folder, "%s", pk_sha);
@@ -104,7 +103,8 @@ void private_DtwResource_destroy_all_primary_keys(DtwResource *self){
     DtwSchema * schema = (DtwSchema*)self->mother->mother->schema;
     for(int i = 0; i < schema->primary_keys->size; i++){
         char *current_pk = schema->primary_keys->strings[i];
-        private_DtwResurce_destroy_primary_key(self,schema,current_pk);
+        DtwResource *son = DtwResource_sub_resource(self,"%s",current_pk);
+        private_DtwResurce_destroy_primary_key(son,schema);
     }
 }
 void DtwResource_destroy(DtwResource *self){
@@ -119,7 +119,7 @@ void DtwResource_destroy(DtwResource *self){
         DtwSchema * schema = (DtwSchema*)self->mother->mother->mother->schema;
         bool its_a_pk = DtwStringArray_find_position(schema->primary_keys,self->name) !=-1;
         if(its_a_pk){
-            private_DtwResurce_destroy_primary_key(self,schema,self->name);
+            private_DtwResurce_destroy_primary_key(self,schema);
         }
     }
 
