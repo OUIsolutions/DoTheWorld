@@ -178,8 +178,8 @@ int private_dtw_string_cmp(const void *a, const void *b){
 }
 
 long dtw_get_time(){
-    if(dtw_now != -1){
-        return dtw_now;
+    if(dtw_debug_time == true){
+        return 0;
     }
     return time(NULL);
 }

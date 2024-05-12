@@ -4,9 +4,8 @@
 
 DtwRandonizer * newDtwRandonizer(){
     DtwRandonizer *self = (DtwRandonizer*) malloc(sizeof (DtwRandonizer));
-    self->seed = dtw_get_time();
-    self->actual_generation = 0;
-
+    *self =(DtwRandonizer){0};
+    self->time_seed = dtw_get_time();
     return self;
 }
 
@@ -20,7 +19,7 @@ char * DtwRandonizer_generate_token(struct DtwRandonizer*self, int size){
     int total_size = sizeof(chars) - 1;
     char *token = (char*)malloc(size +1);
 
-    srand(  self->seed + self->actual_generation);
+    srand(  self->time_seed + self->actual_generation + self->seed);
 
     for (int i = 0; i < size; ++i) {
         int index = rand() % total_size;
