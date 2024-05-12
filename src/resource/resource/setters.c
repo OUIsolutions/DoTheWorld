@@ -18,10 +18,12 @@ void private_dtw_resource_set_primary_key_if_exist_primary_key(DtwResource *self
         if (DtwResource_error(self)) {
             return;
         }
+
         //means its the same
         if (strcmp(content, mothers_name) == 0) {
             return;
         }
+
         private_DtwResource_raise_error(
                 self,
                 DTW_RESOURCE_PRIMARY_KEY_ALREADY_EXIST,

@@ -2,9 +2,12 @@
 #include "../../../doTheWorld_test.h"
 DtwNamespace dtw;
 
+
+
+
 char *create_users(const char *name,const char *email,const char *password, int age){
 
-    DtwResource *database = dtw.resource.newResource("schema_database");
+    DtwResource *database = dtw.resource.newResource("tests/target/schema_database");
     DtwSchema  *users =dtw.resource.sub_schema(database,"users");
     dtw.schema.add_primary_key(users,"name");
     dtw.schema.add_primary_key(users,"email");
@@ -30,11 +33,11 @@ int main(){
     char *error = create_users("mateus","mateusmoutinho01@gmail.com","1234",27);
     if(error){
         printf("error:%s\n",error);
+        free(error);
+        return 0;
     }
 
 
 }
-
-
 
 
