@@ -79,6 +79,7 @@ void DtwResource_set_string_sha(DtwResource *self,const char *value);
 void DtwResource_set_binary_sha_in_sub_resource(DtwResource *self, const char *key, unsigned  char *value, long size);
 void DtwResource_set_string_sha_in_sub_resource(DtwResource *self, const char *key, const char *value);
 
+void DtwResource_destroy_sub_resource(DtwResource *self, const char *key);
 
 unsigned char *DtwResource_get_binary(DtwResource *self, long *size);
 

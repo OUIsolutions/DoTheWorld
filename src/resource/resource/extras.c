@@ -102,7 +102,6 @@ void private_DtwResurce_destroy_primary_key(DtwResource *self,void *vschma,const
 }
 void private_DtwResource_destroy_all_primary_keys(DtwResource *self){
     DtwSchema * schema = (DtwSchema*)self->mother->mother->schema;
-
     for(int i = 0; i < schema->primary_keys->size; i++){
         char *current_pk = schema->primary_keys->strings[i];
         private_DtwResurce_destroy_primary_key(self,schema,current_pk);
@@ -113,7 +112,7 @@ void DtwResource_destroy(DtwResource *self){
         return;
     }
 
-    if(self->its_value_folder){
+    if(self->its_a_element_folder){
         private_DtwResource_destroy_all_primary_keys(self);
     }
     if(self->its_a_write_point){
@@ -132,6 +131,11 @@ void DtwResource_destroy(DtwResource *self){
         dtw_remove_any(self->path);
     }
 
+}
+
+void DtwResource_destroy_sub_resource(DtwResource *self, const char *key){
+    DtwResource *son = DtwResource_sub_resource(self, "%s",key);
+    DtwResource_destroy(son);
 }
 
 
