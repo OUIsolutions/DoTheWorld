@@ -60,7 +60,15 @@ void  private_DtwResource_raise_error(DtwResource *self, int error_code, const c
 
 void DtwResource_rename(DtwResource *self,const char *new_name){
 
-
+    if(private_dtw_resource_its_a_primary_key(self)){
+        private_DtwResource_raise_error(
+                self,
+                DTW_IMPOSSIBLE_TO_RENAME_A_PRIMARY_KEY,
+                "primary key %s cannot be renamed",
+                self->name
+        );
+        return;
+    }
 
     char *old_path = strdup(self->path);
     free(self->path);
@@ -79,6 +87,10 @@ void DtwResource_rename(DtwResource *self,const char *new_name){
 
 }
 
+void DtwResource_rename_sub_resource(DtwResource *self,const char *old_name,const  char *new_name){
+    DtwResource *created = DtwResource_sub_resource(self,"name");
+    DtwResource_rename(created,new_name);
+}
 
 int DtwResource_lock(DtwResource *self){
     if(DtwResource_error(self)){
@@ -96,7 +108,20 @@ void DtwResource_unlock(DtwResource *self){
 }
 
 DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *format,...){
+    if(DtwResource_error(self)){
+        return  NULL;
+    }
 
+    if(private_dtw_resource_its_a_primary_key(self)){
+        private_DtwResource_raise_error(
+                self,
+                DTW_RESOURCE_PRIMARY_KEY_CANNOT_HAVE_SUB_SCHEMA,
+                "primary key %s cannot have a sub schema",
+                self->name
+        );
+        return NULL;
+    }
+    
     DtwSchema *schema = (DtwSchema*) malloc(sizeof(DtwSchema));
     *schema = (DtwSchema){0};
 

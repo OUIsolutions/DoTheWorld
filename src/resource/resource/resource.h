@@ -70,6 +70,7 @@ void DtwResource_unlock(DtwResource *self);
 
 
 void DtwResource_rename(DtwResource *self,const  char *new_name);
+void DtwResource_rename_sub_resource(DtwResource *self,const char *old_name,const  char *new_name);
 
 //getters
 
