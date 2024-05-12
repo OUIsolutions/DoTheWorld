@@ -13,7 +13,7 @@ DtwSchema * newDtwSchema(const char *path){
     schema->master->schema = schema;
     schema->values_resource = DtwResource_sub_resource(master,"%s",DTW_SCHEMA_VALUES_NAME);
     schema->index_resource = DtwResource_sub_resource(master,"%s",DTW_SCHEMA_INDEX_NAME);
-    schema->keys = newDtwStringArray();
+    schema->primary_keys = newDtwStringArray();
     return schema;
 }
 
@@ -28,7 +28,7 @@ void DtwSchema_free(DtwSchema *self){
 
 
 void privateDtwSchema_free_self_props(DtwSchema *self){
-    DtwStringArray_free(self->keys);
+    DtwStringArray_free(self->primary_keys);
     free(self);
 }
 

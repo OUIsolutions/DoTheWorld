@@ -7,7 +7,7 @@ typedef struct {
     bool owner;
     DtwResource  *values_resource;
     DtwResource  *index_resource;
-    DtwStringArray  *keys;
+    DtwStringArray  *primary_keys;
 }DtwSchema;
 
 DtwSchema * DtwResource_new_schema(DtwResource *self, const char *name);

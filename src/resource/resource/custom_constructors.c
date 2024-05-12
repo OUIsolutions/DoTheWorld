@@ -120,6 +120,6 @@ DtwSchema * DtwResource_new_schema(DtwResource *self, const char *name){
     schema->master->schema = schema;
     schema->values_resource = DtwResource_sub_resource(self,"%s",DTW_SCHEMA_VALUES_NAME);
     schema->index_resource = DtwResource_sub_resource(self,"%s",DTW_SCHEMA_INDEX_NAME);
-    schema->keys = newDtwStringArray();
+    schema->primary_keys = newDtwStringArray();
     return schema;
 }

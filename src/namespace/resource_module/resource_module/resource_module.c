@@ -38,7 +38,7 @@ DtwResourceModule newDtwResourceModule(){
     self.get_long = DtwResource_get_long;
     self.get_bool = DtwResource_get_bool;
 
-    self.set_binary = DtwResource_set_binary;
+    self.set_binary = DtwResource_set_normal_binary;
     self.set_string = DtwResource_set_string;
     self.set_long = DtwResource_set_long;
     self.set_double = DtwResource_set_double;

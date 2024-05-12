@@ -93,7 +93,8 @@ bool DtwResource_get_bool_from_sub_resource(DtwResource *self,const char *format
 
 
 
-void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size);
+
+void DtwResource_set_normal_binary(DtwResource *self, unsigned char *element, long size);
 
 void DtwResource_set_binary_in_sub_resource(DtwResource *self, unsigned char *element, long size,const char *format,...);
 
