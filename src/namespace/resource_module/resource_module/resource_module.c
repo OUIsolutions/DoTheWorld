@@ -20,7 +20,7 @@ DtwResourceModule newDtwResourceModule(){
     self.set_string_in_sub_resource = DtwResource_set_string_in_sub_resource;
     self.set_long_in_sub_resource = DtwResource_set_long_in_sub_resource;
     self.set_double_in_sub_resource = DtwResource_set_double_in_sub_resource;
-    self.set_bool_in_sub_resource = DtwResource_set_bool_in_sub_resource_by_key;
+    self.set_bool_in_sub_resource = DtwResource_set_bool_in_sub_resource;
 
     self.sub_resource_ensuring_not_exist = DtwResource_sub_resource_ensuring_not_exist;
     self.sub_resource_next = DtwResource_sub_resource_next;

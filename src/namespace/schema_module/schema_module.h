@@ -9,7 +9,6 @@ typedef struct {
 
     DtwResource * (*find_by_primary_key_with_any)(DtwSchema *schema,const char *key,unsigned  char *value,long size);
     DtwResource * (*find_by_primary_key_with_string)(DtwSchema *schema,const char *key,const char *value);
-
 }DtwSchemaModule;
 
 DtwSchemaModule newDtwSchemaModule();

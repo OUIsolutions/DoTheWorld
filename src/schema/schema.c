@@ -14,6 +14,7 @@ DtwSchema * newDtwSchema(const char *path){
     schema->values_resource = DtwResource_sub_resource(master,"%s",DTW_SCHEMA_VALUES_NAME);
     schema->index_resource = DtwResource_sub_resource(master,"%s",DTW_SCHEMA_INDEX_NAME);
     schema->primary_keys = newDtwStringArray();
+
     return schema;
 }
 
@@ -49,6 +50,7 @@ DtwResourceArray * DtwSchema_get_values(DtwSchema *schema){
 }
 
 DtwResource * DtwSchema_find_by_primary_key_with_any(DtwSchema *schema,const char *primary_key,unsigned  char *value,long size){
+
     DtwResource *primary_key_folder = DtwResource_sub_resource(schema->values_resource,"%s",primary_key);
     char *sha = dtw_generate_sha_from_any(value,size);
     DtwResource *index_value = DtwResource_sub_resource(primary_key_folder,"%s",sha);
@@ -68,6 +70,7 @@ DtwResource * DtwSchema_find_by_primary_key_with_any(DtwSchema *schema,const cha
 }
 
 DtwResource * DtwSchema_find_by_primary_key_with_string(DtwSchema *schema,const char *key,const char *value){
+
     return DtwSchema_find_by_primary_key_with_any(
             schema,
             key,

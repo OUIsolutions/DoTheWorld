@@ -108,12 +108,19 @@ DtwResource * DtwResource_sub_resource_random(DtwResource *self, const char *end
 }
 
 
-DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *name){
+DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *format,...){
+
     DtwSchema *schema = (DtwSchema*) malloc(sizeof(DtwSchema));
     *schema = (DtwSchema){0};
 
+    va_list args;
+    va_start(args, format);
+    char *name = private_dtw_format_vaarg(format,args);
+    va_end(args);
+
     //make both reference each other
     DtwResource *master =DtwResource_sub_resource(self,"%s",name);
+    free(name);
     master->schema = schema;
     schema->master = master;
 

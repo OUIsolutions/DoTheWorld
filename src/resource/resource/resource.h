@@ -121,7 +121,7 @@ void DtwResource_set_double_in_sub_resource(DtwResource *self, const char *key, 
 
 void DtwResource_set_bool( DtwResource *self,bool element);
 
-void DtwResource_set_bool_in_sub_resource_by_key(DtwResource *self,const char *key, bool element);
+void DtwResource_set_bool_in_sub_resource(DtwResource *self,const char *key, bool element);
 
 
 void DtwResource_destroy(DtwResource *self);
