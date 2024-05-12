@@ -38,11 +38,17 @@ void  DtwResource_clear_errors(DtwResource *self){
 
 }
 
-void  private_DtwResource_raise_error(DtwResource *self, int error_code, const char *error_message){
+void  private_DtwResource_raise_error(DtwResource *self, int error_code, const char *format,...){
+
+    va_list args;
+    va_start(args, format);
+    char *error_message = private_dtw_format_vaarg(format,args);
+    va_end(args);
+
     self->root_props->error_code = error_code;
     self->root_props->error_path = strdup(self->path);
     self->root_props->error_message = dtw_replace_string(error_message,"#path#",self->path);
-
+    free(error_message);
 }
 
 void DtwResource_rename(DtwResource *self,const char *new_name){

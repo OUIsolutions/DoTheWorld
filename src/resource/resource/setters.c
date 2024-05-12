@@ -1,26 +1,50 @@
 //
 // Created by mateusmoutinho on 05/08/23.
 //
+void private_dtw_resource_set_primary_key_if_exist_primary_key(DtwResource *self,unsigned  char *element,long size){
+    DtwSchema * schema = (DtwSchema*)self->mother->mother->mother->schema;
+    bool its_a_pk = DtwStringArray_find_position(schema->primary_keys,self->name) !=-1;
+    if(!its_a_pk){
+        return;
+    }
+    DtwResource *pk_folder = DtwResource_sub_resource(schema->index_resource,"%s",self->name);
+    char *sha = dtw_generate_sha_from_any(element,size);
+    DtwResource  *pk_value = DtwResource_sub_resource(pk_folder,sha);
+    free(sha);
+    char *mothers_name =self->mother->name;
 
+    if(DtwResource_is_file(pk_value)) {
+        char *content = DtwResource_get_string(pk_value);
+        if (DtwResource_error(self)) {
+            return;
+        }
+        //means its the same
+        if (strcmp(content, mothers_name) == 0) {
+            return;
+        }
+        private_DtwResource_raise_error(
+                self,
+                DTW_RESOURCE_PRIMARY_KEY_ALREADY_EXIST,
+                "primary key: %s already exist",
+                self->name
+        );
+        return;
+
+    }
+    DtwResource_set_string(pk_value,mothers_name);
+}
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size){
     if(DtwResource_error(self)){
         return ;
     }
 
     if(self->its_a_write_point){
-        DtwSchema * schema = (DtwSchema*)self->mother->mother->mother->schema;
-        bool its_a_pk = DtwStringArray_find_position(schema->primary_keys,self->name) !=-1;
-
-        if(its_a_pk){
-            DtwResource *pk_folder = DtwResource_sub_resource(schema->index_resource,"%s",self->name);
-            char *sha = dtw_generate_sha_from_any(element,size);
-            DtwResource  *pk_value = DtwResource_sub_resource(pk_folder,sha);
-            free(sha);
-            char *mothers_name =self->mother->name;
-            DtwResource_set_string(pk_value,mothers_name);
-        }
+        private_dtw_resource_set_primary_key_if_exist_primary_key(self,element,size);
     }
 
+    if(DtwResource_error(self)){
+        return ;
+    }
 
     if(self->allow_transaction){
         DtwTransaction_write_any(self->root_props->transaction,self->path,element,size,true);
@@ -45,19 +69,12 @@ void DtwResource_set_string(DtwResource *self,const  char *element){
 
 
     if(self->its_a_write_point){
-        DtwSchema * schema = (DtwSchema*)self->mother->mother->mother->schema;
-        bool its_a_pk = DtwStringArray_find_position(schema->primary_keys,self->name) !=-1;
-
-        if(its_a_pk){
-            DtwResource *pk_folder = DtwResource_sub_resource(schema->index_resource,"%s",self->name);
-            char *sha = dtw_generate_sha_from_string(element);
-            DtwResource  *pk_value = DtwResource_sub_resource(pk_folder,sha);
-            free(sha);
-            char *mothers_name =self->mother->name;
-            DtwResource_set_string(pk_value,mothers_name);
-        }
+        private_dtw_resource_set_primary_key_if_exist_primary_key(self,(unsigned  char*)element,(long) strlen(element));
     }
 
+    if(DtwResource_error(self)){
+        return ;
+    }
 
     if(self->allow_transaction){
         DtwTransaction_write_string(self->root_props->transaction,self->path,element);
