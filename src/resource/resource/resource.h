@@ -9,7 +9,8 @@ typedef struct DtwResource{
     struct DtwResource *mother;
     char *name;
     char *path;
-
+    bool its_a_write_point;
+    bool its_value_folder;
     bool loaded;
     bool is_binary;
     unsigned char *value_any;
@@ -125,7 +126,7 @@ void DtwResource_set_bool_in_sub_resource(DtwResource *self,const char *key, boo
 
 void private_DtwResurce_destroy_primary_key(DtwResource *self,void *schema,const char *current_pk);
 
-void private_DtwResource_destroy_all_primary_keys(DtwResource *self,void *vschema);
+void private_DtwResource_destroy_all_primary_keys(DtwResource *self);
 
 void DtwResource_destroy(DtwResource *self);
 

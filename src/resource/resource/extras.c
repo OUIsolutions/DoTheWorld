@@ -100,8 +100,9 @@ void private_DtwResurce_destroy_primary_key(DtwResource *self,void *vschma,const
 
 
 }
-void private_DtwResource_destroy_all_primary_keys(DtwResource *self,void *vschema){
-    DtwSchema *schema = (DtwSchema*)vschema;
+void private_DtwResource_destroy_all_primary_keys(DtwResource *self){
+    DtwSchema * schema = (DtwSchema*)self->mother->mother->schema;
+
     for(int i = 0; i < schema->primary_keys->size; i++){
         char *current_pk = schema->primary_keys->strings[i];
         private_DtwResurce_destroy_primary_key(self,schema,current_pk);
@@ -111,12 +112,10 @@ void DtwResource_destroy(DtwResource *self){
     if(DtwResource_error(self)){
         return;
     }
-    DtwSchema * schema = (DtwSchema*)self->mother->mother->schema;
 
-    if(schema != NULL){
-        private_DtwResource_destroy_all_primary_keys(self,schema);
+    if(self->its_value_folder){
+        private_DtwResource_destroy_all_primary_keys(self);
     }
-
 
     if(self->allow_transaction){
         DtwTransaction_delete_any(self->root_props->transaction,self->path);
@@ -146,6 +145,7 @@ DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *format,...){
 
     schema->master->schema = schema;
     schema->values_resource = DtwResource_sub_resource(master,"%s",DTW_SCHEMA_VALUES_NAME);
+    schema->values_resource->its_value_folder = true;
     schema->index_resource = DtwResource_sub_resource(master,"%s",DTW_SCHEMA_INDEX_NAME);
     schema->primary_keys = newDtwStringArray();
     return schema;

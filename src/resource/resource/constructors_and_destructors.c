@@ -24,7 +24,6 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
     va_start(args, format);
     char *name = private_dtw_format_vaarg(format,args);
     va_end(args);
-    ;
 
     DtwResource * Already_Exist = DtwResourceArray_get_by_name((DtwResourceArray*)self->sub_resources,name);
     if(Already_Exist){
@@ -34,6 +33,11 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
 
     DtwResource *new_element = (DtwResource*) malloc(sizeof (DtwResource));
     *new_element =(DtwResource){0};
+
+    if(self->its_value_folder){
+        new_element->its_a_write_point = true;
+    }
+
     new_element->allow_transaction = self->allow_transaction;
     new_element->use_locker_on_unique_values = self->use_locker_on_unique_values;
     new_element->root_props = self->root_props;

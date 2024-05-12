@@ -6,11 +6,9 @@ void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size
     if(DtwResource_error(self)){
         return ;
     }
-    DtwSchema * schema = (DtwSchema*)self->mother->mother->mother->schema;
 
-    if(schema != NULL){
-
-
+    if(self->its_a_write_point){
+        DtwSchema * schema = (DtwSchema*)self->mother->mother->mother->schema;
         bool its_a_pk = DtwStringArray_find_position(schema->primary_keys,self->name) !=-1;
 
         if(its_a_pk){
@@ -19,23 +17,7 @@ void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size
             DtwResource  *pk_value = DtwResource_sub_resource(pk_folder,sha);
             free(sha);
             char *mothers_name =self->mother->name;
-            if(pk_value->allow_transaction){
-                DtwTransaction_write_string(pk_value->root_props->transaction,
-                                            pk_value->path,
-                                            mothers_name
-                );
-            }
-            else{
-                dtw_write_string_file_content(pk_value->path,mothers_name);
-            }
-
-            DtwResource_unload(pk_value);
-
-            pk_value->loaded = true;
-
-            pk_value->value_size = (long)strlen(mothers_name);
-
-            pk_value->value_any = (unsigned char*)strdup(mothers_name);
+            DtwResource_set_string(pk_value,mothers_name);
         }
     }
 
@@ -60,10 +42,10 @@ void DtwResource_set_string(DtwResource *self,const  char *element){
     if(DtwResource_error(self)){
         return ;
     }
-    DtwSchema * schema = (DtwSchema*)self->mother->mother->mother->schema;
 
-    if(schema != NULL){
 
+    if(self->its_a_write_point){
+        DtwSchema * schema = (DtwSchema*)self->mother->mother->mother->schema;
         bool its_a_pk = DtwStringArray_find_position(schema->primary_keys,self->name) !=-1;
 
         if(its_a_pk){
@@ -72,23 +54,7 @@ void DtwResource_set_string(DtwResource *self,const  char *element){
             DtwResource  *pk_value = DtwResource_sub_resource(pk_folder,sha);
             free(sha);
             char *mothers_name =self->mother->name;
-            if(pk_value->allow_transaction){
-                DtwTransaction_write_string(pk_value->root_props->transaction,
-                                            pk_value->path,
-                                            mothers_name
-                                            );
-            }
-            else{
-                dtw_write_string_file_content(pk_value->path,mothers_name);
-            }
-
-            DtwResource_unload(pk_value);
-
-            pk_value->loaded = true;
-
-            pk_value->value_size = (long)strlen(mothers_name);
-
-            pk_value->value_any = (unsigned char*)strdup(mothers_name);
+            DtwResource_set_string(pk_value,mothers_name);
         }
     }
 

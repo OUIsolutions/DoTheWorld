@@ -12,6 +12,7 @@ DtwSchema * newDtwSchema(const char *path){
 
     schema->master->schema = schema;
     schema->values_resource = DtwResource_sub_resource(master,"%s",DTW_SCHEMA_VALUES_NAME);
+    schema->values_resource->its_value_folder = true;
     schema->index_resource = DtwResource_sub_resource(master,"%s",DTW_SCHEMA_INDEX_NAME);
     schema->primary_keys = newDtwStringArray();
 
