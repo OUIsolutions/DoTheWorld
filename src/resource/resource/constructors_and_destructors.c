@@ -35,8 +35,12 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
     *new_element =(DtwResource){0};
 
     if(self->its_value_folder){
-        new_element->its_a_write_point = true;
+        new_element->its_a_element_folder = true;
     }
+    if(self->its_a_element_folder){
+        new_element->its_a_write_point =true;
+    }
+
 
     new_element->allow_transaction = self->allow_transaction;
     new_element->use_locker_on_unique_values = self->use_locker_on_unique_values;

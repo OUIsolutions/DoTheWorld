@@ -46,6 +46,7 @@ void privateDtwSchema_free_self_props(DtwSchema *self){
 
 DtwResource * DtwSchema_new_insertion(DtwSchema *schema){
     DtwResource  *created = DtwResource_sub_resource_random(schema->values_resource,NULL);
+
     return created;
 }
 

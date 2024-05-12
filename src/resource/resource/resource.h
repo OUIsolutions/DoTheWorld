@@ -10,6 +10,7 @@ typedef struct DtwResource{
     char *name;
     char *path;
     bool its_a_write_point;
+    bool its_a_element_folder;
     bool its_value_folder;
     bool loaded;
     bool is_binary;
