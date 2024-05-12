@@ -107,6 +107,10 @@ DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *format,...){
 
     //make both reference each other
     DtwResource *master =DtwResource_sub_resource(self,"%s",name);
+    if(master->schema){
+        return master->schema;
+    }
+
     free(name);
     master->schema = schema;
     schema->master = master;
