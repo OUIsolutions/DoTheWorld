@@ -1,3 +1,11 @@
+void DtwResource_set_binary_in_sub_resource(DtwResource *self,const char *key, unsigned char *element, long size){
+    if(DtwResource_error(self)){
+        return ;
+    }
+
+    DtwResource *created = DtwResource_sub_resource(self,"%s",key);
+    DtwResource_set_normal_binary(created, element, size);
+}
 
 void DtwResource_set_binary_sha_in_sub_resource(DtwResource *self, const char *key, unsigned  char *value, long size){
     if(DtwResource_error(self)){

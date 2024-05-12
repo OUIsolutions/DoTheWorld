@@ -57,20 +57,6 @@ void DtwResource_set_string(DtwResource *self,const  char *element){
 
 }
 
-void DtwResource_set_binary_in_sub_resource(DtwResource *self, unsigned char *element, long size,const char *format,...){
-    if(DtwResource_error(self)){
-        return ;
-    }
-    char name[2000] ={0};
-
-    va_list args;
-    va_start(args, format);
-    vsprintf(name, format, args);
-    va_end(args);
-
-    DtwResource *created = DtwResource_sub_resource(self,"%s",name);
-    DtwResource_set_normal_binary(created, element, size);
-}
 
 void DtwResource_set_binary_sha(DtwResource *self, unsigned  char *value, long size){
     if(DtwResource_error(self)){
