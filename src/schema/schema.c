@@ -19,7 +19,10 @@ DtwSchema * newDtwSchema(const char *path){
 }
 
 void DtwSchema_add_primary_key(DtwSchema *self,const char *primary_key){
-    if(DtwStringArray_find_position(self->primary_keys,primary_key)!=-1){
+
+    bool not_found =DtwStringArray_find_position(self->primary_keys,primary_key)==-1;
+
+    if(not_found){
         DtwStringArray_append(self->primary_keys,primary_key);
     }
 }
@@ -49,9 +52,9 @@ DtwResourceArray * DtwSchema_get_values(DtwSchema *schema){
     return DtwResource_sub_resources(schema->values_resource);
 }
 
-DtwResource * DtwSchema_find_by_primary_key_with_any(DtwSchema *schema,const char *primary_key,unsigned  char *value,long size){
+DtwResource * DtwSchema_find_by_primary_key_with_binary(DtwSchema *schema, const char *primary_key, unsigned  char *value, long size){
 
-    DtwResource *primary_key_folder = DtwResource_sub_resource(schema->values_resource,"%s",primary_key);
+    DtwResource *primary_key_folder = DtwResource_sub_resource(schema->index_resource,"%s",primary_key);
     char *sha = dtw_generate_sha_from_any(value,size);
     DtwResource *index_value = DtwResource_sub_resource(primary_key_folder,"%s",sha);
     free(sha);
@@ -71,12 +74,12 @@ DtwResource * DtwSchema_find_by_primary_key_with_any(DtwSchema *schema,const cha
 
 DtwResource * DtwSchema_find_by_primary_key_with_string(DtwSchema *schema,const char *key,const char *value){
 
-    return DtwSchema_find_by_primary_key_with_any(
+    return DtwSchema_find_by_primary_key_with_binary(
             schema,
             key,
-            (unsigned  char *)value,
-            (long )strlen(value)
-            );
+            (unsigned char *) value,
+            (long) strlen(value)
+    );
 }
 
 

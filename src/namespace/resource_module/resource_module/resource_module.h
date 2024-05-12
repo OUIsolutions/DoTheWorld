@@ -6,7 +6,7 @@ typedef struct DtwResourceModule{
     bool (*error)(DtwResource *self);
 
     char * (*get_error_message)(DtwResource *self);
-
+    bool (*is_file)(DtwResource *self);
     DtwResource * (*sub_resource)(struct DtwResource *self,const  char *format,...);
     unsigned char *(*get_any_from_sub_resource)(DtwResource *self, long *size, bool *is_binary,const char *format,...);
     unsigned char *(*get_binary_from_sub_resource)(DtwResource *self, long *size,const char *format,...);

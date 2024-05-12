@@ -25,7 +25,7 @@ void DtwSchema_add_primary_key(DtwSchema *self,const char *primary_key);
 
 DtwResourceArray * DtwSchema_get_values(DtwSchema *schema);
 
-DtwResource * DtwSchema_find_by_primary_key_with_any(DtwSchema *schema,const char *key,unsigned  char *value,long size);
+DtwResource * DtwSchema_find_by_primary_key_with_binary(DtwSchema *schema, const char *primary_key, unsigned  char *value, long size);
 
 DtwResource * DtwSchema_find_by_primary_key_with_string(DtwSchema *schema,const char *key,const char *value);
 

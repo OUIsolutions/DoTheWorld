@@ -21,7 +21,7 @@ DtwResourceModule newDtwResourceModule(){
     self.set_long_in_sub_resource = DtwResource_set_long_in_sub_resource;
     self.set_double_in_sub_resource = DtwResource_set_double_in_sub_resource;
     self.set_bool_in_sub_resource = DtwResource_set_bool_in_sub_resource;
-
+    self.is_file = DtwResource_is_file;
     self.sub_resource_ensuring_not_exist = DtwResource_sub_resource_ensuring_not_exist;
     self.sub_resource_next = DtwResource_sub_resource_next;
     self.sub_resource_now  = DtwResource_sub_resource_now;
@@ -44,7 +44,7 @@ DtwResourceModule newDtwResourceModule(){
     self.get_long = DtwResource_get_long;
     self.get_bool = DtwResource_get_bool;
 
-    self.set_binary = DtwResource_set_normal_binary;
+    self.set_binary = DtwResource_set_binary;
     self.set_string = DtwResource_set_string;
     self.set_long = DtwResource_set_long;
     self.set_double = DtwResource_set_double;

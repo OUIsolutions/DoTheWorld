@@ -2,13 +2,17 @@
 // Created by mateusmoutinho on 05/08/23.
 //
 
-void DtwResource_set_normal_binary(DtwResource *self, unsigned char *element, long size){
+void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size){
     if(DtwResource_error(self)){
         return ;
     }
-    DtwSchema * schema = (DtwSchema*)self->mother->mother->schema;
+    DtwSchema * schema = (DtwSchema*)self->mother->mother->mother->schema;
+
     if(schema != NULL){
+
+
         bool its_a_pk = DtwStringArray_find_position(schema->primary_keys,self->name) !=-1;
+
         if(its_a_pk){
             DtwResource *pk_folder = DtwResource_sub_resource(schema->index_resource,"%s",self->name);
             char *sha = dtw_generate_sha_from_any(element,size);
@@ -40,6 +44,24 @@ void DtwResource_set_string(DtwResource *self,const  char *element){
     if(DtwResource_error(self)){
         return ;
     }
+    DtwSchema * schema = (DtwSchema*)self->mother->mother->mother->schema;
+
+    if(schema != NULL){
+
+
+        bool its_a_pk = DtwStringArray_find_position(schema->primary_keys,self->name) !=-1;
+
+        if(its_a_pk){
+            DtwResource *pk_folder = DtwResource_sub_resource(schema->index_resource,"%s",self->name);
+            char *sha = dtw_generate_sha_from_string(element);
+            DtwResource  *pk_value = DtwResource_sub_resource(pk_folder,sha);
+            free(sha);
+            char *mothers_name =self->mother->name;
+            DtwResource_set_string(pk_value,mothers_name);
+        }
+    }
+
+
     if(self->allow_transaction){
         DtwTransaction_write_string(self->root_props->transaction,self->path,element);
     }

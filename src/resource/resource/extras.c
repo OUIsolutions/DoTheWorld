@@ -76,12 +76,48 @@ void DtwResource_unlock(DtwResource *self){
     DtwLocker_unlock(self->root_props->locker, self->path);
     
 }
+void private_DtwResurce_destroy_primary_key(DtwResource *self,void *vschma,const char *current_pk) {
+
+    DtwSchema  *schema = (DtwSchema*)vschma;
+
+    DtwResource *possible_pk = DtwResource_sub_resource(self, "%s", current_pk);
+    if (!DtwResource_is_file(possible_pk)) {
+        return;
+    }
+    DtwResource *pk_index_folder = DtwResource_sub_resource(schema->index_resource, "%s", current_pk);
+    long size;
+    bool is_binary;
+    unsigned char *possible_pk_value = DtwResource_get_any(possible_pk, &size, &is_binary);
+    char *pk_sha = dtw_generate_sha_from_any(possible_pk_value, size);
+
+    DtwResource *pk_index_value = DtwResource_sub_resource(pk_index_folder, "%s", pk_sha);
+
+    if (self->allow_transaction) {
+        DtwTransaction_delete_any(self->root_props->transaction, pk_index_value->path);
+    } else {
+        dtw_remove_any(pk_index_value->path);
+    }
 
 
+}
+void private_DtwResource_destroy_all_primary_keys(DtwResource *self,void *vschema){
+    DtwSchema *schema = (DtwSchema*)vschema;
+    for(int i = 0; i < schema->primary_keys->size; i++){
+        char *current_pk = schema->primary_keys->strings[i];
+        private_DtwResurce_destroy_primary_key(self,schema,current_pk);
+    }
+}
 void DtwResource_destroy(DtwResource *self){
     if(DtwResource_error(self)){
-        return ;
+        return;
     }
+    DtwSchema * schema = (DtwSchema*)self->mother->mother->schema;
+
+    if(schema != NULL){
+        private_DtwResource_destroy_all_primary_keys(self,schema);
+    }
+
+
     if(self->allow_transaction){
         DtwTransaction_delete_any(self->root_props->transaction,self->path);
     }
@@ -92,7 +128,28 @@ void DtwResource_destroy(DtwResource *self){
 }
 
 
+DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *format,...){
 
+    DtwSchema *schema = (DtwSchema*) malloc(sizeof(DtwSchema));
+    *schema = (DtwSchema){0};
+
+    va_list args;
+    va_start(args, format);
+    char *name = private_dtw_format_vaarg(format,args);
+    va_end(args);
+
+    //make both reference each other
+    DtwResource *master =DtwResource_sub_resource(self,"%s",name);
+    free(name);
+    master->schema = schema;
+    schema->master = master;
+
+    schema->master->schema = schema;
+    schema->values_resource = DtwResource_sub_resource(master,"%s",DTW_SCHEMA_VALUES_NAME);
+    schema->index_resource = DtwResource_sub_resource(master,"%s",DTW_SCHEMA_INDEX_NAME);
+    schema->primary_keys = newDtwStringArray();
+    return schema;
+}
 
 void DtwResource_commit(DtwResource *self){
     if(DtwResource_error(self)){
@@ -157,6 +214,18 @@ int DtwResource_type(DtwResource *self){
         }
     }
     return  DTW_COMPLEX_LONG_TYPE;
+
+}
+bool DtwResource_is_file(DtwResource *self){
+    if(DtwResource_error(self)){
+        return -1;
+    }
+    DtwResource_load_if_not_loaded(self);
+
+    if(self->value_any){
+        return true;
+    }
+    return  false;
 
 }
 

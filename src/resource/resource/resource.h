@@ -100,7 +100,7 @@ bool DtwResource_get_bool(DtwResource *self);
 bool DtwResource_get_bool_from_sub_resource(DtwResource *self,const char *format,...);
 
 
-void DtwResource_set_normal_binary(DtwResource *self, unsigned char *element, long size);
+void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size);
 
 void DtwResource_set_binary_in_sub_resource(DtwResource *self,const char *key, unsigned char *element, long size);
 
@@ -123,6 +123,9 @@ void DtwResource_set_bool( DtwResource *self,bool element);
 
 void DtwResource_set_bool_in_sub_resource(DtwResource *self,const char *key, bool element);
 
+void private_DtwResurce_destroy_primary_key(DtwResource *self,void *schema,const char *current_pk);
+
+void private_DtwResource_destroy_all_primary_keys(DtwResource *self,void *vschema);
 
 void DtwResource_destroy(DtwResource *self);
 
@@ -131,6 +134,8 @@ long DtwResource_size(DtwResource *self);
 DtwStringArray *DtwResource_list_names(DtwResource *self);
 
 int DtwResource_type(DtwResource *self);
+
+bool DtwResource_is_file(DtwResource *self);
 
 
 const char * DtwResource_type_in_str(DtwResource *self);

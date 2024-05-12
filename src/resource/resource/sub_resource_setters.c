@@ -4,7 +4,7 @@ void DtwResource_set_binary_in_sub_resource(DtwResource *self,const char *key, u
     }
 
     DtwResource *created = DtwResource_sub_resource(self,"%s",key);
-    DtwResource_set_normal_binary(created, element, size);
+    DtwResource_set_binary(created, element, size);
 }
 
 void DtwResource_set_binary_sha_in_sub_resource(DtwResource *self, const char *key, unsigned  char *value, long size){
