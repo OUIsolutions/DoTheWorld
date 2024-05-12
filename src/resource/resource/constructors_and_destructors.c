@@ -16,7 +16,7 @@ DtwResource *new_DtwResource(const char *path){
 }   
 
 DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ...){
-    if(DtwResource_error(self)){
+    if(private_DtwResource_ensure_no_errors(self)){
         return NULL;
     }
 
@@ -74,7 +74,9 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
 
 }
 DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,const  char *format, ...){
-
+    if(private_DtwResource_ensure_no_errors(self)){
+        return NULL;
+    }
     va_list args;
     va_start(args, format);
     char *name = private_dtw_format_vaarg(format,args);
@@ -117,6 +119,10 @@ DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,cons
 }
 
 void DtwResource_free(DtwResource *self){
+    if(!self){
+        return;
+    }
+
     bool is_root = self->mother == NULL;
     if(is_root){
         privateDtwResourceRootProps_free(self->root_props);

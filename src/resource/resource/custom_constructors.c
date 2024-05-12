@@ -1,6 +1,9 @@
 
 
 DtwResource * DtwResource_sub_resource_next(DtwResource *self, const char *end_path){
+    if(private_DtwResource_ensure_no_errors(self)){
+        return NULL;
+    }
     long  size = dtw_get_total_itens_of_dir(self->path);
     if(size < 0){
         size = 0;
@@ -31,7 +34,9 @@ DtwResource * DtwResource_sub_resource_next(DtwResource *self, const char *end_p
 
 
 DtwResource * DtwResource_sub_resource_now(DtwResource *self, const char *end_path){
-
+    if(private_DtwResource_ensure_no_errors(self)){
+        return NULL;
+    }
     bool empty_already_exist = false;
 
 
@@ -73,6 +78,9 @@ DtwResource * DtwResource_sub_resource_now(DtwResource *self, const char *end_pa
 
 
 DtwResource * DtwResource_sub_resource_now_in_unix(DtwResource *self, const char *end_path){
+    if(private_DtwResource_ensure_no_errors(self)){
+        return NULL;
+    }
     bool empty_already_exist = false;
 
     while(true){
@@ -109,7 +117,9 @@ DtwResource * DtwResource_sub_resource_now_in_unix(DtwResource *self, const char
 }
 
 DtwResource * DtwResource_sub_resource_random(DtwResource *self, const char *end_path){
-
+    if(private_DtwResource_ensure_no_errors(self)){
+        return NULL;
+    }
     while(true){
 
         char *path = NULL;

@@ -32,10 +32,9 @@ void private_dtw_resource_set_primary_key(DtwResource *self, unsigned  char *ele
     DtwResource_set_string(pk_value,mothers_name);
 }
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size){
-    if(DtwResource_error(self)){
+    if(private_DtwResource_ensure_no_errors(self)){
         return ;
     }
-
     if(private_dtw_resource_its_a_primary_key(self)){
         private_dtw_resource_set_primary_key(self, element, size);
     }
@@ -61,10 +60,9 @@ void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size
 
 
 void DtwResource_set_string(DtwResource *self,const  char *element){
-    if(DtwResource_error(self)){
+    if(private_DtwResource_ensure_no_errors(self)){
         return ;
     }
-
     if(private_dtw_resource_its_a_primary_key(self)){
         private_dtw_resource_set_primary_key(self, (unsigned char *) element, (long) strlen(element));
     }
@@ -92,7 +90,7 @@ void DtwResource_set_string(DtwResource *self,const  char *element){
 
 
 void DtwResource_set_binary_sha(DtwResource *self, unsigned  char *value, long size){
-    if(DtwResource_error(self)){
+    if(private_DtwResource_ensure_no_errors(self)){
         return ;
     }
     char *generated_sha = dtw_generate_sha_from_any(value,size);
@@ -101,6 +99,9 @@ void DtwResource_set_binary_sha(DtwResource *self, unsigned  char *value, long s
 }
 
 void DtwResource_set_string_sha(DtwResource *self,const char *value){
+    if(private_DtwResource_ensure_no_errors(self)){
+        return ;
+    }
     DtwResource_set_binary_sha(self,(unsigned char*)value, (long)strlen(value));
 }
 
@@ -112,7 +113,7 @@ void DtwResource_set_string_sha(DtwResource *self,const char *value){
 
 
 void DtwResource_set_long(DtwResource *self,long element){
-    if(DtwResource_error(self)){
+    if(private_DtwResource_ensure_no_errors(self)){
         return ;
     }
     if(self->allow_transaction){
@@ -130,7 +131,7 @@ void DtwResource_set_long(DtwResource *self,long element){
 }
 
 void DtwResource_set_double(DtwResource *self,double element){
-    if(DtwResource_error(self)){
+    if(private_DtwResource_ensure_no_errors(self)){
         return ;
     }
     if(self->allow_transaction){
@@ -149,10 +150,9 @@ void DtwResource_set_double(DtwResource *self,double element){
 }
 
 void DtwResource_set_bool( DtwResource *self,bool element){
-    if(DtwResource_error(self)){
+    if(private_DtwResource_ensure_no_errors(self)){
         return ;
     }
-
     if(self->allow_transaction){
         DtwTransaction_write_bool(self->root_props->transaction,self->path,element);
     }
