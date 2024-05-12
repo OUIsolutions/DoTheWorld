@@ -111,7 +111,6 @@ DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *format,...){
     if(DtwResource_error(self)){
         return  NULL;
     }
-
     if(private_dtw_resource_its_a_primary_key(self)){
         private_DtwResource_raise_error(
                 self,
@@ -121,7 +120,7 @@ DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *format,...){
         );
         return NULL;
     }
-    
+
     DtwSchema *schema = (DtwSchema*) malloc(sizeof(DtwSchema));
     *schema = (DtwSchema){0};
 
