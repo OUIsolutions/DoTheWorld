@@ -16,7 +16,6 @@ void create_users(DtwResource *database,const char *name,const char *email,const
 }
 
 int main(){
-    dtw_debug_time = true;
 
     dtw = newDtwNamespace();
     DtwResource *database = dtw.resource.newResource("tests/target/schema_database");

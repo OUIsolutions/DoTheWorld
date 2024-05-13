@@ -16,7 +16,7 @@ void create_users(DtwResource *database,const char *name,const char *email,const
 }
 
 int main(){
-    dtw_debug_time = true;
+
     dtw = newDtwNamespace();
     DtwResource *database = dtw.resource.newResource("tests/target/schema_database");
     DtwSchema  *users =dtw.resource.sub_schema(database,"users");
@@ -27,19 +27,7 @@ int main(){
     create_users(database,"user1","user1@gmail.com","1234",27);
     create_users(database,"user2","user2@gmail.com","1234",27);
 
-    DtwResource * mateus = dtw.schema.find_by_primary_key_with_string(users,"name","mateus");
-    char *name = dtw.resource.get_string_from_sub_resource(mateus,"name");
-    char *email  = dtw.resource.get_string_from_sub_resource(mateus,"email");
-    long age = dtw.resource.get_long_from_sub_resource(mateus,"age");
-
-
-
-    if(!dtw.resource.error(database)){
-        printf("name: %s\n",name);
-        printf("email: %s\n",email);
-        printf("age: %ld\n",age);
-    }
-
+    dtw.schema.dangerous_rename_prop(users,"name","name_fixed");
 
     if(dtw.resource.error(database)){
         printf("error:%s\n",dtw.resource.get_error_message(database));

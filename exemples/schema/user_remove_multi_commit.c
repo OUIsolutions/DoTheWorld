@@ -13,10 +13,11 @@ void create_users(DtwResource *database,const char *name,const char *email,const
     dtw.resource.set_string_in_sub_resource(user,"email",email);
     dtw.resource.set_string_sha_in_sub_resource(user,"password",password);
     dtw.resource.set_long_in_sub_resource(user,"age",age);
+    dtw.resource.commit(database);
 }
 
 int main(){
-    dtw_debug_time = true;
+
     dtw = newDtwNamespace();
     DtwResource *database = dtw.resource.newResource("tests/target/schema_database");
     DtwSchema  *users =dtw.resource.sub_schema(database,"users");
@@ -24,18 +25,19 @@ int main(){
     dtw.schema.add_primary_key(users,"email");
 
     create_users(database,"mateus","mateusmoutinho01@gmail.com","1234",27);
+    create_users(database,"user1","user1@gmail.com","1234",27);
+    create_users(database,"user2","user2@gmail.com","1234",27);
 
-    DtwResource * mateus = dtw.schema.find_by_primary_key_with_string(users,"email","mateus");
-    dtw.resource.rename_sub_resource(mateus,"name","new name created");
-
-
+    DtwResource * mateus = dtw.schema.find_by_primary_key_with_string(users,"name","mateus");
+    dtw.resource.destroy(mateus);
+    dtw.resource.commit(database);
     if(dtw.resource.error(database)){
         printf("error:%s\n",dtw.resource.get_error_message(database));
         dtw.resource.free(database);
         return 0;
     }
 
-    dtw.resource.commit(database);
+
     dtw.resource.free(database);
 
 

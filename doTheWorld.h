@@ -5856,7 +5856,7 @@ int private_dtw_string_cmp(const void *a, const void *b){
 
 long dtw_get_time(){
 #ifdef DTW_DEBUG_TIME
-    return 0
+    return 0;
 #endif
     return time(NULL);
 }
