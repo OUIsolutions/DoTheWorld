@@ -29,6 +29,7 @@ char *create_users(const char *name,const char *email,const char *password, int 
 
 int main(){
     dtw = newDtwNamespace();
+    create_users("mateus","mateusmoutinho01@gmail.com","1234",27);
 
     char *error = create_users("mateus","mateusmoutinho01@gmail.com","1234",27);
     if(error){

@@ -24,8 +24,9 @@ int main(){
 
     create_users(database,"mateus","mateusmoutinho01@gmail.com","1234",27);
 
-    DtwResource * mateus = dtw.schema.find_by_primary_key_with_string(users,"email","mateus");
-    dtw.resource.set_string_in_sub_resource(mateus,"name","new name created");
+    DtwResource * mateus = dtw.schema.find_by_primary_key_with_string(users,"name","mateus");
+    dtw.resource.destroy_sub_resource(mateus,"name");
+
 
 
     if(dtw.resource.error(database)){
