@@ -24,6 +24,14 @@ DtwResource * DtwSchema_new_insertion(DtwSchema *schema);
 
 void DtwSchema_add_primary_key(DtwSchema *self,const char *primary_key);
 
+void DtwSchema_commit(DtwSchema *self);
+
+DtwResource  *DtwSchema_get_find_by_nameID(DtwSchema *self,const char *name);
+
+void DtwSchema_dangerours_remove_prop(DtwSchema *self, const char *prop);
+
+void DtwSchema_dangerours_rename_prop(DtwSchema *self, const char *prop,const char *new_name);
+
 
 DtwResourceArray * DtwSchema_get_values(DtwSchema *self);
 
