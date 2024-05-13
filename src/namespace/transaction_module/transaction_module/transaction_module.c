@@ -16,6 +16,8 @@ DtwTransactionModule newDtwTransactionModule(){
     self.write_bool = DtwTransaction_write_bool;
     self.write_double = DtwTransaction_write_double;
 
+    self.move_any_merging = DtwTransaction_move_any_merging;
+    self.copy_any_merging = DtwTransaction_copy_any_merging;
     self.move_any = DtwTransaction_move_any;
     self.copy_any = DtwTransaction_copy_any;
     self.delete_any = DtwTransaction_delete_any;

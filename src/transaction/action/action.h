@@ -5,7 +5,9 @@ enum {
     DTW_ACTION_ITS_NOT_JSON,
     DTW_ACTION_WRITE,
     DTW_ACTION_MOVE,
+    DTW_ACTION_MOVE_MERGING,
     DTW_ACTION_COPY,
+    DTW_ACTION_COPY_MERGING,
     DTW_ACTION_DELETE
 };
 
@@ -34,6 +36,10 @@ DtwActionTransaction * DtwActionTransaction_write_any(const char *source,unsigne
 DtwActionTransaction * DtwActionTransaction_move_any(const char *source, const char *dest);
 
 DtwActionTransaction * DtwActionTransaction_copy_any(const char *source, const char *dest);
+
+DtwActionTransaction * DtwActionTransaction_move_any_merging(const char *source, const char *dest);
+
+DtwActionTransaction * DtwActionTransaction_copy_any_merging(const char *source, const char *dest);
 
 DtwActionTransaction * DtwActionTransaction_delete_any(const char *source);
 

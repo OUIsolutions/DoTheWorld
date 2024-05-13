@@ -17,6 +17,9 @@ typedef struct DtwTransactionModule{
     void (*write_bool)(struct DtwTransaction *self,const char *path,bool value);
     void (*write_double)(struct DtwTransaction *self,const char *path,double value);
 
+    void (*move_any_merging)(struct DtwTransaction *self,const char *source,const char *dest);
+    void (*copy_any_merging)(struct DtwTransaction *self,const char *source,const char *dest);
+
 
     void (*move_any)(struct DtwTransaction *self,const char *source,const char *dest);
     void (*copy_any)(struct DtwTransaction *self,const char *source,const char *dest);
