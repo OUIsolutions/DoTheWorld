@@ -62,7 +62,11 @@ def compile_project( file: str,compiler ='gcc', output: str = None, flags: List[
         else:
             output = file.replace('.c', '.out').replace('.cpp', '.out')
 
-    command = f'{compiler} {file} -o {output} ' + ' -'.join(flags)
+    flags_text = ''
+    for flag in flags:
+        flags_text+= '-' + flag + ' '
+
+    command = f'{compiler} {file} {flags_text} -o {output} '
     compile_project_by_command(command, raise_errors, raise_warnings)
     return output
 

@@ -178,9 +178,9 @@ int private_dtw_string_cmp(const void *a, const void *b){
 }
 
 long dtw_get_time(){
-    if(dtw_debug_time == true){
-        return 0;
-    }
+#ifdef DTW_DEBUG_TIME
+    return 0;
+#endif
     return time(NULL);
 }
 char *private_dtw_realoc_formatting(char *ptr,const char *format,...){

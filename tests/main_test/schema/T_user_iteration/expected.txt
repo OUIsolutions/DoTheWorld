@@ -1,0 +1,10 @@
+ 
+name: mateus
+email: mateusmoutinho01@gmail.com
+age: 27
+name: user1
+email: user1@gmail.com
+age: 27
+name: user2
+email: user2@gmail.com
+age: 27

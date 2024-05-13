@@ -23,7 +23,8 @@ if osname() == 'Windows':
 test = ct.FolderTestPreset(
     folder='tests/main_test',
     side_effect_folder='tests/target',
-    use_valgrind=use_valgrind
+    use_valgrind=use_valgrind,
+    compilation_flags=["DDTW_DEBUG_TIME"]
     )
 
 test.generate_ouptut(reconstruct=False)
