@@ -1124,7 +1124,9 @@ enum {
     DTW_ACTION_ITS_NOT_JSON,
     DTW_ACTION_WRITE,
     DTW_ACTION_MOVE,
+    DTW_ACTION_MOVE_MERGING,
     DTW_ACTION_COPY,
+    DTW_ACTION_COPY_MERGING,
     DTW_ACTION_DELETE
 };
 
@@ -1153,6 +1155,10 @@ DtwActionTransaction * DtwActionTransaction_write_any(const char *source,unsigne
 DtwActionTransaction * DtwActionTransaction_move_any(const char *source, const char *dest);
 
 DtwActionTransaction * DtwActionTransaction_copy_any(const char *source, const char *dest);
+
+DtwActionTransaction * DtwActionTransaction_move_any_merging(const char *source, const char *dest);
+
+DtwActionTransaction * DtwActionTransaction_copy_any_merging(const char *source, const char *dest);
 
 DtwActionTransaction * DtwActionTransaction_delete_any(const char *source);
 
@@ -1212,6 +1218,10 @@ void DtwTransaction_write_bool(struct DtwTransaction *self,const char *path,bool
 void DtwTransaction_write_double(struct DtwTransaction *self,const char *path,double value);
 
 void DtwTransaction_move_any(struct DtwTransaction *self,const char *source,const char *dest);
+
+void DtwTransaction_move_any_merging(struct DtwTransaction *self,const char *source,const char *dest);
+
+void DtwTransaction_copy_any_merging(struct DtwTransaction *self,const char *source,const char *dest);
 
 void DtwTransaction_copy_any(struct DtwTransaction *self,const char *source,const char *dest);
 
@@ -1778,6 +1788,8 @@ typedef struct DtwActionTransactionModule{
     DtwActionTransaction * (*write_any)(const char *source,unsigned  char *content,long size,bool is_binary);
 
     DtwActionTransaction * (*move_any)(const char *source, const char *dest);
+    DtwActionTransaction * (*move_any_merging)(const char *source, const char *dest);
+    DtwActionTransaction * (*copy_any_merging)(const char *source, const char *dest);
 
     DtwActionTransaction * (*copy_any)(const char *source, const char *dest);
 
@@ -1825,6 +1837,9 @@ typedef struct DtwTransactionModule{
     void (*write_long)(struct DtwTransaction *self,const char *path,long value);
     void (*write_bool)(struct DtwTransaction *self,const char *path,bool value);
     void (*write_double)(struct DtwTransaction *self,const char *path,double value);
+
+    void (*move_any_merging)(struct DtwTransaction *self,const char *source,const char *dest);
+    void (*copy_any_merging)(struct DtwTransaction *self,const char *source,const char *dest);
 
 
     void (*move_any)(struct DtwTransaction *self,const char *source,const char *dest);
@@ -10124,9 +10139,25 @@ DtwActionTransaction * DtwActionTransaction_move_any(const char *source, const c
 
 }
 
+
 DtwActionTransaction * DtwActionTransaction_copy_any(const char *source, const char *dest){
     DtwActionTransaction *self = newDtwActionTransaction();
     self->action_type = DTW_ACTION_COPY;
+    self->source = strdup(source);
+    self->dest = strdup(dest);
+    return self;
+}
+DtwActionTransaction * DtwActionTransaction_move_any_merging(const char *source, const char *dest){
+    DtwActionTransaction *self = newDtwActionTransaction();
+    self->action_type = DTW_ACTION_MOVE_MERGING;
+    self->source = strdup(source);
+    self->dest = strdup(dest);
+    return self;
+}
+
+DtwActionTransaction * DtwActionTransaction_copy_any_merging(const char *source, const char *dest){
+    DtwActionTransaction *self = newDtwActionTransaction();
+    self->action_type = DTW_ACTION_COPY_MERGING;
     self->source = strdup(source);
     self->dest = strdup(dest);
     return self;
@@ -10161,8 +10192,17 @@ void DtwActionTransaction_commit(DtwActionTransaction* self,const char *path){
     if(self->action_type == DTW_ACTION_MOVE){
         dtw_move_any(formated_source,formated_dest,DTW_NOT_MERGE);
     }
+
+    if(self->action_type == DTW_ACTION_MOVE_MERGING){
+        dtw_move_any(formated_source,formated_dest,DTW_MERGE);
+    }
+
     if(self->action_type == DTW_ACTION_COPY){
         dtw_copy_any(formated_source,formated_dest,DTW_NOT_MERGE);
+    }
+
+    if(self->action_type == DTW_ACTION_COPY_MERGING){
+        dtw_copy_any(formated_source,formated_dest,DTW_MERGE);
     }
 
     free(formated_dest);
@@ -10527,6 +10567,18 @@ void DtwTransaction_copy_any(struct DtwTransaction *self,const char *source,cons
     DtwActionTransaction * action = DtwActionTransaction_copy_any(source,dest);
     DtwTransaction_append_action(self,action);
 }
+
+void DtwTransaction_move_any_merging(struct DtwTransaction *self,const char *source,const char *dest){
+    DtwActionTransaction * action = DtwActionTransaction_move_any_merging(source,dest);
+    DtwTransaction_append_action(self,action);
+}
+
+
+void DtwTransaction_copy_any_merging(struct DtwTransaction *self,const char *source,const char *dest){
+    DtwActionTransaction * action = DtwActionTransaction_copy_any_merging(source,dest);
+    DtwTransaction_append_action(self,action);
+}
+
 
 void DtwTransaction_delete_any(struct DtwTransaction *self,const char *source){
      DtwActionTransaction  *action = DtwActionTransaction_delete_any(source);
@@ -11146,6 +11198,8 @@ DtwActionTransactionModule newDtwActionTransactionModule(){
     self.write_any = DtwActionTransaction_write_any;
     self.move_any = DtwActionTransaction_move_any;
     self.copy_any = DtwActionTransaction_copy_any;
+    self.move_any_merging = DtwActionTransaction_move_any_merging;
+    self.copy_any_merging = DtwActionTransaction_move_any_merging;
     self.delete_any = DtwActionTransaction_delete_any;
     self.convert_action_to_integer =DtwActionTransaction_convert_action_to_integer;
     self.convert_action_to_string = DtwActionTransaction_convert_action_to_string;
@@ -11181,6 +11235,8 @@ DtwTransactionModule newDtwTransactionModule(){
     self.write_bool = DtwTransaction_write_bool;
     self.write_double = DtwTransaction_write_double;
 
+    self.move_any_merging = DtwTransaction_move_any_merging;
+    self.copy_any_merging = DtwTransaction_copy_any_merging;
     self.move_any = DtwTransaction_move_any;
     self.copy_any = DtwTransaction_copy_any;
     self.delete_any = DtwTransaction_delete_any;
