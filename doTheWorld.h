@@ -1524,6 +1524,14 @@ DtwResource * DtwSchema_new_insertion(DtwSchema *schema);
 
 void DtwSchema_add_primary_key(DtwSchema *self,const char *primary_key);
 
+void DtwSchema_commit(DtwSchema *self);
+
+DtwResource  *DtwSchema_get_find_by_nameID(DtwSchema *self,const char *name);
+
+void DtwSchema_dangerours_remove_prop(DtwSchema *self, const char *prop);
+
+void DtwSchema_dangerours_rename_prop(DtwSchema *self, const char *prop,const char *new_name);
+
 
 DtwResourceArray * DtwSchema_get_values(DtwSchema *self);
 
@@ -2002,6 +2010,10 @@ typedef struct {
     DtwResource * (*new_insertion)(DtwSchema *schema);
     DtwResourceArray * (*get_values)(DtwSchema *schema);
     void (*add_primary_key)(DtwSchema *self,const char *primary_key);
+    void (*commit)(DtwSchema *self);
+    DtwResource  *(*find_by_nameID)(DtwSchema *self,const char *name);
+    void (*dangerous_remove_prop)(DtwSchema *self, const char *prop);
+    void (*dangerous_rename_prop)(DtwSchema *self, const char *prop, const char *new_name);
 
     DtwResource * (*find_by_primary_key_with_binary)(DtwSchema *schema, const char *key, unsigned  char *value, long size);
     DtwResource * (*find_by_primary_key_with_string)(DtwSchema *schema,const char *key,const char *value);
@@ -11036,6 +11048,70 @@ DtwResource * DtwSchema_find_by_primary_key_with_string(DtwSchema *self, const c
 
 
 
+void DtwSchema_commit(DtwSchema *self){
+    if(privateDtwSchema_error(self)){
+        return;
+    }
+    DtwResource_commit(self->master);
+}
+
+DtwResource  *DtwSchema_get_find_by_nameID(DtwSchema *self,const char *name){
+    if(privateDtwSchema_error(self)){
+        return NULL;
+    }
+
+    DtwResource *element = DtwResource_sub_resource(self->values_resource,name);
+    return element;
+}
+
+void DtwSchema_dangerours_remove_prop(DtwSchema *self, const char *prop){
+
+    bool allow_transaction = self->master->allow_transaction;
+    DtwResourceArray * all_values = DtwResource_sub_resources(self->values_resource);
+    DtwTransaction * transaction = self->master->root_props->transaction;
+    for(int i = 0; i < all_values->size; i++){
+        DtwResource *current = all_values->resources[i];
+        DtwResource *prop_to_remove = DtwResource_sub_resource(current,"%s",prop);
+        if(allow_transaction){
+            DtwTransaction_delete_any(transaction,prop_to_remove->path);
+        }else{
+            dtw_remove_any(prop_to_remove->path);
+        }
+
+    }
+    DtwResource *index_element = DtwResource_sub_resource(self->index_resource,"%s",prop);
+    if(allow_transaction){
+        DtwTransaction_delete_any(transaction,index_element->path);
+    }else{
+        dtw_remove_any(index_element->path);
+    }
+}
+
+
+void DtwSchema_dangerours_rename_prop(DtwSchema *self, const char *prop,const char *new_name){
+    bool allow_transaction = self->master->allow_transaction;
+    DtwResourceArray * all_values = DtwResource_sub_resources(self->values_resource);
+    DtwTransaction * transaction = self->master->root_props->transaction;
+    for(int i = 0; i < all_values->size; i++){
+        DtwResource *current = all_values->resources[i];
+        DtwResource *prop_to_remove = DtwResource_sub_resource(current,"%s",prop);
+        DtwResource *new_prop = DtwResource_sub_resource(current,"%s",new_name);
+        if(allow_transaction){
+            DtwTransaction_move_any_merging(transaction,prop_to_remove->path,new_prop->path);
+        }else{
+            dtw_move_any(prop_to_remove->path,new_prop->path,DTW_MERGE);
+        }
+
+    }
+    DtwResource *index_element = DtwResource_sub_resource(self->index_resource,"%s",prop);
+    DtwResource *new_index = DtwResource_sub_resource(self->index_resource,"%s",new_name);
+    if(allow_transaction){
+        DtwTransaction_move_any_merging(transaction,index_element->path,new_index->path);
+    }else{
+        dtw_move_any(index_element->path,new_index->path,DTW_MERGE);
+    }
+}
+
 
 
 
@@ -11371,6 +11447,10 @@ DtwSchemaModule newDtwSchemaModule(){
     self.get_values =DtwSchema_get_values;
     self.add_primary_key = DtwSchema_add_primary_key;
     self.newSchema = newDtwSchema;
+    self.commit = DtwSchema_commit;
+    self.find_by_nameID = DtwSchema_get_find_by_nameID;
+    self.dangerous_remove_prop = DtwSchema_dangerours_remove_prop;
+    self.dangerous_rename_prop = DtwSchema_dangerours_rename_prop;
     self.free = DtwSchema_free;
     return  self;
 }
