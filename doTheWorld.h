@@ -589,6 +589,8 @@ int private_dtw_string_cmp(const void *a, const void *b);
 
 char * private_dtw_format_vaarg(const char *expresion, va_list args);
 
+char *private_dtw_realoc_formatting(char *ptr,const char *format,...);
+
 long dtw_get_time();
 
 
@@ -1229,15 +1231,17 @@ void DtwTransaction_free(struct DtwTransaction *self);
 
 
 
-#define DTW_RESOURCE_ELEMENT_IS_NULL -1;
+#define DTW_RESOURCE_ELEMENT_IS_NULL -1
 #define DTW_RESOURCE_OK 0
 #define DTW_RESOURCE_ELEMENT_NOT_EXIST 1
 #define DTW_RESOURCE_ELEMENT_NOT_BOOL 2
 #define DTW_RESOURCE_ELEMENT_NOT_LONG 3
 #define DTW_RESOURCE_ELEMENT_NOT_DOUBLE 4
 #define DTW_RESOURCE_ELEMENT_NOT_STRING 5
-
-
+#define DTW_RESOURCE_PRIMARY_KEY_ALREADY_EXIST 6
+#define DTW_RESOURCE_PRIMARY_KEY_CANNOT_HAVE_SUB_RESOURCE 7
+#define DTW_IMPOSSIBLE_TO_RENAME_A_PRIMARY_KEY 8
+#define DTW_RESOURCE_PRIMARY_KEY_CANNOT_HAVE_SUB_SCHEMA 9
 
 typedef struct {
     DtwTransaction  *transaction;
@@ -1288,14 +1292,20 @@ DtwResource *new_DtwResource(const char *path);
 
 bool DtwResource_error(DtwResource *self);
 
+
 #define DtwResource_protected(self)  if(!DtwResource_error(self))
 #define DtwResource_catch(self)  if(DtwResource_error(self))
+
 
 int DtwResource_get_error_code(DtwResource *self);
 
 char * DtwResource_get_error_message(DtwResource *self);
 
-void  private_DtwResource_raise_error(DtwResource *self, int error_code, const char *error_message);
+void private_dtw_resource_set_primary_key(DtwResource *self, unsigned  char *element, long size);
+
+bool private_dtw_resource_its_a_primary_key(DtwResource *self);
+
+void  private_DtwResource_raise_error(DtwResource *self, int error_code, const char *format,...);
 
 void  DtwResource_clear_errors(DtwResource *self);
 
@@ -1324,6 +1334,7 @@ void DtwResource_unlock(DtwResource *self);
 
 
 void DtwResource_rename(DtwResource *self,const  char *new_name);
+void DtwResource_rename_sub_resource(DtwResource *self,const char *old_name,const  char *new_name);
 
 //getters
 
@@ -1489,6 +1500,7 @@ typedef struct {
     DtwStringArray  *primary_keys;
 }DtwSchema;
 
+bool privateDtwSchema_error(DtwSchema *self);
 
 DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *format,...);
 
@@ -1503,11 +1515,11 @@ DtwResource * DtwSchema_new_insertion(DtwSchema *schema);
 void DtwSchema_add_primary_key(DtwSchema *self,const char *primary_key);
 
 
-DtwResourceArray * DtwSchema_get_values(DtwSchema *schema);
+DtwResourceArray * DtwSchema_get_values(DtwSchema *self);
 
-DtwResource * DtwSchema_find_by_primary_key_with_binary(DtwSchema *schema, const char *primary_key, unsigned  char *value, long size);
+DtwResource * DtwSchema_find_by_primary_key_with_binary(DtwSchema *self, const char *primary_key, unsigned  char *value, long size);
 
-DtwResource * DtwSchema_find_by_primary_key_with_string(DtwSchema *schema,const char *key,const char *value);
+DtwResource * DtwSchema_find_by_primary_key_with_string(DtwSchema *self, const char *key, const char *value);
 
 
 
@@ -1860,6 +1872,7 @@ typedef struct DtwResourceModule{
     char * (*get_error_message)(DtwResource *self);
     bool (*is_file)(DtwResource *self);
     void (*destroy_sub_resource)(DtwResource *self, const char *key);
+    void (*rename_sub_resource)(DtwResource *self,const char *old_name,const  char *new_name);
     DtwResource * (*sub_resource)(struct DtwResource *self,const  char *format,...);
     unsigned char *(*get_any_from_sub_resource)(DtwResource *self, long *size, bool *is_binary,const char *format,...);
     unsigned char *(*get_binary_from_sub_resource)(DtwResource *self, long *size,const char *format,...);
@@ -5818,7 +5831,18 @@ long dtw_get_time(){
     }
     return time(NULL);
 }
+char *private_dtw_realoc_formatting(char *ptr,const char *format,...){
 
+    va_list args;
+    va_start(args, format);
+    char *value = private_dtw_format_vaarg(format,args);
+    va_end(args);
+    if(ptr){
+        free(ptr);
+    }
+
+    return value;
+}
 
 
 
@@ -8795,7 +8819,7 @@ void privateDtwResourceRootProps_free(privateDtwResourceRootProps *self){
 
 
 bool DtwResource_error(DtwResource *self){
-    if(!self){
+    if(self==NULL){
         return true;
     }
     if(DtwResource_get_error_code(self) == DTW_RESOURCE_OK){
@@ -8803,6 +8827,8 @@ bool DtwResource_error(DtwResource *self){
     }
     return true;
 }
+
+
 
 int DtwResource_get_error_code(DtwResource *self){
     if(!self){
@@ -8830,19 +8856,47 @@ void  DtwResource_clear_errors(DtwResource *self){
     self->root_props->error_code = DTW_RESOURCE_OK;
 
 }
+bool private_dtw_resource_its_a_primary_key(DtwResource *self){
+    if(self->its_a_write_point == false){
+        return false;
+    }
+    DtwSchema * schema = (DtwSchema*)self->mother->mother->mother->schema;
+    return DtwStringArray_find_position(schema->primary_keys,self->name) !=-1;
+}
 
-void  private_DtwResource_raise_error(DtwResource *self, int error_code, const char *error_message){
+void  private_DtwResource_raise_error(DtwResource *self, int error_code, const char *format,...){
+
+    va_list args;
+    va_start(args, format);
+    char *error_message = private_dtw_format_vaarg(format,args);
+    va_end(args);
+
     self->root_props->error_code = error_code;
     self->root_props->error_path = strdup(self->path);
     self->root_props->error_message = dtw_replace_string(error_message,"#path#",self->path);
-
+    free(error_message);
 }
 
 void DtwResource_rename(DtwResource *self,const char *new_name){
+    if(DtwResource_error(self)){
+        return;
+    }
+    if(private_dtw_resource_its_a_primary_key(self)){
+        private_DtwResource_raise_error(
+                self,
+                DTW_IMPOSSIBLE_TO_RENAME_A_PRIMARY_KEY,
+                "primary key %s cannot be renamed",
+                self->name
+        );
+        return;
+    }
 
     char *old_path = strdup(self->path);
     free(self->path);
     self->path  = dtw_concat_path(self->mother->path, new_name);
+
+    free(self->name);
+    self->name = strdup(new_name);
 
     if(self->allow_transaction){
         DtwTransaction_move_any(self->root_props->transaction,old_path,self->path);
@@ -8854,6 +8908,13 @@ void DtwResource_rename(DtwResource *self,const char *new_name){
 
 }
 
+void DtwResource_rename_sub_resource(DtwResource *self,const char *old_name,const  char *new_name){
+    if(DtwResource_error(self)){
+        return;
+    }
+    DtwResource *created = DtwResource_sub_resource(self,"name");
+    DtwResource_rename(created,new_name);
+}
 
 int DtwResource_lock(DtwResource *self){
     if(DtwResource_error(self)){
@@ -8869,73 +8930,21 @@ void DtwResource_unlock(DtwResource *self){
     DtwLocker_unlock(self->root_props->locker, self->path);
     
 }
-void private_DtwResurce_destroy_primary_key(DtwResource *self,void *vschma) {
-
-    DtwSchema  *schema = (DtwSchema*)vschma;
-
-    if (!DtwResource_is_file(self)) {
-        return;
-    }
-    DtwResource *pk_index_folder = DtwResource_sub_resource(schema->index_resource, "%s", self->name);
-    long size;
-    bool is_binary;
-    unsigned char *possible_pk_value = DtwResource_get_any(self, &size, &is_binary);
-    char *pk_sha = dtw_generate_sha_from_any(possible_pk_value, size);
-
-    DtwResource *pk_index_value = DtwResource_sub_resource(pk_index_folder, "%s", pk_sha);
-
-    if (self->allow_transaction) {
-        DtwTransaction_delete_any(self->root_props->transaction, pk_index_value->path);
-    } else {
-        dtw_remove_any(pk_index_value->path);
-    }
-
-
-}
-void private_DtwResource_destroy_all_primary_keys(DtwResource *self){
-    DtwSchema * schema = (DtwSchema*)self->mother->mother->schema;
-    for(int i = 0; i < schema->primary_keys->size; i++){
-        char *current_pk = schema->primary_keys->strings[i];
-        DtwResource *son = DtwResource_sub_resource(self,"%s",current_pk);
-        private_DtwResurce_destroy_primary_key(son,schema);
-    }
-}
-void DtwResource_destroy(DtwResource *self){
-    if(DtwResource_error(self)){
-        return;
-    }
-
-    if(self->its_a_element_folder){
-        private_DtwResource_destroy_all_primary_keys(self);
-    }
-    if(self->its_a_write_point){
-        DtwSchema * schema = (DtwSchema*)self->mother->mother->mother->schema;
-        bool its_a_pk = DtwStringArray_find_position(schema->primary_keys,self->name) !=-1;
-        if(its_a_pk){
-            private_DtwResurce_destroy_primary_key(self,schema);
-        }
-    }
-
-
-    if(self->allow_transaction){
-        DtwTransaction_delete_any(self->root_props->transaction,self->path);
-    }
-    else{
-        dtw_remove_any(self->path);
-    }
-
-}
-
-void DtwResource_destroy_sub_resource(DtwResource *self, const char *key){
-    DtwResource *son = DtwResource_sub_resource(self, "%s",key);
-    DtwResource_destroy(son);
-}
-
 
 DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *format,...){
+    if(DtwResource_error(self)){
+        return  NULL;
+    }
+    if(private_dtw_resource_its_a_primary_key(self)){
+        private_DtwResource_raise_error(
+                self,
+                DTW_RESOURCE_PRIMARY_KEY_CANNOT_HAVE_SUB_SCHEMA,
+                "primary key %s cannot have a sub schema",
+                self->name
+        );
+        return NULL;
+    }
 
-    DtwSchema *schema = (DtwSchema*) malloc(sizeof(DtwSchema));
-    *schema = (DtwSchema){0};
 
     va_list args;
     va_start(args, format);
@@ -8944,6 +8953,15 @@ DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *format,...){
 
     //make both reference each other
     DtwResource *master =DtwResource_sub_resource(self,"%s",name);
+    if(master->schema){
+        free(name);
+        return (DtwSchema*)master->schema;
+    }
+
+
+    DtwSchema *schema = (DtwSchema*) malloc(sizeof(DtwSchema));
+    *schema = (DtwSchema){0};
+
     free(name);
     master->schema = schema;
     schema->master = master;
@@ -9043,6 +9061,10 @@ const char * DtwResource_type_in_str(DtwResource *self){
 
 void DtwResource_represent(DtwResource *self){
     if(DtwResource_error(self)){
+        return;
+    }
+
+    if(DtwResource_error(self)){
         printf("error code: %d\n", DtwResource_get_error_code(self));
         printf("error message: %s\n", DtwResource_get_error_message(self));
         return ;
@@ -9122,7 +9144,6 @@ unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binar
     if(DtwResource_error(self)){
         return NULL;
     }
-
     DtwResource_load_if_not_loaded(self);
     *size = self->value_size;
     *is_binary = self->is_binary;
@@ -9145,7 +9166,6 @@ unsigned char *DtwResource_get_any_from_sub_resource(DtwResource *self, long *si
     if(DtwResource_error(self)){
         return NULL;
     }
-
     va_list args;
     va_start(args, format);
     char *name = private_dtw_format_vaarg(format,args);
@@ -9161,7 +9181,6 @@ unsigned char *DtwResource_get_binary(DtwResource *self, long *size){
     if(DtwResource_error(self)){
         return NULL;
     }
-
     bool is_binary;
 
     return DtwResource_get_any(self,size,&is_binary);
@@ -9347,26 +9366,47 @@ bool DtwResource_get_bool_from_sub_resource(DtwResource *self,const char *format
 //
 // Created by mateusmoutinho on 05/08/23.
 //
+void private_dtw_resource_set_primary_key(DtwResource *self, unsigned  char *element, long size){
+    DtwSchema * schema = (DtwSchema*)self->mother->mother->mother->schema;
+    DtwResource *pk_folder = DtwResource_sub_resource(schema->index_resource,"%s",self->name);
+    char *sha = dtw_generate_sha_from_any(element,size);
+    DtwResource  *pk_value = DtwResource_sub_resource(pk_folder,sha);
+    free(sha);
+    char *mothers_name =self->mother->name;
 
+    if(DtwResource_is_file(pk_value)) {
+        char *content = DtwResource_get_string(pk_value);
+        if (DtwResource_error(self)) {
+            return;
+        }
+
+        //means its the same
+        if (strcmp(content, mothers_name) == 0) {
+            return;
+        }
+
+        private_DtwResource_raise_error(
+                self,
+                DTW_RESOURCE_PRIMARY_KEY_ALREADY_EXIST,
+                "primary key: %s already exist",
+                self->name
+        );
+        return;
+
+    }
+    DtwResource_set_string(pk_value,mothers_name);
+}
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size){
     if(DtwResource_error(self)){
         return ;
     }
-
-    if(self->its_a_write_point){
-        DtwSchema * schema = (DtwSchema*)self->mother->mother->mother->schema;
-        bool its_a_pk = DtwStringArray_find_position(schema->primary_keys,self->name) !=-1;
-
-        if(its_a_pk){
-            DtwResource *pk_folder = DtwResource_sub_resource(schema->index_resource,"%s",self->name);
-            char *sha = dtw_generate_sha_from_any(element,size);
-            DtwResource  *pk_value = DtwResource_sub_resource(pk_folder,sha);
-            free(sha);
-            char *mothers_name =self->mother->name;
-            DtwResource_set_string(pk_value,mothers_name);
-        }
+    if(private_dtw_resource_its_a_primary_key(self)){
+        private_dtw_resource_set_primary_key(self, element, size);
     }
 
+    if(DtwResource_error(self)){
+        return ;
+    }
 
     if(self->allow_transaction){
         DtwTransaction_write_any(self->root_props->transaction,self->path,element,size,true);
@@ -9388,22 +9428,13 @@ void DtwResource_set_string(DtwResource *self,const  char *element){
     if(DtwResource_error(self)){
         return ;
     }
-
-
-    if(self->its_a_write_point){
-        DtwSchema * schema = (DtwSchema*)self->mother->mother->mother->schema;
-        bool its_a_pk = DtwStringArray_find_position(schema->primary_keys,self->name) !=-1;
-
-        if(its_a_pk){
-            DtwResource *pk_folder = DtwResource_sub_resource(schema->index_resource,"%s",self->name);
-            char *sha = dtw_generate_sha_from_string(element);
-            DtwResource  *pk_value = DtwResource_sub_resource(pk_folder,sha);
-            free(sha);
-            char *mothers_name =self->mother->name;
-            DtwResource_set_string(pk_value,mothers_name);
-        }
+    if(private_dtw_resource_its_a_primary_key(self)){
+        private_dtw_resource_set_primary_key(self, (unsigned char *) element, (long) strlen(element));
     }
 
+    if(DtwResource_error(self)){
+        return ;
+    }
 
     if(self->allow_transaction){
         DtwTransaction_write_string(self->root_props->transaction,self->path,element);
@@ -9433,6 +9464,9 @@ void DtwResource_set_binary_sha(DtwResource *self, unsigned  char *value, long s
 }
 
 void DtwResource_set_string_sha(DtwResource *self,const char *value){
+    if(DtwResource_error(self)){
+        return ;
+    }
     DtwResource_set_binary_sha(self,(unsigned char*)value, (long)strlen(value));
 }
 
@@ -9484,7 +9518,6 @@ void DtwResource_set_bool( DtwResource *self,bool element){
     if(DtwResource_error(self)){
         return ;
     }
-
     if(self->allow_transaction){
         DtwTransaction_write_bool(self->root_props->transaction,self->path,element);
     }
@@ -9516,7 +9549,7 @@ void DtwResource_set_binary_in_sub_resource(DtwResource *self,const char *key, u
 
 void DtwResource_set_binary_sha_in_sub_resource(DtwResource *self, const char *key, unsigned  char *value, long size){
     if(DtwResource_error(self)){
-        return;
+        return ;
     }
     DtwResource *created = DtwResource_sub_resource(self,"%s",key);
     DtwResource_set_binary_sha(created,value,size);
@@ -9525,9 +9558,8 @@ void DtwResource_set_binary_sha_in_sub_resource(DtwResource *self, const char *k
 
 void DtwResource_set_string_sha_in_sub_resource(DtwResource *self, const char *key, const char *value){
     if(DtwResource_error(self)){
-        return;
+        return ;
     }
-
     DtwResource *created = DtwResource_sub_resource(self,"%s",key);
     DtwResource_set_string_sha(created,value);
 }
@@ -9545,7 +9577,6 @@ void DtwResource_set_long_in_sub_resource(DtwResource *self, const char *key, lo
     if(DtwResource_error(self)){
         return ;
     }
-
     DtwResource *created = DtwResource_sub_resource(self,"%s",key);
     DtwResource_set_long(created,element);
 }
@@ -9591,10 +9622,21 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
         return NULL;
     }
 
+    if(private_dtw_resource_its_a_primary_key(self)){
+        private_DtwResource_raise_error(
+                self,
+                DTW_RESOURCE_PRIMARY_KEY_CANNOT_HAVE_SUB_RESOURCE,
+                "primary key %s cannot have a sub resource",
+                self->name
+        );
+        return NULL;
+    }
+
     va_list args;
     va_start(args, format);
     char *name = private_dtw_format_vaarg(format,args);
     va_end(args);
+
 
     DtwResource * Already_Exist = DtwResourceArray_get_by_name((DtwResourceArray*)self->sub_resources,name);
     if(Already_Exist){
@@ -9634,7 +9676,9 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
 
 }
 DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,const  char *format, ...){
-
+    if(DtwResource_error(self)){
+        return NULL;
+    }
     va_list args;
     va_start(args, format);
     char *name = private_dtw_format_vaarg(format,args);
@@ -9677,6 +9721,10 @@ DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,cons
 }
 
 void DtwResource_free(DtwResource *self){
+    if(!self){
+        return;
+    }
+
     bool is_root = self->mother == NULL;
     if(is_root){
         privateDtwResourceRootProps_free(self->root_props);
@@ -9704,20 +9752,30 @@ void DtwResource_free(DtwResource *self){
 
 
 DtwResource * DtwResource_sub_resource_next(DtwResource *self, const char *end_path){
+    if(DtwResource_error(self)){
+        return NULL;
+    }
     long  size = dtw_get_total_itens_of_dir(self->path);
     if(size < 0){
         size = 0;
     }
     while(true){
 
-        char path[300] ={0};
+        char *path = NULL;
         if(end_path){
-            sprintf(path,"%ld%s",size,end_path);
+            path = private_dtw_realoc_formatting(path,"%ld%s",size,end_path);
         }
+
         else{
-            sprintf(path,"%ld",size);
+            path = private_dtw_realoc_formatting(path,"%ld",size);
         }
+
         DtwResource *new_element = DtwResource_sub_resource_ensuring_not_exist(self,"%s",path);
+        free(path);
+        if(DtwResource_error(self)){
+            return NULL;
+        }
+
         if(new_element){
             return new_element;
         }
@@ -9727,7 +9785,9 @@ DtwResource * DtwResource_sub_resource_next(DtwResource *self, const char *end_p
 
 
 DtwResource * DtwResource_sub_resource_now(DtwResource *self, const char *end_path){
-
+    if(DtwResource_error(self)){
+        return NULL;
+    }
     bool empty_already_exist = false;
 
 
@@ -9735,23 +9795,31 @@ DtwResource * DtwResource_sub_resource_now(DtwResource *self, const char *end_pa
 
         long now = dtw_get_time();
         char *time = dtw_convert_unix_time_to_string(now);
-        char path[1000] ={0};
+        char *path = NULL;
 
         if(empty_already_exist){
             char *token = DtwRandonizer_generate_token(self->root_props->randonizer,10);
-            sprintf(path,"%s--%s",time,token);
+            path = private_dtw_realoc_formatting(path,"%s--%s",time,token);
             free(token);
         }
         else{
-            sprintf(path,"%s",time);
+            path = private_dtw_realoc_formatting(path,"%s",time);
         }
+
         free(time);
 
         if(end_path){
-            strcat(path,end_path);
+            path = private_dtw_realoc_formatting(path,"%s%s",path,end_path);
         }
 
         DtwResource *new_element = DtwResource_sub_resource_ensuring_not_exist(self,"%s",path);
+
+        free(path);
+
+
+        if(DtwResource_error(self)){
+            return NULL;
+        }
         if(new_element){
             return new_element;
         }
@@ -9761,27 +9829,37 @@ DtwResource * DtwResource_sub_resource_now(DtwResource *self, const char *end_pa
 
 
 DtwResource * DtwResource_sub_resource_now_in_unix(DtwResource *self, const char *end_path){
+    if(DtwResource_error(self)){
+        return NULL;
+    }
     bool empty_already_exist = false;
 
     while(true){
 
         long now = dtw_get_time();
-        char path[1000] ={0};
+        char *path = NULL;
 
         if(empty_already_exist){
             char *token = DtwRandonizer_generate_token(self->root_props->randonizer,10);
-            sprintf(path,"%ld--%s",now,token);
+            path = private_dtw_realoc_formatting(path,"%ld--%s",now,token);
             free(token);
         }
         else{
-            sprintf(path,"%ld",now);
+            path = private_dtw_realoc_formatting(path,"%ld",now);
         }
 
         if(end_path){
-            strcat(path,end_path);
+            path = private_dtw_realoc_formatting(path,"%s%s",path,end_path);
         }
 
         DtwResource *new_element = DtwResource_sub_resource_ensuring_not_exist(self,"%s",path);
+
+        free(path);
+
+
+        if(DtwResource_error(self)){
+            return NULL;
+        }
         if(new_element){
             return new_element;
         }
@@ -9790,19 +9868,26 @@ DtwResource * DtwResource_sub_resource_now_in_unix(DtwResource *self, const char
 }
 
 DtwResource * DtwResource_sub_resource_random(DtwResource *self, const char *end_path){
-
+    if(DtwResource_error(self)){
+        return NULL;
+    }
     while(true){
 
-        char path[1000] ={0};
+        char *path = NULL;
         char *token = DtwRandonizer_generate_token(self->root_props->randonizer,15);
-        sprintf(path,"%s",token);
+        path = private_dtw_realoc_formatting(path,"%s",token);
         free(token);
 
         if(end_path){
-            strcat(path,end_path);
+            path = private_dtw_realoc_formatting(path,"%s%s",path,end_path);
         }
 
         DtwResource *new_element = DtwResource_sub_resource_ensuring_not_exist(self,"%s",path);
+        free(path);
+        if(DtwResource_error(self)){
+            return NULL;
+        }
+
         if(new_element){
             return new_element;
         }
@@ -9810,6 +9895,73 @@ DtwResource * DtwResource_sub_resource_random(DtwResource *self, const char *end
     }
 }
 
+
+
+
+
+void private_DtwResurce_destroy_primary_key(DtwResource *self,void *vschma) {
+
+    DtwSchema  *schema = (DtwSchema*)vschma;
+
+    if (!DtwResource_is_file(self)) {
+        return;
+    }
+    DtwResource *pk_index_folder = DtwResource_sub_resource(schema->index_resource, "%s", self->name);
+    long size;
+    bool is_binary;
+    unsigned char *possible_pk_value = DtwResource_get_any(self, &size, &is_binary);
+    char *pk_sha = dtw_generate_sha_from_any(possible_pk_value, size);
+
+    DtwResource *pk_index_value = DtwResource_sub_resource(pk_index_folder, "%s", pk_sha);
+
+    free(pk_sha);
+    if (self->allow_transaction) {
+        DtwTransaction_delete_any(self->root_props->transaction, pk_index_value->path);
+    } else {
+        dtw_remove_any(pk_index_value->path);
+    }
+
+
+}
+void private_DtwResource_destroy_all_primary_keys(DtwResource *self){
+    DtwSchema * schema = (DtwSchema*)self->mother->mother->schema;
+    for(int i = 0; i < schema->primary_keys->size; i++){
+        char *current_pk = schema->primary_keys->strings[i];
+        DtwResource *son = DtwResource_sub_resource(self,"%s",current_pk);
+        private_DtwResurce_destroy_primary_key(son,schema);
+    }
+}
+void DtwResource_destroy(DtwResource *self){
+    if(DtwResource_error(self)){
+        return;
+    }
+
+    if(self->its_a_element_folder){
+        private_DtwResource_destroy_all_primary_keys(self);
+    }
+
+    if(private_dtw_resource_its_a_primary_key(self)){
+        DtwSchema * schema = (DtwSchema*)self->mother->mother->mother->schema;
+        private_DtwResurce_destroy_primary_key(self,schema);
+    }
+
+
+    if(self->allow_transaction){
+        DtwTransaction_delete_any(self->root_props->transaction,self->path);
+    }
+    else{
+        dtw_remove_any(self->path);
+    }
+
+}
+
+void DtwResource_destroy_sub_resource(DtwResource *self, const char *key){
+    if(DtwResource_error(self)){
+        return;
+    }
+    DtwResource *son = DtwResource_sub_resource(self, "%s",key);
+    DtwResource_destroy(son);
+}
 
 
 
@@ -10743,7 +10895,9 @@ DtwSchema * newDtwSchema(const char *path){
 }
 
 void DtwSchema_add_primary_key(DtwSchema *self,const char *primary_key){
-
+    if(privateDtwSchema_error(self)){
+        return ;
+    }
     bool not_found =DtwStringArray_find_position(self->primary_keys,primary_key)==-1;
 
     if(not_found){
@@ -10752,6 +10906,9 @@ void DtwSchema_add_primary_key(DtwSchema *self,const char *primary_key){
 }
 
 void DtwSchema_free(DtwSchema *self){
+    if(privateDtwSchema_error(self)){
+        return;
+    }
     if(self->owner){
         //the resource call the privateDtwSchema_free_self_props, and frees
         //everything
@@ -10759,7 +10916,15 @@ void DtwSchema_free(DtwSchema *self){
     }
 
 }
-
+bool privateDtwSchema_error(DtwSchema *self){
+    if(!self){
+        return true;
+    }
+    if(DtwResource_error(self->master)){
+        return true;
+    }
+    return false;
+}
 
 void privateDtwSchema_free_self_props(DtwSchema *self){
     DtwStringArray_free(self->primary_keys);
@@ -10768,18 +10933,26 @@ void privateDtwSchema_free_self_props(DtwSchema *self){
 
 
 DtwResource * DtwSchema_new_insertion(DtwSchema *schema){
+    if(privateDtwSchema_error(schema)){
+        return NULL;
+    }
     DtwResource  *created = DtwResource_sub_resource_random(schema->values_resource,NULL);
 
     return created;
 }
 
-DtwResourceArray * DtwSchema_get_values(DtwSchema *schema){
-    return DtwResource_sub_resources(schema->values_resource);
+DtwResourceArray * DtwSchema_get_values(DtwSchema *self){
+    if(privateDtwSchema_error(self)){
+        return NULL;
+    }
+    return DtwResource_sub_resources(self->values_resource);
 }
 
-DtwResource * DtwSchema_find_by_primary_key_with_binary(DtwSchema *schema, const char *primary_key, unsigned  char *value, long size){
-
-    DtwResource *primary_key_folder = DtwResource_sub_resource(schema->index_resource,"%s",primary_key);
+DtwResource * DtwSchema_find_by_primary_key_with_binary(DtwSchema *self, const char *primary_key, unsigned  char *value, long size){
+    if(privateDtwSchema_error(self)){
+        return NULL;
+    }
+    DtwResource *primary_key_folder = DtwResource_sub_resource(self->index_resource, "%s", primary_key);
     char *sha = dtw_generate_sha_from_any(value,size);
     DtwResource *index_value = DtwResource_sub_resource(primary_key_folder,"%s",sha);
     free(sha);
@@ -10787,20 +10960,22 @@ DtwResource * DtwSchema_find_by_primary_key_with_binary(DtwSchema *schema, const
         return NULL;
     }
     char *element_folder = DtwResource_get_string(index_value);
-    if(DtwResource_error(schema->master)){
+    if(DtwResource_error(self->master)){
         return NULL;
     }
     if(!element_folder){
         return NULL;
     }
-    DtwResource *founded_resource = DtwResource_sub_resource(schema->values_resource,"%s",element_folder);
+    DtwResource *founded_resource = DtwResource_sub_resource(self->values_resource, "%s", element_folder);
     return founded_resource;
 }
 
-DtwResource * DtwSchema_find_by_primary_key_with_string(DtwSchema *schema,const char *key,const char *value){
-
+DtwResource * DtwSchema_find_by_primary_key_with_string(DtwSchema *self, const char *key, const char *value){
+    if(privateDtwSchema_error(self)){
+        return NULL;
+    }
     return DtwSchema_find_by_primary_key_with_binary(
-            schema,
+            self,
             key,
             (unsigned char *) value,
             (long) strlen(value)
@@ -11064,6 +11239,7 @@ DtwResourceModule newDtwResourceModule(){
     self.sub_resource_ensuring_not_exist = DtwResource_sub_resource_ensuring_not_exist;
     self.sub_resource_next = DtwResource_sub_resource_next;
     self.destroy_sub_resource = DtwResource_destroy_sub_resource;
+    self.rename_sub_resource = DtwResource_rename_sub_resource;
     self.sub_resource_now  = DtwResource_sub_resource_now;
     self.sub_resource_now_in_unix = DtwResource_sub_resource_now_in_unix;
     self.sub_resource_random = DtwResource_sub_resource_random;

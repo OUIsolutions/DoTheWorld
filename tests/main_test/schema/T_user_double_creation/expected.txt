@@ -1,2 +1,0 @@
- 
-error:primary key: name already exist

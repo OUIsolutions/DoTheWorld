@@ -14,6 +14,7 @@ void private_DtwResurce_destroy_primary_key(DtwResource *self,void *vschma) {
 
     DtwResource *pk_index_value = DtwResource_sub_resource(pk_index_folder, "%s", pk_sha);
 
+    free(pk_sha);
     if (self->allow_transaction) {
         DtwTransaction_delete_any(self->root_props->transaction, pk_index_value->path);
     } else {

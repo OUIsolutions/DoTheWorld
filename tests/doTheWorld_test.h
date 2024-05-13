@@ -8955,8 +8955,9 @@ DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *format,...){
     DtwResource *master =DtwResource_sub_resource(self,"%s",name);
     if(master->schema){
         free(name);
-        return master->schema;
+        return (DtwSchema*)master->schema;
     }
+
 
     DtwSchema *schema = (DtwSchema*) malloc(sizeof(DtwSchema));
     *schema = (DtwSchema){0};
@@ -9913,6 +9914,7 @@ void private_DtwResurce_destroy_primary_key(DtwResource *self,void *vschma) {
 
     DtwResource *pk_index_value = DtwResource_sub_resource(pk_index_folder, "%s", pk_sha);
 
+    free(pk_sha);
     if (self->allow_transaction) {
         DtwTransaction_delete_any(self->root_props->transaction, pk_index_value->path);
     } else {

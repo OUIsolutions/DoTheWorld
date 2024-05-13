@@ -138,8 +138,9 @@ DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *format,...){
     DtwResource *master =DtwResource_sub_resource(self,"%s",name);
     if(master->schema){
         free(name);
-        return master->schema;
+        return (DtwSchema*)master->schema;
     }
+
 
     DtwSchema *schema = (DtwSchema*) malloc(sizeof(DtwSchema));
     *schema = (DtwSchema){0};
