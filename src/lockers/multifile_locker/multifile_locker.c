@@ -27,7 +27,6 @@ int  DtwMultiFIleLocker_lock(DtwMultiFileLocker *self, const char *element) {
     sprintf(file,"%s%s",element,LOCK_FOLDER);
     long started_time = time(NULL);
 
-    int tota_execution = 0;
     while (true){
 
 
@@ -37,7 +36,6 @@ int  DtwMultiFIleLocker_lock(DtwMultiFileLocker *self, const char *element) {
             return DTW_LOCKER_WAIT_ERROR;
         }
 
-        tota_execution+=1;
 
          bool write = false;
          int entity_type = dtw_entity_type(file);
