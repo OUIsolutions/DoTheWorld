@@ -2,6 +2,7 @@
 
 
 typedef struct DtwRandonizer{
+    long time_seed;
     long seed;
     long actual_generation;
 

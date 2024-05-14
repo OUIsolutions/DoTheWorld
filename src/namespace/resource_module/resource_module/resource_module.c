@@ -21,12 +21,20 @@ DtwResourceModule newDtwResourceModule(){
     self.set_long_in_sub_resource = DtwResource_set_long_in_sub_resource;
     self.set_double_in_sub_resource = DtwResource_set_double_in_sub_resource;
     self.set_bool_in_sub_resource = DtwResource_set_bool_in_sub_resource;
-
+    self.is_file = DtwResource_is_file;
     self.sub_resource_ensuring_not_exist = DtwResource_sub_resource_ensuring_not_exist;
     self.sub_resource_next = DtwResource_sub_resource_next;
+    self.destroy_sub_resource = DtwResource_destroy_sub_resource;
+    self.rename_sub_resource = DtwResource_rename_sub_resource;
     self.sub_resource_now  = DtwResource_sub_resource_now;
     self.sub_resource_now_in_unix = DtwResource_sub_resource_now_in_unix;
     self.sub_resource_random = DtwResource_sub_resource_random;
+    self.sub_schema = DtwResource_sub_schema;
+    self.set_binary_sha =DtwResource_set_binary_sha;
+    self.set_string_sha = DtwResource_set_string_sha;
+    self.set_binary_sha_in_sub_resource = DtwResource_set_binary_sha_in_sub_resource;
+    self.set_string_sha_in_sub_resource = DtwResource_set_string_sha_in_sub_resource;
+
     self.lock =DtwResource_lock;
     self.unlock = DtwResource_unlock;
     self.destroy = DtwResource_destroy;
@@ -53,7 +61,6 @@ DtwResourceModule newDtwResourceModule(){
     self.represent = DtwResource_represent;
     self.rename = DtwResource_rename;
     self.free  = DtwResource_free;
-
     self.sub_resources = DtwResource_sub_resources;
     self.array = newDtwResourceArrayModule();
 

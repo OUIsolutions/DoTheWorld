@@ -15,7 +15,9 @@ void private_dtw_remove_double_bars(struct DtwStringArray*path);
 
 int private_dtw_string_cmp(const void *a, const void *b);
 
+char * private_dtw_format_vaarg(const char *expresion, va_list args);
 
+char *private_dtw_realoc_formatting(char *ptr,const char *format,...);
 
 long dtw_get_time();
 

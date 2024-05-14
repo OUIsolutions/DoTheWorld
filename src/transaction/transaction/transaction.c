@@ -95,6 +95,18 @@ void DtwTransaction_copy_any(struct DtwTransaction *self,const char *source,cons
     DtwTransaction_append_action(self,action);
 }
 
+void DtwTransaction_move_any_merging(struct DtwTransaction *self,const char *source,const char *dest){
+    DtwActionTransaction * action = DtwActionTransaction_move_any_merging(source,dest);
+    DtwTransaction_append_action(self,action);
+}
+
+
+void DtwTransaction_copy_any_merging(struct DtwTransaction *self,const char *source,const char *dest){
+    DtwActionTransaction * action = DtwActionTransaction_copy_any_merging(source,dest);
+    DtwTransaction_append_action(self,action);
+}
+
+
 void DtwTransaction_delete_any(struct DtwTransaction *self,const char *source){
      DtwActionTransaction  *action = DtwActionTransaction_delete_any(source);
      DtwTransaction_append_action(self,action);

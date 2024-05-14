@@ -4,12 +4,14 @@ typedef struct DtwResource{
 
     bool allow_transaction;
     bool use_locker_on_unique_values;
+    void *schema;
     privateDtwResourceRootProps *root_props;
-    char *mothers_path;
+    struct DtwResource *mother;
     char *name;
     char *path;
-    bool child;
-
+    bool its_a_write_point;
+    bool its_a_element_folder;
+    bool its_value_folder;
     bool loaded;
     bool is_binary;
     unsigned char *value_any;
@@ -28,14 +30,20 @@ DtwResource *new_DtwResource(const char *path);
 
 bool DtwResource_error(DtwResource *self);
 
+
 #define DtwResource_protected(self)  if(!DtwResource_error(self))
 #define DtwResource_catch(self)  if(DtwResource_error(self))
+
 
 int DtwResource_get_error_code(DtwResource *self);
 
 char * DtwResource_get_error_message(DtwResource *self);
 
-void  private_DtwResource_raise_error(DtwResource *self, int error_code, const char *error_message);
+void private_dtw_resource_set_primary_key(DtwResource *self, unsigned  char *element, long size);
+
+bool private_dtw_resource_its_a_primary_key(DtwResource *self);
+
+void  private_DtwResource_raise_error(DtwResource *self, int error_code, const char *format,...);
 
 void  DtwResource_clear_errors(DtwResource *self);
 
@@ -64,6 +72,7 @@ void DtwResource_unlock(DtwResource *self);
 
 
 void DtwResource_rename(DtwResource *self,const  char *new_name);
+void DtwResource_rename_sub_resource(DtwResource *self,const char *old_name,const  char *new_name);
 
 //getters
 
@@ -71,7 +80,16 @@ unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binar
 unsigned char *DtwResource_get_any_from_sub_resource(DtwResource *self, long *size, bool *is_binary,const char *format,...);
 
 
+void DtwResource_set_binary_sha(DtwResource *self, unsigned  char *value, long size);
+void DtwResource_set_string_sha(DtwResource *self,const char *value);
+
+void DtwResource_set_binary_sha_in_sub_resource(DtwResource *self, const char *key, unsigned  char *value, long size);
+void DtwResource_set_string_sha_in_sub_resource(DtwResource *self, const char *key, const char *value);
+
+void DtwResource_destroy_sub_resource(DtwResource *self, const char *key);
+
 unsigned char *DtwResource_get_binary(DtwResource *self, long *size);
+
 
 unsigned char *DtwResource_get_binary_from_sub_resource(DtwResource *self, long *size,const char *format,...);
 
@@ -92,30 +110,32 @@ bool DtwResource_get_bool(DtwResource *self);
 bool DtwResource_get_bool_from_sub_resource(DtwResource *self,const char *format,...);
 
 
-
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size);
 
-void DtwResource_set_binary_in_sub_resource(DtwResource *self, unsigned char *element, long size,const char *format,...);
+void DtwResource_set_binary_in_sub_resource(DtwResource *self,const char *key, unsigned char *element, long size);
 
 
 
 void DtwResource_set_string(DtwResource *self,const  char *element);
 
-void DtwResource_set_string_in_sub_resource(DtwResource *self,const  char *element,const char *format,...);
+void DtwResource_set_string_in_sub_resource(DtwResource *self, const char *key, const  char *element);
 
 void DtwResource_set_long(DtwResource *self,long element);
 
-void DtwResource_set_long_in_sub_resource(DtwResource *self,long element,const char *format,...);
+void DtwResource_set_long_in_sub_resource(DtwResource *self, const char *key, long element);
 
 
 void DtwResource_set_double(DtwResource *self,double element);
 
-void DtwResource_set_double_in_sub_resource(DtwResource *self,double element,const char *format,...);
+void DtwResource_set_double_in_sub_resource(DtwResource *self, const char *key, double element);
 
 void DtwResource_set_bool( DtwResource *self,bool element);
 
-void DtwResource_set_bool_in_sub_resource( DtwResource *self,bool element,const char *format,...);
+void DtwResource_set_bool_in_sub_resource(DtwResource *self,const char *key, bool element);
 
+void private_DtwResurce_destroy_primary_key(DtwResource *self,void *schema);
+
+void private_DtwResource_destroy_all_primary_keys(DtwResource *self);
 
 void DtwResource_destroy(DtwResource *self);
 
@@ -124,6 +144,8 @@ long DtwResource_size(DtwResource *self);
 DtwStringArray *DtwResource_list_names(DtwResource *self);
 
 int DtwResource_type(DtwResource *self);
+
+bool DtwResource_is_file(DtwResource *self);
 
 
 const char * DtwResource_type_in_str(DtwResource *self);

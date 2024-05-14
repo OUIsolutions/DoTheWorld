@@ -160,6 +160,16 @@ void private_dtw_remove_double_bars(struct DtwStringArray*path){
     }
 }
 
+char * private_dtw_format_vaarg(const char *expresion, va_list args){
+
+    va_list args_copy;
+    va_copy(args_copy, args);
+    long required_size = vsnprintf(NULL, 0,expresion,args_copy);
+    va_end(args_copy);
+    char *buffer = (char*)malloc(sizeof(char) * required_size + 2);
+    vsnprintf(buffer,sizeof (char) * required_size+1,expresion,args);
+    return buffer;
+}
 
 int private_dtw_string_cmp(const void *a, const void *b){
     const char *str_a = *(const char **)a;
@@ -168,9 +178,20 @@ int private_dtw_string_cmp(const void *a, const void *b){
 }
 
 long dtw_get_time(){
-    if(dtw_now != -1){
-        return dtw_now;
-    }
+#ifdef DTW_DEBUG_TIME
+    return 0;
+#endif
     return time(NULL);
 }
+char *private_dtw_realoc_formatting(char *ptr,const char *format,...){
 
+    va_list args;
+    va_start(args, format);
+    char *value = private_dtw_format_vaarg(format,args);
+    va_end(args);
+    if(ptr){
+        free(ptr);
+    }
+
+    return value;
+}

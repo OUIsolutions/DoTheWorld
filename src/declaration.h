@@ -59,4 +59,5 @@
 #include "transaction/declaration.h"
 #include "resource/declaration.h"
 #include "hash/hash.h"
+#include "schema/schema.h"
 #include "namespace/declaration.h"

@@ -29,9 +29,25 @@ DtwActionTransaction * DtwActionTransaction_move_any(const char *source, const c
 
 }
 
+
 DtwActionTransaction * DtwActionTransaction_copy_any(const char *source, const char *dest){
     DtwActionTransaction *self = newDtwActionTransaction();
     self->action_type = DTW_ACTION_COPY;
+    self->source = strdup(source);
+    self->dest = strdup(dest);
+    return self;
+}
+DtwActionTransaction * DtwActionTransaction_move_any_merging(const char *source, const char *dest){
+    DtwActionTransaction *self = newDtwActionTransaction();
+    self->action_type = DTW_ACTION_MOVE_MERGING;
+    self->source = strdup(source);
+    self->dest = strdup(dest);
+    return self;
+}
+
+DtwActionTransaction * DtwActionTransaction_copy_any_merging(const char *source, const char *dest){
+    DtwActionTransaction *self = newDtwActionTransaction();
+    self->action_type = DTW_ACTION_COPY_MERGING;
     self->source = strdup(source);
     self->dest = strdup(dest);
     return self;
@@ -66,8 +82,17 @@ void DtwActionTransaction_commit(DtwActionTransaction* self,const char *path){
     if(self->action_type == DTW_ACTION_MOVE){
         dtw_move_any(formated_source,formated_dest,DTW_NOT_MERGE);
     }
+
+    if(self->action_type == DTW_ACTION_MOVE_MERGING){
+        dtw_move_any(formated_source,formated_dest,DTW_MERGE);
+    }
+
     if(self->action_type == DTW_ACTION_COPY){
         dtw_copy_any(formated_source,formated_dest,DTW_NOT_MERGE);
+    }
+
+    if(self->action_type == DTW_ACTION_COPY_MERGING){
+        dtw_copy_any(formated_source,formated_dest,DTW_MERGE);
     }
 
     free(formated_dest);

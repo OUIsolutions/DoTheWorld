@@ -7,6 +7,8 @@ typedef struct DtwActionTransactionModule{
     DtwActionTransaction * (*write_any)(const char *source,unsigned  char *content,long size,bool is_binary);
 
     DtwActionTransaction * (*move_any)(const char *source, const char *dest);
+    DtwActionTransaction * (*move_any_merging)(const char *source, const char *dest);
+    DtwActionTransaction * (*copy_any_merging)(const char *source, const char *dest);
 
     DtwActionTransaction * (*copy_any)(const char *source, const char *dest);
 

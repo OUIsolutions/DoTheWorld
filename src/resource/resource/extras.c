@@ -2,7 +2,7 @@
 
 
 bool DtwResource_error(DtwResource *self){
-    if(!self){
+    if(self==NULL){
         return true;
     }
     if(DtwResource_get_error_code(self) == DTW_RESOURCE_OK){
@@ -10,6 +10,8 @@ bool DtwResource_error(DtwResource *self){
     }
     return true;
 }
+
+
 
 int DtwResource_get_error_code(DtwResource *self){
     if(!self){
@@ -37,19 +39,47 @@ void  DtwResource_clear_errors(DtwResource *self){
     self->root_props->error_code = DTW_RESOURCE_OK;
 
 }
+bool private_dtw_resource_its_a_primary_key(DtwResource *self){
+    if(self->its_a_write_point == false){
+        return false;
+    }
+    DtwSchema * schema = (DtwSchema*)self->mother->mother->mother->schema;
+    return DtwStringArray_find_position(schema->primary_keys,self->name) !=-1;
+}
 
-void  private_DtwResource_raise_error(DtwResource *self, int error_code, const char *error_message){
+void  private_DtwResource_raise_error(DtwResource *self, int error_code, const char *format,...){
+
+    va_list args;
+    va_start(args, format);
+    char *error_message = private_dtw_format_vaarg(format,args);
+    va_end(args);
+
     self->root_props->error_code = error_code;
     self->root_props->error_path = strdup(self->path);
     self->root_props->error_message = dtw_replace_string(error_message,"#path#",self->path);
-
+    free(error_message);
 }
 
 void DtwResource_rename(DtwResource *self,const char *new_name){
+    if(DtwResource_error(self)){
+        return;
+    }
+    if(private_dtw_resource_its_a_primary_key(self)){
+        private_DtwResource_raise_error(
+                self,
+                DTW_IMPOSSIBLE_TO_RENAME_A_PRIMARY_KEY,
+                "primary key %s cannot be renamed",
+                self->name
+        );
+        return;
+    }
 
     char *old_path = strdup(self->path);
     free(self->path);
-    self->path  = dtw_concat_path(self->mothers_path, new_name);
+    self->path  = dtw_concat_path(self->mother->path, new_name);
+
+    free(self->name);
+    self->name = strdup(new_name);
 
     if(self->allow_transaction){
         DtwTransaction_move_any(self->root_props->transaction,old_path,self->path);
@@ -61,6 +91,13 @@ void DtwResource_rename(DtwResource *self,const char *new_name){
 
 }
 
+void DtwResource_rename_sub_resource(DtwResource *self,const char *old_name,const  char *new_name){
+    if(DtwResource_error(self)){
+        return;
+    }
+    DtwResource *created = DtwResource_sub_resource(self,"name");
+    DtwResource_rename(created,new_name);
+}
 
 int DtwResource_lock(DtwResource *self){
     if(DtwResource_error(self)){
@@ -77,22 +114,48 @@ void DtwResource_unlock(DtwResource *self){
     
 }
 
-
-void DtwResource_destroy(DtwResource *self){
+DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *format,...){
     if(DtwResource_error(self)){
-        return ;
+        return  NULL;
     }
-    if(self->allow_transaction){
-        DtwTransaction_delete_any(self->root_props->transaction,self->path);
-    }
-    else{
-        dtw_remove_any(self->path);
+    if(private_dtw_resource_its_a_primary_key(self)){
+        private_DtwResource_raise_error(
+                self,
+                DTW_RESOURCE_PRIMARY_KEY_CANNOT_HAVE_SUB_SCHEMA,
+                "primary key %s cannot have a sub schema",
+                self->name
+        );
+        return NULL;
     }
 
+
+    va_list args;
+    va_start(args, format);
+    char *name = private_dtw_format_vaarg(format,args);
+    va_end(args);
+
+    //make both reference each other
+    DtwResource *master =DtwResource_sub_resource(self,"%s",name);
+    if(master->schema){
+        free(name);
+        return (DtwSchema*)master->schema;
+    }
+
+
+    DtwSchema *schema = (DtwSchema*) malloc(sizeof(DtwSchema));
+    *schema = (DtwSchema){0};
+
+    free(name);
+    master->schema = schema;
+    schema->master = master;
+
+    schema->master->schema = schema;
+    schema->values_resource = DtwResource_sub_resource(master,"%s",DTW_SCHEMA_VALUES_NAME);
+    schema->values_resource->its_value_folder = true;
+    schema->index_resource = DtwResource_sub_resource(master,"%s",DTW_SCHEMA_INDEX_NAME);
+    schema->primary_keys = newDtwStringArray();
+    return schema;
 }
-
-
-
 
 void DtwResource_commit(DtwResource *self){
     if(DtwResource_error(self)){
@@ -159,6 +222,18 @@ int DtwResource_type(DtwResource *self){
     return  DTW_COMPLEX_LONG_TYPE;
 
 }
+bool DtwResource_is_file(DtwResource *self){
+    if(DtwResource_error(self)){
+        return -1;
+    }
+    DtwResource_load_if_not_loaded(self);
+
+    if(self->value_any){
+        return true;
+    }
+    return  false;
+
+}
 
 const char * DtwResource_type_in_str(DtwResource *self){
     if(DtwResource_error(self)){
@@ -168,6 +243,10 @@ const char * DtwResource_type_in_str(DtwResource *self){
 }
 
 void DtwResource_represent(DtwResource *self){
+    if(DtwResource_error(self)){
+        return;
+    }
+
     if(DtwResource_error(self)){
         printf("error code: %d\n", DtwResource_get_error_code(self));
         printf("error message: %s\n", DtwResource_get_error_message(self));

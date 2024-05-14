@@ -33,6 +33,7 @@ class FolderTestPressetExecution(FolderTestPressetCreation):
                 file=execution_file,
                 compiler=self._compiler,
                 use_valgrind=self._use_valgrind,
+                copilation_flags=self._compilation_flags,
                 raise_warnings=self._raise_warnings
         )
 

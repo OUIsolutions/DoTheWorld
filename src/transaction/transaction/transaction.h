@@ -39,6 +39,10 @@ void DtwTransaction_write_double(struct DtwTransaction *self,const char *path,do
 
 void DtwTransaction_move_any(struct DtwTransaction *self,const char *source,const char *dest);
 
+void DtwTransaction_move_any_merging(struct DtwTransaction *self,const char *source,const char *dest);
+
+void DtwTransaction_copy_any_merging(struct DtwTransaction *self,const char *source,const char *dest);
+
 void DtwTransaction_copy_any(struct DtwTransaction *self,const char *source,const char *dest);
 
 void DtwTransaction_delete_any(struct DtwTransaction *self,const char *source);
