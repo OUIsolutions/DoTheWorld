@@ -27,7 +27,7 @@ test = ct.FolderTestPreset(
     compilation_flags=["DDTW_DEBUG_TIME"]
     )
 
-test.generate_ouptut(reconstruct=True)
+test.generate_ouptut(reconstruct=False)
 test.start_test()
 execute_locker_test()
 create_exemples(TEST_NAME,OUTPUT_FULL)
