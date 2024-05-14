@@ -5568,7 +5568,7 @@ char *dtw_base64_encode(unsigned char *data, long input_length){
 
     if (encoded_data == NULL) return NULL;
 
-    size_t i, j;
+    long i, j;
     for (i = 0, j = 0; i < input_length; ) {
         unsigned char b0 = i < input_length ? data[i++] : 0;
         unsigned char b1 = i < input_length ? data[i++] : 0;
@@ -5595,7 +5595,7 @@ char *dtw_base64_encode(unsigned char *data, long input_length){
 
 
 unsigned char *dtw_base64_decode(const char *data, long *output_length){
-    unsigned long input_length = strlen(data);
+    long input_length = (long)strlen(data);
     if (input_length % 4 != 0) return NULL;
 
     *output_length = input_length / 4 * 3;
@@ -5605,7 +5605,7 @@ unsigned char *dtw_base64_decode(const char *data, long *output_length){
     unsigned char *decoded_data = (unsigned char*) malloc(*output_length +2);
 
 
-    size_t i, j;
+    long i, j;
     for (i = 0, j = 0; i < input_length; ) {
         unsigned char b0 = data[i] == '=' ? 0 & i++ : strchr(dtw_base64_table, data[i++]) - dtw_base64_table;
         unsigned char b1 = data[i] == '=' ? 0 & i++ : strchr(dtw_base64_table, data[i++]) - dtw_base64_table;
