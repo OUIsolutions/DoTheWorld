@@ -97,7 +97,7 @@ void DtwPath_set_full_name(struct DtwPath * self, const char * full_name){
         self->extension = NULL;
     }
     long full_name_size = (long)strlen(full_name);
-    for(long i = full_name_size; i > 0; i--){
+    for(long i = full_name_size; i >= 0; i--){
         char current_char = full_name[i];
         if(current_char == '.'){
             self->name = private_dtw_sub_str(full_name,0,i);
