@@ -1,12 +1,7 @@
 
 typedef struct DtwPath {
-    char *original_path;
-    char *dir;
-    char *name;
-    char *extension;
-    bool dir_exists;
-    bool name_exists;
-    bool extension_exists;
+    char *original_path_string;
+    char *path;
     DtwStringArray *garbage;
 
 

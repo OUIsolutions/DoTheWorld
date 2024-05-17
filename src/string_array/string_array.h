@@ -27,4 +27,6 @@ void DtwStringArray_set_value(struct DtwStringArray *self, int index, const char
 
 struct DtwStringArray * newDtwStringArray();
 
+char * privateDtwStringArray_append_if_not_included(DtwStringArray *self,char *value);
+
 struct DtwStringArray * DtwStringArray_clone(DtwStringArray *self);

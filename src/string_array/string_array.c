@@ -78,7 +78,15 @@ struct DtwStringArray * DtwStringArray_clone(DtwStringArray *self){
     return clone;
 }
 
-
+char * privateDtwStringArray_append_if_not_included(DtwStringArray *self,char *value){
+    long position=DtwStringArray_find_position(self,value);
+    if(position != -1){
+        free(value);
+        return self->strings[position];
+    }
+    DtwStringArray_append(self,value);
+    return value;
+}
 void DtwStringArray_free(struct DtwStringArray *self){
     for(int i = 0; i < self->size; i++){
             free(self->strings[i]);
