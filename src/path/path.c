@@ -151,8 +151,10 @@ void DtwPath_set_path(struct DtwPath *self, const char *target_path) {
 }
 
 void DtwPath_add_start_dir(struct DtwPath *self, const char *start_dir){
-
-    char *element = self->
+    char *element = dtw_concat_path(start_dir,self->path);
+    free(self->path);
+    self->path = private_dtw_format_path(element);
+    free(element);
 }
 
 void DtwPath_add_end_dir(struct DtwPath *self, const char *end_dir){
