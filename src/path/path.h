@@ -1,9 +1,9 @@
 
 typedef struct DtwPath {
     char *original_path_string;
-    int size;
-    privateDtwPathElement  **path_elements;
-    DtwStringArray *current_path;
+    char *name;
+    char *extension;
+    DtwStringArray *dirs;
     DtwStringArray *garbage;
 
 

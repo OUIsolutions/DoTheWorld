@@ -28,7 +28,7 @@
 #include "monodimension_listage/monodimension_listage_linux.c"
 #include "monodimension_listage/monodimension_listage_win32.c"
 #include "multidimension_listage/multidimension_listage.c"
-#include "path/definition.h"
+#include "path/path.c"
 #include "string_array/string_array.c"
 #include "tree/definitions.h"
 
