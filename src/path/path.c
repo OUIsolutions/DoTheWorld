@@ -90,9 +90,11 @@ void DtwPath_set_full_name(struct DtwPath * self, const char * full_name){
 
     if(self->name){
         free(self->name);
+        self->name = NULL;
     }
     if(self->extension){
         free(self->extension);
+        self->extension = NULL;
     }
     long full_name_size = (long)strlen(full_name);
     for(long i = full_name_size; i > 0; i--){
@@ -100,13 +102,22 @@ void DtwPath_set_full_name(struct DtwPath * self, const char * full_name){
         if(current_char == '.'){
             self->name = private_dtw_sub_str(full_name,0,i);
             self->extension = private_dtw_sub_str(full_name,i,full_name_size);
+            return;
         }
     }
+    self->name = strdup(full_name);
 }
 
 
-void DtwPath_set_dir(struct DtwPath *self, const char *path){
+void DtwPath_set_dir(struct DtwPath *self, const char *dir){
+    DtwStringArray_free(self->dirs);
+    self->dirs = newDtwStringArray();
+    long path_size = (long) strlen(dir);
 
+    for(long i = 0; i < path_size; i++){
+        char current_char = dir[i];
+
+    }
 }
 
 void DtwPath_set_path(struct DtwPath *self, const char *target_path) {
