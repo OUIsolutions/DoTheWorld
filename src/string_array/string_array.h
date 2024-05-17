@@ -28,3 +28,4 @@ void DtwStringArray_set_value(struct DtwStringArray *self, int index, const char
 struct DtwStringArray * newDtwStringArray();
 
 struct DtwStringArray * DtwStringArray_clone(DtwStringArray *self);
+

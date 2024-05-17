@@ -183,6 +183,16 @@ long dtw_get_time(){
 #endif
     return time(NULL);
 }
+
+char *private_dtw_format(const char *format,...){
+
+    va_list args;
+    va_start(args, format);
+    char *value = private_dtw_format_vaarg(format,args);
+    va_end(args);
+    return value;
+}
+
 char *private_dtw_realoc_formatting(char *ptr,const char *format,...){
 
     va_list args;

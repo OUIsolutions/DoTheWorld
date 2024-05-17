@@ -19,6 +19,8 @@ char * private_dtw_format_vaarg(const char *expresion, va_list args);
 
 char *private_dtw_realoc_formatting(char *ptr,const char *format,...);
 
+char *private_dtw_format(const char *format,...);
+
 long dtw_get_time();
 
 
