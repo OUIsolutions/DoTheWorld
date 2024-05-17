@@ -15,7 +15,7 @@ char *DtwPath_get_name( DtwPath *self);
 char *DtwPath_get_extension( DtwPath *self);
 char *DtwPath_get_path( DtwPath *self);
 char *DtwPath_get_dir( DtwPath *self);
-long DtwPath_get_size(DtwPath *self);
+long DtwPath_get_dirs_size(DtwPath *self);
 
 void DtwPath_set_extension( DtwPath *self, const char *extension);
 void DtwPath_set_name( DtwPath * self, const char * name);

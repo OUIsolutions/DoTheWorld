@@ -192,7 +192,16 @@ char *private_dtw_format(const char *format,...){
     va_end(args);
     return value;
 }
+char * private_dtw_sub_str(const char *str, long start,long end){
+    long size = end - start;
+    char *value = (char*)malloc(size+ 2);
 
+    for(long i = 0; i <size; i++){
+        value[i] = str[i+start];
+    }
+    value[size] = '\0';
+    return value;
+}
 char *private_dtw_realoc_formatting(char *ptr,const char *format,...){
 
     va_list args;

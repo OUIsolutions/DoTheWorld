@@ -98,7 +98,7 @@ bool DtwTreePart_hardware_modify(struct DtwTreePart *self, int transaction){
 
     
     if(changed_path == true && self->content == NULL){
-        char *old_path = self->path->original_path;
+        char *old_path = self->path->original_path_string;
         char *new_path = DtwPath_get_path(self->path);
         dtw_move_any(old_path,new_path,true);
         return true;
@@ -106,7 +106,7 @@ bool DtwTreePart_hardware_modify(struct DtwTreePart *self, int transaction){
     bool write = false;
 
     if(changed_path == true && self->content ){
-        char *old_path = self->path->original_path;
+        char *old_path = self->path->original_path_string;
         dtw_remove_any(old_path);
         write = true;
     }

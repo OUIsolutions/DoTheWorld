@@ -5,7 +5,8 @@
     *self = (DtwPath){0};
 
     self->garbage = newDtwStringArray();
-    self->path_elements = (privateDtwPathElement**)malloc(0);
+    self->dirs = newDtwStringArray();
+
     if(path){
         DtwPath_set_path(self, path);
         self->original_path_string = strdup(path);
@@ -25,40 +26,22 @@ bool DtwPath_changed( DtwPath *self){
     return true;
 }
 
-long DtwPath_get_size(DtwPath *self){
-    return (long)self->current_path->size;
+long DtwPath_get_dirs_size(DtwPath *self){
+    return (long)self->dirs->size;
 }
 
 
 char * DtwPath_get_name( DtwPath *self){
-
-    for(int i = 0 ; i <self->size;i++){
-        privateDtwPathElement  * current = self->path_elements[i];
-        if(current->path_type == PRIVATE_DTW_PATH_TYPE_NAME){
-            return current->value;
-        }
-    }
-
-    return NULL;
+    return self->name;
 
 }
 char * DtwPath_get_extension(struct DtwPath *self){
-
-    for(int i = 0 ; i <self->size;i++){
-        privateDtwPathElement  * current = self->path_elements[i];
-        if(current->path_type == PRIVATE_DTW_PATH_TYPE_EXTENSION){
-            return current->value;
-        }
-    }
-
-    return NULL;
+    return self->extension;
 }
 
 char * DtwPath_get_full_name(struct DtwPath *self){
 
     const char * name = DtwPath_get_name(self);
-
-
     const char * extension = DtwPath_get_extension(self);
 
     if(name != NULL && extension == NULL){
@@ -84,26 +67,41 @@ char * DtwPath_get_dir(struct DtwPath *self){
 
 char * DtwPath_get_path(struct DtwPath *self){
 
-
-
-
 }
 
 
 
 void DtwPath_set_extension(struct DtwPath *self, const char *extension){
-
+    if(self->extension){
+        free(self->extension);
+    }
+    self->extension == strdup(extension);
 }
 
 
 void DtwPath_set_name(struct DtwPath * self, const char * name){
-
+    if(self->name){
+        free(self->name);
+    }
+    self->name = strdup(self->name);
 }
-
-
 
 void DtwPath_set_full_name(struct DtwPath * self, const char * full_name){
 
+    if(self->name){
+        free(self->name);
+    }
+    if(self->extension){
+        free(self->extension);
+    }
+    long full_name_size = (long)strlen(full_name);
+    for(long i = full_name_size; i > 0; i--){
+        char current_char = full_name[i];
+        if(current_char == '.'){
+            self->name = private_dtw_sub_str(full_name,0,i);
+            self->extension = private_dtw_sub_str(full_name,i,full_name_size);
+        }
+    }
 }
 
 
@@ -147,6 +145,16 @@ void DtwPath_represent(struct DtwPath *self){
 
 void DtwPath_free(struct DtwPath *self) {
     DtwStringArray_free(self->garbage);
+    DtwStringArray_free(self->dirs);
+
+    if(self->name){
+        free(self->name);
+    }
+
+    if(self->extension){
+        free(self->extension);
+    }
+
     free(self);
 }
 

@@ -140,7 +140,7 @@ void DtwTree_add_tree_from_hardware( DtwTree *self,const char *path, DtwTreeProp
                 strlen(current_path_string) - size_to_remove +1
                 );
         DtwPath_set_path(current_path,current_path_string);
-        strcpy(current_path->original_path,current_path_string);
+        strcpy(current_path->original_path_string,current_path_string);
         free(current_path_string);
     }
 

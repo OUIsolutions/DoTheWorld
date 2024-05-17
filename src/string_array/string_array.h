@@ -25,7 +25,9 @@ void DtwStringArray_sort(struct DtwStringArray *self);
 
 void DtwStringArray_set_value(struct DtwStringArray *self, int index, const char *value);
 
-struct DtwStringArray * newDtwStringArray();
+DtwStringArray * newDtwStringArray();
 
-struct DtwStringArray * DtwStringArray_clone(DtwStringArray *self);
 
+
+
+DtwStringArray * DtwStringArray_clone(DtwStringArray *self);
