@@ -84,7 +84,7 @@ char * privateDtwStringArray_append_if_not_included(DtwStringArray *self,char *v
         free(value);
         return self->strings[position];
     }
-    DtwStringArray_append(self,value);
+    DtwStringArray_append_getting_ownership(self,value);
     return value;
 }
 void DtwStringArray_free(struct DtwStringArray *self){

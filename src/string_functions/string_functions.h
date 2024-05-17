@@ -12,6 +12,8 @@ char * private_dtw_format_vaarg(const char *expresion, va_list args);
 
 char *private_dtw_realoc_formatting(char *ptr,const char *format,...);
 
+char *private_dtw_formatt(const char *format,...);
+
 char * private_dtw_sub_str(const char *str, long start,long end);
 
 int private_dtw_string_cmp(const void *a, const void *b);
@@ -23,3 +25,4 @@ char *private_dtw_replace_string_once(const char *target, const char *old_elemen
 char* dtw_replace_string(const char *target, const char *old_element, const char *new_element);
 
 char *private_dtw_change_beginning_of_string(const char *target,int start_element_to_remove_size, const char *new_element);
+

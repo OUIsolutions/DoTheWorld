@@ -23,8 +23,10 @@ void DtwTree_loads_json_tree(struct DtwTree *self, const char *all_tree){
                 );
 
         if(original_path != NULL){
-            part->path->original_path = strdup(original_path->valuestring);
-            DtwStringArray_append_getting_ownership(part->path->garbage,part->path->original_path);
+            if(  part->path->original_path_string){
+                free(  part->path->original_path_string);
+            }
+            part->path->original_path_string = strdup(original_path->valuestring);
 
         }
 
@@ -131,11 +133,11 @@ char * DtwTree_dumps_tree_json( DtwTree *self, DtwTreeProps  props){
                 char *full_name_string = DtwPath_get_full_name(tree_part->path);
                 char *name_string = DtwPath_get_name(tree_part->path);
                 char *extension_string = DtwPath_get_extension(tree_part->path);
-                if(tree_part->path->original_path != path_string){
+                if(tree_part->path->original_path_string != path_string){
                     cJSON_AddItemToObject(
                         json_tree_part, 
                         "original_path", 
-                        cJSON_CreateString(tree_part->path->original_path)
+                        cJSON_CreateString(tree_part->path->original_path_string)
                     );
                 }
                 cJSON_AddItemToObject(

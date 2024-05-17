@@ -22,7 +22,8 @@ char * DtwPath_get_name(struct DtwPath *self){
     for(long i = path_size-1; i >=0; i--){
         char current_char = self->path[i];
         if(current_char == '/' || current_char == '\\'){
-            start = i;
+            start = i+1;
+            break;
         }
         if(current_char == '.'){
             end = i;
@@ -43,7 +44,8 @@ char * DtwPath_get_extension(struct DtwPath *self){
     for(long i = path_size-1; i >=0; i--){
         char current_char = self->path[i];
         if(current_char == '.'){
-            start = i;
+            start = i+1;
+            break;
         }
     }
     if(start == -1){
@@ -60,7 +62,7 @@ char * DtwPath_get_full_name(struct DtwPath *self){
     for(long i = path_size-1; i >=0; i--){
         char current_char = self->path[i];
         if(current_char == '/' || current_char == '\\'){
-            start = i;
+            start = i+1;
             break;
         }
     }
@@ -78,7 +80,7 @@ char * DtwPath_get_dir(struct DtwPath *self){
     for(long i = path_size-1; i >=0; i--){
         char current_char = self->path[i];
         if(current_char == '/' || current_char == '\\'){
-            end = i;
+            end = i+1;
             break;
         }
     }
@@ -98,7 +100,32 @@ char * DtwPath_get_path(struct DtwPath *self){
 
 void DtwPath_set_extension(struct DtwPath *self, const char *extension){
 
+    long path_size = (long)strlen(self->path);
+    long end = -1;
+    for(long i = path_size-1; i >=0; i--){
+        char current_char = self->path[i];
+        if(current_char == '.'){
+            end = i;
+            break;
+        }
+    }
 
+    char *without_extension = NULL;
+    if(end != -1){
+        without_extension = private_dtw_sub_str(self->path,0,end);
+    }
+    else{
+        without_extension = self->path;
+    }
+    char *formated_extension = dtw_replace_string(extension,".","");
+    char *buffer = private_dtw_formatt("%s.%s",without_extension,formated_extension);
+    if(end != -1){
+        free(without_extension);
+    }
+
+    free(self->path);
+    free(formated_extension);
+    self->path = buffer;
 
 }
 
@@ -119,11 +146,13 @@ void DtwPath_set_dir(struct DtwPath *self, const char *path){
 }
 
 void DtwPath_set_path(struct DtwPath *self, const char *target_path) {
-
+    free(self->path);
+    self->path = private_dtw_format_path(target_path);
 }
 
 void DtwPath_add_start_dir(struct DtwPath *self, const char *start_dir){
 
+    char *element = self->
 }
 
 void DtwPath_add_end_dir(struct DtwPath *self, const char *end_dir){
@@ -155,9 +184,8 @@ void DtwPath_represent(struct DtwPath *self){
 
 void DtwPath_free(struct DtwPath *self) {
     DtwStringArray_free(self->garbage);
-    free(self->dir);
-    free(self->name);
-    free(self->extension);
+    free(self->original_path_string);
+    free(self->path);
     free(self);
 }
 

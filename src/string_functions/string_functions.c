@@ -166,3 +166,23 @@ char *private_dtw_change_beginning_of_string(const char *target,int start_elemen
 
 
 
+char *private_dtw_realoc_formatting(char *ptr,const char *format,...){
+
+    va_list args;
+    va_start(args, format);
+    char *value = private_dtw_format_vaarg(format,args);
+    va_end(args);
+    if(ptr){
+        free(ptr);
+    }
+
+    return value;
+}
+char *private_dtw_formatt(const char *format,...){
+
+    va_list args;
+    va_start(args, format);
+    char *value = private_dtw_format_vaarg(format,args);
+    va_end(args);
+    return value;
+}

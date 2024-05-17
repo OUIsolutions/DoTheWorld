@@ -45,7 +45,7 @@ bool DtwTreePart_hardware_remove(struct DtwTreePart *self, int transaction){
 
     char *path =DtwPath_get_path(self->path);
 
-    dtw_remove_any(path);
+    remove(path);
     
     self->content_exist_in_hardware = false;
     return true;
@@ -75,11 +75,11 @@ bool DtwTreePart_hardware_write(struct DtwTreePart *self, int transaction){
     }
     char *path = DtwPath_get_path(self->path);
 
-    dtw_write_any_content(path,self->content,self->content_size);
+    dtw_write_any_content(path,self->content,(long)self->content_size);
     free(self->hawdware_content_sha);
     self->hawdware_content_sha = dtw_generate_sha_from_string((const char  *)self->content);
     self->content_exist_in_hardware = true;
-    int now = dtw_get_time();
+    long now = dtw_get_time();
     self->last_modification_time = now;
 
     return true;
@@ -98,16 +98,19 @@ bool DtwTreePart_hardware_modify(struct DtwTreePart *self, int transaction){
 
     
     if(changed_path == true && self->content == NULL){
-        char *old_path = self->path->original_path;
+        char *old_path = self->path->original_path_string;
         char *new_path = DtwPath_get_path(self->path);
-        dtw_move_any(old_path,new_path,true);
+        remove(old_path);
+        dtw_create_dir_recursively(new_path);
         return true;
     }
+
+
     bool write = false;
 
     if(changed_path == true && self->content ){
-        char *old_path = self->path->original_path;
-        dtw_remove_any(old_path);
+        char *old_path = self->path->original_path_string;
+        remove(old_path);
         write = true;
     }
 
@@ -130,12 +133,12 @@ bool DtwTreePart_hardware_modify(struct DtwTreePart *self, int transaction){
         dtw_write_any_content(
             path,
             self->content,
-            self->content_size
+            (long)self->content_size
         );
         free(self->hawdware_content_sha);
         self->hawdware_content_sha = dtw_generate_sha_from_string((const char *)self->content);
         self->content_exist_in_hardware = true;
-        int now = dtw_get_time();
+        long now = dtw_get_time();
         self->last_modification_time = now;
 
         return true;

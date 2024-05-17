@@ -30,3 +30,4 @@ struct DtwStringArray * newDtwStringArray();
 char * privateDtwStringArray_append_if_not_included(DtwStringArray *self,char *value);
 
 struct DtwStringArray * DtwStringArray_clone(DtwStringArray *self);
+
