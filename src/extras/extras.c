@@ -88,28 +88,7 @@ void private_dtw_add_end_bar_to_dirs_string_array(struct DtwStringArray * dirs){
     }
 }
 
-char *dtw_concat_path(const char *path1, const char *path2){
 
-    if(!path1){
-        return strdup(path2);
-    }
-
-    if(!path2){
-        return strdup(path1);
-    }
-
-    char *path = (char *)malloc(strlen(path1) + strlen(path2) + 3);
-
-        if(dtw_ends_with(path1, "/") || dtw_ends_with(path1, "\\")){
-            sprintf(path,"%s%s",path1,path2);
-
-        }
-        else{
-            sprintf(path,"%s/%s",path1,path2);
-      
-        }
-    return path;
-}
 
 struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *paths,const char *rm_path){
 
@@ -151,31 +130,6 @@ struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *path
     return new_array;
 }
 
-void private_dtw_remove_double_bars(struct DtwStringArray*path){
-    for(int i =0;i< path->size;i++){
-        char *current_string = path->strings[i];
-        char *result = dtw_replace_string(current_string,"//","/");
-        strcpy(current_string,result);
-        free(result);
-    }
-}
-
-char * private_dtw_format_vaarg(const char *expresion, va_list args){
-
-    va_list args_copy;
-    va_copy(args_copy, args);
-    long required_size = vsnprintf(NULL, 0,expresion,args_copy);
-    va_end(args_copy);
-    char *buffer = (char*)malloc(sizeof(char) * required_size + 2);
-    vsnprintf(buffer,sizeof (char) * required_size+1,expresion,args);
-    return buffer;
-}
-
-int private_dtw_string_cmp(const void *a, const void *b){
-    const char *str_a = *(const char **)a;
-    const char *str_b = *(const char **)b;
-    return strcmp(str_a, str_b);
-}
 
 long dtw_get_time(){
 #ifdef DTW_DEBUG_TIME

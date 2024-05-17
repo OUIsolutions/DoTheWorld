@@ -45,6 +45,7 @@
 #include "base64/base64.h"
 #include "randonizer/randonizer.h"
 #include "extras/extras.h"
+#include "string_formatation/string_formatation.h"
 #include "string_functions/string_functions.h"
 #include "io/io.h"
 #include "numeral_io/numeral_io.h"

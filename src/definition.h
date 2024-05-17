@@ -21,6 +21,7 @@
 #include "base64/base64.c"
 #include "randonizer/randonizer.c"
 #include "extras/extras.c"
+#include "string_formatation/string_formatation.c"
 #include "string_functions/string_functions.c"
 #include "io/io.c"
 #include "numeral_io/numeral_io.c"

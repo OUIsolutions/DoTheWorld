@@ -28,7 +28,7 @@
                
         }
         //unsifth path in dirs 
-        private_dtw_remove_double_bars(dirs);
+     private_dtw_remove_double_bars_from_string_array(dirs);
 
         if(!concat_path){
 
@@ -90,7 +90,7 @@
         DtwStringArray_free(sub_files);
     }
     DtwStringArray_free(dirs);
-    private_dtw_remove_double_bars(all);
+     private_dtw_remove_double_bars_from_string_array(all);
     if(!concat_path){
 
         struct DtwStringArray *removed =  private_dtw_remove_start_path(all,path);
