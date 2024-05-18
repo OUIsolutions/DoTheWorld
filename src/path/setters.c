@@ -55,7 +55,9 @@ void DtwPath_set_dir(struct DtwPath *self, const char *dir){
     char *buffer = private_dtw_formatt("%s/%s",dir,full_name);
     self->path = private_dtw_format_path(buffer);
     free(buffer);
+
 }
+
 
 void DtwPath_set_path(struct DtwPath *self, const char *target_path) {
     free(self->path);
@@ -79,6 +81,8 @@ void DtwPath_add_end_dir(struct DtwPath *self, const char *end_dir){
     if(!full_name){
         full_name = "";
     }
+    free(self->path);
+
     char *buffer = private_dtw_formatt("%s/%s/%s",dir,end_dir,full_name);
     self->path = private_dtw_format_path(buffer);
     free(buffer);
