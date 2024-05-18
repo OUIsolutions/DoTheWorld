@@ -18,6 +18,15 @@ char * private_dtw_sub_str(const char *str, long start,long end);
 
 int private_dtw_string_cmp(const void *a, const void *b);
 
+bool dtw_is_string_at_point(
+        const char *str,
+        long str_size,
+        const char *target,
+        long target_size,
+        long target_point
+);
+
+long  dtw_index_of_string(const char *str,const char *element);
 
 bool dtw_starts_with(const char *string, const char *prefix);
 bool dtw_ends_with(const char *string, const char *suffix);

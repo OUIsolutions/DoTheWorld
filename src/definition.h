@@ -31,6 +31,7 @@
 #include "path/path.c"
 #include "path/setters.c"
 #include "path/getters.c"
+#include "path/index_dirs.c"
 #include "string_array/string_array.c"
 #include "tree/definitions.h"
 

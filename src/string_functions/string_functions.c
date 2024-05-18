@@ -186,3 +186,35 @@ char *private_dtw_formatt(const char *format,...){
     va_end(args);
     return value;
 }
+bool dtw_is_string_at_point(
+        const char *str,
+        long str_size,
+        const char *target,
+        long target_size,
+        long target_point
+        ){
+
+    if(target_size + target_point > str_size){
+        return false;
+    }
+    for(long i = 0; i < target_size; i++ ){
+        char current_char = target[i];
+        char char_to_compare = str[i+target_point];
+        if(current_char != char_to_compare){
+            return  false;
+        }
+    }
+    return true;
+}
+
+long  dtw_index_of_string(const char *str,const char *element){
+    long str_size = (long)strlen(str);
+    long element_size = (long)strlen(element);
+
+    for(int i = 0; i <str_size; i++){
+        if(dtw_is_string_at_point(str,str_size,element,element_size,i)){
+            return i;
+        }
+    }
+    return -1;
+}

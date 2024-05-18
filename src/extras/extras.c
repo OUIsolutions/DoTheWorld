@@ -137,3 +137,20 @@ long dtw_get_time(){
 #endif
     return time(NULL);
 }
+long private_dtw_convert_index(long index,long size){
+
+    long converted_index = index;
+
+    if(converted_index < 0){
+        converted_index = size + converted_index;
+    }
+
+    if(converted_index >= size){
+       return size -1;
+    }
+    if(converted_index < 0){
+        return 0;
+    }
+
+    return converted_index;
+}
