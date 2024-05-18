@@ -1,5 +1,0 @@
- 
-name : a.txt
-extension : txt
-dir : tests/target/
-full_path : tests/target/a.txt
