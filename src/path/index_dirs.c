@@ -43,19 +43,6 @@ char *DtwPath_get_sub_dirs(DtwPath *self, int start,int end){
     return privateDtwStringArray_append_if_not_included(self->garbage,buffer);
 }
 
-int private_dtw_count_dirs_after_index(const char *dirs,int index){
-    int size = (int)strlen(dirs);
-    int converted_point = index;
-    for(int i = index; i < size;i++){
-        char current_char = dirs[i];
-        if(current_char == '\\' || current_char == '/' ){
-            converted_point = i;
-            break;
-        }
-    }
-
-    return private_dtw_count_dirs_before(dirs,converted_point);
-}
 
 
 int private_dtw_count_dirs_before(const char *dirs,int index){
@@ -91,7 +78,15 @@ void DtwPath_insert_dir_after(DtwPath *self,const char *str,const char *dir){
         return;
     }
 
+    int start = private_dtw_count_dirs_before(current_dir,index)+1;
+    DtwPath_insert_dir_at(self,start,dir);
+}
+void DtwPath_insert_dir_before(DtwPath *self,const char *str,const char *dir){
+    char *current_dir = DtwPath_get_dir(self);
+    int index = (int)dtw_index_of_string(current_dir,str);
+    if(index == -1){
+        return;
+    }
     int start = private_dtw_count_dirs_before(current_dir,index);
-    printf("start %d\n",start);
     DtwPath_insert_dir_at(self,start,dir);
 }
