@@ -76,9 +76,15 @@ void DtwResource_rename(DtwResource *self,const char *new_name){
 
     char *old_path = strdup(self->path);
     free(self->path);
-    self->path  = dtw_concat_path(self->mother->path, new_name);
-
     free(self->name);
+
+    if(self->mother){
+        self->path  = dtw_concat_path(self->mother->path, new_name);
+    }
+    if(!self->mother){
+        self->path = strdup(new_name);
+    }
+
     self->name = strdup(new_name);
 
     if(self->allow_transaction){
@@ -87,6 +93,8 @@ void DtwResource_rename(DtwResource *self,const char *new_name){
     else{
         dtw_move_any(old_path,self->path,DTW_NOT_MERGE);
     }
+    DtwResourceArray_free(self->sub_resources);
+    self->sub_resources = newDtwResourceArray();
     free(old_path);
 
 }
