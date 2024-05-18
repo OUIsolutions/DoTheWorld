@@ -996,11 +996,7 @@ int main(){
 
 int main(){
     DtwNamespace dtw = newDtwNamespace();
-
-    DtwTreePart *part = dtw.tree.part.newPartLoading( "tests/target/a.txt");
-
-    DtwPath *path = part->path;
-
+    DtwPath *path = dtw.path.newPath("a/b/c/d.txt");
     char *name = dtw.path.get_full_name(path);
     char *extension = dtw.path.get_extension(path);
     char *dir = dtw.path.get_dir(path);
@@ -1009,8 +1005,9 @@ int main(){
     printf("extension : %s\n",extension);
     printf("dir : %s\n",dir);
     printf("full_path : %s\n",full_path);
+    dtw.path.free(path);
 
-    dtw.tree.part.free(part);
+
 }
 ~~~
 
@@ -1026,17 +1023,12 @@ int main(){
 int main(){
     DtwNamespace dtw = newDtwNamespace();
 
-    DtwTreePart *part = dtw.tree.part.newPartLoading("tests/target/sub_folder/a.txt");
-
-    DtwPath *path = part->path;
-
-    dtw.path.set_dir(path,"a/b");
-    dtw.path.set_name(path,"test2");
+    DtwPath * path = dtw.path.newPath("a/b/c/d.txt");
+    dtw.path.set_name(path,"test");
     dtw.path.set_extension(path,"md");
     dtw.path.represent(path);
-    dtw.tree.part.hardware_modify(part,DTW_SET_AS_ACTION);
-    dtw.tree.part.hardware_commit(part);
-    dtw.tree.part.free(part);
+    dtw.path.free(path);
+
 
 }
 ~~~

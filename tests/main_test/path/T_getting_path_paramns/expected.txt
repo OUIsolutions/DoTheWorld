@@ -1,0 +1,5 @@
+ 
+name : d.txt
+extension : txt
+dir : a/b/c/
+full_path : a/b/c/d.txt
