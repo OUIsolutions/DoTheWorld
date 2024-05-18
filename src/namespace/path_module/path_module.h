@@ -12,7 +12,16 @@ typedef struct DtwPathModule{
     char *(*get_path) (struct DtwPath *self);
     char *(*get_dir) (struct DtwPath *self);
 
-    
+    int (*get_total_dirs)(DtwPath *self);
+    char *(*get_sub_dirs_from_index)(DtwPath *self, int start,int end);
+    void (*insert_dir_at_index)(DtwPath *self,int index,const char *dir);
+    void (*remove_sub_dirs_at_index)(DtwPath *self,int start,int end);
+    void (*insert_dir_after)(DtwPath *self,const char *str,const char *dir);
+    void (*insert_dir_before)(DtwPath *self,const char *str,const char *dir);
+    void (*replace_dirs)(DtwPath *self,const char *str,const char *dir);
+    void (*remove_sub_dirs_at)(DtwPath *self,const char *str);
+
+
     //Setters
     void (*set_extension) (struct DtwPath *self, const char *extension);
     void (*set_name) (struct DtwPath *self, const char *name);
