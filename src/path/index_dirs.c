@@ -58,17 +58,40 @@ int private_dtw_count_dirs_before(const char *dirs,int index){
 
 void DtwPath_insert_dir_at(DtwPath *self,int index,const char *dir){
 
-    char * starter = DtwPath_get_sub_dirs(self,0,index);
     int size = DtwPath_get_total_dirs(self);
-    int converted_index = (int)private_dtw_convert_index(index,size);
-    const char *rest ="";
-    if(converted_index < size-1){
-        rest = DtwPath_get_sub_dirs(self,index+1,-1);
+    int converted_index = (int)private_dtw_convert_index(index,size+1);
+
+    char * starter = NULL;
+    if(converted_index > 0){
+        starter = DtwPath_get_sub_dirs(self,0,converted_index-1);
     }
 
-    char *buffer = private_dtw_formatt("%s/%s/%s",starter,dir,rest);
+    const char *rest =NULL;
+    if(converted_index < size){
+        rest = DtwPath_get_sub_dirs(self,converted_index,-1);
+    }
+
+
+     char *buffer =NULL;
+    if(starter && rest){
+        buffer = private_dtw_formatt("%s/%s/%s",starter,dir,rest);
+    }
+    if(starter && !rest){
+        buffer = private_dtw_formatt("%s/%s",starter,dir);
+    }
+    if(!starter && rest){
+        buffer = private_dtw_formatt("%s/%s",dir,rest);
+    }
+
+    if(!starter && !rest){
+        buffer = (char*)dir;
+    }
+
     DtwPath_set_dir(self,buffer);
-    free(buffer);
+
+    if(starter || rest){
+        free(buffer);
+    }
 }
 
 void DtwPath_insert_dir_after(DtwPath *self,const char *str,const char *dir){
