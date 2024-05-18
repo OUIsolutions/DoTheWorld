@@ -3,7 +3,7 @@
 First Path: tests/target/a.txt
 Path: tests/target/a.txt
 Path Changed: false
-Dir: tests/target
+Dir: tests/target/
 Full Name: a.txt
 Name: a
 Extension: txt

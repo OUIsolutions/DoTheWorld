@@ -105,17 +105,18 @@ bool DtwTreePart_hardware_modify(struct DtwTreePart *self, int transaction){
         return true;
     }
 
+    if(changed_path == false  && self->content == NULL){
+        return  false;
+    }
 
     bool write = false;
-
-    if(changed_path == true && self->content ){
+    if(changed_path == true){
         char *old_path = self->path->original_path_string;
         remove(old_path);
         write = true;
     }
 
-    if(changed_path== false && self->content ){
-    
+    if(changed_path== false){
         if(self->metadata_loaded == true){
             char *hardware_sha = self->hawdware_content_sha;
             char *memory_sha = DtwTreePart_get_content_sha(self);

@@ -10,11 +10,10 @@ bool test_if_blob(struct DtwTreePart*part){
     if(!name){
         return false;
     }
+
     if(strcmp(name,"blob.png") == 0){
-        free(name);
         return true;
     }
-    free(name);
     return false;
 };
 
@@ -25,7 +24,7 @@ int main(){
     struct DtwTree *tree = dtw.tree.newTree();
     dtw.tree.add_tree_from_hardware(
             tree,
-            "exemple_folder",
+            "tests/target",
             (DtwTreeProps){
                 .content = DTW_INCLUDE,
                 .hadware_data=DTW_HIDE,
@@ -39,9 +38,8 @@ int main(){
             test_if_blob
     );
 
-    if(blob){
-        dtw.tree.part.represent(blob);
-    }
+    dtw.tree.part.represent(blob);
+    
     dtw.tree.free(tree);
 
 }

@@ -2,11 +2,11 @@
 [{
 		"path":	"tests/target/",
 		"original_path":	"tests/target/",
-		"dir":	"tests/target"
+		"dir":	"tests/target/"
 	}, {
 		"path":	"tests/target/a.txt",
 		"original_path":	"tests/target/a.txt",
-		"dir":	"tests/target",
+		"dir":	"tests/target/",
 		"full_name":	"a.txt",
 		"name":	"a",
 		"extension":	"txt",
@@ -17,7 +17,7 @@
 	}, {
 		"path":	"tests/target/blob.png",
 		"original_path":	"tests/target/blob.png",
-		"dir":	"tests/target",
+		"dir":	"tests/target/",
 		"full_name":	"blob.png",
 		"name":	"blob",
 		"extension":	"png",
@@ -28,11 +28,11 @@
 	}, {
 		"path":	"tests/target/numerical/",
 		"original_path":	"tests/target/numerical/",
-		"dir":	"tests/target/numerical"
+		"dir":	"tests/target/numerical/"
 	}, {
 		"path":	"tests/target/numerical/double.txt",
 		"original_path":	"tests/target/numerical/double.txt",
-		"dir":	"tests/target/numerical",
+		"dir":	"tests/target/numerical/",
 		"full_name":	"double.txt",
 		"name":	"double",
 		"extension":	"txt",
@@ -43,7 +43,7 @@
 	}, {
 		"path":	"tests/target/numerical/false_normal.txt",
 		"original_path":	"tests/target/numerical/false_normal.txt",
-		"dir":	"tests/target/numerical",
+		"dir":	"tests/target/numerical/",
 		"full_name":	"false_normal.txt",
 		"name":	"false_normal",
 		"extension":	"txt",
@@ -54,7 +54,7 @@
 	}, {
 		"path":	"tests/target/numerical/false_small.txt",
 		"original_path":	"tests/target/numerical/false_small.txt",
-		"dir":	"tests/target/numerical",
+		"dir":	"tests/target/numerical/",
 		"full_name":	"false_small.txt",
 		"name":	"false_small",
 		"extension":	"txt",
@@ -65,7 +65,7 @@
 	}, {
 		"path":	"tests/target/numerical/integer.txt",
 		"original_path":	"tests/target/numerical/integer.txt",
-		"dir":	"tests/target/numerical",
+		"dir":	"tests/target/numerical/",
 		"full_name":	"integer.txt",
 		"name":	"integer",
 		"extension":	"txt",
@@ -76,7 +76,7 @@
 	}, {
 		"path":	"tests/target/numerical/true_normal.txt",
 		"original_path":	"tests/target/numerical/true_normal.txt",
-		"dir":	"tests/target/numerical",
+		"dir":	"tests/target/numerical/",
 		"full_name":	"true_normal.txt",
 		"name":	"true_normal",
 		"extension":	"txt",
@@ -87,7 +87,7 @@
 	}, {
 		"path":	"tests/target/numerical/true_small.txt",
 		"original_path":	"tests/target/numerical/true_small.txt",
-		"dir":	"tests/target/numerical",
+		"dir":	"tests/target/numerical/",
 		"full_name":	"true_small.txt",
 		"name":	"true_small",
 		"extension":	"txt",
@@ -98,11 +98,11 @@
 	}, {
 		"path":	"tests/target/sub_folder/",
 		"original_path":	"tests/target/sub_folder/",
-		"dir":	"tests/target/sub_folder"
+		"dir":	"tests/target/sub_folder/"
 	}, {
 		"path":	"tests/target/sub_folder/sub_element.txt",
 		"original_path":	"tests/target/sub_folder/sub_element.txt",
-		"dir":	"tests/target/sub_folder",
+		"dir":	"tests/target/sub_folder/",
 		"full_name":	"sub_element.txt",
 		"name":	"sub_element",
 		"extension":	"txt",
@@ -113,7 +113,7 @@
 	}, {
 		"path":	"tests/target/sub_folder/sub_element2.txt",
 		"original_path":	"tests/target/sub_folder/sub_element2.txt",
-		"dir":	"tests/target/sub_folder",
+		"dir":	"tests/target/sub_folder/",
 		"full_name":	"sub_element2.txt",
 		"name":	"sub_element2",
 		"extension":	"txt",
@@ -124,7 +124,7 @@
 	}, {
 		"path":	"tests/target/transaction.json",
 		"original_path":	"tests/target/transaction.json",
-		"dir":	"tests/target",
+		"dir":	"tests/target/",
 		"full_name":	"transaction.json",
 		"name":	"transaction",
 		"extension":	"json",
@@ -135,7 +135,7 @@
 	}, {
 		"path":	"tests/target/wrong_transaction.json",
 		"original_path":	"tests/target/wrong_transaction.json",
-		"dir":	"tests/target",
+		"dir":	"tests/target/",
 		"full_name":	"wrong_transaction.json",
 		"name":	"wrong_transaction",
 		"extension":	"json",

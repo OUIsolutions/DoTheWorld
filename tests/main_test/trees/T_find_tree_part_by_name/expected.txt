@@ -3,7 +3,7 @@
 First Path: tests/target/blob.png
 Path: tests/target/blob.png
 Path Changed: false
-Dir: tests/target
+Dir: tests/target/
 Full Name: blob.png
 Name: blob
 Extension: png

@@ -3,7 +3,7 @@
 First Path: tests/target/
 Path: tests/target/
 Path Changed: false
-Dir: tests/target
+Dir: tests/target/
 Full Name: NULL
 Name: NULL
 Extension: NULL
@@ -16,7 +16,7 @@ Content Size: 0
 First Path: tests/target/a.txt
 Path: tests/target/a.txt
 Path Changed: false
-Dir: tests/target
+Dir: tests/target/
 Full Name: a.txt
 Name: a
 Extension: txt
@@ -31,7 +31,7 @@ Content: Hello World! test
 First Path: tests/target/blob.png
 Path: tests/target/blob.png
 Path Changed: false
-Dir: tests/target
+Dir: tests/target/
 Full Name: blob.png
 Name: blob
 Extension: png
@@ -46,7 +46,7 @@ Content: Binary
 First Path: tests/target/numerical/
 Path: tests/target/numerical/
 Path Changed: false
-Dir: tests/target/numerical
+Dir: tests/target/numerical/
 Full Name: NULL
 Name: NULL
 Extension: NULL
@@ -59,7 +59,7 @@ Content Size: 0
 First Path: tests/target/numerical/double.txt
 Path: tests/target/numerical/double.txt
 Path Changed: false
-Dir: tests/target/numerical
+Dir: tests/target/numerical/
 Full Name: double.txt
 Name: double
 Extension: txt
@@ -74,7 +74,7 @@ Content: 1.3 test
 First Path: tests/target/numerical/false_normal.txt
 Path: tests/target/numerical/false_normal.txt
 Path Changed: false
-Dir: tests/target/numerical
+Dir: tests/target/numerical/
 Full Name: false_normal.txt
 Name: false_normal
 Extension: txt
@@ -89,7 +89,7 @@ Content: false test
 First Path: tests/target/numerical/false_small.txt
 Path: tests/target/numerical/false_small.txt
 Path Changed: false
-Dir: tests/target/numerical
+Dir: tests/target/numerical/
 Full Name: false_small.txt
 Name: false_small
 Extension: txt
@@ -104,7 +104,7 @@ Content: f test
 First Path: tests/target/numerical/integer.txt
 Path: tests/target/numerical/integer.txt
 Path Changed: false
-Dir: tests/target/numerical
+Dir: tests/target/numerical/
 Full Name: integer.txt
 Name: integer
 Extension: txt
@@ -119,7 +119,7 @@ Content: 10 test
 First Path: tests/target/numerical/true_normal.txt
 Path: tests/target/numerical/true_normal.txt
 Path Changed: false
-Dir: tests/target/numerical
+Dir: tests/target/numerical/
 Full Name: true_normal.txt
 Name: true_normal
 Extension: txt
@@ -134,7 +134,7 @@ Content: true test
 First Path: tests/target/numerical/true_small.txt
 Path: tests/target/numerical/true_small.txt
 Path Changed: false
-Dir: tests/target/numerical
+Dir: tests/target/numerical/
 Full Name: true_small.txt
 Name: true_small
 Extension: txt
@@ -149,7 +149,7 @@ Content: t test
 First Path: tests/target/sub_folder/
 Path: tests/target/sub_folder/
 Path Changed: false
-Dir: tests/target/sub_folder
+Dir: tests/target/sub_folder/
 Full Name: NULL
 Name: NULL
 Extension: NULL
@@ -162,7 +162,7 @@ Content Size: 0
 First Path: tests/target/sub_folder/sub_element.txt
 Path: tests/target/sub_folder/sub_element.txt
 Path Changed: false
-Dir: tests/target/sub_folder
+Dir: tests/target/sub_folder/
 Full Name: sub_element.txt
 Name: sub_element
 Extension: txt
@@ -177,7 +177,7 @@ Content:  test
 First Path: tests/target/sub_folder/sub_element2.txt
 Path: tests/target/sub_folder/sub_element2.txt
 Path Changed: false
-Dir: tests/target/sub_folder
+Dir: tests/target/sub_folder/
 Full Name: sub_element2.txt
 Name: sub_element2
 Extension: txt
@@ -192,7 +192,7 @@ Content: aaa test
 First Path: tests/target/transaction.json
 Path: tests/target/transaction.json
 Path Changed: false
-Dir: tests/target
+Dir: tests/target/
 Full Name: transaction.json
 Name: transaction
 Extension: json
@@ -222,7 +222,7 @@ Content: [{
 First Path: tests/target/wrong_transaction.json
 Path: tests/target/wrong_transaction.json
 Path Changed: false
-Dir: tests/target
+Dir: tests/target/
 Full Name: wrong_transaction.json
 Name: wrong_transaction
 Extension: json

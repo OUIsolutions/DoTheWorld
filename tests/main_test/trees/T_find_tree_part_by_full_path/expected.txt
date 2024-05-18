@@ -3,7 +3,7 @@
 First Path: tests/target/sub_folder/sub_element.txt
 Path: tests/target/sub_folder/sub_element.txt
 Path Changed: false
-Dir: tests/target/sub_folder
+Dir: tests/target/sub_folder/
 Full Name: sub_element.txt
 Name: sub_element
 Extension: txt
