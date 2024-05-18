@@ -1305,7 +1305,7 @@ void DtwTransaction_free(struct DtwTransaction *self);
 #define DTW_RESOURCE_PRIMARY_KEY_CANNOT_HAVE_SUB_RESOURCE 7
 #define DTW_IMPOSSIBLE_TO_RENAME_A_PRIMARY_KEY 8
 #define DTW_RESOURCE_PRIMARY_KEY_CANNOT_HAVE_SUB_SCHEMA 9
-
+#define DTW_RESOURCE_RENAMED_RESOURCE_CANNOT_HAVE_SONS 10
 typedef struct {
     DtwTransaction  *transaction;
     DtwRandonizer  *randonizer;
@@ -1339,6 +1339,7 @@ typedef struct DtwResource{
     bool its_value_folder;
     bool loaded;
     bool is_binary;
+    bool were_renamed;
     unsigned char *value_any;
     long value_size;
    
@@ -9224,7 +9225,18 @@ void DtwResource_rename(DtwResource *self,const char *new_name){
         );
         return;
     }
+    DtwResourceArray *sons =self->sub_resources;
+    if(sons->size > 0){
+        private_DtwResource_raise_error(
+                self,
+                DTW_RESOURCE_RENAMED_RESOURCE_CANNOT_HAVE_SONS,
+                "you cannot rename a resource with active sons",
+                self->name
+        );
+        return;
+    }
 
+    self->were_renamed = true;
     char *old_path = strdup(self->path);
     free(self->path);
     free(self->name);
@@ -9244,8 +9256,7 @@ void DtwResource_rename(DtwResource *self,const char *new_name){
     else{
         dtw_move_any(old_path,self->path,DTW_NOT_MERGE);
     }
-    DtwResourceArray_free(self->sub_resources);
-    self->sub_resources = newDtwResourceArray();
+
     free(old_path);
 
 }
@@ -9973,7 +9984,15 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
         );
         return NULL;
     }
-
+    if(self->were_renamed){
+        private_DtwResource_raise_error(
+                self,
+                DTW_RESOURCE_RENAMED_RESOURCE_CANNOT_HAVE_SONS,
+                "you cannot create a sub resurce from a renamed resource",
+                self->name
+        );
+        return NULL;
+    }
     va_list args;
     va_start(args, format);
     char *name = private_dtw_format_vaarg(format,args);
@@ -10375,6 +10394,7 @@ void DtwResourceArray_represent(DtwResourceArray *self){
 void DtwResourceArray_free(DtwResourceArray *self){
     for(int i = 0; i < self->size; i++){
         DtwResource_free(self->resources[i]);
+
     }
     free(self->resources);
     free(self);
