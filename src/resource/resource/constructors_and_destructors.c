@@ -29,7 +29,15 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
         );
         return NULL;
     }
-
+    if(self->were_renamed){
+        private_DtwResource_raise_error(
+                self,
+                DTW_RESOURCE_RENAMED_RESOURCE_CANNOT_HAVE_SONS,
+                "you cannot create a sub resurce from a renamed resource",
+                self->name
+        );
+        return NULL;
+    }
     va_list args;
     va_start(args, format);
     char *name = private_dtw_format_vaarg(format,args);

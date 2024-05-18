@@ -73,7 +73,18 @@ void DtwResource_rename(DtwResource *self,const char *new_name){
         );
         return;
     }
+    DtwResourceArray *sons =self->sub_resources;
+    if(sons->size > 0){
+        private_DtwResource_raise_error(
+                self,
+                DTW_RESOURCE_RENAMED_RESOURCE_CANNOT_HAVE_SONS,
+                "you cannot rename a resource with active sons",
+                self->name
+        );
+        return;
+    }
 
+    self->were_renamed = true;
     char *old_path = strdup(self->path);
     free(self->path);
     free(self->name);
@@ -93,8 +104,7 @@ void DtwResource_rename(DtwResource *self,const char *new_name){
     else{
         dtw_move_any(old_path,self->path,DTW_NOT_MERGE);
     }
-    DtwResourceArray_free(self->sub_resources);
-    self->sub_resources = newDtwResourceArray();
+
     free(old_path);
 
 }

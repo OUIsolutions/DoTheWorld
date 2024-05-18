@@ -14,6 +14,7 @@ typedef struct DtwResource{
     bool its_value_folder;
     bool loaded;
     bool is_binary;
+    bool were_renamed;
     unsigned char *value_any;
     long value_size;
    
