@@ -88,3 +88,20 @@ void DtwPath_add_end_dir(struct DtwPath *self, const char *end_dir){
     free(buffer);
 }
 
+void DtwPath_replace_dirs(DtwPath *self,const char *str,const char *dir){
+    char *self_dir = DtwPath_get_dir(self);
+
+    char *formatted_entry = NULL;
+    if(dtw_starts_with(self_dir,str)){
+       formatted_entry = private_dtw_formatt("%s/",dir);
+    }
+    else{
+        formatted_entry = private_dtw_formatt("/%s/",dir);
+
+    }
+    char * formated_dir = dtw_replace_string(self_dir,str,formatted_entry);
+    DtwPath_set_dir(self,formated_dir);
+    free(formated_dir);
+    free(formatted_entry);
+
+}

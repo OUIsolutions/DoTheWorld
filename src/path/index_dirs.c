@@ -143,3 +143,18 @@ void DtwPath_remove_sub_dirs(DtwPath *self,int start,int end){
     }
 
 }
+
+void DtwPath_remove_sub_dirs_at(DtwPath *self,const char *str){
+    char *current_dir = DtwPath_get_dir(self);
+    int index = (int)dtw_index_of_string(current_dir,str);
+    if(index == -1){
+        return;
+    }
+
+    int start = private_dtw_count_dirs_before(current_dir,index);
+    int end = private_dtw_count_dirs_before(current_dir,index+ (int)strlen(str));
+    printf("start %d\n",start);
+
+    printf("end %d\n",end);
+    DtwPath_remove_sub_dirs(self,start,end-1);
+}

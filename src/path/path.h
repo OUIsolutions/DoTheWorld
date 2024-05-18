@@ -47,10 +47,14 @@ void DtwPath_remove_sub_dirs(DtwPath *self,int start,int end);
 int private_dtw_count_dirs_before(const char *dirs,int index);
 
 
+
 void DtwPath_insert_dir_after(DtwPath *self,const char *str,const char *dir);
 
 void DtwPath_insert_dir_before(DtwPath *self,const char *str,const char *dir);
 
+void DtwPath_replace_dirs(DtwPath *self,const char *str,const char *dir);
+
+void DtwPath_remove_sub_dirs_at(DtwPath *self,const char *str);
 
 void DtwPath_free(DtwPath *self);
 

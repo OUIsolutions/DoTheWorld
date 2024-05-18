@@ -15,7 +15,6 @@ bool DtwPath_changed(struct DtwPath *self){
 
 
 
-  
 
 void DtwPath_represent(struct DtwPath *self){
     char  *path = DtwPath_get_path(self);
