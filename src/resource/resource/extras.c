@@ -93,8 +93,7 @@ void DtwResource_rename(DtwResource *self,const char *new_name){
     else{
         dtw_move_any(old_path,self->path,DTW_NOT_MERGE);
     }
-    DtwResourceArray_free(self->sub_resources);
-    self->sub_resources = newDtwResourceArray();
+
     free(old_path);
 
 }
