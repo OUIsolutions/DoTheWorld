@@ -7769,7 +7769,7 @@ void DtwTreePart_represent(struct DtwTreePart *self){
         printf("Last Modification Time: %s\n",last_moditication_in_string);
     }
 
-    printf("Content Size: %li\n",self->content_size);
+    printf("Content Size: %ld\n",(long)self->content_size);
 
     char *content_sha = DtwTreePart_get_content_sha(self);
     if(content_sha){
