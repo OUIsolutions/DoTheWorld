@@ -712,7 +712,7 @@ int main(){
     DtwNamespace  dtw = newDtwNamespace();
 
     DtwResource *database = dtw.resource.newResource("tests/target/schema_database");
-    DtwOldSchema  *users =dtw.resource.sub_schema(database,"users");
+    DtwOldSchema  *users =dtw.resource.new_schema(database,"users");
     dtw.schema.add_primary_key(users,"name");
     dtw.schema.add_primary_key(users,"email");
 
@@ -750,7 +750,7 @@ DtwNamespace dtw;
 
 void create_users(DtwResource *database,const char *name,const char *email,const char *password, int age){
 
-    DtwOldSchema  *users =dtw.resource.sub_schema(database,"users");
+    DtwOldSchema  *users =dtw.resource.new_schema(database,"users");
     DtwResource *user = dtw.schema.new_insertion(users);
     dtw.resource.set_string_in_sub_resource(user,"name",name);
     dtw.resource.set_string_in_sub_resource(user,"email",email);
@@ -762,7 +762,7 @@ int main(){
 
     dtw = newDtwNamespace();
     DtwResource *database = dtw.resource.newResource("tests/target/schema_database");
-    DtwOldSchema  *users =dtw.resource.sub_schema(database,"users");
+    DtwOldSchema  *users =dtw.resource.new_schema(database,"users");
     dtw.schema.add_primary_key(users,"name");
     dtw.schema.add_primary_key(users,"email");
 
@@ -803,7 +803,7 @@ DtwNamespace dtw;
 
 void create_users(DtwResource *database,const char *name,const char *email,const char *password, int age){
 
-    DtwOldSchema  *users =dtw.resource.sub_schema(database,"users");
+    DtwOldSchema  *users =dtw.resource.new_schema(database,"users");
     DtwResource *user = dtw.schema.new_insertion(users);
     dtw.resource.set_string_in_sub_resource(user,"name",name);
     dtw.resource.set_string_in_sub_resource(user,"email",email);
@@ -815,7 +815,7 @@ int main(){
 
     dtw = newDtwNamespace();
     DtwResource *database = dtw.resource.newResource("tests/target/schema_database");
-    DtwOldSchema  *users =dtw.resource.sub_schema(database,"users");
+    DtwOldSchema  *users =dtw.resource.new_schema(database,"users");
     dtw.schema.add_primary_key(users,"name");
     dtw.schema.add_primary_key(users,"email");
 
@@ -867,7 +867,7 @@ DtwNamespace dtw;
 
 void create_users(DtwResource *database,const char *name,const char *email,const char *password, int age){
 
-    DtwOldSchema  *users =dtw.resource.sub_schema(database,"users");
+    DtwOldSchema  *users =dtw.resource.new_schema(database,"users");
     DtwResource *user = dtw.schema.new_insertion(users);
     dtw.resource.set_string_in_sub_resource(user,"name",name);
     dtw.resource.set_string_in_sub_resource(user,"email",email);
@@ -879,7 +879,7 @@ int main(){
 
     dtw = newDtwNamespace();
     DtwResource *database = dtw.resource.newResource("tests/target/schema_database");
-    DtwOldSchema  *users =dtw.resource.sub_schema(database,"users");
+    DtwOldSchema  *users =dtw.resource.new_schema(database,"users");
     dtw.schema.add_primary_key(users,"name");
     dtw.schema.add_primary_key(users,"email");
 

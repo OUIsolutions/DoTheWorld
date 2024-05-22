@@ -29,7 +29,7 @@ DtwResourceModule newDtwResourceModule(){
     self.sub_resource_now  = DtwResource_sub_resource_now;
     self.sub_resource_now_in_unix = DtwResource_sub_resource_now_in_unix;
     self.sub_resource_random = DtwResource_sub_resource_random;
-    self.sub_schema = DtwResource_sub_schema;
+    self.new_schema = DtwResource_newSchema;
     self.set_binary_sha =DtwResource_set_binary_sha;
     self.set_string_sha = DtwResource_set_string_sha;
     self.set_binary_sha_in_sub_resource = DtwResource_set_binary_sha_in_sub_resource;

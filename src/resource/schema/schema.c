@@ -7,10 +7,23 @@ DtwSchema *private_newDtwSchema(const char *name){
     return  self;
 }
 
-DtwSchema *DtwSchema_sub_schema(DtwSchema *self,const char *name){
 
-    struct DtwSchema *child = (struct DtwSchema *) private_newDtwSchema(name);
-    self->sub_schemas = (struct DtwSchema **)realloc(self->sub_schemas, sizeof(struct DtwSchema *) * (self->size + 1));
+DtwSchema * privateDtwSchema_get_sub_schema(DtwSchema *self,const char *name){
+
+    for(int i = 0; i < self->size; i++){
+        DtwSchema  *current = self->sub_schemas[i];
+        if(strcmp(current->name,name) == 0){
+            return  current;
+        }
+    }
+    return NULL;
+}
+
+DtwSchema *DtwSchema_new_sub_schema(DtwSchema *self, const char *name){
+
+
+    struct DtwSchema *child = ( DtwSchema *) private_newDtwSchema(name);
+    self->sub_schemas = ( DtwSchema **)realloc(self->sub_schemas, sizeof(struct DtwSchema *) * (self->size + 1));
     self->sub_schemas[self->size] = child;
     self->size++;
     return (DtwSchema*)child;

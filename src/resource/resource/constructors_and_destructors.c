@@ -38,6 +38,7 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
         );
         return NULL;
     }
+
     va_list args;
     va_start(args, format);
     char *name = private_dtw_format_vaarg(format,args);
@@ -74,9 +75,15 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
     new_element->cache_sub_resources = self->cache_sub_resources;
     new_element->sub_resources = newDtwResourceArray();
 
+    if(self->attached_schema){
+        new_element->attached_schema = privateDtwSchema_get_sub_schema(self->attached_schema, name);
+    }
+    
     if(self->cache_sub_resources){
         DtwResourceArray_append((DtwResourceArray*)self->sub_resources,new_element);
     }
+
+
     free(name);
     return new_element;
 

@@ -132,10 +132,11 @@ void DtwResource_unlock(DtwResource *self){
     
 }
 
-DtwOldSchema * DtwResource_sub_schema(DtwResource *self, const char *format, ...){
+DtwSchema * DtwResource_newSchema(DtwResource *self, const char *format, ...){
     if(DtwResource_error(self)){
         return  NULL;
     }
+
     if(private_dtw_resource_its_a_primary_key(self)){
         private_DtwResource_raise_error(
                 self,
@@ -146,34 +147,21 @@ DtwOldSchema * DtwResource_sub_schema(DtwResource *self, const char *format, ...
         return NULL;
     }
 
-
     va_list args;
     va_start(args, format);
     char *name = private_dtw_format_vaarg(format,args);
     va_end(args);
 
-    //make both reference each other
-    DtwResource *master =DtwResource_sub_resource(self,"%s",name);
-    if(master->schema){
+    if(self->attached_schema){
         free(name);
-        return (DtwOldSchema*)master->schema;
+        return self->attached_schema;
     }
-
-
-    DtwOldSchema *schema = (DtwOldSchema*) malloc(sizeof(DtwOldSchema));
-    *schema = (DtwOldSchema){0};
-
+    self->attached_schema = private_newDtwSchema(name);
     free(name);
-    master->schema = schema;
-    schema->master = master;
-
-    schema->master->schema = schema;
-    schema->values_resource = DtwResource_sub_resource(master,"%s",DTW_SCHEMA_VALUES_NAME);
-    schema->values_resource->its_value_folder = true;
-    schema->index_resource = DtwResource_sub_resource(master,"%s",DTW_SCHEMA_INDEX_NAME);
-    schema->primary_keys = newDtwStringArray();
-    return schema;
+    self->its_the_schema_owner = true;
+    return self->attached_schema;
 }
+
 
 void DtwResource_commit(DtwResource *self){
     if(DtwResource_error(self)){

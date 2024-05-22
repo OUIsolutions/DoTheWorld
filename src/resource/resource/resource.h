@@ -4,7 +4,10 @@ typedef struct DtwResource{
 
     bool allow_transaction;
     bool use_locker_on_unique_values;
-    void *schema;
+
+    DtwSchema *attached_schema;
+    bool its_the_schema_owner;
+
     privateDtwResourceRootProps *root_props;
     struct DtwResource *mother;
     char *name;
@@ -116,6 +119,7 @@ void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size
 void DtwResource_set_binary_in_sub_resource(DtwResource *self,const char *key, unsigned char *element, long size);
 
 
+DtwSchema * DtwResource_newSchema(DtwResource *self, const char *format, ...);
 
 void DtwResource_set_string(DtwResource *self,const  char *element);
 

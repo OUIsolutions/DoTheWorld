@@ -1,6 +1,6 @@
 
 
-typedef struct {
+typedef struct DtwSchema{
     char *name;
     struct DtwSchema **sub_schemas;
     int size;
@@ -9,7 +9,10 @@ typedef struct {
 
 DtwSchema *private_newDtwSchema(const char *name);
 
-DtwSchema *DtwSchema_sub_schema(DtwSchema *self,const char *name);
+DtwSchema * privateDtwSchema_get_sub_schema(DtwSchema *self,const char *name);
+
+DtwSchema *DtwSchema_new_sub_schema(DtwSchema *self, const char *name);
+
 
 void DtwSchema_add_primary_key(DtwSchema *self,const char *name);
 
