@@ -1,6 +1,6 @@
 
 bool private_dtw_resource_its_a_pk(DtwResource *self){
-    if(self->its_a_write_point == false){
+    if(self->schema_type != PRIVATE_DTW_SCHEMA_ELEMENT_PROP){
         return false;
     }
     DtwResource *ancestor = self->mother->mother->mother;
@@ -11,11 +11,23 @@ bool private_dtw_resource_its_a_pk(DtwResource *self){
 
 
 DtwResource * DtwSchema_new_insertion(DtwResource *self){
+
     if(DtwResource_error(self)){
         return NULL;
     }
+    if(self->schema_type != PRIVATE_DTW_SCHEMA_ROOT){
+        private_DtwResource_raise_error(
+                self,
+                DTW_RESOURCE_IMPOSSIBLE_TO_ADD_SUB_RESOURCE_INSIDE_SCHEMA_STRUCT,
+                "only root schema can generate insertions",
+                self->name
+        );
+        return NULL;
+    }
 
-    DtwResource  *created = DtwResource_sub_resource_random(schema->values_resource,NULL);
+
+    DtwResource *values = DtwResource_sub_resource(self,DTW_SCHEMA_VALUES_NAME);
+    DtwResource  *created = DtwResource_sub_resource_random(values,NULL);
 
     return created;
 }
@@ -44,12 +56,12 @@ DtwSchema * DtwResource_newSchema(DtwResource *self, const char *format, ...){
         return self->attached_schema;
     }
     self->root_props->is_writing_schema = true;
-
+    self->schema_type = PRIVATE_DTW_SCHEMA_ROOT;
     self->attached_schema = private_newDtwSchema(name);
     DtwResource *values = DtwResource_sub_resource(self,DTW_SCHEMA_VALUES_NAME);
-    values->its_value_folder = true;
+    values->schema_type = PRIVATE_DTW_SCHEMA_VALUE;
     DtwResource *index = DtwResource_sub_resource(self,DTW_SCHEMA_INDEX_NAME);
-    index->its_index_folder = true;
+    index->schema_type = PRIVATE_DTW_SCHEMA_INDEX;
 
     free(name);
     self->its_the_schema_owner = true;

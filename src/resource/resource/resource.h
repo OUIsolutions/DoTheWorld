@@ -12,8 +12,7 @@ typedef struct DtwResource{
     char *path;
 
 
-    DtwSchema *attached_schema;
-    bool its_the_schema_owner;
+
 
     //in the schema struct there is:
     //|/root
@@ -23,7 +22,9 @@ typedef struct DtwResource{
     //|root/values/element/element_prop ->any(write_point)|
     //|root/index                                         |
     //|root/index/pk_name/pk_sha ->txt  -------------------
-
+    DtwSchema *attached_schema;
+    bool its_the_schema_owner;
+    int schema_type;
 
     bool loaded;
     bool is_binary;
