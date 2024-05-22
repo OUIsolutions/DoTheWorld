@@ -28,6 +28,17 @@ typedef struct DtwResourceModule{
     void (*set_string_sha_in_sub_resource)(DtwResource *self,const char *key,const char *value);
 
 
+
+    DtwResource * (*new_schema_insertion)(DtwResource *self);
+    DtwResource  *(*find_by_name_id)(DtwResource *self, const char *name);
+    DtwResource * (*find_by_primary_key_with_binary)(DtwResource *self, const char *primary_key, unsigned  char *value, long size);
+    DtwResource * (*find_by_primary_key_with_string)(DtwResource *self, const char *key, const char *value);
+    void (*dangerous_remove_schema_prop)(DtwResource*self,const char *prop);
+    void (*dangerous_rename_schema_prop)(DtwResource*self,const char *prop,const char *new_name);
+    DtwSchema * (*newSchema_with_custom_folders)(DtwResource *self,const char *values_name,const char *index_name, const char *format, ...);
+    DtwSchema * (*newSchema)(DtwResource *self, const char *format, ...);
+
+
     DtwResource * (*sub_resource_ensuring_not_exist)(DtwResource *self,const  char *format, ...);
     DtwSchema * (*new_schema)(DtwResource *self, const char *format, ...);
     DtwResource * (*sub_resource_next)(DtwResource *self, const char *end_path);

@@ -35,6 +35,15 @@ DtwResourceModule newDtwResourceModule(){
     self.set_binary_sha_in_sub_resource = DtwResource_set_binary_sha_in_sub_resource;
     self.set_string_sha_in_sub_resource = DtwResource_set_string_sha_in_sub_resource;
 
+    self.new_schema_insertion = DtwResource_new_schema_insertion;
+    self.find_by_name_id = DtwResource_find_by_name_id;
+    self.find_by_primary_key_with_string = DtwResource_find_by_primary_key_with_string;
+    self.find_by_primary_key_with_binary = DtwResource_find_by_primary_key_with_binary;
+    self.dangerous_remove_schema_prop = DtwResource_dangerous_remove_schema_prop;
+    self.dangerous_rename_schema_prop = DtwResource_dangerous_rename_schema_prop;
+    self.newSchema_with_custom_folders = DtwResource_newSchema_with_custom_folders;
+    self.newSchema = DtwResource_newSchema;
+    
     self.lock =DtwResource_lock;
     self.unlock = DtwResource_unlock;
     self.destroy = DtwResource_destroy;
