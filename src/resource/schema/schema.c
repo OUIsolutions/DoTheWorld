@@ -1,7 +1,9 @@
 
-DtwSchema *private_newDtwSchema(const char *name){
+DtwSchema *private_newDtwSchema(const char *name,const char *value_name,const char *index_name){
     DtwSchema *self = (DtwSchema*) malloc(sizeof (DtwSchema));
     *self = (DtwSchema){0};
+    self->value_name = value_name;
+    self->index_name = index_name;
     self->sub_schemas = (struct DtwSchema **)malloc(0);
     self->name = strdup(name);
     return  self;
@@ -22,7 +24,7 @@ DtwSchema * privateDtwSchema_get_sub_schema(DtwSchema *self,const char *name){
 DtwSchema *DtwSchema_new_sub_schema(DtwSchema *self, const char *name){
 
 
-    struct DtwSchema *child = ( DtwSchema *) private_newDtwSchema(name);
+    struct DtwSchema *child = ( DtwSchema *) private_newDtwSchema(name,DTW_SCHEMA_DEFAULT_VALUES_NAME,DTW_SCHEMA_DEFAULT_INDEX_NAME);
     self->sub_schemas = ( DtwSchema **)realloc(self->sub_schemas, sizeof(struct DtwSchema *) * (self->size + 1));
     self->sub_schemas[self->size] = child;
     self->size++;

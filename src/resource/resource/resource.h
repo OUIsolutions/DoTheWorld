@@ -23,6 +23,8 @@ typedef struct DtwResource{
     //|root/index                                         |
     //|root/index/pk_name/pk_sha ->txt  -------------------
     DtwSchema *attached_schema;
+    struct DtwResource *values_resource;
+    struct DtwResource *index_resource;
     bool its_the_schema_owner;
     int schema_type;
 
