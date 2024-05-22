@@ -78,7 +78,7 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
     if(self->attached_schema){
         new_element->attached_schema = privateDtwSchema_get_sub_schema(self->attached_schema, name);
     }
-    
+
     if(self->cache_sub_resources){
         DtwResourceArray_append((DtwResourceArray*)self->sub_resources,new_element);
     }
@@ -142,11 +142,10 @@ void DtwResource_free(DtwResource *self){
     if(is_root){
         privateDtwResourceRootProps_free(self->root_props);
     }
-    if(self->schema){
-        DtwOldSchema  *schema = (DtwOldSchema*)self->schema;
-        privateDtwSchema_free_self_props(schema);
-    }
 
+    if(self->its_the_schema_owner){
+        private_newDtwSchema_free(self->attached_schema);
+    }
 
     DtwResourceArray_free((DtwResourceArray*)self->sub_resources);
 

@@ -39,13 +39,16 @@ void  DtwResource_clear_errors(DtwResource *self){
     self->root_props->error_code = DTW_RESOURCE_OK;
 
 }
+
 bool private_dtw_resource_its_a_primary_key(DtwResource *self){
     if(self->its_a_write_point == false){
         return false;
     }
+
     DtwOldSchema * schema = (DtwOldSchema*)self->mother->mother->mother->schema;
     return DtwStringArray_find_position(schema->primary_keys,self->name) !=-1;
 }
+
 
 void  private_DtwResource_raise_error(DtwResource *self, int error_code, const char *format,...){
 
