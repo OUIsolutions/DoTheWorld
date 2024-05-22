@@ -83,9 +83,16 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
     new_element->cache_sub_resources = self->cache_sub_resources;
     new_element->sub_resources = newDtwResourceArray();
 
-    if(self->attached_schema){
+    if(self->attached_schema && self->root_props->is_writing_schema == false){
         new_element->attached_schema = privateDtwSchema_get_sub_schema(self->attached_schema, name);
     }
+
+    if(self->schema_type == PRIVATE_DTW_SCHEMA_ELEMENT){
+        DtwResource * ancestor = self->mother->mother;
+        new_element->attached_schema = privateDtwSchema_get_sub_schema(ancestor->attached_schema, name);
+    }
+
+
 
     if(new_element->attached_schema){
         self->root_props->is_writing_schema = true;

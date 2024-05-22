@@ -3,6 +3,7 @@
 //
 void private_dtw_resource_set_primary_key(DtwResource *self, unsigned  char *element, long size){
 
+    self->root_props->is_writing_schema = true;
     DtwResource * ancestor = self->mother->mother->mother;
     DtwResource *index_resource =ancestor->index_resource;
     DtwResource *pk_folder = DtwResource_sub_resource(index_resource,"%s",self->name);
@@ -15,11 +16,13 @@ void private_dtw_resource_set_primary_key(DtwResource *self, unsigned  char *ele
     if(DtwResource_is_file(pk_value)) {
         char *content = DtwResource_get_string(pk_value);
         if (DtwResource_error(self)) {
+            self->root_props->is_writing_schema = false;
             return;
         }
 
         //means its the same
         if (strcmp(content, mothers_name) == 0) {
+            self->root_props->is_writing_schema = false;
             return;
         }
 
@@ -29,10 +32,13 @@ void private_dtw_resource_set_primary_key(DtwResource *self, unsigned  char *ele
                 "primary key: %s already exist",
                 self->name
         );
+        self->root_props->is_writing_schema = false;
         return;
 
     }
     DtwResource_set_string(pk_value,mothers_name);
+    self->root_props->is_writing_schema = false;
+
 }
 
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size){

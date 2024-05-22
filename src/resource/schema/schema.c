@@ -18,6 +18,7 @@ DtwSchema * privateDtwSchema_get_sub_schema(DtwSchema *self,const char *name){
 
     for(int i = 0; i < self->size; i++){
         DtwSchema  *current = self->sub_schemas[i];
+
         if(strcmp(current->name,name) == 0){
             return  current;
         }

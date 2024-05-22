@@ -15,8 +15,10 @@ void privateDtwResource_ensure_its_possible_to_sub_resource(DtwResource *self){
     }
 
     if(self->schema_type == 0){
+
         return;
     }
+
 
     if(self->schema_type != PRIVATE_DTW_SCHEMA_ELEMENT && self->schema_type != PRIVATE_DTW_SCHEMA_ELEMENT_PROP){
 
