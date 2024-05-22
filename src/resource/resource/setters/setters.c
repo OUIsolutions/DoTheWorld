@@ -4,8 +4,7 @@
 void private_dtw_resource_set_primary_key(DtwResource *self, unsigned  char *element, long size){
 
     DtwResource * ancestor = self->mother->mother->mother;
-    DtwResource *index_resource = DtwResource_sub_resource(ancestor,DTW_SCHEMA_INDEX_NAME);
-
+    DtwResource *index_resource =ancestor->index_resource;
     DtwResource *pk_folder = DtwResource_sub_resource(index_resource,"%s",self->name);
 
     char *sha = dtw_generate_sha_from_any(element,size);
@@ -40,7 +39,7 @@ void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size
     if(DtwResource_error(self)){
         return ;
     }
-    if(private_dtw_resource_its_a_pk(self)){
+    if(private_DtwResource_its_a_pk(self)){
         private_dtw_resource_set_primary_key(self, element, size);
     }
 
@@ -68,7 +67,7 @@ void DtwResource_set_string(DtwResource *self,const  char *element){
     if(DtwResource_error(self)){
         return ;
     }
-    if(private_dtw_resource_its_a_pk(self)){
+    if(private_DtwResource_its_a_pk(self)){
         private_dtw_resource_set_primary_key(self, (unsigned char *) element, (long) strlen(element));
     }
 

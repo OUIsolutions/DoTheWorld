@@ -43,7 +43,7 @@ DtwResourceModule newDtwResourceModule(){
     self.dangerous_rename_schema_prop = DtwResource_dangerous_rename_schema_prop;
     self.newSchema_with_custom_folders = DtwResource_newSchema_with_custom_folders;
     self.newSchema = DtwResource_newSchema;
-    
+
     self.lock =DtwResource_lock;
     self.unlock = DtwResource_unlock;
     self.destroy = DtwResource_destroy;

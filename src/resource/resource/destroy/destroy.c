@@ -1,12 +1,13 @@
 
-void private_DtwResurce_destroy_primary_key(DtwResource *self,void *vschma) {
+void private_DtwResurce_destroy_primary_key(DtwResource *self) {
 
-    DtwOldSchema  *schema = (DtwOldSchema*)vschma;
 
     if (!DtwResource_is_file(self)) {
         return;
     }
-    DtwResource *pk_index_folder = DtwResource_sub_resource(schema->index_resource, "%s", self->name);
+
+    DtwResource *root = self->mother->mother->mother->mother;
+    DtwResource *pk_index_folder = DtwResource_sub_resource(root->index_resource, "%s", self->name);
     long size;
     bool is_binary;
     unsigned char *possible_pk_value = DtwResource_get_any(self, &size, &is_binary);
@@ -24,11 +25,11 @@ void private_DtwResurce_destroy_primary_key(DtwResource *self,void *vschma) {
 
 }
 void private_DtwResource_destroy_all_primary_keys(DtwResource *self){
-    DtwOldSchema * schema = (DtwOldSchema*)self->mother->mother->schema;
+    DtwSchema * schema = (DtwSchema*)self->mother->mother->attached_schema;
     for(int i = 0; i < schema->primary_keys->size; i++){
         char *current_pk = schema->primary_keys->strings[i];
         DtwResource *son = DtwResource_sub_resource(self,"%s",current_pk);
-        private_DtwResurce_destroy_primary_key(son,schema);
+        private_DtwResurce_destroy_primary_key(son);
     }
 }
 void DtwResource_destroy(DtwResource *self){
@@ -36,13 +37,28 @@ void DtwResource_destroy(DtwResource *self){
         return;
     }
 
-    if(self->its_a_element_folder){
+
+    if(self->schema_type == PRIVATE_DTW_SCHEMA_ELEMENT){
         private_DtwResource_destroy_all_primary_keys(self);
     }
 
-    if(private_dtw_resource_its_a_primary_key(self)){
-        DtwOldSchema * schema = (DtwOldSchema*)self->mother->mother->mother->schema;
-        private_DtwResurce_destroy_primary_key(self,schema);
+    if(private_DtwResource_its_a_pk(self)){
+        private_DtwResurce_destroy_primary_key(self);
+    }
+
+    if(self->root_props->is_writing_schema == false){
+        if(
+                self->schema_type == PRIVATE_DTW_SCHEMA_VALUE
+                || self->schema_type == PRIVATE_DTW_SCHEMA_INDEX
+                || self->schema_type == PRIVATE_DTW_SCHEMA_PK_FOLDER
+                || self->schema_type == PRIVATE_DTW_SCHEMA_PK_VALUE
+        ){
+            private_DtwResource_raise_error(
+                    self,
+                    DTW_RESOURCE_ONLY_ROOT_SCHEMA_CANN_MODIFY_SCHEMA_PROPS,
+                    "you cannot delete a internal schema part"
+            );
+        }
     }
 
 

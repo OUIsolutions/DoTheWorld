@@ -38,8 +38,8 @@ DtwResourceArray * DtwResource_get_schema_values(DtwResource *self){
         );
         return NULL;
     }
-    DtwResource *values = DtwResource_sub_resource(self,DTW_SCHEMA_VALUES_NAME);
-    return DtwResource_sub_resources(values);
+
+    return DtwResource_sub_resources(self->values_resource);
 
 }
 

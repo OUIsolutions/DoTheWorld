@@ -1,5 +1,5 @@
 
-void private_DtwResurce_destroy_primary_key(DtwResource *self,void *vschma);
+void private_DtwResurce_destroy_primary_key(DtwResource *self);
 
 
 void private_DtwResource_destroy_all_primary_keys(DtwResource *self);

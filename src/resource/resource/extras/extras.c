@@ -58,7 +58,7 @@ void DtwResource_rename(DtwResource *self,const char *new_name){
     if(DtwResource_error(self)){
         return;
     }
-    if(private_dtw_resource_its_a_primary_key(self)){
+    if(private_DtwResource_its_a_pk(self)){
         private_DtwResource_raise_error(
                 self,
                 DTW_IMPOSSIBLE_TO_RENAME_A_PRIMARY_KEY,
