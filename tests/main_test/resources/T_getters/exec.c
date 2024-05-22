@@ -8,7 +8,7 @@ int main (){
     printf("elements:---------------------------------\n");
     DtwStringArray  *sub_elements = dtw.resource.list_names(values);
     DtwStringArray_sort(sub_elements);
-    DtwResource_protected(values){
+    if(!dtw.resource.error(values)){
         dtw.string_array.represent(sub_elements);
         dtw.string_array.free(sub_elements);
     }
@@ -30,7 +30,7 @@ int main (){
     DtwResource  *bool_r = dtw.resource.sub_resource(numerical,"true_normal.txt");
     bool bool_r_value = dtw.resource.get_bool(bool_r);
 
-    DtwResource_protected(values){
+    if(!dtw.resource.error(values)){
         printf("value string :%s\n",string_r_value);
         printf("blob size: %ld\n",blob_r->value_size);
         printf("double value %lf\n",double_r_value);
@@ -38,7 +38,7 @@ int main (){
         printf("bool value %d\n",bool_r_value);
     }
 
-    DtwResource_catch(values){
+    if(!dtw.resource.error(values)){
         char *message = DtwResource_get_error_message(values);
         printf("%s",message);
     }

@@ -2068,6 +2068,7 @@ typedef struct DtwResourceModule{
     DtwSchema * (*newSchema_with_custom_folders)(DtwResource *self,const char *values_name,const char *index_name, const char *format, ...);
     DtwSchema * (*newSchema)(DtwResource *self);
     char * (*get_error_path)(DtwResource *self);
+    DtwResourceArray * (*get_schema_values)(DtwResource *self);
 
 
     DtwResource * (*sub_resource_ensuring_not_exist)(DtwResource *self,const  char *format, ...);
@@ -11946,6 +11947,7 @@ DtwResourceModule newDtwResourceModule(){
     self.get_double_from_sub_resource = DtwResource_get_double_from_sub_resource;
     self.get_bool_from_sub_resource = DtwResource_get_bool_from_sub_resource;
     self.get_error_path = DtwResource_get_error_path;
+    self.get_schema_values = DtwResource_get_schema_values;
     self.set_binary_in_sub_resource = DtwResource_set_binary_in_sub_resource;
     self.set_string_in_sub_resource = DtwResource_set_string_in_sub_resource;
     self.set_long_in_sub_resource = DtwResource_set_long_in_sub_resource;
