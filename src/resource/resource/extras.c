@@ -40,15 +40,6 @@ void  DtwResource_clear_errors(DtwResource *self){
 
 }
 
-bool private_dtw_resource_its_a_primary_key(DtwResource *self){
-    if(self->its_a_write_point == false){
-        return false;
-    }
-
-    DtwOldSchema * schema = (DtwOldSchema*)self->mother->mother->mother->schema;
-    return DtwStringArray_find_position(schema->primary_keys,self->name) !=-1;
-}
-
 
 void  private_DtwResource_raise_error(DtwResource *self, int error_code, const char *format,...){
 
@@ -135,35 +126,6 @@ void DtwResource_unlock(DtwResource *self){
     
 }
 
-DtwSchema * DtwResource_newSchema(DtwResource *self, const char *format, ...){
-    if(DtwResource_error(self)){
-        return  NULL;
-    }
-
-    if(private_dtw_resource_its_a_primary_key(self)){
-        private_DtwResource_raise_error(
-                self,
-                DTW_RESOURCE_PRIMARY_KEY_CANNOT_HAVE_SUB_SCHEMA,
-                "primary key %s cannot have a sub old_schema",
-                self->name
-        );
-        return NULL;
-    }
-
-    va_list args;
-    va_start(args, format);
-    char *name = private_dtw_format_vaarg(format,args);
-    va_end(args);
-
-    if(self->attached_schema){
-        free(name);
-        return self->attached_schema;
-    }
-    self->attached_schema = private_newDtwSchema(name);
-    free(name);
-    self->its_the_schema_owner = true;
-    return self->attached_schema;
-}
 
 
 void DtwResource_commit(DtwResource *self){

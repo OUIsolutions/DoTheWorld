@@ -2,8 +2,12 @@
 // Created by mateusmoutinho on 05/08/23.
 //
 void private_dtw_resource_set_primary_key(DtwResource *self, unsigned  char *element, long size){
-    DtwOldSchema * schema = (DtwOldSchema*)self->mother->mother->mother->schema;
-    DtwResource *pk_folder = DtwResource_sub_resource(schema->index_resource,"%s",self->name);
+
+    DtwResource * ancestor = self->mother->mother->mother;
+    DtwResource *index_resource = DtwResource_sub_resource(ancestor,DTW_SCHEMA_INDEX_NAME);
+
+    DtwResource *pk_folder = DtwResource_sub_resource(index_resource,"%s",self->name);
+
     char *sha = dtw_generate_sha_from_any(element,size);
     DtwResource  *pk_value = DtwResource_sub_resource(pk_folder,sha);
     free(sha);
@@ -31,6 +35,7 @@ void private_dtw_resource_set_primary_key(DtwResource *self, unsigned  char *ele
     }
     DtwResource_set_string(pk_value,mothers_name);
 }
+
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size){
     if(DtwResource_error(self)){
         return ;

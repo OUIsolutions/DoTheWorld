@@ -1,5 +1,9 @@
 
 
+#define DTW_SCHEMA_VALUES_NAME "value"
+#define DTW_SCHEMA_INDEX_NAME "index"
+
+
 typedef struct DtwSchema{
     char *name;
     struct DtwSchema **sub_schemas;

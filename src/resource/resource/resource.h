@@ -5,16 +5,26 @@ typedef struct DtwResource{
     bool allow_transaction;
     bool use_locker_on_unique_values;
 
-    DtwSchema *attached_schema;
-    bool its_the_schema_owner;
 
     privateDtwResourceRootProps *root_props;
     struct DtwResource *mother;
     char *name;
     char *path;
-    bool its_a_write_point;
-    bool its_a_element_folder;
-    bool its_value_folder;
+
+
+    DtwSchema *attached_schema;
+    bool its_the_schema_owner;
+
+    //in the schema struct there is:
+    //|/root
+    //|/root/values
+    //|root/values/element  <-----------------------------|
+    //|root/values/element/pk_name ->any(write_point)     |
+    //|root/values/element/element_prop ->any(write_point)|
+    //|root/index                                         |
+    //|root/index/pk_name/pk_sha ->txt  -------------------
+
+
     bool loaded;
     bool is_binary;
     bool were_renamed;
@@ -37,6 +47,9 @@ bool DtwResource_error(DtwResource *self);
 
 #define DtwResource_protected(self)  if(!DtwResource_error(self))
 #define DtwResource_catch(self)  if(DtwResource_error(self))
+
+
+DtwResource * DtwSchema_new_insertion(DtwResource *self);
 
 
 int DtwResource_get_error_code(DtwResource *self);

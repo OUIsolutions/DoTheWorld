@@ -1,7 +1,4 @@
 
-#define DTW_SCHEMA_VALUES_NAME "value"
-#define DTW_SCHEMA_INDEX_NAME "index"
-
 typedef struct {
     DtwResource *master;
     bool owner;
@@ -20,7 +17,6 @@ void DtwSchema_free(DtwOldSchema *self);
 
 void privateDtwSchema_free_self_props(DtwOldSchema *self);
 
-DtwResource * DtwSchema_new_insertion(DtwOldSchema *schema);
 
 void DtwSchema_add_primary_key(DtwOldSchema *self, const char *primary_key);
 

@@ -8,5 +8,6 @@
 #include "resource/constructors_and_destructors.c"
 #include "resource/custom_constructors.c"
 #include "resource/destroy.c"
+#include "resource/schema.c"
 
 #include "resource_array/resource_array.c"

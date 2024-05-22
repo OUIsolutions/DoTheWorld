@@ -20,6 +20,7 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
         return NULL;
     }
 
+
     if(private_dtw_resource_its_a_primary_key(self)){
         private_DtwResource_raise_error(
                 self,
@@ -29,6 +30,7 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
         );
         return NULL;
     }
+
     if(self->were_renamed){
         private_DtwResource_raise_error(
                 self,
@@ -38,6 +40,7 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
         );
         return NULL;
     }
+
 
     va_list args;
     va_start(args, format);
