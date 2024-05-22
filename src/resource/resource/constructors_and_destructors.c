@@ -21,29 +21,11 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
     }
 
 
-    if(self->schema_type && !self->root_props->is_writing_schema){
+    privateDtwResource_ensure_its_possible_to_sub_resource(self);
 
-        if(self->schema_type != PRIVATE_DTW_SCHEMA_ELEMENT && self->schema_type != PRIVATE_DTW_SCHEMA_ELEMENT_PROP){
-            private_DtwResource_raise_error(
-                    self,
-                    DTW_RESOURCE_IMPOSSIBLE_TO_ADD_SUB_RESOURCE_INSIDE_SCHEMA_STRUCT,
-                    "impossible to add sub resource inside schema strict "
-            );
-            return NULL;
-        }
-
-        if(private_dtw_resource_its_a_primary_key(self)){
-            private_DtwResource_raise_error(
-                    self,
-                    DTW_RESOURCE_PRIMARY_KEY_CANNOT_HAVE_SUB_RESOURCE,
-                    "primary key %s cannot have a sub resource",
-                    self->name
-            );
-            return NULL;
-        }
+    if(DtwResource_error(self)){
+        return NULL;
     }
-
-
 
 
     if(self->were_renamed){

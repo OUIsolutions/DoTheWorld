@@ -1,5 +1,5 @@
 
-bool private_dtw_resource_its_a_pk(DtwResource *self){
+bool private_DtwResource_its_a_pk(DtwResource *self){
     if(self->schema_type != PRIVATE_DTW_SCHEMA_ELEMENT_PROP){
         return false;
     }
@@ -8,6 +8,35 @@ bool private_dtw_resource_its_a_pk(DtwResource *self){
     return DtwStringArray_find_position(schema->primary_keys,self->name) !=-1;
 }
 
+void privateDtwResource_ensure_its_possible_to_sub_resource(DtwResource *self){
+    if(self->root_props->is_writing_schema){
+        return;
+    }
+    if(self->schema_type == 0){
+        return;
+    }
+
+
+    if(self->schema_type != PRIVATE_DTW_SCHEMA_ELEMENT && self->schema_type != PRIVATE_DTW_SCHEMA_ELEMENT_PROP){
+        private_DtwResource_raise_error(
+                self,
+                DTW_RESOURCE_IMPOSSIBLE_TO_ADD_SUB_RESOURCE_INSIDE_SCHEMA_STRUCT,
+                "impossible to add sub resource inside schema strict "
+        );
+        return ;
+    }
+
+    if(private_dtw_resource_its_a_pk(self)){
+        private_DtwResource_raise_error(
+                self,
+                DTW_RESOURCE_PRIMARY_KEY_CANNOT_HAVE_SUB_RESOURCE,
+                "primary key %s cannot have a sub resource",
+                self->name
+        );
+        return;
+    }
+
+}
 
 
 DtwResource * DtwSchema_new_insertion(DtwResource *self){
@@ -36,15 +65,12 @@ DtwSchema * DtwResource_newSchema(DtwResource *self, const char *format, ...){
         return  NULL;
     }
 
-    if(private_dtw_resource_its_a_primary_key(self)){
-        private_DtwResource_raise_error(
-                self,
-                DTW_RESOURCE_PRIMARY_KEY_CANNOT_HAVE_SUB_SCHEMA,
-                "primary key %s cannot have a sub old_schema",
-                self->name
-        );
-        return NULL;
+    privateDtwResource_ensure_its_possible_to_sub_resource(self);
+
+    if(DtwResource_error(self)){
+        return  NULL;
     }
+
 
     va_list args;
     va_start(args, format);

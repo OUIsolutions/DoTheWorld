@@ -40,7 +40,7 @@ void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size
     if(DtwResource_error(self)){
         return ;
     }
-    if(private_dtw_resource_its_a_primary_key(self)){
+    if(private_dtw_resource_its_a_pk(self)){
         private_dtw_resource_set_primary_key(self, element, size);
     }
 
@@ -68,7 +68,7 @@ void DtwResource_set_string(DtwResource *self,const  char *element){
     if(DtwResource_error(self)){
         return ;
     }
-    if(private_dtw_resource_its_a_primary_key(self)){
+    if(private_dtw_resource_its_a_pk(self)){
         private_dtw_resource_set_primary_key(self, (unsigned char *) element, (long) strlen(element));
     }
 

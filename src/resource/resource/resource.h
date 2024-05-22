@@ -45,6 +45,7 @@ DtwResource *new_DtwResource(const char *path);
 
 bool DtwResource_error(DtwResource *self);
 
+void privateDtwResource_ensure_its_possible_to_sub_resource(DtwResource *self);
 
 #define DtwResource_protected(self)  if(!DtwResource_error(self))
 #define DtwResource_catch(self)  if(DtwResource_error(self))
@@ -59,7 +60,7 @@ char * DtwResource_get_error_message(DtwResource *self);
 
 void private_dtw_resource_set_primary_key(DtwResource *self, unsigned  char *element, long size);
 
-bool private_dtw_resource_its_a_primary_key(DtwResource *self);
+bool private_dtw_resource_its_a_pk(DtwResource *self);
 
 void  private_DtwResource_raise_error(DtwResource *self, int error_code, const char *format,...);
 
