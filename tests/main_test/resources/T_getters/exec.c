@@ -38,7 +38,7 @@ int main (){
         printf("bool value %d\n",bool_r_value);
     }
 
-    if(!dtw.resource.error(values)){
+    if(dtw.resource.error(values)){
         char *message = DtwResource_get_error_message(values);
         printf("%s",message);
     }

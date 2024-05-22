@@ -36,14 +36,14 @@ int main (){
     long long_value = dtw.resource.get_long_from_sub_resource(numerical,"integer.txt");
     bool bool_value = dtw.resource.get_bool_from_sub_resource(numerical,"true_normal.txt");
 
-    DtwResource_protected(values){
+    if(!dtw.resource.error(values)){
         printf("value string :%s\n",a);
         printf("blob size: %ld\n",blob_size);
         printf("double value %lf\n",double_value);
         printf("long value %ld\n",long_value);
         printf("bool value %d\n",bool_value);
     }
-    DtwResource_catch(values){
+    if(dtw.resource.error(values)){
         char *message = DtwResource_get_error_message(values);
         printf("%s",message);
     }

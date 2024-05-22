@@ -43,7 +43,7 @@ int main (){
         printf("long value %ld\n",long_value);
         printf("bool value %d\n",bool_value);
     }
-    if(!dtw.resource.error(values)){
+    if(dtw.resource.error(values)){
         char *message = DtwResource_get_error_message(values);
         printf("%s",message);
     }

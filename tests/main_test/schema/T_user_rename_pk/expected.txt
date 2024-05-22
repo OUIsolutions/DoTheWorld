@@ -1,1 +1,2 @@
  
+error:primary key name cannot be renamed

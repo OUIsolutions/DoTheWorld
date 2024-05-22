@@ -6,11 +6,13 @@ int main(){
     DtwNamespace  dtw = newDtwNamespace();
 
     DtwResource *database = dtw.resource.newResource("tests/target/schema_database");
-    DtwSchema  *users =dtw.resource.sub_schema(database,"users");
-    dtw.schema.add_primary_key(users,"name");
-    dtw.schema.add_primary_key(users,"email");
+    DtwSchema *schema  = dtw.resource.newSchema(database);
+    DtwSchema *users_schema = dtw.schema.sub_schema(schema,"users");
+    dtw.schema.add_primary_key(users_schema,"name");
+    dtw.schema.add_primary_key(users_schema,"email");
+    DtwResource  *users =dtw.resource.sub_resource(database,"users");
 
-    DtwResource *user = dtw.schema.new_insertion(users);
+    DtwResource *user = dtw.resource.new_schema_insertion(users);
     dtw.resource.set_string_in_sub_resource(user,"name","mateus");
     dtw.resource.set_string_in_sub_resource(user,"email","mateusmoutinho01@gmail.com");
     dtw.resource.set_string_sha_in_sub_resource(user,"password","12345");
