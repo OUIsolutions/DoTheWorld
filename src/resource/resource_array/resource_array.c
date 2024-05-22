@@ -26,7 +26,27 @@ DtwResource* DtwResourceArray_get_by_name(DtwResourceArray *self, const char *na
     return NULL;
 }
 
+DtwResourceArray * DtwResource_get_schema_values(DtwResource *self){
+    if(DtwResource_error(self)){
+        return NULL;
+    }
+    if(self->schema_type != PRIVATE_DTW_SCHEMA_ROOT){
+        private_DtwResource_raise_error(
+                self,
+                DTW_RESOURCE_ONLY_ROOT_SCHEMA_HAVE_SCHEMA_VALUES,
+                "only root schema have schema values"
+        );
+        return NULL;
+    }
+    DtwResource *values = DtwResource_sub_resource(self,DTW_SCHEMA_VALUES_NAME);
+    return DtwResource_sub_resources(values);
+
+}
+
 DtwResourceArray * DtwResource_sub_resources(DtwResource *self){
+
+
+
     DtwStringArray  *names  = DtwResource_list_names(self);
     DtwStringArray_sort(names);
     DtwResourceArray *target_array = (DtwResourceArray*)self->sub_resources;

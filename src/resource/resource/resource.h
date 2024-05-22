@@ -51,7 +51,7 @@ void privateDtwResource_ensure_its_possible_to_sub_resource(DtwResource *self);
 #define DtwResource_catch(self)  if(DtwResource_error(self))
 
 
-DtwResource * DtwSchema_new_insertion(DtwResource *self);
+DtwResource * DtwResource_new_schema_insertion(DtwResource *self);
 
 
 int DtwResource_get_error_code(DtwResource *self);
@@ -61,6 +61,17 @@ char * DtwResource_get_error_message(DtwResource *self);
 void private_dtw_resource_set_primary_key(DtwResource *self, unsigned  char *element, long size);
 
 bool private_dtw_resource_its_a_pk(DtwResource *self);
+
+DtwResource  *DtwResource_find_by_name_id(DtwResource *self, const char *name);
+
+DtwResource * DtwResource_find_by_primary_key_with_binary(DtwResource *self, const char *primary_key, unsigned  char *value, long size);
+
+DtwResource * DtwResource_find_by_primary_key_with_string(DtwResource *self, const char *key, const char *value);
+
+void DtwResource_dangerous_remove_schema_prop(DtwResource*self,const char *prop);
+
+void DtwResource_dangerous_rename_schema_prop(DtwResource*self,const char *prop,const char *new_name);
+
 
 void  private_DtwResource_raise_error(DtwResource *self, int error_code, const char *format,...);
 
