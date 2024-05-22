@@ -21,6 +21,14 @@ DtwSchema * privateDtwSchema_get_sub_schema(DtwSchema *self,const char *name){
     return NULL;
 }
 
+DtwSchema * DtwSchema_new_subSchema(DtwSchema *self,const char *name){
+    DtwSchema *subSchema = private_newDtwSchema(name);
+    self->sub_schemas = ( DtwSchema **) realloc(self->sub_schemas, (self->size + 1) * sizeof( DtwSchema *));
+    self->sub_schemas[self->size] = subSchema;
+    self->size+=1;
+    return subSchema;
+}
+
 
 void DtwSchema_add_primary_key(DtwSchema *self,const char *name){
     DtwStringArray_append(self->primary_keys,name);
