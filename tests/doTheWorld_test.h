@@ -9292,7 +9292,7 @@ DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *format,...){
         private_DtwResource_raise_error(
                 self,
                 DTW_RESOURCE_PRIMARY_KEY_CANNOT_HAVE_SUB_SCHEMA,
-                "primary key %s cannot have a sub schema",
+                "primary key %s cannot have a sub old_schema",
                 self->name
         );
         return NULL;

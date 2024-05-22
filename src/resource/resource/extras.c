@@ -43,7 +43,7 @@ bool private_dtw_resource_its_a_primary_key(DtwResource *self){
     if(self->its_a_write_point == false){
         return false;
     }
-    DtwSchema * schema = (DtwSchema*)self->mother->mother->mother->schema;
+    DtwOldSchema * schema = (DtwOldSchema*)self->mother->mother->mother->schema;
     return DtwStringArray_find_position(schema->primary_keys,self->name) !=-1;
 }
 
@@ -132,7 +132,7 @@ void DtwResource_unlock(DtwResource *self){
     
 }
 
-DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *format,...){
+DtwOldSchema * DtwResource_sub_schema(DtwResource *self, const char *format, ...){
     if(DtwResource_error(self)){
         return  NULL;
     }
@@ -140,7 +140,7 @@ DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *format,...){
         private_DtwResource_raise_error(
                 self,
                 DTW_RESOURCE_PRIMARY_KEY_CANNOT_HAVE_SUB_SCHEMA,
-                "primary key %s cannot have a sub schema",
+                "primary key %s cannot have a sub old_schema",
                 self->name
         );
         return NULL;
@@ -156,12 +156,12 @@ DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *format,...){
     DtwResource *master =DtwResource_sub_resource(self,"%s",name);
     if(master->schema){
         free(name);
-        return (DtwSchema*)master->schema;
+        return (DtwOldSchema*)master->schema;
     }
 
 
-    DtwSchema *schema = (DtwSchema*) malloc(sizeof(DtwSchema));
-    *schema = (DtwSchema){0};
+    DtwOldSchema *schema = (DtwOldSchema*) malloc(sizeof(DtwOldSchema));
+    *schema = (DtwOldSchema){0};
 
     free(name);
     master->schema = schema;

@@ -2,7 +2,7 @@
 // Created by mateusmoutinho on 05/08/23.
 //
 void private_dtw_resource_set_primary_key(DtwResource *self, unsigned  char *element, long size){
-    DtwSchema * schema = (DtwSchema*)self->mother->mother->mother->schema;
+    DtwOldSchema * schema = (DtwOldSchema*)self->mother->mother->mother->schema;
     DtwResource *pk_folder = DtwResource_sub_resource(schema->index_resource,"%s",self->name);
     char *sha = dtw_generate_sha_from_any(element,size);
     DtwResource  *pk_value = DtwResource_sub_resource(pk_folder,sha);

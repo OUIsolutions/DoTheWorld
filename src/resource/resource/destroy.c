@@ -1,7 +1,7 @@
 
 void private_DtwResurce_destroy_primary_key(DtwResource *self,void *vschma) {
 
-    DtwSchema  *schema = (DtwSchema*)vschma;
+    DtwOldSchema  *schema = (DtwOldSchema*)vschma;
 
     if (!DtwResource_is_file(self)) {
         return;
@@ -24,7 +24,7 @@ void private_DtwResurce_destroy_primary_key(DtwResource *self,void *vschma) {
 
 }
 void private_DtwResource_destroy_all_primary_keys(DtwResource *self){
-    DtwSchema * schema = (DtwSchema*)self->mother->mother->schema;
+    DtwOldSchema * schema = (DtwOldSchema*)self->mother->mother->schema;
     for(int i = 0; i < schema->primary_keys->size; i++){
         char *current_pk = schema->primary_keys->strings[i];
         DtwResource *son = DtwResource_sub_resource(self,"%s",current_pk);
@@ -41,7 +41,7 @@ void DtwResource_destroy(DtwResource *self){
     }
 
     if(private_dtw_resource_its_a_primary_key(self)){
-        DtwSchema * schema = (DtwSchema*)self->mother->mother->mother->schema;
+        DtwOldSchema * schema = (DtwOldSchema*)self->mother->mother->mother->schema;
         private_DtwResurce_destroy_primary_key(self,schema);
     }
 

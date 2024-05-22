@@ -702,7 +702,7 @@ Schema its a way to handle resources into a serializible way, providing foreing 
 
 ### Creating a insertion
 in these example we are creating a user using schema concept  
-<!--codeof:exemples/schema/user_creation.c-->
+<!--codeof:exemples/old_schema/user_creation.c-->
 ~~~c
 
 #include "doTheWorld.h"
@@ -712,7 +712,7 @@ int main(){
     DtwNamespace  dtw = newDtwNamespace();
 
     DtwResource *database = dtw.resource.newResource("tests/target/schema_database");
-    DtwSchema  *users =dtw.resource.sub_schema(database,"users");
+    DtwOldSchema  *users =dtw.resource.sub_schema(database,"users");
     dtw.schema.add_primary_key(users,"name");
     dtw.schema.add_primary_key(users,"email");
 
@@ -739,7 +739,7 @@ int main(){
 ### Removing a insertion
 In these example we also can destroy the user , automaticly destroying the index
 
-<!--codeof:exemples/schema/user_remove.c-->
+<!--codeof:exemples/old_schema/user_remove.c-->
 ~~~c
 
 #include "doTheWorld.h"
@@ -750,7 +750,7 @@ DtwNamespace dtw;
 
 void create_users(DtwResource *database,const char *name,const char *email,const char *password, int age){
 
-    DtwSchema  *users =dtw.resource.sub_schema(database,"users");
+    DtwOldSchema  *users =dtw.resource.sub_schema(database,"users");
     DtwResource *user = dtw.schema.new_insertion(users);
     dtw.resource.set_string_in_sub_resource(user,"name",name);
     dtw.resource.set_string_in_sub_resource(user,"email",email);
@@ -762,7 +762,7 @@ int main(){
 
     dtw = newDtwNamespace();
     DtwResource *database = dtw.resource.newResource("tests/target/schema_database");
-    DtwSchema  *users =dtw.resource.sub_schema(database,"users");
+    DtwOldSchema  *users =dtw.resource.sub_schema(database,"users");
     dtw.schema.add_primary_key(users,"name");
     dtw.schema.add_primary_key(users,"email");
 
@@ -792,7 +792,7 @@ int main(){
 ### Finding a insertion
 With  primary keys you can find values without loop iteration increasing readability and speed, 
 
-<!--codeof:exemples/schema/user_find.c-->
+<!--codeof:exemples/old_schema/user_find.c-->
 ~~~c
 
 #include "doTheWorld.h"
@@ -803,7 +803,7 @@ DtwNamespace dtw;
 
 void create_users(DtwResource *database,const char *name,const char *email,const char *password, int age){
 
-    DtwSchema  *users =dtw.resource.sub_schema(database,"users");
+    DtwOldSchema  *users =dtw.resource.sub_schema(database,"users");
     DtwResource *user = dtw.schema.new_insertion(users);
     dtw.resource.set_string_in_sub_resource(user,"name",name);
     dtw.resource.set_string_in_sub_resource(user,"email",email);
@@ -815,7 +815,7 @@ int main(){
 
     dtw = newDtwNamespace();
     DtwResource *database = dtw.resource.newResource("tests/target/schema_database");
-    DtwSchema  *users =dtw.resource.sub_schema(database,"users");
+    DtwOldSchema  *users =dtw.resource.sub_schema(database,"users");
     dtw.schema.add_primary_key(users,"name");
     dtw.schema.add_primary_key(users,"email");
 
@@ -856,7 +856,7 @@ int main(){
 ### Iterating over insertions
 you also can iterate over insertions 
 
-<!--codeof:exemples/schema/user_iteration.c-->
+<!--codeof:exemples/old_schema/user_iteration.c-->
 ~~~c
 
 #include "doTheWorld.h"
@@ -867,7 +867,7 @@ DtwNamespace dtw;
 
 void create_users(DtwResource *database,const char *name,const char *email,const char *password, int age){
 
-    DtwSchema  *users =dtw.resource.sub_schema(database,"users");
+    DtwOldSchema  *users =dtw.resource.sub_schema(database,"users");
     DtwResource *user = dtw.schema.new_insertion(users);
     dtw.resource.set_string_in_sub_resource(user,"name",name);
     dtw.resource.set_string_in_sub_resource(user,"email",email);
@@ -879,7 +879,7 @@ int main(){
 
     dtw = newDtwNamespace();
     DtwResource *database = dtw.resource.newResource("tests/target/schema_database");
-    DtwSchema  *users =dtw.resource.sub_schema(database,"users");
+    DtwOldSchema  *users =dtw.resource.sub_schema(database,"users");
     dtw.schema.add_primary_key(users,"name");
     dtw.schema.add_primary_key(users,"email");
 

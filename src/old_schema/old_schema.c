@@ -1,9 +1,9 @@
 
 
 
-DtwSchema * newDtwSchema(const char *path){
-    DtwSchema *schema = (DtwSchema*) malloc(sizeof(DtwSchema));
-    *schema = (DtwSchema){0};
+DtwOldSchema * newDtwSchema(const char *path){
+    DtwOldSchema *schema = (DtwOldSchema*) malloc(sizeof(DtwOldSchema));
+    *schema = (DtwOldSchema){0};
 
     //make both reference each other
     DtwResource *master = new_DtwResource(path);
@@ -19,7 +19,7 @@ DtwSchema * newDtwSchema(const char *path){
     return schema;
 }
 
-void DtwSchema_add_primary_key(DtwSchema *self,const char *primary_key){
+void DtwSchema_add_primary_key(DtwOldSchema *self, const char *primary_key){
     if(privateDtwSchema_error(self)){
         return ;
     }
@@ -30,7 +30,7 @@ void DtwSchema_add_primary_key(DtwSchema *self,const char *primary_key){
     }
 }
 
-void DtwSchema_free(DtwSchema *self){
+void DtwSchema_free(DtwOldSchema *self){
     if(privateDtwSchema_error(self)){
         return;
     }
@@ -41,7 +41,7 @@ void DtwSchema_free(DtwSchema *self){
     }
 
 }
-bool privateDtwSchema_error(DtwSchema *self){
+bool privateDtwSchema_error(DtwOldSchema *self){
     if(!self){
         return true;
     }
@@ -51,13 +51,13 @@ bool privateDtwSchema_error(DtwSchema *self){
     return false;
 }
 
-void privateDtwSchema_free_self_props(DtwSchema *self){
+void privateDtwSchema_free_self_props(DtwOldSchema *self){
     DtwStringArray_free(self->primary_keys);
     free(self);
 }
 
 
-DtwResource * DtwSchema_new_insertion(DtwSchema *schema){
+DtwResource * DtwSchema_new_insertion(DtwOldSchema *schema){
     if(privateDtwSchema_error(schema)){
         return NULL;
     }
@@ -66,14 +66,14 @@ DtwResource * DtwSchema_new_insertion(DtwSchema *schema){
     return created;
 }
 
-DtwResourceArray * DtwSchema_get_values(DtwSchema *self){
+DtwResourceArray * DtwSchema_get_values(DtwOldSchema *self){
     if(privateDtwSchema_error(self)){
         return NULL;
     }
     return DtwResource_sub_resources(self->values_resource);
 }
 
-DtwResource * DtwSchema_find_by_primary_key_with_binary(DtwSchema *self, const char *primary_key, unsigned  char *value, long size){
+DtwResource * DtwSchema_find_by_primary_key_with_binary(DtwOldSchema *self, const char *primary_key, unsigned  char *value, long size){
     if(privateDtwSchema_error(self)){
         return NULL;
     }
@@ -95,7 +95,7 @@ DtwResource * DtwSchema_find_by_primary_key_with_binary(DtwSchema *self, const c
     return founded_resource;
 }
 
-DtwResource * DtwSchema_find_by_primary_key_with_string(DtwSchema *self, const char *key, const char *value){
+DtwResource * DtwSchema_find_by_primary_key_with_string(DtwOldSchema *self, const char *key, const char *value){
     if(privateDtwSchema_error(self)){
         return NULL;
     }
@@ -109,14 +109,14 @@ DtwResource * DtwSchema_find_by_primary_key_with_string(DtwSchema *self, const c
 
 
 
-void DtwSchema_commit(DtwSchema *self){
+void DtwSchema_commit(DtwOldSchema *self){
     if(privateDtwSchema_error(self)){
         return;
     }
     DtwResource_commit(self->master);
 }
 
-DtwResource  *DtwSchema_get_find_by_nameID(DtwSchema *self,const char *name){
+DtwResource  *DtwSchema_get_find_by_nameID(DtwOldSchema *self, const char *name){
     if(privateDtwSchema_error(self)){
         return NULL;
     }
@@ -125,7 +125,7 @@ DtwResource  *DtwSchema_get_find_by_nameID(DtwSchema *self,const char *name){
     return element;
 }
 
-void DtwSchema_dangerours_remove_prop(DtwSchema *self, const char *prop){
+void DtwSchema_dangerours_remove_prop(DtwOldSchema *self, const char *prop){
 
     bool allow_transaction = self->master->allow_transaction;
     DtwResourceArray * all_values = DtwResource_sub_resources(self->values_resource);
@@ -149,7 +149,7 @@ void DtwSchema_dangerours_remove_prop(DtwSchema *self, const char *prop){
 }
 
 
-void DtwSchema_dangerours_rename_prop(DtwSchema *self, const char *prop,const char *new_name){
+void DtwSchema_dangerours_rename_prop(DtwOldSchema *self, const char *prop, const char *new_name){
     bool allow_transaction = self->master->allow_transaction;
     DtwResourceArray * all_values = DtwResource_sub_resources(self->values_resource);
     DtwTransaction * transaction = self->master->root_props->transaction;

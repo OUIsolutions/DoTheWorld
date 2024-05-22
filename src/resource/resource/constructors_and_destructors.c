@@ -136,7 +136,7 @@ void DtwResource_free(DtwResource *self){
         privateDtwResourceRootProps_free(self->root_props);
     }
     if(self->schema){
-        DtwSchema  *schema = (DtwSchema*)self->schema;
+        DtwOldSchema  *schema = (DtwOldSchema*)self->schema;
         privateDtwSchema_free_self_props(schema);
     }
 

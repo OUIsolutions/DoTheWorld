@@ -40,7 +40,6 @@
 #include "resource/definition.h"
 #include "transaction/definition.h"
 #include "hash/hash.c"
-#include "schema/schema.c"
 #include "namespace/definition.h"
 
 

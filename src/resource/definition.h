@@ -1,3 +1,4 @@
+#include "schema/schema.c"
 #include "root_props/root_props.c"
 #include "resource/extras.c"
 #include "resource/loaders_and_unloaders.c"
