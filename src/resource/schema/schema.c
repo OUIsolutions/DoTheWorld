@@ -5,6 +5,7 @@ DtwSchema *private_newDtwSchema(const char *name){
     self->value_name = DTW_SCHEMA_DEFAULT_VALUES_NAME;
     self->index_name = DTW_SCHEMA_DEFAULT_INDEX_NAME;
     self->sub_schemas = (struct DtwSchema **)malloc(0);
+    self->primary_keys = newDtwStringArray();
     self->name = strdup(name);
     return  self;
 }

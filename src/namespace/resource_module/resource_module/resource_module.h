@@ -37,6 +37,7 @@ typedef struct DtwResourceModule{
     void (*dangerous_rename_schema_prop)(DtwResource*self,const char *prop,const char *new_name);
     DtwSchema * (*newSchema_with_custom_folders)(DtwResource *self,const char *values_name,const char *index_name, const char *format, ...);
     DtwSchema * (*newSchema)(DtwResource *self);
+    char * (*get_error_path)(DtwResource *self);
 
 
     DtwResource * (*sub_resource_ensuring_not_exist)(DtwResource *self,const  char *format, ...);

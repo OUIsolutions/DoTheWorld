@@ -8,6 +8,8 @@ int DtwResource_get_error_code(DtwResource *self);
 
 char * DtwResource_get_error_message(DtwResource *self);
 
+char * DtwResource_get_error_path(DtwResource *self);
+
 void  DtwResource_clear_errors(DtwResource *self);
 
 

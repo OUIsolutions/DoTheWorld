@@ -19,6 +19,16 @@ int DtwResource_get_error_code(DtwResource *self){
     }
     return self->root_props->error_code;
 }
+char * DtwResource_get_error_path(DtwResource *self){
+    if(!self){
+        return NULL;
+    }
+    if(!self->root_props){
+        return NULL;
+    }
+    return self->root_props->error_path;
+}
+
 
 char * DtwResource_get_error_message(DtwResource *self){
 
