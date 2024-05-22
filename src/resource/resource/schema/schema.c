@@ -19,10 +19,11 @@ void privateDtwResource_ensure_its_possible_to_sub_resource(DtwResource *self){
     }
 
     if(self->schema_type != PRIVATE_DTW_SCHEMA_ELEMENT && self->schema_type != PRIVATE_DTW_SCHEMA_ELEMENT_PROP){
+
         private_DtwResource_raise_error(
                 self,
                 DTW_RESOURCE_IMPOSSIBLE_TO_ADD_SUB_RESOURCE_INSIDE_SCHEMA_STRUCT,
-                "impossible to add sub resource inside schema strict "
+                "impossible to add sub resource inside schema struct "
         );
         return ;
     }
@@ -226,17 +227,7 @@ DtwSchema * DtwResource_newSchema(DtwResource *self){
         return self->attached_schema;
     }
 
-    self->root_props->is_writing_schema = true;
-    self->schema_type = PRIVATE_DTW_SCHEMA_ROOT;
-    self->attached_schema = private_newDtwSchema(self->name);
+    self->attached_schema = private_newDtwSchema(NULL);
     self->its_the_schema_owner = true;
-
-    self->values_resource = DtwResource_sub_resource(self,DTW_SCHEMA_DEFAULT_VALUES_NAME);
-    self->values_resource->schema_type = PRIVATE_DTW_SCHEMA_VALUE;
-    self->index_resource = DtwResource_sub_resource(self,DTW_SCHEMA_DEFAULT_INDEX_NAME);
-    self->index_resource->schema_type = PRIVATE_DTW_SCHEMA_INDEX;
-
-    self->root_props->is_writing_schema = false;
-
     return self->attached_schema;
 }

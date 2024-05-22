@@ -7,6 +7,7 @@
 
 typedef struct DtwSchema{
 
+
     const char *value_name;
     const char *index_name;
 

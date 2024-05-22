@@ -5,8 +5,11 @@ DtwSchema *private_newDtwSchema(const char *name){
     self->value_name = DTW_SCHEMA_DEFAULT_VALUES_NAME;
     self->index_name = DTW_SCHEMA_DEFAULT_INDEX_NAME;
     self->sub_schemas = (struct DtwSchema **)malloc(0);
-    self->primary_keys = newDtwStringArray();
-    self->name = strdup(name);
+    if(name){
+        self->primary_keys = newDtwStringArray();
+        self->name = strdup(name);
+    }
+
     return  self;
 }
 
@@ -42,7 +45,11 @@ void private_newDtwSchema_free(DtwSchema *self){
     }
 
     free(self->sub_schemas);
-    free(self->name);
-    DtwStringArray_free(self->primary_keys);
+    if(self->name){
+        free(self->name);
+    }
+    if(self->primary_keys){
+        DtwStringArray_free(self->primary_keys);
+    }
     free(self);
 }
