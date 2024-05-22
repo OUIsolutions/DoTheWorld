@@ -87,6 +87,17 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
         new_element->attached_schema = privateDtwSchema_get_sub_schema(self->attached_schema, name);
     }
 
+    if(new_element->attached_schema){
+        self->root_props->is_writing_schema = true;
+        new_element->schema_type = PRIVATE_DTW_SCHEMA_ROOT;
+        new_element->values_resource = DtwResource_sub_resource(new_element,DTW_SCHEMA_DEFAULT_VALUES_NAME);
+        new_element->values_resource->schema_type = PRIVATE_DTW_SCHEMA_VALUE;
+        new_element->index_resource = DtwResource_sub_resource(new_element,DTW_SCHEMA_DEFAULT_INDEX_NAME);
+        new_element->index_resource->schema_type = PRIVATE_DTW_SCHEMA_INDEX;
+    }
+
+
+
     if(self->cache_sub_resources){
         DtwResourceArray_append((DtwResourceArray*)self->sub_resources,new_element);
     }

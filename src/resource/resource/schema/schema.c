@@ -220,7 +220,7 @@ DtwSchema * DtwResource_newSchema_with_custom_folders(DtwResource *self,const ch
     if(DtwResource_error(self)){
         return  NULL;
     }
-    
+
     va_list args;
     va_start(args, format);
     char *name = private_dtw_format_vaarg(format,args);
@@ -271,13 +271,14 @@ DtwSchema * DtwResource_newSchema(DtwResource *self, const char *format, ...){
     self->root_props->is_writing_schema = true;
     self->schema_type = PRIVATE_DTW_SCHEMA_ROOT;
     self->attached_schema = private_newDtwSchema(name,DTW_SCHEMA_DEFAULT_VALUES_NAME,DTW_SCHEMA_DEFAULT_INDEX_NAME);
+    self->its_the_schema_owner = true;
+
     self->values_resource = DtwResource_sub_resource(self,DTW_SCHEMA_DEFAULT_VALUES_NAME);
     self->values_resource->schema_type = PRIVATE_DTW_SCHEMA_VALUE;
     self->index_resource = DtwResource_sub_resource(self,DTW_SCHEMA_DEFAULT_INDEX_NAME);
     self->index_resource->schema_type = PRIVATE_DTW_SCHEMA_INDEX;
 
     free(name);
-    self->its_the_schema_owner = true;
 
     self->root_props->is_writing_schema = false;
 
