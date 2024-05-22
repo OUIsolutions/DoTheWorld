@@ -1568,7 +1568,7 @@ bool privateDtwSchema_error(DtwSchema *self);
 
 DtwSchema * DtwResource_sub_schema(DtwResource *self, const char *format,...);
 
-DtwSchema * newDtwSchema(const char *path);
+DtwSchema * private_newDtwSchema(const char *path);
 
 void DtwSchema_free(DtwSchema *self);
 
@@ -11275,12 +11275,12 @@ void  DtwHash_free(DtwHash *self){
 
 
 
-DtwSchema * newDtwSchema(const char *path){
+DtwSchema * private_newDtwSchema(const char *path){
     DtwSchema *schema = (DtwSchema*) malloc(sizeof(DtwSchema));
     *schema = (DtwSchema){0};
 
     //make both reference each other
-    DtwResource *master = new_DtwResource(path);
+    DtwResource *master = new_DtwResource(name);
     master->schema = schema;
     schema->master = master;
 

@@ -16,7 +16,7 @@ typedef struct DtwSchema{
     DtwStringArray  *primary_keys;
 }DtwSchema;
 
-DtwSchema *private_newDtwSchema(const char *name,const char *value_name,const char *index_name);
+DtwSchema *private_newDtwSchema(const char *name);
 
 DtwSchema * privateDtwSchema_get_sub_schema(DtwSchema *self,const char *name);
 

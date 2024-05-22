@@ -210,7 +210,8 @@ void DtwResource_dangerous_rename_schema_prop(DtwResource*self,const char *prop,
 }
 
 
-DtwSchema * DtwResource_newSchema_with_custom_folders(DtwResource *self,const char *values_name,const char *index_name, const char *format, ...){
+
+DtwSchema * DtwResource_newSchema(DtwResource *self){
     if(DtwResource_error(self)){
         return  NULL;
     }
@@ -221,64 +222,19 @@ DtwSchema * DtwResource_newSchema_with_custom_folders(DtwResource *self,const ch
         return  NULL;
     }
 
-    va_list args;
-    va_start(args, format);
-    char *name = private_dtw_format_vaarg(format,args);
-    va_end(args);
-
     if(self->attached_schema){
-        free(name);
         return self->attached_schema;
     }
+
     self->root_props->is_writing_schema = true;
     self->schema_type = PRIVATE_DTW_SCHEMA_ROOT;
-    self->attached_schema = private_newDtwSchema(name,values_name,index_name);
-
-    self->values_resource = DtwResource_sub_resource(self,DTW_SCHEMA_DEFAULT_VALUES_NAME);
-    self->values_resource->schema_type = PRIVATE_DTW_SCHEMA_VALUE;
-    self->index_resource = DtwResource_sub_resource(self,DTW_SCHEMA_DEFAULT_INDEX_NAME);
-    self->index_resource->schema_type = PRIVATE_DTW_SCHEMA_INDEX;
-    free(name);
-    self->its_the_schema_owner = true;
-
-    self->root_props->is_writing_schema = false;
-
-    return self->attached_schema;
-}
-
-
-DtwSchema * DtwResource_newSchema(DtwResource *self, const char *format, ...){
-    if(DtwResource_error(self)){
-        return  NULL;
-    }
-
-    privateDtwResource_ensure_its_possible_to_sub_resource(self);
-
-    if(DtwResource_error(self)){
-        return  NULL;
-    }
-
-
-    va_list args;
-    va_start(args, format);
-    char *name = private_dtw_format_vaarg(format,args);
-    va_end(args);
-
-    if(self->attached_schema){
-        free(name);
-        return self->attached_schema;
-    }
-    self->root_props->is_writing_schema = true;
-    self->schema_type = PRIVATE_DTW_SCHEMA_ROOT;
-    self->attached_schema = private_newDtwSchema(name,DTW_SCHEMA_DEFAULT_VALUES_NAME,DTW_SCHEMA_DEFAULT_INDEX_NAME);
+    self->attached_schema = private_newDtwSchema(self->name);
     self->its_the_schema_owner = true;
 
     self->values_resource = DtwResource_sub_resource(self,DTW_SCHEMA_DEFAULT_VALUES_NAME);
     self->values_resource->schema_type = PRIVATE_DTW_SCHEMA_VALUE;
     self->index_resource = DtwResource_sub_resource(self,DTW_SCHEMA_DEFAULT_INDEX_NAME);
     self->index_resource->schema_type = PRIVATE_DTW_SCHEMA_INDEX;
-
-    free(name);
 
     self->root_props->is_writing_schema = false;
 

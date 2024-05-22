@@ -29,7 +29,6 @@ DtwResourceModule newDtwResourceModule(){
     self.sub_resource_now  = DtwResource_sub_resource_now;
     self.sub_resource_now_in_unix = DtwResource_sub_resource_now_in_unix;
     self.sub_resource_random = DtwResource_sub_resource_random;
-    self.new_schema = DtwResource_newSchema;
     self.set_binary_sha =DtwResource_set_binary_sha;
     self.set_string_sha = DtwResource_set_string_sha;
     self.set_binary_sha_in_sub_resource = DtwResource_set_binary_sha_in_sub_resource;
@@ -41,7 +40,6 @@ DtwResourceModule newDtwResourceModule(){
     self.find_by_primary_key_with_binary = DtwResource_find_by_primary_key_with_binary;
     self.dangerous_remove_schema_prop = DtwResource_dangerous_remove_schema_prop;
     self.dangerous_rename_schema_prop = DtwResource_dangerous_rename_schema_prop;
-    self.newSchema_with_custom_folders = DtwResource_newSchema_with_custom_folders;
     self.newSchema = DtwResource_newSchema;
 
     self.lock =DtwResource_lock;

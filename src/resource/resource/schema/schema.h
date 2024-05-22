@@ -23,7 +23,6 @@ void DtwResource_dangerous_remove_schema_prop(DtwResource*self,const char *prop)
 
 void DtwResource_dangerous_rename_schema_prop(DtwResource*self,const char *prop,const char *new_name);
 
-DtwSchema * DtwResource_newSchema_with_custom_folders(DtwResource *self,const char *values_name,const char *index_name, const char *format, ...);
 
 
-DtwSchema * DtwResource_newSchema(DtwResource *self, const char *format, ...);
+DtwSchema * DtwResource_newSchema(DtwResource *self);
