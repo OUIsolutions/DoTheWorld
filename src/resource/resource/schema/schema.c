@@ -26,7 +26,7 @@ void privateDtwResource_ensure_its_possible_to_sub_resource(DtwResource *self){
         return ;
     }
 
-    if(private_dtw_resource_its_a_pk(self)){
+    if(private_DtwResource_its_a_pk(self)){
         private_DtwResource_raise_error(
                 self,
                 DTW_RESOURCE_PRIMARY_KEY_CANNOT_HAVE_SUB_RESOURCE,

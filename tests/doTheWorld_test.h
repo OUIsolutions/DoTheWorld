@@ -5514,7 +5514,7 @@ uint8_t *sha_256_close(struct Sha_256 *sha_256)
 	/*
 	 * Now, the last step is to add the total data length at the end of the last chunk, and zero padding before
 	 * that. But we do not necessarily have enough space left. If not, we pad the current chunk with zeroes, and add
-	 * an extra chunk at the end.
+	 * an extras chunk at the end.
 	 */
 	if (space_left < TOTAL_LEN_LEN) {
 		memset(pos, 0x00, space_left);
