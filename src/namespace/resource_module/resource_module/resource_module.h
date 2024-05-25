@@ -42,7 +42,6 @@ typedef struct DtwResourceModule{
 
 
     DtwResource * (*sub_resource_ensuring_not_exist)(DtwResource *self,const  char *format, ...);
-    DtwSchema * (*new_schema)(DtwResource *self, const char *format, ...);
     DtwResource * (*sub_resource_next)(DtwResource *self, const char *end_path);
     DtwResource * (*sub_resource_now)(DtwResource *self, const char *end_path);
 

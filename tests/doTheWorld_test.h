@@ -2072,7 +2072,6 @@ typedef struct DtwResourceModule{
 
 
     DtwResource * (*sub_resource_ensuring_not_exist)(DtwResource *self,const  char *format, ...);
-    DtwSchema * (*new_schema)(DtwResource *self, const char *format, ...);
     DtwResource * (*sub_resource_next)(DtwResource *self, const char *end_path);
     DtwResource * (*sub_resource_now)(DtwResource *self, const char *end_path);
 
@@ -5707,11 +5706,12 @@ char * calc_sha_256_from_file_returning_string(const char *filename)
 
 
 char *dtw_base64_encode(unsigned char *data, long input_length){
+    if (data == NULL) return NULL;
+
     size_t output_length = 4 * ((input_length + 2) / 3);
 
     char *encoded_data = (char *)malloc(output_length + 1);
 
-    if (encoded_data == NULL) return NULL;
 
     long i, j;
     for (i = 0, j = 0; i < input_length; ) {
