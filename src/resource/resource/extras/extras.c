@@ -77,7 +77,7 @@ void DtwResource_rename(DtwResource *self,const char *new_name){
         );
         return;
     }
-    DtwResourceArray *sons =self->sub_resources;
+    DtwResourceArray *sons =(DtwResourceArray*)self->sub_resources;
     if(sons->size > 0){
         private_DtwResource_raise_error(
                 self,

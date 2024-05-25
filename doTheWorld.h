@@ -6023,7 +6023,7 @@ char * private_dtw_format_vaarg(const char *expresion, va_list args){
 
 char *private_dtw_format_path(const char *path){
     int path_size = (int)strlen(path);
-    char *buffer = malloc((path_size+2) * sizeof(char));
+    char *buffer = (char*)malloc((path_size+2) * sizeof(char));
     int buffer_size = 0;
     bool already_concatened = false;
     for(long i = 0; i < path_size;i++){
@@ -9812,7 +9812,7 @@ void DtwResource_rename(DtwResource *self,const char *new_name){
         );
         return;
     }
-    DtwResourceArray *sons =self->sub_resources;
+    DtwResourceArray *sons =(DtwResourceArray*)self->sub_resources;
     if(sons->size > 0){
         private_DtwResource_raise_error(
                 self,
