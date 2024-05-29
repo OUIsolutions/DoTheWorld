@@ -30,6 +30,8 @@ DtwResourceArray * DtwResource_get_schema_values(DtwResource *self){
     if(DtwResource_error(self)){
         return NULL;
     }
+    self->root_props->is_writing_schema = true;
+
     if(self->schema_type != PRIVATE_DTW_SCHEMA_ROOT){
         private_DtwResource_raise_error(
                 self,
@@ -39,9 +41,11 @@ DtwResourceArray * DtwResource_get_schema_values(DtwResource *self){
         return NULL;
     }
 
-    return DtwResource_sub_resources(self->values_resource);
-
+    DtwResourceArray *elements =  DtwResource_sub_resources(self->values_resource);
+    self->root_props->is_writing_schema = false;
+    return elements;
 }
+
 
 DtwResourceArray * DtwResource_sub_resources(DtwResource *self){
 

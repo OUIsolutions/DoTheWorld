@@ -218,7 +218,6 @@ DtwSchema * DtwResource_newSchema(DtwResource *self){
     if(DtwResource_error(self)){
         return  NULL;
     }
-
     privateDtwResource_ensure_its_possible_to_sub_resource(self);
 
     if(DtwResource_error(self)){
