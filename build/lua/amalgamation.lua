@@ -1,6 +1,7 @@
 
-
-function generate_amalgamation(start_point)
-    local content = load_file(start_point)
+---@param start_point string
+---@return string
+ function Generate_amalgamation(start_point)
+    local content = clib.load_string(start_point)
 
 end

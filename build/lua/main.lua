@@ -1,6 +1,7 @@
 
 
 
-function main()
-    local amalgamation_result = generate_amalgamation("src/one.c")
+local function main()
+    local amalgamation_result = Generate_amalgamation("src/one.c")
 end
+main()
