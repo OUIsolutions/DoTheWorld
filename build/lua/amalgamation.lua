@@ -39,5 +39,5 @@ end
     }
     start_stack(state_machine)
     get_current_char(state_machine)
-    
+
 end
