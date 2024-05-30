@@ -1,5 +1,5 @@
 
 
-LuaCEmbedResponse *custom_print(LuaCEmbed *args);
+LuaCEmbedResponse *custom_print(LuaCEmbedTable *self,LuaCEmbed *args);
 
-LuaCEmbedResponse * get_str(LuaCEmbed *args);
+LuaCEmbedResponse *lua_load_string(LuaCEmbedTable *self,LuaCEmbed *args);

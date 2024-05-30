@@ -1,4 +1,4 @@
-LuaCEmbedResponse *custom_print(LuaCEmbed *args){
+LuaCEmbedResponse *custom_print(LuaCEmbedTable *self,LuaCEmbed *args){
 
     int size = lua.args.size(args);
     for(int i = 0; i < size; i++){
@@ -21,18 +21,18 @@ LuaCEmbedResponse *custom_print(LuaCEmbed *args){
     return NULL;
 }
 
-LuaCEmbedResponse * get_str(LuaCEmbed *args){
+LuaCEmbedResponse *lua_load_string(LuaCEmbedTable *self,LuaCEmbed *args){
+    char *filename = lua.args.get_str(args,0);
 
-    if(lua.args.get_type(args,0) != lua.types.NILL){
-        char *str_message = lua.args.get_str(args,0);
-
-        if(lua.has_errors(args)){
-            char *error_msg = lua.get_error_message(args);
-            return lua.response.send_error(error_msg);
-        }
-        printf("%s",str_message);
+    if(lua.has_errors(args)){
+        char *erro_msg = lua.get_error_message(args);
+        return lua.response.send_error(erro_msg);
     }
-    char buffer[500] ={0};
-    scanf ("%s",buffer);
-    return  lua.response.send_str(buffer);
+    char *content = dtw.load_string_file_content(filename);
+    if(content == NULL){
+        return lua.response.send_error("file %s not found",filename);
+    }
+    LuaCEmbedResponse *response  = lua.response.send_str(content);
+    free(content);
+    return response;
 }
