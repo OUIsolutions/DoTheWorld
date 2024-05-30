@@ -1,57 +1,43 @@
-local function concat_if_not_nul(str,str2)
-    if str2 == nil then
-    	return str
-    end
-    return str..str2
-end
 
-local function flip_bool(value)
-	if value == true then
-		return false
-	end
-	return true
 
-end
-local function is_include_at_point(str,point,inside_string)
-    if inside_string == true  then
-    	return false
+local function start_stack(state_machine)
+
+    if state_machine.pending_stack_start  == false then
+        return
     end
 
-    local include_size = clib.get_str_size("#include")
-    local buffer = ""
-    for i=point,point+include_size-1 do
-    	local current_char = clib.get_char(str,i)
-        buffer = concat_if_not_nul(buffer,current_char)
-    end
+    state_machine.currrent_stack = state_machine.currrent_stack +1
+    state_machine.stack[state_machine.currrent_stack] = {
+                content = clib.load_string(state_machine.start_point),
+                current_char = nil,
+                index = 1
+    }
+    state_machine.pending_stack_start = false
 
-    return buffer == "#include"
 end
 
+local function get_current_char(state_machine)
+    local current_stack = state_machine.state_machine[state_machine.current_stack]
+    current_stack.current_char = clib.get_char(current_stack.content,current_stack.index)
+end
+
+local function terminate_machine(state_machine)
+    if state_machine.current_stack == 0 then
+    	state_machine.terminate = true
+    end
+end
 
 ---@param start_point string
 ---@return string
  function Generate_amalgamation(start_point)
-    local content = clib.load_string(start_point)
-    local size = clib.get_str_size(content)
-    local final  = ""
-    local getting_path = false
-    local inside_string = false
-    local path = ""
-    for i=1,size do
-
-       	local char = clib.get_char(content,i)
-        local last_char = clib.get_char(content,i-1);
-
-       	if char == '"' and last_char ~= '\\' then
-       		inside_string = flip_bool(inside_string)
-       	end
-
-        getting_path = is_include_at_point(content,i,inside_string)
-        if getting_path == false then
-        	final = final..char
-        end
-
-
-    end
-    return final
+    local state_machine = {
+        terminate = false,
+        start_point = start_point,
+        stack = {},
+        pending_stack_start = true,
+        current_stack = 0;
+    }
+    start_stack(state_machine)
+    get_current_char(state_machine)
+    
 end
