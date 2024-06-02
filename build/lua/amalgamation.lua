@@ -107,75 +107,96 @@ local function anulate_inclusion(waiting_include,content,index)
     end
     return false
 end
+local function convert_bool(value)
+	   if value == true then
+	   	return "true"
+	   end
+	   return "false"
+end
+local function create_stack(filename)
+	    local current_stack = {}
+	    current_stack.filename = filename
+        current_stack.content = clib.load_string(filename)
+        current_stack.size = clib.get_str_size(current_stack.content)
+        current_stack.inside_string = false
+        current_stack.waiting_include = false
+        current_stack.string_buffer = ""
+        current_stack.final_text = ""
+        current_stack.i = 1
+        return current_stack
+end
 ---@param start_point string
 ---@return string
  function Generate_amalgamation(start_point)
 
-    local stack = {{}}
-    local current_stack = stack[1]
-    current_stack.start_point = start_point
-    current_stack.content = clib.load_string(start_point)
-    current_stack.size = clib.get_str_size(current_stack.content)
-    current_stack.inside_string = false
-    current_stack.waiting_include = false
-    current_stack.string_buffer = ""
-    current_stack.final_text = ""
-
+    local stack = {}
+    local current_stack = create_stack(start_point)
     local stack_size = 1
-
+    stack[stack_size]= stack_size
+    local next_stack  = nil
     while true do
 
+            if next_stack then
+                stack_size = stack_size +1
+                stack[stack_size] = next_stack
+                current_stack = next_stack
+            end
 
-            for i=1,current_stack.size do
+            while true do
 
-                local is_start_string = verify_if_is_start_string_char(current_stack.content,i,current_stack.inside_string)
+                if current_stack.i > current_stack.size then
+                	break
+                end
+                clib.print("----------------------------\n")
+                clib.print("i: "..current_stack.i.."\n");
+                clib.print("char: "..clib.get_char(current_stack.content,current_stack.i).."\n");
+                clib.print("inside string: "..convert_bool(current_stack.inside_string).."\n");
+                local is_start_string = verify_if_is_start_string_char(current_stack.content,current_stack.i,current_stack.inside_string)
+
                 if is_start_string  then
                     current_stack.inside_string = true
                 end
 
-                local is_end_string = verify_if_is_end_string_char(is_start_string,current_stack.content,i,current_stack.inside_string)
+                local is_end_string = verify_if_is_end_string_char(is_start_string,current_stack.content,current_stack.i,current_stack.inside_string)
+
 
                if include_char_to_string_buffer(is_start_string,is_end_string,current_stack.inside_string) then
-                    current_stack.string_buffer = current_stack.string_buffer..clib.get_char(current_stack.content,i)
+                    current_stack.string_buffer = current_stack.string_buffer..clib.get_char(current_stack.content,current_stack.i)
                 end
 
                if include_string_buffer_to_final(current_stack.waiting_include,is_end_string) then
                     current_stack.final_text = current_stack.final_text..'"'..current_stack.string_buffer..'"'
                 end
 
-                if is_include_point(current_stack.content,i,current_stack.inside_string) then
+                if is_include_point(current_stack.content,current_stack.i,current_stack.inside_string) then
                     current_stack.waiting_include = true
                 end
 
-                if anulate_inclusion(current_stack.waiting_include,current_stack.content,i) then
+                if anulate_inclusion(current_stack.waiting_include,current_stack.content,current_stack.i) then
                     current_stack.final_text = current_stack.final_text.."#include "
                     current_stack.waiting_include = false
                 end
 
                 if include_char_to_final(current_stack.waiting_include,current_stack.inside_string) then
-                    current_stack.final_text = current_stack.final_text..clib.get_char(current_stack.content,i)
+                    current_stack.final_text = current_stack.final_text..clib.get_char(current_stack.content,current_stack.i)
                 end
 
 
                 if make_recursive_call(current_stack.waiting_include,is_end_string) then
-                    local dir = clib.extract_dir(current_stack.start_point)
+                    local dir = clib.extract_dir(current_stack.filename)
                     local full_path = clib.concat_path(dir,current_stack.string_buffer)
-                    stack_size = stack_size +1
-                    current_stack = {}
-                    stack[stack_size] = current_stack
-                    current_stack.start_point = full_path
-                    current_stack.content = clib.load_string(full_path)
-                    current_stack.size = clib.get_str_size(current_stack.content)
-                    current_stack.inside_string = false
+                    next_stack = create_stack(full_path)
+
+                end
+                if is_end_string then
                     current_stack.waiting_include = false
+                    current_stack.inside_string = false
                     current_stack.string_buffer = ""
-                    current_stack.final_text = ""
-                    clib.print("incremetou\n")
-                    break
                 end
 
-            end
+                current_stack.i = current_stack.i +1
 
+            end
 
             if stack_size == 1 then
             	return current_stack.final_text
@@ -183,11 +204,8 @@ end
             local old_stack = stack[stack_size]
             stack_size = stack_size -1
             current_stack = stack[stack_size]
-
             current_stack.final_text = current_stack.final_text.. old_stack.final_text.."\n"
-            current_stack.waiting_include = false
-            current_stack.inside_string = false
-            current_stack.string_buffer = ""
+            current_stack.i  = current_stack.i + 1
 
     end
 
