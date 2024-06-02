@@ -86,7 +86,7 @@ local function include_char_to_string_buffer(is_start_string,is_end_string,is_in
     	return true
     end
 
-    return true
+    return false
 end
 ---@param start_point string
 ---@return string
@@ -108,14 +108,20 @@ end
 
         local is_end_string = verify_if_is_end_string_char(is_start_string,content,i,inside_string)
 
-
-        if include_char_to_string_buffer(is_start_string,is_end_string,inside_string) then
-        	string_buffer = string_buffer..clib.get_char(content,i)
+       if include_char_to_string_buffer(is_start_string,is_end_string,inside_string) then
+            string_buffer = string_buffer..clib.get_char(content,i)
         end
 
-        if include_string_buffer_to_final(waiting_include,is_end_string) then
-        	final_text = final_text..string_buffer
+       if include_string_buffer_to_final(waiting_include,is_end_string) then
+            final_text = final_text..string_buffer
         end
+
+
+        if is_end_string then
+           inside_string = false
+           string_buffer = ""
+        end
+
 
         if include_char_to_final(waiting_include,inside_string) then
         	---final_text = final_text..clib.get_char(content,i)
@@ -123,11 +129,6 @@ end
 
 
 
-
-        if is_end_string then
-           inside_string = false
-           string_buffer = ""
-        end
 
 
     end
