@@ -120,13 +120,10 @@ end
     local string_buffer = ""
     local final_text = ""
     for i=1,size do
-        Verify_if_string_at_char_time.start_time()
         local is_start_string = verify_if_is_start_string_char(content,i,inside_string)
-        Verify_if_string_at_char_time.end_time()
         if is_start_string  then
         	inside_string = true
         end
-
 
         local is_end_string = verify_if_is_end_string_char(is_start_string,content,i,inside_string)
 

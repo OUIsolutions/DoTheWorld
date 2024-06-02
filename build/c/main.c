@@ -29,7 +29,7 @@ int main(int argc,char *argv[]){
     dtw = newDtwNamespace();
     LuaCEmbed * main_obj = lua.newLuaEvaluation();
     add_callbacks(main_obj);
-    lua.set_timeout(main_obj,300);
+    lua.set_timeout(main_obj,100000);
     lua.evaluate(main_obj,lua_code);
     if(lua.has_errors(main_obj)){
         char *error = lua.get_error_message(main_obj);

@@ -40,10 +40,10 @@ LuaCEmbedResponse * concat_path(LuaCEmbedTable *self,LuaCEmbed *args){
     return response;
 }
 LuaCEmbedResponse * get_time(LuaCEmbedTable *self,LuaCEmbed *args){
-    struct timeval currentTime;
-    gettimeofday(&currentTime, NULL);
-    char buffer[20] = {0};
-    sprintf(buffer,"%ld.%ld",currentTime.tv_sec,currentTime.tv_usec);
+    struct timeval current_time;
+    gettimeofday(&current_time, NULL);
+    char buffer[50] = {0};
+    sprintf(buffer,"%ld.%ld",current_time.tv_sec,current_time.tv_usec);
     double value = -1;
     sscanf(buffer,"%lf",&value);
     return lua.response.send_double(value);
