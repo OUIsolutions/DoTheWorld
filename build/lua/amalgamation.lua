@@ -5,6 +5,6 @@
  function Generate_amalgamation(start_point)
 
     local content = clib.load_string(start_point)
-    clib.print(content)
+    clib.print("aaa")
 
 end
