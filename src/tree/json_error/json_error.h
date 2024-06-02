@@ -1,4 +1,3 @@
-#define DTW_JSON_ERROR_CODE_OK 0
 #define DTW_JSON_TYPE_ERROR 1
 #define DTW_JSON_SYNTAX_ERROR 2
 #define DTW_JSON_REQUIRED_KEY_ERROR 3
@@ -15,7 +14,12 @@ typedef struct DtwJsonTreeError {
 
 }DtwJsonTreeError;
 
-struct DtwJsonTreeError * newDtwJsonError();
-struct DtwJsonTreeError * DtwJsonTreeError_validate_json_tree(char *content);
+DtwJsonTreeError * newDtwJsonError();
+
+DtwJsonTreeError * DtwJsonTreeError_validate_json_tree_by_cJSON(cJSON *json_tree);
+
+DtwJsonTreeError * DtwJsonTreeError_validate_json_tree_by_content(const char *content);
+
 void DtwJsonTreeError_represent(struct DtwJsonTreeError *self);
+
 void DtwJsonTreeError_free(struct DtwJsonTreeError *self);

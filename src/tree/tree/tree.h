@@ -65,9 +65,9 @@ void DtwTree_insecure_hardware_write_tree( DtwTree *self);
 
 void DtwTree_hardware_commit_tree( DtwTree *self);
 
-void DtwTree_loads_json_tree( DtwTree *self, const char *content);
+bool DtwTree_loads_json_tree( DtwTree *self, const char *content);
 
-void DtwTree_loads_json_tree_from_file( DtwTree *self, const char *path);
+bool DtwTree_loads_json_tree_from_file( DtwTree *self, const char *path);
 
 char * DtwTree_dumps_tree_json(DtwTree *self,DtwTreeProps  props);
 

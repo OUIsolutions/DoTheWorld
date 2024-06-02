@@ -1,17 +1,10 @@
-struct DtwJsonTreeError * newDtwJsonError(){
-    struct DtwJsonTreeError *self =(struct DtwJsonTreeError*)malloc(sizeof(struct DtwJsonTreeError));
-    self->code = DTW_JSON_ERROR_CODE_OK;
-    self->position = 0;
-    self->menssage = "ok";
-
+ DtwJsonTreeError * newDtwJsonError(){
+     DtwJsonTreeError *self =(DtwJsonTreeError*)malloc(sizeof(struct DtwJsonTreeError));
     return self;
 }
 
-
-struct DtwJsonTreeError * DtwJsonTreeError_validate_json_tree(char *content){
- 
-    struct DtwJsonTreeError *json_error = newDtwJsonError();
-    cJSON *json_tree = cJSON_Parse(content);
+DtwJsonTreeError * DtwJsonTreeError_validate_json_tree_by_cJSON(cJSON *json_tree){
+     struct DtwJsonTreeError *json_error = newDtwJsonError();
     //verifiy if json_tre is not null
     if(json_tree == NULL){
         json_error->code = DTW_JSON_SYNTAX_ERROR;
@@ -26,7 +19,7 @@ struct DtwJsonTreeError * DtwJsonTreeError_validate_json_tree(char *content){
         json_error->menssage = "json_tree is not an array";
         return json_error;
     }
-    
+
     int size = cJSON_GetArraySize(json_tree);
     for(int i = 0; i < size; i++){
         json_error->position = i;
@@ -67,7 +60,7 @@ struct DtwJsonTreeError * DtwJsonTreeError_validate_json_tree(char *content){
             json_error->code = DTW_JSON_REQUIRED_VALUE_ERROR;
             json_error->menssage = "hardware_content_size is not a number";
             return json_error;
-        }  
+        }
         if(last_modification_in_unix_time != NULL && !cJSON_IsNumber(last_modification_in_unix_time)){
             cJSON_Delete(json_tree);
             json_error->code = DTW_JSON_REQUIRED_VALUE_ERROR;
@@ -101,9 +94,9 @@ struct DtwJsonTreeError * DtwJsonTreeError_validate_json_tree(char *content){
         }
 
         if(pending_action != NULL && cJSON_IsNull(pending_action) == false){
-            
+
             if(cJSON_IsString(pending_action)){
-          
+
                 int action = private_dtw_convert_string_to_action(
                     cJSON_GetStringValue(pending_action)
                 );
@@ -120,22 +113,37 @@ struct DtwJsonTreeError * DtwJsonTreeError_validate_json_tree(char *content){
                 json_error->menssage = "pending_action is not a valid action";
                 return json_error;
             }
-                                
-       
+
+
         }
-        
+
     }
-    cJSON_Delete(json_tree);
-    return json_error;
-}
+     DtwJsonTreeError_free(json_error);
+     return NULL;
+ }
+
+ DtwJsonTreeError * DtwJsonTreeError_validate_json_tree_by_content(const char *content){
+     cJSON *json_tree = cJSON_Parse(content);
+     DtwJsonTreeError *json_error = DtwJsonTreeError_validate_json_tree_by_cJSON(json_tree);
+     cJSON_Delete(json_tree);
+     return json_error;
+ }
 
 
-void DtwJsonTreeError_represent(struct DtwJsonTreeError *self){
+
+
+void DtwJsonTreeError_represent( DtwJsonTreeError *self){
+
+    if(self == NULL){
+        return;
+    }
     printf("code: %d\n", self->code);
     printf("position: %d\n", self->position);
     printf("menssage: %s\n", self->menssage);
 }
 
 void DtwJsonTreeError_free(struct DtwJsonTreeError *self){
-    free(self);
+     if(self){
+         free(self);
+     }
 }

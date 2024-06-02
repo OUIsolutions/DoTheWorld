@@ -70,13 +70,13 @@ typedef struct DtwTreeModule{
 
     struct DtwTreeTransactionReport * (*create_report)(struct DtwTree *self);
 
-    void (*loads_json_tree)(
+    bool (*loads_json_tree)(
             struct DtwTree *self,
             const char *content
     );
 
 
-    void (*loads_json_tree_from_file)(
+    bool (*loads_json_tree_from_file)(
             struct DtwTree *self,
             const char *path
     );
