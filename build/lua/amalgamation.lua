@@ -1,9 +1,21 @@
+local function verify_if_is_start_string_char(content,index,inside_string)
+
+	if inside_string == true then
+		return false
+	end
+    local current_char = clib.get_char(content,index)
+    if current_char == '"' then
+    	return true
+    end
+    return false
+end
 
 
-function is_end_string(allow_loop,content,index,inside_string)
-    if allow_loop == false then
+function verify_if_is_end_string_char(is_start_string_char,content,index,inside_string)
+    if is_start_string_char then
     	return false
     end
+
     if inside_string == false then
     	return false
     end
@@ -18,24 +30,9 @@ function is_end_string(allow_loop,content,index,inside_string)
     return false
 end
 
-local function is_string_start(allow_loop,content,index,inside_string)
-    if allow_loop == false then
-    	return false
-    end
-	if inside_string == true then
-		return false
-	end
-    local current_char = clib.get_char(content,index)
-    if current_char == '"' then
-    	return true
-    end
-    return false
-end
 
-local function include_char_to_final(allow_loop,waiting_include,inside_string)
-    if allow_loop == false then
-    	return false
-    end
+local function include_char_to_final(waiting_include,inside_string)
+
     if waiting_include then
     	return false
     end
@@ -45,12 +42,12 @@ local function include_char_to_final(allow_loop,waiting_include,inside_string)
     return true
 end
 
-local function include_string_buffer_to_final(waiting_include,is_end)
+local function include_string_buffer_to_final(waiting_include,is_end_string)
 
     if waiting_include then
     	return false
     end
-    if is_end then
+    if is_end_string then
     	return true
     end
 
@@ -77,13 +74,18 @@ local function is_include_point(allow_loop,content,index,inside_string)
     end
     return buffer == INCLUDE_TEXT
 end
-local function include_char_to_string_buffer(allow_loop,inside_string)
-    if inside_string == false then
+
+local function include_char_to_string_buffer(is_start_string,is_end_string,is_inside_string)
+    if is_start_string then
     	return false
     end
-    if allow_loop == false then
+    if is_end_string then
     	return false
     end
+    if is_inside_string then
+    	return true
+    end
+
     return true
 end
 ---@param start_point string
@@ -96,42 +98,36 @@ end
     local inside_string = false
     local waiting_include = false
     local string_buffer = ""
-    local allow_loop = true
     local final_text = ""
     for i=1,size do
-        allow_loop = true
 
-        if  is_string_start(allow_loop,content,i,inside_string) then
-        	allow_loop = false
+        local is_start_string = verify_if_is_start_string_char(content,i,inside_string)
+        if is_start_string  then
         	inside_string = true
         end
 
-        local end_string = is_end_string(allow_loop,content,i,inside_string)
-
-        if end_string then
-           inside_string = false
-           string_buffer = ""
-        end
+        local is_end_string = verify_if_is_end_string_char(is_start_string,content,i,inside_string)
 
 
-        if include_char_to_string_buffer(allow_loop,inside_string) then
+        if include_char_to_string_buffer(is_start_string,is_end_string,inside_string) then
         	string_buffer = string_buffer..clib.get_char(content,i)
         end
 
-        if include_string_buffer_to_final(waiting_include,end_string) then
+        if include_string_buffer_to_final(waiting_include,is_end_string) then
         	final_text = final_text..string_buffer
         end
 
-        if include_char_to_final(allow_loop,waiting_include,inside_string) then
-        	final_text = final_text..clib.get_char(content,i)
-        end
-
-        if is_include_point(allow_loop,content,i,inside_string) then
-        	waiting_include = true
+        if include_char_to_final(waiting_include,inside_string) then
+        	---final_text = final_text..clib.get_char(content,i)
         end
 
 
 
+
+        if is_end_string then
+           inside_string = false
+           string_buffer = ""
+        end
 
 
     end
