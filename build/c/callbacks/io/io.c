@@ -36,3 +36,13 @@ LuaCEmbedResponse *lua_load_string(LuaCEmbedTable *self,LuaCEmbed *args){
     free(content);
     return response;
 }
+LuaCEmbedResponse *write_file(LuaCEmbedTable *self,LuaCEmbed *args){
+    char *filename = lua.args.get_str(args,0);
+    char *content = lua.args.get_str(args,1);
+    if(lua.has_errors(args)){
+        char *erro_msg = lua.get_error_message(args);
+        return lua.response.send_error(erro_msg);
+    }
+    dtw.write_string_file_content(filename,content);
+    return NULL;
+}

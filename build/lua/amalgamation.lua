@@ -3,6 +3,10 @@ local function verify_if_is_start_string_char(content,index,inside_string)
 	if inside_string == true then
 		return false
 	end
+	local last_char = clib.get_char(content,index-1)
+    if last_char == '\\' then
+    	return false
+    end
     local current_char = clib.get_char(content,index)
     if current_char == '"' then
     	return true
@@ -116,7 +120,6 @@ end
     local waiting_include = false
     local string_buffer = ""
     local final_text = ""
-    local security_buffer = ""
     for i=1,size do
 
         local is_start_string = verify_if_is_start_string_char(content,i,inside_string)
@@ -138,23 +141,22 @@ end
         	waiting_include = true
         end
 
-        if include_char_to_final(waiting_include,inside_string) then
-        	final_text = final_text..clib.get_char(content,i)
-        else
-          security_buffer = security_buffer..clib.get_char(content,i)
-        end
-
         if anulate_inclusion(waiting_include,content,i) then
-            final_text = final_text..security_buffer
-            security_buffer = ""
+            final_text = final_text.."#include "
         	waiting_include = false
         end
+
+        if include_char_to_final(waiting_include,inside_string) then
+        	final_text = final_text..clib.get_char(content,i)
+        end
+
 
 
         if make_recursive_call(waiting_include,is_end_string) then
             local dir = clib.extract_dir(start_point)
             local full_path = clib.concat_path(dir,string_buffer)
-            final_text = final_text.."\n"..Generate_amalgamation(full_path)
+
+           final_text = final_text.."\n"..Generate_amalgamation(full_path)
         	waiting_include = false
         	security_buffer = ""
         end
@@ -163,12 +165,6 @@ end
            inside_string = false
            string_buffer = ""
         end
-
-
-
-
-
-
 
     end
     return final_text

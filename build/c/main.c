@@ -18,6 +18,8 @@ void add_callbacks(LuaCEmbed *main_obj){
     lua.tables.set_method(clib,"get_char",lua_get_char);
     lua.tables.set_method(clib,"concat_path",concat_path);
     lua.tables.set_method(clib,"extract_dir",extract_dir);
+    lua.tables.set_method(clib,"write_file",write_file);
+
 }
 
 
@@ -26,6 +28,7 @@ int main(int argc,char *argv[]){
     dtw = newDtwNamespace();
     LuaCEmbed * main_obj = lua.newLuaEvaluation();
     add_callbacks(main_obj);
+    lua.set_timeout(main_obj,300);
     lua.evaluate(main_obj,lua_code);
     if(lua.has_errors(main_obj)){
         char *error = lua.get_error_message(main_obj);
