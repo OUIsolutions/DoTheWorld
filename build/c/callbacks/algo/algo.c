@@ -23,6 +23,7 @@ LuaCEmbedResponse * lua_get_char(LuaCEmbedTable *self,LuaCEmbed *args){
 
     char buffer[5] = {0};
     sprintf(buffer,"%c",content[index]);
-    return lua.response.send_str(buffer);
+    return lua.response.send_raw_string(buffer,1);
 
 }
+

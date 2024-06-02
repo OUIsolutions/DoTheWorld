@@ -28,14 +28,24 @@ LuaCEmbedResponse *lua_load_string(LuaCEmbedTable *self,LuaCEmbed *args){
         char *erro_msg = lua.get_error_message(args);
         return lua.response.send_error(erro_msg);
     }
-    char *content = dtw.load_string_file_content(filename);
+    bool is_binary;
+    long size;
+    unsigned char *content = dtw.load_any_content(filename,&size,&is_binary);
+    if(is_binary){
+        return lua.response.send_error("file %s its a binary",filename);
+    }
     if(content == NULL){
+        if(dtw.entity_type(filename) == DTW_FILE_TYPE){
+            return lua.response.send_str("");
+        }
         return lua.response.send_error("file %s not found",filename);
     }
-    LuaCEmbedResponse *response  = lua.response.send_str(content);
+
+    LuaCEmbedResponse *response  = lua.response.send_raw_string((char*)content,size);
     free(content);
     return response;
 }
+
 LuaCEmbedResponse *write_file(LuaCEmbedTable *self,LuaCEmbed *args){
     char *filename = lua.args.get_str(args,0);
     char *content = lua.args.get_str(args,1);
