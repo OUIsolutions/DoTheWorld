@@ -68,6 +68,7 @@ int  create_lua_code(){
 
         if(strcmp(full_name,"main.lua")==0){
             main_code = (char*)current_file->content;
+            continue;
         }
         parse_code(final,(char*)current_file->content);
         parse_code(final,"\n");
@@ -77,6 +78,8 @@ int  create_lua_code(){
         UniversalGarbage_free(garbage);
         return 1;
     }
+    parse_code(final,main_code);
+    parse_code(final,"\n");
     stack.format(final,"\";");
 
     dtw.write_string_file_content(OUTPUT,final->rendered_text);

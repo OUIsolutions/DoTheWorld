@@ -1,5 +1,4 @@
 local function verify_if_is_start_string_char(content,index,inside_string)
-
 	if inside_string == true then
 		return false
 	end
@@ -15,7 +14,7 @@ local function verify_if_is_start_string_char(content,index,inside_string)
 end
 
 
-function verify_if_is_end_string_char(is_start_string_char,content,index,inside_string)
+local function verify_if_is_end_string_char(is_start_string_char,content,index,inside_string)
     if is_start_string_char then
     	return false
     end
@@ -112,7 +111,6 @@ end
 ---@return string
  function Generate_amalgamation(start_point)
 
-    local start = clib.get_time()
 
     local content = clib.load_string(start_point)
 
@@ -122,11 +120,13 @@ end
     local string_buffer = ""
     local final_text = ""
     for i=1,size do
-
+        Verify_if_string_at_char_time.start_time()
         local is_start_string = verify_if_is_start_string_char(content,i,inside_string)
+        Verify_if_string_at_char_time.end_time()
         if is_start_string  then
         	inside_string = true
         end
+
 
         local is_end_string = verify_if_is_end_string_char(is_start_string,content,i,inside_string)
 
@@ -161,7 +161,6 @@ end
             final_text = final_text.. acumulated.."\n"
 
         	waiting_include = false
-        	security_buffer = ""
         end
 
         if is_end_string then
@@ -170,8 +169,6 @@ end
         end
 
     end
-    local end_time = clib.get_time()
-    clib.print("path:"..start_point.." duration: "..(end_time - start).."\n")
 
     return final_text
 end
