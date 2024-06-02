@@ -112,6 +112,7 @@ end
 ---@return string
  function Generate_amalgamation(start_point)
 
+    local start = clib.get_time()
 
     local content = clib.load_string(start_point)
 
@@ -156,7 +157,9 @@ end
             local dir = clib.extract_dir(start_point)
             local full_path = clib.concat_path(dir,string_buffer)
 
-           final_text = final_text.."\n"..Generate_amalgamation(full_path)
+            local acumulated = Generate_amalgamation(full_path)
+            final_text = final_text.. acumulated.."\n"
+
         	waiting_include = false
         	security_buffer = ""
         end
@@ -167,5 +170,8 @@ end
         end
 
     end
+    local end_time = clib.get_time()
+    clib.print("path:"..start_point.." duration: "..(end_time - start).."\n")
+
     return final_text
 end

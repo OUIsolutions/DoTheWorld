@@ -19,6 +19,7 @@ void add_callbacks(LuaCEmbed *main_obj){
     lua.tables.set_method(clib,"concat_path",concat_path);
     lua.tables.set_method(clib,"extract_dir",extract_dir);
     lua.tables.set_method(clib,"write_file",write_file);
+    lua.tables.set_method(clib,"get_time",get_time);
 
 }
 

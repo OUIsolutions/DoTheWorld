@@ -8,5 +8,7 @@
 ---@field concat_path fun(path:string,path_to_concat:string):string
 ---@field extract_dir fun(path:string):string
 ---@field write_file fun(filename:string,content:string)
+---@field get_time fun():number
+
 ---@type Clib
 clib = clib

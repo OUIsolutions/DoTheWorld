@@ -39,3 +39,6 @@ LuaCEmbedResponse * concat_path(LuaCEmbedTable *self,LuaCEmbed *args){
     free(value);
     return response;
 }
+LuaCEmbedResponse * get_time(LuaCEmbedTable *self,LuaCEmbed *args){
+    return lua.response.send_long(time(NULL));
+}
