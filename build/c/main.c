@@ -16,7 +16,8 @@ void add_callbacks(LuaCEmbed *main_obj){
     lua.tables.set_method(clib,"load_string",lua_load_string);
     lua.tables.set_method(clib,"get_str_size",lua_get_str_size);
     lua.tables.set_method(clib,"get_char",lua_get_char);
-
+    lua.tables.set_method(clib,"concat_path",concat_path);
+    lua.tables.set_method(clib,"extract_dir",extract_dir);
 }
 
 

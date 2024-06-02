@@ -55,13 +55,12 @@ local function include_string_buffer_to_final(waiting_include,is_end_string)
 end
 
 
-local function is_include_point(allow_loop,content,index,inside_string)
-    if allow_loop == false then
-    	return false
-    end
+local function is_include_point(content,index,inside_string)
+
     if inside_string then
     	return false
     end
+
     local INCLUDE_TEXT  = "#include"
     local content_size = clib.get_str_size(content)
     local include_size = clib.get_str_size(INCLUDE_TEXT)
@@ -69,9 +68,10 @@ local function is_include_point(allow_loop,content,index,inside_string)
     	return false
     end
     local buffer = ""
-    for i=index,content_size do
+    for i=index,index + include_size -1 do
     	buffer = buffer..clib.get_char(content,i)
     end
+
     return buffer == INCLUDE_TEXT
 end
 
@@ -88,9 +88,26 @@ local function include_char_to_string_buffer(is_start_string,is_end_string,is_in
 
     return false
 end
+
+local function make_recursive_call(waiting_include,is_end_string)
+	if waiting_include and is_end_string then
+		return true
+	end
+end
+
+local function anulate_inclusion(waiting_include,content,index)
+    if waiting_include == false then
+    	return false
+    end
+    if clib.get_char(content,index) == "<" then
+    	return true
+    end
+    return false
+end
 ---@param start_point string
 ---@return string
  function Generate_amalgamation(start_point)
+
 
     local content = clib.load_string(start_point)
 
@@ -99,6 +116,7 @@ end
     local waiting_include = false
     local string_buffer = ""
     local final_text = ""
+    local security_buffer = ""
     for i=1,size do
 
         local is_start_string = verify_if_is_start_string_char(content,i,inside_string)
@@ -113,9 +131,33 @@ end
         end
 
        if include_string_buffer_to_final(waiting_include,is_end_string) then
-            final_text = final_text..string_buffer
+            final_text = final_text..'"'..string_buffer..'"'
         end
 
+        if is_include_point(content,i,inside_string) then
+        	waiting_include = true
+        end
+
+        if include_char_to_final(waiting_include,inside_string) then
+        	final_text = final_text..clib.get_char(content,i)
+        else
+          security_buffer = security_buffer..clib.get_char(content,i)
+        end
+
+        if anulate_inclusion(waiting_include,content,i) then
+            final_text = final_text..security_buffer
+            security_buffer = ""
+        	waiting_include = false
+        end
+
+
+        if make_recursive_call(waiting_include,is_end_string) then
+            local dir = clib.extract_dir(start_point)
+            local full_path = clib.concat_path(dir,string_buffer)
+            final_text = final_text.."\n"..Generate_amalgamation(full_path)
+        	waiting_include = false
+        	security_buffer = ""
+        end
 
         if is_end_string then
            inside_string = false
@@ -123,9 +165,6 @@ end
         end
 
 
-        if include_char_to_final(waiting_include,inside_string) then
-        	---final_text = final_text..clib.get_char(content,i)
-        end
 
 
 
