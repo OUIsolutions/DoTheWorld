@@ -132,7 +132,7 @@ end
     local stack = {}
     local current_stack = create_stack(start_point)
     local stack_size = 1
-    stack[stack_size]= stack_size
+    stack[stack_size]= current_stack
     local next_stack  = nil
     while true do
 
@@ -140,6 +140,7 @@ end
                 stack_size = stack_size +1
                 stack[stack_size] = next_stack
                 current_stack = next_stack
+                next_stack = nil
             end
 
             while true do
@@ -186,8 +187,8 @@ end
                     local dir = clib.extract_dir(current_stack.filename)
                     local full_path = clib.concat_path(dir,current_stack.string_buffer)
                     next_stack = create_stack(full_path)
-
                 end
+
                 if is_end_string then
                     current_stack.waiting_include = false
                     current_stack.inside_string = false
@@ -198,14 +199,15 @@ end
 
             end
 
-            if stack_size == 1 then
-            	return current_stack.final_text
+            if next_stack == nil then
+                if stack_size == 1 then
+                    return current_stack.final_text
+                end
+                local old_stack = stack[stack_size]
+                stack_size = stack_size -1
+                current_stack = stack[stack_size]
+                current_stack.final_text = current_stack.final_text.. old_stack.final_text.."\n"
             end
-            local old_stack = stack[stack_size]
-            stack_size = stack_size -1
-            current_stack = stack[stack_size]
-            current_stack.final_text = current_stack.final_text.. old_stack.final_text.."\n"
-            current_stack.i  = current_stack.i + 1
 
     end
 
