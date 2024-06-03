@@ -196,6 +196,11 @@ end
                     local dir = clib.extract_dir(current_stack.filename)
                     local full_path = clib.concat_path(dir,current_stack.string_buffer)
                     next_stack = create_stack(full_path)
+                    current_stack.waiting_include = false
+                    current_stack.inside_string = false
+                    current_stack.string_buffer = ""
+                    current_stack.i = current_stack.i +1
+                    break
                 end
 
                 if is_end_string then

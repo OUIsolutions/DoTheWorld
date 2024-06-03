@@ -30,13 +30,13 @@ SOFTWARE.
 #define DO_THE_WORLD_H
 
 
+
+const char dtw_base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+
+
 #endif //DO_THE_WORLD_H
 
 
 
-
-
-
-
-const char dtw_base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
