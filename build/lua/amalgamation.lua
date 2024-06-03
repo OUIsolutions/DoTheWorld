@@ -166,6 +166,6 @@ end
         end
 
     end
-
+    clib.print("alamalgamated:"..start_point.."\n")
     return final_text
 end

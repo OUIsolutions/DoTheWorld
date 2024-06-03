@@ -1,5 +1,6 @@
 {
     "diagnostics.globals": [
-        "clib"
+        "clib",
+        "END_TEST_POINT"
     ]
 }
