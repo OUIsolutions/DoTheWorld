@@ -73,7 +73,6 @@ LuaCEmbedResponse *list_dirs(LuaCEmbedTable *self,LuaCEmbed *args){
         char *current = folders->strings[i];
         lua.tables.append_string(litage_table,current);
     }
-
     dtw.string_array.free(folders);
     LuaCEmbedTable *final_response = lua.tables.new_anonymous_table(args);
     lua.tables.append_table(final_response,litage_table);

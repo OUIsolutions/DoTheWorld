@@ -21,6 +21,9 @@ void add_callbacks(LuaCEmbed *main_obj){
     lua.tables.set_method(clib,"write_file",write_file);
     lua.tables.set_method(clib,"get_time",get_time);
     lua.tables.set_method(clib,"list_dirs",list_dirs);
+    lua.tables.set_method(clib,"generate_sha_from_string",generate_sha_from_string);
+    lua.tables.set_method(clib,"generate_sha_from_folder",generate_sha_from_folder);
+    lua.tables.set_method(clib,"generate_sha_from_file",generate_sha_from_file);
 }
 
 
