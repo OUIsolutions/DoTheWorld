@@ -8,11 +8,16 @@ LIB_FOLDER = "src"
 CACHE_POINT  = "cache"
 local function main()
 
-  local amalgamation_result = Generate_amalgamation(START_POINT)
-   clib.write_file(END_TEST_POINT,amalgamation_result)
-   local src_sha = clib.generate_sha_from_folder(LIB_FOLDER)
-    Execute_tests_compilaton(src_sha)
-   clib.write_file(END_POINT,amalgamation_result)
-
+    local listage = dtw.list_files_recursively("src")
+    local i = 1
+    while true  do
+    	local current = listage[i]
+        clib.print(current.."\n")
+    	if current == nil then
+    		break
+    	end
+    	i = i + 1
+    end
 end
+
 main()

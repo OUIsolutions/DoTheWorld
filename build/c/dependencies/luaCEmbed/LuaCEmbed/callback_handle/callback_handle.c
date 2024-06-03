@@ -167,7 +167,6 @@ void private_LuaCEmbed_add_lib_callback(LuaCEmbed *self, const char *callback_na
     lua_pushvalue(self->state,-1);
     //set the function name
     lua_pushstring(self->state,callback_name);
-
     //creating the clojure
 
     //creating the clojure
