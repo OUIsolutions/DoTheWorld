@@ -136,6 +136,15 @@ end
     local next_stack  = nil
     while true do
 
+
+
+           if stack_size > 1  and not next_stack then
+                local old_stack = stack[stack_size]
+                stack_size = stack_size -1
+                current_stack = stack[stack_size]
+                current_stack.final_text = current_stack.final_text..old_stack.final_text.."\n"
+           end
+
             if next_stack then
                 stack_size = stack_size +1
                 stack[stack_size] = next_stack
@@ -143,7 +152,7 @@ end
                 next_stack = nil
             end
 
-            while true do
+           while true do
 
                 if current_stack.i > current_stack.size then
                 	break
@@ -199,15 +208,11 @@ end
 
             end
 
-            if next_stack == nil then
-                if stack_size == 1 then
+            if stack_size == 1 and not next_stack then
                     return current_stack.final_text
-                end
-                local old_stack = stack[stack_size]
-                stack_size = stack_size -1
-                current_stack = stack[stack_size]
-                current_stack.final_text = current_stack.final_text.. old_stack.final_text.."\n"
             end
+
+
 
     end
 

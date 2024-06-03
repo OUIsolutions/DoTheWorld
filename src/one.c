@@ -28,10 +28,8 @@ SOFTWARE.
 
 #ifndef DO_THE_WORLD_H
 #define DO_THE_WORLD_H
-#include "declaration.h"
 #include "globals.h"
 
-#include "definition.h"
 #endif //DO_THE_WORLD_H
 
 
