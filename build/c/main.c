@@ -1,8 +1,12 @@
 
-#include "dependencies/all.h"
 #include "lua_code.h"
+#include "dependencies/luaCEmbed/one.c"
+#include "dependencies/doTheWorld/one.c"
+
 LuaCEmbedNamespace lua;
 DtwNamespace dtw;
+#include "dependencies/luadoTheWorld/one.c"
+
 int lua_exit = 0;
 
 #include "callbacks/declaration.h"
@@ -13,17 +17,9 @@ void add_callbacks(LuaCEmbed *main_obj){
     LuaCEmbedTable *clib = lua.globals.new_table(main_obj,"clib");
     lua.tables.set_method(clib,"print",custom_print);
     lua.tables.set_method(clib,"exit",generate_exit);
-    lua.tables.set_method(clib,"load_string",lua_load_string);
     lua.tables.set_method(clib,"get_str_size",lua_get_str_size);
     lua.tables.set_method(clib,"get_char",lua_get_char);
-    lua.tables.set_method(clib,"concat_path",concat_path);
-    lua.tables.set_method(clib,"extract_dir",extract_dir);
-    lua.tables.set_method(clib,"write_file",write_file);
-    lua.tables.set_method(clib,"get_time",get_time);
-    lua.tables.set_method(clib,"list_dirs",list_dirs);
-    lua.tables.set_method(clib,"generate_sha_from_string",generate_sha_from_string);
-    lua.tables.set_method(clib,"generate_sha_from_folder",generate_sha_from_folder);
-    lua.tables.set_method(clib,"generate_sha_from_file",generate_sha_from_file);
+
 }
 
 
@@ -32,6 +28,9 @@ int main(int argc,char *argv[]){
     dtw = newDtwNamespace();
     LuaCEmbed * main_obj = lua.newLuaEvaluation();
     add_callbacks(main_obj);
+    start_dtw(main_obj->state);
+    lua_setglobal(main_obj->state,"dtw");
+
     lua.set_timeout(main_obj,-1);
     lua.evaluate(main_obj,lua_code);
     if(lua.has_errors(main_obj)){
