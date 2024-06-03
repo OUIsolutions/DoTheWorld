@@ -6,7 +6,7 @@ local function compile_projects_of_folder(src_sha,folder)
             local current_file = current_path.."exec.c"
             local current_sha = clib.generate_sha_from_file(current_file)
             local final_sha = clib.generate_sha_from_string(src_sha..current_sha)
-            local output = CACHE_POINT.."/"..final_sha
+            local output = CACHE_POINT.."/bins"..final_sha
             clib.print("compiling: "..output.."\n")
 
         end

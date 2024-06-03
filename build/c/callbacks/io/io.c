@@ -79,3 +79,6 @@ LuaCEmbedResponse *list_dirs(LuaCEmbedTable *self,LuaCEmbed *args){
     lua.tables.append_long(final_response,size);
     return lua.response.send_multi_return(final_response);
 }
+LuaCEmbedResponse *is_file(LuaCEmbedTable *self,LuaCEmbed *args){
+
+}
