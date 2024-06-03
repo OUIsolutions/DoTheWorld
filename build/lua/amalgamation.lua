@@ -157,10 +157,10 @@ end
                 if current_stack.i > current_stack.size then
                 	break
                 end
-                clib.print("----------------------------\n")
-                clib.print("i: "..current_stack.i.."\n");
-                clib.print("char: "..clib.get_char(current_stack.content,current_stack.i).."\n");
-                clib.print("inside string: "..convert_bool(current_stack.inside_string).."\n");
+                --clib.print("----------------------------\n")
+                --clib.print("i: "..current_stack.i.."\n");
+                --clib.print("char: "..clib.get_char(current_stack.content,current_stack.i).."\n");
+                --clib.print("inside string: "..convert_bool(current_stack.inside_string).."\n");
                 local is_start_string = verify_if_is_start_string_char(current_stack.content,current_stack.i,current_stack.inside_string)
 
                 if is_start_string  then
