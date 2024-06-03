@@ -14,11 +14,18 @@ static void *private_LuaCembed_custom_allocator(void *ud, void *ptr, size_t osiz
         return NULL;
     } else {
         long  custom_limit = (long)(private_lua_cembed_memory_limit * PRIVATE_LUA_CEMBED_ONE_MB);
-        if (*used + (nsize - osize) > custom_limit) /* too much memory in use */
+        if (*used + (nsize - osize) > custom_limit)
+        {   printf("retornou no segundo\n");
             return NULL;
+        }
         ptr = realloc(ptr, nsize);
-        if (ptr) /* reallocation successful? */
+        if (ptr){
             *used += (nsize - osize);
+        }
+
+        if(ptr == NULL){
+            printf("realc pointerfalhou\n");
+        }
         return ptr;
     }
 }
