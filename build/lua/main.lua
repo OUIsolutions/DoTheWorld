@@ -10,18 +10,8 @@ local function main()
 
     local cache = dtw.newResource(CACHE_POINT)
     local src_sha = dtw.generate_sha_from_folder_by_content(LIB_FOLDER)
-    local amalgamation  = cache.sub_resource("amalgamation")
-    local src_of_generation = amalgamation.sub_resource("src_sha").get_string()
-    local amalgamation_result = nil
-    if src_of_generation == src_sha then
-    	clib.print("amalgamation cached\n");
-    	amalgamation_result =amalgamation.get_value_from_sub_resource("code")
-    else
-        clib.print("constructing amalgamation\n")
-        amalgamation_result =Generate_amalgamation(START_POINT)
-        amalgamation.set_value_in_sub_resource("code",amalgamation_result)
-        amalgamation.set_value_in_sub_resource("src_sha",src_sha)
-    end
+    local amalgamation = Generate_amalgamation(cache,src_sha)
+    dtw.write_file(END_TEST_POINT,amalgamation)
     cache.commit()
 
 end
