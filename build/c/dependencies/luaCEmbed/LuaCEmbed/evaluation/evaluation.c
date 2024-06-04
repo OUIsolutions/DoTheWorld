@@ -32,9 +32,9 @@ int privateLuaCEmbed_start_func_evaluation(lua_State *state){
                 SetTimer(NULL, 0, self->timeout * 1000, TimerHandler);
             }
         #else
-            if (self->timeout > 0) {
+            if (lua_cembed_timeout > 0) {
                 signal(SIGALRM, private_LuaCembed_handle_timeout);
-                alarm(self->timeout);
+                alarm(lua_cembed_timeout);
             }
         #endif
 
@@ -56,7 +56,6 @@ int privateLuaCEmbed_start_func_evaluation(lua_State *state){
 int LuaCEmbed_evaluate(LuaCEmbed *self, const char *code, ...){
 
     PRIVATE_LUA_CEMBED_PROTECT_NUM
-    private_lua_cembed_memory_limit = self->memory_limit;
 
     va_list args;
     va_start(args,code);
@@ -77,7 +76,6 @@ int LuaCEmbed_evaluate(LuaCEmbed *self, const char *code, ...){
 int LuaCEmbed_evaluete_file(LuaCEmbed *self, const char *file){
     PRIVATE_LUA_CEMBED_PROTECT_NUM
 
-    private_lua_cembed_memory_limit = self->memory_limit;
 
     lua_pushinteger(self->state,PRIVATE_LUA_EMBED_FILE_EVALUATION_TYPE);
     lua_pushlightuserdata(self->state,(void*)file); //code
@@ -139,7 +137,6 @@ int private_LuaCEmbed_ensure_evaluation_type(LuaCEmbed *self,int type){
 
 char * LuaCEmbed_get_evaluation_string(LuaCEmbed *self,const char *code, ...){
     PRIVATE_LUA_CEMBED_PROTECT_NULL
-    private_lua_cembed_memory_limit = self->memory_limit;
 
     va_list args;
     va_start(args,code);
@@ -159,7 +156,6 @@ char * LuaCEmbed_get_evaluation_string(LuaCEmbed *self,const char *code, ...){
 
 int  LuaCEmbed_get_evaluation_type(LuaCEmbed *self,const char *code, ...){
     PRIVATE_LUA_CEMBED_PROTECT_NUM
-    private_lua_cembed_memory_limit = self->memory_limit;
 
     va_list args;
     va_start(args,code);
@@ -175,7 +171,6 @@ int  LuaCEmbed_get_evaluation_type(LuaCEmbed *self,const char *code, ...){
 
 long LuaCEmbed_get_evaluation_table_size(LuaCEmbed *self,const char *code, ...){
     PRIVATE_LUA_CEMBED_PROTECT_NUM
-    private_lua_cembed_memory_limit = self->memory_limit;
 
     va_list args;
     va_start(args,code);
@@ -203,7 +198,6 @@ long LuaCEmbed_get_evaluation_table_size(LuaCEmbed *self,const char *code, ...){
 
 long long  LuaCEmbed_get_evaluation_long(LuaCEmbed *self,const char *code, ...){
     PRIVATE_LUA_CEMBED_PROTECT_NUM
-    private_lua_cembed_memory_limit = self->memory_limit;
 
     va_list args;
     va_start(args,code);
@@ -221,7 +215,6 @@ long long  LuaCEmbed_get_evaluation_long(LuaCEmbed *self,const char *code, ...){
 
 double LuaCEmbed_get_evaluation_double(LuaCEmbed *self,const char *code, ...){
     PRIVATE_LUA_CEMBED_PROTECT_NUM
-    private_lua_cembed_memory_limit = self->memory_limit;
 
     va_list args;
     va_start(args,code);
@@ -238,7 +231,6 @@ double LuaCEmbed_get_evaluation_double(LuaCEmbed *self,const char *code, ...){
 
 bool LuaCEmbed_get_evaluation_bool(LuaCEmbed *self,const char *code, ...){
     PRIVATE_LUA_CEMBED_PROTECT_BOOL
-    private_lua_cembed_memory_limit = self->memory_limit;
 
     va_list args;
     va_start(args,code);

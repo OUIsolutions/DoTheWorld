@@ -2,7 +2,6 @@
 
 void LuaCembedTable_destroy_prop(LuaCEmbedTable *self, const char *name){
     PRIVATE_LUA_CEMBED_TABLE_PROTECT_VOID
-    private_lua_cembed_memory_limit = self->main_object->memory_limit;
 
 
     lua_getglobal(self->main_object->state,self->global_name);
@@ -12,7 +11,6 @@ void LuaCembedTable_destroy_prop(LuaCEmbedTable *self, const char *name){
 }
 void LuaCEmbedTable_destroy_by_index(LuaCEmbedTable *self, long index){
     PRIVATE_LUA_CEMBED_TABLE_PROTECT_VOID
-    private_lua_cembed_memory_limit = self->main_object->memory_limit;
 
     long formatted_index = index + LUA_CEMBED_INDEX_DIF;
 

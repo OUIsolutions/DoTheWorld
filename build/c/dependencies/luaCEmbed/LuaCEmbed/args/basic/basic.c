@@ -1,19 +1,22 @@
 
-int privateLuaCEmbed_put_arg_on_top(LuaCEmbed *self, int index){
+int  privateLuaCEmbed_put_arg_on_top(LuaCEmbed *self, int index){
+    PRIVATE_LUA_CEMBED_PROTECT_NUM
     long  formatted_index = index + LUA_CEMBED_INDEX_DIF;
+
+    if(formatted_index > self->total_args){
+        privateLuaCEmbed_raise_error_not_jumping(self,PRIVATE_LUA_CEMBED_ARG_NOT_PROVIDED,formatted_index,self->current_function);
+        return LUA_CEMBED_GENERIC_ERROR;
+     }
 
     char *formated_arg = private_LuaCembed_format(PRIVATE_LUA_CEMBED_ARGS_,self->stack_leve,formatted_index-1);
     lua_getglobal(self->state,formated_arg);
-
-    if(lua_type(self->state,-1) == LUA_CEMBED_NOT_FOUND){
-
-        char *error = private_LuaCembed_format(PRIVATE_LUA_CEMBED_ARG_NOT_PROVIDED,formatted_index,self->current_function);
-
-        privateLuaCEmbed_raise_error_not_jumping(self,error);
-        free(error);
+    int type = lua_type(self->state,-1);
+    if(type == LUA_CEMBED_NOT_FOUND || type == LUA_CEMBED_NIL){
+        privateLuaCEmbed_raise_error_not_jumping(self,PRIVATE_LUA_CEMBED_ARG_NOT_PROVIDED,formatted_index,self->current_function);
         free(formated_arg);
         return LUA_CEMBED_GENERIC_ERROR;
     }
+
     free(formated_arg);
     return LUA_OK;
 }
@@ -25,12 +28,18 @@ int  LuaCEmbed_get_total_args(LuaCEmbed *self){
 
 
 int  LuaCEmbed_get_arg_type(LuaCEmbed *self,int index){
-    PRIVATE_LUA_CEMBED_PROTECT_NUM
 
-    privateLuaCEmbed_put_arg_on_top(self,index);
+    long  formatted_index = index + LUA_CEMBED_INDEX_DIF;
 
-    int type =  lua_type(self->state, -1);
-    lua_settop(self->state,0);
+    if(formatted_index > self->total_args){
+        return LUA_CEMBED_NIL;
+    }
+
+    char *formated_arg = private_LuaCembed_format(PRIVATE_LUA_CEMBED_ARGS_,self->stack_leve,formatted_index-1);
+    lua_getglobal(self->state,formated_arg);
+    int type = lua_type(self->state, -1);
+    free(formated_arg);
+    PRIVATE_LUA_CEMBED_CLEAR_STACK
     return type;
 }
 
@@ -38,13 +47,19 @@ int  LuaCEmbed_get_arg_type(LuaCEmbed *self,int index){
 long long LuaCEmbed_get_long_arg(LuaCEmbed *self, int index){
     PRIVATE_LUA_CEMBED_PROTECT_NUM
 
-    privateLuaCEmbed_put_arg_on_top(self,index);
+
+    if(privateLuaCEmbed_put_arg_on_top(self,index)){
+        PRIVATE_LUA_CEMBED_CLEAR_STACK
+       return (long )LUA_CEMBED_NOT_FOUND;
+    }
+
     if(private_LuaCEmbed_ensure_top_stack_arg_type(self,index,LUA_CEMBED_NUMBER)){
-        lua_settop(self->state,0);
+        PRIVATE_LUA_CEMBED_CLEAR_STACK
         return (long )LUA_CEMBED_NOT_FOUND;
     }
+
     long long result =  (long long)lua_tonumber(self->state,-1);
-    lua_settop(self->state,0);
+    PRIVATE_LUA_CEMBED_CLEAR_STACK
     return result;
 }
 
@@ -52,57 +67,77 @@ long long LuaCEmbed_get_long_arg(LuaCEmbed *self, int index){
 double LuaCEmbed_get_double_arg(LuaCEmbed *self, int index){
     PRIVATE_LUA_CEMBED_PROTECT_NUM
 
-    privateLuaCEmbed_put_arg_on_top(self,index);
+    if(privateLuaCEmbed_put_arg_on_top(self,index)){
+        PRIVATE_LUA_CEMBED_CLEAR_STACK
+       return (long )LUA_CEMBED_NOT_FOUND;
+    }
     if(private_LuaCEmbed_ensure_top_stack_arg_type(self,index,LUA_CEMBED_NUMBER)){
-        lua_settop(self->state,0);
+        PRIVATE_LUA_CEMBED_CLEAR_STACK
         return (long )LUA_CEMBED_NOT_FOUND;
     }
     double result = lua_tonumber(self->state,-1);
-    lua_settop(self->state,0);
+    PRIVATE_LUA_CEMBED_CLEAR_STACK
     return result;
 }
 
 bool LuaCEmbed_get_bool_arg(LuaCEmbed *self, int index){
     PRIVATE_LUA_CEMBED_PROTECT_BOOL
 
-    privateLuaCEmbed_put_arg_on_top(self,index);
+    if(privateLuaCEmbed_put_arg_on_top(self,index)){
+        PRIVATE_LUA_CEMBED_CLEAR_STACK
+       return (long )LUA_CEMBED_NOT_FOUND;
+    }
     if(private_LuaCEmbed_ensure_top_stack_arg_type(self,index,LUA_CEMBED_BOOL)){
-        lua_settop(self->state,0);
+    PRIVATE_LUA_CEMBED_CLEAR_STACK
         return (long )LUA_CEMBED_NOT_FOUND;
     }
     bool result = lua_toboolean(self->state,-1);
-    lua_settop(self->state,0);
+    PRIVATE_LUA_CEMBED_CLEAR_STACK
     return result;
 }
 
 
 char * LuaCEmbed_get_str_arg(LuaCEmbed *self, int index){
     PRIVATE_LUA_CEMBED_PROTECT_NULL
-    lua_settop(self->state,0);
-    privateLuaCEmbed_put_arg_on_top(self,index);
+    PRIVATE_LUA_CEMBED_CLEAR_STACK
+
+    if(privateLuaCEmbed_put_arg_on_top(self,index)){
+        PRIVATE_LUA_CEMBED_CLEAR_STACK
+        return NULL;
+    }
+
     if(private_LuaCEmbed_ensure_top_stack_arg_type(self,index,LUA_CEMBED_STRING)){
         return NULL;
     }
     char *result =  (char*)lua_tostring(self->state,-1);
-    lua_settop(self->state,0);
+    PRIVATE_LUA_CEMBED_CLEAR_STACK
     return result;
 }
 char * LuaCEmbed_get_raw_str_arg(LuaCEmbed *self,long *size, int index){
     PRIVATE_LUA_CEMBED_PROTECT_NULL
-    lua_settop(self->state,0);
-    privateLuaCEmbed_put_arg_on_top(self,index);
+    PRIVATE_LUA_CEMBED_CLEAR_STACK
+
+    if(privateLuaCEmbed_put_arg_on_top(self,index)){
+        PRIVATE_LUA_CEMBED_CLEAR_STACK
+       return NULL;
+    }
+
     if(private_LuaCEmbed_ensure_top_stack_arg_type(self,index,LUA_CEMBED_STRING)){
         return NULL;
     }
     char *result =  (char*)lua_tolstring(self->state,-1,(unsigned  long*)size);
-    lua_settop(self->state,0);
+    PRIVATE_LUA_CEMBED_CLEAR_STACK
     return result;
 }
 
 LuaCEmbedTable  * LuaCEmbed_get_arg_table(LuaCEmbed *self,int index){
     PRIVATE_LUA_CEMBED_PROTECT_NULL
 
-    privateLuaCEmbed_put_arg_on_top(self,index);
+    if(privateLuaCEmbed_put_arg_on_top(self,index)){
+        PRIVATE_LUA_CEMBED_CLEAR_STACK
+       return NULL;
+    }
+
     if(private_LuaCEmbed_ensure_top_stack_arg_type(self,index,LUA_CEMBED_TABLE)){
         return NULL;
     }
@@ -111,7 +146,7 @@ LuaCEmbedTable  * LuaCEmbed_get_arg_table(LuaCEmbed *self,int index){
     char *formated_arg = private_LuaCembed_format(PRIVATE_LUA_CEMBED_ARGS_,self->stack_leve,formatted_index-1);
     LuaCEmbedTable  *created = LuaCembed_get_global_table(self,formated_arg);
     free(formated_arg);
-    lua_settop(self->state,0);
+    PRIVATE_LUA_CEMBED_CLEAR_STACK
     return created;
 
 }
@@ -120,13 +155,16 @@ LuaCEmbedTable* LuaCEmbed_run_args_lambda(LuaCEmbed *self, int index, LuaCEmbedT
 
     long  formatted_index = index + LUA_CEMBED_INDEX_DIF;
     char *formatted_arg = private_LuaCembed_format(PRIVATE_LUA_CEMBED_ARGS_,self->stack_leve,formatted_index-1);
-    lua_getglobal(self->state,PRIVATE_LUA_CEMBED_STACK_LEVEL);
 
-    privateLuaCEmbed_put_arg_on_top(self,index);
+    if(privateLuaCEmbed_put_arg_on_top(self,index)){
+        PRIVATE_LUA_CEMBED_CLEAR_STACK
+        free(formatted_arg);
+       return NULL;
+    }
 
     if(private_LuaCEmbed_ensure_top_stack_arg_type(self,index,LUA_CEMBED_FUNCTION)){
         free(formatted_arg);
-        lua_settop(self->state,0);
+        PRIVATE_LUA_CEMBED_CLEAR_STACK
         return  NULL;
     }
 
@@ -136,8 +174,7 @@ LuaCEmbedTable* LuaCEmbed_run_args_lambda(LuaCEmbed *self, int index, LuaCEmbedT
         privateLuaCEmbed_raise_error_not_jumping(self, lua_tostring(self->state,-1));
         free(formatted_arg);
 
-        lua_settop(self->state,0);
-
+        PRIVATE_LUA_CEMBED_CLEAR_STACK
         return  NULL;
     }
 
@@ -162,8 +199,7 @@ LuaCEmbedTable* LuaCEmbed_run_args_lambda(LuaCEmbed *self, int index, LuaCEmbedT
         free(formatted);
     }
     free(formatted_arg);
-    lua_settop(self->state,0);
-
+    PRIVATE_LUA_CEMBED_CLEAR_STACK
     return result;
 
 }

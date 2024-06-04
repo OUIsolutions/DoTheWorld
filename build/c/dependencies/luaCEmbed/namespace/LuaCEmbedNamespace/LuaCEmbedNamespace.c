@@ -1,8 +1,11 @@
 
 
+#include "../../LuaCEmbed/basic/basic.h"
+
 LuaCEmbedNamespace newLuaCEmbedNamespace(){
     LuaCEmbedNamespace self = {0};
     self.newLuaLib = newLuaCEmbedLib;
+    self.load_lib_from_c = LuaCEmbed_load_lib_from_c;
     self.newLuaEvaluation = newLuaCEmbedEvaluation;
     self.set_delete_function = LuaCembed_set_delete_function;
     self.perform = LuaCembed_perform;

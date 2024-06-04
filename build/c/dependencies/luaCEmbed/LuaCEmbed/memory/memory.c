@@ -1,6 +1,9 @@
 
 
-
+void LuaCEmbed_set_memory_limit(LuaCEmbed *self, double limit){
+    lua_setallocf(self->state, private_LuaCembed_custom_allocator, &lua_cembed_used_memory);
+    lua_cembed_memory_limit = limit;
+}
 static void *private_LuaCembed_custom_allocator(void *ud, void *ptr, size_t osize, size_t nsize) {
     int *used = (int *)ud;
 
@@ -13,19 +16,12 @@ static void *private_LuaCembed_custom_allocator(void *ud, void *ptr, size_t osiz
         *used -= osize; /* subtract old size from used memory */
         return NULL;
     } else {
-        long  custom_limit = (long)(private_lua_cembed_memory_limit * PRIVATE_LUA_CEMBED_ONE_MB);
-        if (*used + (nsize - osize) > custom_limit)
-        {   printf("retornou no segundo\n");
+        long  custom_limit = (long)(lua_cembed_memory_limit * PRIVATE_LUA_CEMBED_ONE_MB);
+        if (*used + (nsize - osize) > custom_limit) /* too much memory in use */
             return NULL;
-        }
         ptr = realloc(ptr, nsize);
-        if (ptr){
+        if (ptr) /* reallocation successful? */
             *used += (nsize - osize);
-        }
-
-        if(ptr == NULL){
-            printf("realc pointerfalhou\n");
-        }
         return ptr;
     }
 }

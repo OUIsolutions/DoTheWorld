@@ -23,7 +23,6 @@ LuaCEmbedTable * private_newLuaCembedTable(LuaCEmbed *main_embed, const char *fo
     long size = LuaCEmbedTable_get_listable_size(self);
      lua_settop(self->main_object->state, 0);
 
-     private_lua_cembed_memory_limit = self->main_object->memory_limit;
 
      lua_getglobal(self->main_object->state,self->global_name);
      int table_index = lua_gettop(self->main_object->state);

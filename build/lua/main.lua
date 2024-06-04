@@ -12,10 +12,11 @@ local function main()
     local i = 1
     while true  do
     	local current = listage[i]
-        clib.print(current.."\n")
     	if current == nil then
     		break
     	end
+        clib.print(current.."\n")
+
     	i = i + 1
     end
 end

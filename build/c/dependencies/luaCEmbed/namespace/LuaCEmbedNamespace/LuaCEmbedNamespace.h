@@ -10,13 +10,14 @@ typedef struct{
     LuaCEmbed * (*newLuaLib)(lua_State *state, bool public_functions);
     void (*set_delete_function)(LuaCEmbed *self,void (*delelte_function)(struct  LuaCEmbed *self));
     LuaCEmbed * (*newLuaEvaluation)();
+    void (*load_lib_from_c)(LuaCEmbed *self,int (*callback)(lua_State *l),const char *name);
     int (*perform)(LuaCEmbed *self);
     const char * (*convert_arg_code)(int arg_code);
-    void (*set_memory_limit)(LuaCEmbed  *self, double limit);
+    void (*set_memory_limit)(LuaCEmbed *self, double limit);
 
     char * (*get_error_message)(LuaCEmbed *self);
     bool (*has_errors)(LuaCEmbed *self);
-    void (*set_timeout)(LuaCEmbed *self,int seconds);
+    void (*set_timeout)(int seconds);
     int (*evaluate)(LuaCEmbed *self, const char *code, ...);
     char * (*get_string_evaluation)(LuaCEmbed *self,const char *code, ...);
     int  (*get_evaluation_type)(LuaCEmbed *self,const char *code,...);

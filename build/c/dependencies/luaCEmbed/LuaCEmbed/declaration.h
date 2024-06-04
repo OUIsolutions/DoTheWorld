@@ -1,6 +1,7 @@
 typedef long private_lua_cembed_incremented_arg ;
-#include "memory/memory.h"
 #include "LuaCEmbed.h"
+#include "memory/memory.h"
+
 #include "lib_start/lib_start.h"
 #include "basic/basic.h"
 #include "table/declaration.h"

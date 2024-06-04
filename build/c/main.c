@@ -1,11 +1,8 @@
-
+#include "dependencies/all.h"
 #include "lua_code.h"
-#include "dependencies/luaCEmbed/one.c"
-#include "dependencies/doTheWorld/one.c"
 
 LuaCEmbedNamespace lua;
 DtwNamespace dtw;
-#include "dependencies/luadoTheWorld/one.c"
 
 int lua_exit = 0;
 
@@ -28,10 +25,9 @@ int main(int argc,char *argv[]){
     dtw = newDtwNamespace();
     LuaCEmbed * main_obj = lua.newLuaEvaluation();
     add_callbacks(main_obj);
-    start_dtw(main_obj->state);
-    lua_setglobal(main_obj->state,"dtw");
+    lua.load_lib_from_c(main_obj,load_luaDoTheWorld,"dtw");
 
-    lua.set_timeout(main_obj,-1);
+
     lua.evaluate(main_obj,lua_code);
     if(lua.has_errors(main_obj)){
         char *error = lua.get_error_message(main_obj);

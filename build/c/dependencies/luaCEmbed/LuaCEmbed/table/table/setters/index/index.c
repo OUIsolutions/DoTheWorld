@@ -2,7 +2,6 @@
 
 void  LuaCEmbedTable_set_string_by_index(LuaCEmbedTable *self, long index, const char *value){
     PRIVATE_LUA_CEMBED_TABLE_PROTECT_VOID
-    private_lua_cembed_memory_limit = self->main_object->memory_limit;
 
     char *possible_key = LuaCembedTable_get_key_by_index(self,index);
     if(possible_key){
@@ -20,7 +19,6 @@ void  LuaCEmbedTable_set_string_by_index(LuaCEmbedTable *self, long index, const
 
 void  LuaCEmbedTable_set_long_by_index(LuaCEmbedTable *self, long long  index, long  value){
     PRIVATE_LUA_CEMBED_TABLE_PROTECT_VOID
-    private_lua_cembed_memory_limit = self->main_object->memory_limit;
 
     char *possible_key = LuaCembedTable_get_key_by_index(self,index);
     if(possible_key){
@@ -38,7 +36,6 @@ void  LuaCEmbedTable_set_long_by_index(LuaCEmbedTable *self, long long  index, l
 
 void  LuaCEmbedTable_set_double_by_index(LuaCEmbedTable *self, long index, double  value){
     PRIVATE_LUA_CEMBED_TABLE_PROTECT_VOID
-    private_lua_cembed_memory_limit = self->main_object->memory_limit;
 
     char *possible_key = LuaCembedTable_get_key_by_index(self,index);
     if(possible_key){
@@ -57,7 +54,6 @@ void  LuaCEmbedTable_set_double_by_index(LuaCEmbedTable *self, long index, doubl
 
 void  LuaCEmbedTable_set_bool_by_index(LuaCEmbedTable *self, long index, bool value){
     PRIVATE_LUA_CEMBED_TABLE_PROTECT_VOID
-    private_lua_cembed_memory_limit = self->main_object->memory_limit;
 
     char *possible_key = LuaCembedTable_get_key_by_index(self,index);
     if(possible_key){
@@ -77,7 +73,6 @@ void  LuaCEmbedTable_set_bool_by_index(LuaCEmbedTable *self, long index, bool va
 
 void  LuaCEmbedTable_set_evaluation_by_index(LuaCEmbedTable *self, long index, const char *code, ...){
     PRIVATE_LUA_CEMBED_TABLE_PROTECT_VOID
-    private_lua_cembed_memory_limit = self->main_object->memory_limit;
 
     long formatted_index = index + LUA_CEMBED_INDEX_DIF;
     va_list  args;

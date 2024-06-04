@@ -1,8 +1,17 @@
 
 
-void DtwTree_loads_json_tree(struct DtwTree *self, const char *all_tree){
+bool DtwTree_loads_json_tree(struct DtwTree *self, const char *all_tree){
     //load json
     cJSON *json_tree = cJSON_Parse(all_tree);
+    if(json_tree == NULL){
+        return false;
+    }
+    DtwJsonTreeError *json_error = DtwJsonTreeError_validate_json_tree_by_cJSON(json_tree);
+    if(json_error){
+        DtwJsonTreeError_free(json_error);
+        return  false;
+    }
+
     int size = cJSON_GetArraySize(json_tree);
     for(int i = 0; i < size; i++){
 
@@ -83,13 +92,18 @@ void DtwTree_loads_json_tree(struct DtwTree *self, const char *all_tree){
         
     }
     cJSON_Delete(json_tree);
+    return  true;
 }
 
 
-void DtwTree_loads_json_tree_from_file( DtwTree *self, const char *path){
+bool DtwTree_loads_json_tree_from_file( DtwTree *self, const char *path){
     char *content = dtw_load_string_file_content(path);
-    DtwTree_loads_json_tree(self,content);
+    if(content == NULL){
+        return false;
+    }
+    bool result = DtwTree_loads_json_tree(self,content);
     free(content);
+    return result;
 }
 
 char * DtwTree_dumps_tree_json( DtwTree *self, DtwTreeProps  props){
