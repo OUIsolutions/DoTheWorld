@@ -32,6 +32,7 @@ int main(int argc,char *argv[]){
     if(lua.has_errors(main_obj)){
         char *error = lua.get_error_message(main_obj);
         if(strcmp(error,"") != 0){
+            printf("pegou aqui\n");
             printf("%s\n",error);
         }
         lua.free(main_obj);

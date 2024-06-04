@@ -17,7 +17,6 @@ local function new_cache_element(resource_path,callback)
         local sha_resource = resource_path.sub_resource(sha)
         local possible_element = sha_resource.get_string()
         if possible_element then
-            clib.print("returned the cached\n")
         	return possible_element
         end
         local result = self.callback()
