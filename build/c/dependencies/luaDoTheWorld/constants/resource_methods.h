@@ -17,6 +17,9 @@
 #define SUB_RESOURCE_NOW_METHOD "sub_resource_now"
 #define SUB_RESOURCE_NOW_IN_UNIX "sub_resource_now_in_unix"
 #define SUB_RESOURCE_METHOD "sub_resource"
+#define RESOURCE_GET_STRING "get_string"
+#define RESOURCE_GET_NUMBER "get_number"
+#define RESOURCE_GET_BOOL "get_bool"
 
 #define UNLOAD_METHOD "unload"
 #define UNLOCK_METHOD "unlock"

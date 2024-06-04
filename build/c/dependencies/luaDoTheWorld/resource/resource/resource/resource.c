@@ -143,6 +143,10 @@ LuaCEmbedTable *raw_create_resource(LuaCEmbed *args,DtwResource *resource){
     LuaCEmbedTable_set_method(self, SUB_RESOURCE_METHOD, resource_sub_resource_method);
     LuaCEmbedTable_set_method(self,RESOURCE_RENAME_METHOD,resource_rename);
 
+    LuaCEmbedTable_set_method(self,RESOURCE_GET_STRING,resource_value_string);
+    LuaCEmbedTable_set_method(self,RESOURCE_GET_NUMBER,resource_value_number);
+    LuaCEmbedTable_set_method(self,RESOURCE_GET_BOOL,resource_value_bool);
+
     LuaCEmbedTable_set_method(self, SUB_RESOURCE_NEXT_METHOD, resource_sub_resource_next);
     LuaCEmbedTable_set_method(self, SUB_RESOURCE_NOW_METHOD, resource_sub_resource_now);
     LuaCEmbedTable_set_method(self, SUB_RESOURCE_NOW_IN_UNIX, resource_sub_resource_now_in_unix);

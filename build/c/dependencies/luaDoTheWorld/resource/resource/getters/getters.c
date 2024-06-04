@@ -1,13 +1,14 @@
 LuaCEmbedResponse * resource_to_string(LuaCEmbedTable  *self,LuaCEmbed *args){
     DtwResource  *resource = (DtwResource*)LuaCembedTable_get_long_prop(self,RESOURCE_POINTER);
     int  type = DtwResource_type(resource);
-    if(type == DTW_NOT_FOUND ||type == DTW_COMPLEX_BINARY || type == DTW_FOLDER_TYPE ){
+    if(type == DTW_NOT_FOUND || type == DTW_FOLDER_TYPE ){
         return  LuaCEmbed_send_str(resource->path);
     }
+    long size;
+    bool is_binary;
+    unsigned  char *content =  DtwResource_get_any(resource,&size,&is_binary);
+    return LuaCEmbed_send_raw_string_reference((char*)content,size);
 
-    char *value = DtwResource_get_string(resource);
-
-    return LuaCEmbed_send_str(value);
 }
 
 
@@ -47,6 +48,43 @@ LuaCEmbedResponse * resource_value(LuaCEmbedTable  *self,LuaCEmbed *args){
         unsigned  char *content =  DtwResource_get_any(resource,&size,&is_binary);
         return LuaCEmbed_send_raw_string_reference((char*)content,size);
     }
+
+    return NULL;
+}
+LuaCEmbedResponse * resource_value_string(LuaCEmbedTable  *self,LuaCEmbed *args){
+    DtwResource  *resource = (DtwResource*)LuaCembedTable_get_long_prop(self,RESOURCE_POINTER);
+    int type = DtwResource_type(resource);
+    if(type != DTW_NOT_FOUND && type != DTW_FOLDER_TYPE){
+        long size;
+        bool is_binary;
+        unsigned  char *content =  DtwResource_get_any(resource,&size,&is_binary);
+        return LuaCEmbed_send_raw_string_reference((char*)content,size);
+    }
+    return NULL;
+}
+
+LuaCEmbedResponse * resource_value_number(LuaCEmbedTable  *self,LuaCEmbed *args){
+    DtwResource  *resource = (DtwResource*)LuaCembedTable_get_long_prop(self,RESOURCE_POINTER);
+    int type = DtwResource_type(resource);
+
+    if(type == DTW_COMPLEX_DOUBLE_TYPE || type == DTW_COMPLEX_LONG_TYPE){
+        double value = DtwResource_get_double(resource);
+        return LuaCEmbed_send_double(value);
+    }
+
+    return NULL;
+}
+
+LuaCEmbedResponse * resource_value_bool(LuaCEmbedTable  *self,LuaCEmbed *args){
+    DtwResource  *resource = (DtwResource*)LuaCembedTable_get_long_prop(self,RESOURCE_POINTER);
+    int type = DtwResource_type(resource);
+
+
+    if(type == DTW_COMPLEX_BOOL_TYPE){
+        bool value= DtwResource_get_bool(resource);
+        return LuaCEmbed_send_bool(value);
+    }
+
 
     return NULL;
 }

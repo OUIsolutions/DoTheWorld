@@ -6,6 +6,8 @@ bin
 a/
 # object files
 *.o
+cache2
+
 side_effect_copy
 *.ko
 out_folder
