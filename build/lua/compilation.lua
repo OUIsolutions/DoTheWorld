@@ -1,22 +1,33 @@
 
-local function compile_projects_of_folder(src_sha,folder)
-        local listage,size = clib.list_dirs(folder)
-        for i=1, size do
-            local current_path = listage[i]
-            local current_file = current_path.."exec.c"
-            local current_sha = clib.generate_sha_from_file(current_file)
-            local final_sha = clib.generate_sha_from_string(src_sha..current_sha)
-            local output = CACHE_POINT.."/bins"..final_sha
-            clib.print("compiling: "..output.."\n")
+local function compile_test(test_resource,cache,src_folder)
+    test_resource.each(function (value)
+    	local exec_resource = value.sub_resource("exec")
+    	local exec = exec_resource.get_string()
+    	local exec_path = exec_resource.get_path_string()
+    	local value_path = value.get_path_string()
+        clib.print("compiling "..value_path.."\n")
 
+        if exec == nil then
+            clib.print("file:"..exec_resource.."not found\n")
+        	clib.exit()
         end
+
+    	local current_test = cache.new_element(function ()
+
+    	    local comand = "gcc "..exec_path.." -o "..value_path..dtw.concat_path(value_path," exec.out")
+            local result = clib.system_with_status(comand)
+
+    	end)
+
+    	.add_side_effect(src_folder)
+    	.add_side_effect(exec)
+        current_test.perform()
+    end)
 end
 
-function Execute_tests_compilaton(src_sha)
-    local listage,size = clib.list_dirs(TEST_POINT)
-    clib.print("compiling==========================================\n")
-    for i=1,size do
-        local current = listage[i]
-        compile_projects_of_folder(src_sha,current)
-    end
+function Execute_compilation(test_resource,cache,src_folder)
+
+    test_resource.each(function (value)
+        compile_test(value,cache,src_folder)
+    end)
 end

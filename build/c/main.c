@@ -16,7 +16,7 @@ void add_callbacks(LuaCEmbed *main_obj){
     lua.tables.set_method(clib,"exit",generate_exit);
     lua.tables.set_method(clib,"get_str_size",lua_get_str_size);
     lua.tables.set_method(clib,"get_char",lua_get_char);
-
+    lua.tables.set_method(clib,"system_with_status",system_function_with_status);
 }
 
 

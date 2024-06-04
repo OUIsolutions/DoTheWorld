@@ -21,6 +21,9 @@ local function new_cache_element(resource_path,callback)
         	return possible_element
         end
         local result = self.callback()
+        if result == nil then
+        	result = ""
+        end
         sha_resource.set_value(result)
         sha_resource.commit()
         return result
