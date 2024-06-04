@@ -39,6 +39,7 @@ void start_lua_props(LuaCEmbed *l){
     LuaCEmbed_add_callback(l,NEW_TRANSACTION_FROM_JSON_FILE,create_empty_transaction_from_json_file);
     LuaCEmbed_add_callback(l,NEW_PATH,create_path);
     LuaCEmbed_add_callback(l,NEW_TREE,create_empty_tree);
+    LuaCEmbed_add_callback(l,CONCAT_PATH,concat_path);
     LuaCEmbed_add_callback(l,NEW_TREE_FROM_HARWARE,create_tree_fro_hardware);
 
 }

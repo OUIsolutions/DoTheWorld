@@ -8,3 +8,17 @@ bool get_table_props_or_default_bool(LuaCEmbedTable *table,const char *prop,bool
     }
     return default_value;
 }
+
+LuaCEmbedResponse * concat_path(LuaCEmbed *args){
+    char *path1 = LuaCEmbed_get_str_arg(args,0);
+    char *path2 = LuaCEmbed_get_str_arg(args,1);
+
+    if(LuaCEmbed_has_errors(args)){
+        char *error_msg = LuaCEmbed_get_error_message(args);
+        return LuaCEmbed_send_error(error_msg);
+    }
+    char *value = dtw_concat_path(path1,path2);
+    LuaCEmbedResponse *response = LuaCEmbed_send_str(value);
+    free(value);
+    return  response;
+}

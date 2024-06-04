@@ -112,7 +112,7 @@ end
  function Generate_amalgamation(start_point)
 
 
-    local content = clib.load_string(start_point)
+    local content = dtw.load_file(start_point)
 
     local size = clib.get_str_size(content)
     local inside_string = false
@@ -151,8 +151,8 @@ end
 
 
         if make_recursive_call(waiting_include,is_end_string) then
-            local dir = clib.extract_dir(start_point)
-            local full_path = clib.concat_path(dir,string_buffer)
+            local dir = dtw.newPath(start_point).get_dir()
+            local full_path = dtw.concat_path(dir,string_buffer)
 
             local acumulated = Generate_amalgamation(full_path)
             final_text = final_text.. acumulated.."\n"
