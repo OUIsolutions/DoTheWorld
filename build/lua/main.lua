@@ -13,7 +13,7 @@ local function main()
 
     local amalgamation_cache = cache.new_element(function ()
     	return Generate_amalgamation_recursive(START_POINT)
-    end).add_side_effect(src_sha)
+    end).add_dependencie(src_sha)
 
     local amalgamation_result = amalgamation_cache.perform()
     dtw.write_file(END_TEST_POINT,amalgamation_result)

@@ -19,9 +19,9 @@ local function compile_segment(test_resource,cache,src_folder)
              	clib.exit(1)
              end
         end)
-        .add_side_effect(exec)
-        .add_side_effect(src_folder)
-        .add_side_effect(command)
+        .add_dependencie(exec)
+        .add_dependencie(src_folder)
+        .add_dependencie(command)
         .perform()
     end)
 end

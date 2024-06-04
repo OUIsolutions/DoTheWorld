@@ -7,7 +7,7 @@ local function new_cache_element(resource_path,callback)
         hasher = dtw.newHasher()
     }
 
-    self.add_side_effect = function (element)
+    self.add_dependencie = function (element)
     	   self.hasher.digest(element)
     	   return self
     end
