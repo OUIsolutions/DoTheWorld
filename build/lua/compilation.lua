@@ -11,17 +11,15 @@ local function compile_test(test_resource,cache,src_folder)
             clib.print("file:"..exec_resource.."not found\n")
         	clib.exit()
         end
-
     	local current_test = cache.new_element(function ()
-
-    	    local comand = "gcc "..exec_path.." -o "..value_path..dtw.concat_path(value_path," exec.out")
-            local result = clib.system_with_status(comand)
-
+    	   local comand = "gcc "..exec_path.." -o "..value_path..dtw.concat_path(value_path," exec.out")
+           local result = clib.system_with_status(comand)
     	end)
 
     	.add_side_effect(src_folder)
     	.add_side_effect(exec)
-        current_test.perform()
+
+       -- current_test.perform()
     end)
 end
 

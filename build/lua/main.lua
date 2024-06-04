@@ -19,7 +19,7 @@ local function main()
     dtw.write_file(END_TEST_POINT,amalgamation_result)
 
     local main_test_resource = dtw.newResource(TEST_POINT)
-    Execute_compilation(main_test_resource,cache)
+    Execute_compilation(main_test_resource,cache,src_sha)
 
 
 
