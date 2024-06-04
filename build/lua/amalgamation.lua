@@ -109,7 +109,7 @@ local function anulate_inclusion(waiting_include,content,index)
 end
 ---@param start_point string
 ---@return string
- local function generate_amalgamation_recursive(start_point)
+  function Generate_amalgamation_recursive(start_point)
 
 
     local content = dtw.load_file(start_point)
@@ -154,7 +154,7 @@ end
             local dir = dtw.newPath(start_point).get_dir()
             local full_path = dtw.concat_path(dir,string_buffer)
 
-            local acumulated = generate_amalgamation_recursive(full_path)
+            local acumulated = Generate_amalgamation_recursive(full_path)
             final_text = final_text.. acumulated.."\n"
 
         	waiting_include = false
@@ -168,21 +168,4 @@ end
     end
     clib.print("alamalgamated:"..start_point.."\n")
     return final_text
-end
-
-
-function Generate_amalgamation(cache,src_sha)
-        local amalgamation  = cache.sub_resource("amalgamation")
-        local src_of_generation = amalgamation.sub_resource("src_sha").get_string()
-
-        if src_of_generation == src_sha then
-        	clib.print("amalgamation cached\n");
-        	return amalgamation.get_value_from_sub_resource("code")
-        end
-            clib.print("constructing amalgamation\n")
-            local amalgamation_result =generate_amalgamation_recursive(START_POINT)
-            amalgamation.set_value_in_sub_resource("code",amalgamation_result)
-            amalgamation.set_value_in_sub_resource("src_sha",src_sha)
-        return amalgamation_result
-
 end

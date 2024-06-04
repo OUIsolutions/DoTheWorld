@@ -8,11 +8,14 @@ LIB_FOLDER = "src"
 CACHE_POINT  = "cache2"
 local function main()
 
-    local cache = dtw.newResource(CACHE_POINT)
     local src_sha = dtw.generate_sha_from_folder_by_content(LIB_FOLDER)
-    local amalgamation = Generate_amalgamation(cache,src_sha)
-    dtw.write_file(END_TEST_POINT,amalgamation)
-    cache.commit()
+    local cache = NewCache(CACHE_POINT)
+    local amalgamation_cache = cache.new_element(function ()
+    	return Generate_amalgamation_recursive(START_POINT)
+    end)
+    amalgamation_cache.add_side_effect(src_sha)
+    local amalgamation_result = amalgamation_cache.perform()
+    dtw.write_file(END_TEST_POINT,amalgamation_result)
 
 end
 
