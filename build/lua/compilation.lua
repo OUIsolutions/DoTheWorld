@@ -5,7 +5,6 @@ local function compile_segment(test_resource,cache,src_folder)
     	local exec_resource = value.sub_resource("exec.c")
     	local exec_path = exec_resource.get_path_string()
     	local exec = exec_resource.get_string()
-        clib.print("compiling "..value_path.."\n")
 
         if exec == nil then
             clib.print("file:'"..exec_path.."'not found\n")
@@ -13,6 +12,7 @@ local function compile_segment(test_resource,cache,src_folder)
         end
         local command = "gcc "..exec_path.." -o "..dtw.concat_path(value_path,"exec.o ")
         cache.new_element(function ()
+            clib.print("compiling "..value_path.."\n")
              local status = clib.system_with_status(command)
              if status ~= 0 then
              	clib.print("compilation fail\n")
