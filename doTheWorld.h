@@ -7283,6 +7283,8 @@ char *DtwPath_get_sub_dirs_from_index(DtwPath *self, int start, int end){
     char *dir = DtwPath_get_dir(self);
     int  dirs_string_size = (int)strlen(dir);
     int total_dirs = 0;
+    bool start_defined = false;
+    bool end_defined  = false;
     int start_point = 0;
     int end_point = dirs_string_size;
 
@@ -7290,13 +7292,16 @@ char *DtwPath_get_sub_dirs_from_index(DtwPath *self, int start, int end){
         char current = dir[i];
         if(current == '/' || current =='\\'){
             total_dirs+=1;
+            continue;
         }
-        if(total_dirs == converted_start_index){
+        if(total_dirs == converted_start_index  &&!start_defined){
             start_point = i;
+            start_defined = true;
         }
 
-        if(total_dirs == (converted_end_index + 1)){
+        if(total_dirs == (converted_end_index + 1)&&!end_defined){
             end_point = i;
+            end_defined = true;
         }
     }
     char *buffer = private_dtw_sub_str(dir,start_point,end_point);
@@ -7398,7 +7403,7 @@ void DtwPath_remove_sub_dirs_at_index(DtwPath *self, int start, int end){
         free(buffer);
     }
 
-    if(!start_dirs){
+    if(start_dirs ==NULL){
         DtwPath_set_dir(self,end_dirs);
     }
 
@@ -7412,10 +7417,7 @@ void DtwPath_remove_sub_dirs_at(DtwPath *self,const char *str){
     }
 
     int start = private_dtw_count_dirs_before(current_dir,index);
-    int end = private_dtw_count_dirs_before(current_dir,index+ (int)strlen(str));
-    printf("start %d\n",start);
-
-    printf("end %d\n",end);
+    int end = private_dtw_count_dirs_before(current_dir,index+ (int)strlen(str));;
     DtwPath_remove_sub_dirs_at_index(self, start, end - 1);
 }
 

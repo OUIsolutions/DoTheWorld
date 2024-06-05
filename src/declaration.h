@@ -51,7 +51,7 @@
 #include "listage_wrappers/listage_wrappers.h"
 #include "monodimension_listage/monodimension_listage.h"
 #include "multidimension_listage/multidimension_listage.h"
-#include "path/path.h"
+#include "path/declaration.h"
 #include "tree/declarations.h"
 
 #include "lockers/declaration.h"

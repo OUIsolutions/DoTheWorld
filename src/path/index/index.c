@@ -20,9 +20,15 @@ char *DtwPath_get_sub_dirs_from_index(DtwPath *self, int start, int end){
     int converted_start_index = (int)private_dtw_convert_index(start, size);
     int converted_end_index = (int)private_dtw_convert_index(end, size);
 
+    if(converted_start_index == -1  || converted_end_index == -1){
+        return  NULL;
+    }
+
     char *dir = DtwPath_get_dir(self);
     int  dirs_string_size = (int)strlen(dir);
     int total_dirs = 0;
+    bool start_defined = false;
+    bool end_defined  = false;
     int start_point = 0;
     int end_point = dirs_string_size;
 
@@ -30,13 +36,16 @@ char *DtwPath_get_sub_dirs_from_index(DtwPath *self, int start, int end){
         char current = dir[i];
         if(current == '/' || current =='\\'){
             total_dirs+=1;
+            continue;
         }
-        if(total_dirs == converted_start_index){
+        if(total_dirs == converted_start_index  &&!start_defined){
             start_point = i;
+            start_defined = true;
         }
 
-        if(total_dirs == (converted_end_index + 1)){
+        if(total_dirs == (converted_end_index + 1)&&!end_defined){
             end_point = i;
+            end_defined = true;
         }
     }
     char *buffer = private_dtw_sub_str(dir,start_point,end_point);
@@ -61,6 +70,9 @@ void DtwPath_insert_dir_at_index(DtwPath *self, int index, const char *dir){
     int size = DtwPath_get_total_dirs(self);
     int converted_index = (int)private_dtw_convert_index(index,size+1);
 
+    if(converted_index == -1){
+        return  ;
+    }
     char * starter = NULL;
     if(converted_index > 0){
         starter = DtwPath_get_sub_dirs_from_index(self, 0, converted_index - 1);
@@ -76,10 +88,10 @@ void DtwPath_insert_dir_at_index(DtwPath *self, int index, const char *dir){
     if(starter && rest){
         buffer = private_dtw_formatt("%s/%s/%s",starter,dir,rest);
     }
-    if(starter && !rest){
+    if(starter && rest==NULL){
         buffer = private_dtw_formatt("%s/%s",starter,dir);
     }
-    if(!starter && rest){
+    if(starter == NULL && rest){
         buffer = private_dtw_formatt("%s/%s",dir,rest);
     }
 
@@ -94,26 +106,7 @@ void DtwPath_insert_dir_at_index(DtwPath *self, int index, const char *dir){
     }
 }
 
-void DtwPath_insert_dir_after(DtwPath *self,const char *str,const char *dir){
-    char *current_dir = DtwPath_get_dir(self);
-    int index = (int)dtw_index_of_string(current_dir,str);
-    if(index == -1){
-        return;
-    }
 
-    int start = private_dtw_count_dirs_before(current_dir,index)+1;
-    DtwPath_insert_dir_at_index(self, start, dir);
-}
-
-void DtwPath_insert_dir_before(DtwPath *self,const char *str,const char *dir){
-    char *current_dir = DtwPath_get_dir(self);
-    int index = (int)dtw_index_of_string(current_dir,str);
-    if(index == -1){
-        return;
-    }
-    int start = private_dtw_count_dirs_before(current_dir,index);
-    DtwPath_insert_dir_at_index(self, start, dir);
-}
 
 void DtwPath_remove_sub_dirs_at_index(DtwPath *self, int start, int end){
 
@@ -124,37 +117,30 @@ void DtwPath_remove_sub_dirs_at_index(DtwPath *self, int start, int end){
     int converted_start_index = (int)private_dtw_convert_index(start, size);
     int converted_end_index = (int)private_dtw_convert_index(end, size);
 
-
-    char *start_dirs = NULL;
-    if(converted_start_index > 0){
-        start_dirs = DtwPath_get_sub_dirs_from_index(self, 0, converted_start_index - 1);
+    if(converted_start_index == -1  || converted_end_index == -1){
+        return  ;
+    }
+    char *start_dir = NULL;
+    if(converted_start_index != 0){
+        start_dir = DtwPath_get_sub_dirs_from_index(self,0,converted_start_index-1);
     }
 
-    char *end_dirs = DtwPath_get_sub_dirs_from_index(self, converted_end_index + 1, -1);
+    char *end_dir = DtwPath_get_sub_dirs_from_index(self,converted_end_index+1,-1);
 
-    if(start_dirs){
-        char *buffer = private_dtw_formatt("%s/%s",start_dirs,end_dirs);
-        DtwPath_set_dir(self,buffer);
-        free(buffer);
+    if(start_dir != NULL  && end_dir != NULL){
+        char *full_dir = dtw_concat_path(start_dir,end_dir);
+        DtwPath_set_dir(self,full_dir);
+        free(full_dir);
+        return ;
+    }
+    if(start_dir != NULL){
+        DtwPath_set_dir(self,start_dir);
     }
 
-    if(!start_dirs){
-        DtwPath_set_dir(self,end_dirs);
+    if(end_dir != NULL){
+        DtwPath_set_dir(self,end_dir);
     }
+
 
 }
 
-void DtwPath_remove_sub_dirs_at(DtwPath *self,const char *str){
-    char *current_dir = DtwPath_get_dir(self);
-    int index = (int)dtw_index_of_string(current_dir,str);
-    if(index == -1){
-        return;
-    }
-
-    int start = private_dtw_count_dirs_before(current_dir,index);
-    int end = private_dtw_count_dirs_before(current_dir,index+ (int)strlen(str));
-    printf("start %d\n",start);
-
-    printf("end %d\n",end);
-    DtwPath_remove_sub_dirs_at_index(self, start, end - 1);
-}

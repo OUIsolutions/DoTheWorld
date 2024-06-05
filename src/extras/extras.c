@@ -146,10 +146,11 @@ long private_dtw_convert_index(long index,long size){
     }
 
     if(converted_index >= size){
-       return size -1;
+       return -1;
     }
+
     if(converted_index < 0){
-        return 0;
+        return -1;
     }
 
     return converted_index;
