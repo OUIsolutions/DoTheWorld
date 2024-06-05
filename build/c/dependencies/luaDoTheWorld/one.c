@@ -41,7 +41,8 @@ void start_lua_props(LuaCEmbed *l){
     LuaCEmbed_add_callback(l,NEW_TREE,create_empty_tree);
     LuaCEmbed_add_callback(l,CONCAT_PATH,concat_path);
     LuaCEmbed_add_callback(l,NEW_TREE_FROM_HARWARE,create_tree_fro_hardware);
-
+    LuaCEmbed_add_callback(l,STARTS_WITH,starts_with);
+    LuaCEmbed_add_callback(l,ENDS_WITH,ends_with);
 }
 
 int load_luaDoTheWorld(lua_State *state){

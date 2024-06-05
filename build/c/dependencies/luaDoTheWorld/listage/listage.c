@@ -17,8 +17,11 @@ LuaCEmbedResponse  * aply_listage(LuaCEmbed *args,DtwStringArray* (*callback)(co
         LuaCEmbedTable_append_string(table,current_value);
     }
 
+    LuaCEmbedTable *final = LuaCembed_new_anonymous_table(args);
+    LuaCEmbedTable_append_table(final,table);
+    LuaCEmbedTable_append_long(final,listage->size);
     DtwStringArray_free(listage);
-    return LuaCEmbed_send_table(table);
+    return LuaCEmbed_send_multi_return(final);
 }
 
 LuaCEmbedResponse  * list_files(LuaCEmbed *args){

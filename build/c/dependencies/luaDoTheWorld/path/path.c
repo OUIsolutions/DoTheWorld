@@ -3,7 +3,30 @@ LuaCEmbedResponse *path_changed(LuaCEmbedTable *self,LuaCEmbed *args){
     DtwPath *self_path = (DtwPath*)LuaCembedTable_get_long_prop(self,PATH_POINTER);
     return LuaCEmbed_send_bool(DtwPath_changed(self_path));
 }
+LuaCEmbedResponse *path_unpack(LuaCEmbedTable *self,LuaCEmbed *args){
+    DtwPath *self_path = (DtwPath*)LuaCembedTable_get_long_prop(self,PATH_POINTER);
+    int total_dirs = DtwPath_get_total_dirs(self_path);
+    int size= total_dirs;
+    LuaCEmbedTable *elements =LuaCembed_new_anonymous_table(args);
+    for(int i =0;i <total_dirs;i++){
+        char *current=DtwPath_get_sub_dirs_from_index(self_path,i,i);
+        LuaCEmbedTable_append_string(elements,current);
+    }
+    char *full_name = DtwPath_get_full_name(self_path);
+    if(full_name !=NULL){
+        LuaCEmbedTable_append_string(elements,full_name);
+        size+=1;
+    }
+    LuaCEmbedTable *final_response =LuaCembed_new_anonymous_table(args);
+    LuaCEmbedTable_append_table(final_response,elements);
+    LuaCEmbedTable_append_long(final_response,size);
+    return LuaCEmbed_send_multi_return(final_response);
 
+
+
+
+    return NULL;
+}
 
 LuaCEmbedResponse *path_add_start_dir(LuaCEmbedTable *self,LuaCEmbed *args){
     char *start_dir = LuaCEmbed_get_str_arg(args,0);
@@ -267,6 +290,7 @@ LuaCEmbedTable *raw_create_path(LuaCEmbed *args,DtwPath *path){
     LuaCEmbedTable_set_method(self,PATH_INSERT_DIR_AFTER_METHOD,path_insert_dir_after);
     LuaCEmbedTable_set_method(self,PATH_INSERT_DIR_BEFORE_METHOD,path_insert_dir_before);
     LuaCEmbedTable_set_method(self,PATH_REMOVE_SUB_DIRS_AT_METHOD,path_remove_sub_dirs_at);
+    LuaCEmbedTable_set_method(self,PATH_UNPACK,path_unpack);
     LuaCEmbedTable_set_method(self,DELETE_METHOD,path_delete);
 
     return self;

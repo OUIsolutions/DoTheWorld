@@ -52,6 +52,8 @@ LuaCEmbedResponse *path_insert_dir_before(LuaCEmbedTable *self,LuaCEmbed *args);
 
 LuaCEmbedResponse *path_remove_sub_dirs_at(LuaCEmbedTable *self,LuaCEmbed *args);
 
+LuaCEmbedResponse *path_unpack(LuaCEmbedTable *self,LuaCEmbed *args);
+
 
 LuaCEmbedResponse *path_delete(LuaCEmbedTable *self,LuaCEmbed *args);
 

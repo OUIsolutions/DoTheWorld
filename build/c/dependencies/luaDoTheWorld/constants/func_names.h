@@ -38,4 +38,5 @@
 #define NEW_PATH "newPath"
 #define NEW_TREE "newTree"
 #define NEW_TREE_FROM_HARWARE "newTree_from_hardware"
-
+#define STARTS_WITH "starts_with"
+#define ENDS_WITH "ends_with"

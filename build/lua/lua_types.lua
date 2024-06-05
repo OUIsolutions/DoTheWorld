@@ -1,6 +1,5 @@
 
 
-
 ---@class DtwTreePart
 ---@field path DtwPath
 ---@field get_value fun():string
@@ -54,6 +53,7 @@
 ---@field insert_dir_after fun(point:string, dir:string):DtwPath
 ---@field insert_dir_before fun(point:string, dir:string):DtwPath
 ---@field remove_dir_at fun(point:string):DtwPath
+---@field unpack fun():string[],number
 
 
 
@@ -118,9 +118,9 @@
 ---@field get_bool fun(): boolean | nil
 ---@field set_value fun(value:string | number | boolean | string | DtwResource )
 ---@field commit fun()  apply the modifications
----@field lock fun() lock the resource from other process 
+---@field lock fun() lock the resource from other process
 ---@field unlock fun()
----@field unload fun() unload the content 
+---@field unload fun() unload the content
 ---@field get_path_string fun() :string
 ---@field each fun(callback :fun(element:DtwResource))
 ---@field set_extension fun(extension:string)
@@ -137,15 +137,15 @@
 ---@field move_any_overwriting fun(src:string,dest:string):boolean returns true if the operation were ok otherwise false
 ---@field move_any_merging fun(src:string,dest:string):boolean returns true if the operation were ok otherwise false
 ---@field remove_any fun(src:string):boolean returns true if the operation were ok otherwise false
----@field base64_encode_file fun(src:string):string transform file into base64 
+---@field base64_encode_file fun(src:string):string transform file into base64
 ---@field base64_encode fun(value:string | number | boolean | string):string transform content into base64
 ---@field base64_decode fun(value:string): string | string retransform base64 into normal value
----@field list_files fun(src:string):string[] 
----@field list_dirs fun(src:string):string[] 
----@field list_all fun(src:string):string[] 
----@field list_files_recursively fun(src:string):string[] 
----@field list_dirs_recursively fun(src:string):string[] 
----@field list_all_recursively fun(src:string):string[] 
+---@field list_files fun(src:string):string[],number
+---@field list_dirs fun(src:string):string[],number
+---@field list_all fun(src:string):string[],number
+---@field list_files_recursively fun(src:string):string[],number
+---@field list_dirs_recursively fun(src:string):string[],number
+---@field list_all_recursively fun(src:string):string[],number
 ---@field load_file fun(src:string):string | string
 ---@field write_file fun(src:string,value:string | number | boolean | DtwTreePart | DtwResource | DtwActionTransaction)
 ---@field is_blob fun(value:any):boolean returns if a value is a blob
@@ -165,6 +165,9 @@
 ---@field newTree fun():DtwTree
 ---@field newTree_from_hardware fun(path:string):DtwTree
 ---@field concat_path fun(path1:string,path2:string):string
+---@field starts_with fun(comparation:string,prefix:string):boolean
+---@field ends_with fun(comparation:string,sulfix:string):boolean
+
 
 
 ---@type DtwModule
