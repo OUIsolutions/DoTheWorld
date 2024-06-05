@@ -11,13 +11,7 @@ CACHE_POINT  = "cache2"
 local function main()
 
 
-    local path = dtw.newPath("/home/mateus/Documentos/OUI/production/clibs/DoTheWorld/tests/main_test/hash/S_file_hashing_by_last_modification/exec.c")
-    local dirs,size=  path.unpack()
-    for i=1,size do
-    	clib.print(dirs[i])
-    	clib.print(" ")
-    end
-    if false then
+
         local src_sha = dtw.generate_sha_from_folder_by_content(LIB_FOLDER)
         local cache = NewCache(CACHE_POINT)
 
@@ -30,7 +24,7 @@ local function main()
 
         Execute_full_test(cache,src_sha)
 
-    end
+
 
 
 

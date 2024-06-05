@@ -13,12 +13,17 @@ function get_test_spec(content)
      local dirs,size = path.unpack()
      for i=1,size do
         local current_dir = dirs[i]
+        if dtw.starts_with(current_dir,"S_") then
+        	test.test_type = IMPREDITIBLE
+        end
+        if dtw.starts_with(current_dir,"T_") then
+        	test.test_type = PREDICTIBLE
+        end
      end
 
      if test.test_type == nil then
      	return nil
      end
-      clib.print(test.test_type.."\n");
 
      test.test_dir = path.get_dir()
      return test
@@ -31,6 +36,7 @@ function Execute_full_test(cache,src_sha)
     	local possible_test = listage[i]
         local test = get_test_spec(possible_test)
         if test ~= nil then
+            clib.print(test.test_dir.."\n")
         end
 
     end
