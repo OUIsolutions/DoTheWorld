@@ -20,12 +20,3 @@ LuaCEmbedResponse * get_time(LuaCEmbedTable *self,LuaCEmbed *args){
     sscanf(buffer,"%lf",&value);
     return lua.response.send_double(value);
 }
-LuaCEmbedResponse * system_function_with_status(LuaCEmbedTable *self,LuaCEmbed *args){
-    char *command = lua.args.get_str(args,0);
-    if(lua.has_errors(args)){
-        char *msg  = lua.get_error_message(args);
-        return lua.response.send_error(msg);
-    }
-    int result = system(command);
-    return lua.response.send_long(result);
-}

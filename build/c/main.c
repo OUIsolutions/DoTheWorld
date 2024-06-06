@@ -3,7 +3,7 @@
 
 LuaCEmbedNamespace lua;
 DtwNamespace dtw;
-
+CTextStackModule stack;
 int lua_exit = 0;
 
 #include "callbacks/declaration.h"
@@ -17,12 +17,15 @@ void add_callbacks(LuaCEmbed *main_obj){
     lua.tables.set_method(clib,"get_str_size",lua_get_str_size);
     lua.tables.set_method(clib,"get_char",lua_get_char);
     lua.tables.set_method(clib,"system_with_status",system_function_with_status);
+    lua.tables.set_method(clib,"system_with_string",system_with_text);
+
 }
 
 
 int main(int argc,char *argv[]){
     lua  = newLuaCEmbedNamespace();
     dtw = newDtwNamespace();
+    stack = newCTextStackModule();
     LuaCEmbed * main_obj = lua.newLuaEvaluation();
     add_callbacks(main_obj);
     lua.load_lib_from_c(main_obj,load_luaDoTheWorld,"dtw");
