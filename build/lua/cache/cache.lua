@@ -1,4 +1,6 @@
-
+---@param resource_path DtwResource
+---@param callback fun():string
+---@return CacheCallback
 local function new_cache_element(resource_path,callback)
 
     local self = {
@@ -31,8 +33,10 @@ local function new_cache_element(resource_path,callback)
 
 end
 
-
+---@param path string
+---@return Cache
 function NewCache(path)
+
 
     local self = {
         resource_path = dtw.newResource(path)

@@ -2,11 +2,18 @@
 IMPREDITIBLE = 1
 PREDICTIBLE = 2
 
-function get_test_spec(content)
+---@class TestSpec
+---@field test_type number
+---@field test_dir string
+
+
+---@param content string
+---@return TestSpec | nil
+local function get_test_spec(content)
 
      local path = dtw.newPath(content)
      local filename = path.get_name()
-     if filename ~= "exec.c" and  filename ~= "exec.cpp" then
+     if filename ~= "exec.c" then
      	return nil
      end
      local test = {}
@@ -29,6 +36,40 @@ function get_test_spec(content)
      return test
 end
 
+---@param cache Cache
+---@param src_sha string
+---@param side_effect_sha string
+---@param artifact TestSpec
+local function execute_test_artifact(cache,src_sha,side_effect_sha,artifact)
+
+    local exec_path = dtw.concat_path(artifact.test_dir,"exec.c")
+    local out_path = dtw.concat_path(artifact.test_dir,"exec.out")
+    local exec_content = dtw.load_file(exec_path)
+
+    local compiled = false;
+    local compilation = cache.new_element(function ()
+        compiled = true;
+        local comand = "gcc "..exec_path.." -o "..out_path
+        local result = clib.system_with_status(comand)
+        if result ~=0 then
+        	clib.exit(1)
+        end
+    end).
+    add_dependencie(src_sha).
+    add_dependencie(exec_content)
+
+    if compiled then
+    	clib.print("compiled "..exec_path.."\n");
+    else
+        clib.print("already cached "..exec_path.."\n");
+    end
+
+
+end
+
+
+---@param cache Cache
+---@param src_sha string
 function Execute_full_test(cache,src_sha)
     local side_effect_sha =  dtw.generate_sha_from_folder_by_content(SIDE_EFFECT)
     local listage,size =dtw.list_files_recursively(TEST_POINT)
@@ -36,7 +77,7 @@ function Execute_full_test(cache,src_sha)
     	local possible_test = listage[i]
         local test = get_test_spec(possible_test)
         if test ~= nil then
-            clib.print(test.test_dir.."\n")
+            execute_test_artifact(cache,src_sha,side_effect_sha,test)
         end
 
     end
