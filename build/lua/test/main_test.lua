@@ -46,9 +46,9 @@ local function execute_test_artifact(cache,src_sha,side_effect_sha,artifact)
     local out_path = dtw.concat_path(artifact.test_dir,"exec.out")
     local exec_content = dtw.load_file(exec_path)
 
-    local compiled = false;
-    local compilation = cache.new_element(function ()
-        compiled = true;
+
+    cache.new_element(function ()
+    	clib.print("compiled "..exec_path.."\n");
         local comand = "gcc "..exec_path.." -o "..out_path
         local result = clib.system_with_status(comand)
         if result ~=0 then
@@ -56,13 +56,9 @@ local function execute_test_artifact(cache,src_sha,side_effect_sha,artifact)
         end
     end).
     add_dependencie(src_sha).
-    add_dependencie(exec_content)
+    add_dependencie(exec_content).
+    perform()
 
-    if compiled then
-    	clib.print("compiled "..exec_path.."\n");
-    else
-        clib.print("already cached "..exec_path.."\n");
-    end
 
 
 end
@@ -72,7 +68,8 @@ end
 ---@param src_sha string
 function Execute_full_test(cache,src_sha)
     local side_effect_sha =  dtw.generate_sha_from_folder_by_content(SIDE_EFFECT)
-    local listage,size =dtw.list_files_recursively(TEST_POINT)
+    local listage,size =dtw.list_files_recursively(TEST_POINT,true)
+
     for i=1,size do
     	local possible_test = listage[i]
         local test = get_test_spec(possible_test)
