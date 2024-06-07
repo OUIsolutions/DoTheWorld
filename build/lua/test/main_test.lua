@@ -1,45 +1,4 @@
 
-IMPREDITIBLE = 1
-PREDICTIBLE = 2
-
----@class TestSpec
----@field test_type number
----@field test_dir string
-
-
----@param content string
----@return TestSpec | nil
-local function get_test_spec(content)
-
-     local path = dtw.newPath(content)
-     local filename = path.get_name()
-     if filename ~= "exec.c" then
-     	return nil
-     end
-     local test = {}
-     local dirs,size = path.unpack()
-     for i=1,size do
-        local current_dir = dirs[i]
-        if dtw.starts_with(current_dir,"S_") then
-        	test.test_type = IMPREDITIBLE
-        end
-        if dtw.starts_with(current_dir,"T_") then
-        	test.test_type = PREDICTIBLE
-        end
-     end
-
-     if test.test_type == nil then
-     	return nil
-     end
-
-     test.test_dir = path.get_dir()
-     return test
-end
-
-local function rebase_side_effect()
-	        dtw.copy_any_overwriting("side_effect_copy",SIDE_EFFECT)
-
-end
 
 ---@param cache Cache
 ---@param src_sha string
@@ -53,62 +12,8 @@ local function execute_test_artifact(cache,src_sha,side_effect_sha,artifact)
     local out_path = dtw.concat_path(artifact.test_dir,"exec.out")
     local exec_content = dtw.load_file(exec_path)
 
-    local compiled = false
-    cache.new_element(function ()
-        compiled = true
-        local comand = "gcc "..exec_path.." -o "..out_path
-        local result = clib.system_with_status(comand)
-        if result ~=0 then
-        	clib.exit(1)
-        end
-        clib.print(ANSI_GREEN.."\tcompilation:passed\n")
-    end).
-    add_dependencie(src_sha).
-    add_dependencie(exec_content).
-    perform()
-
-    if compiled == false then
-        clib.print(ANSI_YELLOW.."\tcompilation:cached\n")
-    end
-
-    local memory_tested = false
-    cache.new_element(function ()
-        memory_tested =true
-        local comand = "valgrind --log-file='output_test' ./"..out_path
-        clib.system_with_string(comand);
-
-        local result = dtw.load_file("output_test")
-        if result == nil then
-            rebase_side_effect()
-            clib.exit(1)
-            return
-        end
-
-        local HEAP_CHECK  = "All heap blocks were freed -- no leaks are possible"
-        local error =false
-        if clib.indexof(result,HEAP_CHECK) == -1 then
-        	error = true
-        end
-        local ERROR_CHECK = "ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)"
-        if clib.indexof(result,ERROR_CHECK) == -1 then
-          error = true
-        end
-
-        rebase_side_effect()
-        if error then
-            clib.print(ANSI_RED..result)
-        	clib.exit(1)
-        end
-        clib.print(ANSI_GREEN.."\tmemory test:passed\n")
-end).
-    add_dependencie(src_sha).
-    add_dependencie(exec_content).
-    add_dependencie(side_effect_sha).
-    perform()
-
-    if memory_tested == false then
-        clib.print(ANSI_YELLOW.."\tmemory test:cached\n")
-    end
+    Execute_compilation(cache,src_sha,exec_content,exec_path,out_path)
+    Exec_valgrind_test(cache,src_sha,exec_content,side_effect_sha,out_path)
 
 end
 
@@ -124,7 +29,7 @@ function Execute_full_test(cache,src_sha)
 
     for i=1,size do
     	local possible_test = listage[i]
-        local test = get_test_spec(possible_test)
+        local test = Get_test_spec(possible_test)
         if test ~= nil then
             execute_test_artifact(cache,src_sha,side_effect_sha,test)
         end
