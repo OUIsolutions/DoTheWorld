@@ -755,7 +755,6 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
 
 
 
-
 typedef struct DtwPath {
     char *original_path_string;
     char *path;
@@ -845,6 +844,7 @@ void DtwPath_insert_dir_before(DtwPath *self,const char *str,const char *dir);
 
 
 void DtwPath_remove_sub_dirs_at(DtwPath *self,const char *str);
+
 
 
 
@@ -7045,7 +7045,6 @@ struct DtwStringArray *  dtw_list_basic(const char *path,int expected_type,bool 
 
 
 
-
 struct DtwPath * newDtwPath(const char *path) {
     struct DtwPath *self = (struct DtwPath *)malloc(sizeof(struct DtwPath));
     self->garbage = newDtwStringArray();
@@ -7466,9 +7465,9 @@ void DtwPath_remove_sub_dirs_at(DtwPath *self,const char *str){
 
     int start = private_dtw_count_dirs_before(current_dir,index);
     int end = private_dtw_count_dirs_before(current_dir,index+ (int)strlen(str));
-    printf("start %d end %d\n",start,end);
     DtwPath_remove_sub_dirs_at_index(self, start, end - 1);
 }
+
 
 
 
