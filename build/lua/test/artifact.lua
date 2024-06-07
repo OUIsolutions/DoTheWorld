@@ -28,7 +28,7 @@ PREDICTIBLE = 2
         if dtw.starts_with(current_dir,TEST_INPREDICTBILE_START) then
         	test.test_type = IMPREDITIBLE
         end
-        if dtw.starts_with(current_dir,TEST_INPREDICTBILE_START) then
+        if dtw.starts_with(current_dir,TEST_PREDICIBLE_START) then
         	test.test_type = PREDICTIBLE
         end
      end
