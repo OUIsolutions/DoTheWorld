@@ -1,4 +1,3 @@
- 
 blob.png: binary
 a.txt: string
 sub_folder: folder

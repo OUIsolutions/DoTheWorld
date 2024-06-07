@@ -7,7 +7,7 @@ function Execute_compilation(cache,src_sha,artifact)
     local compiled = false
     cache.new_element("compilation",function ()
         compiled = true
-        local comand = "gcc "..artifact.c_path.." -o "..artifact.executable_path
+        local comand = "gcc "..artifact.c_path.." -DDTW_DEBUG_TIME -o "..artifact.executable_path
         local result = clib.system_with_status(comand)
         if result ~=0 then
         	clib.exit(1)

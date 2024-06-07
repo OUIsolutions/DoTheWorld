@@ -1,4 +1,3 @@
- 
 value after digest string 3afe1895b7785b881f5c1aa06240fadb3f3e755398e682262e7a0fdeffc5c36c
 value after long: d1a403705c0e5a76a53499fe8a62f2dfdf1f368f5e061e6cffb6991f09878853
 value after double: 2f019f8c1be6cb6bbadd63ffb3a373a93e2263ec7f0e8f40178b57cde953124b

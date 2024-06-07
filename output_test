@@ -1,32 +1,15 @@
-==48474== Memcheck, a memory error detector
-==48474== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
-==48474== Using Valgrind-3.23.0 and LibVEX; rerun with -h for copyright info
-==48474== Command: ./tests/main_test/schema/T_user_remove_multi_commit/exec.out
-==48474== Parent PID: 48225
-==48474== 
-==48474== 
-==48474== Process terminating with default action of signal 2 (SIGINT)
-==48474==    at 0x49763D1: open (open64.c:41)
-==48474==    by 0x40E0E4: DtwFlockLocker_lock (in /home/mateus/Documentos/OUI/production/clibs/DoTheWorld/tests/main_test/schema/T_user_remove_multi_commit/exec.out)
-==48474==    by 0x40E2AD: DtwLocker_lock (in /home/mateus/Documentos/OUI/production/clibs/DoTheWorld/tests/main_test/schema/T_user_remove_multi_commit/exec.out)
-==48474==    by 0x40FA7C: DtwResource_lock (in /home/mateus/Documentos/OUI/production/clibs/DoTheWorld/tests/main_test/schema/T_user_remove_multi_commit/exec.out)
-==48474==    by 0x40ECE3: DtwResource_sub_resource_ensuring_not_exist (in /home/mateus/Documentos/OUI/production/clibs/DoTheWorld/tests/main_test/schema/T_user_remove_multi_commit/exec.out)
-==48474==    by 0x40F26F: DtwResource_sub_resource_random (in /home/mateus/Documentos/OUI/production/clibs/DoTheWorld/tests/main_test/schema/T_user_remove_multi_commit/exec.out)
-==48474==    by 0x410B27: DtwResource_new_schema_insertion (in /home/mateus/Documentos/OUI/production/clibs/DoTheWorld/tests/main_test/schema/T_user_remove_multi_commit/exec.out)
-==48474==    by 0x415429: create_users (in /home/mateus/Documentos/OUI/production/clibs/DoTheWorld/tests/main_test/schema/T_user_remove_multi_commit/exec.out)
-==48474==    by 0x415569: main (in /home/mateus/Documentos/OUI/production/clibs/DoTheWorld/tests/main_test/schema/T_user_remove_multi_commit/exec.out)
-==48474== 
-==48474== HEAP SUMMARY:
-==48474==     in use at exit: 1,333 bytes in 45 blocks
-==48474==   total heap usage: 57 allocs, 12 frees, 1,469 bytes allocated
-==48474== 
-==48474== LEAK SUMMARY:
-==48474==    definitely lost: 0 bytes in 0 blocks
-==48474==    indirectly lost: 0 bytes in 0 blocks
-==48474==      possibly lost: 0 bytes in 0 blocks
-==48474==    still reachable: 1,333 bytes in 45 blocks
-==48474==         suppressed: 0 bytes in 0 blocks
-==48474== Rerun with --leak-check=full to see details of leaked memory
-==48474== 
-==48474== For lists of detected and suppressed errors, rerun with: -s
-==48474== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==58705== Memcheck, a memory error detector
+==58705== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==58705== Using Valgrind-3.23.0 and LibVEX; rerun with -h for copyright info
+==58705== Command: ./tests/main_test/trees/T_tree_map/exec.out
+==58705== Parent PID: 57288
+==58705== 
+==58705== 
+==58705== HEAP SUMMARY:
+==58705==     in use at exit: 0 bytes in 0 blocks
+==58705==   total heap usage: 550 allocs, 550 frees, 346,874 bytes allocated
+==58705== 
+==58705== All heap blocks were freed -- no leaks are possible
+==58705== 
+==58705== For lists of detected and suppressed errors, rerun with: -s
+==58705== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

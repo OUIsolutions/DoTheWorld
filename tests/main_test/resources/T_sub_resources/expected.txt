@@ -1,4 +1,3 @@
- 
 ----------------------------------------
 path: tests/target/a.txt
 name: a.txt

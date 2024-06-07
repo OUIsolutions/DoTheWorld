@@ -1,4 +1,3 @@
- 
 ------------------------------------------------------------
 First Path: tests/target/blob.png
 Path: tests/target/blob.png
