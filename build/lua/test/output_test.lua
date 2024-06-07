@@ -33,29 +33,40 @@ end
 ---@param original_side_effect_sha string
 ---@param artifact TestArtifact
 local function handle_side_effect_folde(original_side_effect_sha,artifact)
-          local current_sidde_effect = dtw.generate_sha_from_file(SIDE_EFFECT)
-          if current_sidde_effect ~=original_side_effect_sha then
-          	 clib.print(ANSI_YELLOW.."\tside effect folder: no changes\n")
-          	 return
-          end
+      local current_sidde_effect = dtw.generate_sha_from_file(SIDE_EFFECT)
 
-          local comparation_provided = dtw.isdir(artifact.side_effect_folder_path)
-          if comparation_provided == false or RECONSTRUCT then
-          	 dtw.move_any_overwriting(SIDE_EFFECT,artifact.side_effect_folder_path)
-          	 Rebase_side_effect()
-             clib.print(ANSI_MAGENTA.."\tside effect folder: recreated\n")
-             return
-          end
+      if current_sidde_effect == original_side_effect_sha then
+         clib.print(ANSI_YELLOW.."\tside effect folder: no changes\n")
+         return
+      end
 
-          local comparation_sha = dtw.generate_sha_from_folder_by_content(artifact.side_effect_folder_path)
-          if comparation_sha ~=original_side_effect_sha then
-          	   clib.print(ANSI_RED.."\tside effect folder: diffeent\n")
-          	   Rebase_side_effect()
-               clib.exit(1)
-          end
 
-          clib.print(ANSI_GREEN.."\tside effect folder: passed\n")
-          Rebase_side_effect()
+      local comparation_provided = dtw.isdir(artifact.side_effect_folder_path)
+
+      if comparation_provided == false  then
+         dtw.move_any_overwriting(SIDE_EFFECT,artifact.side_effect_folder_path)
+         Rebase_side_effect()
+         clib.print(ANSI_CYAN.."\tside effect folder: created\n")
+         return
+      end
+
+      if RECONSTRUCT then
+         dtw.move_any_overwriting(SIDE_EFFECT,artifact.side_effect_folder_path)
+         Rebase_side_effect()
+         clib.print(ANSI_MAGENTA.."\tside effect folder: recreated\n")
+         return
+      end
+
+
+      local comparation_sha = dtw.generate_sha_from_folder_by_content(artifact.side_effect_folder_path)
+      if comparation_sha ~=original_side_effect_sha then
+           clib.print(ANSI_RED.."\tside effect folder: diffeent\n")
+           Rebase_side_effect()
+           clib.exit(1)
+      end
+
+      clib.print(ANSI_GREEN.."\tside effect folder: passed\n")
+      Rebase_side_effect()
 end
 
 ---@param cache Cache
