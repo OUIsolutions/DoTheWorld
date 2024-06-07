@@ -39,12 +39,13 @@ end
 ---@param artifact TestArtifact
 local function handle_side_effect_folder(original_side_effect_sha,artifact)
 
-      local current_sidde_effect = dtw.generate_sha_from_file(SIDE_EFFECT)
+      local current_sidde_effect = dtw.generate_sha_from_folder_by_content(SIDE_EFFECT)
 
       if current_sidde_effect == original_side_effect_sha then
          clib.print(ANSI_YELLOW.."\tside effect folder: no changes\n")
          return
       end
+
 
       local comparation_provided = dtw.isdir(artifact.side_effect_folder_path)
 
@@ -87,9 +88,8 @@ function Test_out_put(cache,original_side_effect_sha,artifact)
           output_tested = true
           local output_test = clib.system_with_string("./"..artifact.executable_path)
           handle_expected_file(expected_content,artifact,output_test)
-          Rebase_side_effect()
-          --clib.print("side effect "..artifact.side_effect_folder_path.."\n")
           handle_side_effect_folder(original_side_effect_sha,artifact)
+          Rebase_side_effect()
 
     end).
     add_dependencie(artifact.executable_sha).
