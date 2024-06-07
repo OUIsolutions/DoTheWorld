@@ -13,14 +13,17 @@ function Test_out_put(cache,executable_sha,side_effect_sha,test_dir,out_path,exp
         clib.print(ANSI_RED.."expected file not provided")
         clib.exit(1)
     end
+    local output_tested = false
     cache.new_element(function ()
+          output_tested = true
           local output_test = clib.system_with_string("./"..out_path)
 
           if output_test ~= expected_content then
-          	  clib.print(ANSI_RED.."side effect different\n")
+          	  clib.print(ANSI_RED.."\tside effect different\n")
           	  Rebase_side_effect()
               clib.exit(1)
           end
+          clib.print(ANSI_GREEN.."\texpected file: passed\n")
 
           local local_side_effect_dir_path = dtw.concat_path(test_dir,"side_effect")
           if dtw.isdir(local_side_effect_dir_path) then
@@ -31,13 +34,18 @@ function Test_out_put(cache,executable_sha,side_effect_sha,test_dir,out_path,exp
                   Rebase_side_effect()
                   clib.exit(1)
           	end
+            clib.print(ANSI_GREEN.."\tside effect folder: passed\n")
             Rebase_side_effect()
-
+          else
+            clib.print(ANSI_YELLOW.."\tside effect folder: not provided\n")
           end
     end).
     add_dependencie(executable_sha).
     add_dependencie(side_effect_sha).
     perform()
 
+    if output_tested == false then
+    	clib.print(ANSI_YELLOW.."output test: cached\n")
+    end
 
 end
