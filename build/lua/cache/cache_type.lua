@@ -6,4 +6,4 @@
 
 
 ---@class Cache
----@field new_element fun(callback:fun():string):CacheCallback
+---@field new_element fun(callback:fun():string | nil):CacheCallback

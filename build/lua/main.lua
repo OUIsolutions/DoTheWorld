@@ -11,7 +11,7 @@ CACHE_POINT  = "cache2"
 local function main()
 
 
-    local result = clib.system_with_string("valgrind  ./a.out --log-file='teste'")
+    local result = clib.system_with_string("valgrind --log-file='teste'  ./a.out ")
     clib.print("result was: "..result.."\n")
 
     if false then

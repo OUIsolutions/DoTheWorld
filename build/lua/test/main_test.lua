@@ -66,9 +66,16 @@ local function execute_test_artifact(cache,src_sha,side_effect_sha,artifact)
 
 
     cache.new_element(function ()
-        clib.print("testing "..out_path.."\n");
-        local comand = "valgrind ./"..out_path
-        local result = clib.system_with_string(comand);
+        clib.print("testing memory"..out_path.."\n");
+        local comand = "valgrind --log-file='output_test' ./"..out_path
+        clib.system_with_status(comand);
+
+        local result = dtw.load_file("output_test")
+        if result == nil then
+            rebase_side_effect()
+            clib.exit(1)
+            return
+        end
 
         local HEAP_CHECK  = "All heap blocks were freed -- no leaks are possible"
         local error =false
@@ -84,6 +91,7 @@ local function execute_test_artifact(cache,src_sha,side_effect_sha,artifact)
         if error then
         	clib.exit(1)
         end
+
 end).
     add_dependencie(src_sha).
     add_dependencie(exec_content).
