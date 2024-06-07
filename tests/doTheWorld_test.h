@@ -32,7 +32,6 @@ SOFTWARE.
 
 
 
-
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -63,7 +62,6 @@ SOFTWARE.
 #endif
 
 #ifndef cJSON__h
-
 /*
   Copyright (c) 2009-2017 Dave Gamble and cJSON contributors
 
@@ -364,11 +362,11 @@ CJSON_PUBLIC(void) cJSON_free(void *object);
 #endif
 
 #endif
+
 #undef cJSON__h
 #endif //cJSON__h
 
 #ifndef SHA_256_H
-
 #ifndef SHA_256_H
 #define SHA_256_H
 
@@ -505,9 +503,9 @@ uint8_t *sha_256_close(struct Sha_256 *sha_256);
 #endif
 
 #endif
+
 #undef SHA_256_H
 #endif  //SHA_256_H
-
 
 
 typedef struct DtwStringArray {
@@ -853,7 +851,6 @@ void DtwPath_remove_sub_dirs_at(DtwPath *self,const char *str);
 
 
 
-
 #define DTW_NOT_MIMIFY 1
 #define DTW_MIMIFY 2
 
@@ -1089,10 +1086,8 @@ void DtwMultiFileLocker_represemt(DtwMultiFileLocker *self);
 void DtwMultiFileLocker_free(DtwMultiFileLocker *self);
 
 
+
 #ifdef __linux__
-
-
-
 
 typedef struct {
 
@@ -1131,6 +1126,8 @@ void privateDtwFlockArray_free(privateDtwFlockArray *self);
 
 
 
+
+
 typedef struct {
    const char *temp_folder;
    privateDtwFlockArray  *locked_files;
@@ -1148,8 +1145,8 @@ void  DtwFlockLocker_represent(DtwFlockLocker *self);
 
 void  DtwFlockLocker_free(DtwFlockLocker *self);
 
-#endif
 
+#endif
 
 #define DTW_LOCKER_LOCKED 0
 #define DTW_LOCKER_IMPOSSIBLE_TO_CREATE_FILE_DESCRIPTOR 5
@@ -1176,7 +1173,6 @@ void DtwLocker_unlock(DtwLocker *self, const  char *element);
 void DtwLocker_represemt(DtwLocker *self);
 
 void DtwLocker_free(DtwLocker *self);
-
 
 
 
@@ -1393,7 +1389,6 @@ DtwSchema * (DtwSchema_new_subSchema)(DtwSchema *self,const char *name);
 void DtwSchema_add_primary_key(DtwSchema *self,const char *name);
 
 void private_newDtwSchema_free(DtwSchema *self);
-
 
 
 
@@ -1642,6 +1637,7 @@ void DtwResource_set_bool_in_sub_resource(DtwResource *self,const char *key, boo
 
 
 
+
 typedef struct DtwResourceArray{
     DtwResource **resources;
     long size;
@@ -1663,6 +1659,7 @@ DtwResourceArray * DtwResource_sub_resources(DtwResource *self);
 void DtwResourceArray_represent(DtwResourceArray *self);
 
 void DtwResourceArray_free(DtwResourceArray *self);
+
 
 
 
@@ -1708,7 +1705,6 @@ bool DtwHash_digest_string_array_content_adding_name(DtwHash *self,DtwStringArra
 
 
 void  DtwHash_free(DtwHash *self);
-
 
 
 
@@ -1787,7 +1783,6 @@ typedef struct DtwStringArrayModule{
 }DtwStringArrayModule;
 
 DtwStringArrayModule newDtwStringArrayModule();
-
 
 
 
@@ -1956,6 +1951,7 @@ DtwTreeModule newDtwTreeModule();
 
 
 
+
 typedef struct DtwLockerModule{
     DtwLocker * (*newLocker)();
     int (*lock)(DtwLocker *self, const  char *element);
@@ -1966,7 +1962,6 @@ typedef struct DtwLockerModule{
 }DtwLockerModule;
 
 DtwLockerModule newDtwLockerModule();
-
 
 
 
@@ -2049,7 +2044,6 @@ typedef struct DtwTransactionModule{
 }DtwTransactionModule;
 
 DtwTransactionModule newDtwTransactionModule();
-
 
 
 
@@ -2310,6 +2304,8 @@ DtwNamespace newDtwNamespace();
 
 
 
+
+
 const char dtw_base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 
@@ -2317,7 +2313,6 @@ const char dtw_base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstu
 
 #ifndef cJSON__h
 #define cJSON__h
-
 /*
   Copyright (c) 2009-2017 Dave Gamble and cJSON contributors
 
@@ -5436,6 +5431,7 @@ CJSON_PUBLIC(void) cJSON_free(void *object)
 {
     global_hooks.deallocate(object);
 }
+
 #endif //cJSON__h
 
 #undef true
@@ -5447,7 +5443,6 @@ CJSON_PUBLIC(void) cJSON_free(void *object)
 
 #ifndef SHA_256_H
 #define SHA_256_H
-
 
 
 #define TOTAL_LEN_LEN 8
@@ -5736,8 +5731,8 @@ char * calc_sha_256_from_file_returning_string(const char *filename)
 	return hash_string;
 
 }
-#endif  //SHA_256_H
 
+#endif  //SHA_256_H
 
 
 
@@ -7575,7 +7570,6 @@ void DtwStringArray_free(struct DtwStringArray *self){
 }
 
 
-
 //
 // Created by jurandi on 01-07-2023.
 //
@@ -9076,11 +9070,9 @@ void DtwMultiFileLocker_free(DtwMultiFileLocker *self){
     DtwStringArray_free(self->locked_elements);
     free(self);
 }
+
 #ifdef __linux__
-
-
-
-
+    
 
 privateDtwFlockLockedElement * private_new_privateDtwFlockLockedElement(const char *filename, int file_descriptor){
     privateDtwFlockLockedElement *self = (privateDtwFlockLockedElement*) malloc(sizeof (privateDtwFlockLockedElement));
@@ -9223,8 +9215,8 @@ void  DtwFlockLocker_free(DtwFlockLocker *self){
     free(self);
 }
 
-#endif
 
+#endif
 
 
 
@@ -9282,7 +9274,6 @@ void DtwLocker_free(DtwLocker *self){
 #endif
     free(self);
 }
-
 
 
 
@@ -9374,7 +9365,6 @@ void privateDtwResourceRootProps_free(privateDtwResourceRootProps *self){
 
     free(self);
 }
-
 
 
 
@@ -10835,6 +10825,7 @@ void DtwResource_set_bool_in_sub_resource(DtwResource *self,const char *key, boo
 
 
 
+
 DtwResourceArray * newDtwResourceArray(){
     DtwResourceArray *self = (DtwResourceArray*) malloc(sizeof (DtwResourceArray));
     self->resources = (DtwResource**) malloc(0);
@@ -10928,7 +10919,6 @@ void DtwResourceArray_free(DtwResourceArray *self){
     free(self->resources);
     free(self);
 }
-
 
 
 
@@ -11803,7 +11793,6 @@ void  DtwHash_free(DtwHash *self){
 
 
 
-
 DtwRandonizerModule newDtwRandonizerModule(){
     DtwRandonizerModule self = {0};
     self.newRandonizer = newDtwRandonizer;
@@ -11859,7 +11848,6 @@ DtwStringArrayModule newDtwStringArrayModule(){
     self.free =DtwStringArray_free;
     return self;
 }
-
 
 
 
@@ -11954,6 +11942,7 @@ DtwTreeModule newDtwTreeModule(){
 
 
 
+
 DtwLockerModule newDtwLockerModule(){
     DtwLockerModule  self = {0};
     self.newLocker = newDtwLocker;
@@ -11963,7 +11952,6 @@ DtwLockerModule newDtwLockerModule(){
     self.free = DtwLocker_free;
     return self;
 }
-
 
 
 DtwActionTransactionModule newDtwActionTransactionModule(){
@@ -12028,7 +12016,6 @@ DtwTransactionModule newDtwTransactionModule(){
 
     return self;
 }
-
 
 
 
@@ -12213,6 +12200,8 @@ DtwNamespace newDtwNamespace(){
 
     return self;
 }
+
+
 
 
 

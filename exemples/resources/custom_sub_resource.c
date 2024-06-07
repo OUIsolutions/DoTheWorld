@@ -9,6 +9,10 @@ int main (){
     dtw.resource.set_string(next,"next-value");
 
 
+
+
+
+
     DtwResource *random = dtw.resource.sub_resource_random(test,".txt");
     dtw.resource.set_string(random,"random-value");
 

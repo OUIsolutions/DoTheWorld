@@ -1,4 +1,3 @@
- 
 tests/target/
 tests/target/a.txt
 tests/target/blob.png

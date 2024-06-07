@@ -1,5 +1,5 @@
- 
-start 0 end 1
+start 0
+end 1
 First Path: a/b/c/d.txt
 Path: b/c/d.txt
 Path Changed: true

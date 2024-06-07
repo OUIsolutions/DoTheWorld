@@ -1,4 +1,3 @@
- 
 	action: write
 	source:b.txt
 	content : aaaaa

@@ -41,7 +41,7 @@ int main(int argc, char *argv[]){
 
 ## Reading strings
 if you are sure that the content you are going to read is not binary you can call the function **dtw_load_string_file_content**
-<!--codeof:exemples/io/loading_string.c-->
+
 ~~~c
 
 #include "doTheWorld.h"
@@ -62,8 +62,10 @@ int main(int argc, char *argv[]){
   
 }
 ~~~
+
 ### Reading Any Content
-<!--codeof:exemples/io/loading_any.c-->
+
+
 ~~~c
 #include "doTheWorld.h"
 
@@ -90,7 +92,8 @@ int main(int argc, char *argv[]){
 
 ### Reading Double bools and Integers
 you also can direclty load all types from an file  with numerical ios 
-<!--codeof:exemples/numerical_io/loading_data.c-->
+
+
 ~~~c
 
 #include "doTheWorld.h"
@@ -139,10 +142,11 @@ int main (){
 
 }
 ~~~
+
 to write strings in text files is very simple, just call the function **dtw_write_string_file_content**
 (Note that the target directory does not need to exist, if it does not exist it will be created automatically)
 
-<!--codeof:exemples/io/writing_strings.c-->
+
 ~~~c
 #include "doTheWorld.h"
 
@@ -155,10 +159,13 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
+
+
 ### Writing Any
 if you want to write anything to a file, it's also very simple, use the **dtw_write_any_content** function, but note that it will be necessary to pass the writing size
 
-<!--codeof:exemples/io/write_any.c-->
+
+
 ~~~c
 #include "doTheWorld.h"
 
@@ -183,10 +190,10 @@ free(content);
 }
 ~~~
 
-
 ### Writing Double , bool and Integers
 You also can write any type direclty to an file 
-<!--codeof:exemples/numerical_io/writing_data.c-->
+
+
 ~~~c
 
 #include "doTheWorld.h"
@@ -207,11 +214,12 @@ int main (){
 
 }
 ~~~
+
 If you want to create dirs you can call the function **dtw_create_dir_recursively**
 passing the folder you want to create,dont wory about if the previews path dont exist 
 it will create till reachs the target folder
 
-<!--codeof:exemples/io/create_dirs.c-->
+
 ~~~c
 #include "doTheWorld.h"
 
@@ -223,10 +231,11 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
+
 ### Copying Anything
 With the function **dtw_copy_any** you can copy either files or folders to one position to anoter position 
 
-<!--codeof:exemples/io/copying_files.c-->
+
 ~~~c
 
 
@@ -238,9 +247,11 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
+
 ### Moving Any
 You can move either folders or files with **dtw_move_any** function
-<!--codeof:exemples/io/move_any.c-->
+
+
 ~~~c
 
 #include "doTheWorld.h"
@@ -255,10 +266,12 @@ int main(int argc, char *argv[]){
 }
 ~~~
 
+
 With the listage functions you can extract all Strings Arrays of elements in an folder 
 
 ## Listing files
-<!--codeof:exemples/monodimension_listage/list_files.c-->
+
+
 ~~~c
 
 #include "doTheWorld.h"
@@ -276,8 +289,10 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
+
 ### Listing Dirs
-<!--codeof:exemples/monodimension_listage/list_dirs.c-->
+
+
 ~~~c
 
 
@@ -294,8 +309,10 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
+
 ### Listing All
-<!--codeof:exemples/monodimension_listage/list_all.c-->
+
+
 ~~~c
 
 
@@ -312,10 +329,12 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
+
 The By Using multi dimension listage functions , you can see all itens listed in all sub folders of the "main" folder 
 
 ## Listing Files Recursively
-<!--codeof:exemples/multidimension_listage/list_files_recursively.c-->
+
+
 ~~~c
 
 #include "doTheWorld.h"
@@ -330,9 +349,10 @@ int main(int argc, char *argv[]){
   return 0;
 }
 ~~~
+
 ## Listing Dirs Recursively
 
-<!--codeof:exemples/multidimension_listage/list_dirs_recursively.c-->
+
 ~~~c
 
 #include "doTheWorld.h"
@@ -349,7 +369,8 @@ int main(int argc, char *argv[]){
 ~~~
 
 ## Listing All Recursively
-<!--codeof:exemples/multidimension_listage/list_all_recursively.c-->
+
+
 ~~~c
 
 #include "doTheWorld.h"
@@ -367,7 +388,8 @@ int main(int argc, char *argv[]){
 
 ## Dealing with base64 
 You can easly transform an binary file to an base64 string like these
-<!--codeof:exemples/extras/converting_file_to_base64.c-->
+
+
 ~~~c
 
 #include "doTheWorld.h"
@@ -381,8 +403,10 @@ int main(int argc, char *argv[]){
     free(deerb64);
 }
 ~~~
+
 You also can reconvert an base64 string to binary
-<!--codeof:exemples/extras/converting_b64_to_binary.c-->
+
+
 ~~~c
 
 #include "doTheWorld.h"
@@ -410,7 +434,8 @@ int main(int argc, char *argv[]){
 
 ## Sha256
 Generating Sha from file 
-<!--codeof:exemples/extras/generating_sha_from_file.c-->
+
+
 ~~~c
 
 #include "doTheWorld.h"
@@ -423,9 +448,10 @@ int main(int argc, char *argv[]){
    free(hash);
 }
 ~~~
+
 ### Unix
 
-<!--codeof:exemples/extras/get_entity_last_modification_in_unix.c-->
+
 ~~~c
 
 #include "doTheWorld.h"
@@ -437,12 +463,16 @@ int main(int argc, char *argv[]){
     printf("Last modification: %d\n", last_modification_in_unix);
 }
 ~~~
-<!--codeof:exemples/extras/get_entity_last_modification.c-->
+
+
+
 ~~~c
 #include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
     DtwNamespace dtw = newDtwNamespace();
+
+
 
     char *last_modification = dtw.get_entity_last_motification_in_string("tests/target/a.txt");
     printf("Last modification: %s", last_modification);
@@ -451,13 +481,15 @@ int main(int argc, char *argv[]){
 ~~~
 
 
+
 ## Locker 
 With the locker you can Lock files and ensure that even with multprocessment, they will
 be executed in an order
-<!--codeof:exemples/locker/locker_test.c-->
+
+
 ~~~c
 
-#include "doTheWorld.h"
+#include "../doTheWorld_test.h"
 
 
 
@@ -518,10 +550,12 @@ int main(int argc, char *argv[]){
 }
 
 ~~~
+
 ## Resources 
 With Resources you can iterate over all types of values ,and modifie than into an single transaction or one by one 
 ### Setting Values 
-<!--codeof:exemples/resources/setters.c-->
+
+
 ~~~c
 
 #include "doTheWorld.h"
@@ -571,8 +605,10 @@ int main (){
 ~~~
 
 
+
+
 ### Getting values of Resource
-<!--codeof:exemples/resources/getters.c-->
+
 ~~~c
 #include "doTheWorld.h"
 
@@ -633,10 +669,13 @@ int main (){
 
 
 ~~~
+
+
 ### Generating transaction
 with transactions you can make all modifications and executed or denny it one time,avoid nod
 wanted side effects
-<!--codeof:exemples/transaction/transaction_executiong.c-->
+
+
 ~~~c
 
 #include "doTheWorld.h"
@@ -654,9 +693,11 @@ int main(){
 
 }
 ~~~
+
+
 You also can dump the transaction to an json file to store it 
 
-<!--codeof:exemples/transaction/transaction_dumping_to_json.c-->
+
 ~~~c
 
 #include "doTheWorld.h"
@@ -675,7 +716,7 @@ int main(){
 }
 ~~~
 
-<!--codeof:exemples/transaction/transaction_loading_from_json.c-->
+
 ~~~c
 
 #include "doTheWorld.h"
@@ -696,13 +737,16 @@ int main(){
 }
 ~~~
 
+
+
 ### Schemas
 
 Schema its a way to handle resources into a serializible way, providing foreing key and primary key concepts
 
 ### Creating a insertion
 in these example we are creating a user using schema concept  
-<!--codeof:exemples/schema/user_creation.c-->
+
+
 ~~~c
 
 #include "doTheWorld.h"
@@ -738,10 +782,12 @@ int main(){
 
 ~~~
 
+
+
 ### Removing a insertion
 In these example we also can destroy the user , automaticly destroying the index
 
-<!--codeof:exemples/schema/user_remove.c-->
+
 ~~~c
 
 #include "doTheWorld.h"
@@ -794,10 +840,11 @@ int main(){
 
 ~~~
 
+
 ### Finding a insertion
 With  primary keys you can find values without loop iteration increasing readability and speed, 
 
-<!--codeof:exemples/schema/user_find.c-->
+
 ~~~c
 
 #include "doTheWorld.h"
@@ -858,10 +905,11 @@ int main(){
 
 ~~~
 
+
 ### Iterating over insertions
 you also can iterate over insertions 
 
-<!--codeof:exemples/schema/user_iteration.c-->
+
 ~~~c
 
 #include "doTheWorld.h"
@@ -926,13 +974,12 @@ int main(){
 ~~~
 
 
-
 ### Trees and TreeParts 
 with tree concepts, you can manipulate files as trees, and implement IO modifications with atomic concepts
 
 ### Loading An TreePart 
 
-<!--codeof:exemples/tree_parts/loading_tree_part.c-->
+
 ~~~c
 
 
@@ -948,8 +995,11 @@ int main(){
     dtw.tree.part.free(part);
 }
 ~~~
+
+
 ### Creating an empty tree Part
-<!--codeof:exemples/trees/creating_tree_part.c-->
+
+
 ~~~c
 //
 // Created by jurandi on 20-06-2023.
@@ -969,7 +1019,8 @@ int main(){
 ~~~
 
 ### Modifying an tree part
-<!--codeof:exemples/tree_parts/tree_part_content_modification.c-->
+
+
 ~~~c
 #include "doTheWorld.h"
 
@@ -992,8 +1043,10 @@ int main(){
 }
 ~~~
 
+
 ### Retriing Paths Paramns
-<!--codeof:exemples/path/getting_path_paramns.c-->
+
+
 ~~~c
 
 #include "doTheWorld.h"
@@ -1016,10 +1069,10 @@ int main(){
 }
 ~~~
 
-
 ### Changing path Atributes at once 
 
-<!--codeof:exemples/path/change_path_attributes.c-->
+
+
 ~~~c
 
 #include "doTheWorld.h"
@@ -1037,6 +1090,7 @@ int main(){
 
 }
 ~~~
+
 With the **hardware_modify** , **hardware_write**, **hardware_remove** 
 Functions , you can generate modifications, without implement it, in these 
 way , you can create massive atomic transactions, and execute all at once 
@@ -1045,7 +1099,8 @@ way , you can create massive atomic transactions, and execute all at once
 ### hardware_modify
 Will Modificate the original content, for exemple, if you change the extension of an file, it will modificate the original content 
 
-<!--codeof:exemples/tree_parts/hardware_modify.c-->
+
+
 ~~~c
 #include "doTheWorld.h"
 
@@ -1063,10 +1118,11 @@ int main(){
 
 }
 ~~~
+
 Will write the file as an "new" file, ignoring the existence of the 
 old file 
 
-<!--codeof:exemples/tree_parts/hardware_write.c-->
+
 ~~~c
 
 #include "doTheWorld.h"
@@ -1084,9 +1140,11 @@ int main(){
 }
 ~~~
 
+
 Will Delete the current Content 
 
-<!--codeof:exemples/tree_parts/hardware_remove.c-->
+
+
 ~~~c
 
 
@@ -1105,11 +1163,12 @@ int main(){
 
 }
 ~~~
+
 With Trees you can make massive folders and files modifications with 
 easy steps 
 ### Loading Tree From Hardware
 
-<!--codeof:exemples/trees/add_tree_from_hardware.c-->
+
 ~~~c
 #include "doTheWorld.h"
 
@@ -1133,7 +1192,8 @@ int main(){
 ~~~
 
 ### Iterating over An Tree
-<!--codeof:exemples/trees/tree_iteration.c-->
+
+
 ~~~c
 //
 // Created by jurandi on 20-06-2023.
@@ -1161,7 +1221,8 @@ int main(){
 ~~~
 
 ### Finding An Tree by name
-<!--codeof:exemples/trees/find_tree_part_by_name.c-->
+
+
 ~~~c
 //
 // Created by jurandi on 20-06-2023.
@@ -1193,8 +1254,10 @@ int main(){
 }
 ~~~
 
+
 ### Finding An Tree by Path
-<!--codeof:exemples/trees/find_tree_part_by_full_path.c-->
+
+
 ~~~c
 //
 // Created by jurandi on 20-06-2023.
@@ -1226,8 +1289,10 @@ int main(){
 }
 
 ~~~
+
 ### Finding An Tree by Function
-<!--codeof:exemples/trees/finding_tree_part_by_function.c-->
+
+
 ~~~c
 //
 // Created by jurandi on 20-06-2023.
@@ -1275,11 +1340,12 @@ int main(){
 
 }
 ~~~
+
 Trees suports even Maps or filters, it returns an new tree of the of the current lambda procediment 
 #### Filter 
 with filter you can filter the contents you want in an tree with an bool lambda
 
-<!--codeof:exemples/trees/tree_filter.c-->
+
 ~~~c
 //
 // Created by jurandi on 20-06-2023.
@@ -1324,7 +1390,8 @@ int main(){
 ~~~
 
 ### Map 
-<!--codeof:exemples/trees/tree_map.c-->
+
+
 ~~~c
 //
 // Created by jurandi on 20-06-2023.
@@ -1370,10 +1437,12 @@ int main(){
     dtw.tree.free(tree);
 }
 ~~~
+
 With **hardware_commit_tree** you can commit all modifications at Once 
 turning system ultra securty
 
-<!--codeof:exemples/trees/tree_commit.c-->
+
+
 ~~~c
 //
 // Created by jurandi on 20-06-2023.
@@ -1414,8 +1483,10 @@ int main(){
 }
 ~~~
 
+
 With transactin Reports , you can see what will be modified
-<!--codeof:exemples/trees/transaction_report.c-->
+
+
 ~~~c
 //
 // Created by jurandi on 20-06-2023.
@@ -1455,11 +1526,13 @@ int main(){
     dtw.tree.free(tree);
 }
 ~~~
+
 With Json Trees Operations you can save or load trees, from hardware or strings in an super easy mode 
 
 #### Dumping Tree Json To File 
 It will transform the tree in an json document
-<!--codeof:exemples/trees/dumps_json_tree_to_file.c-->
+
+
 ~~~c
 //
 // Created by jurandi on 20-06-2023.
@@ -1496,7 +1569,9 @@ int main(){
     dtw.tree.free(tree);
 }
 ~~~
-<!--codeof:exemples/trees/dumps_json_tree_to_string.c-->
+
+
+
 ~~~c
 
 #include "doTheWorld.h"
@@ -1530,10 +1605,11 @@ int main(){
     dtw.tree.free(tree);
 }
 ~~~
+
 If you want to recuperate the file you saved in the json file
 you can load it 
 
-<!--codeof:exemples/trees/loads_json_tree_from_file.c-->
+
 ~~~c
 //
 // Created by jurandi on 20-06-2023.
@@ -1580,7 +1656,6 @@ int main(){
 
 
 
-<!--codeof:exemples/trees/loads_json_tree_from_string.c-->
 ~~~c
 //
 // Created by jurandi on 20-06-2023.
@@ -1625,13 +1700,15 @@ int main(){
 }
 ~~~
 
+
 ## Hash
 
 By using hash Object you can digest values,( its very usefull in dynamic programing)
 or to avoid recomputation in compilers or bundlers
 
 ### Simple Hashing
-<!--codeof:exemples/hash/simple_digest.c-->
+
+
 ~~~c
 #include "doTheWorld.h"
 
@@ -1667,7 +1744,8 @@ int main (){
     dtw.hash.free(my_hash);
 }
 ~~~
-<!--codeof:exemples/hash/file_hashing.c-->
+
+
 ~~~c
 #include "doTheWorld.h"
 
@@ -1690,7 +1768,8 @@ int main (){
     dtw.hash.free(my_hash);
 }
 ~~~
-<!--codeof:exemples/hash/file_hashing_by_last_modification.c-->
+
+
 ~~~c
 #include "doTheWorld.h"
 
@@ -1733,4 +1812,3 @@ Zero Clause BSD License
 Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted.
 
 THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-

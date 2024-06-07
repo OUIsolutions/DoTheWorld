@@ -6,12 +6,13 @@ bin
 a/
 # object files
 *.o
+cache2
+build/c/lua_code.h
 side_effect_copy
 *.ko
 out_folder
 *.obj
 *.elf
-main.c
 deer.jpg
 main.cpp
 output_folder
@@ -32,7 +33,7 @@ output_test/
 *.a
 *.la
 *.loa
-main.c
+
 test.txt
 deer.txt
 # Shared objects (inc. Windows DLLs)

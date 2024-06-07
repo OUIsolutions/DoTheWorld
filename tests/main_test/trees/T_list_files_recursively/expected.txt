@@ -1,4 +1,3 @@
- 
 a.txt
 blob.png
 numerical/double.txt

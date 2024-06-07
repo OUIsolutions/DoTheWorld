@@ -1,4 +1,3 @@
- 
 asasasas not exist
 tests/target/ is an folder
 tests/target/a.txt is an file
