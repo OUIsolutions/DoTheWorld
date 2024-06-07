@@ -62,7 +62,7 @@ function Create_readme()
         	end
 
             local extension = dtw.newPath(path).get_extension()
-            final_text = final_text.."\n```"..extension.."\n"..file_content.."```\n"
+            final_text = final_text.."\n~~~"..extension.."\n"..file_content.."\n~~~\n"
             colecting = false
             path =""
         end

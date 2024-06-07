@@ -26,20 +26,18 @@ local function main()
         add_dependencie(src_sha).
         perform()
 
-
         Create_examples()
-
-
-
+        dtw.write_file("exemples/locker/locker_test.c",locker_content)
 
         clib.print(ANSI_RESET)
 
 
+        local readme = Create_readme()
+        if readme ~= nil then
+            dtw.write_file("README.md",readme)
+        end
 
-
-        --local readme = Create_readme()
-        --dtw.write_file("README.md",readme)
-
+        dtw.write_file(OUT_PUT_NAME,amalgamation_result)
 end
 
 main()
