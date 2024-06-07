@@ -48,27 +48,34 @@ end
 local function execute_test_artifact(cache,src_sha,side_effect_sha,artifact)
 
     local exec_path = dtw.concat_path(artifact.test_dir,"exec.c")
+    clib.print("testing: "..exec_path.."\n")
+
     local out_path = dtw.concat_path(artifact.test_dir,"exec.out")
     local exec_content = dtw.load_file(exec_path)
 
-
+    local compiled = false
     cache.new_element(function ()
-    	clib.print("compiled "..exec_path.."\n");
+        compiled = true
         local comand = "gcc "..exec_path.." -o "..out_path
         local result = clib.system_with_status(comand)
         if result ~=0 then
         	clib.exit(1)
         end
+        clib.print("\tcompilation:passed\n")
     end).
     add_dependencie(src_sha).
     add_dependencie(exec_content).
     perform()
 
+    if compiled == false then
+        clib.print("\tcompilation:cached\n")
+    end
 
+    local memory_tested = false
     cache.new_element(function ()
-        clib.print("testing memory"..out_path.."\n");
+        memory_tested =true
         local comand = "valgrind --log-file='output_test' ./"..out_path
-        clib.system_with_status(comand);
+        clib.system_with_string(comand);
 
         local result = dtw.load_file("output_test")
         if result == nil then
@@ -89,15 +96,19 @@ local function execute_test_artifact(cache,src_sha,side_effect_sha,artifact)
 
         rebase_side_effect()
         if error then
+            clib.print(result)
         	clib.exit(1)
         end
-
+        clib.print("\tmemory:passed\n")
 end).
     add_dependencie(src_sha).
     add_dependencie(exec_content).
     add_dependencie(side_effect_sha).
     perform()
 
+    if memory_tested == false then
+        clib.print("\tmemory:cached\n")
+    end
 
 end
 

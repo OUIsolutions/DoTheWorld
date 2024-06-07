@@ -11,15 +11,10 @@ CACHE_POINT  = "cache2"
 local function main()
 
 
-    local result = clib.system_with_string("valgrind --log-file='teste'  ./a.out ")
-    clib.print("result was: "..result.."\n")
-
-    if false then
         local src_sha = dtw.generate_sha_from_folder_by_content(LIB_FOLDER)
         local cache = NewCache(CACHE_POINT)
 
         local amalgamation_cache = cache.new_element(function ()
-            clib.print("amalgamated \n");
             return Generate_amalgamation_recursive(START_POINT)
         end).add_dependencie(src_sha)
 
@@ -28,7 +23,6 @@ local function main()
 
         Execute_full_test(cache,src_sha)
 
-    end
 
 
 
