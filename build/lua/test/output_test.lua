@@ -33,13 +33,13 @@ end
 ---@param original_side_effect_sha string
 ---@param artifact TestArtifact
 local function handle_side_effect_folde(original_side_effect_sha,artifact)
+
       local current_sidde_effect = dtw.generate_sha_from_file(SIDE_EFFECT)
 
       if current_sidde_effect == original_side_effect_sha then
          clib.print(ANSI_YELLOW.."\tside effect folder: no changes\n")
          return
       end
-
 
       local comparation_provided = dtw.isdir(artifact.side_effect_folder_path)
 
