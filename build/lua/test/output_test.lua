@@ -32,7 +32,7 @@ end
 
 ---@param original_side_effect_sha string
 ---@param artifact TestArtifact
-local function handle_side_effect_folde(original_side_effect_sha,artifact)
+local function handle_side_effect_folder(original_side_effect_sha,artifact)
 
       local current_sidde_effect = dtw.generate_sha_from_file(SIDE_EFFECT)
 
@@ -82,7 +82,8 @@ function Test_out_put(cache,original_side_effect_sha,artifact)
           output_tested = true
           local output_test = clib.system_with_string("./"..artifact.executable_path)
           handle_expected_file(expected_content,artifact,output_test)
-          handle_side_effect_folde(original_side_effect_sha,artifact)
+          clib.print("side effect "..artifact.side_effect_folder_path.."\n")
+          --handle_side_effect_folder(original_side_effect_sha,artifact)
 
     end).
     add_dependencie(artifact.executable_sha).
