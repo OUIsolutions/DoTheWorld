@@ -47,13 +47,13 @@ local function handle_side_effect_folder(original_side_effect_sha,artifact)
       end
 
 
-      local comparation_provided = dtw.isdir(artifact.side_effect_folder_path)
 
-      if comparation_provided == false  then
+      if artifact.side_effect_sha == nil  then
          dtw.move_any_overwriting(SIDE_EFFECT,artifact.side_effect_folder_path)
          clib.print(ANSI_CYAN.."\tside effect folder: created\n")
          return
       end
+
       if artifact.test_type == IMPREDITIBLE then
       	  clib.print(ANSI_YELLOW.."\tside effect folder: impredictible\n")
           return
@@ -65,9 +65,7 @@ local function handle_side_effect_folder(original_side_effect_sha,artifact)
          return
       end
 
-
-      local comparation_sha = dtw.generate_sha_from_folder_by_content(artifact.side_effect_folder_path)
-      if comparation_sha ~=current_sidde_effect then
+      if artifact.side_effect_sha ~=current_sidde_effect then
            clib.print(ANSI_RED.."\tside effect folder: diffeent\n")
            Rebase_side_effect()
            clib.exit(1)
@@ -95,6 +93,12 @@ function Test_out_put(cache,original_side_effect_sha,artifact)
     end).
     add_dependencie(artifact.executable_sha).
     add_dependencie(original_side_effect_sha)
+
+
+    if dtw.isdir(artifact.side_effect_folder_path) then
+       artifact.side_effect_sha = dtw.generate_sha_from_folder_by_content(artifact.side_effect_folder_path)
+        out_cache.add_dependencie(artifact.side_effect_sha)
+    end
 
     if expected_content ~=nil and artifact.test_type == PREDICTIBLE then
     	out_cache.add_dependencie(expected_content)

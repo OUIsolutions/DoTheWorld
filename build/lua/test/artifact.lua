@@ -11,7 +11,7 @@ PREDICTIBLE = 2
 ---@field side_effect_folder_path string | nil
 ---@field c_sha string
 ---@field executable_sha string
-
+---@field side_effect_sha string | nil
 ---@param content string
 ---@return TestArtifact | nil
  function Get_test_spec(content)
