@@ -3,7 +3,7 @@
 ---@param cache Cache
 ---@param src_sha string
 ---@param original_side_effect_sha string
----@param artifact TestSpec
+---@param artifact TestArtifact
 local function execute_test_artifact(cache,src_sha,original_side_effect_sha,artifact)
 
     clib.print(ANSI_BLUE.."testing: "..artifact.c_path.."\n")

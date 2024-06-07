@@ -1,7 +1,7 @@
 
 ---@param cache Cache
 ---@param src_sha string
----@param artifact TestSpec
+---@param artifact TestArtifact
 function Execute_compilation(cache,src_sha,artifact)
 
     local compiled = false

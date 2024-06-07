@@ -2,7 +2,7 @@
 
 ---@param cache Cache
 ---@param original_side_effect_sha string
----@param artifact TestSpec
+---@param artifact TestArtifact
  function Exec_valgrind_test(cache,original_side_effect_sha,artifact)
     local memory_tested = false
     cache.new_element("valgrind",function ()

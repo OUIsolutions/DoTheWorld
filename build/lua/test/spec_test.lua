@@ -2,7 +2,7 @@
 IMPREDITIBLE = 1
 PREDICTIBLE = 2
 
----@class TestSpec
+---@class TestArtifact
 ---@field test_type number
 ---@field test_dir string | nil
 ---@field expected_file_path string | nil
@@ -13,7 +13,7 @@ PREDICTIBLE = 2
 ---@field executable_sha string
 
 ---@param content string
----@return TestSpec | nil
+---@return TestArtifact | nil
  function Get_test_spec(content)
 
      local path = dtw.newPath(content)
