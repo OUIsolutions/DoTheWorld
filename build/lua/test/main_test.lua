@@ -6,23 +6,24 @@
 ---@param artifact TestSpec
 local function execute_test_artifact(cache,src_sha,side_effect_sha,artifact)
 
-    clib.print(ANSI_BLUE.."testing: "..artifact.exec_path.."\n")
+    clib.print(ANSI_BLUE.."testing: "..artifact.c_path.."\n")
 
-    artifact.exec_content = dtw.load_file(artifact.exec_path)
+    artifact.c_sha = dtw.generate_sha_from_file(artifact.c_path)
 
 
     Execute_compilation(cache,src_sha,artifact)
-    artifact.binary_content = dtw.load_file(artifact.executable_output)
+    artifact.executable_sha = dtw.load_file(artifact.executable_path)
+
 
     Exec_valgrind_test(cache,side_effect_sha,artifact)
 
     if artifact.test_type ==IMPREDITIBLE  then
     	clib.print(ANSI_YELLOW.."side effect: not tested\n")
-        Reconstruct_output(artifact.test_dir,out_path,side_effect_sha)
+        Reconstruct_output(side_effect_sha,artifact)
         return
     end
     if RECONSTRUCT then
-    	Reconstruct_output(artifact.test_dir,out_path,side_effect_sha)
+        Reconstruct_output(side_effect_sha,artifact)
     	return
     end
 

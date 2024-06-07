@@ -7,7 +7,7 @@
     local memory_tested = false
     cache.new_element(function ()
         memory_tested =true
-        local comand = "valgrind --log-file='output_test' ./"..artifact.executable_output
+        local comand = "valgrind --log-file='output_test' ./"..artifact.executable_path
         clib.system_with_string(comand);
 
         local result = dtw.load_file("output_test")
@@ -34,7 +34,7 @@
         end
         clib.print(ANSI_GREEN.."\tmemory test:passed\n")
 end).
-    add_dependencie(artifact.binary_content).
+    add_dependencie(artifact.executable_sha).
     add_dependencie(side_effect_sha).
     perform()
 
