@@ -31,6 +31,7 @@ local function handle_expected_file(expected_content,artifact,output_test)
       end
 
 
+
 end
 
 
@@ -79,9 +80,9 @@ end
 function Test_out_put(cache,original_side_effect_sha,artifact)
 
     local output_tested = false
+    local expected_content = dtw.load_file(artifact.expected_file_path)
 
-    cache.new_element("output",function ()
-          local expected_content = dtw.load_file(artifact.expected_file_path)
+    local out_cache = cache.new_element("output",function ()
 
           output_tested = true
           local output_test = clib.system_with_string("./"..artifact.executable_path)
@@ -92,8 +93,13 @@ function Test_out_put(cache,original_side_effect_sha,artifact)
 
     end).
     add_dependencie(artifact.executable_sha).
-    add_dependencie(original_side_effect_sha).
-    perform()
+    add_dependencie(original_side_effect_sha)
+
+    if expected_content then
+    	out_cache.add_dependencie(expected_content)
+    end
+    out_cache.perform()
+
 
     if output_tested == false then
     	clib.print(ANSI_YELLOW.."\toutput test: cached\n")
