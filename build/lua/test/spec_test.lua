@@ -4,8 +4,13 @@ PREDICTIBLE = 2
 
 ---@class TestSpec
 ---@field test_type number
----@field test_dir string
-
+---@field test_dir string | nil
+---@field expected_file string | nil
+---@field executable_output string |nil
+---@field exec_path string | nil
+---@field side_effect_folder_path string | nil
+---@field exec_content string
+---@field binary_content string
 
 ---@param content string
 ---@return TestSpec | nil
@@ -33,5 +38,9 @@ PREDICTIBLE = 2
      end
 
      test.test_dir = path.get_dir()
+     test.expected_file = dtw.concat_path(test.test_dir,"expected.txt")
+     test.executable_output = dtw.concat_path(test.test_dir,"exec."..clib.out_extension())
+     test.exec_path = path.get_full_path()
+     test.side_effect_folder_path = dtw.concat_path(test.test_dir,"side_effect")
      return test
 end

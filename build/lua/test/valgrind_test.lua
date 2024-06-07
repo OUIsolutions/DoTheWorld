@@ -1,14 +1,13 @@
 
 
 ---@param cache Cache
----@param executable_sha string
 ---@param side_effect_sha string
----@param out_path string
- function Exec_valgrind_test(cache,side_effect_sha,executable_sha,out_path)
+---@param artifact TestSpec
+ function Exec_valgrind_test(cache,side_effect_sha,artifact)
     local memory_tested = false
     cache.new_element(function ()
         memory_tested =true
-        local comand = "valgrind --log-file='output_test' ./"..out_path
+        local comand = "valgrind --log-file='output_test' ./"..artifact.executable_output
         clib.system_with_string(comand);
 
         local result = dtw.load_file("output_test")
@@ -35,7 +34,7 @@
         end
         clib.print(ANSI_GREEN.."\tmemory test:passed\n")
 end).
-    add_dependencie(executable_sha).
+    add_dependencie(artifact.binary_content).
     add_dependencie(side_effect_sha).
     perform()
 
