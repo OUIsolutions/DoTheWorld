@@ -1,7 +1,23 @@
 
+
+
 ---@param start_point string
+---@param already_included_list  StringArray | nil
 ---@return string
-  function Generate_amalgamation_recursive(start_point)
+  function Generate_amalgamation_recursive(start_point,already_included_list)
+
+
+    if already_included_list == nil then
+    	already_included_list = Created_already_included()
+    end
+
+    local start_point_sha = dtw.generate_sha_from_file(start_point)
+    if already_included_list.is_included(start_point_sha) then
+    	clib.print(ANSI_YELLOW.."file"..start_point.."already included\n")
+    	return ""
+    end
+
+    already_included_list.append(start_point_sha)
 
 
     local content = dtw.load_file(start_point)
@@ -46,7 +62,7 @@
             local dir = dtw.newPath(start_point).get_dir()
             local full_path = dtw.concat_path(dir,string_buffer)
 
-            local acumulated = Generate_amalgamation_recursive(full_path)
+            local acumulated = Generate_amalgamation_recursive(full_path,already_included_list)
             final_text = final_text.. acumulated.."\n"
 
         	waiting_include = false

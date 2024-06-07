@@ -504,6 +504,7 @@ uint8_t *sha_256_close(struct Sha_256 *sha_256);
 
 #endif
 
+
 #undef SHA_256_H
 #endif  //SHA_256_H
 

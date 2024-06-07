@@ -41,7 +41,7 @@ deer.txt
 *.so
 *.so.*
 *.dylib
-
+output_test
 # Executables
 *.exe
 *.out
