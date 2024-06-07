@@ -48,7 +48,7 @@ end
 local function execute_test_artifact(cache,src_sha,side_effect_sha,artifact)
 
     local exec_path = dtw.concat_path(artifact.test_dir,"exec.c")
-    clib.print("testing: "..exec_path.."\n")
+    clib.print(ANSI_BLUE.."testing: "..exec_path.."\n")
 
     local out_path = dtw.concat_path(artifact.test_dir,"exec.out")
     local exec_content = dtw.load_file(exec_path)
@@ -61,14 +61,14 @@ local function execute_test_artifact(cache,src_sha,side_effect_sha,artifact)
         if result ~=0 then
         	clib.exit(1)
         end
-        clib.print("\tcompilation:passed\n")
+        clib.print(ANSI_GREEN.."\tcompilation:passed\n")
     end).
     add_dependencie(src_sha).
     add_dependencie(exec_content).
     perform()
 
     if compiled == false then
-        clib.print("\tcompilation:cached\n")
+        clib.print(ANSI_YELLOW.."\tcompilation:cached\n")
     end
 
     local memory_tested = false
@@ -96,10 +96,10 @@ local function execute_test_artifact(cache,src_sha,side_effect_sha,artifact)
 
         rebase_side_effect()
         if error then
-            clib.print(result)
+            clib.print(ANSI_RED..result)
         	clib.exit(1)
         end
-        clib.print("\tmemory:passed\n")
+        clib.print(ANSI_GREEN.."\tmemory test:passed\n")
 end).
     add_dependencie(src_sha).
     add_dependencie(exec_content).
@@ -107,7 +107,7 @@ end).
     perform()
 
     if memory_tested == false then
-        clib.print("\tmemory:cached\n")
+        clib.print(ANSI_YELLOW.."\tmemory test:cached\n")
     end
 
 end

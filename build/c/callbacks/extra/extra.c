@@ -1,5 +1,7 @@
 
 LuaCEmbedResponse * generate_exit(LuaCEmbedTable *self,LuaCEmbed *args){
+
+    printf("\x1b[0m"); //ressset color
     int status = lua.args.get_long(args,0);
     if(lua.has_errors(args)){
         char *menssage = lua.get_error_message(args);

@@ -167,6 +167,6 @@ end
 
     end
 
-    clib.print("amalgamated: "..start_point.."\n")
+    clib.print(ANSI_GREEN.."amalgamated: "..start_point.."\n")
     return final_text
 end
