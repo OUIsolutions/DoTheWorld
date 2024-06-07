@@ -31,7 +31,7 @@ function Test_out_put(cache,original_side_effect_sha,artifact)
           local expected_content = dtw.load_file(artifact.expected_file_path)
 
           output_tested = true
-          local output_test = clib.system_with_string("./"..artifact.expected_file_path)
+          local output_test = clib.system_with_string("./"..artifact.executable_path)
           handle_side_effect_expected_file(expected_content,artifact,output_test)
 
           local current_sidde_effect = dtw.generate_sha_from_file(SIDE_EFFECT)
