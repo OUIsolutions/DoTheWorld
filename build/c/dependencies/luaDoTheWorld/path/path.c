@@ -284,7 +284,7 @@ LuaCEmbedTable *raw_create_path(LuaCEmbed *args,DtwPath *path){
 
     LuaCEmbedTable_set_method(self,PATH_REPLACE_DIRS_METHOD,path_replace_dirs);
     LuaCEmbedTable_set_method(self,PATH_GET_TOTAL_DIRS_METHOD,path_get_total_dirs);
-    LuaCEmbedTable_set_method(self,PATH_GET_SUB_DIRS_FROM_INDEX_METHOD,path_get_total_dirs);
+    LuaCEmbedTable_set_method(self,PATH_GET_SUB_DIRS_FROM_INDEX_METHOD,path_get_sub_dirs_from_index);
     LuaCEmbedTable_set_method(self,PATH_INSERT_DIR_AT_INDEX_METHOD,path_insert_dir_at_index);
     LuaCEmbedTable_set_method(self,PATH_REMOVE_SUB_DIR_AT_INDEX_METHOD,path_remove_sub_dir_at_index);
     LuaCEmbedTable_set_method(self,PATH_INSERT_DIR_AFTER_METHOD,path_insert_dir_after);

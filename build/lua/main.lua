@@ -16,7 +16,10 @@ local function main()
         dtw.write_file(END_TEST_POINT,amalgamation_result)
 
         Execute_full_test(cache,src_sha)
+        Create_examples()
         clib.print(ANSI_RESET)
+
+
 
 
 end

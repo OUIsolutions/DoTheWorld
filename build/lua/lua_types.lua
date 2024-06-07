@@ -140,12 +140,12 @@
 ---@field base64_encode_file fun(src:string):string transform file into base64
 ---@field base64_encode fun(value:string | number | boolean | string):string transform content into base64
 ---@field base64_decode fun(value:string): string | string retransform base64 into normal value
----@field list_files fun(src:string,concat_path:boolean):string[],number
----@field list_dirs fun(src:string,concat_path:boolean):string[],number
----@field list_all fun(src:string,concat_path:boolean):string[],number
----@field list_files_recursively fun(src:string,concat_path:boolean):string[],number
----@field list_dirs_recursively fun(src:string,concat_path:boolean):string[],number
----@field list_all_recursively fun(src:string,concat_path:boolean):string[],number
+---@field list_files fun(src:string,concat_path:boolean|nil):string[],number
+---@field list_dirs fun(src:string,concat_path:boolean|nil):string[],number
+---@field list_all fun(src:string,concat_path:boolean|nil):string[],number
+---@field list_files_recursively fun(src:string,concat_path:boolean|nil):string[],number
+---@field list_dirs_recursively fun(src:string,concat_path:boolean|nil):string[],number
+---@field list_all_recursively fun(src:string,concat_path:boolean|nil):string[],number
 ---@field load_file fun(src:string):string | string
 ---@field write_file fun(src:string,value:string | number | boolean | DtwTreePart | DtwResource | DtwActionTransaction)
 ---@field is_blob fun(value:any):boolean returns if a value is a blob

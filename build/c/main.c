@@ -19,7 +19,7 @@ void add_callbacks(LuaCEmbed *main_obj){
     lua.tables.set_method(clib,"system_with_string",system_with_text);
     lua.tables.set_method(clib,"indexof",lua_index_of);
     lua.tables.set_method(clib,"out_extension",get_out_extension);
-
+    lua.tables.set_method(clib,"replace",lua_replace_string);
 }
 
 

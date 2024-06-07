@@ -11,6 +11,6 @@
 ---@field system_with_string fun(comand:string):string
 ---@field indexof fun(content:string,comparation:string):number
 ---@field out_extension fun():string
-
+---@field replace fun(content:string,target:string,value_to_replace:string):string
 ---@type Clib
 clib = clib

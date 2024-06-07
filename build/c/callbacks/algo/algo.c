@@ -41,3 +41,20 @@ LuaCEmbedResponse * lua_index_of(LuaCEmbedTable *self,LuaCEmbed *args){
     stack.free(content_stack);
     return  lua.response.send_long(index);
 }
+LuaCEmbedResponse * lua_replace_string(LuaCEmbedTable *self,LuaCEmbed *args){
+
+    char *content = lua.args.get_str(args,0);
+    char *target = lua.args.get_str(args,1);
+    char *value_to_replace  = lua.args.get_str(args,2);
+    if(lua.has_errors(args)){
+        char *error_msg = lua.get_error_message(args);
+        return lua.response.send_error(error_msg);
+    }
+    CTextStack *content_stack = stack.newStack_string(content);
+    stack.self_replace(content_stack,target,value_to_replace);
+
+    LuaCEmbedResponse *response =  lua.response.send_str(content_stack->rendered_text);
+    stack.free(content_stack);
+    return  response;
+
+}
