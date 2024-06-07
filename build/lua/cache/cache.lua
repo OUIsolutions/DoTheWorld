@@ -1,13 +1,16 @@
+
+---@param function_name string
 ---@param resource_path DtwResource
 ---@param callback fun():string
 ---@return CacheCallback
-local function new_cache_element(resource_path,callback)
+local function new_cache_element(function_name,resource_path,callback)
 
     local self = {
         resource_path  = resource_path,
         callback = callback,
         hasher = dtw.newHasher()
     }
+    self.hasher.digest(function_name)
 
     self.add_dependencie = function (element)
     	   self.hasher.digest(element)
@@ -42,8 +45,8 @@ function NewCache(path)
         resource_path = dtw.newResource(path)
     }
 
-    self.new_element =function (callback)
-        return new_cache_element(self.resource_path,callback)
+    self.new_element =function (function_name,callback)
+        return new_cache_element(function_name,self.resource_path,callback)
     end
     return self;
 end

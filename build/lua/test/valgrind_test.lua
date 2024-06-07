@@ -5,7 +5,7 @@
 ---@param artifact TestSpec
  function Exec_valgrind_test(cache,original_side_effect_sha,artifact)
     local memory_tested = false
-    cache.new_element(function ()
+    cache.new_element("valgrind",function ()
         memory_tested =true
         local comand = "valgrind --log-file='output_test' ./"..artifact.executable_path
         clib.system_with_string(comand);

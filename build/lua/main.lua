@@ -8,7 +8,7 @@ local function main()
         local src_sha = dtw.generate_sha_from_folder_by_content(LIB_FOLDER)
         local cache = NewCache(CACHE_POINT)
 
-        local amalgamation_cache = cache.new_element(function ()
+        local amalgamation_cache = cache.new_element("amalgamation",function ()
             return Generate_amalgamation_recursive(START_POINT)
         end).add_dependencie(src_sha)
 

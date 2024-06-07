@@ -27,7 +27,7 @@ function Test_out_put(cache,original_side_effect_sha,artifact)
 
     local output_tested = false
 
-    cache.new_element(function ()
+    cache.new_element("output",function ()
           local expected_content = dtw.load_file(artifact.expected_file_path)
 
           output_tested = true
@@ -64,7 +64,7 @@ function Test_out_put(cache,original_side_effect_sha,artifact)
     perform()
 
     if output_tested == false then
-    	clib.print(ANSI_YELLOW.."output test: cached\n")
+    	clib.print(ANSI_YELLOW.."\toutput test: cached\n")
     end
 
 end
