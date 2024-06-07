@@ -7,11 +7,11 @@
     local memory_tested = false
     cache.new_element("valgrind",function ()
         memory_tested =true
-        local comand = "valgrind --log-file='output_test' ./"..artifact.executable_path
+        local comand = "valgrind --log-file='"..OUTPUT_TEST.."' ./"..artifact.executable_path
         clib.system_with_string(comand);
         Rebase_side_effect()
 
-        local result = dtw.load_file("output_test")
+        local result = dtw.load_file(OUTPUT_TEST)
         if result == nil then
             clib.exit(1)
             return

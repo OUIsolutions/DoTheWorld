@@ -3,7 +3,6 @@
 ---@param content string
 ---@param index number
 local function is_codeof_at_point(content,index)
-    local CODEOF_TEXT = "codeof"
     local codeof_size = clib.get_str_size(CODEOF_TEXT)
     local content_size = clib.get_str_size(content)
     if index + codeof_size >= content_size then
@@ -31,7 +30,7 @@ function Create_readme()
 
     local i = 1
     local size = clib.get_str_size(content)
-    local codeof_size = clib.get_str_size("codeof")
+    local codeof_size = clib.get_str_size(CODEOF_TEXT)
 
     local colecting = false
     local final_text = ""

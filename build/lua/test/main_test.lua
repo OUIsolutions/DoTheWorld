@@ -27,7 +27,7 @@ end
 function Execute_full_test(cache,src_sha)
 
     local original_side_effect_sha =  dtw.generate_sha_from_folder_by_content(SIDE_EFFECT)
-    dtw.copy_any_overwriting(SIDE_EFFECT,"side_effect_copy")
+    dtw.copy_any_overwriting(SIDE_EFFECT,SIDE_EFFECT_COPY)
 
     local listage,size =dtw.list_files_recursively(TEST_POINT,true)
 

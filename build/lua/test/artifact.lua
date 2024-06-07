@@ -18,17 +18,17 @@ PREDICTIBLE = 2
 
      local path = dtw.newPath(content)
      local filename = path.get_name()
-     if filename ~= "exec.c" then
+     if filename ~= TEST_FILE then
      	return nil
      end
      local test = {}
      local dirs,size = path.unpack()
      for i=1,size do
         local current_dir = dirs[i]
-        if dtw.starts_with(current_dir,"S_") then
+        if dtw.starts_with(current_dir,TEST_INPREDICTBILE_START) then
         	test.test_type = IMPREDITIBLE
         end
-        if dtw.starts_with(current_dir,"T_") then
+        if dtw.starts_with(current_dir,TEST_INPREDICTBILE_START) then
         	test.test_type = PREDICTIBLE
         end
      end
@@ -38,9 +38,9 @@ PREDICTIBLE = 2
      end
 
      test.test_dir = path.get_dir()
-     test.expected_file_path = dtw.concat_path(test.test_dir,"expected.txt")
+     test.expected_file_path = dtw.concat_path(test.test_dir,EXPECTED_NAME)
      test.executable_path = dtw.concat_path(test.test_dir,"exec."..clib.out_extension())
      test.c_path = path.get_full_path()
-     test.side_effect_folder_path = dtw.concat_path(test.test_dir,"side_effect")
+     test.side_effect_folder_path = dtw.concat_path(test.test_dir,SIDE_EFFECT_COMPARATION)
      return test
 end

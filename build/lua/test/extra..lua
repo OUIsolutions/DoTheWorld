@@ -1,5 +1,5 @@
 
  function Rebase_side_effect()
-	        dtw.copy_any_overwriting("side_effect_copy",SIDE_EFFECT)
+	        dtw.copy_any_overwriting(SIDE_EFFECT_COPY,SIDE_EFFECT)
 
 end
