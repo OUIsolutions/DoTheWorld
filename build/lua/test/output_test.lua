@@ -51,28 +51,29 @@ local function handle_side_effect_folder(original_side_effect_sha,artifact)
 
       if comparation_provided == false  then
          dtw.move_any_overwriting(SIDE_EFFECT,artifact.side_effect_folder_path)
-         Rebase_side_effect()
          clib.print(ANSI_CYAN.."\tside effect folder: created\n")
          return
+      end
+      if artifact.test_type == IMPREDITIBLE then
+      	  clib.print(ANSI_YELLOW.."\tside effect folder: impredictible\n")
+          return
       end
 
       if RECONSTRUCT then
          dtw.move_any_overwriting(SIDE_EFFECT,artifact.side_effect_folder_path)
-         Rebase_side_effect()
          clib.print(ANSI_MAGENTA.."\tside effect folder: recreated\n")
          return
       end
 
 
       local comparation_sha = dtw.generate_sha_from_folder_by_content(artifact.side_effect_folder_path)
-      if comparation_sha ~=original_side_effect_sha then
+      if comparation_sha ~=current_sidde_effect then
            clib.print(ANSI_RED.."\tside effect folder: diffeent\n")
            Rebase_side_effect()
            clib.exit(1)
       end
 
       clib.print(ANSI_GREEN.."\tside effect folder: passed\n")
-      Rebase_side_effect()
 end
 
 ---@param cache Cache
