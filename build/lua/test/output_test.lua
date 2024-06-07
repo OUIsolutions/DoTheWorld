@@ -39,7 +39,7 @@ end
 ---@param artifact TestArtifact
 local function handle_side_effect_folder(original_side_effect_sha,artifact)
 
-      local current_sidde_effect = dtw.generate_sha_from_folder_by_content(SIDE_EFFECT)
+      local current_sidde_effect =Generate_sha_from_folder_not_considering_empty_folders(SIDE_EFFECT)
 
       if current_sidde_effect == original_side_effect_sha then
          clib.print(ANSI_YELLOW.."\tside effect folder: no changes\n")
@@ -96,7 +96,7 @@ function Test_out_put(cache,original_side_effect_sha,artifact)
 
 
     if dtw.isdir(artifact.side_effect_folder_path) then
-       artifact.side_effect_sha = dtw.generate_sha_from_folder_by_content(artifact.side_effect_folder_path)
+       artifact.side_effect_sha = Generate_sha_from_folder_not_considering_empty_folders(artifact.side_effect_folder_path)
         out_cache.add_dependencie(artifact.side_effect_sha)
     end
 
