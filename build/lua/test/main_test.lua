@@ -16,8 +16,6 @@ local function execute_test_artifact(cache,src_sha,original_side_effect_sha,arti
 
     Exec_valgrind_test(cache,original_side_effect_sha,artifact)
 
-
-
     Test_out_put(cache,original_side_effect_sha,artifact)
 
 

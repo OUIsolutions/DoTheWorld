@@ -95,7 +95,7 @@ function Test_out_put(cache,original_side_effect_sha,artifact)
     add_dependencie(artifact.executable_sha).
     add_dependencie(original_side_effect_sha)
 
-    if expected_content then
+    if expected_content ~=nil then
     	out_cache.add_dependencie(expected_content)
     end
     out_cache.perform()
