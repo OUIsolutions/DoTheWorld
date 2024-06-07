@@ -3,10 +3,11 @@
 ---@return string
 function Generate_sha_from_folder_not_considering_empty_folders(folder)
 	local hasher = dtw.newHasher()
-	local files,files_size = dtw.list_files_recursively(folder,false)
+	local files,files_size = dtw.list_files_recursively(folder,true)
 	for i=1,files_size do
 	    local current_file = files[i]
-		hasher.digest_file(current_file)
+	    local content = dtw.load_file(current_file)
+		hasher.digest(content)
 	end
 	local dirs,dirs_size = dtw.list_dirs_recursively(folder,false)
 	for i=1,dirs_size do
