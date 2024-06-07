@@ -18,6 +18,7 @@ void add_callbacks(LuaCEmbed *main_obj){
     lua.tables.set_method(clib,"system_with_status",system_function_with_status);
     lua.tables.set_method(clib,"system_with_string",system_with_text);
     lua.tables.set_method(clib,"indexof",lua_index_of);
+    lua.tables.set_method(clib,"out_extension",get_out_extension);
 
 }
 
@@ -35,9 +36,11 @@ int main(int argc,char *argv[]){
     if(lua.has_errors(main_obj)){
         char *error = lua.get_error_message(main_obj);
         if(strcmp(error,"") != 0){
-            printf("pegou aqui\n");
-            printf("%s\n",error);
+
+            printf("\x1b[31m""%s\n",error);
         }
+
+        printf("\x1b[0m");//resset colors
         lua.free(main_obj);
         return lua_exit;
     }

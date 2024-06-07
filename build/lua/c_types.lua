@@ -10,6 +10,7 @@
 ---@field system_with_status fun(comand:string):number
 ---@field system_with_string fun(comand:string):string
 ---@field indexof fun(content:string,comparation:string):number
+---@field out_extension fun():string
 
 ---@type Clib
 clib = clib

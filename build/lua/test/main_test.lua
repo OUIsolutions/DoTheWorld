@@ -9,11 +9,19 @@ local function execute_test_artifact(cache,src_sha,side_effect_sha,artifact)
     local exec_path = dtw.concat_path(artifact.test_dir,"exec.c")
     clib.print(ANSI_BLUE.."testing: "..exec_path.."\n")
 
-    local out_path = dtw.concat_path(artifact.test_dir,"exec.out")
+    local out_path = dtw.concat_path(artifact.test_dir,"exec."..clib.out_extension())
     local exec_content = dtw.load_file(exec_path)
 
     Execute_compilation(cache,src_sha,exec_content,exec_path,out_path)
-    Exec_valgrind_test(cache,src_sha,exec_content,side_effect_sha,out_path)
+    local executable_sha = dtw.load_file(out_path)
+    Exec_valgrind_test(cache,side_effect_sha,executable_sha,out_path)
+
+
+    if artifact.test_type ==IMPREDITIBLE then
+    	clib.print(ANSI_YELLOW.."side effect: not tested\n")
+        return
+    end
+
 
 end
 

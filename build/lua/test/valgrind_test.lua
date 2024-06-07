@@ -1,11 +1,10 @@
 
 
 ---@param cache Cache
----@param src_sha string
----@param exec_content string
+---@param executable_sha string
 ---@param side_effect_sha string
 ---@param out_path string
- function Exec_valgrind_test(cache,src_sha,exec_content,side_effect_sha,out_path)
+ function Exec_valgrind_test(cache,side_effect_sha,executable_sha,out_path)
     local memory_tested = false
     cache.new_element(function ()
         memory_tested =true
@@ -14,7 +13,7 @@
 
         local result = dtw.load_file("output_test")
         if result == nil then
-            rebase_side_effect()
+            Rebase_side_effect()
             clib.exit(1)
             return
         end
@@ -29,15 +28,14 @@
           error = true
         end
 
-        rebase_side_effect()
+        Rebase_side_effect()
         if error then
             clib.print(ANSI_RED..result)
         	clib.exit(1)
         end
         clib.print(ANSI_GREEN.."\tmemory test:passed\n")
 end).
-    add_dependencie(src_sha).
-    add_dependencie(exec_content).
+    add_dependencie(executable_sha).
     add_dependencie(side_effect_sha).
     perform()
 

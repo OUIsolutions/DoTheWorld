@@ -155,9 +155,9 @@
 ---@field generate_sha_from_folder_by_content fun(src:string):string
 ---@field generate_sha_from_folder_by_last_modification fun(src:string):string
 ---@field newHasher fun():DtwHasher
----@field isdir fun():boolean
----@field isfile fun():boolean
----@field isfile_blob fun():boolean
+---@field isdir fun(path:string):boolean
+---@field isfile fun(path:string):boolean
+---@field isfile_blob fun(path:string):boolean
 ---@field newTransaction fun():DtwTransaction
 ---@field newTransaction_from_file fun():DtwTransaction
 ---@field newTransaction_from_json_string fun():DtwTransaction

@@ -11,7 +11,15 @@ LuaCEmbedResponse * generate_exit(LuaCEmbedTable *self,LuaCEmbed *args){
     return lua.response.send_error("");
 }
 
+LuaCEmbedResponse * get_out_extension(LuaCEmbedTable *self,LuaCEmbed *args)
+{
+#ifdef __linux__
+    return  lua.response.send_str("out");
+#elif _WIN32
+    return  lua.response.send_str("exe");
+#endif
 
+}
 
 LuaCEmbedResponse * get_time(LuaCEmbedTable *self,LuaCEmbed *args){
     struct timeval current_time;
