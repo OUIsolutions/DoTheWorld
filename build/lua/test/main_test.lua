@@ -69,9 +69,21 @@ local function execute_test_artifact(cache,src_sha,side_effect_sha,artifact)
         clib.print("testing "..out_path.."\n");
         local comand = "valgrind ./"..out_path
         local result = clib.system_with_string(comand);
-        --clib.print(result)
-        rebase_side_effect()
 
+        local HEAP_CHECK  = "All heap blocks were freed -- no leaks are possible"
+        local error =false
+        if clib.indexof(result,HEAP_CHECK) == -1 then
+        	error = true
+        end
+        local ERROR_CHECK = "ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)"
+        if clib.indexof(result,ERROR_CHECK) == -1 then
+          error = true
+        end
+
+        rebase_side_effect()
+        if error then
+        	clib.exit(1)
+        end
 end).
     add_dependencie(src_sha).
     add_dependencie(exec_content).
