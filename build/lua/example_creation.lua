@@ -9,7 +9,7 @@ function Create_examples()
 	        if path.get_name() ~= "exec.c" then
 	        	return
 	        end
-
+            path.insert_dir_at_index(0,EXAMPLES_FOLDER)
             path.remove_dir_at(TEST_POINT)
             local final_name =  path.get_sub_dirs_from_index(-1,-1)
             final_name = clib.replace(final_name,"T_","")
@@ -18,7 +18,8 @@ function Create_examples()
             path.remove_sub_dir_at_index(-1,-1)
             path.set_name(final_name)
 
-            tree_part.hardware_write()
+            --tree_part.hardware_write()
+            clib.print(path.get_full_path().."\n")
 	   end)
 	   
 end

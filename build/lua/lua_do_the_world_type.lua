@@ -48,7 +48,7 @@
 ---@field replace_dirs fun(old_dir:string,new_dir:string):DtwPath
 ---@field get_total_dirs fun():number
 ---@field get_sub_dirs_from_index fun(start:number,end:number):string
----@field insert_dir_at_index fun(dir:string,index:number):DtwPath
+---@field insert_dir_at_index fun(index:number,dir:string):DtwPath
 ---@field remove_sub_dir_at_index fun(start:number,end:number):DtwPath
 ---@field insert_dir_after fun(point:string, dir:string):DtwPath
 ---@field insert_dir_before fun(point:string, dir:string):DtwPath
