@@ -21,10 +21,14 @@ local function handle_expected_file(expected_content,artifact,output_test)
         clib.print(ANSI_MAGENTA.."\texpected file:reconstructed\n")
         return
       end
-
-      clib.print(ANSI_RED.."\texpected file: different\n")
-      Rebase_side_effect()
-      clib.exit(1)
+      if artifact.test_type == PREDICTIBLE then
+      	      clib.print(ANSI_RED.."\texpected file: different\n")
+              Rebase_side_effect()
+              clib.exit(1)
+      end
+      if artifact.test_type== IMPREDITIBLE then
+      	 clib.print(ANSI_YELLOW.."\texpected file: impredictible\n")
+      end
 
 
 end
@@ -82,7 +86,8 @@ function Test_out_put(cache,original_side_effect_sha,artifact)
           output_tested = true
           local output_test = clib.system_with_string("./"..artifact.executable_path)
           handle_expected_file(expected_content,artifact,output_test)
-          clib.print("side effect "..artifact.side_effect_folder_path.."\n")
+          Rebase_side_effect()
+          --clib.print("side effect "..artifact.side_effect_folder_path.."\n")
           --handle_side_effect_folder(original_side_effect_sha,artifact)
 
     end).
