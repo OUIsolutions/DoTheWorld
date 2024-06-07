@@ -89,7 +89,7 @@ function Test_out_put(cache,original_side_effect_sha,artifact)
           handle_expected_file(expected_content,artifact,output_test)
           Rebase_side_effect()
           --clib.print("side effect "..artifact.side_effect_folder_path.."\n")
-          --handle_side_effect_folder(original_side_effect_sha,artifact)
+          handle_side_effect_folder(original_side_effect_sha,artifact)
 
     end).
     add_dependencie(artifact.executable_sha).
@@ -98,6 +98,7 @@ function Test_out_put(cache,original_side_effect_sha,artifact)
     if expected_content ~=nil and artifact.test_type == PREDICTIBLE then
     	out_cache.add_dependencie(expected_content)
     end
+
 
     out_cache.perform()
 
