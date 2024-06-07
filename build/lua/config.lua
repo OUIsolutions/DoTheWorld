@@ -5,4 +5,4 @@ SIDE_EFFECT = "tests/target"
 TEST_POINT = "tests/main_test"
 LIB_FOLDER = "src"
 CACHE_POINT  = "cache2"
-RECONSTRUCT = false
+RECONSTRUCT = true
