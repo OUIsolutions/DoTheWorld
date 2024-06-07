@@ -275,7 +275,7 @@ LuaCEmbedTable *raw_create_path(LuaCEmbed *args,DtwPath *path){
     LuaCEmbedTable_set_method(self,GET_NAME_METHOD,path_get_name);
     LuaCEmbedTable_set_method(self,GET_ONLY_NAME_METHOD,path_get_only_name);
     LuaCEmbedTable_set_method(self,TO_STRING_METHOD,path_to_string);
-
+    LuaCEmbedTable_set_method(self,PATH_GET_FULL_PATH_METHOD,path_get_full_path);
     LuaCEmbedTable_set_method(self,SET_EXTENSION_METHOD,path_set_extension);
     LuaCEmbedTable_set_method(self,PATH_SET_ONLY_NAME_METHOD,path_set_only_name);
     LuaCEmbedTable_set_method(self,PATH_SET_NAME_METHOD,path_set_name);
