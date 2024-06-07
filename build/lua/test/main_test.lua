@@ -27,7 +27,7 @@ local function execute_test_artifact(cache,src_sha,side_effect_sha,artifact)
     	return
     end
 
-    Test_out_put(cache,executable_sha,side_effect_sha,artifact.test_dir,out_path)
+    Test_out_put(cache,side_effect_sha,artifact)
 
 
 end

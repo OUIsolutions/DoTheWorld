@@ -3,9 +3,9 @@
 ---@param artifact TestSpec
 function Reconstruct_output(side_effect_sha,artifact)
 
-    local execution_result = clib.system_with_string("./"..artifact.executable_output)
-    dtw.write_file(artifact.expected_file,execution_result)
-    clib.print(ANSI_MAGENTA.."\tcreated:"..artifact.expected_file.."\n")
+    local execution_result = clib.system_with_string("./"..artifact.executable_path)
+    dtw.write_file(artifact.expected_file_path,execution_result)
+    clib.print(ANSI_MAGENTA.."\tcreated:"..artifact.expected_file_path.."\n")
 
 
     local current_side_effect_sha = dtw.generate_sha_from_folder_by_content(SIDE_EFFECT)
