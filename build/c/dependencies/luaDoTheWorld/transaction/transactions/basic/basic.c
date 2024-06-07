@@ -55,7 +55,7 @@ LuaCEmbedResponse * transaction_new_transaction(LuaCEmbed *args){
     LuaCEmbedTable * self = LuaCembed_new_anonymous_table(args);
     LuaCEmbedTable_set_bool_prop(self,IS_A_REF,false);
     DtwTransaction *transaction = newDtwTransaction();
-    LuaCEmbedTable_set_long_prop(self,TRANSACTION_POINTER,(long)transaction);
+    LuaCEmbedTable_set_long_prop(self,TRANSACTION_POINTER,(long long)transaction);
     if(LuaCEmbed_has_errors(self->main_object)){
         printf("error %s\n", LuaCEmbed_get_error_message(self->main_object));
     }

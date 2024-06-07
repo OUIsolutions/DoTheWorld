@@ -15,7 +15,7 @@ LuaCEmbedResponse  *action_transaction_get_transaction_type(LuaCEmbedTable *self
 
 LuaCEmbedResponse  *action_transaction_get_content(LuaCEmbedTable *self,LuaCEmbed *args){
     DtwActionTransaction *transaction = (DtwActionTransaction *) LuaCembedTable_get_long_prop(self,ACTION_TRANSACTION_POINTER);
-    if(!transaction->content){
+    if(transaction->content==NULL){
         return NULL;
     }
     return LuaCEmbed_send_raw_string_reference((char*)transaction->content, transaction->size);
@@ -97,7 +97,7 @@ LuaCEmbedResponse  *action_transaction_get_dest(LuaCEmbedTable *self,LuaCEmbed *
 LuaCEmbedTable *raw_create_action_transaction(LuaCEmbed *args,DtwActionTransaction *transaction){
     LuaCEmbedTable * table = LuaCembed_new_anonymous_table(args);
     LuaCEmbedTable_set_long_prop(table,DTW_TYPE,DTW_ACTION_TRANSACTION_TYPE);
-    LuaCEmbedTable_set_long_prop(table,ACTION_TRANSACTION_POINTER,(long)transaction);
+    LuaCEmbedTable_set_long_prop(table,ACTION_TRANSACTION_POINTER,(long long )transaction);
     LuaCEmbedTable_set_method(table,LUA_DO_THE_WORLD_GET_DEST,action_transaction_get_dest);
     LuaCEmbedTable_set_method(table,LUA_DO_THE_WORLD_SET_DEST,action_transaction_set_dest);
     LuaCEmbedTable_set_method(table,LUA_DO_THE_WORLD_GET_SOURCE,action_transaction_get_source);

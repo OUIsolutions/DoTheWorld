@@ -49,8 +49,7 @@ int load_luaDoTheWorld(lua_State *state){
     
     
 
-    bool set_functions_as_public  = false;
-    LuaCEmbed * l  = newLuaCEmbedLib(state,set_functions_as_public);
+    LuaCEmbed * l  = newLuaCEmbedLib(state);
     start_lua_props(l);
 
     return LuaCembed_perform(l);
