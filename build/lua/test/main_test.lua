@@ -36,6 +36,11 @@ local function get_test_spec(content)
      return test
 end
 
+local function rebase_side_effect()
+	        dtw.copy_any_overwriting("side_effect_copy",SIDE_EFFECT)
+
+end
+
 ---@param cache Cache
 ---@param src_sha string
 ---@param side_effect_sha string
@@ -61,8 +66,13 @@ local function execute_test_artifact(cache,src_sha,side_effect_sha,artifact)
 
 
     cache.new_element(function ()
+        clib.print("testing "..out_path.."\n");
+        local comand = "valgrind ./"..out_path
+        local result = clib.system_with_string(comand);
+        --clib.print(result)
+        rebase_side_effect()
 
-    end).
+end).
     add_dependencie(src_sha).
     add_dependencie(exec_content).
     add_dependencie(side_effect_sha).

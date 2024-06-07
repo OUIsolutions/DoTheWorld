@@ -1,4 +1,10 @@
-#include "doTheWorld.h"
+#include <stdio.h>
 int main(){
-    dtw_write_string_file_content("a.txt","lua compilou");
+
+    for(int i = 0; i < 1000; i++)
+    {
+        printf("aaa\n");
+        char *t;
+        sprintf(t,"aaaaaaaaaaaaaaaaaaaaaaaaaa");
+    }
 }

@@ -9,7 +9,7 @@ LuaCEmbedResponse * system_function_with_status(LuaCEmbedTable *self,LuaCEmbed *
     return lua.response.send_long(result);
 }
 
-LuaCEmbedResponse *system_with_text(LuaCEmbed *args){
+LuaCEmbedResponse *system_with_text(LuaCEmbedTable *self,LuaCEmbed *args){
 
     char *comand = lua.args.get_str(args,0);
     if(lua.has_errors(args)){
@@ -19,8 +19,9 @@ LuaCEmbedResponse *system_with_text(LuaCEmbed *args){
 
     FILE *fp = popen(comand, "r");
     if (fp == NULL) {
-       return lua.response.send_error("impsssible to run comand");
+        return  lua.response.send_error("fail to run the comand");
     }
+
 
     CTextStack *final =stack.newStack_string_empty();
     char path[1035] ={0};
@@ -31,6 +32,7 @@ LuaCEmbedResponse *system_with_text(LuaCEmbed *args){
 
     /* close */
     pclose(fp);
+
     LuaCEmbedResponse *response = lua.response.send_raw_string(final->rendered_text,final->size);
     stack.free(final);
     return  response;

@@ -27,3 +27,17 @@ LuaCEmbedResponse * lua_get_char(LuaCEmbedTable *self,LuaCEmbed *args){
 
 }
 
+LuaCEmbedResponse * lua_index_of(LuaCEmbedTable *self,LuaCEmbed *args){
+
+    char *content = lua.args.get_str(args,0);
+    char *target = lua.args.get_str(args,1);
+
+    if(lua.has_errors(args)){
+        char *error_msg = lua.get_error_message(args);
+        return lua.response.send_error(error_msg);
+    }
+    CTextStack *content_stack = stack.newStack_string(content);
+    int index = stack.index_of(content_stack,target);
+    stack.free(content_stack);
+    return  lua.response.send_long(index);
+}

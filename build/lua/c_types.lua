@@ -8,7 +8,8 @@
 ---@field get_time fun():number
 ---@field exit fun(status:number):number
 ---@field system_with_status fun(comand:string):number
-
+---@field system_with_string fun(comand:string):string
+---@field index_of fun(content:string,comparation:string):number
 
 ---@type Clib
 clib = clib

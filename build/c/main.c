@@ -7,7 +7,6 @@ CTextStackModule stack;
 int lua_exit = 0;
 
 #include "callbacks/declaration.h"
-
 #include "callbacks/definition.h"
 
 void add_callbacks(LuaCEmbed *main_obj){
@@ -18,6 +17,7 @@ void add_callbacks(LuaCEmbed *main_obj){
     lua.tables.set_method(clib,"get_char",lua_get_char);
     lua.tables.set_method(clib,"system_with_status",system_function_with_status);
     lua.tables.set_method(clib,"system_with_string",system_with_text);
+    lua.tables.set_method(clib,"indexof",lua_index_of);
 
 }
 
