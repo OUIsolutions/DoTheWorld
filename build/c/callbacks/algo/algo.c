@@ -58,3 +58,19 @@ LuaCEmbedResponse * lua_replace_string(LuaCEmbedTable *self,LuaCEmbed *args){
     return  response;
 
 }
+
+LuaCEmbedResponse * lua_trim(LuaCEmbedTable *self,LuaCEmbed *args){
+
+    char *content = lua.args.get_str(args,0);
+
+    if(lua.has_errors(args)){
+        char *error_msg = lua.get_error_message(args);
+        return lua.response.send_error(error_msg);
+    }
+
+    CTextStack * content_stack = stack.newStack_string(content);
+    stack.self_trim(content_stack);
+    LuaCEmbedResponse *response =lua.response.send_str(content_stack->rendered_text);
+    stack.free(content_stack);
+    return  response;
+}
