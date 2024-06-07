@@ -1,20 +1,20 @@
-#include "src/one.c"
-
-int main(int argc, char *argv[]){
+#include "doTheWorld.h"
 
 
+
+
+
+int main (){
     DtwNamespace dtw = newDtwNamespace();
 
-    //creating the b64 file
-    const char *blob_path = "tests/target/blob.png";
-    char *blob  = dtw.convert_binary_file_to_base64(blob_path);
-    long output;
-    unsigned char  *result = dtw.base64_decode(blob,&output);
+    DtwHash *my_hash = dtw.hash.newHash();
 
-    dtw.write_any_content("tests/target/blob2.png",result,output);
+    dtw.hash.digest_file(my_hash,"tests/target/a.txt");
 
-    free(result);
-    free(blob);
+    printf("after a file :%s\n",my_hash->hash);
 
-    return 0;
+    dtw.hash.digest_folder_by_content(my_hash,"tests/target");
+    printf("after a folder %s\n",my_hash->hash);
+
+    dtw.hash.free(my_hash);
 }

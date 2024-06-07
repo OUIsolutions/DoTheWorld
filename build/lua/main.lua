@@ -17,6 +17,9 @@ local function main()
 
         Execute_full_test(cache,src_sha)
         Create_examples()
+
+
+
         clib.print(ANSI_RESET)
 
 
