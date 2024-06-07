@@ -2,7 +2,6 @@
 
 function Reconstruct_output(test_dir,out_path,side_effect_sha)
     local expected_file_path = dtw.concat_path(test_dir,"expected.txt")
-    local output_test = clib.system_with_string("./"..out_path)
     dtw.write_file(expected_file_path,out_path)
     clib.print(ANSI_BLUE.."created:"..expected_file_path.."\n")
     local local_side_effect_dir_path = dtw.concat_path(test_dir,"side_effect")

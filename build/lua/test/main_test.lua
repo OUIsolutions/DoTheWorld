@@ -15,15 +15,21 @@ local function execute_test_artifact(cache,src_sha,side_effect_sha,artifact)
     Execute_compilation(cache,src_sha,exec_content,exec_path,out_path)
     local executable_sha = dtw.load_file(out_path)
 
-    Test_out_put(cache,executable_sha,side_effect_sha,artifact.test_dir,out_path)
 
     Exec_valgrind_test(cache,side_effect_sha,executable_sha,out_path)
 
 
-    if artifact.test_type ==IMPREDITIBLE then
+    if artifact.test_type ==IMPREDITIBLE  then
     	clib.print(ANSI_YELLOW.."side effect: not tested\n")
+        Reconstruct_output(artifact.test_dir,out_path,side_effect_sha)
         return
     end
+    if RECONSTRUCT then
+    	Reconstruct_output(artifact.test_dir,out_path,side_effect_sha)
+    	return
+    end
+
+    Test_out_put(cache,executable_sha,side_effect_sha,artifact.test_dir,out_path)
 
 
 end
