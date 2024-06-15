@@ -3,8 +3,6 @@
 #include "src/one.c"
 
 
-
-
 int main(){
     DtwNamespace dtw = newDtwNamespace();
 

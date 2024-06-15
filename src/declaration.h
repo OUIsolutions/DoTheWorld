@@ -1,5 +1,6 @@
 
 
+#ifndef DO_THE_WORLD_H
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -51,3 +52,5 @@
 #include "resource/declaration.h"
 #include "hash/hash.h"
 #include "namespace/declaration.h"
+#define DO_THE_WORLD_H
+#endif
