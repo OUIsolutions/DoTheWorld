@@ -1,5 +1,16 @@
 START_POINT = "src/one.c"
-OUT_PUT_NAME = "doTheWorld.h"
+DECLARATION_POINT = "src/declaration.h"
+DEFINITION_POINT = "src/definition.h"
+LINUX_COMPILER = "gcc"
+
+RELEASE_FOLDER = "release"
+CJSON_NAME = "cJson.o"
+CJSON_LOCATION = "src/dependencies/cJSON/cJSON.c"
+SHA_256_NAME = "sha256.o"
+SHA_256_LOCATION ="src/dependencies/sha256/sha-256.c"
+
+OUTPUT_DECLARATION = "doTheWorldDeclaration.h"
+OUTPUT_SINGLE_FILE = "doTheWorld.h"
 END_TEST_POINT= "tests/doTheWorld_test.h"
 SIDE_EFFECT = "tests/target"
 TEST_POINT = "tests/main_test"

@@ -1,10 +1,12 @@
 # Prerequisites
 *.d
 CWebStudio.h
+releases
 exemple
 *.pyc
 bin
 a/
+temp_compilation
 luaDoTheWorld
 teste.lua
 # object files
