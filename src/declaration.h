@@ -32,7 +32,7 @@
 
 #include "dependencies/declaration.h"
 #include "string_array/string_array.h"
-
+#include "sha256/sha256.h"
 #include "base64/base64.h"
 #include "randonizer/randonizer.h"
 #include "extras/extras.h"
