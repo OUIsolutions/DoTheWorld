@@ -46,3 +46,16 @@ char * calc_sha_256_from_file_returning_string(const char *filename)
     return hash_string;
 
 }
+char * sha256_open_file(const char *filename, int *size){
+    FILE *file = fopen(filename, "rb");
+    if (file == NULL) {
+        return NULL;
+    }
+    fseek(file,0,SEEK_END);
+    *size = ftell(file);
+    fseek(file,0,SEEK_SET);
+    char *content = (char*)malloc(*size +1);
+    fread(content,1,*size,file);
+    fclose(file);
+    return content;
+}

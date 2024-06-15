@@ -27,3 +27,4 @@ char * calc_sha_256_from_file_returning_string(const char *filename);
     @return: the hash of the file
     @note: if the filename is NULL, the return value is NULL
 */
+char * sha256_open_file(const char *filename, int *size);

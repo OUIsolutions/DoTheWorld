@@ -3,7 +3,6 @@
 
 #include <stdint.h>
 #include <string.h>
-#include <stdlib.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,7 +32,7 @@ struct Sha_256 {
 	uint8_t chunk[SIZE_OF_SHA_256_CHUNK];
 	uint8_t *chunk_pos;
 	size_t space_left;
-	size_t total_len;
+	uint64_t total_len;
 	uint32_t h[8];
 };
 
@@ -47,6 +46,8 @@ struct Sha_256 {
  * the function you should use.
  *
  * @note If either of the passed pointers is NULL, the results are unpredictable.
+ *
+ * @note See note about maximum data length for sha_256_write, as it applies for this function's len argument too.
  */
 void calc_sha_256(uint8_t hash[SIZE_OF_SHA_256_HASH], const void *input, size_t len);
 
@@ -55,16 +56,13 @@ void calc_sha_256(uint8_t hash[SIZE_OF_SHA_256_HASH], const void *input, size_t 
  * @param sha_256 A pointer to a SHA-256 structure.
  * @param hash Hash array, where the result will be delivered.
  *
- * @note If all of the data you are calculating the hash value on is not available in a contiguous buffer in memory, this is
- * where you should start. Instantiate a SHA-256 structure, for instance by simply declaring it locally, make your hash
- * buffer available, and invoke this function. Once a SHA-256 hash has been calculated (see further below) a SHA-256
- * structure can be initialized again for the next calculation.
+ * @note If all of the data you are calculating the hash value on is not available in a contiguous buffer in memory,
+ * this is where you should start. Instantiate a SHA-256 structure, for instance by simply declaring it locally, make
+ * your hash buffer available, and invoke this function. Once a SHA-256 hash has been calculated (see further below) a
+ * SHA-256 structure can be initialized again for the next calculation.
  *
  * @note If either of the passed pointers is NULL, the results are unpredictable.
  */
-
-
-
 void sha_256_init(struct Sha_256 *sha_256, uint8_t hash[SIZE_OF_SHA_256_HASH]);
 
 /*
@@ -99,8 +97,6 @@ void sha_256_write(struct Sha_256 *sha_256, const void *data, size_t len);
  * has been invoked with empty data) is legal. It will calculate the SHA-256 value of the empty string.
  */
 uint8_t *sha_256_close(struct Sha_256 *sha_256);
-
-
 
 #ifdef __cplusplus
 }

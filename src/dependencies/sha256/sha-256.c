@@ -1,4 +1,4 @@
-
+#include "sha-256.h"
 
 #define TOTAL_LEN_LEN 8
 
@@ -136,9 +136,11 @@ void sha_256_write(struct Sha_256 *sha_256, const void *data, size_t len)
 {
 	sha_256->total_len += len;
 
-	
+	/*
+	 * The following cast is not necessary, and could even be considered as poor practice. However, it makes this
+	 * file valid C++, which could be a good thing for some use cases.
+	 */
 	const uint8_t *p = (const uint8_t *)data;
-
 
 	while (len > 0) {
 		/*
@@ -174,8 +176,8 @@ uint8_t *sha_256_close(struct Sha_256 *sha_256)
 	uint32_t *const h = sha_256->h;
 
 	/*
-	 * The current chunk cannot be full. Otherwise, it would already have be consumed. I.e. there is space left for
-	 * at least one byte. The next step in the calculation is to add a single one-bit to the data.
+	 * The current chunk cannot be full. Otherwise, it would already have been consumed. I.e. there is space left
+	 * for at least one byte. The next step in the calculation is to add a single one-bit to the data.
 	 */
 	*pos++ = 0x80;
 	--space_left;
@@ -183,7 +185,7 @@ uint8_t *sha_256_close(struct Sha_256 *sha_256)
 	/*
 	 * Now, the last step is to add the total data length at the end of the last chunk, and zero padding before
 	 * that. But we do not necessarily have enough space left. If not, we pad the current chunk with zeroes, and add
-	 * an extras chunk at the end.
+	 * an extra chunk at the end.
 	 */
 	if (space_left < TOTAL_LEN_LEN) {
 		memset(pos, 0x00, space_left);
@@ -194,7 +196,7 @@ uint8_t *sha_256_close(struct Sha_256 *sha_256)
 	const size_t left = space_left - TOTAL_LEN_LEN;
 	memset(pos, 0x00, left);
 	pos += left;
-	size_t len = sha_256->total_len;
+	uint64_t len = sha_256->total_len;
 	pos[7] = (uint8_t)(len << 3);
 	len >>= 5;
 	int i;
@@ -215,21 +217,6 @@ uint8_t *sha_256_close(struct Sha_256 *sha_256)
 	return sha_256->hash;
 }
 
-char * sha256_open_file(const char *filename, int *size){
-	FILE *file = fopen(filename, "rb");
-	if (file == NULL) {
-		return NULL;
-	}
-	fseek(file,0,SEEK_END);
-    *size = ftell(file);
-    fseek(file,0,SEEK_SET);
-    char *content = (char*)malloc(*size +1);
-    fread(content,1,*size,file);
-	fclose(file);
-	return content;
-}
-
-//Wrapper functions
 void calc_sha_256(uint8_t hash[SIZE_OF_SHA_256_HASH], const void *input, size_t len)
 {
 	struct Sha_256 sha_256;
@@ -237,4 +224,3 @@ void calc_sha_256(uint8_t hash[SIZE_OF_SHA_256_HASH], const void *input, size_t 
 	sha_256_write(&sha_256, input, len);
 	(void)sha_256_close(&sha_256);
 }
-
