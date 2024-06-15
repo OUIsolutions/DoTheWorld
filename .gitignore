@@ -4,6 +4,8 @@ exemple
 *.pyc
 bin
 a/
+luaDoTheWorld
+teste.lua
 # object files
 *.o
 cache2
