@@ -1,4 +1,7 @@
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #ifndef DO_THE_WORLD_H
 
@@ -53,4 +56,8 @@
 #include "hash/hash.h"
 #include "namespace/declaration.h"
 #define DO_THE_WORLD_H
+#endif
+
+#ifdef __cplusplus
+}
 #endif
