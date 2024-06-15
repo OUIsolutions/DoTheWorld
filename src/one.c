@@ -29,11 +29,9 @@ SOFTWARE.
 
 #ifndef DO_THE_WORLD_H
 #define DO_THE_WORLD_H
-#include "declaration.h"
-#include "dependencies/definition.c"
 #include "globals.c"
 #include "definition.c"
-
+#include "dependencies/definition.c"
 
 #endif //DO_THE_WORLD_H
 
