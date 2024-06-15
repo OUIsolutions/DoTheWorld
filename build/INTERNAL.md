@@ -37,6 +37,21 @@ int main(int argc, char *argv[]){
 }
 
 ~~~
+## Pre Compiled version
+
+~~~c 
+#include "doTheWorldDeclaration.h"
+
+int main(){
+  return 0;
+}
+~~~
+compile with: 
+
+~~~shel 
+gcc main.c cJSON.o doTheWorld.o sha256.o
+~~~
+
 
 # Bulding the Project
 if you want to exec all tests, or generate your own amalgamation, 
