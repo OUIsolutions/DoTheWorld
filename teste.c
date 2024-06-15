@@ -1,14 +1,18 @@
 
-
+#include "CWebStudio.h"
 #include "src/one.c"
+CwebNamespace cweb;
 
+CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
-int main(){
-    DtwNamespace dtw = newDtwNamespace();
+    
+    return cweb.response.send_text("Hello World", 200);
 
-    DtwPath * path = dtw.path.newPath("a/b/c/d.txt");
-    dtw.path.remove_sub_dirs_at(path,"b/c");
-    dtw.path.represent(path);
-    dtw.path.free(path);
+}
 
+int main(int argc, char *argv[]){
+    cweb = newCwebNamespace();
+    struct CwebServer server = newCwebSever(5000, main_sever);
+    cweb.server.start(&server);
+    return 0;
 }
