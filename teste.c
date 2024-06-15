@@ -1,18 +1,9 @@
 
-#include "CWebStudio.h"
-#include "src/one.c"
-CwebNamespace cweb;
 
-CwebHttpResponse *main_sever(CwebHttpRequest *request ){
+#include "temp_compilation/doTheWorldDeclaration.h"
 
-
-    return cweb.response.send_text("Hello World", 200);
-
-}
-
-int main(int argc, char *argv[]){
-    cweb = newCwebNamespace();
-    struct CwebServer server = newCwebSever(5000, main_sever);
-    cweb.server.start(&server);
-    return 0;
+int main() {
+    char *lua  =dtw_load_string_file_content("teste.lua");
+    printf("%s\n",lua);
+    free(lua);
 }

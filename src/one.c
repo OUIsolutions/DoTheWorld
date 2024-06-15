@@ -28,7 +28,6 @@ SOFTWARE.
 */
 
 #ifndef DO_THE_WORLD_H
-#include "globals.c"
 #include "definition.c"
 #include "dependencies/definition.c"
 

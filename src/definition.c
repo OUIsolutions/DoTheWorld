@@ -3,6 +3,8 @@
 
 
 #include "declaration.h"
+#include "globals.c"
+
 #include "sha256/sha256.c"
 #include "base64/base64.c"
 #include "randonizer/randonizer.c"

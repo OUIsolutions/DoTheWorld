@@ -2,6 +2,8 @@
 *.d
 CWebStudio.h
 releases
+temp_lib
+temp_lib.zip
 exemple
 *.pyc
 bin
