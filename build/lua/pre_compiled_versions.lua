@@ -19,8 +19,9 @@ function Create_pre_compiled_version(compiler,declaration_amalgamantion,lib_name
     clib.system_with_status(sha_cmand)
     local temp_lib = "temp_lib"
 
-    clib.system_with_status("zip -r "..temp_lib.." "..temp_compilation)
+    clib.system_with_status("zip -r --junk-paths "..temp_lib.." "..temp_compilation)
 
-
+    local zip_name = temp_lib..".zip"
+    dtw.move_any_overwriting(zip_name,dtw.concat_path(RELEASE_FOLDER,lib_name))
 
 end

@@ -2,13 +2,16 @@ START_POINT = "src/one.c"
 DECLARATION_POINT = "src/declaration.h"
 DEFINITION_POINT = "src/definition.c"
 LINUX_COMPILER = "gcc"
-
+WINDOWS_COMPILER = "x86_64-w64-mingw32-gcc"
 RELEASE_FOLDER = "release"
 CJSON_NAME = "cJSON.o"
 CJSON_LOCATION = "src/dependencies/cJSON/cJSON.c"
 SHA_256_NAME = "sha256.o"
 SHA_256_LOCATION ="src/dependencies/sha256/sha-256.c"
 LIB_NAME = "doTheWorld.o"
+
+PRECOMPILED_LINUX = "pre_compiled_linux.zip"
+PRECOMPILED_WINDOWS = "pre_compiled_windows.zip"
 
 OUTPUT_DECLARATION = "doTheWorldDeclaration.h"
 OUTPUT_SINGLE_FILE = "doTheWorld.h"

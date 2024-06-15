@@ -1,6 +1,6 @@
 
 
-#include "temp_compilation/doTheWorldDeclaration.h"
+#include "release/doTheWorld.h"
 
 int main() {
     char *lua  =dtw_load_string_file_content("teste.lua");

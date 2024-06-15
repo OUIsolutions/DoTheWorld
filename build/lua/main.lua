@@ -6,7 +6,6 @@ local function main()
         local src_sha = Generate_sha_from_folder_not_considering_empty_folders(LIB_FOLDER)
         local cache = NewCache(CACHE_POINT)
 
-        if false then
 
         local amalgamation_cache = cache.new_element("amalgamation",function ()
             return Generate_amalgamation_recursive(START_POINT)
@@ -38,13 +37,13 @@ local function main()
             dtw.write_file("README.md",readme)
         end
         dtw.write_file(RELEASE_FOLDER.."/"..OUTPUT_SINGLE_FILE,amalgamation_result)
-        end
 
         local declaration_amalgamation = cache.new_element("declaration_amalgamation",function ()
             return Generate_amalgamation_recursive(DECLARATION_POINT)
         end).add_dependencie(src_sha).perform()
 
-        Create_pre_compiled_version(LINUX_COMPILER,declaration_amalgamation,"pre_compiled_linux")
+        Create_pre_compiled_version(LINUX_COMPILER,declaration_amalgamation,PRECOMPILED_LINUX)
+        Create_pre_compiled_version(WINDOWS_COMPILER,declaration_amalgamation,PRECOMPILED_WINDOWS)
 
 end
 

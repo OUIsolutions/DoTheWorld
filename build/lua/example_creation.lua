@@ -11,7 +11,7 @@ function Create_examples()
 	        end
             local content = tree_part.get_value()
             local formated_content = clib.replace(content,"../","")
-            formated_content = clib.replace(formated_content,"doTheWorld_test.h",OUT_PUT_NAME);
+            formated_content = clib.replace(formated_content,"doTheWorld_test.h",OUTPUT_SINGLE_FILE);
             tree_part.set_value(formated_content)
             path.insert_dir_at_index(0,EXAMPLES_FOLDER)
             path.remove_dir_at(TEST_POINT)
