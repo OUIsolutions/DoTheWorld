@@ -571,6 +571,9 @@ typedef struct DtwRandonizer{
 
 
 DtwRandonizer * newDtwRandonizer();
+
+int DtwRandonizer_generate_num(DtwRandonizer *self,int max);
+
 char * DtwRandonizer_generate_token(struct DtwRandonizer*self, int size);
 void DtwRandonizer_free(struct DtwRandonizer *self);
 
@@ -1717,7 +1720,7 @@ void  DtwHash_free(DtwHash *self);
 
 typedef struct  DtwRandonizerModule{
     DtwRandonizer * (*newRandonizer)();
-
+    int (*generate_num)(DtwRandonizer *self,int max);
     char * (*generate_token)(DtwRandonizer*self, int size);
     void (*free)(DtwRandonizer *self);
 }DtwRandonizerModule;
@@ -2473,8 +2476,13 @@ DtwRandonizer * newDtwRandonizer(){
     return self;
 }
 
-char * DtwRandonizer_generate_token(struct DtwRandonizer*self, int size){
+int DtwRandonizer_generate_num(DtwRandonizer *self,int max) {
     self->actual_generation+=1;
+    srand(  self->time_seed + self->actual_generation + self->seed);
+    int value = rand() % max;
+    return value;
+}
+char * DtwRandonizer_generate_token(struct DtwRandonizer*self, int size){
     static const char chars[] =
             "abcdefghijklmnopqrstuvwxyz"
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -2483,10 +2491,8 @@ char * DtwRandonizer_generate_token(struct DtwRandonizer*self, int size){
     int total_size = sizeof(chars) - 1;
     char *token = (char*)malloc(size +1);
 
-    srand(  self->time_seed + self->actual_generation + self->seed);
-
     for (int i = 0; i < size; ++i) {
-        int index = rand() % total_size;
+        int index = DtwRandonizer_generate_num(self,total_size);
         token[i] = chars[index];
     }
 
@@ -8443,6 +8449,7 @@ void  DtwHash_free(DtwHash *self){
 DtwRandonizerModule newDtwRandonizerModule(){
     DtwRandonizerModule self = {0};
     self.newRandonizer = newDtwRandonizer;
+    self.generate_num = DtwRandonizer_generate_num;
     self.generate_token =DtwRandonizer_generate_token;
     self.free = DtwRandonizer_free;
     return self;

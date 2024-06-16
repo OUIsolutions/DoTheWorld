@@ -9,8 +9,13 @@ DtwRandonizer * newDtwRandonizer(){
     return self;
 }
 
-char * DtwRandonizer_generate_token(struct DtwRandonizer*self, int size){
+int DtwRandonizer_generate_num(DtwRandonizer *self,int max) {
     self->actual_generation+=1;
+    srand(  self->time_seed + self->actual_generation + self->seed);
+    int value = rand() % max;
+    return value;
+}
+char * DtwRandonizer_generate_token(struct DtwRandonizer*self, int size){
     static const char chars[] =
             "abcdefghijklmnopqrstuvwxyz"
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -19,10 +24,8 @@ char * DtwRandonizer_generate_token(struct DtwRandonizer*self, int size){
     int total_size = sizeof(chars) - 1;
     char *token = (char*)malloc(size +1);
 
-    srand(  self->time_seed + self->actual_generation + self->seed);
-
     for (int i = 0; i < size; ++i) {
-        int index = rand() % total_size;
+        int index = DtwRandonizer_generate_num(self,total_size);
         token[i] = chars[index];
     }
 

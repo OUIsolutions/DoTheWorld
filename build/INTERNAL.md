@@ -163,7 +163,6 @@ codeof: exemples/extras/get_entity_last_modification_in_unix.c
 codeof: exemples/extras/get_entity_last_modification.c
 
 
-
 ## Locker 
 With the locker you can Lock files and ensure that even with multprocessment, they will
 be executed in an order
@@ -350,6 +349,17 @@ codeof:exemples/hash/simple_digest.c
 codeof:exemples/hash/file_hashing.c
 
 codeof:exemples/hash/file_hashing_by_last_modification.c
+
+
+### Randonizer
+Randonizer it's a way to generate random values,integers or strings
+
+#### Numerical Random 
+codeof:exemples/randonizer/num_randonizer.c
+
+#### Token  Random
+codeof:exemples/randonizer/token_randonizer.c
+
 
 ## CJson<br><br>
 **CJson**: from https://github.com/DaveGamble/cJSON <br>
