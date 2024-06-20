@@ -4720,7 +4720,7 @@ bool DtwTreePart_hardware_write(struct DtwTreePart *self, int transaction){
 
     dtw_write_any_content(path,self->content,(long)self->content_size);
     free(self->hawdware_content_sha);
-    self->hawdware_content_sha = dtw_generate_sha_from_string((const char  *)self->content);
+    self->hawdware_content_sha = dtw_generate_sha_from_any(self->content,self->content_size);
     self->content_exist_in_hardware = true;
     long now = dtw_get_time();
     self->last_modification_time = now;
