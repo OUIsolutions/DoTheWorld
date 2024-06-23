@@ -171,7 +171,9 @@ int DtwResource_type(DtwResource *self){
         return dtw_entity_type(self->path);
     }
 
-
+    if(self->value_size == 0){
+        return DTW_COMPLEX_STRING_TYPE;
+    }
     if(self->is_binary){
         return DTW_COMPLEX_BINARY;
     }
