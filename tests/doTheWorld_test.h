@@ -1371,11 +1371,6 @@ void privateDtwResourceRootProps_free(privateDtwResourceRootProps *self);
 
 
 
-#define DTW_SCHEMA_DEFAULT_VALUES_NAME "value"
-#define DTW_SCHEMA_DEFAULT_INDEX_NAME "index"
-
-
-
 typedef struct DtwSchema{
 
 
@@ -1398,6 +1393,31 @@ DtwSchema * (DtwSchema_new_subSchema)(DtwSchema *self,const char *name);
 void DtwSchema_add_primary_key(DtwSchema *self,const char *name);
 
 void private_newDtwSchema_free(DtwSchema *self);
+
+
+
+
+#define DTW_SCHEMA_DEFAULT_VALUES_NAME "value"
+#define DTW_SCHEMA_DEFAULT_INDEX_NAME "index"
+
+
+
+typedef struct DtwDtatabaseSchema{
+
+    const char *value_name;
+    const char *index_name;
+    struct DtwSchema **sub_schemas;
+    int size;
+}DtwDtatabaseSchema;
+
+DtwDtatabaseSchema *private_newDtwDtatabaseSchema();
+
+DtwSchema * privateDtwDtatabaseSchema_get_sub_schema(DtwDtatabaseSchema *self,const char *name);
+
+DtwSchema * DtwDtatabaseSchema_new_subSchema(DtwDtatabaseSchema *self,const char *name);
+
+void private_new_DtwDtatabaseSchema_free(DtwDtatabaseSchema *self);
+
 
 
 
@@ -1425,9 +1445,9 @@ typedef struct DtwResource{
     //|root/index                                         |
     //|root/index/pk_name/pk_sha ->txt  -------------------
     DtwSchema *attached_schema;
+    DtwDtatabaseSchema *datatabase_schema;
     struct DtwResource *values_resource;
     struct DtwResource *index_resource;
-    bool its_the_schema_owner;
     int schema_type;
 
     bool loaded;
@@ -1597,7 +1617,7 @@ void DtwResource_dangerous_rename_schema_prop(DtwResource*self,const char *prop,
 
 
 
-DtwSchema * DtwResource_newSchema(DtwResource *self);
+DtwDtatabaseSchema * DtwResource_newDatabaseSchema(DtwResource *self);
 
 
 //
@@ -2106,8 +2126,8 @@ typedef struct DtwResourceModule{
     DtwResource * (*find_by_primary_key_with_string)(DtwResource *self, const char *key, const char *value);
     void (*dangerous_remove_schema_prop)(DtwResource*self,const char *prop);
     void (*dangerous_rename_schema_prop)(DtwResource*self,const char *prop,const char *new_name);
-    DtwSchema * (*newSchema_with_custom_folders)(DtwResource *self,const char *values_name,const char *index_name, const char *format, ...);
-    DtwSchema * (*newSchema)(DtwResource *self);
+    DtwDtatabaseSchema * (*newDatabaseSchema)(DtwResource *self);
+
     char * (*get_error_path)(DtwResource *self);
     DtwResourceArray * (*get_schema_values)(DtwResource *self);
 
@@ -2207,6 +2227,13 @@ typedef struct {
 DtwSchemaModule newDtwSchemaModule();
 
 
+typedef struct {
+    DtwSchema * (*sub_schema)(DtwDtatabaseSchema *self,const char *name);
+}DtwDatabaseSchemaModule;
+
+DtwDatabaseSchemaModule newDtwDatabaseSchemaModule();
+
+
 typedef struct DtwNamespace{
     //IO
     void (*create_dir_recursively)(const char *path);
@@ -2297,6 +2324,7 @@ typedef struct DtwNamespace{
     DtwLockerModule locker;
 
     DtwSchemaModule schema;
+    DtwDatabaseSchemaModule database_schema;
     DtwTreeModule tree;
     DtwHashModule  hash;
     DtwTransactionModule transaction;
@@ -5937,7 +5965,7 @@ DtwSchema *private_newDtwSchema(const char *name){
     *self = (DtwSchema){0};
     self->value_name = DTW_SCHEMA_DEFAULT_VALUES_NAME;
     self->index_name = DTW_SCHEMA_DEFAULT_INDEX_NAME;
-    self->sub_schemas = (struct DtwSchema **)malloc(0);
+    self->sub_schemas = ( DtwSchema **)malloc(0);
     if(name){
         self->primary_keys = newDtwStringArray();
         self->name = strdup(name);
@@ -5987,6 +6015,50 @@ void private_newDtwSchema_free(DtwSchema *self){
     }
     free(self);
 }
+
+
+DtwDtatabaseSchema *private_newDtwDtatabaseSchema(){
+    DtwDtatabaseSchema *self = (DtwDtatabaseSchema*) malloc(sizeof (DtwDtatabaseSchema));
+    *self = (DtwDtatabaseSchema){0};
+    self->value_name = DTW_SCHEMA_DEFAULT_VALUES_NAME;
+    self->index_name = DTW_SCHEMA_DEFAULT_INDEX_NAME;
+    self->sub_schemas = (struct DtwSchema **)malloc(0);
+    return  self;
+}
+
+
+DtwSchema * privateDtwDtatabaseSchema_get_sub_schema(DtwDtatabaseSchema *self,const char *name){
+
+    for(int i = 0; i < self->size; i++){
+        DtwSchema  *current = self->sub_schemas[i];
+
+        if(strcmp(current->name,name) == 0){
+            return  current;
+        }
+
+    }
+    return NULL;
+}
+
+DtwSchema * DtwDtatabaseSchema_new_subSchema(DtwDtatabaseSchema *self,const char *name){
+    DtwSchema *subSchema = private_newDtwSchema(name);
+    self->sub_schemas = ( DtwSchema **) realloc(self->sub_schemas, (self->size + 1) * sizeof( DtwSchema *));
+    self->sub_schemas[self->size] = subSchema;
+    self->size+=1;
+    return subSchema;
+}
+
+
+
+void private_new_DtwDtatabaseSchema_free(DtwDtatabaseSchema *self){
+    for (int i = 0; i < self->size; i++) {
+        private_newDtwSchema_free((DtwSchema *) self->sub_schemas[i]);
+    }
+    free(self->sub_schemas);
+    free(self);
+}
+
+
 
 
 
@@ -6104,8 +6176,8 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
     new_element->cache_sub_resources = self->cache_sub_resources;
     new_element->sub_resources = newDtwResourceArray();
 
-    if(self->attached_schema && self->root_props->is_writing_schema == false){
-        new_element->attached_schema = privateDtwSchema_get_sub_schema(self->attached_schema, name);
+    if(self->datatabase_schema && self->root_props->is_writing_schema == false){
+        new_element->attached_schema = privateDtwDtatabaseSchema_get_sub_schema(self->datatabase_schema, name);
     }
 
     if(self->schema_type == PRIVATE_DTW_SCHEMA_ELEMENT){
@@ -6190,8 +6262,8 @@ void DtwResource_free(DtwResource *self){
         privateDtwResourceRootProps_free(self->root_props);
     }
 
-    if(self->its_the_schema_owner){
-        private_newDtwSchema_free(self->attached_schema);
+    if(self->datatabase_schema){
+        private_new_DtwDtatabaseSchema_free(self->datatabase_schema);
     }
 
     DtwResourceArray_free((DtwResourceArray*)self->sub_resources);
@@ -7207,7 +7279,7 @@ void DtwResource_dangerous_rename_schema_prop(DtwResource*self,const char *prop,
 
 
 
-DtwSchema * DtwResource_newSchema(DtwResource *self){
+DtwDtatabaseSchema * DtwResource_newDatabaseSchema(DtwResource *self){
     if(DtwResource_error(self)){
         return  NULL;
     }
@@ -7217,13 +7289,12 @@ DtwSchema * DtwResource_newSchema(DtwResource *self){
         return  NULL;
     }
 
-    if(self->attached_schema){
-        return self->attached_schema;
+    if(self->datatabase_schema){
+        return self->datatabase_schema;
     }
 
-    self->attached_schema = private_newDtwSchema(NULL);
-    self->its_the_schema_owner = true;
-    return self->attached_schema;
+    self->datatabase_schema = private_newDtwDtatabaseSchema();
+    return self->datatabase_schema;
 }
 
 
@@ -8726,7 +8797,7 @@ DtwResourceModule newDtwResourceModule(){
     self.find_by_primary_key_with_binary = DtwResource_find_by_primary_key_with_binary;
     self.dangerous_remove_schema_prop = DtwResource_dangerous_remove_schema_prop;
     self.dangerous_rename_schema_prop = DtwResource_dangerous_rename_schema_prop;
-    self.newSchema = DtwResource_newSchema;
+    self.newDatabaseSchema = DtwResource_newDatabaseSchema;
 
     self.lock =DtwResource_lock;
     self.unlock = DtwResource_unlock;
@@ -8795,6 +8866,14 @@ DtwSchemaModule newDtwSchemaModule(){
 }
 
 
+
+DtwDatabaseSchemaModule newDtwDatabaseSchemaModule(){
+    DtwDatabaseSchemaModule  self = {0};
+    self.sub_schema = DtwDtatabaseSchema_new_subSchema;
+    return  self;
+}
+
+
 DtwNamespace newDtwNamespace(){
     DtwNamespace self = {0};
     //io
@@ -8846,6 +8925,7 @@ DtwNamespace newDtwNamespace(){
     self.locker = newDtwLockerModule();
     
     self.schema = newDtwSchemaModule();
+    self.database_schema = newDtwDatabaseSchemaModule();
     self.tree = newDtwTreeModule();
     self.hash = newDtwHashModule();
     self.transaction = newDtwTransactionModule();

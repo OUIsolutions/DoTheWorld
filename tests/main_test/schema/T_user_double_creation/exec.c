@@ -20,11 +20,10 @@ int main(){
 
     dtw = newDtwNamespace();
     DtwResource *database = dtw.resource.newResource("tests/target/schema_database");
-    DtwSchema *schema  = dtw.resource.newSchema(database);
-    DtwSchema *users_schema = dtw.schema.sub_schema(schema,"users");
+    DtwDtatabaseSchema *root_schema  = dtw.resource.newDatabaseSchema(database);
+    DtwSchema *users_schema = dtw.database_schema.sub_schema(root_schema,"users");
     dtw.schema.add_primary_key(users_schema,"name");
     dtw.schema.add_primary_key(users_schema,"email");
-
 
     create_users(database,"mateus","mateusmoutinho01@gmail.com","1234",27);
     if(dtw.resource.error(database)){
