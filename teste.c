@@ -10,7 +10,6 @@ int main(){
 
     DtwResource *database = dtw.resource.newResource("data");
     DtwSchema *schema  = dtw.resource.newSchema(database);
-
     DtwSchema *users_schema = dtw.schema.sub_schema(schema,"users");
     dtw.schema.add_primary_key(users_schema,"name");
     dtw.schema.add_primary_key(users_schema,"email");

@@ -7,4 +7,5 @@
 #include "resource_module/definition.c"
 #include "hash_module/hash_module.c"
 #include "schema_module/schema_module.c"
+#include "database_schema_module/database_schema_module.c"
 #include "namespace/namespace.c"

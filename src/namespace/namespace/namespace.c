@@ -50,6 +50,7 @@ DtwNamespace newDtwNamespace(){
     self.locker = newDtwLockerModule();
     
     self.schema = newDtwSchemaModule();
+    self.database_schema = newDtwDatabaseSchemaModule();
     self.tree = newDtwTreeModule();
     self.hash = newDtwHashModule();
     self.transaction = newDtwTransactionModule();
