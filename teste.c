@@ -8,27 +8,12 @@ DtwNamespace dtw;
 int main(){
     DtwNamespace  dtw = newDtwNamespace();
 
-    DtwResource *database = dtw.resource.newResource("data");
-    DtwDtatabaseSchema *root_schema  = dtw.resource.newDatabaseSchema(database);
+    for(int i = 0 ;  i <4 ; i++){if(fork()==0) {
+        DtwRandonizer *random = dtw.randonizer.newRandonizer();
+        char *creation = dtw.randonizer.generate_token(random,20);
+        printf("%s\n",creation);
 
-    DtwSchema *users_schema = dtw.database_schema.sub_schema(root_schema,"users");
-    dtw.schema.add_primary_key(users_schema,"name");
-    dtw.schema.add_primary_key(users_schema,"email");
-
-    DtwResource  *users =dtw.resource.sub_resource(database,"users");
-    DtwResource *user = dtw.resource.new_schema_insertion(users);
-
-    dtw.resource.set_string_in_sub_resource(user,"name","mateus");
-    dtw.resource.set_string_in_sub_resource(user,"email","mateusmoutinho01@gmail.com");
-    dtw.resource.set_string_sha_in_sub_resource(user,"password","12345");
-    dtw.resource.set_long_in_sub_resource(user,"age",27);
-
-    if(dtw.resource.error(database)){
-        printf("error:%s",dtw.resource.get_error_message(database));
-    }
-
-    dtw.resource.commit(database);
-    dtw.resource.free(database);
+    }}
 }
 
 

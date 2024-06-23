@@ -5,13 +5,16 @@
 DtwRandonizer * newDtwRandonizer(){
     DtwRandonizer *self = (DtwRandonizer*) malloc(sizeof (DtwRandonizer));
     *self =(DtwRandonizer){0};
-    self->time_seed = dtw_get_time();
+    self->internal_seed = dtw_get_time();
+    #ifndef DTW_DEBUG_TIME
+        self->internal_seed = self->internal_seed * getpid();
+    #endif
     return self;
 }
 
 int DtwRandonizer_generate_num(DtwRandonizer *self,int max) {
     self->actual_generation+=1;
-    srand(  self->time_seed + self->actual_generation + self->seed);
+    srand(  self->internal_seed + self->actual_generation + self->seed);
     int value = rand() % max;
     return value;
 }
