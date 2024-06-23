@@ -7,10 +7,24 @@ DtwRandonizer * newDtwRandonizer(){
     *self =(DtwRandonizer){0};
 
     #ifndef DTW_DEBUG_TIME
-        struct timespec ts;
-        timespec_get(&ts, TIME_UTC);
 
-        self->internal_seed = ts.tv_sec + ts.tv_nsec + getpid();
+            #ifdef _WIN32
+                FILETIME ft;
+                LARGE_INTEGER li;
+
+                GetSystemTimeAsFileTime(&ft);
+                li.LowPart = ft.dwLowDateTime;
+                li.HighPart = ft.dwHighDateTime;
+
+                self->internal_seed = li.QuadPart;
+                self->internal_seed ^= GetCurrentProcessId();
+            #else
+                struct timespec ts;
+                clock_gettime(CLOCK_REALTIME, &ts);
+
+                self->internal_seed = (uint64_t)ts.tv_sec + (uint64_t)ts.tv_nsec;
+                self->internal_seed += getpid();
+            #endif
     #endif
     return self;
 }
