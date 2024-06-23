@@ -7,7 +7,6 @@ DtwNamespace dtw;
 
 int main(){
     DtwNamespace  dtw = newDtwNamespace();
-
     DtwResource *database = dtw.resource.newResource("data");
     DtwDatabaseSchema *root_schema  = dtw.resource.newDatabaseSchema(database);
 

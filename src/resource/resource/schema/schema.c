@@ -48,13 +48,11 @@ DtwResource * DtwResource_new_schema_insertion(DtwResource *self){
     if(DtwResource_error(self)){
         return NULL;
     }
-    if(self->schema_type != PRIVATE_DTW_SCHEMA_ROOT){
+    if(self->schema_type != PRIVATE_DTW_SCHEMA_ROOT || self->datatabase_schema){
         private_DtwResource_raise_error(
                 self,
                 DTW_RESOURCE_IMPSSIBLE_TO_ADD_INSERTION_OUTSIDE_ROOT_SCHEMA,
-                "only root schema can generate insertions",
-                self->name
-        );
+                "only root schema can generate insertions");
         return NULL;
     }
     self->root_props->is_writing_schema = true;
