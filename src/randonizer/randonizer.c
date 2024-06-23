@@ -5,9 +5,12 @@
 DtwRandonizer * newDtwRandonizer(){
     DtwRandonizer *self = (DtwRandonizer*) malloc(sizeof (DtwRandonizer));
     *self =(DtwRandonizer){0};
-    self->internal_seed = dtw_get_time();
+
     #ifndef DTW_DEBUG_TIME
-        self->internal_seed = self->internal_seed * getpid();
+        struct timespec ts;
+        timespec_get(&ts, TIME_UTC);
+
+        self->internal_seed = ts.tv_sec + ts.tv_nsec + getpid();
     #endif
     return self;
 }
