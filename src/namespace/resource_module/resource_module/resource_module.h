@@ -35,8 +35,8 @@ typedef struct DtwResourceModule{
     DtwResource * (*find_by_primary_key_with_string)(DtwResource *self, const char *key, const char *value);
     void (*dangerous_remove_schema_prop)(DtwResource*self,const char *prop);
     void (*dangerous_rename_schema_prop)(DtwResource*self,const char *prop,const char *new_name);
-    DtwSchema * (*newSchema_with_custom_folders)(DtwResource *self,const char *values_name,const char *index_name, const char *format, ...);
-    DtwSchema * (*newSchema)(DtwResource *self);
+    DtwDtatabaseSchema * (*newDatabaseSchema)(DtwResource *self);
+
     char * (*get_error_path)(DtwResource *self);
     DtwResourceArray * (*get_schema_values)(DtwResource *self);
 

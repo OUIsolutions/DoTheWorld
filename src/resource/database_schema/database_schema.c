@@ -39,3 +39,4 @@ void private_new_DtwDtatabaseSchema_free(DtwDtatabaseSchema *self){
     free(self->sub_schemas);
     free(self);
 }
+

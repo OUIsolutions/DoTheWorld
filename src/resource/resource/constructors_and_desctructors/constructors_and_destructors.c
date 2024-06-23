@@ -83,8 +83,8 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
     new_element->cache_sub_resources = self->cache_sub_resources;
     new_element->sub_resources = newDtwResourceArray();
 
-    if(self->attached_schema && self->root_props->is_writing_schema == false){
-        new_element->attached_schema = privateDtwSchema_get_sub_schema(self->attached_schema, name);
+    if(self->datatabase_schema && self->root_props->is_writing_schema == false){
+        new_element->attached_schema = privateDtwDtatabaseSchema_get_sub_schema(self->datatabase_schema, name);
     }
 
     if(self->schema_type == PRIVATE_DTW_SCHEMA_ELEMENT){
@@ -169,8 +169,8 @@ void DtwResource_free(DtwResource *self){
         privateDtwResourceRootProps_free(self->root_props);
     }
 
-    if(self->its_the_schema_owner){
-        private_newDtwSchema_free(self->attached_schema);
+    if(self->datatabase_schema){
+        private_new_DtwDtatabaseSchema_free(self->datatabase_schema);
     }
 
     DtwResourceArray_free((DtwResourceArray*)self->sub_resources);

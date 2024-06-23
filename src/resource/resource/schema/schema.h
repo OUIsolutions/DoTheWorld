@@ -25,4 +25,4 @@ void DtwResource_dangerous_rename_schema_prop(DtwResource*self,const char *prop,
 
 
 
-DtwSchema * DtwResource_newSchema(DtwResource *self);
+DtwDtatabaseSchema * DtwResource_newDatabaseSchema(DtwResource *self);

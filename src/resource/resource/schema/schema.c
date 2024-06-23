@@ -214,7 +214,7 @@ void DtwResource_dangerous_rename_schema_prop(DtwResource*self,const char *prop,
 
 
 
-DtwSchema * DtwResource_newSchema(DtwResource *self){
+DtwDtatabaseSchema * DtwResource_newDatabaseSchema(DtwResource *self){
     if(DtwResource_error(self)){
         return  NULL;
     }
@@ -224,11 +224,10 @@ DtwSchema * DtwResource_newSchema(DtwResource *self){
         return  NULL;
     }
 
-    if(self->attached_schema){
-        return self->attached_schema;
+    if(self->datatabase_schema){
+        return self->datatabase_schema;
     }
 
-    self->attached_schema = private_newDtwSchema(NULL);
-    self->its_the_schema_owner = true;
-    return self->attached_schema;
+    self->datatabase_schema = private_newDtwDtatabaseSchema();
+    return self->datatabase_schema;
 }

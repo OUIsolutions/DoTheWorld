@@ -20,3 +20,4 @@ DtwSchema * privateDtwDtatabaseSchema_get_sub_schema(DtwDtatabaseSchema *self,co
 DtwSchema * DtwDtatabaseSchema_new_subSchema(DtwDtatabaseSchema *self,const char *name);
 
 void private_new_DtwDtatabaseSchema_free(DtwDtatabaseSchema *self);
+

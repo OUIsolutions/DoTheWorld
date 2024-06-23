@@ -41,7 +41,7 @@ DtwResourceModule newDtwResourceModule(){
     self.find_by_primary_key_with_binary = DtwResource_find_by_primary_key_with_binary;
     self.dangerous_remove_schema_prop = DtwResource_dangerous_remove_schema_prop;
     self.dangerous_rename_schema_prop = DtwResource_dangerous_rename_schema_prop;
-    self.newSchema = DtwResource_newSchema;
+    self.newDatabaseSchema = DtwResource_newDatabaseSchema;
 
     self.lock =DtwResource_lock;
     self.unlock = DtwResource_unlock;
