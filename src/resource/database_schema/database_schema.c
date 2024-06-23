@@ -1,7 +1,7 @@
 
-DtwDtatabaseSchema *private_newDtwDtatabaseSchema(){
-    DtwDtatabaseSchema *self = (DtwDtatabaseSchema*) malloc(sizeof (DtwDtatabaseSchema));
-    *self = (DtwDtatabaseSchema){0};
+DtwDatabaseSchema *private_newDtwDtatabaseSchema(){
+    DtwDatabaseSchema *self = (DtwDatabaseSchema*) malloc(sizeof (DtwDatabaseSchema));
+    *self = (DtwDatabaseSchema){0};
     self->value_name = DTW_SCHEMA_DEFAULT_VALUES_NAME;
     self->index_name = DTW_SCHEMA_DEFAULT_INDEX_NAME;
     self->sub_schemas = (struct DtwSchema **)malloc(0);
@@ -9,7 +9,7 @@ DtwDtatabaseSchema *private_newDtwDtatabaseSchema(){
 }
 
 
-DtwSchema * privateDtwDtatabaseSchema_get_sub_schema(DtwDtatabaseSchema *self,const char *name){
+DtwSchema * privateDtwDtatabaseSchema_get_sub_schema(DtwDatabaseSchema *self,const char *name){
 
     for(int i = 0; i < self->size; i++){
         DtwSchema  *current = self->sub_schemas[i];
@@ -22,7 +22,7 @@ DtwSchema * privateDtwDtatabaseSchema_get_sub_schema(DtwDtatabaseSchema *self,co
     return NULL;
 }
 
-DtwSchema * DtwDtatabaseSchema_new_subSchema(DtwDtatabaseSchema *self,const char *name){
+DtwSchema * DtwDtatabaseSchema_new_subSchema(DtwDatabaseSchema *self,const char *name){
     DtwSchema *subSchema = private_newDtwSchema(name);
     self->sub_schemas = ( DtwSchema **) realloc(self->sub_schemas, (self->size + 1) * sizeof( DtwSchema *));
     self->sub_schemas[self->size] = subSchema;
@@ -32,7 +32,7 @@ DtwSchema * DtwDtatabaseSchema_new_subSchema(DtwDtatabaseSchema *self,const char
 
 
 
-void private_new_DtwDtatabaseSchema_free(DtwDtatabaseSchema *self){
+void private_new_DtwDtatabaseSchema_free(DtwDatabaseSchema *self){
     for (int i = 0; i < self->size; i++) {
         private_newDtwSchema_free((DtwSchema *) self->sub_schemas[i]);
     }

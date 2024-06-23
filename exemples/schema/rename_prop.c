@@ -19,7 +19,7 @@ int main(){
 
     dtw = newDtwNamespace();
     DtwResource *database = dtw.resource.newResource("tests/target/schema_database");
-    DtwDtatabaseSchema *root_schema  = dtw.resource.newDatabaseSchema(database);
+    DtwDatabaseSchema *root_schema  = dtw.resource.newDatabaseSchema(database);
     DtwSchema *users_schema = dtw.database_schema.sub_schema(root_schema,"users");
 
     dtw.schema.add_primary_key(users_schema,"name");

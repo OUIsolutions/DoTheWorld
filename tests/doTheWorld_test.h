@@ -47,6 +47,7 @@ extern "C" {
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <time.h>
+
 #include <stdarg.h>
 
 #include <errno.h>
@@ -563,7 +564,7 @@ char *dtw_convert_binary_file_to_base64(const char *path);
 
 
 typedef struct DtwRandonizer{
-    long time_seed;
+    long internal_seed;
     long seed;
     long actual_generation;
 
@@ -1402,21 +1403,21 @@ void private_newDtwSchema_free(DtwSchema *self);
 
 
 
-typedef struct DtwDtatabaseSchema{
+typedef struct DtwDatabaseSchema{
 
     const char *value_name;
     const char *index_name;
     struct DtwSchema **sub_schemas;
     int size;
-}DtwDtatabaseSchema;
+}DtwDatabaseSchema;
 
-DtwDtatabaseSchema *private_newDtwDtatabaseSchema();
+DtwDatabaseSchema *private_newDtwDtatabaseSchema();
 
-DtwSchema * privateDtwDtatabaseSchema_get_sub_schema(DtwDtatabaseSchema *self,const char *name);
+DtwSchema * privateDtwDtatabaseSchema_get_sub_schema(DtwDatabaseSchema *self,const char *name);
 
-DtwSchema * DtwDtatabaseSchema_new_subSchema(DtwDtatabaseSchema *self,const char *name);
+DtwSchema * DtwDtatabaseSchema_new_subSchema(DtwDatabaseSchema *self,const char *name);
 
-void private_new_DtwDtatabaseSchema_free(DtwDtatabaseSchema *self);
+void private_new_DtwDtatabaseSchema_free(DtwDatabaseSchema *self);
 
 
 
@@ -1445,7 +1446,7 @@ typedef struct DtwResource{
     //|root/index                                         |
     //|root/index/pk_name/pk_sha ->txt  -------------------
     DtwSchema *attached_schema;
-    DtwDtatabaseSchema *datatabase_schema;
+    DtwDatabaseSchema *datatabase_schema;
     struct DtwResource *values_resource;
     struct DtwResource *index_resource;
     int schema_type;
@@ -1617,7 +1618,7 @@ void DtwResource_dangerous_rename_schema_prop(DtwResource*self,const char *prop,
 
 
 
-DtwDtatabaseSchema * DtwResource_newDatabaseSchema(DtwResource *self);
+DtwDatabaseSchema * DtwResource_newDatabaseSchema(DtwResource *self);
 
 
 //
@@ -2126,7 +2127,7 @@ typedef struct DtwResourceModule{
     DtwResource * (*find_by_primary_key_with_string)(DtwResource *self, const char *key, const char *value);
     void (*dangerous_remove_schema_prop)(DtwResource*self,const char *prop);
     void (*dangerous_rename_schema_prop)(DtwResource*self,const char *prop,const char *new_name);
-    DtwDtatabaseSchema * (*newDatabaseSchema)(DtwResource *self);
+    DtwDatabaseSchema * (*newDatabaseSchema)(DtwResource *self);
 
     char * (*get_error_path)(DtwResource *self);
     DtwResourceArray * (*get_schema_values)(DtwResource *self);
@@ -2228,7 +2229,7 @@ DtwSchemaModule newDtwSchemaModule();
 
 
 typedef struct {
-    DtwSchema * (*sub_schema)(DtwDtatabaseSchema *self,const char *name);
+    DtwSchema * (*sub_schema)(DtwDatabaseSchema *self,const char *name);
 }DtwDatabaseSchemaModule;
 
 DtwDatabaseSchemaModule newDtwDatabaseSchemaModule();
@@ -2500,13 +2501,33 @@ char *dtw_convert_binary_file_to_base64(const char *path){
 DtwRandonizer * newDtwRandonizer(){
     DtwRandonizer *self = (DtwRandonizer*) malloc(sizeof (DtwRandonizer));
     *self =(DtwRandonizer){0};
-    self->time_seed = dtw_get_time();
+
+    #ifndef DTW_DEBUG_TIME
+
+            #ifdef _WIN32
+                FILETIME ft;
+                LARGE_INTEGER li;
+
+                GetSystemTimeAsFileTime(&ft);
+                li.LowPart = ft.dwLowDateTime;
+                li.HighPart = ft.dwHighDateTime;
+
+                self->internal_seed = li.QuadPart;
+                self->internal_seed ^= GetCurrentProcessId();
+            #else
+                struct timespec ts;
+                clock_gettime(CLOCK_REALTIME, &ts);
+
+                self->internal_seed = (uint64_t)ts.tv_sec + (uint64_t)ts.tv_nsec;
+                self->internal_seed += getpid();
+            #endif
+    #endif
     return self;
 }
 
 int DtwRandonizer_generate_num(DtwRandonizer *self,int max) {
     self->actual_generation+=1;
-    srand(  self->time_seed + self->actual_generation + self->seed);
+    srand(  self->internal_seed + self->actual_generation + self->seed);
     int value = rand() % max;
     return value;
 }
@@ -6017,9 +6038,9 @@ void private_newDtwSchema_free(DtwSchema *self){
 }
 
 
-DtwDtatabaseSchema *private_newDtwDtatabaseSchema(){
-    DtwDtatabaseSchema *self = (DtwDtatabaseSchema*) malloc(sizeof (DtwDtatabaseSchema));
-    *self = (DtwDtatabaseSchema){0};
+DtwDatabaseSchema *private_newDtwDtatabaseSchema(){
+    DtwDatabaseSchema *self = (DtwDatabaseSchema*) malloc(sizeof (DtwDatabaseSchema));
+    *self = (DtwDatabaseSchema){0};
     self->value_name = DTW_SCHEMA_DEFAULT_VALUES_NAME;
     self->index_name = DTW_SCHEMA_DEFAULT_INDEX_NAME;
     self->sub_schemas = (struct DtwSchema **)malloc(0);
@@ -6027,7 +6048,7 @@ DtwDtatabaseSchema *private_newDtwDtatabaseSchema(){
 }
 
 
-DtwSchema * privateDtwDtatabaseSchema_get_sub_schema(DtwDtatabaseSchema *self,const char *name){
+DtwSchema * privateDtwDtatabaseSchema_get_sub_schema(DtwDatabaseSchema *self,const char *name){
 
     for(int i = 0; i < self->size; i++){
         DtwSchema  *current = self->sub_schemas[i];
@@ -6040,7 +6061,7 @@ DtwSchema * privateDtwDtatabaseSchema_get_sub_schema(DtwDtatabaseSchema *self,co
     return NULL;
 }
 
-DtwSchema * DtwDtatabaseSchema_new_subSchema(DtwDtatabaseSchema *self,const char *name){
+DtwSchema * DtwDtatabaseSchema_new_subSchema(DtwDatabaseSchema *self,const char *name){
     DtwSchema *subSchema = private_newDtwSchema(name);
     self->sub_schemas = ( DtwSchema **) realloc(self->sub_schemas, (self->size + 1) * sizeof( DtwSchema *));
     self->sub_schemas[self->size] = subSchema;
@@ -6050,7 +6071,7 @@ DtwSchema * DtwDtatabaseSchema_new_subSchema(DtwDtatabaseSchema *self,const char
 
 
 
-void private_new_DtwDtatabaseSchema_free(DtwDtatabaseSchema *self){
+void private_new_DtwDtatabaseSchema_free(DtwDatabaseSchema *self){
     for (int i = 0; i < self->size; i++) {
         private_newDtwSchema_free((DtwSchema *) self->sub_schemas[i]);
     }
@@ -7279,7 +7300,7 @@ void DtwResource_dangerous_rename_schema_prop(DtwResource*self,const char *prop,
 
 
 
-DtwDtatabaseSchema * DtwResource_newDatabaseSchema(DtwResource *self){
+DtwDatabaseSchema * DtwResource_newDatabaseSchema(DtwResource *self){
     if(DtwResource_error(self)){
         return  NULL;
     }
