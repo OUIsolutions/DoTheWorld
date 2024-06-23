@@ -4,18 +4,32 @@ DtwNamespace dtw;
 
 
 
-int main(){
-    dtw = newDtwNamespace();
-    DtwTree *t  = dtw.tree.newTree();
-    DtwTreePart *p = dtw.tree.part.newPartEmpty("a.txt");
-    long size;
-    bool isbin;
-    unsigned char *v = dtw.load_any_content("tests/target/blob.png",&size,&isbin);
-    dtw.tree.part.set_any_content(p,v,size,isbin);
-    free(v);
-    dtw.tree.add_tree_part_getting_owenership(t,p);
-    dtw.tree.part.hardware_write(p,DTW_SET_AS_ACTION);
 
-    dtw.tree.hardware_commit_tree(t);
-    dtw.tree.free(t);
+int main(){
+    DtwNamespace  dtw = newDtwNamespace();
+
+    DtwResource *database = dtw.resource.newResource("data");
+    DtwSchema *schema  = dtw.resource.newSchema(database);
+
+    DtwSchema *users_schema = dtw.schema.sub_schema(schema,"users");
+    dtw.schema.add_primary_key(users_schema,"name");
+    dtw.schema.add_primary_key(users_schema,"email");
+
+
+    DtwResource  *users =dtw.resource.sub_resource(database,"users");
+
+    DtwResource *user = dtw.resource.new_schema_insertion(users);
+    dtw.resource.set_string_in_sub_resource(user,"name","mateus");
+    dtw.resource.set_string_in_sub_resource(user,"email","mateusmoutinho01@gmail.com");
+    dtw.resource.set_string_sha_in_sub_resource(user,"password","12345");
+    dtw.resource.set_long_in_sub_resource(user,"age",27);
+
+    if(dtw.resource.error(database)){
+        printf("error:%s",dtw.resource.get_error_message(database));
+    }
+
+    dtw.resource.commit(database);
+    dtw.resource.free(database);
 }
+
+
