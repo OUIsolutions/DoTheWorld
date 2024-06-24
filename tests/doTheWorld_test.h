@@ -7394,9 +7394,8 @@ void DtwResource_set_any(DtwResource *self, unsigned char *element, long size,bo
     self->value_size = size;
     self->is_binary = is_binary;
     self->value_any = (unsigned  char *) malloc(size+1);
-    if(!is_binary) {
-        self->value_any[size]= '\0';
-    }
+
+    self->value_any[size]= '\0';
     memcpy(self->value_any,element,size);
 }
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size){
