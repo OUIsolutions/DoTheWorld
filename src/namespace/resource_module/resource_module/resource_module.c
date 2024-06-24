@@ -32,6 +32,7 @@ DtwResourceModule newDtwResourceModule(){
     self.sub_resource_random = DtwResource_sub_resource_random;
     self.set_binary_sha =DtwResource_set_binary_sha;
     self.set_string_sha = DtwResource_set_string_sha;
+    self.set_any_in_sub_resource = DtwResource_set_any_in_sub_resource;
     self.set_binary_sha_in_sub_resource = DtwResource_set_binary_sha_in_sub_resource;
     self.set_string_sha_in_sub_resource = DtwResource_set_string_sha_in_sub_resource;
 
@@ -54,6 +55,7 @@ DtwResourceModule newDtwResourceModule(){
     self.get_long = DtwResource_get_long;
     self.get_bool = DtwResource_get_bool;
 
+    self.set_any = DtwResource_set_any;
     self.set_binary = DtwResource_set_binary;
     self.set_string = DtwResource_set_string;
     self.set_long = DtwResource_set_long;

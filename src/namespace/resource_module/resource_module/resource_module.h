@@ -16,6 +16,7 @@ typedef struct DtwResourceModule{
     long (*get_long_from_sub_resource)(DtwResource *self,const char *format,...);
     double (*get_double_from_sub_resource)(DtwResource *self,const char *format,...);
     bool (*get_bool_from_sub_resource)(DtwResource *self,const char *format,...);
+    void (*set_any_in_sub_resource)(DtwResource *self,const char *key, unsigned char *element, long size,bool is_binary);
     void (*set_binary_in_sub_resource)(DtwResource *self,const char *key, unsigned char *element, long size);
     void (*set_string_in_sub_resource)(DtwResource *self,const char *key,const  char *element);
     void (*set_long_in_sub_resource)(DtwResource *self,const char *key,long element);
@@ -23,7 +24,6 @@ typedef struct DtwResourceModule{
     void (*set_bool_in_sub_resource)( DtwResource *self,const char *key,bool element);
     void (*set_binary_sha)(DtwResource *self, unsigned  char *value, long size);
     void (*set_string_sha)(DtwResource *self,const char *value);
-
     void (*set_binary_sha_in_sub_resource)(DtwResource *self,const char *key, unsigned  char *value, long size);
     void (*set_string_sha_in_sub_resource)(DtwResource *self,const char *key,const char *value);
 
@@ -69,7 +69,7 @@ typedef struct DtwResourceModule{
     double (*get_double)(struct DtwResource *self);
 
     bool (*get_bool)(struct DtwResource *self);
-
+    void (*set_any)(DtwResource *self, unsigned char *element, long size,bool is_binary);
     void (*set_binary)(DtwResource *self, unsigned char *element, long size);
 
     void (*set_string)(DtwResource *self,const  char *element);

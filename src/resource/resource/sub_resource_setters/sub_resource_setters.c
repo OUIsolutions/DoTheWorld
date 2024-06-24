@@ -1,3 +1,13 @@
+
+void DtwResource_set_any_in_sub_resource(DtwResource *self,const char *key, unsigned char *element, long size,bool is_binary) {
+    if(DtwResource_error(self)){
+        return ;
+    }
+
+    DtwResource *created = DtwResource_sub_resource(self,"%s",key);
+    DtwResource_set_any(created, element, size,is_binary);
+}
+
 void DtwResource_set_binary_in_sub_resource(DtwResource *self,const char *key, unsigned char *element, long size){
     if(DtwResource_error(self)){
         return ;

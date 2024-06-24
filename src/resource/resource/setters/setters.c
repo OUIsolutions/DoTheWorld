@@ -40,8 +40,7 @@ void private_dtw_resource_set_primary_key(DtwResource *self, unsigned  char *ele
     self->root_props->is_writing_schema = false;
 
 }
-
-void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size){
+void DtwResource_set_any(DtwResource *self, unsigned char *element, long size,bool is_binary){
     if(DtwResource_error(self)){
         return ;
     }
@@ -50,7 +49,7 @@ void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size
     }
 
     if(DtwResource_error(self)){
-        return ;
+        return;
     }
 
     if(self->allow_transaction){
@@ -63,41 +62,17 @@ void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size
     DtwResource_unload(self);
     self->loaded = true;
     self->value_size = size;
+    self->is_binary = is_binary;
     self->value_any = (unsigned  char *) malloc(size+1);
     memcpy(self->value_any,element,size);
-
 }
-
+void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size){
+    DtwResource_set_any(self,element,size,true);
+}
 
 void DtwResource_set_string(DtwResource *self,const  char *element){
-    if(DtwResource_error(self)){
-        return ;
-    }
-    if(private_DtwResource_its_a_pk(self)){
-        private_dtw_resource_set_primary_key(self, (unsigned char *) element, (long) strlen(element));
-    }
-
-    if(DtwResource_error(self)){
-        return ;
-    }
-
-    if(self->allow_transaction){
-        DtwTransaction_write_string(self->root_props->transaction,self->path,element);
-    }
-    else{
-        dtw_write_string_file_content(self->path,element);
-    }
-    DtwResource_unload(self);
-
-    self->loaded = true;
-
-    self->value_size = (long)strlen(element);
-
-    self->value_any = (unsigned char*)strdup(element);
-
-
+    DtwResource_set_any(self,(unsigned char *)element,strlen(element),false);
 }
-
 
 void DtwResource_set_binary_sha(DtwResource *self, unsigned  char *value, long size){
     if(DtwResource_error(self)){

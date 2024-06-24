@@ -3,6 +3,8 @@
 //
 void private_dtw_resource_set_primary_key(DtwResource *self, unsigned  char *element, long size);
 
+void DtwResource_set_any(DtwResource *self, unsigned char *element, long size,bool is_binary);
+
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size);
 
 

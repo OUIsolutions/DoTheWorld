@@ -1626,6 +1626,8 @@ DtwDatabaseSchema * DtwResource_newDatabaseSchema(DtwResource *self);
 //
 void private_dtw_resource_set_primary_key(DtwResource *self, unsigned  char *element, long size);
 
+void DtwResource_set_any(DtwResource *self, unsigned char *element, long size,bool is_binary);
+
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size);
 
 
@@ -1644,6 +1646,10 @@ void DtwResource_set_double(DtwResource *self,double element);
 
 void DtwResource_set_bool( DtwResource *self,bool element);
 
+
+
+
+void DtwResource_set_any_in_sub_resource(DtwResource *self,const char *key, unsigned char *element, long size,bool is_binary);
 
 
 void DtwResource_set_binary_in_sub_resource(DtwResource *self,const char *key, unsigned char *element, long size);
@@ -2108,6 +2114,7 @@ typedef struct DtwResourceModule{
     long (*get_long_from_sub_resource)(DtwResource *self,const char *format,...);
     double (*get_double_from_sub_resource)(DtwResource *self,const char *format,...);
     bool (*get_bool_from_sub_resource)(DtwResource *self,const char *format,...);
+    void (*set_any_in_sub_resource)(DtwResource *self,const char *key, unsigned char *element, long size,bool is_binary);
     void (*set_binary_in_sub_resource)(DtwResource *self,const char *key, unsigned char *element, long size);
     void (*set_string_in_sub_resource)(DtwResource *self,const char *key,const  char *element);
     void (*set_long_in_sub_resource)(DtwResource *self,const char *key,long element);
@@ -2115,7 +2122,6 @@ typedef struct DtwResourceModule{
     void (*set_bool_in_sub_resource)( DtwResource *self,const char *key,bool element);
     void (*set_binary_sha)(DtwResource *self, unsigned  char *value, long size);
     void (*set_string_sha)(DtwResource *self,const char *value);
-
     void (*set_binary_sha_in_sub_resource)(DtwResource *self,const char *key, unsigned  char *value, long size);
     void (*set_string_sha_in_sub_resource)(DtwResource *self,const char *key,const char *value);
 
@@ -2161,7 +2167,7 @@ typedef struct DtwResourceModule{
     double (*get_double)(struct DtwResource *self);
 
     bool (*get_bool)(struct DtwResource *self);
-
+    void (*set_any)(DtwResource *self, unsigned char *element, long size,bool is_binary);
     void (*set_binary)(DtwResource *self, unsigned char *element, long size);
 
     void (*set_string)(DtwResource *self,const  char *element);
@@ -6728,7 +6734,9 @@ int DtwResource_type(DtwResource *self){
         return dtw_entity_type(self->path);
     }
 
-
+    if(self->value_size == 0){
+        return DTW_COMPLEX_STRING_TYPE;
+    }
     if(self->is_binary){
         return DTW_COMPLEX_BINARY;
     }
@@ -7134,13 +7142,11 @@ DtwResource * DtwResource_new_schema_insertion(DtwResource *self){
     if(DtwResource_error(self)){
         return NULL;
     }
-    if(self->schema_type != PRIVATE_DTW_SCHEMA_ROOT){
+    if(self->schema_type != PRIVATE_DTW_SCHEMA_ROOT || self->datatabase_schema){
         private_DtwResource_raise_error(
                 self,
                 DTW_RESOURCE_IMPSSIBLE_TO_ADD_INSERTION_OUTSIDE_ROOT_SCHEMA,
-                "only root schema can generate insertions",
-                self->name
-        );
+                "only root schema can generate insertions");
         return NULL;
     }
     self->root_props->is_writing_schema = true;
@@ -7361,8 +7367,7 @@ void private_dtw_resource_set_primary_key(DtwResource *self, unsigned  char *ele
     self->root_props->is_writing_schema = false;
 
 }
-
-void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size){
+void DtwResource_set_any(DtwResource *self, unsigned char *element, long size,bool is_binary){
     if(DtwResource_error(self)){
         return ;
     }
@@ -7371,7 +7376,7 @@ void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size
     }
 
     if(DtwResource_error(self)){
-        return ;
+        return;
     }
 
     if(self->allow_transaction){
@@ -7384,41 +7389,17 @@ void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size
     DtwResource_unload(self);
     self->loaded = true;
     self->value_size = size;
+    self->is_binary = is_binary;
     self->value_any = (unsigned  char *) malloc(size+1);
     memcpy(self->value_any,element,size);
-
 }
-
+void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size){
+    DtwResource_set_any(self,element,size,true);
+}
 
 void DtwResource_set_string(DtwResource *self,const  char *element){
-    if(DtwResource_error(self)){
-        return ;
-    }
-    if(private_DtwResource_its_a_pk(self)){
-        private_dtw_resource_set_primary_key(self, (unsigned char *) element, (long) strlen(element));
-    }
-
-    if(DtwResource_error(self)){
-        return ;
-    }
-
-    if(self->allow_transaction){
-        DtwTransaction_write_string(self->root_props->transaction,self->path,element);
-    }
-    else{
-        dtw_write_string_file_content(self->path,element);
-    }
-    DtwResource_unload(self);
-
-    self->loaded = true;
-
-    self->value_size = (long)strlen(element);
-
-    self->value_any = (unsigned char*)strdup(element);
-
-
+    DtwResource_set_any(self,(unsigned char *)element,strlen(element),false);
 }
-
 
 void DtwResource_set_binary_sha(DtwResource *self, unsigned  char *value, long size){
     if(DtwResource_error(self)){
@@ -7503,6 +7484,16 @@ void DtwResource_set_bool( DtwResource *self,bool element){
 
 }
 
+
+
+void DtwResource_set_any_in_sub_resource(DtwResource *self,const char *key, unsigned char *element, long size,bool is_binary) {
+    if(DtwResource_error(self)){
+        return ;
+    }
+
+    DtwResource *created = DtwResource_sub_resource(self,"%s",key);
+    DtwResource_set_any(created, element, size,is_binary);
+}
 
 void DtwResource_set_binary_in_sub_resource(DtwResource *self,const char *key, unsigned char *element, long size){
     if(DtwResource_error(self)){
@@ -8809,6 +8800,7 @@ DtwResourceModule newDtwResourceModule(){
     self.sub_resource_random = DtwResource_sub_resource_random;
     self.set_binary_sha =DtwResource_set_binary_sha;
     self.set_string_sha = DtwResource_set_string_sha;
+    self.set_any_in_sub_resource = DtwResource_set_any_in_sub_resource;
     self.set_binary_sha_in_sub_resource = DtwResource_set_binary_sha_in_sub_resource;
     self.set_string_sha_in_sub_resource = DtwResource_set_string_sha_in_sub_resource;
 
@@ -8831,6 +8823,7 @@ DtwResourceModule newDtwResourceModule(){
     self.get_long = DtwResource_get_long;
     self.get_bool = DtwResource_get_bool;
 
+    self.set_any = DtwResource_set_any;
     self.set_binary = DtwResource_set_binary;
     self.set_string = DtwResource_set_string;
     self.set_long = DtwResource_set_long;
