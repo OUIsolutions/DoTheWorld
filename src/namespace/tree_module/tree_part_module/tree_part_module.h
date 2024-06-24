@@ -11,9 +11,9 @@ typedef struct DtwTreePartModule{
 
     char *(*get_content_sha)(struct DtwTreePart *self);
     char *(*last_modification_time_in_string)(struct DtwTreePart *self);
-    void (*set_any_content)(struct DtwTreePart *self,unsigned char *content,int content_size,bool is_binary);
+    void (*set_any_content)(struct DtwTreePart *self,unsigned char *content,long content_size,bool is_binary);
     void (*set_string_content)(struct DtwTreePart *self,const char *content);
-    void (*set_binary_content)(struct DtwTreePart *self,unsigned char *content,int content_size);
+    void (*set_binary_content)(struct DtwTreePart *self,unsigned char *content,long content_size);
     void (*load_content_from_hardware)(struct DtwTreePart *self);
     void (*free_content)(struct DtwTreePart *self);
     void(*represent)(struct DtwTreePart *self);

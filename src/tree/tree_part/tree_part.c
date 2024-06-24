@@ -75,7 +75,7 @@ struct  DtwTreePart * DtwTreePart_self_copy( DtwTreePart *self){
     return new_tree_part;
 }
 
-void DtwTreePart_set_any_content( DtwTreePart *self, unsigned char *content, int content_size, bool is_binary){
+void DtwTreePart_set_any_content( DtwTreePart *self, unsigned char *content, long content_size, bool is_binary){
 
     DtwTreePart_free_content(self);
     self->is_binary = is_binary;
@@ -97,7 +97,7 @@ void DtwTreePart_set_string_content( DtwTreePart *self, const char *content){
     self->content[self->content_size] = '\0';
 }
 
-void DtwTreePart_set_binary_content( DtwTreePart *self, unsigned char *content, int content_size){
+void DtwTreePart_set_binary_content( DtwTreePart *self, unsigned char *content, long content_size){
     DtwTreePart_set_any_content(self,content,content_size,true);
 }
 

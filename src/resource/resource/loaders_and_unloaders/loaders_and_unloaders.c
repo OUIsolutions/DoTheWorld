@@ -22,10 +22,7 @@ void DtwResource_load(DtwResource *self){
     }
     DtwResource_unload(self);
     self->value_any = dtw_load_any_content(self->path,&self->value_size,&self->is_binary);
-    //means its a empty string
-    if(dtw_entity_type(self->path) == DTW_FILE_TYPE  && self->value_size ==0 ){
-        self->value_any = (unsigned char*)strdup("");
-    }
+
     self->loaded = true;
 
 }

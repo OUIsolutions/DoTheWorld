@@ -940,9 +940,10 @@ void  DtwTreeTransactionReport_free(struct DtwTreeTransactionReport *report);
 
 typedef struct DtwTreePart{
     
-    struct DtwPath *path;
+     DtwPath *path;
     void *owner;
-    size_t  hardware_content_size;
+    long content_size;
+    long  hardware_content_size;
     long last_modification_time;
     bool content_exist_in_hardware;
     bool ignore;
@@ -955,7 +956,6 @@ typedef struct DtwTreePart{
     unsigned char *content;
     int pending_action;
 
-    size_t content_size;
 
 }DtwTreePart;
 
@@ -964,9 +964,9 @@ char *DtwTreePart_get_content_string_by_reference(struct DtwTreePart *self);
 unsigned char *DtwTreePart_get_content_binary_by_reference(struct DtwTreePart *self);
 char *DtwTreePart_get_content_sha(struct DtwTreePart *self);
 char *DtwTreePart_last_modification_time_in_string(struct DtwTreePart *self);
-void DtwTreePart_set_any_content(struct DtwTreePart *self, unsigned char *content, int content_size, bool is_binary);
+void DtwTreePart_set_any_content(struct DtwTreePart *self, unsigned char *content, long content_size, bool is_binary);
 void DtwTreePart_set_string_content(struct DtwTreePart *self, const char *content);
-void DtwTreePart_set_binary_content(struct DtwTreePart *self, unsigned char *content, int content_size);
+void DtwTreePart_set_binary_content(struct DtwTreePart *self, unsigned char *content, long content_size);
 void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self);
 void DtwTreePart_free_content(struct DtwTreePart *self);
 void DtwTreePart_represent(struct DtwTreePart *self);
@@ -1833,9 +1833,9 @@ typedef struct DtwTreePartModule{
 
     char *(*get_content_sha)(struct DtwTreePart *self);
     char *(*last_modification_time_in_string)(struct DtwTreePart *self);
-    void (*set_any_content)(struct DtwTreePart *self,unsigned char *content,int content_size,bool is_binary);
+    void (*set_any_content)(struct DtwTreePart *self,unsigned char *content,long content_size,bool is_binary);
     void (*set_string_content)(struct DtwTreePart *self,const char *content);
-    void (*set_binary_content)(struct DtwTreePart *self,unsigned char *content,int content_size);
+    void (*set_binary_content)(struct DtwTreePart *self,unsigned char *content,long content_size);
     void (*load_content_from_hardware)(struct DtwTreePart *self);
     void (*free_content)(struct DtwTreePart *self);
     void(*represent)(struct DtwTreePart *self);
@@ -3037,7 +3037,7 @@ unsigned char *dtw_load_any_content(const char * path,long *size,bool *is_binary
     }
     FILE  *file = fopen(path,"rb");
 
-    if(!file){
+    if(file ==NULL){
         return NULL;
     }
 
@@ -4554,7 +4554,7 @@ struct  DtwTreePart * DtwTreePart_self_copy( DtwTreePart *self){
     return new_tree_part;
 }
 
-void DtwTreePart_set_any_content( DtwTreePart *self, unsigned char *content, int content_size, bool is_binary){
+void DtwTreePart_set_any_content( DtwTreePart *self, unsigned char *content, long content_size, bool is_binary){
 
     DtwTreePart_free_content(self);
     self->is_binary = is_binary;
@@ -4576,7 +4576,7 @@ void DtwTreePart_set_string_content( DtwTreePart *self, const char *content){
     self->content[self->content_size] = '\0';
 }
 
-void DtwTreePart_set_binary_content( DtwTreePart *self, unsigned char *content, int content_size){
+void DtwTreePart_set_binary_content( DtwTreePart *self, unsigned char *content, long content_size){
     DtwTreePart_set_any_content(self,content,content_size,true);
 }
 
@@ -4697,28 +4697,21 @@ void DtwTreePart_free(struct DtwTreePart *self){
 
 
 void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self){
-    long size;
-    bool is_binary;
+
     char *path = DtwPath_get_path(self->path);
 
-    if(!path){
+    if(path == NULL){
         return;
     }
+
+
     if(dtw_entity_type(path) != DTW_FILE_TYPE){
         return;
     }
 
     DtwTreePart_free_content(self);
-    self->content = dtw_load_any_content(path,&size,&is_binary);
-    
-    if(!self->content){
-        self->content = (unsigned char *)strdup("");
-    }    
-
-
-    self->is_binary = is_binary;
-    self->content_size = size;
-    self->hardware_content_size = size;
+    self->content = dtw_load_any_content(path,&self->content_size,&self->is_binary);
+    self->hardware_content_size = self->content_size;
     self->content_exist_in_hardware = true;
 
 
@@ -5587,8 +5580,8 @@ void DtwTree_add_tree_from_hardware( DtwTree *self,const char *path, DtwTreeProp
     }
 
     for(int i =0; i < self->size; i++){
-        struct DtwTreePart *current_part = self->tree_parts[i];
-        struct DtwPath *current_path = current_part->path;
+         DtwTreePart *current_part = self->tree_parts[i];
+         DtwPath *current_path = current_part->path;
         char *current_path_string = DtwPath_get_path(current_path);
         //remove the size toremove from string
 
@@ -5598,9 +5591,7 @@ void DtwTree_add_tree_from_hardware( DtwTree *self,const char *path, DtwTreeProp
                 strlen(current_path_string) - size_to_remove +1
                 );
         DtwPath_set_path(current_path,current_path_string);
-        if(current_path->original_path_string){
-            free(current_path->original_path_string);
-        }
+
         current_path->original_path_string = current_path_string;
 
     }
@@ -7070,10 +7061,7 @@ void DtwResource_load(DtwResource *self){
     }
     DtwResource_unload(self);
     self->value_any = dtw_load_any_content(self->path,&self->value_size,&self->is_binary);
-    //means its a empty string
-    if(dtw_entity_type(self->path) == DTW_FILE_TYPE  && self->value_size ==0 ){
-        self->value_any = (unsigned char*)strdup("");
-    }
+
     self->loaded = true;
 
 }

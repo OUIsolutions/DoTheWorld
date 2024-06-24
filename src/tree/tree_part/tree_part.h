@@ -14,9 +14,10 @@
 
 typedef struct DtwTreePart{
     
-    struct DtwPath *path;
+     DtwPath *path;
     void *owner;
-    size_t  hardware_content_size;
+    long content_size;
+    long  hardware_content_size;
     long last_modification_time;
     bool content_exist_in_hardware;
     bool ignore;
@@ -29,7 +30,6 @@ typedef struct DtwTreePart{
     unsigned char *content;
     int pending_action;
 
-    size_t content_size;
 
 }DtwTreePart;
 
@@ -38,9 +38,9 @@ char *DtwTreePart_get_content_string_by_reference(struct DtwTreePart *self);
 unsigned char *DtwTreePart_get_content_binary_by_reference(struct DtwTreePart *self);
 char *DtwTreePart_get_content_sha(struct DtwTreePart *self);
 char *DtwTreePart_last_modification_time_in_string(struct DtwTreePart *self);
-void DtwTreePart_set_any_content(struct DtwTreePart *self, unsigned char *content, int content_size, bool is_binary);
+void DtwTreePart_set_any_content(struct DtwTreePart *self, unsigned char *content, long content_size, bool is_binary);
 void DtwTreePart_set_string_content(struct DtwTreePart *self, const char *content);
-void DtwTreePart_set_binary_content(struct DtwTreePart *self, unsigned char *content, int content_size);
+void DtwTreePart_set_binary_content(struct DtwTreePart *self, unsigned char *content, long content_size);
 void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self);
 void DtwTreePart_free_content(struct DtwTreePart *self);
 void DtwTreePart_represent(struct DtwTreePart *self);

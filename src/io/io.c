@@ -95,7 +95,7 @@ unsigned char *dtw_load_any_content(const char * path,long *size,bool *is_binary
     }
     FILE  *file = fopen(path,"rb");
 
-    if(!file){
+    if(file ==NULL){
         return NULL;
     }
 

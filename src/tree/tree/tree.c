@@ -129,8 +129,8 @@ void DtwTree_add_tree_from_hardware( DtwTree *self,const char *path, DtwTreeProp
     }
 
     for(int i =0; i < self->size; i++){
-        struct DtwTreePart *current_part = self->tree_parts[i];
-        struct DtwPath *current_path = current_part->path;
+         DtwTreePart *current_part = self->tree_parts[i];
+         DtwPath *current_path = current_part->path;
         char *current_path_string = DtwPath_get_path(current_path);
         //remove the size toremove from string
 
@@ -140,9 +140,7 @@ void DtwTree_add_tree_from_hardware( DtwTree *self,const char *path, DtwTreeProp
                 strlen(current_path_string) - size_to_remove +1
                 );
         DtwPath_set_path(current_path,current_path_string);
-        if(current_path->original_path_string){
-            free(current_path->original_path_string);
-        }
+
         current_path->original_path_string = current_path_string;
 
     }

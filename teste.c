@@ -1,20 +1,12 @@
 
 #include "src/one.c"
 DtwNamespace dtw;
-int main (){
+int main(){
     dtw = newDtwNamespace();
 
-    DtwResource *t = dtw.resource.newResource("data");
-    DtwResource *ar = dtw.resource.sub_resource(t,"a.txt");
-
-    bool is_binary;
-    long size;
-    unsigned char *a = dtw.load_any_content("a.txt",&size,&is_binary);
-    dtw.resource.set_any(ar,a,size,is_binary);
-    printf("a %s\n",dtw.resource.get_string(ar));
-    dtw.resource.free(ar);
-    dtw.resource.commit(t);
-    free(a);
+    DtwTreePart *part = dtw.tree.part.newPartEmpty("tests/target/a.txt");
+    dtw.tree.part.set_string_content(part,"my mensage2");
+    dtw.tree.part.hardware_write(part,DTW_SET_AS_ACTION);
+    dtw.tree.part.hardware_commit(part);
+    dtw.tree.part.free(part);
 }
-
-
