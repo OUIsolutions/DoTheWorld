@@ -44,6 +44,8 @@ void DtwResource_set_any(DtwResource *self, unsigned char *element, long size,bo
     if(DtwResource_error(self)){
         return ;
     }
+    DtwResource_unload(self);
+
     if(private_DtwResource_its_a_pk(self)){
         private_dtw_resource_set_primary_key(self, element, size);
     }
@@ -53,17 +55,18 @@ void DtwResource_set_any(DtwResource *self, unsigned char *element, long size,bo
     }
 
     if(self->allow_transaction){
-        DtwTransaction_write_any(self->root_props->transaction,self->path,element,size,true);
+        DtwTransaction_write_any(self->root_props->transaction,self->path,element,size,is_binary);
     }
     else{
         dtw_write_any_content(self->path,element,size);
     }
 
-    DtwResource_unload(self);
     self->loaded = true;
     self->value_size = size;
     self->is_binary = is_binary;
     self->value_any = (unsigned  char *) malloc(size+1);
+
+    self->value_any[size]= '\0';
     memcpy(self->value_any,element,size);
 }
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size){

@@ -111,7 +111,7 @@ DtwResource * DtwResource_find_by_primary_key_with_binary(DtwResource *self, con
     if(DtwResource_error(self)){
         return NULL;
     }
-    if(!element_folder){
+    if(element_folder == NULL){
         return NULL;
     }
 
@@ -126,7 +126,7 @@ DtwResource * DtwResource_find_by_primary_key_with_string(DtwResource *self, con
     if(DtwResource_error(self)){
         return NULL;
     }
-    return DtwResource_find_by_primary_key_with_binary(self,key,(unsigned char*)value, (long )strlen(value));
+    return DtwResource_find_by_primary_key_with_binary(self,key,(unsigned char*)value, (long)strlen(value));
 }
 
 

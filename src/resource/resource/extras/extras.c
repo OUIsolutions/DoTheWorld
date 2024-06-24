@@ -14,16 +14,17 @@ bool DtwResource_error(DtwResource *self){
 
 
 int DtwResource_get_error_code(DtwResource *self){
-    if(!self){
+    if(self == NULL){
         return DTW_RESOURCE_ELEMENT_IS_NULL;
     }
     return self->root_props->error_code;
 }
 char * DtwResource_get_error_path(DtwResource *self){
-    if(!self){
+    if(self == NULL){
         return NULL;
     }
-    if(!self->root_props){
+
+    if(self->root_props == NULL){
         return NULL;
     }
     return self->root_props->error_path;
@@ -32,7 +33,7 @@ char * DtwResource_get_error_path(DtwResource *self){
 
 char * DtwResource_get_error_message(DtwResource *self){
 
-    if(!self){
+    if(self== NULL){
         return (char*)"element its null";
     }
 
@@ -96,7 +97,7 @@ void DtwResource_rename(DtwResource *self,const char *new_name){
     if(self->mother){
         self->path  = dtw_concat_path(self->mother->path, new_name);
     }
-    if(!self->mother){
+    if(self->mother==NULL){
         self->path = strdup(new_name);
     }
 
@@ -167,7 +168,7 @@ int DtwResource_type(DtwResource *self){
     }
     DtwResource_load_if_not_loaded(self);
 
-    if(!self->value_any){
+    if(self->value_any == NULL){
         return dtw_entity_type(self->path);
     }
 
@@ -177,6 +178,7 @@ int DtwResource_type(DtwResource *self){
     if(self->is_binary){
         return DTW_COMPLEX_BINARY;
     }
+
     char *data_in_string = DtwResource_get_string(self);
 
     if(

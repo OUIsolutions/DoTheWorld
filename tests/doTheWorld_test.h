@@ -6577,16 +6577,17 @@ bool DtwResource_error(DtwResource *self){
 
 
 int DtwResource_get_error_code(DtwResource *self){
-    if(!self){
+    if(self == NULL){
         return DTW_RESOURCE_ELEMENT_IS_NULL;
     }
     return self->root_props->error_code;
 }
 char * DtwResource_get_error_path(DtwResource *self){
-    if(!self){
+    if(self == NULL){
         return NULL;
     }
-    if(!self->root_props){
+
+    if(self->root_props == NULL){
         return NULL;
     }
     return self->root_props->error_path;
@@ -6595,7 +6596,7 @@ char * DtwResource_get_error_path(DtwResource *self){
 
 char * DtwResource_get_error_message(DtwResource *self){
 
-    if(!self){
+    if(self== NULL){
         return (char*)"element its null";
     }
 
@@ -6659,7 +6660,7 @@ void DtwResource_rename(DtwResource *self,const char *new_name){
     if(self->mother){
         self->path  = dtw_concat_path(self->mother->path, new_name);
     }
-    if(!self->mother){
+    if(self->mother==NULL){
         self->path = strdup(new_name);
     }
 
@@ -6730,7 +6731,7 @@ int DtwResource_type(DtwResource *self){
     }
     DtwResource_load_if_not_loaded(self);
 
-    if(!self->value_any){
+    if(self->value_any == NULL){
         return dtw_entity_type(self->path);
     }
 
@@ -6740,6 +6741,7 @@ int DtwResource_type(DtwResource *self){
     if(self->is_binary){
         return DTW_COMPLEX_BINARY;
     }
+
     char *data_in_string = DtwResource_get_string(self);
 
     if(
@@ -7205,7 +7207,7 @@ DtwResource * DtwResource_find_by_primary_key_with_binary(DtwResource *self, con
     if(DtwResource_error(self)){
         return NULL;
     }
-    if(!element_folder){
+    if(element_folder == NULL){
         return NULL;
     }
 
@@ -7220,7 +7222,7 @@ DtwResource * DtwResource_find_by_primary_key_with_string(DtwResource *self, con
     if(DtwResource_error(self)){
         return NULL;
     }
-    return DtwResource_find_by_primary_key_with_binary(self,key,(unsigned char*)value, (long )strlen(value));
+    return DtwResource_find_by_primary_key_with_binary(self,key,(unsigned char*)value, (long)strlen(value));
 }
 
 
@@ -7371,6 +7373,8 @@ void DtwResource_set_any(DtwResource *self, unsigned char *element, long size,bo
     if(DtwResource_error(self)){
         return ;
     }
+    DtwResource_unload(self);
+
     if(private_DtwResource_its_a_pk(self)){
         private_dtw_resource_set_primary_key(self, element, size);
     }
@@ -7380,17 +7384,19 @@ void DtwResource_set_any(DtwResource *self, unsigned char *element, long size,bo
     }
 
     if(self->allow_transaction){
-        DtwTransaction_write_any(self->root_props->transaction,self->path,element,size,true);
+        DtwTransaction_write_any(self->root_props->transaction,self->path,element,size,is_binary);
     }
     else{
         dtw_write_any_content(self->path,element,size);
     }
 
-    DtwResource_unload(self);
     self->loaded = true;
     self->value_size = size;
     self->is_binary = is_binary;
     self->value_any = (unsigned  char *) malloc(size+1);
+    if(!is_binary) {
+        self->value_any[size]= '\0';
+    }
     memcpy(self->value_any,element,size);
 }
 void DtwResource_set_binary(DtwResource *self, unsigned char *element, long size){
