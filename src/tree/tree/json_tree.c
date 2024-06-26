@@ -199,16 +199,12 @@ char * DtwTree_dumps_tree_json( DtwTree *self, DtwTreeProps  props){
                 "hardware_content_size", 
                 cJSON_CreateNumber(tree_part->hardware_content_size)
             );
-            char *last_modification_string =DtwTreePart_last_modification_time_in_string(tree_part);
+
             cJSON_AddItemToObject(
                 json_tree_part, 
                 "last_modification", 
-                cJSON_CreateString(last_modification_string)
+                cJSON_CreateString(tree_part->last_modification_in_str)
             );
-            
-            free(last_modification_string);
-
-            
         }
 
         if(formated_props.content_data == DTW_INCLUDE && tree_part->content){

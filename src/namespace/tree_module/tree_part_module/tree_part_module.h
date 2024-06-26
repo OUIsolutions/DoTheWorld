@@ -10,7 +10,6 @@ typedef struct DtwTreePartModule{
     unsigned char *(*get_content_binary_by_reference)(struct DtwTreePart *self);
 
     char *(*get_content_sha)(struct DtwTreePart *self);
-    char *(*last_modification_time_in_string)(struct DtwTreePart *self);
     void (*set_any_content)(struct DtwTreePart *self,unsigned char *content,long content_size,bool is_binary);
     void (*set_string_content)(struct DtwTreePart *self,const char *content);
     void (*set_binary_content)(struct DtwTreePart *self,unsigned char *content,long content_size);

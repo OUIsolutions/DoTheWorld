@@ -18,13 +18,13 @@ typedef struct DtwTreePart{
     void *owner;
     long content_size;
     long  hardware_content_size;
-    long last_modification_time;
     bool content_exist_in_hardware;
     bool ignore;
     bool is_binary;
     bool metadata_loaded;
     char *current_sha;
     char * last_modification_in_str;
+    long last_modification_time;
     char *hawdware_content_sha;
 
     unsigned char *content;
@@ -37,7 +37,6 @@ typedef struct DtwTreePart{
 char *DtwTreePart_get_content_string_by_reference(struct DtwTreePart *self);
 unsigned char *DtwTreePart_get_content_binary_by_reference(struct DtwTreePart *self);
 char *DtwTreePart_get_content_sha(struct DtwTreePart *self);
-char *DtwTreePart_last_modification_time_in_string(struct DtwTreePart *self);
 void DtwTreePart_set_any_content(struct DtwTreePart *self, unsigned char *content, long content_size, bool is_binary);
 void DtwTreePart_set_string_content(struct DtwTreePart *self, const char *content);
 void DtwTreePart_set_binary_content(struct DtwTreePart *self, unsigned char *content, long content_size);

@@ -74,7 +74,7 @@ bool DtwTreePart_hardware_write(struct DtwTreePart *self, int transaction){
     self->content_exist_in_hardware = true;
     long now = dtw_get_time();
     self->last_modification_time = now;
-
+    self->last_modification_in_str = dtw_convert_unix_time_to_string(self->last_modification_time);
     return true;
   
 }

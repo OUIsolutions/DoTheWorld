@@ -8,7 +8,6 @@ DtwTreePartModule newDtwTreePartModule(){
     self.get_content_string_by_reference = DtwTreePart_get_content_string_by_reference;
     self.get_content_binary_by_reference = DtwTreePart_get_content_binary_by_reference;
     self.get_content_sha = DtwTreePart_get_content_sha;
-    self.last_modification_time_in_string = DtwTreePart_last_modification_time_in_string;
     self.set_any_content = DtwTreePart_set_any_content;
     self.set_string_content = DtwTreePart_set_string_content;
     self.set_binary_content = DtwTreePart_set_binary_content;

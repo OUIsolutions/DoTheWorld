@@ -944,13 +944,13 @@ typedef struct DtwTreePart{
     void *owner;
     long content_size;
     long  hardware_content_size;
-    long last_modification_time;
     bool content_exist_in_hardware;
     bool ignore;
     bool is_binary;
     bool metadata_loaded;
     char *current_sha;
     char * last_modification_in_str;
+    long last_modification_time;
     char *hawdware_content_sha;
 
     unsigned char *content;
@@ -963,7 +963,6 @@ typedef struct DtwTreePart{
 char *DtwTreePart_get_content_string_by_reference(struct DtwTreePart *self);
 unsigned char *DtwTreePart_get_content_binary_by_reference(struct DtwTreePart *self);
 char *DtwTreePart_get_content_sha(struct DtwTreePart *self);
-char *DtwTreePart_last_modification_time_in_string(struct DtwTreePart *self);
 void DtwTreePart_set_any_content(struct DtwTreePart *self, unsigned char *content, long content_size, bool is_binary);
 void DtwTreePart_set_string_content(struct DtwTreePart *self, const char *content);
 void DtwTreePart_set_binary_content(struct DtwTreePart *self, unsigned char *content, long content_size);
@@ -1832,7 +1831,6 @@ typedef struct DtwTreePartModule{
     unsigned char *(*get_content_binary_by_reference)(struct DtwTreePart *self);
 
     char *(*get_content_sha)(struct DtwTreePart *self);
-    char *(*last_modification_time_in_string)(struct DtwTreePart *self);
     void (*set_any_content)(struct DtwTreePart *self,unsigned char *content,long content_size,bool is_binary);
     void (*set_string_content)(struct DtwTreePart *self,const char *content);
     void (*set_binary_content)(struct DtwTreePart *self,unsigned char *content,long content_size);
@@ -4495,6 +4493,7 @@ struct DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps props){
 
             self->metadata_loaded = true;
             self->last_modification_time = dtw_get_entity_last_motification_in_unix(path);
+            self->last_modification_in_str = dtw_convert_unix_time_to_string(self->last_modification_time);
             free(self->hawdware_content_sha);
             self->hawdware_content_sha = dtw_generate_sha_from_string((const char*)self->content);
         }
@@ -4593,13 +4592,7 @@ char *DtwTreePart_get_content_sha( DtwTreePart *self){
 }
 
 
-char *DtwTreePart_last_modification_time_in_string(DtwTreePart *self){
-    if(self->last_modification_in_str) {
-        free(self->last_modification_in_str);
-    }
-    self->last_modification_in_str = dtw_convert_unix_time_to_string(self->last_modification_time);
-    return self->last_modification_in_str;
-}
+
 
 
 
@@ -4613,10 +4606,9 @@ void DtwTreePart_represent(struct DtwTreePart *self){
     printf("Content Exist In Hardware: %s\n",self->content_exist_in_hardware ? "true" : "false");
     printf("Is Binary: %s\n",self->is_binary ? "true" : "false");
 
-    if(self->last_modification_time){
+    if(self->last_modification_in_str){
         printf("Last Modification Time in Unix: %li\n",self->last_modification_time);
-        char *last_moditication_in_string = DtwTreePart_last_modification_time_in_string(self);
-        printf("Last Modification Time: %s\n",last_moditication_in_string);
+        printf("Last Modification Time: %s\n",self->last_modification_in_str);
     }
 
     printf("Content Size: %ld\n",(long)self->content_size);
@@ -4766,7 +4758,7 @@ bool DtwTreePart_hardware_write(struct DtwTreePart *self, int transaction){
     self->content_exist_in_hardware = true;
     long now = dtw_get_time();
     self->last_modification_time = now;
-
+    self->last_modification_in_str = dtw_convert_unix_time_to_string(self->last_modification_time);
     return true;
   
 }
@@ -5051,16 +5043,12 @@ char * DtwTree_dumps_tree_json( DtwTree *self, DtwTreeProps  props){
                 "hardware_content_size", 
                 cJSON_CreateNumber(tree_part->hardware_content_size)
             );
-            char *last_modification_string =DtwTreePart_last_modification_time_in_string(tree_part);
+
             cJSON_AddItemToObject(
                 json_tree_part, 
                 "last_modification", 
-                cJSON_CreateString(last_modification_string)
+                cJSON_CreateString(tree_part->last_modification_in_str)
             );
-            
-            free(last_modification_string);
-
-            
         }
 
         if(formated_props.content_data == DTW_INCLUDE && tree_part->content){
@@ -8583,7 +8571,6 @@ DtwTreePartModule newDtwTreePartModule(){
     self.get_content_string_by_reference = DtwTreePart_get_content_string_by_reference;
     self.get_content_binary_by_reference = DtwTreePart_get_content_binary_by_reference;
     self.get_content_sha = DtwTreePart_get_content_sha;
-    self.last_modification_time_in_string = DtwTreePart_last_modification_time_in_string;
     self.set_any_content = DtwTreePart_set_any_content;
     self.set_string_content = DtwTreePart_set_string_content;
     self.set_binary_content = DtwTreePart_set_binary_content;
