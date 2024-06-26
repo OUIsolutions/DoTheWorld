@@ -959,20 +959,21 @@ typedef struct DtwTreePart{
 
 }DtwTreePart;
 
+void private_DtwTreePart_set_last_modification(DtwTreePart *self,long last_modification);
 
-char *DtwTreePart_get_content_string_by_reference(struct DtwTreePart *self);
-unsigned char *DtwTreePart_get_content_binary_by_reference(struct DtwTreePart *self);
-char *DtwTreePart_get_content_sha(struct DtwTreePart *self);
-void DtwTreePart_set_any_content(struct DtwTreePart *self, unsigned char *content, long content_size, bool is_binary);
-void DtwTreePart_set_string_content(struct DtwTreePart *self, const char *content);
-void DtwTreePart_set_binary_content(struct DtwTreePart *self, unsigned char *content, long content_size);
-void DtwTreePart_load_content_from_hardware(struct DtwTreePart *self);
-void DtwTreePart_free_content(struct DtwTreePart *self);
-void DtwTreePart_represent(struct DtwTreePart *self);
+char *DtwTreePart_get_content_string_by_reference( DtwTreePart *self);
+unsigned char *DtwTreePart_get_content_binary_by_reference( DtwTreePart *self);
+char *DtwTreePart_get_content_sha( DtwTreePart *self);
+void DtwTreePart_set_any_content( DtwTreePart *self, unsigned char *content, long content_size, bool is_binary);
+void DtwTreePart_set_string_content( DtwTreePart *self, const char *content);
+void DtwTreePart_set_binary_content( DtwTreePart *self, unsigned char *content, long content_size);
+void DtwTreePart_load_content_from_hardware( DtwTreePart *self);
+void DtwTreePart_free_content( DtwTreePart *self);
+void DtwTreePart_represent( DtwTreePart *self);
 
-bool DtwTreePart_hardware_remove(struct DtwTreePart *self,int transaction);
-bool DtwTreePart_hardware_write(struct DtwTreePart *self,int transaction);
-bool DtwTreePart_hardware_modify(struct DtwTreePart *self,int transaction);
+bool DtwTreePart_hardware_remove( DtwTreePart *self,int transaction);
+bool DtwTreePart_hardware_write( DtwTreePart *self,int transaction);
+bool DtwTreePart_hardware_modify( DtwTreePart *self,int transaction);
 
 
 bool DtwTreePart_hardware_commit(struct DtwTreePart *self);
@@ -4477,8 +4478,14 @@ void  DtwTreeTransactionReport_free(struct DtwTreeTransactionReport *report){
 
 
 
-
-struct DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps props){
+void private_DtwTreePart_set_last_modification(DtwTreePart *self,long last_modification) {
+    self->last_modification_time = last_modification;
+    if(self->last_modification_in_str) {
+        free(self->last_modification_in_str);
+    }
+    self->last_modification_in_str = dtw_convert_unix_time_to_string(last_modification);
+}
+ DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps props){
     DtwTreeProps formated_props = DtwTreeProps_format_props(props);
 
     DtwTreePart *self = (DtwTreePart *)malloc(sizeof(struct DtwTreePart));
@@ -4492,8 +4499,7 @@ struct DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps props){
         if(formated_props.hadware_data == DTW_INCLUDE && self->content){
 
             self->metadata_loaded = true;
-            self->last_modification_time = dtw_get_entity_last_motification_in_unix(path);
-            self->last_modification_in_str = dtw_convert_unix_time_to_string(self->last_modification_time);
+            private_DtwTreePart_set_last_modification(self,dtw_get_entity_last_motification_in_unix(path));
             free(self->hawdware_content_sha);
             self->hawdware_content_sha = dtw_generate_sha_from_string((const char*)self->content);
         }
@@ -4514,7 +4520,7 @@ unsigned char *DtwTreePart_get_content_binary_by_reference(struct DtwTreePart *s
 }
 
 
-struct  DtwTreePart * DtwTreePart_self_copy( DtwTreePart *self){
+  DtwTreePart * DtwTreePart_self_copy( DtwTreePart *self){
     char *path = DtwPath_get_path(self->path);
 
     DtwTreeProps props = {.content =DTW_NOT_LOAD,.hadware_data = DTW_NOT_LOAD};
@@ -4756,9 +4762,7 @@ bool DtwTreePart_hardware_write(struct DtwTreePart *self, int transaction){
     free(self->hawdware_content_sha);
     self->hawdware_content_sha = dtw_generate_sha_from_any(self->content,self->content_size);
     self->content_exist_in_hardware = true;
-    long now = dtw_get_time();
-    self->last_modification_time = now;
-    self->last_modification_in_str = dtw_convert_unix_time_to_string(self->last_modification_time);
+    private_DtwTreePart_set_last_modification(self,dtw_get_time());
     return true;
   
 }
@@ -4816,8 +4820,8 @@ bool DtwTreePart_hardware_modify(struct DtwTreePart *self, int transaction){
         free(self->hawdware_content_sha);
         self->hawdware_content_sha = dtw_generate_sha_from_string((const char *)self->content);
         self->content_exist_in_hardware = true;
-        long now = dtw_get_time();
-        self->last_modification_time = now;
+        private_DtwTreePart_set_last_modification(self,dtw_get_time());
+
 
         return true;
     }

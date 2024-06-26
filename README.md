@@ -10,7 +10,7 @@ but if you want to get an deep knolege see at **exemples** folder, you will find
 # Installation
 The installation of DoTheWorld is made to be as dumb as possible, just  download the file  **doTheWorld.h** :
 
-[Download link](https://github.com/OUIsolutions/DoTheWorld/releases/download/v6.0/doTheWorld.h)
+[Download link](https://github.com/OUIsolutions/DoTheWorld/releases/download/v6.001/doTheWorld.h)
 
  And include in your project.
 if this compiles then the library will work:
@@ -39,8 +39,8 @@ int main(int argc, char *argv[]){
 ~~~
 ## Pre Compiled version
 You also can download the pre compiled versions
-[Pre Compiled Linux](https://github.com/OUIsolutions/DoTheWorld/releases/download/v6.0/pre_compiled_linux.zip) or
-[Pre Compiled Windows](https://github.com/OUIsolutions/DoTheWorld/releases/download/v6.0/pre_compiled_windows.zip) to
+[Pre Compiled Linux](https://github.com/OUIsolutions/DoTheWorld/releases/download/v6.001/pre_compiled_linux.zip) or
+[Pre Compiled Windows](https://github.com/OUIsolutions/DoTheWorld/releases/download/v6.001/pre_compiled_windows.zip) to
 optimize compilation time, extract the zip , than you can run with:
 ~~~c 
 #include "doTheWorldDeclaration.h"
@@ -1016,8 +1016,6 @@ int main(){
     DtwNamespace dtw = newDtwNamespace();
 
     DtwTreePart *part = dtw.tree.part.newPartLoading("tests/target/a.txt");
-    part->last_modification_time = 0;
-    
     dtw.tree.part.represent(part);
     dtw.tree.part.free(part);
 }

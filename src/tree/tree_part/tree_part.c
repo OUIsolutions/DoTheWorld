@@ -1,7 +1,13 @@
 
 
-
-struct DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps props){
+void private_DtwTreePart_set_last_modification(DtwTreePart *self,long last_modification) {
+    self->last_modification_time = last_modification;
+    if(self->last_modification_in_str) {
+        free(self->last_modification_in_str);
+    }
+    self->last_modification_in_str = dtw_convert_unix_time_to_string(last_modification);
+}
+ DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps props){
     DtwTreeProps formated_props = DtwTreeProps_format_props(props);
 
     DtwTreePart *self = (DtwTreePart *)malloc(sizeof(struct DtwTreePart));
@@ -15,8 +21,7 @@ struct DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps props){
         if(formated_props.hadware_data == DTW_INCLUDE && self->content){
 
             self->metadata_loaded = true;
-            self->last_modification_time = dtw_get_entity_last_motification_in_unix(path);
-            self->last_modification_in_str = dtw_convert_unix_time_to_string(self->last_modification_time);
+            private_DtwTreePart_set_last_modification(self,dtw_get_entity_last_motification_in_unix(path));
             free(self->hawdware_content_sha);
             self->hawdware_content_sha = dtw_generate_sha_from_string((const char*)self->content);
         }
@@ -37,7 +42,7 @@ unsigned char *DtwTreePart_get_content_binary_by_reference(struct DtwTreePart *s
 }
 
 
-struct  DtwTreePart * DtwTreePart_self_copy( DtwTreePart *self){
+  DtwTreePart * DtwTreePart_self_copy( DtwTreePart *self){
     char *path = DtwPath_get_path(self->path);
 
     DtwTreeProps props = {.content =DTW_NOT_LOAD,.hadware_data = DTW_NOT_LOAD};

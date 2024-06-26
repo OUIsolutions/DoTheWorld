@@ -1,0 +1,16 @@
+------------------------------------------------------------
+First Path: tests/target/a.txt
+Path: tests/target/a.txt
+Path Changed: false
+Dir: tests/target/
+Full Name: a.txt
+Name: a
+Extension: txt
+Content Exist in Memory: true
+Ignore: false
+Content Exist In Hardware: true
+Is Binary: false
+Content Size: 12
+Content SHA:  7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069
+Content: Hello World!
+Original Hardware SHA:7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069
