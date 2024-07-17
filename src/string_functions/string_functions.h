@@ -16,8 +16,6 @@ char *private_dtw_formatt(const char *format,...);
 
 char * private_dtw_sub_str(const char *str, long start,long end);
 
-int private_dtw_string_cmp(const void *a, const void *b);
-
 bool dtw_is_string_at_point(
         const char *str,
         long str_size,
@@ -35,3 +33,4 @@ char* dtw_replace_string(const char *target, const char *old_element, const char
 
 char *private_dtw_change_beginning_of_string(const char *target,int start_element_to_remove_size, const char *new_element);
 
+double private_dtw_convert_string_to_number(const char *num, bool *its_a_number);

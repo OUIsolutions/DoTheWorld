@@ -506,6 +506,8 @@ void DtwStringArray_pop(struct DtwStringArray *self, int position);
 void DtwStringArray_merge(struct DtwStringArray *self, struct DtwStringArray *other);
 void DtwStringArray_represent(struct DtwStringArray *self);
 void DtwStringArray_free(struct DtwStringArray *self);
+
+int private_dtw_string_cmp(const void *a, const void *b);
 void DtwStringArray_sort(struct DtwStringArray *self);
 
 void DtwStringArray_set_value(struct DtwStringArray *self, int index, const char *value);
@@ -620,8 +622,6 @@ char *private_dtw_formatt(const char *format,...);
 
 char * private_dtw_sub_str(const char *str, long start,long end);
 
-int private_dtw_string_cmp(const void *a, const void *b);
-
 bool dtw_is_string_at_point(
         const char *str,
         long str_size,
@@ -639,6 +639,7 @@ char* dtw_replace_string(const char *target, const char *old_element, const char
 
 char *private_dtw_change_beginning_of_string(const char *target,int start_element_to_remove_size, const char *new_element);
 
+double private_dtw_convert_string_to_number(const char *num, bool *its_a_number);
 
 
 
@@ -2719,7 +2720,6 @@ long private_dtw_convert_index(long index,long size){
 }
 
 
-
 void private_dtw_remove_double_bars_from_string_array(struct DtwStringArray*path){
     for(int i =0;i< path->size;i++){
         char *buffer = private_dtw_format_path(path->strings[i]);
@@ -2805,12 +2805,6 @@ char * private_dtw_sub_str(const char *str, long start,long end){
     }
     value[size] = '\0';
     return value;
-}
-
-int private_dtw_string_cmp(const void *a, const void *b){
-    const char *str_a = *(const char **)a;
-    const char *str_b = *(const char **)b;
-    return strcmp(str_a, str_b);
 }
 
 
@@ -2937,6 +2931,82 @@ long  dtw_index_of_string(const char *str,const char *element){
         }
     }
     return -1;
+}
+
+double private_dtw_convert_string_to_number(const char *num, bool *its_a_number){
+
+    long size_num = strlen(num);
+
+    if(size_num == 0){
+        *its_a_number = false;
+        return -1;
+    }
+
+    bool dot_found = false;
+
+    for(int i = 0; i < size_num; i++){
+        char current = num[i];
+
+        if(current == '.'){
+            if(i == 0 || dot_found || i == size_num - 1){
+                *its_a_number = false;
+                return -1;
+            }
+
+            dot_found = true;
+            continue;
+        }
+
+        if(current == '0'){
+            continue;
+        }
+
+        if(current == '1'){
+            continue;
+        }
+
+        if(current == '2'){
+            continue;
+        }
+
+        if(current == '3'){
+            continue;
+        }
+
+        if(current == '4'){
+            continue;
+        }
+
+        if(current == '5'){
+            continue;
+        }
+
+        if(current == '6'){
+            continue;
+        }
+
+        if(current == '7'){
+            continue;
+        }
+
+        if(current == '8'){
+            continue;
+        }
+
+        if(current == '9'){
+            continue;
+        }
+
+        *its_a_number = false;
+
+        return -1;
+    }
+
+    *its_a_number = true;
+
+    return atof(num);
+
+
 }
 
 
@@ -4173,6 +4243,7 @@ void DtwPath_remove_sub_dirs_at(DtwPath *self,const char *str){
 
 
 
+
 struct DtwStringArray * newDtwStringArray(){
     struct DtwStringArray *self = (struct DtwStringArray*)malloc(sizeof(struct DtwStringArray));
     self->size = 0;
@@ -4235,13 +4306,32 @@ void DtwStringArray_represent(struct DtwStringArray *self){
     }
 }
 
+int private_dtw_string_cmp(const void *a, const void *b){
 
+    bool a_its_number;
+
+    double a_num_value = private_dtw_convert_string_to_number(*(const char **)a, &a_its_number);
+
+    if(a_its_number){
+        bool b_its_number;
+
+        double b_num_value = private_dtw_convert_string_to_number(*(const char **)b, &b_its_number);
+
+        if(b_its_number){
+
+
+            return a_num_value - b_num_value;
+        }
+    }
+
+    const char *str_a = *(const char **)a;
+    const char *str_b = *(const char **)b;
+    return strcmp(str_a, str_b);
+}
 
 void DtwStringArray_sort(struct DtwStringArray *self) {
 
     qsort(self->strings, self->size, sizeof(char*), private_dtw_string_cmp);
-
-
 }
 
 struct DtwStringArray * DtwStringArray_clone(DtwStringArray *self){

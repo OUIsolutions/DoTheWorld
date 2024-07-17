@@ -21,6 +21,8 @@ void DtwStringArray_pop(struct DtwStringArray *self, int position);
 void DtwStringArray_merge(struct DtwStringArray *self, struct DtwStringArray *other);
 void DtwStringArray_represent(struct DtwStringArray *self);
 void DtwStringArray_free(struct DtwStringArray *self);
+
+int private_dtw_string_cmp(const void *a, const void *b);
 void DtwStringArray_sort(struct DtwStringArray *self);
 
 void DtwStringArray_set_value(struct DtwStringArray *self, int index, const char *value);

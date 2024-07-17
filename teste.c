@@ -1,12 +1,34 @@
+
 #define DTW_DEBUG_TIME
 #include "src/one.c"
 
 
 int main(){
     DtwNamespace dtw = newDtwNamespace();
-    DtwTreePart *part = dtw.tree.part.newPartLoading("tests/target/a.txt");
-    part->last_modification_in_str = NULL;
-    part->last_modification_time = 0;
-    dtw.tree.part.represent(part);
-    dtw.tree.part.free(part);
+
+    DtwResource *teste = dtw.resource.newResource("teste");
+    /*
+    DtwResource *sub_1 = dtw.resource.sub_resource(teste, "a");
+
+    dtw.resource.set_string(sub_1, "sla");
+
+    for(int i = 0; i < 20; i++){
+
+        DtwResource *sub_1 = dtw.resource.sub_resource(teste, "%d", i);
+
+        dtw.resource.set_string(sub_1, "sla");
+    }
+    */
+
+    DtwResourceArray *list = dtw.resource.sub_resources(teste);
+
+    for(int i = 0; i < list->size; i++){
+        DtwResource *element = list->resources[i];
+
+        char *path = element->name;
+
+        printf("\n\tpath: %s\n", path);
+    }
+    dtw.resource.commit(teste);
+
 }

@@ -1,4 +1,5 @@
 
+
 struct DtwStringArray * newDtwStringArray(){
     struct DtwStringArray *self = (struct DtwStringArray*)malloc(sizeof(struct DtwStringArray));
     self->size = 0;
@@ -61,13 +62,32 @@ void DtwStringArray_represent(struct DtwStringArray *self){
     }
 }
 
+int private_dtw_string_cmp(const void *a, const void *b){
 
+    bool a_its_number;
+
+    double a_num_value = private_dtw_convert_string_to_number(*(const char **)a, &a_its_number);
+
+    if(a_its_number){
+        bool b_its_number;
+
+        double b_num_value = private_dtw_convert_string_to_number(*(const char **)b, &b_its_number);
+
+        if(b_its_number){
+
+
+            return a_num_value - b_num_value;
+        }
+    }
+
+    const char *str_a = *(const char **)a;
+    const char *str_b = *(const char **)b;
+    return strcmp(str_a, str_b);
+}
 
 void DtwStringArray_sort(struct DtwStringArray *self) {
 
     qsort(self->strings, self->size, sizeof(char*), private_dtw_string_cmp);
-
-
 }
 
 struct DtwStringArray * DtwStringArray_clone(DtwStringArray *self){

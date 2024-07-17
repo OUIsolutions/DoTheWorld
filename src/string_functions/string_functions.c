@@ -1,5 +1,4 @@
 
-
 void private_dtw_remove_double_bars_from_string_array(struct DtwStringArray*path){
     for(int i =0;i< path->size;i++){
         char *buffer = private_dtw_format_path(path->strings[i]);
@@ -85,12 +84,6 @@ char * private_dtw_sub_str(const char *str, long start,long end){
     }
     value[size] = '\0';
     return value;
-}
-
-int private_dtw_string_cmp(const void *a, const void *b){
-    const char *str_a = *(const char **)a;
-    const char *str_b = *(const char **)b;
-    return strcmp(str_a, str_b);
 }
 
 
@@ -217,4 +210,80 @@ long  dtw_index_of_string(const char *str,const char *element){
         }
     }
     return -1;
+}
+
+double private_dtw_convert_string_to_number(const char *num, bool *its_a_number){
+
+    long size_num = strlen(num);
+
+    if(size_num == 0){
+        *its_a_number = false;
+        return -1;
+    }
+
+    bool dot_found = false;
+
+    for(int i = 0; i < size_num; i++){
+        char current = num[i];
+
+        if(current == '.'){
+            if(i == 0 || dot_found || i == size_num - 1){
+                *its_a_number = false;
+                return -1;
+            }
+
+            dot_found = true;
+            continue;
+        }
+
+        if(current == '0'){
+            continue;
+        }
+
+        if(current == '1'){
+            continue;
+        }
+
+        if(current == '2'){
+            continue;
+        }
+
+        if(current == '3'){
+            continue;
+        }
+
+        if(current == '4'){
+            continue;
+        }
+
+        if(current == '5'){
+            continue;
+        }
+
+        if(current == '6'){
+            continue;
+        }
+
+        if(current == '7'){
+            continue;
+        }
+
+        if(current == '8'){
+            continue;
+        }
+
+        if(current == '9'){
+            continue;
+        }
+
+        *its_a_number = false;
+
+        return -1;
+    }
+
+    *its_a_number = true;
+
+    return atof(num);
+
+
 }
