@@ -1,6 +1,6 @@
 
 
-struct DtwPath * newDtwPath(const char *path);
+DtwPath * newDtwPath(const char *path);
 
 bool DtwPath_changed(struct DtwPath *self);
 

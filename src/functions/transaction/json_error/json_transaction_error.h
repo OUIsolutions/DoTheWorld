@@ -1,9 +1,3 @@
-enum {
-
-    JSON_TRANSACTION_WRONG_TYPE,
-    JSON_TRANSACTION_NOT_PRESENT_VALUE,
-    JSON_TRANSACTION_INVALID_ACTION
-};
 
 
 DtwJsonTransactionError * private_new_DtwJsonTransactionError( int code,const char *mensage,const  char *path);

@@ -1,7 +1,6 @@
 
 
-#define DTW_NOT_NUMERICAL -2
-#define DTW_NOT_BOOL -3
+
 
 long dtw_load_long_file_content_setting_error(const char *path,int *error);
 

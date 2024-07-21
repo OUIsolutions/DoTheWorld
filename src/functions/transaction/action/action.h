@@ -1,17 +1,4 @@
 
-
-enum {
-    DTW_ACTION_FILE_NOT_FOUND,
-    DTW_ACTION_ITS_NOT_JSON,
-    DTW_ACTION_WRITE,
-    DTW_ACTION_MOVE,
-    DTW_ACTION_MOVE_MERGING,
-    DTW_ACTION_COPY,
-    DTW_ACTION_COPY_MERGING,
-    DTW_ACTION_DELETE
-};
-
-
 DtwActionTransaction *newDtwActionTransaction();
 
 DtwJsonTransactionError * private_dtw_validate_json_action_transaction(cJSON *json_obj);

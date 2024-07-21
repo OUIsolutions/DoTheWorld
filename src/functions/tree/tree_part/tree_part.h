@@ -1,18 +1,5 @@
 
 
-#define DTW_IS_BINARY true
-#define DTW_IS_NOT_BINARY false
-#define DTW_IGNORE true
-#define DTW_NOT_IGNORE false
-
-#define DTW_SET_AS_ACTION 1
-#define DTW_EXECUTE_NOW 2
-
-#define DTW_MODIFY 1
-#define DTW_WRITE 2
-#define DTW_REMOVE 3
-
-
 void private_DtwTreePart_set_last_modification(DtwTreePart *self,long last_modification);
 
 char *DtwTreePart_get_content_string_by_reference( DtwTreePart *self);

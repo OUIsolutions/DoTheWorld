@@ -1,7 +1,7 @@
 
 
 struct DtwStringArray * newDtwStringArray(){
-    struct DtwStringArray *self = (struct DtwStringArray*)malloc(sizeof(struct DtwStringArray));
+    struct DtwStringArray *self = ( DtwStringArray*)malloc(sizeof(struct DtwStringArray));
     self->size = 0;
 
     self->strings = (char**)malloc(1);
@@ -9,7 +9,7 @@ struct DtwStringArray * newDtwStringArray(){
     return self;
 }
 
-int DtwStringArray_find_position(struct DtwStringArray *self, const char *string){
+int DtwStringArray_find_position( DtwStringArray *self, const char *string){
     for(int i = 0; i < self->size; i++){
         if(strcmp(self->strings[i], string) == 0){
             return i;
@@ -19,7 +19,7 @@ int DtwStringArray_find_position(struct DtwStringArray *self, const char *string
 }
 
 
-void DtwStringArray_set_value(struct DtwStringArray *self, int index, const char *value){
+void DtwStringArray_set_value( DtwStringArray *self, int index, const char *value){
     if(index < self->size && index >= 0){
         int size = strlen(value);
         self->strings[index] = (char*)realloc(self->strings[index], size + 1);
@@ -27,21 +27,21 @@ void DtwStringArray_set_value(struct DtwStringArray *self, int index, const char
         strcpy(self->strings[index], value);
     }
 }
-void DtwStringArray_append_getting_ownership(struct DtwStringArray *self, char *string){
+void DtwStringArray_append_getting_ownership( DtwStringArray *self, char *string){
     self->strings =  (char**)realloc(self->strings, (self->size+ 1) * sizeof(char*));
     self->strings[self->size] = string;
     self->size+=1;
 }
 
 // Function prototypes
-void DtwStringArray_append(struct DtwStringArray *self, const  char *string){
+void DtwStringArray_append( DtwStringArray *self, const  char *string){
 
     self->strings =  (char**)realloc(self->strings, (self->size+ 1) * sizeof(char*));
     self->strings[self->size] = strdup(string);
     self->size+=1;
 }
 
-void DtwStringArray_pop(struct DtwStringArray *self, int position){
+void DtwStringArray_pop( DtwStringArray *self, int position){
     free(self->strings[position]);
     for(int i = position; i < self->size -1; i++){
         self->strings[i] = self->strings[i+1];
@@ -49,14 +49,14 @@ void DtwStringArray_pop(struct DtwStringArray *self, int position){
     self->size-=1;
 }
 
-void DtwStringArray_merge(struct DtwStringArray *self, struct DtwStringArray *other){
+void DtwStringArray_merge( DtwStringArray *self,  DtwStringArray *other){
     for(int i = 0; i < other->size; i++){
         DtwStringArray_append(self, other->strings[i]);
     }
 }
 
 
-void DtwStringArray_represent(struct DtwStringArray *self){
+void DtwStringArray_represent( DtwStringArray *self){
     for(int i = 0; i < self->size; i++){
         printf("%s\n", self->strings[i]);
     }
@@ -90,7 +90,7 @@ void DtwStringArray_sort(struct DtwStringArray *self) {
     qsort(self->strings, self->size, sizeof(char*), private_dtw_string_cmp);
 }
 
-struct DtwStringArray * DtwStringArray_clone(DtwStringArray *self){
+ DtwStringArray * DtwStringArray_clone(DtwStringArray *self){
     DtwStringArray  *clone = newDtwStringArray();
     for(int i = 0; i< self->size; i++){
         DtwStringArray_append(clone,self->strings[i]);

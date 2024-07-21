@@ -1,12 +1,4 @@
 
-#define PRIVATE_DTW_SCHEMA_ROOT  1
-#define PRIVATE_DTW_SCHEMA_VALUE 2
-#define PRIVATE_DTW_SCHEMA_ELEMENT 3
-#define PRIVATE_DTW_SCHEMA_ELEMENT_PROP 4
-#define PRIVATE_DTW_SCHEMA_INDEX 5
-#define PRIVATE_DTW_SCHEMA_PK_FOLDER 6
-#define PRIVATE_DTW_SCHEMA_PK_VALUE 7
-
 bool private_DtwResource_its_a_pk(DtwResource *self);
 
 void privateDtwResource_ensure_its_possible_to_sub_resource(DtwResource *self);

@@ -3,7 +3,6 @@
 
 
 bool private_dtw_verify_if_add(const int expected_type, WIN32_FIND_DATAA entry){
-    #define WIN32_FILETYPE 32
 
     if (expected_type == DTW_FILE_TYPE && entry.dwFileAttributes == WIN32_FILETYPE) {
         return true;
