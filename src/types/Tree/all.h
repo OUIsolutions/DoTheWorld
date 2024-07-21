@@ -1,5 +1,5 @@
 #include "JsonTreeError.h"
-#include "Tree.h"
-#include "TreeParts.h"
 #include "TreeProps.h"
+#include "TreeParts.h"
 #include "treeTransactionReport.h"
+#include "Tree.h"

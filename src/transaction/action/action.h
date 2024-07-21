@@ -12,17 +12,6 @@ enum {
 };
 
 
-typedef struct DtwActionTransaction{
-    short action_type;
-    unsigned  char *content;
-    long size;
-    bool is_binary;
-
-    char *dest;
-    char *source;
-
-}DtwActionTransaction;
-
 DtwActionTransaction *newDtwActionTransaction();
 
 DtwJsonTransactionError * private_dtw_validate_json_action_transaction(cJSON *json_obj);
