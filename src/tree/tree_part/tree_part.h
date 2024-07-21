@@ -12,26 +12,6 @@
 #define DTW_WRITE 2
 #define DTW_REMOVE 3
 
-typedef struct DtwTreePart{
-    
-     DtwPath *path;
-    void *owner;
-    long content_size;
-    long  hardware_content_size;
-    bool content_exist_in_hardware;
-    bool ignore;
-    bool is_binary;
-    bool metadata_loaded;
-    char *current_sha;
-    char * last_modification_in_str;
-    long last_modification_time;
-    char *hawdware_content_sha;
-
-    unsigned char *content;
-    int pending_action;
-
-
-}DtwTreePart;
 
 void private_DtwTreePart_set_last_modification(DtwTreePart *self,long last_modification);
 

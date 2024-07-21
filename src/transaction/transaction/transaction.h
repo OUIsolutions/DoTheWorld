@@ -1,13 +1,4 @@
 
-typedef struct DtwTransaction{
-
-    DtwActionTransaction  **actions;
-    long size;
-
-
-
-}DtwTransaction;
-
 DtwTransaction * newDtwTransaction();
 
 DtwTransaction * newDtwTransaction_from_json(cJSON *json_entry);

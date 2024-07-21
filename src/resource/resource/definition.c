@@ -7,3 +7,4 @@
 #include "schema/schema.c"
 #include "setters/setters.c"
 #include "sub_resource_setters/sub_resource_setters.c"
+#include "iterables/definition.c"

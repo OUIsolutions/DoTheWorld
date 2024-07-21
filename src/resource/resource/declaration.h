@@ -1,4 +1,3 @@
-#include "resource.h"
 #include "constructors_and_desctructors/constructors_and_destructors.h"
 #include "custom_constructors/custom_constructors.h"
 #include "destroy/destroy.h"
@@ -8,3 +7,4 @@
 #include "schema/schema.h"
 #include "setters/setters.h"
 #include "sub_resource_setters/sub_resource_setters.h"
+#include "iterables/declaration.h"

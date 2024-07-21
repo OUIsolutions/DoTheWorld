@@ -35,7 +35,9 @@ extern "C" {
   #include <direct.h>
 #endif
 
+
 #include "dependencies/declaration.h"
+#include "types/all.h"
 #include "string_array/string_array.h"
 #include "sha256/sha256.h"
 #include "base64/base64.h"

@@ -1,9 +1,5 @@
 
 
-typedef  struct DtwHash{
-    char *hash;
-}DtwHash;
-
 
 DtwHash * newDtwHash();
 

@@ -1,12 +1,5 @@
 
 
-
-typedef struct DtwResourceArray{
-    DtwResource **resources;
-    long size;
-
-}DtwResourceArray;
-
 DtwResourceArray * newDtwResourceArray();
 
 void DtwResourceArray_append(DtwResourceArray *self, DtwResource *element);

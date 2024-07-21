@@ -5,14 +5,6 @@
 
 
 
-typedef struct DtwDatabaseSchema{
-
-    const char *value_name;
-    const char *index_name;
-    struct DtwSchema **sub_schemas;
-    int size;
-}DtwDatabaseSchema;
-
 DtwDatabaseSchema *private_newDtwDtatabaseSchema();
 
 DtwSchema * privateDtwDtatabaseSchema_get_sub_schema(DtwDatabaseSchema *self,const char *name);

@@ -1,12 +1,6 @@
 
 
 
-typedef struct  DtwTree{
-    int size;
-     DtwTreePart **tree_parts;
-
-}DtwTree;
-
 
  DtwTree *DtwTree_get_sub_tree(
      DtwTree *self,

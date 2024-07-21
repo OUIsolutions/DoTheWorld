@@ -12,8 +12,6 @@ typedef struct DtwResource{
     char *path;
 
 
-
-
     //in the schema struct there is:
     //|/root
     //|/root/values
@@ -33,7 +31,7 @@ typedef struct DtwResource{
     bool were_renamed;
     unsigned char *value_any;
     long value_size;
-   
+
     //cache implementation
     bool cache_sub_resources;
     void *sub_resources;

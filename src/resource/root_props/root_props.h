@@ -15,16 +15,6 @@
 #define DTW_RESOURCE_ONLY_ROOT_SCHEMA_HAVE_SCHEMA_VALUES 13
 #define DTW_RESOURCE_ONLY_ROOT_SCHEMA_CANN_MODIFY_SCHEMA_PROPS 14
 
-typedef struct {
-    DtwTransaction  *transaction;
-    DtwRandonizer  *randonizer;
-    DtwLocker *locker;
-    bool is_writing_schema;
-    int error_code;
-    char *error_path;
-    char *error_message;
-    
-}privateDtwResourceRootProps;
 
 privateDtwResourceRootProps *private_newDtwResourceRootProps();
 

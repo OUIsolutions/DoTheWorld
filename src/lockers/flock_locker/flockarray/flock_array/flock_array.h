@@ -1,10 +1,6 @@
 
 
 
-typedef struct {
-    privateDtwFlockLockedElement **elements;
-    int size;
-}privateDtwFlockArray;
 
 
 privateDtwFlockArray * private_new_privateFlockArray();

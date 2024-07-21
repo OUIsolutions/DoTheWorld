@@ -1,13 +1,4 @@
 
-typedef struct DtwStringArray {
-  int size;
-
-  char **strings;
-
-
-
-}DtwStringArray;
-
 // End the structure with a semicolon
 int  DtwStringArray_find_position(struct DtwStringArray *self, const char *string);
 

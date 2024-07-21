@@ -1,0 +1,12 @@
+#include "Resource/all.h"
+#include "Transaction/all.h"
+#include "Tree/all.h"
+#Include "DatabaseSchemaModule.h"
+#include "HashModule.h"
+#include "LockerModule.h"
+#include "PathModule.h"
+#include "RandonizerModule.h"
+#include "SchemaModule.h"
+#include "StringArrayModule.h"
+#include "Namespace.h"
+
