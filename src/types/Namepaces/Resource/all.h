@@ -1,2 +1,2 @@
-#include "ResourceModule.h"
 #include "ResourceArrayModule.h"
+#include "ResourceModule.h"

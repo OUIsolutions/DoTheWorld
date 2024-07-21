@@ -7,7 +7,7 @@ int main(){
     DtwNamespace dtw = newDtwNamespace();
 
     DtwResource *teste = dtw.resource.newResource("teste");
-    /*
+
     DtwResource *sub_1 = dtw.resource.sub_resource(teste, "a");
 
     dtw.resource.set_string(sub_1, "sla");
@@ -18,7 +18,7 @@ int main(){
 
         dtw.resource.set_string(sub_1, "sla");
     }
-    */
+
 
     DtwResourceArray *list = dtw.resource.sub_resources(teste);
 

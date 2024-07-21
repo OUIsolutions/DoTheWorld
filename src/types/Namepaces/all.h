@@ -1,7 +1,7 @@
 #include "Resource/all.h"
 #include "Transaction/all.h"
 #include "Tree/all.h"
-#Include "Schema/all.h"
+#include "Schema/all.h"
 #include "HashModule.h"
 #include "LockerModule.h"
 #include "PathModule.h"
