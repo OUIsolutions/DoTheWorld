@@ -8,3 +8,4 @@
 #include "setters/setters.h"
 #include "sub_resource_setters/sub_resource_setters.h"
 #include "iterables/declaration.h"
+#include  "resource_array/resource_array.h"
