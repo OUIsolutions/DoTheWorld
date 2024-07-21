@@ -29,6 +29,6 @@ int main(){
 
         printf("\n\tpath: %s\n", path);
     }
-    dtw.resource.commit(teste);
+    //dtw.resource.commit(teste);
 
 }
