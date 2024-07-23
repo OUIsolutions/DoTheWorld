@@ -1,35 +1,48 @@
 
+#include <stdio.h>
 #define DTW_DEBUG_TIME
 #include "src/one.c"
 DtwNamespace dtw;
 DtwRandonizer *randonizer;
-void cria_x_usuarios(DtwResource *usuarios,int tamanho) {
 
-    for(int i = 0; i < tamanho; i++) {
-        DtwResource  *novo_usuario =  dtw.resource.sub_resource(usuarios,"%d",i);
-        char nome_usuario[50]  = {0};
-        sprintf(nome_usuario,"usuario%d",i);
-        char email[50] = {0};
-        sprintf(email,"%d@gmail.com",i);
-        dtw.resource.set_string_in_sub_resource(novo_usuario,"nome",nome_usuario);
-        dtw.resource.set_string_in_sub_resource(novo_usuario,"email",email);
-        int idade = dtw.randonizer.generate_num(randonizer,100);
-        dtw.resource.set_long_in_sub_resource(novo_usuario,"idade",idade);
+typedef struct {
+    int idade;
+} Filtragem;
 
-    }
+int sla = 0;
+
+void imprime_user(DtwResource *user, void *filtragem){
+    sla++;
+    printf("nome: %s\n", dtw.resource.get_string_from_sub_resource(user, "nome"));
 }
+
+
+bool verifica_imprime_user(DtwResource *user, void *filtragem){
+
+     Filtragem *f = (Filtragem *)filtragem;
+
+    long idade = dtw.resource.get_long_from_sub_resource(user, "idade");
+
+    if(idade < f->idade){
+
+        return true;        
+    }
+
+    return false;
+}
+
 int main(){
     dtw = newDtwNamespace();
     randonizer = dtw.randonizer.newRandonizer();
 
-    dtw.remove_any("usuarios");
     DtwResource *usuarios = dtw.resource.newResource("usuarios");
-    cria_x_usuarios(usuarios,100);
-    dtw.resource.commit(usuarios);
-    dtw.resource.free(usuarios);
-    dtw.randonizer.free(randonizer);
 
+    Filtragem f;
+    f.idade = 18;
 
-    //dtw.resource.commit(teste);
+    DtwResource_foreach(usuarios, verifica_imprime_user, imprime_user, &f, 0, -1);
 
+    return 0;
 }
+
+
