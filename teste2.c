@@ -1,3 +1,6 @@
+typedef struct Filtragem{
+    int idade;
+} Filtragem;
 
 #include <stdio.h>
 #define DTW_DEBUG_TIME
@@ -5,9 +8,6 @@
 DtwNamespace dtw;
 DtwRandonizer *randonizer;
 
-typedef struct {
-    int idade;
-} Filtragem;
 
 cJSON * Retorna_json_formatado(DtwResource *user, void *filtragem){
     cJSON *obj_criado = cJSON_CreateObject();
@@ -18,10 +18,10 @@ cJSON * Retorna_json_formatado(DtwResource *user, void *filtragem){
 
 
 bool verifica_se_e_um_json(DtwResource *user, void *filtragem){
-    Filtragem *f = (Filtragem *)filtragem;
+    Filtragem *f = (Filtragem*)filtragem;
     long idade = dtw.resource.get_long_from_sub_resource(user, "idade");
     if(idade < f->idade){
-        return true;        
+        return true;
     }
 
     return false;
@@ -39,10 +39,11 @@ int main(){
     cJSON *itens = DtwResource_map_cJSON(
         usuarios,
         verifica_se_e_um_json,
+        NULL,
         Retorna_json_formatado,
-        &f,
+        (void*)&f,
         0,
-        -1
+        5
         );
    
     char *texto = cJSON_Print(itens);
