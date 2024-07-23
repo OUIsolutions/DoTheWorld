@@ -3,3 +3,4 @@
 #include "RootResourceProps.h"
 #include "Resource.h"
 #include "ResourceArray.h"
+#include "cJSON_map.h"
