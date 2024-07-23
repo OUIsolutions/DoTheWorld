@@ -7,7 +7,7 @@ DtwRandonizer *randonizer;
 
 typedef struct {
     int idade;
-} Filtragem;
+}Filtragem;
 
 int sla = 0;
 

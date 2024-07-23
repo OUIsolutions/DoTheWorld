@@ -35,12 +35,6 @@ bool verifica_se_e_um_json(DtwResource *user, void *filtragem){
     return false;
 }
 
-void adiciona_item_no_array(void *array, void *item){
-
-    cJSON_AddItemToArray(array, item);
-
-}
-
 int main(){
     dtw = newDtwNamespace();
     randonizer = dtw.randonizer.newRandonizer();
@@ -50,10 +44,8 @@ int main(){
     Filtragem f;
     f.idade = 18;
 
-    cJSON *itens = cJSON_CreateArray();
-
-    DtwResource_map(usuarios, itens, adiciona_item_no_array, verifica_se_e_um_json, Retorna_json_formatado, &f, 0, -1);
-
+    cJSON *itens = DtwResource_map_cJSON(usuarios, verifica_se_e_um_json, Retorna_json_formatado, &f, 0, -1);
+   
     char *texto = cJSON_Print(itens);
 
     dtw.write_string_file_content("saida.json", texto);
