@@ -1,4 +1,5 @@
 
+#include "../unique.declaration.h"
 
 void DtwPath_set_extension(struct DtwPath *self, const char *extension);
 

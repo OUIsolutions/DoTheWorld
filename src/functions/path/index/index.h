@@ -1,3 +1,4 @@
+#include "../unique.declaration.h"
 
 int DtwPath_get_total_dirs(DtwPath *self);
 

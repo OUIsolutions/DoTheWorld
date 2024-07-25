@@ -1,4 +1,5 @@
 
+#include "../unique.declaration.h"
 
 struct DtwTreeTransactionReport * newDtwTreeTransactionReport();
 void  DtwTreeTransactionReport_represent(struct DtwTreeTransactionReport *report);

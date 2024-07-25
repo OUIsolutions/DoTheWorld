@@ -1,3 +1,4 @@
+#include "../unique.declaration.h"
 
 void DtwPath_insert_dir_after(DtwPath *self,const char *str,const char *dir);
 
