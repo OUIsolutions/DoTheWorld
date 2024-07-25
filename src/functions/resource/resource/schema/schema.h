@@ -1,3 +1,4 @@
+#include "../unique.declaration_less_functions.h"
 
 bool private_DtwResource_its_a_pk(DtwResource *self);
 

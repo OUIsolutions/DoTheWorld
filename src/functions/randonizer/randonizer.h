@@ -1,4 +1,5 @@
 
+#include "../unique.declaration_less_functions.h"
 
 
 
@@ -9,5 +10,3 @@ int DtwRandonizer_generate_num(DtwRandonizer *self,int max);
 
 char * DtwRandonizer_generate_token(struct DtwRandonizer*self, int size);
 void DtwRandonizer_free(struct DtwRandonizer *self);
-
-

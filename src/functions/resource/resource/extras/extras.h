@@ -1,4 +1,5 @@
 
+#include "../unique.declaration_less_functions.h"
 
 
 bool DtwResource_error(DtwResource *self);

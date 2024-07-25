@@ -1,3 +1,4 @@
+#include "../unique.declaration_less_functions.h"
 
 unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binary);
 

@@ -1,3 +1,4 @@
+#include "../unique.declaration_less_functions.h"
 
 // End the structure with a semicolon
 int  DtwStringArray_find_position( DtwStringArray *self, const char *string);
@@ -23,4 +24,3 @@ void DtwStringArray_set_value( DtwStringArray *self, int index, const char *valu
 char * privateDtwStringArray_append_if_not_included(DtwStringArray *self,char *value);
 
 DtwStringArray * DtwStringArray_clone(DtwStringArray *self);
-

@@ -1,5 +1,6 @@
 
 
+#include "../unique.declaration_less_functions.h"
 
 cJSON *DtwResource_map_cJSON(
 DtwResource *self,
@@ -18,5 +19,3 @@ bool private_dtw_cJSON_filtrage(DtwResource *item,void *args);
 int private_dtw_cJSON_ordenation(DtwResource *item1,DtwResource *item2,void *args);
 
 void privateDtwResource_add_to_item_to_array(void* array, void *item);
-
-

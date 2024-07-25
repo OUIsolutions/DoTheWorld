@@ -1,4 +1,5 @@
 
+#include "../unique.declaration_less_functions.h"
 
 DtwResourceArray * newDtwResourceArray();
 
@@ -13,4 +14,3 @@ DtwResource * DtwResourceArray_get_by_name(DtwResourceArray *self, const char *n
 void DtwResourceArray_represent(DtwResourceArray *self);
 
 void DtwResourceArray_free(DtwResourceArray *self);
-

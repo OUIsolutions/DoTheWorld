@@ -1,3 +1,4 @@
+#include "../unique.declaration_less_functions.h"
 
 
 DtwSchema *private_newDtwSchema(const char *name);

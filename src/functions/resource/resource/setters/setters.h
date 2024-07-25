@@ -1,6 +1,6 @@
-//
-// Created by mateusmoutinho on 05/08/23.
-//
+
+#include "../unique.declaration_less_functions.h"
+
 void private_dtw_resource_set_primary_key(DtwResource *self, unsigned  char *element, long size);
 
 void DtwResource_set_any(DtwResource *self, unsigned char *element, long size,bool is_binary);
@@ -22,4 +22,3 @@ void DtwResource_set_long(DtwResource *self,long element);
 void DtwResource_set_double(DtwResource *self,double element);
 
 void DtwResource_set_bool( DtwResource *self,bool element);
-

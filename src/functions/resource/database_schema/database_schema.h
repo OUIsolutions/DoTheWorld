@@ -1,6 +1,7 @@
 
 
 
+#include "../unique.declaration_less_functions.h"
 
 
 DtwDatabaseSchema *private_newDtwDtatabaseSchema();
@@ -10,4 +11,3 @@ DtwSchema * privateDtwDtatabaseSchema_get_sub_schema(DtwDatabaseSchema *self,con
 DtwSchema * DtwDtatabaseSchema_new_subSchema(DtwDatabaseSchema *self,const char *name);
 
 void private_new_DtwDtatabaseSchema_free(DtwDatabaseSchema *self);
-

@@ -21,4 +21,3 @@ void dtw_write_long_file_content(const char *path, long value);
 void dtw_write_bool_file_content(const char *path, bool value);
 
 void dtw_write_double_file_content(const char *path,double value);
-

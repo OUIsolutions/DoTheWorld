@@ -1,3 +1,4 @@
+#include "../unique.declaration_less_functions.h"
 
 char * calc_sha_256_returning_string(const void *input, size_t len);
 

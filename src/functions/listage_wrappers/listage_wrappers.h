@@ -1,3 +1,4 @@
+#include "../unique.declaration_less_functions.h"
 
 
  DtwStringArray * dtw_list_files(const char *path, bool concat_path);

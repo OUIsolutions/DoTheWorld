@@ -1,3 +1,4 @@
+#include "../unique.declaration_less_functions.h"
 
 
 
@@ -35,4 +36,3 @@ bool DtwHash_digest_string_array_content_adding_name(DtwHash *self,DtwStringArra
 
 
 void  DtwHash_free(DtwHash *self);
-
