@@ -1,4 +1,5 @@
 
+#include "../unique.declaration.h"
 
 DtwJsonTransactionError * dtw_validate_json_transaction(cJSON *json_entry){
     if(json_entry->type != cJSON_Array){

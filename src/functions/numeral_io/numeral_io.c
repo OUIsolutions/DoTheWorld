@@ -1,3 +1,4 @@
+#include "../unique.declaration.h"
 
 long dtw_load_long_file_content_setting_error(const char *path,int *error){
     char *data = dtw_load_string_file_content(path);
@@ -32,7 +33,7 @@ double dtw_load_double_file_content_setting_error(const char * path, int *error)
     int result = sscanf(data,"%lf",&value);
     free(data);
     if(result){
-    
+
         return value;
     }
     *error = DTW_NOT_NUMERICAL;
@@ -72,7 +73,7 @@ bool dtw_load_bool_file_content_setting_error(const char * path, int *error){
 bool dtw_load_bool_file_content(const char * path){
     int error;
     return dtw_load_bool_file_content_setting_error(path,&error);
-    
+
 }
 
 
@@ -99,5 +100,3 @@ void dtw_write_bool_file_content(const char *path, bool value){
         dtw_write_string_file_content(path,"f");
     }
 }
-
-

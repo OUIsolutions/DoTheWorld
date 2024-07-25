@@ -1,4 +1,5 @@
 
+#include "../unique.declaration.h"
 
 DtwTransactionModule newDtwTransactionModule(){
     DtwTransactionModule self = {0};

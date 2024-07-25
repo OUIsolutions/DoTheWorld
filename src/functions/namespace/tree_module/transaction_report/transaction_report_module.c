@@ -1,3 +1,4 @@
+#include "../unique.declaration.h"
 
 DtwTreeTransactionReportModule newDtwTreeTransactionReportModule(){
     DtwTreeTransactionReportModule self = {0};

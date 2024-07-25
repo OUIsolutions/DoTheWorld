@@ -1,3 +1,4 @@
+#include "../unique.declaration.h"
 
 bool private_DtwResource_its_a_pk(DtwResource *self){
     if(self->schema_type != PRIVATE_DTW_SCHEMA_ELEMENT_PROP){

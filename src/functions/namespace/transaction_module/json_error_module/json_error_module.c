@@ -1,3 +1,4 @@
+#include "../unique.declaration.h"
 
 DtwJsonTransactionErrorModule newDtwJsonTransactionErrorModule(){
     DtwJsonTransactionErrorModule self = {0};

@@ -1,4 +1,5 @@
 
+#include "../unique.declaration.h"
 
  DtwStringArray * dtw_list_files(const char *path, bool concat_path){
     return dtw_list_basic(path,  DTW_FILE_TYPE, concat_path);

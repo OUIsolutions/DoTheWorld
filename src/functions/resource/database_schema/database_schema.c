@@ -1,3 +1,4 @@
+#include "../unique.declaration.h"
 
 DtwDatabaseSchema *private_newDtwDtatabaseSchema(){
     DtwDatabaseSchema *self = (DtwDatabaseSchema*) malloc(sizeof (DtwDatabaseSchema));
@@ -39,4 +40,3 @@ void private_new_DtwDtatabaseSchema_free(DtwDatabaseSchema *self){
     free(self->sub_schemas);
     free(self);
 }
-

@@ -1,3 +1,4 @@
+#include "../unique.declaration.h"
 
 
 struct DtwStringArray * newDtwStringArray(){

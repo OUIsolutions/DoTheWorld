@@ -1,3 +1,4 @@
+#include "../unique.declaration.h"
 
 
 DtwResource *new_DtwResource(const char *path){
@@ -13,7 +14,7 @@ DtwResource *new_DtwResource(const char *path){
     self->root_props = private_newDtwResourceRootProps();
 
     return self;
-}   
+}
 
 DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ...){
     if(DtwResource_error(self)){

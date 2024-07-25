@@ -1,3 +1,4 @@
+#include "../unique.declaration.h"
 
 DtwNamespace newDtwNamespace(){
     DtwNamespace self = {0};
@@ -48,7 +49,7 @@ DtwNamespace newDtwNamespace(){
     self.string_array = newDtwStringArrayModule();
     self.path = newDtwPathModule();
     self.locker = newDtwLockerModule();
-    
+
     self.schema = newDtwSchemaModule();
     self.database_schema = newDtwDatabaseSchemaModule();
     self.tree = newDtwTreeModule();

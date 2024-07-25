@@ -1,3 +1,4 @@
+#include "../unique.declaration.h"
 
 void DtwResource_set_any_in_sub_resource(DtwResource *self,const char *key, unsigned char *element, long size,bool is_binary) {
     if(DtwResource_error(self)){

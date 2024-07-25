@@ -1,4 +1,5 @@
 
+#include "../unique.declaration.h"
 
 
 
@@ -46,4 +47,3 @@ void DtwJsonTransactionError_free(struct DtwJsonTransactionError *self){
     free(self);
 
 }
-

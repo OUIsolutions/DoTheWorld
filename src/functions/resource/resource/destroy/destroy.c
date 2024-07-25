@@ -1,3 +1,4 @@
+#include "../unique.declaration.h"
 
 void private_DtwResurce_destroy_primary_key(DtwResource *self) {
 
@@ -100,4 +101,3 @@ void DtwResource_destroy_sub_resource(DtwResource *self, const char *key){
     DtwResource *son = DtwResource_sub_resource(self, "%s",key);
     DtwResource_destroy(son);
 }
-

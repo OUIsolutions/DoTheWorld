@@ -1,4 +1,5 @@
 
+#include "../unique.declaration.h"
 
 char * DtwPath_get_name(struct DtwPath *self){
 
@@ -81,5 +82,3 @@ char * DtwPath_get_dir(struct DtwPath *self){
 char * DtwPath_get_path(struct DtwPath *self){
     return self->path;
 }
-
-

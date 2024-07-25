@@ -1,5 +1,6 @@
 
 
+#include "../unique.declaration.h"
 
 bool DtwResource_error(DtwResource *self){
     if(self==NULL){
@@ -134,7 +135,7 @@ void DtwResource_unlock(DtwResource *self){
         return ;
     }
     DtwLocker_unlock(self->root_props->locker, self->path);
-    
+
 }
 
 
@@ -262,4 +263,3 @@ void DtwResource_represent(DtwResource *self){
 
 
 }
-
