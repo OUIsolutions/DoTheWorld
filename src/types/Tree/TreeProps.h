@@ -1,4 +1,5 @@
-
+#ifndef PRIVATE_DTW_TREE_PROPS_TYPE_H
+#define PRIVATE_DTW_TREE_PROPS_TYPE_H
 typedef struct DtwTreeProps{
     int minification;
     int content;
@@ -8,3 +9,4 @@ typedef struct DtwTreeProps{
     int ignored_elements;
 
 }DtwTreeProps;
+#endif

@@ -1,5 +1,8 @@
 
+#include "../Path.h"
 
+#ifndef PRIVATE_DTW_TREE_PART_TYPE_H
+#define PRIVATE_DTW_TREE_PART_TYPE_H
 
 typedef struct DtwTreePart{
 
@@ -20,3 +23,4 @@ typedef struct DtwTreePart{
     int pending_action;
 
 }DtwTreePart;
+#endif

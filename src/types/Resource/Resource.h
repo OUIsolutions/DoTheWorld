@@ -1,4 +1,9 @@
+#include "RootResourceProps.h"
+#include "Schema.h"
+#include "DataBaseSchema.h"
 
+#ifndef PRIVATE_DTW_RESOURCE_TYPE_H
+#define PRIVATE_DTW_RESOURCE_TYPE_H
 
 typedef struct DtwResource{
 
@@ -40,3 +45,4 @@ typedef struct DtwResource{
 
 
 
+#endif

@@ -1,3 +1,6 @@
+#ifndef PRIVATE_DTW_SCHEMA_TYPE_H
+#define PRIVATE_DTW_SCHEMA_TYPE_H
+#include "../StringArray.h"
 
 typedef struct DtwSchema{
 
@@ -10,3 +13,5 @@ typedef struct DtwSchema{
     int size;
     DtwStringArray  *primary_keys;
 }DtwSchema;
+
+#endif
