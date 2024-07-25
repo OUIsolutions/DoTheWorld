@@ -1,3 +1,4 @@
+#include "../unique.h"
 
 typedef struct  {
     cJSON *(*callback)(DtwResource *item,void *args);

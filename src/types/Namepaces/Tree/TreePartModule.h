@@ -1,4 +1,5 @@
 
+#include "../unique.h"
 
 
 typedef struct DtwTreePartModule{
@@ -26,4 +27,3 @@ typedef struct DtwTreePartModule{
     void (*free)(struct DtwTreePart *self);
     struct DtwTreePart *(*self_copy)(struct DtwTreePart *self);
 }DtwTreePartModule;
-

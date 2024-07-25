@@ -1,3 +1,4 @@
+#include "../unique.h"
 
 
 typedef struct DtwResource{
@@ -37,6 +38,3 @@ typedef struct DtwResource{
     void *sub_resources;
 
 }DtwResource;
-
-
-

@@ -1,4 +1,5 @@
 
+#include "../unique.h"
 
 typedef struct DtwTransactionModule{
     DtwTransaction *(*newTransaction)();

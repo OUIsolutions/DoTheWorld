@@ -1,3 +1,4 @@
+#include "../unique.h"
 
 typedef struct DtwTreeTransactionReport{
     DtwStringArray *write;

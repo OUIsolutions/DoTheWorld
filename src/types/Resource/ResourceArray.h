@@ -1,4 +1,5 @@
 
+#include "../unique.h"
 
 typedef struct DtwResourceArray{
     DtwResource **resources;

@@ -1,3 +1,5 @@
+#include "unique.h"
+
 
 typedef struct DtwPath {
     char *original_path_string;

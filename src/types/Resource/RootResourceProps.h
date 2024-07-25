@@ -1,3 +1,5 @@
+#include "../unique.h"
+
 typedef struct {
     DtwTransaction  *transaction;
     DtwRandonizer  *randonizer;
