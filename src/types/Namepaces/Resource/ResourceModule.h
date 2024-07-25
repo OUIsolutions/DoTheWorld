@@ -1,5 +1,6 @@
 
-
+#ifndef PRIVATE_DTW_RESOURCE_MODULE_TYPE_H
+#define PRIVATE_DTW_RESOURCE_MODULE_TYPE_H
 typedef struct DtwResourceModule{
 
     DtwResource *(*newResource)(const char *path);
@@ -102,4 +103,4 @@ typedef struct DtwResourceModule{
 
 }DtwResourceModule;
 
-DtwResourceModule newDtwResourceModule();
+#endif

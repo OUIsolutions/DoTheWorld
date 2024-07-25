@@ -1,5 +1,6 @@
 
-
+#ifndef PRIVATE_DTW_ACTION_TRANSACTION_MODULE_TYPE_H
+#define PRIVATE_DTW_ACTION_TRANSACTION_MODULE_TYPE_H
 typedef struct DtwActionTransactionModule{
 
     DtwActionTransaction *(*newAction)();
@@ -25,3 +26,4 @@ typedef struct DtwActionTransactionModule{
     void (*free)(DtwActionTransaction* self);
 
 }DtwActionTransactionModule;
+#endif

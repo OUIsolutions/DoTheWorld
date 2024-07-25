@@ -1,4 +1,7 @@
+#include "unique.all_types_less_dependencies.h"
 
+#ifndef PRIVATE_DTW_NAMESPACE_MODULE_TYPE_H
+#define PRIVATE_DTW_NAMESPACE_MODULE_TYPE_H
 typedef struct DtwNamespace{
     //IO
     void (*create_dir_recursively)(const char *path);
@@ -98,3 +101,4 @@ typedef struct DtwNamespace{
     DtwRandonizerModule randonizer;
 
 }DtwNamespace;
+#endif

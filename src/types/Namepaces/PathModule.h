@@ -1,5 +1,8 @@
 
+#include "unique.all_types_less_dependencies.h"
 
+#ifndef PRIVATE_DTW_PATH_MODULE_TYPE_H
+#define PRIVATE_DTW_PATH_MODULE_TYPE_H
 typedef struct DtwPathModule{
     //Getters
 
@@ -36,3 +39,4 @@ typedef struct DtwPathModule{
     void (*free) (struct DtwPath *self);
 
 }DtwPathModule;
+#endif

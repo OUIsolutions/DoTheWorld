@@ -1,4 +1,5 @@
-
+#ifndef PRIVATE_DTW_TREE_MODULE_TYPE_H
+#define PRIVATE_DTW_TREE_MODULE_TYPE_H
 typedef struct DtwTreeModule{
 
     DtwTree  *(*newTree)();
@@ -104,3 +105,4 @@ typedef struct DtwTreeModule{
     DtwJsonTreeErrorModule json_error;
 
 }DtwTreeModule;
+#endif

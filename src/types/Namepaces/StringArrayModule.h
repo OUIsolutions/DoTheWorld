@@ -1,4 +1,6 @@
-
+#include "unique.all_types_less_dependencies.h"
+#ifndef PRIVATE_DTW_STRING_ARRAY_MODULE_TYPE_H
+#define PRIVATE_DTW_STRING_ARRAY_MODULE_TYPE_H
 typedef struct DtwStringArrayModule{
     DtwStringArray *(*newStringArray)();
 
@@ -20,3 +22,4 @@ typedef struct DtwStringArrayModule{
 
 
 }DtwStringArrayModule;
+#endif

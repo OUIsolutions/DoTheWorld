@@ -1,4 +1,5 @@
-
+#ifndef PRIVATE_DTW_RESOURCE_ARRAY_MODULE_TYPE_H
+#define PRIVATE_DTW_RESOURCE_ARRAY_MODULE_TYPE_H
 typedef struct DtwResourceArrayModule{
 
     void (*append)(DtwResourceArray *self, DtwResource *element);
@@ -7,3 +8,4 @@ typedef struct DtwResourceArrayModule{
     void (*free)(DtwResourceArray *self);
 
 }DtwResourceArrayModule;
+#endif

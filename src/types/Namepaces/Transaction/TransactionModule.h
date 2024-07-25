@@ -1,5 +1,6 @@
 
-
+#ifndef PRIVATE_DTW_TRANSACTION_MODULE_TYPE_H
+#define PRIVATE_DTW_TRANSACTION_MODULE_TYPE_H
 typedef struct DtwTransactionModule{
     DtwTransaction *(*newTransaction)();
     DtwTransaction * (*newTransaction_from_json)(cJSON *json_entry);
@@ -38,3 +39,4 @@ typedef struct DtwTransactionModule{
 
 
 }DtwTransactionModule;
+#endif

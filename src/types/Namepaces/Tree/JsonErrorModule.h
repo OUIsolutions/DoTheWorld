@@ -1,5 +1,6 @@
 
-
+#ifndef PRIVATE_DTW_JSON_TREE_ERROR_MODULE_TYPE_H
+#define PRIVATE_DTW_JSON_TREE_ERROR_MODULE_TYPE_H
 typedef struct DtwJsonTreeErrorModule{
 
     DtwJsonTreeError * (*validate_json_tree_by_cJSON)(cJSON *json_tree);
@@ -8,3 +9,4 @@ typedef struct DtwJsonTreeErrorModule{
     void (*represent)(struct DtwJsonTreeError *self);
 
 }DtwJsonTreeErrorModule;
+#endif

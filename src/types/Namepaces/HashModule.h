@@ -1,3 +1,7 @@
+#include "unique.all_types_less_dependencies.h"
+
+#ifndef PRIVATE_DTW_HASH_MODULE_TYPE_H
+#define PRIVATE_DTW_HASH_MODULE_TYPE_H
 
 typedef struct DtwHashModule{
     DtwHash * (*newHash)();
@@ -18,3 +22,4 @@ typedef struct DtwHashModule{
     void  (*free)(DtwHash *self);
 
 }DtwHashModule;
+#endif

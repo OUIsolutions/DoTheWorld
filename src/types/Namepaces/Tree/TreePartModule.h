@@ -1,5 +1,6 @@
 
-
+#ifndef PRIVATE_DTW_TREE_PART_MODULE_TYPE_H
+#define PRIVATE_DTW_TREE_PART_MODULE_TYPE_H
 
 typedef struct DtwTreePartModule{
 
@@ -26,4 +27,4 @@ typedef struct DtwTreePartModule{
     void (*free)(struct DtwTreePart *self);
     struct DtwTreePart *(*self_copy)(struct DtwTreePart *self);
 }DtwTreePartModule;
-
+#endif
