@@ -1,3 +1,5 @@
+#ifndef DTW_TYPES_H
+#define DTW_TYPES_H
 #include "StringArray.h"
 #include "Path.h"
 #include  "Hash.h"
@@ -7,4 +9,4 @@
 #include "Tree/all.h"
 #include "Resource/all.h"
 #include "Namepaces/all.h"
-
+#endif
