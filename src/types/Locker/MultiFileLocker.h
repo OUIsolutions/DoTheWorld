@@ -1,5 +1,6 @@
-
-
+#include "../StringArray.h"
+#ifndef PRIVATE_DTW_MULTIFILE_LOCKER_TYPE_H
+#define PRIVATE_DTW_MULTIFILE_LOCKER_TYPE_H
 
 typedef struct {
 
@@ -11,3 +12,4 @@ typedef struct {
 
 
 }DtwMultiFileLocker;
+#endif
