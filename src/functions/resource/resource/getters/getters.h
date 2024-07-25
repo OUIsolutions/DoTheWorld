@@ -1,3 +1,4 @@
+#include "../unique.h"
 
 unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binary);
 

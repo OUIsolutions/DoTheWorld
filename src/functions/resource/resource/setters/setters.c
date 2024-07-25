@@ -1,6 +1,6 @@
-//
-// Created by mateusmoutinho on 05/08/23.
-//
+
+#include "../unique.h"
+
 void private_dtw_resource_set_primary_key(DtwResource *self, unsigned  char *element, long size){
 
     self->root_props->is_writing_schema = true;

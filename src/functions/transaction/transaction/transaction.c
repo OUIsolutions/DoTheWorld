@@ -1,4 +1,5 @@
 
+#include "../unique.h"
 
 DtwTransaction * newDtwTransaction(){
     DtwTransaction *self = (DtwTransaction*) malloc(sizeof(DtwTransaction));

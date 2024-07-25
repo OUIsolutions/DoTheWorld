@@ -1,3 +1,4 @@
+#include "../unique.h"
 
 DtwSchema *private_newDtwSchema(const char *name){
     DtwSchema *self = (DtwSchema*) malloc(sizeof (DtwSchema));

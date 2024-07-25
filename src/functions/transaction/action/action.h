@@ -1,3 +1,4 @@
+#include "../unique.h"
 
 DtwActionTransaction *newDtwActionTransaction();
 

@@ -1,4 +1,5 @@
 
+#include "../unique.h"
 
 #ifdef __linux__
 
@@ -12,7 +13,7 @@ bool private_dtw_verify_if_add(const int expected_type, int d_type){
     }
 
     if (expected_type == DTW_ALL_TYPE) {
-      
+
         return true;
     }
     return false;
@@ -44,10 +45,10 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
         if (private_dtw_verify_if_skip(entry)){
             continue;
         }
-    
+
         if (private_dtw_verify_if_add(expected_type,entry->d_type)) {
-            
-            
+
+
             if(concat_path){
                 //allocates memory for the directory
                 char *generated_dir = (char*)malloc(strlen(path) + strlen(entry->d_name) + 2);
@@ -63,7 +64,7 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
             }
             else{
                 DtwStringArray_append(dirs, entry->d_name);
-                
+
             }
 
             i++;
@@ -71,7 +72,7 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
     }
 
     if(expected_type == DTW_FOLDER_TYPE){
-        private_dtw_add_end_bar_to_dirs_string_array(dirs);   
+        private_dtw_add_end_bar_to_dirs_string_array(dirs);
     }
     closedir(dir);
 

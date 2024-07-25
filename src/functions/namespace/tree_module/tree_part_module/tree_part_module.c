@@ -1,4 +1,5 @@
 
+#include "../unique.h"
 
 DtwTreePartModule newDtwTreePartModule(){
     DtwTreePartModule self ={0};

@@ -1,3 +1,4 @@
+#include "../unique.h"
 
 privateDtwFlockArray * private_new_privateFlockArray(){
     privateDtwFlockArray * self = (privateDtwFlockArray*) malloc(sizeof (privateDtwFlockArray));

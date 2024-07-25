@@ -1,4 +1,5 @@
 
+#include "../unique.h"
 
 
 
@@ -68,4 +69,3 @@ char * DtwTree_dumps_tree_json(DtwTree *self,DtwTreeProps  props);
 void DtwTree_dumps_tree_json_to_file(DtwTree *self,const char *path,DtwTreeProps  props);
 
   DtwTree * newDtwTree();
-

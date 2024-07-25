@@ -1,3 +1,4 @@
+#include "../unique.h"
 
 bool private_DtwResource_its_a_pk(DtwResource *self);
 

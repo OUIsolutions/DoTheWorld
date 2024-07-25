@@ -1,3 +1,4 @@
+#include "../unique.h"
 
 
 DtwResource *new_DtwResource(const char *path);

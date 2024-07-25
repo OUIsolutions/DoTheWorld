@@ -1,3 +1,4 @@
+#include "../unique.h"
 
 DtwPathModule newDtwPathModule(){
     DtwPathModule  self = {0};

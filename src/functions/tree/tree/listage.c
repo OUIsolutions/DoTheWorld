@@ -1,6 +1,7 @@
+#include "../unique.h"
 
-//listages
- DtwStringArray *DtwTree_list_files( DtwTree *self, const char *path,bool concat_path){
+
+DtwStringArray *DtwTree_list_files( DtwTree *self, const char *path,bool concat_path){
     DtwStringArray *formated_elements = newDtwStringArray();
     for(int i = 0; i < self->size; i++){
         DtwTreePart *current = self->tree_parts[i];
@@ -225,4 +226,3 @@ struct DtwStringArray *DtwTree_list_all( DtwTree *self, const char *path,bool co
 
     return formated_elements;
 }
-

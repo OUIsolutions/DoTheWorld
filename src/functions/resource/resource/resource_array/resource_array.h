@@ -1,4 +1,5 @@
 
+#include "../unique.h"
 
 DtwResourceArray * DtwResource_get_schema_values(DtwResource *self);
 

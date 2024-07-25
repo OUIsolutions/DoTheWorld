@@ -1,3 +1,4 @@
+#include "../unique.h"
 
 void private_DtwResurce_destroy_primary_key(DtwResource *self);
 
@@ -8,4 +9,3 @@ void DtwResource_destroy(DtwResource *self);
 
 
 void DtwResource_destroy_sub_resource(DtwResource *self, const char *key);
-

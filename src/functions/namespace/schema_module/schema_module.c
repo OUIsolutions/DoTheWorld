@@ -1,4 +1,5 @@
 
+#include "../unique.h"
 
 DtwSchemaModule newDtwSchemaModule(){
     DtwSchemaModule  self = {0};

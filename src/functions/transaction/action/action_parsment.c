@@ -1,3 +1,4 @@
+#include "../unique.h"
 
 short DtwActionTransaction_convert_action_to_integer(char *action){
     if(strcmp(action,"write") == 0){
@@ -239,4 +240,3 @@ void DtwActionTransaction_represent(DtwActionTransaction* self){
     }
 
 }
-

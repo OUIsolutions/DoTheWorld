@@ -1,4 +1,5 @@
 
+#include "../unique.h"
 
 DtwSchema *private_newDtwSchema(const char *name);
 

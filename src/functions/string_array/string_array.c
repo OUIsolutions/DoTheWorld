@@ -1,4 +1,5 @@
 
+#include "../unique.h"
 
 struct DtwStringArray * newDtwStringArray(){
     struct DtwStringArray *self = ( DtwStringArray*)malloc(sizeof(struct DtwStringArray));

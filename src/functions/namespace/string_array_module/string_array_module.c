@@ -1,3 +1,4 @@
+#include "../unique.h"
 
 DtwStringArrayModule newDtwStringArrayModule(){
     DtwStringArrayModule self = {0};

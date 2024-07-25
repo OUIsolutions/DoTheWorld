@@ -1,4 +1,5 @@
 
+#include "../unique.h"
 
 DtwResource * DtwResource_sub_resource_next(DtwResource *self, const char *end_path){
     if(DtwResource_error(self)){
@@ -143,5 +144,3 @@ DtwResource * DtwResource_sub_resource_random(DtwResource *self, const char *end
 
     }
 }
-
-

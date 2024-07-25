@@ -1,3 +1,4 @@
+#include "../unique.h"
 
 DtwLockerModule newDtwLockerModule(){
     DtwLockerModule  self = {0};

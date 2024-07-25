@@ -1,4 +1,5 @@
 
+#include "../unique.h"
 
 DtwPath * newDtwPath(const char *path);
 

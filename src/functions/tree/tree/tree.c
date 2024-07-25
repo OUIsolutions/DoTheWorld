@@ -1,4 +1,5 @@
 
+#include "../unique.h"
 
 
 struct  DtwTree * newDtwTree(){
@@ -40,7 +41,7 @@ void DtwTree_add_tree_part_copy( DtwTree *self,  DtwTreePart *tree_part){
     DtwTreePart *copy = DtwTreePart_self_copy(tree_part);
     copy->owner = (void*)self;
     self->tree_parts[self->size - 1] = copy;
-       
+
 }
 
 void DtwTree_remove_tree_part(struct DtwTree *self, int position){
@@ -156,7 +157,7 @@ void DtwTree_free( DtwTree *self){
         }
 
     }
-    
+
     free(self->tree_parts);
     free(self);
 }
@@ -167,7 +168,7 @@ void DtwTree_insecure_hardware_remove_tree(struct DtwTree *self){
 }
 
 void DtwTree_insecure_hardware_write_tree(struct DtwTree *self){
-    
+
     for(int i = 0; i < self->size; i++){
         struct DtwTreePart *tree_part = self->tree_parts[i];
         DtwTreePart_hardware_write(tree_part,DTW_EXECUTE_NOW);

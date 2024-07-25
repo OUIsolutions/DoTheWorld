@@ -1,4 +1,5 @@
 
+#include "../unique.h"
 
 DtwMultiFileLocker *newDtwMultiFileLocker(){
     DtwMultiFileLocker *self = (DtwMultiFileLocker*) malloc(sizeof (DtwMultiFileLocker));

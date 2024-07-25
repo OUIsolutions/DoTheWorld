@@ -1,3 +1,4 @@
+#include "../unique.h"
 
 DtwJsonTreeErrorModule newDtwJsonTreeErrorModule(){
     DtwJsonTreeErrorModule self = {0};

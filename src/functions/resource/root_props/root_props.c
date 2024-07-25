@@ -1,4 +1,5 @@
 
+#include "../unique.h"
 
 privateDtwResourceRootProps *private_newDtwResourceRootProps(){
     privateDtwResourceRootProps *self  = (privateDtwResourceRootProps*) malloc(sizeof (privateDtwResourceRootProps));
