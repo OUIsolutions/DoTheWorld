@@ -1,4 +1,5 @@
 
+#include "../unique.declaration.h"
 
 
 bool DtwResource_error(DtwResource *self);

@@ -1,4 +1,5 @@
 
+#include "../unique.declaration.h"
 
 DtwResource *new_DtwResource(const char *path);
 
