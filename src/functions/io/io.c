@@ -1,4 +1,5 @@
 
+#include "../unique.h"
 
 
 void dtw_create_dir_recursively(const char *path){
@@ -17,7 +18,7 @@ void dtw_create_dir_recursively(const char *path){
     long size_path = strlen(path);
     for(int i=0;i <  size_path;i++){
         if((path[i] == '\\'  || path[i] == '/' )  &&( i != size_path - 1)){
-            
+
             char * current_path = (char*)malloc(i + 1);
             current_path[i] = '\0';
             strncpy(current_path,path,i);
@@ -51,7 +52,7 @@ bool dtw_remove_any(const char* path) {
     if(remove(path) == 0){
         return true;
     }
-    
+
     struct DtwStringArray *files = dtw_list_files_recursively(path,DTW_CONCAT_PATH);
     int files_size = files->size;
     for(int i = 0; i < files_size; i++){
@@ -66,13 +67,13 @@ bool dtw_remove_any(const char* path) {
         rmdir(dirs->strings[i]);
     }
     DtwStringArray_free(dirs);
-    //remove / to the path 
+    //remove / to the path
     if(files_size ||dirs_size){
         return true;
-    }    
+    }
     return false;
-    
- 
+
+
 }
 
 
@@ -189,12 +190,12 @@ bool dtw_write_any_content(const char *path,unsigned  char *content,long size){
 
     FILE *file = fopen(path,"wb");
     if(file == NULL){
-   
+
         return false;
     }
-    
+
     fwrite(content, sizeof(char),size, file);
-    
+
     fclose(file);
     return true;
 }
@@ -214,7 +215,7 @@ bool dtw_write_string_file_content(const char *path,const char *content){
 
 int dtw_entity_type(const char *path){
     //returns 1 for file, 2 for directory, -1 for not found
-    struct stat path_stat; 
+    struct stat path_stat;
 
     if(stat(path,&path_stat) == 0){
         if(S_ISREG(path_stat.st_mode)){
@@ -251,7 +252,7 @@ int dtw_complex_entity_type(const char *path){
         return DTW_COMPLEX_BOOL_TYPE;
     }
 
-    
+
     double value;
     int result = sscanf(data,"%lf",&value);
     if(result == 0){
@@ -283,7 +284,7 @@ long dtw_get_total_itens_of_dir(const char *path){
         }
         closedir(dir);
         return i -2;
-    #else 
+    #else
         WIN32_FIND_DATA findFileData;
             HANDLE hFind = FindFirstFile(path, &findFileData);
 
@@ -300,8 +301,8 @@ long dtw_get_total_itens_of_dir(const char *path){
 
             FindClose(hFind);
             return i;
-    
-    #endif 
+
+    #endif
 }
 
 const char *dtw_convert_entity(int entity_type){
@@ -330,7 +331,7 @@ const char *dtw_convert_entity(int entity_type){
         return "double";
     }
     return "invalid";
-}   
+}
 
 bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
 
@@ -341,7 +342,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
     }
 
     if(type == DTW_FILE_TYPE){
-    
+
         long size;
         bool is_binary;
         unsigned char *content = dtw_load_any_content(src_path,&size,&is_binary);
@@ -357,11 +358,11 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
     }
     //creating dirs
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(src_path,DTW_CONCAT_PATH);
-    
+
     int size = dirs->size;
     int src_path_size = strlen(src_path);
 
-    for(int i = 0; i < size; i++){        
+    for(int i = 0; i < size; i++){
         char *new_path_dir = private_dtw_change_beginning_of_string(dirs->strings[i],src_path_size,dest_path);
         dtw_create_dir_recursively(new_path_dir);
         free(new_path_dir);
@@ -370,7 +371,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
 
 
     struct DtwStringArray *files = dtw_list_files_recursively(src_path,DTW_CONCAT_PATH);
-   
+
     for(int i = 0; i < files->size; i++){
         long file_size;
         bool is_binary;
@@ -381,13 +382,13 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
         free(content);
         free(new_path);
 
-       
+
     }
 
     DtwStringArray_free(files);
-    
+
     return true;
-    
+
 }
 
 bool dtw_move_any(const char* src_path, const char* dest_path,bool merge) {

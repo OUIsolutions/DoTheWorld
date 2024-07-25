@@ -1,3 +1,4 @@
+#include "../unique.h"
 
 char * dtw_generate_sha_from_file(const char *path);
 char * dtw_generate_sha_from_string(const char *string);
@@ -14,6 +15,3 @@ long private_dtw_convert_index(long index,long size);
 
 
 long dtw_get_time();
-
-
-
