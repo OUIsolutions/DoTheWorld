@@ -1,4 +1,5 @@
 
+#include "../unique.definition.h"
 
 DtwHashModule newDtwHashModule(){
     DtwHashModule self = {0};

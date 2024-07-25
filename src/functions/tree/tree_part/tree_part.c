@@ -1,3 +1,4 @@
+#include "../unique.definition.h"
 
 
 void private_DtwTreePart_set_last_modification(DtwTreePart *self,long last_modification) {
@@ -16,7 +17,7 @@ void private_DtwTreePart_set_last_modification(DtwTreePart *self,long last_modif
 
 
     if(formated_props.content == DTW_INCLUDE || formated_props.hadware_data == DTW_INCLUDE){
-        
+
         DtwTreePart_load_content_from_hardware(self);
         if(formated_props.hadware_data == DTW_INCLUDE && self->content){
 
@@ -77,7 +78,7 @@ unsigned char *DtwTreePart_get_content_binary_by_reference(struct DtwTreePart *s
     }
 
 
-    
+
     return new_tree_part;
 }
 
@@ -99,7 +100,7 @@ void DtwTreePart_set_string_content( DtwTreePart *self, const char *content){
         strlen(content),
         false
     );
-    
+
     self->content[self->content_size] = '\0';
 }
 
@@ -156,7 +157,7 @@ void DtwTreePart_represent(struct DtwTreePart *self){
     if(self->is_binary == true){
         printf("Content: Binary\n");
     }
-    
+
     const char *action = private_dtw_convert_action_to_string(self->pending_action);
     if(action){
         printf("Pending Action: %s\n",action);

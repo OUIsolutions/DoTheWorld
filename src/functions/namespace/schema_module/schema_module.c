@@ -1,3 +1,4 @@
+#include "../unique.definition.h"
 
 
 DtwSchemaModule newDtwSchemaModule(){

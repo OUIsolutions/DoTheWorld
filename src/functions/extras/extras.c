@@ -1,3 +1,4 @@
+#include "../unique.definition.h"
 
 char * dtw_generate_sha_from_file(const char *path){
     return calc_sha_256_from_file_returning_string(path);
@@ -8,7 +9,7 @@ char * dtw_generate_sha_from_any(void *anything , long size){
         return NULL;
     }
     return calc_sha_256_returning_string(anything,size);
-}   
+}
 
 char * dtw_generate_sha_from_string(const char *string){
     if(string == NULL) {
@@ -76,15 +77,15 @@ short private_dtw_convert_string_to_action(const char *action){
 
 void private_dtw_add_end_bar_to_dirs_string_array(struct DtwStringArray * dirs){
     for(int i = 0; i < dirs->size; i++){
-  
+
         if(!dtw_ends_with(dirs->strings[i], "/") || !dtw_ends_with(dirs->strings[i],"\\")){
             char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 3);
             sprintf(formated_dir,"%s/",dirs->strings[i]);
             DtwStringArray_set_value(dirs, i, formated_dir);
             free(formated_dir);
-        }    
-            
-         
+        }
+
+
     }
 }
 

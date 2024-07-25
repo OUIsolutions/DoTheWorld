@@ -1,3 +1,4 @@
+#include "../unique.definition.h"
 
 int DtwPath_get_total_dirs(DtwPath *self){
     int size = 0;
@@ -143,4 +144,3 @@ void DtwPath_remove_sub_dirs_at_index(DtwPath *self, int start, int end){
 
 
 }
-

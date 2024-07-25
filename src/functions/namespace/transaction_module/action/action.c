@@ -1,3 +1,4 @@
+#include "../unique.definition.h"
 
 DtwActionTransactionModule newDtwActionTransactionModule(){
     DtwActionTransactionModule self = {0};

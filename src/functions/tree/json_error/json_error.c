@@ -1,4 +1,6 @@
- DtwJsonTreeError * newDtwJsonError(){
+#include "../unique.definition.h"
+
+DtwJsonTreeError * newDtwJsonError(){
      DtwJsonTreeError *self =(DtwJsonTreeError*)malloc(sizeof(struct DtwJsonTreeError));
     return self;
 }

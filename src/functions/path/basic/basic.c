@@ -1,3 +1,4 @@
+#include "../unique.definition.h"
 
 
 struct DtwPath * newDtwPath(const char *path) {
@@ -32,7 +33,7 @@ void DtwPath_represent(struct DtwPath *self){
     printf("Name: %s\n", name ? name : "NULL");
     printf("Extension: %s\n", extension ? extension : "NULL");
 
-    
+
 }
 
 
@@ -43,4 +44,3 @@ void DtwPath_free(struct DtwPath *self) {
     free(self->path);
     free(self);
 }
-

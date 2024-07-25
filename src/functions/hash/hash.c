@@ -1,8 +1,5 @@
 
-
-
-
-
+#include "../unique.definition.h"
 
 DtwHash * newDtwHash(){
     DtwHash *self = (DtwHash*) malloc(sizeof(DtwHash));

@@ -1,3 +1,4 @@
+#include "../unique.definition.h"
 
 
 privateDtwFlockLockedElement * private_new_privateDtwFlockLockedElement(const char *filename, int file_descriptor){

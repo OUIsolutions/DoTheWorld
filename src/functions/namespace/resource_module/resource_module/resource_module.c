@@ -1,3 +1,4 @@
+#include "../unique.definition.h"
 
 DtwResourceModule newDtwResourceModule(){
     DtwResourceModule self = {0};

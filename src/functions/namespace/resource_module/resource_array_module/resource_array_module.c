@@ -1,3 +1,6 @@
+
+#include "../unique.definition.h"
+
 DtwResourceArrayModule newDtwResourceArrayModule(){
     DtwResourceArrayModule self = {0};
     self.append = DtwResourceArray_append;

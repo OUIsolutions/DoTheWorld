@@ -1,3 +1,4 @@
+#include "../unique.definition.h"
 
 
  DtwStringArray * dtw_list_files(const char *path, bool concat_path){

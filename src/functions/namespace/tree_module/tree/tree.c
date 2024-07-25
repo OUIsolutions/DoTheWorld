@@ -1,3 +1,4 @@
+#include "../unique.definition.h"
 
 DtwTreeModule newDtwTreeModule(){
     DtwTreeModule self = {0};
