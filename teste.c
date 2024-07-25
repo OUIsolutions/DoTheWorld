@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 #define DTW_DEBUG_TIME
-#include "src/one.c"
+#include "src/declaration.h"
 DtwNamespace dtw;
 DtwRandonizer *randonizer;
 
@@ -25,7 +25,7 @@ bool verifica_imprime_user(DtwResource *user, void *filtragem){
 
     if(idade < f->idade){
 
-        return true;        
+        return true;
     }
 
     return false;
@@ -44,7 +44,3 @@ int main(){
 
     return 0;
 }
-
-
-
-

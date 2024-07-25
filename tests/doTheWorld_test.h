@@ -32,8 +32,10 @@ SOFTWARE.
 
 
 
-
+#ifndef DTW_GLOBALS_H
+#define DTW_GLOBALS_H
 const char dtw_base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+#endif
 
 
 
@@ -42,6 +44,7 @@ extern "C" {
 #endif
 
 #ifndef DO_THE_WORLD_H
+#define DO_THE_WORLD_H
 
 
 #include <unistd.h>
@@ -75,6 +78,8 @@ extern "C" {
 #endif
 
 
+#ifndef PRIVATE_DTW_CONSTS_H
+#define PRIVATE_DTW_CONSTS_H
 
 #define DTW_FILE_TYPE 1
 #define DTW_FOLDER_TYPE 2
@@ -200,7 +205,12 @@ enum {
 
 
 
+#endif
 
+
+
+#ifndef PRIVATE_DTW_MACROS_H
+#define PRIVATE_DTW_MACROS_H
 
 #ifdef __linux__
 #define dtw_create_dir(path) mkdir(path,0777)
@@ -211,6 +221,8 @@ enum {
 
 
 
+
+#endif
 
 
 #ifndef cJSON__h
@@ -628,15 +640,21 @@ uint8_t *sha_256_close(struct Sha_256 *sha_256);
 #define PRIVATE_DTW_SHA_DEFINED_IN_DO_THE_WORLD
 #endif  //SHA_256_H
 
-
-
+#ifndef PRIVATE_DTW_TYPES_H
+#define PRIVATE_DTW_TYPES_H
+#ifndef PRIVATE_DTW_STRING_ARRAY_TYPE_H
+#define PRIVATE_DTW_STRING_ARRAY_TYPE_H
 typedef struct DtwStringArray {
     int size;
     char **strings;
 }DtwStringArray;
+#endif
 
 
 
+
+#ifndef PRIVATE_DTW_PATH_TYPE_H
+#define PRIVATE_DTW_PATH_TYPE_H
 typedef struct DtwPath {
     char *original_path_string;
     char *path;
@@ -644,15 +662,19 @@ typedef struct DtwPath {
 
 
 }DtwPath;
+#endif
 
 
-
+#ifndef  PRIVATE_DTW_HASH_TYPE_H
+#define PRIVATE_DTW_HASH_TYPE_H
 typedef  struct DtwHash{
     char *hash;
 }DtwHash;
+#endif
 
 
-
+#ifndef  PRIVATE_DTW_LOCKED_ELEMENT_TYPE_H
+#define PRIVATE_DTW_LOCKED_ELEMENT_TYPE_H
 typedef struct {
 
     char *filename;
@@ -660,24 +682,40 @@ typedef struct {
 
 
 }privateDtwFlockLockedElement;
+#endif
 
+
+
+
+
+#ifndef  PRIVATE_DTW_FLOCK_ARRAY_TYPE_H
+#define PRIVATE_DTW_FLOCK_ARRAY_TYPE_H
 
 typedef struct {
     privateDtwFlockLockedElement **elements;
     int size;
 }privateDtwFlockArray;
+#endif
 
 
 
+
+
+#ifndef PRIVATE_DTW_FLOCK_LOCKER_TYPE_H
+#define PRIVATE_DTW_FLOCK_LOCKER_TYPE_H
 typedef struct {
     const char *temp_folder;
     privateDtwFlockArray  *locked_files;
 }DtwFlockLocker;
+#endif
 
 
 
 
 
+
+#ifndef PRIVATE_DTW_MULTIFILE_LOCKER_TYPE_H
+#define PRIVATE_DTW_MULTIFILE_LOCKER_TYPE_H
 
 typedef struct {
 
@@ -689,10 +727,17 @@ typedef struct {
 
 
 }DtwMultiFileLocker;
+#endif
 
 
 
 
+
+
+
+
+#ifndef PRIVATE_DTW_LOCKER_TYPE_H
+#define PRIVATE_DTW_LOCKER_TYPE_H
 typedef struct {
 #ifdef __linux__
     DtwFlockLocker *locker;
@@ -702,19 +747,25 @@ typedef struct {
 #endif
 
 } DtwLocker;
+#endif
 
 
 
 
 
+#ifndef PRIVATE_DTW_RANDONIZER_TYPE_H
+#define PRIVATE_DTW_RANDONIZER_TYPE_H
 typedef struct DtwRandonizer{
     long internal_seed;
     long seed;
     long actual_generation;
 
 }DtwRandonizer;
+#endif
 
 
+#ifndef PRIVATE_DTW_ACTION_TRANSACTION_TYPE_H
+#define PRIVATE_DTW_ACTION_TRANSACTION_TYPE_H
 typedef struct DtwActionTransaction{
     short action_type;
     unsigned  char *content;
@@ -725,8 +776,11 @@ typedef struct DtwActionTransaction{
     char *source;
 
 }DtwActionTransaction;
+#endif
 
 
+#ifndef PRIVATE_DTW_JSON_TRANSACTION_ERROR_TYPE_H
+#define PRIVATE_DTW_JSON_TRANSACTION_ERROR_TYPE_H
 typedef struct DtwJsonTransactionError{
     int code;
     char *mensage;
@@ -734,9 +788,14 @@ typedef struct DtwJsonTransactionError{
 
 
 }DtwJsonTransactionError;
+#endif
 
 
 
+
+
+#ifndef PRIVATE_DT_TRANSACTION_TYPE_H
+#define PRIVATE_DT_TRANSACTION_TYPE_H
 
 typedef struct DtwTransaction{
 
@@ -744,10 +803,12 @@ typedef struct DtwTransaction{
     long size;
 
 }DtwTransaction;
+#endif
 
 
 
-
+#ifndef PRIVATE_DTW_JSON_TREE_ERROR_TYPE_H
+#define PRIVATE_DTW_JSON_TREE_ERROR_TYPE_H
 typedef struct DtwJsonTreeError {
     int code;
     int position;
@@ -755,8 +816,11 @@ typedef struct DtwJsonTreeError {
 
 
 }DtwJsonTreeError;
+#endif
 
 
+#ifndef PRIVATE_DTW_TREE_PROPS_TYPE_H
+#define PRIVATE_DTW_TREE_PROPS_TYPE_H
 typedef struct DtwTreeProps{
     int minification;
     int content;
@@ -766,9 +830,15 @@ typedef struct DtwTreeProps{
     int ignored_elements;
 
 }DtwTreeProps;
+#endif
 
 
 
+
+
+
+#ifndef PRIVATE_DTW_TREE_PART_TYPE_H
+#define PRIVATE_DTW_TREE_PART_TYPE_H
 
 typedef struct DtwTreePart{
 
@@ -789,28 +859,42 @@ typedef struct DtwTreePart{
     int pending_action;
 
 }DtwTreePart;
+#endif
 
 
+
+
+
+#ifndef PRIVATE_DTW_TRANSACTION_REPORT_TYPE_H
+#define PRIVATE_DTW_TRANSACTION_REPORT_TYPE_H
 typedef struct DtwTreeTransactionReport{
     DtwStringArray *write;
     DtwStringArray *modify;
     DtwStringArray *remove;
 
 }DtwTreeTransactionReport;
+#endif
 
 
+
+
+
+#ifndef  PRIVATE_DTW_TREE_TYPE_H
+#define  PRIVATE_DTW_TREE_TYPE_H
 typedef struct  DtwTree{
     int size;
     DtwTreePart **tree_parts;
 
 }DtwTree;
+#endif
 
 
 
 
 
 
-
+#ifndef  PRIVATE_DTW_DATABASE_SCHEMA_TYPE_H
+#define PRIVATE_DTW_DATABASE_SCHEMA_TYPE_H
 typedef struct DtwDatabaseSchema{
 
     const char *value_name;
@@ -818,6 +902,12 @@ typedef struct DtwDatabaseSchema{
     struct DtwSchema **sub_schemas;
     int size;
 }DtwDatabaseSchema;
+#endif
+
+
+#ifndef PRIVATE_DTW_SCHEMA_TYPE_H
+#define PRIVATE_DTW_SCHEMA_TYPE_H
+
 
 
 typedef struct DtwSchema{
@@ -832,7 +922,18 @@ typedef struct DtwSchema{
     DtwStringArray  *primary_keys;
 }DtwSchema;
 
+#endif
 
+
+
+
+
+
+
+
+
+#ifndef PRIVATE_DTW_ROOT_PROPS_RESOURCE_TYPE_H
+#define PRIVATE_DTW_ROOT_PROPS_RESOURCE_TYPE_H
 typedef struct {
     DtwTransaction  *transaction;
     DtwRandonizer  *randonizer;
@@ -843,9 +944,18 @@ typedef struct {
     char *error_message;
 
 }privateDtwResourceRootProps;
+#endif
 
 
 
+
+
+
+
+
+
+#ifndef PRIVATE_DTW_RESOURCE_TYPE_H
+#define PRIVATE_DTW_RESOURCE_TYPE_H
 
 typedef struct DtwResource{
 
@@ -887,20 +997,79 @@ typedef struct DtwResource{
 
 
 
+#endif
 
 
 
 
+
+#ifndef PRIVATE_DTW_RESORCE_ARRAY_TYPE_H
+#define PRIVATE_DTW_RESORCE_ARRAY_TYPE_H
 typedef struct DtwResourceArray{
     DtwResource **resources;
     long size;
 
 }DtwResourceArray;
+#endif
 
 
 
 
 
+
+
+
+
+#ifndef PRIVATE_DTW_RESOURCE_CJSON_ARGS_TYPE_H
+#define PRIVATE_DTW_RESOURCE_CJSON_ARGS_TYPE_H
+typedef struct  {
+    cJSON *(*callback)(DtwResource *item,void *args);
+    bool (*filtrage)(DtwResource *item,void *args);
+    int (*ordenation)(DtwResource *item1,DtwResource *item2,void *args);
+    void *args;
+}private_DtwResource_cJSON_args;
+#endif
+
+
+
+
+
+#ifndef PRIVATE_DTW_RESOURCE_MAP_ELEMENT_TYPE_H
+#define PRIVATE_DTW_RESOURCE_MAP_ELEMENT_TYPE_H
+
+typedef struct {
+    void *result;
+    void *args;
+    DtwResource *current;
+    int (*ordenation_callback)(DtwResource *item1, DtwResource *item2, void *args);
+}privateDtwResource_map_element;
+#endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#ifndef PRIVATE_DTW_RESOURCE_ARRAY_MODULE_TYPE_H
+#define PRIVATE_DTW_RESOURCE_ARRAY_MODULE_TYPE_H
 typedef struct DtwResourceArrayModule{
 
     void (*append)(DtwResourceArray *self, DtwResource *element);
@@ -909,9 +1078,16 @@ typedef struct DtwResourceArrayModule{
     void (*free)(DtwResourceArray *self);
 
 }DtwResourceArrayModule;
+#endif
 
 
 
+
+
+
+
+#ifndef PRIVATE_DTW_RESOURCE_MODULE_TYPE_H
+#define PRIVATE_DTW_RESOURCE_MODULE_TYPE_H
 typedef struct DtwResourceModule{
 
     DtwResource *(*newResource)(const char *path);
@@ -1014,13 +1190,17 @@ typedef struct DtwResourceModule{
 
 }DtwResourceModule;
 
-DtwResourceModule newDtwResourceModule();
+#endif
 
 
 
 
 
 
+
+
+#ifndef PRIVATE_DTW_ACTION_TRANSACTION_MODULE_TYPE_H
+#define PRIVATE_DTW_ACTION_TRANSACTION_MODULE_TYPE_H
 typedef struct DtwActionTransactionModule{
 
     DtwActionTransaction *(*newAction)();
@@ -1046,17 +1226,28 @@ typedef struct DtwActionTransactionModule{
     void (*free)(DtwActionTransaction* self);
 
 }DtwActionTransactionModule;
+#endif
 
 
 
+#ifndef PRIVATE_DTW_JSON_TRANSACTION_MODULE_TYPE_H
+#define PRIVATE_DTW_JSON_TRANSACTION_MODULE_TYPE_H
 typedef struct DtwJsonTransactionErrorModule{
     void (*represent)(struct DtwJsonTransactionError *self);
     void (*free)(struct DtwJsonTransactionError *self);
 
 }DtwJsonTransactionErrorModule;
+#endif
 
 
 
+
+
+
+
+
+#ifndef PRIVATE_DTW_TRANSACTION_MODULE_TYPE_H
+#define PRIVATE_DTW_TRANSACTION_MODULE_TYPE_H
 typedef struct DtwTransactionModule{
     DtwTransaction *(*newTransaction)();
     DtwTransaction * (*newTransaction_from_json)(cJSON *json_entry);
@@ -1095,10 +1286,15 @@ typedef struct DtwTransactionModule{
 
 
 }DtwTransactionModule;
+#endif
 
 
 
 
+
+
+#ifndef PRIVATE_DTW_JSON_TREE_ERROR_MODULE_TYPE_H
+#define PRIVATE_DTW_JSON_TREE_ERROR_MODULE_TYPE_H
 typedef struct DtwJsonTreeErrorModule{
 
     DtwJsonTreeError * (*validate_json_tree_by_cJSON)(cJSON *json_tree);
@@ -1107,18 +1303,25 @@ typedef struct DtwJsonTreeErrorModule{
     void (*represent)(struct DtwJsonTreeError *self);
 
 }DtwJsonTreeErrorModule;
+#endif
 
 
-
+#ifndef PRIVATE_DTW_TRANSACTION_REPORT_MODULE_TYPE_H
+#define PRIVATE_DTW_TRANSACTION_REPORT_MODULE_TYPE_H
 typedef struct  DtwTreeTransactionReportModule{
 
     void (*represent)(struct DtwTreeTransactionReport *report);
     void (*free)(struct DtwTreeTransactionReport *report);
 
 }DtwTreeTransactionReportModule;
+#endif
 
 
 
+
+
+#ifndef PRIVATE_DTW_TREE_PART_MODULE_TYPE_H
+#define PRIVATE_DTW_TREE_PART_MODULE_TYPE_H
 
 typedef struct DtwTreePartModule{
 
@@ -1145,10 +1348,20 @@ typedef struct DtwTreePartModule{
     void (*free)(struct DtwTreePart *self);
     struct DtwTreePart *(*self_copy)(struct DtwTreePart *self);
 }DtwTreePartModule;
+#endif
 
 
 
 
+
+
+
+
+
+
+
+#ifndef PRIVATE_DTW_TREE_MODULE_TYPE_H
+#define PRIVATE_DTW_TREE_MODULE_TYPE_H
 typedef struct DtwTreeModule{
 
     DtwTree  *(*newTree)();
@@ -1254,23 +1467,39 @@ typedef struct DtwTreeModule{
     DtwJsonTreeErrorModule json_error;
 
 }DtwTreeModule;
+#endif
 
 
 
 
 
+
+
+#ifndef PRIVATE_DTW_DATABASE_SCHEMA_MODULE_TYPE_H
+#define PRIVATE_DTW_DATABASE_SCHEMA_MODULE_TYPE_H
 typedef struct {
     DtwSchema * (*sub_schema)(DtwDatabaseSchema *self,const char *name);
 }DtwDatabaseSchemaModule;
+#endif
 
 
+
+
+#ifndef PRIVATE_DTW_SCHEMA_MODULE_TYPE_H
+#define PRIVATE_DTW_SCHEMA_MODULE_TYPE_H
 typedef struct {
     void (*add_primary_key)(DtwSchema *self, const char *primary_key);
     DtwSchema * (*sub_schema)(DtwSchema *self,const char *name);
 }DtwSchemaModule;
+#endif
 
 
 
+
+
+
+#ifndef PRIVATE_DTW_HASH_MODULE_TYPE_H
+#define PRIVATE_DTW_HASH_MODULE_TYPE_H
 
 typedef struct DtwHashModule{
     DtwHash * (*newHash)();
@@ -1291,9 +1520,14 @@ typedef struct DtwHashModule{
     void  (*free)(DtwHash *self);
 
 }DtwHashModule;
+#endif
 
 
 
+
+
+#ifndef PRIVATE_DTW_LOCKER_MODULE_TYPE_H
+#define PRIVATE_DTW_LOCKER_MODULE_TYPE_H
 typedef struct DtwLockerModule{
     DtwLocker * (*newLocker)();
     int (*lock)(DtwLocker *self, const  char *element);
@@ -1303,8 +1537,15 @@ typedef struct DtwLockerModule{
 
 }DtwLockerModule;
 
+#endif
 
 
+
+
+
+
+#ifndef PRIVATE_DTW_PATH_MODULE_TYPE_H
+#define PRIVATE_DTW_PATH_MODULE_TYPE_H
 typedef struct DtwPathModule{
     //Getters
 
@@ -1341,18 +1582,28 @@ typedef struct DtwPathModule{
     void (*free) (struct DtwPath *self);
 
 }DtwPathModule;
+#endif
 
 
 
 
+
+
+#ifndef PRIVATE_DTW_RANDONIZER_MODULE_TYPE_H
+#define PRIVATE_DTW_RANDONIZER_MODULE_TYPE_H
 typedef struct  DtwRandonizerModule{
     DtwRandonizer * (*newRandonizer)();
     int (*generate_num)(DtwRandonizer *self,int max);
     char * (*generate_token)(DtwRandonizer*self, int size);
     void (*free)(DtwRandonizer *self);
 }DtwRandonizerModule;
+#endif
 
 
+
+
+#ifndef PRIVATE_DTW_STRING_ARRAY_MODULE_TYPE_H
+#define PRIVATE_DTW_STRING_ARRAY_MODULE_TYPE_H
 typedef struct DtwStringArrayModule{
     DtwStringArray *(*newStringArray)();
 
@@ -1374,8 +1625,32 @@ typedef struct DtwStringArrayModule{
 
 
 }DtwStringArrayModule;
+#endif
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#ifndef PRIVATE_DTW_NAMESPACE_MODULE_TYPE_H
+#define PRIVATE_DTW_NAMESPACE_MODULE_TYPE_H
 typedef struct DtwNamespace{
     //IO
     void (*create_dir_recursively)(const char *path);
@@ -1475,6 +1750,20 @@ typedef struct DtwNamespace{
     DtwRandonizerModule randonizer;
 
 }DtwNamespace;
+#endif
+
+
+
+
+
+#endif
+
+
+
+
+
+
+
 
 
 
@@ -1511,15 +1800,19 @@ DtwStringArray * DtwStringArray_clone(DtwStringArray *self);
 
 
 
+
 char * calc_sha_256_returning_string(const void *input, size_t len);
 
 void calc_sha_256_from_string(uint8_t hash[SIZE_OF_SHA_256_HASH], const char *input);
 
 int calc_sha_256_from_file(uint8_t hash[SIZE_OF_SHA_256_HASH], const char *filename);
 
+char * calc_sha_256_from_string_returning_string(const char *input);
+
 char * calc_sha_256_from_file_returning_string(const char *filename);
 
 char * sha256_open_file(const char *filename, int *size);
+
 
 
 
@@ -1531,6 +1824,9 @@ unsigned char *dtw_base64_decode(const char *data, long *output_length);
 
 
 char *dtw_convert_binary_file_to_base64(const char *path);
+
+
+
 
 
 
@@ -1563,7 +1859,6 @@ long private_dtw_convert_index(long index,long size);
 
 
 long dtw_get_time();
-
 
 
 
@@ -1671,10 +1966,14 @@ void dtw_write_double_file_content(const char *path,double value);
 
 
 
+
  DtwStringArray * dtw_list_files(const char *path, bool concat_path);
 DtwStringArray * dtw_list_dirs(const char *path, bool concat_path);
 
 DtwStringArray *  dtw_list_all(const char *path,  bool concat_path);
+
+
+
 
 
 #ifdef __linux__
@@ -1694,7 +1993,9 @@ bool private_dtw_verify_if_skip(WIN32_FIND_DATAA *entry);
 
 
 struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool concat_path);
- 
+
+
+
 
 
  DtwStringArray * dtw_list_dirs_recursively(const char *path,bool concat_path);
@@ -1704,6 +2005,10 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
 
 
  DtwStringArray * dtw_list_all_recursively(const char *path,bool concat_path);
+
+
+
+
 
 
 
@@ -1723,6 +2028,9 @@ void DtwPath_free(struct DtwPath *self);
 
 
 
+
+
+
 char * DtwPath_get_name(DtwPath *self);
 
 char * DtwPath_get_extension(struct DtwPath *self);
@@ -1735,7 +2043,6 @@ char * DtwPath_get_dir(struct DtwPath *self);
 
 
 char * DtwPath_get_path(struct DtwPath *self);
-
 
 
 
@@ -1766,6 +2073,8 @@ void DtwPath_replace_dirs(DtwPath *self,const char *str,const char *dir);
 
 
 
+
+
 int DtwPath_get_total_dirs(DtwPath *self);
 
 char *DtwPath_get_sub_dirs_from_index(DtwPath *self, int start, int end);
@@ -1776,6 +2085,8 @@ int private_dtw_count_dirs_before(const char *dirs,int index);
 void DtwPath_insert_dir_at_index(DtwPath *self, int index, const char *dir);
 
 void DtwPath_remove_sub_dirs_at_index(DtwPath *self, int start, int end);
+
+
 
 
 
@@ -1793,7 +2104,11 @@ void DtwPath_remove_sub_dirs_at(DtwPath *self,const char *str);
 
 
 
+
+
 DtwTreeProps DtwTreeProps_format_props(DtwTreeProps props);
+
+
 
 
 
@@ -1815,6 +2130,8 @@ void DtwJsonTreeError_free(struct DtwJsonTreeError *self);
 struct DtwTreeTransactionReport * newDtwTreeTransactionReport();
 void  DtwTreeTransactionReport_represent(struct DtwTreeTransactionReport *report);
 void  DtwTreeTransactionReport_free(struct DtwTreeTransactionReport *report);
+
+
 
 
 
@@ -1843,6 +2160,8 @@ struct DtwTreePart * DtwTreePart_self_copy(struct DtwTreePart *self);
 struct DtwTreePart * newDtwTreePart(const char *path, DtwTreeProps props);
 struct DtwTreePart * newDtwTreePartEmpty(const char *path);
 struct DtwTreePart * newDtwTreePartLoading(const char *path);
+
+
 
 
 
@@ -1922,6 +2241,7 @@ void DtwTree_dumps_tree_json_to_file(DtwTree *self,const char *path,DtwTreeProps
 
 
 
+
 DtwMultiFileLocker *newDtwMultiFileLocker();
 
 int DtwMultiFIleLocker_lock(DtwMultiFileLocker *self, const  char *element);
@@ -1933,8 +2253,9 @@ void DtwMultiFileLocker_represemt(DtwMultiFileLocker *self);
 void DtwMultiFileLocker_free(DtwMultiFileLocker *self);
 
 
-
 #ifdef __linux__
+
+
 
 
 privateDtwFlockLockedElement * private_new_privateDtwFlockLockedElement(const char *filename, int file_descriptor);
@@ -1942,6 +2263,9 @@ privateDtwFlockLockedElement * private_new_privateDtwFlockLockedElement(const ch
 void privateDtwFlockLockedElement_represent(privateDtwFlockLockedElement *self);
 
 void privateDtwFlockLockedElement_free(privateDtwFlockLockedElement *self);
+
+
+
 
 
 
@@ -1966,6 +2290,9 @@ void privateDtwFlockArray_free(privateDtwFlockArray *self);
 
 
 
+
+
+
 DtwFlockLocker * newFlockLocker();
 
 void private_FlockLocker_unlock_by_index(DtwFlockLocker *self, int index);
@@ -1979,7 +2306,10 @@ void  DtwFlockLocker_represent(DtwFlockLocker *self);
 void  DtwFlockLocker_free(DtwFlockLocker *self);
 
 
+
 #endif
+
+
 
 
 DtwLocker *newDtwLocker();
@@ -1997,6 +2327,7 @@ void DtwLocker_free(DtwLocker *self);
 
 
 
+
 DtwJsonTransactionError * private_new_DtwJsonTransactionError( int code,const char *mensage,const  char *path);
 
 void DtwJsonTransactionError_represent(struct DtwJsonTransactionError *self);
@@ -2004,6 +2335,8 @@ void DtwJsonTransactionError_represent(struct DtwJsonTransactionError *self);
 void DtwJsonTransactionError_prepend_path(struct DtwJsonTransactionError *self,char *path);
 
 void DtwJsonTransactionError_free(struct DtwJsonTransactionError *self);
+
+
 
 
 
@@ -2041,6 +2374,8 @@ void DtwActionTransaction_commit(DtwActionTransaction* self,const char *path);
 void DtwActionTransaction_represent(DtwActionTransaction* self);
 
 void DtwActionTransaction_free(DtwActionTransaction* self);
+
+
 
 
 
@@ -2099,10 +2434,13 @@ void DtwTransaction_free(struct DtwTransaction *self);
 
 
 
+
+
 privateDtwResourceRootProps *private_newDtwResourceRootProps();
 
 
 void privateDtwResourceRootProps_free(privateDtwResourceRootProps *self);
+
 
 
 
@@ -2125,6 +2463,8 @@ void private_newDtwSchema_free(DtwSchema *self);
 
 
 
+
+
 DtwDatabaseSchema *private_newDtwDtatabaseSchema();
 
 DtwSchema * privateDtwDtatabaseSchema_get_sub_schema(DtwDatabaseSchema *self,const char *name);
@@ -2137,6 +2477,7 @@ void private_new_DtwDtatabaseSchema_free(DtwDatabaseSchema *self);
 
 
 
+
 DtwResource *new_DtwResource(const char *path);
 
 DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ...);
@@ -2144,6 +2485,9 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
 DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,const  char *format, ...);
 
 void DtwResource_free(DtwResource *self);
+
+
+
 
 
 
@@ -2160,7 +2504,6 @@ DtwResource * DtwResource_sub_resource_random(DtwResource *self, const char *end
 
 
 
-
 void private_DtwResurce_destroy_primary_key(DtwResource *self);
 
 
@@ -2170,6 +2513,7 @@ void DtwResource_destroy(DtwResource *self);
 
 
 void DtwResource_destroy_sub_resource(DtwResource *self, const char *key);
+
 
 
 
@@ -2218,6 +2562,8 @@ void DtwResource_represent(DtwResource *self);
 
 
 
+
+
 unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binary);
 
 
@@ -2250,12 +2596,15 @@ bool DtwResource_get_bool_from_sub_resource(DtwResource *self,const char *format
 
 
 
+
+
 void DtwResource_unload(DtwResource *self);
 
 
 void DtwResource_load(DtwResource *self);
 
 void DtwResource_load_if_not_loaded(DtwResource *self);
+
 
 
 
@@ -2281,9 +2630,10 @@ void DtwResource_dangerous_rename_schema_prop(DtwResource*self,const char *prop,
 DtwDatabaseSchema * DtwResource_newDatabaseSchema(DtwResource *self);
 
 
-//
-// Created by mateusmoutinho on 05/08/23.
-//
+
+
+
+
 void private_dtw_resource_set_primary_key(DtwResource *self, unsigned  char *element, long size);
 
 void DtwResource_set_any(DtwResource *self, unsigned char *element, long size,bool is_binary);
@@ -2305,6 +2655,7 @@ void DtwResource_set_long(DtwResource *self,long element);
 void DtwResource_set_double(DtwResource *self,double element);
 
 void DtwResource_set_bool( DtwResource *self,bool element);
+
 
 
 
@@ -2334,10 +2685,63 @@ void DtwResource_set_bool_in_sub_resource(DtwResource *self,const char *key, boo
 
 
 
+void DtwResource_foreach(DtwResource *self, bool(*filtrage_callback)(DtwResource *item, void *args_filter), void(*callback)(DtwResource *item, void *args), void *args, int start, int qtd);
+
+
+
+
+
+int  private_dtwResource_compare(const void *item1,const void*item2);
+
+
+void DtwResource_map(
+DtwResource *self,
+void *main_array,
+void(*append)(void *main_array_arg, void *item),
+bool(*filtrage_callback)(DtwResource *item, void *args),
+int (*ordenation_callback)(DtwResource *item1, DtwResource *item2, void *args),
+void *(*callback)(DtwResource *item, void *args),
+void *args,
+int start,
+int qtd
+);
+
+
+
+
+
+
+
+cJSON *DtwResource_map_cJSON(
+DtwResource *self,
+bool(*filtrage_callback)(DtwResource *item, void *args_filter),
+int (*ordenation_callback)(DtwResource *item1, DtwResource *item2, void *args),
+cJSON *(*callback)(DtwResource *item, void *args),
+void *args,
+int start,
+int qtd
+);
+
+void  *private_dtw_cJSON_callback(DtwResource *item,void *args);
+
+bool private_dtw_cJSON_filtrage(DtwResource *item,void *args);
+
+int private_dtw_cJSON_ordenation(DtwResource *item1,DtwResource *item2,void *args);
+
+void privateDtwResource_add_to_item_to_array(void* array, void *item);
+
+
+
+
+
+
 
 DtwResourceArray * DtwResource_get_schema_values(DtwResource *self);
 
 DtwResourceArray * DtwResource_sub_resources(DtwResource *self);
+
+
+
 
 
 
@@ -2355,6 +2759,7 @@ DtwResource * DtwResourceArray_get_by_name(DtwResourceArray *self, const char *n
 void DtwResourceArray_represent(DtwResourceArray *self);
 
 void DtwResourceArray_free(DtwResourceArray *self);
+
 
 
 
@@ -2402,27 +2807,49 @@ void  DtwHash_free(DtwHash *self);
 
 
 
+
 DtwRandonizerModule newDtwRandonizerModule();
+
+
+
 
 
 DtwPathModule newDtwPathModule();
 
 
 
+
+
+
 DtwStringArrayModule newDtwStringArrayModule();
 
 
+
+
+
 DtwTreePartModule newDtwTreePartModule();
+
+
+
 
 
 DtwJsonTreeErrorModule newDtwJsonTreeErrorModule();
 
 
 
+
+
+
 DtwTreeTransactionReportModule newDtwTreeTransactionReportModule();
 
 
+
+
+
 DtwTreeModule newDtwTreeModule();
+
+
+
 
 
 
@@ -2432,7 +2859,13 @@ DtwLockerModule newDtwLockerModule();
 
 
 
+
+
+
 DtwActionTransactionModule newDtwActionTransactionModule();
+
+
+
 
 
 
@@ -2440,7 +2873,12 @@ DtwJsonTransactionErrorModule newDtwJsonTransactionErrorModule();
 
 
 
+
+
+
 DtwTransactionModule newDtwTransactionModule();
+
+
 
 
 
@@ -2451,7 +2889,12 @@ DtwResourceArrayModule newDtwResourceArrayModule();
 
 
 
+
+
 DtwResourceModule newDtwResourceModule();
+
+
+
 
 
 
@@ -2460,11 +2903,20 @@ DtwHashModule newDtwHashModule();
 
 
 
+
+
+
 DtwSchemaModule newDtwSchemaModule();
 
 
 
+
+
+
 DtwDatabaseSchemaModule newDtwDatabaseSchemaModule();
+
+
+
 
 
 
@@ -2474,12 +2926,21 @@ DtwNamespace newDtwNamespace();
 
 
 
-#define DO_THE_WORLD_H
+
 #endif
 
 #ifdef __cplusplus
 }
 #endif
+
+
+
+
+
+
+
+
+
 
 
 char * calc_sha_256_returning_string(const void *input, size_t len)
@@ -2543,6 +3004,9 @@ char * sha256_open_file(const char *filename, int *size){
     fclose(file);
     return content;
 }
+
+
+
 
 
 
@@ -2627,6 +3091,9 @@ char *dtw_convert_binary_file_to_base64(const char *path){
 
 
 
+
+
+
 DtwRandonizer * newDtwRandonizer(){
     DtwRandonizer *self = (DtwRandonizer*) malloc(sizeof (DtwRandonizer));
     *self =(DtwRandonizer){0};
@@ -2685,6 +3152,7 @@ void DtwRandonizer_free(struct DtwRandonizer *self){
 
 
 
+
 char * dtw_generate_sha_from_file(const char *path){
     return calc_sha_256_from_file_returning_string(path);
 }
@@ -2694,7 +3162,7 @@ char * dtw_generate_sha_from_any(void *anything , long size){
         return NULL;
     }
     return calc_sha_256_returning_string(anything,size);
-}   
+}
 
 char * dtw_generate_sha_from_string(const char *string){
     if(string == NULL) {
@@ -2762,15 +3230,15 @@ short private_dtw_convert_string_to_action(const char *action){
 
 void private_dtw_add_end_bar_to_dirs_string_array(struct DtwStringArray * dirs){
     for(int i = 0; i < dirs->size; i++){
-  
+
         if(!dtw_ends_with(dirs->strings[i], "/") || !dtw_ends_with(dirs->strings[i],"\\")){
             char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 3);
             sprintf(formated_dir,"%s/",dirs->strings[i]);
             DtwStringArray_set_value(dirs, i, formated_dir);
             free(formated_dir);
-        }    
-            
-         
+        }
+
+
     }
 }
 
@@ -2841,6 +3309,9 @@ long private_dtw_convert_index(long index,long size){
 
     return converted_index;
 }
+
+
+
 
 
 void private_dtw_remove_double_bars_from_string_array(struct DtwStringArray*path){
@@ -2971,7 +3442,7 @@ char *private_dtw_replace_string_once(const char *target, const char *old_elemen
 
     return result;
 
-    
+
 
 }
 
@@ -3135,6 +3606,9 @@ double private_dtw_convert_string_to_number(const char *num, bool *its_a_number)
 
 
 
+
+
+
 void dtw_create_dir_recursively(const char *path){
 
     int entity =dtw_entity_type(path);
@@ -3151,7 +3625,7 @@ void dtw_create_dir_recursively(const char *path){
     long size_path = strlen(path);
     for(int i=0;i <  size_path;i++){
         if((path[i] == '\\'  || path[i] == '/' )  &&( i != size_path - 1)){
-            
+
             char * current_path = (char*)malloc(i + 1);
             current_path[i] = '\0';
             strncpy(current_path,path,i);
@@ -3185,7 +3659,7 @@ bool dtw_remove_any(const char* path) {
     if(remove(path) == 0){
         return true;
     }
-    
+
     struct DtwStringArray *files = dtw_list_files_recursively(path,DTW_CONCAT_PATH);
     int files_size = files->size;
     for(int i = 0; i < files_size; i++){
@@ -3200,13 +3674,13 @@ bool dtw_remove_any(const char* path) {
         rmdir(dirs->strings[i]);
     }
     DtwStringArray_free(dirs);
-    //remove / to the path 
+    //remove / to the path
     if(files_size ||dirs_size){
         return true;
-    }    
+    }
     return false;
-    
- 
+
+
 }
 
 
@@ -3323,12 +3797,12 @@ bool dtw_write_any_content(const char *path,unsigned  char *content,long size){
 
     FILE *file = fopen(path,"wb");
     if(file == NULL){
-   
+
         return false;
     }
-    
+
     fwrite(content, sizeof(char),size, file);
-    
+
     fclose(file);
     return true;
 }
@@ -3348,7 +3822,7 @@ bool dtw_write_string_file_content(const char *path,const char *content){
 
 int dtw_entity_type(const char *path){
     //returns 1 for file, 2 for directory, -1 for not found
-    struct stat path_stat; 
+    struct stat path_stat;
 
     if(stat(path,&path_stat) == 0){
         if(S_ISREG(path_stat.st_mode)){
@@ -3385,7 +3859,7 @@ int dtw_complex_entity_type(const char *path){
         return DTW_COMPLEX_BOOL_TYPE;
     }
 
-    
+
     double value;
     int result = sscanf(data,"%lf",&value);
     if(result == 0){
@@ -3417,7 +3891,7 @@ long dtw_get_total_itens_of_dir(const char *path){
         }
         closedir(dir);
         return i -2;
-    #else 
+    #else
         WIN32_FIND_DATA findFileData;
             HANDLE hFind = FindFirstFile(path, &findFileData);
 
@@ -3434,8 +3908,8 @@ long dtw_get_total_itens_of_dir(const char *path){
 
             FindClose(hFind);
             return i;
-    
-    #endif 
+
+    #endif
 }
 
 const char *dtw_convert_entity(int entity_type){
@@ -3464,7 +3938,7 @@ const char *dtw_convert_entity(int entity_type){
         return "double";
     }
     return "invalid";
-}   
+}
 
 bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
 
@@ -3475,7 +3949,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
     }
 
     if(type == DTW_FILE_TYPE){
-    
+
         long size;
         bool is_binary;
         unsigned char *content = dtw_load_any_content(src_path,&size,&is_binary);
@@ -3491,11 +3965,11 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
     }
     //creating dirs
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(src_path,DTW_CONCAT_PATH);
-    
+
     int size = dirs->size;
     int src_path_size = strlen(src_path);
 
-    for(int i = 0; i < size; i++){        
+    for(int i = 0; i < size; i++){
         char *new_path_dir = private_dtw_change_beginning_of_string(dirs->strings[i],src_path_size,dest_path);
         dtw_create_dir_recursively(new_path_dir);
         free(new_path_dir);
@@ -3504,7 +3978,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
 
 
     struct DtwStringArray *files = dtw_list_files_recursively(src_path,DTW_CONCAT_PATH);
-   
+
     for(int i = 0; i < files->size; i++){
         long file_size;
         bool is_binary;
@@ -3515,13 +3989,13 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
         free(content);
         free(new_path);
 
-       
+
     }
 
     DtwStringArray_free(files);
-    
+
     return true;
-    
+
 }
 
 bool dtw_move_any(const char* src_path, const char* dest_path,bool merge) {
@@ -3529,6 +4003,8 @@ bool dtw_move_any(const char* src_path, const char* dest_path,bool merge) {
     dtw_remove_any(src_path);
     return result;
 }
+
+
 
 
 
@@ -3565,7 +4041,7 @@ double dtw_load_double_file_content_setting_error(const char * path, int *error)
     int result = sscanf(data,"%lf",&value);
     free(data);
     if(result){
-    
+
         return value;
     }
     *error = DTW_NOT_NUMERICAL;
@@ -3605,7 +4081,7 @@ bool dtw_load_bool_file_content_setting_error(const char * path, int *error){
 bool dtw_load_bool_file_content(const char * path){
     int error;
     return dtw_load_bool_file_content_setting_error(path,&error);
-    
+
 }
 
 
@@ -3653,6 +4129,8 @@ void dtw_write_bool_file_content(const char *path, bool value){
 
 
 
+
+
 #ifdef __linux__
 
 bool private_dtw_verify_if_add(const int expected_type, int d_type){
@@ -3665,7 +4143,7 @@ bool private_dtw_verify_if_add(const int expected_type, int d_type){
     }
 
     if (expected_type == DTW_ALL_TYPE) {
-      
+
         return true;
     }
     return false;
@@ -3697,10 +4175,10 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
         if (private_dtw_verify_if_skip(entry)){
             continue;
         }
-    
+
         if (private_dtw_verify_if_add(expected_type,entry->d_type)) {
-            
-            
+
+
             if(concat_path){
                 //allocates memory for the directory
                 char *generated_dir = (char*)malloc(strlen(path) + strlen(entry->d_name) + 2);
@@ -3716,7 +4194,7 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
             }
             else{
                 DtwStringArray_append(dirs, entry->d_name);
-                
+
             }
 
             i++;
@@ -3724,7 +4202,7 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
     }
 
     if(expected_type == DTW_FOLDER_TYPE){
-        private_dtw_add_end_bar_to_dirs_string_array(dirs);   
+        private_dtw_add_end_bar_to_dirs_string_array(dirs);
     }
     closedir(dir);
 
@@ -3732,6 +4210,9 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
 }
 
 #endif
+
+
+
 
 
 #ifdef _WIN32
@@ -3750,7 +4231,7 @@ bool private_dtw_verify_if_add(const int expected_type, WIN32_FIND_DATAA entry){
     if (expected_type == DTW_ALL_TYPE) {
         return true;
     }
-    
+
     return false;
 }
 
@@ -3787,7 +4268,7 @@ struct DtwStringArray *  dtw_list_basic(const char *path,int expected_type,bool 
 
         // verify if it's a file or directory
         if (private_dtw_verify_if_add(expected_type, file_data)) {
-            
+
             if(concat_path){
                 // allocate memory for the directory
                 if(path[strlen(path) - 1] == '\\' || path[strlen(path) - 1] == '/'){
@@ -3798,19 +4279,19 @@ struct DtwStringArray *  dtw_list_basic(const char *path,int expected_type,bool 
                 }
                 else{
                     char *generated_dir = (char*)malloc(strlen(path) + strlen(file_data.cFileName) + 2);
-                    
+
 
                     sprintf(generated_dir, "%s/%s", path, file_data.cFileName);
-                   
+
                     DtwStringArray_append(dirs, generated_dir);
                     free(generated_dir);
                 }
-                
-    
+
+
             }
             else{
                 DtwStringArray_append(dirs, file_data.cFileName);
-            
+
             }
 
             i++;
@@ -3818,9 +4299,9 @@ struct DtwStringArray *  dtw_list_basic(const char *path,int expected_type,bool 
     } while (FindNextFileA(file_handle, &file_data) != 0);
 
         if(expected_type == DTW_FOLDER_TYPE){
-            private_dtw_add_end_bar_to_dirs_string_array(dirs);   
+            private_dtw_add_end_bar_to_dirs_string_array(dirs);
         }
-    
+
     FindClose(file_handle);
 
     return dirs;
@@ -3828,23 +4309,26 @@ struct DtwStringArray *  dtw_list_basic(const char *path,int expected_type,bool 
 #endif
 
 
+
+
+
  DtwStringArray * dtw_list_dirs_recursively(const char *path,bool concat_path){
 
         struct  DtwStringArray *dirs  = newDtwStringArray();
         //verify if the path is a directory
-    
+
         int entity_type = dtw_entity_type(path);
         if(entity_type != DTW_FOLDER_TYPE){
                 return dirs;
         }
-      
-        
+
+
         DtwStringArray_append(dirs, (char*)path);
 
         private_dtw_add_end_bar_to_dirs_string_array(dirs);
         int i = 0;
         //The size of dirs will increase til it reaches the end of the array
-        while(i < dirs->size){                
+        while(i < dirs->size){
                 struct DtwStringArray *sub_dirs = dtw_list_basic(
                     dirs->strings[i],
                     DTW_FOLDER_TYPE,
@@ -3854,9 +4338,9 @@ struct DtwStringArray *  dtw_list_basic(const char *path,int expected_type,bool 
             DtwStringArray_merge(dirs, sub_dirs);
                 DtwStringArray_free(sub_dirs);
                 i++;
-               
+
         }
-        //unsifth path in dirs 
+        //unsifth path in dirs
      private_dtw_remove_double_bars_from_string_array(dirs);
 
         if(!concat_path){
@@ -3871,9 +4355,9 @@ struct DtwStringArray *  dtw_list_basic(const char *path,int expected_type,bool 
 
 
  DtwStringArray *  dtw_list_files_recursively(const char *path,bool concat_path){
-    
+
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,DTW_CONCAT_PATH);
-    
+
     struct  DtwStringArray *files = newDtwStringArray();
     for(int i = 0; i < dirs->size; i++){
         struct DtwStringArray *sub_files = dtw_list_basic(dirs->strings[i],DTW_FILE_TYPE,DTW_CONCAT_PATH);
@@ -3897,9 +4381,9 @@ struct DtwStringArray *  dtw_list_basic(const char *path,int expected_type,bool 
  DtwStringArray * dtw_list_all_recursively(const char *path,bool concat_path){
 
     struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,DTW_CONCAT_PATH);
-    
+
     struct DtwStringArray *all = newDtwStringArray();
-    
+
     for(int i = 0; i < dirs->size; i++){
 
         if(!dtw_ends_with(dirs->strings[i], "/") || !dtw_ends_with(dirs->strings[i], "\\") ){
@@ -3928,6 +4412,11 @@ struct DtwStringArray *  dtw_list_basic(const char *path,int expected_type,bool 
     }
     return all;
 }
+
+
+
+
+
 
 
 
@@ -3964,7 +4453,7 @@ void DtwPath_represent(struct DtwPath *self){
     printf("Name: %s\n", name ? name : "NULL");
     printf("Extension: %s\n", extension ? extension : "NULL");
 
-    
+
 }
 
 
@@ -3975,6 +4464,7 @@ void DtwPath_free(struct DtwPath *self) {
     free(self->path);
     free(self);
 }
+
 
 
 
@@ -4174,6 +4664,9 @@ void DtwPath_replace_dirs(DtwPath *self,const char *str,const char *dir){
 }
 
 
+
+
+
 int DtwPath_get_total_dirs(DtwPath *self){
     int size = 0;
     int path_size = (int)strlen(self->path);
@@ -4322,6 +4815,7 @@ void DtwPath_remove_sub_dirs_at_index(DtwPath *self, int start, int end){
 
 
 
+
 void DtwPath_insert_dir_after(DtwPath *self,const char *str,const char *dir){
     char *current_dir = DtwPath_get_dir(self);
     int index = (int)dtw_index_of_string(current_dir,str);
@@ -4354,6 +4848,9 @@ void DtwPath_remove_sub_dirs_at(DtwPath *self,const char *str){
     int end = private_dtw_count_dirs_before(current_dir,index+ (int)strlen(str));
     DtwPath_remove_sub_dirs_at_index(self, start, end - 1);
 }
+
+
+
 
 
 
@@ -5835,6 +6332,11 @@ void DtwTree_hardware_commit_tree(struct DtwTree *self){
 
 
 
+
+
+
+
+
 DtwMultiFileLocker *newDtwMultiFileLocker(){
     DtwMultiFileLocker *self = (DtwMultiFileLocker*) malloc(sizeof (DtwMultiFileLocker));
 
@@ -5961,8 +6463,11 @@ void DtwMultiFileLocker_free(DtwMultiFileLocker *self){
     free(self);
 }
 
+
 #ifdef __linux__
     
+
+
 
 privateDtwFlockLockedElement * private_new_privateDtwFlockLockedElement(const char *filename, int file_descriptor){
     privateDtwFlockLockedElement *self = (privateDtwFlockLockedElement*) malloc(sizeof (privateDtwFlockLockedElement));
@@ -5981,6 +6486,9 @@ void privateDtwFlockLockedElement_free(privateDtwFlockLockedElement *self){
     free(self);
 
 }
+
+
+
 
 
 privateDtwFlockArray * private_new_privateFlockArray(){
@@ -6041,6 +6549,9 @@ void privateDtwFlockArray_free(privateDtwFlockArray *self){
     free(self->elements);
     free(self);
 }
+
+
+
 
 
 
@@ -6106,7 +6617,10 @@ void  DtwFlockLocker_free(DtwFlockLocker *self){
 }
 
 
+
 #endif
+
+
 
 
 
@@ -6169,6 +6683,8 @@ void DtwLocker_free(DtwLocker *self){
 
 
 
+
+
 DtwSchema *private_newDtwSchema(const char *name){
     DtwSchema *self = (DtwSchema*) malloc(sizeof (DtwSchema));
     *self = (DtwSchema){0};
@@ -6226,6 +6742,9 @@ void private_newDtwSchema_free(DtwSchema *self){
 }
 
 
+
+
+
 DtwDatabaseSchema *private_newDtwDtatabaseSchema(){
     DtwDatabaseSchema *self = (DtwDatabaseSchema*) malloc(sizeof (DtwDatabaseSchema));
     *self = (DtwDatabaseSchema){0};
@@ -6271,6 +6790,7 @@ void private_new_DtwDtatabaseSchema_free(DtwDatabaseSchema *self){
 
 
 
+
 privateDtwResourceRootProps *private_newDtwResourceRootProps(){
     privateDtwResourceRootProps *self  = (privateDtwResourceRootProps*) malloc(sizeof (privateDtwResourceRootProps));
     *self = (privateDtwResourceRootProps){0};
@@ -6302,6 +6822,9 @@ void privateDtwResourceRootProps_free(privateDtwResourceRootProps *self){
 
 
 
+
+
+
 DtwResource *new_DtwResource(const char *path){
     DtwResource *self = (DtwResource*) malloc(sizeof (DtwResource));
     *self =(DtwResource){0};
@@ -6315,7 +6838,7 @@ DtwResource *new_DtwResource(const char *path){
     self->root_props = private_newDtwResourceRootProps();
 
     return self;
-}   
+}
 
 DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ...){
     if(DtwResource_error(self)){
@@ -6488,6 +7011,9 @@ void DtwResource_free(DtwResource *self){
     free(self->name);
     free(self);
 }
+
+
+
 
 
 
@@ -6746,6 +7272,7 @@ void DtwResource_destroy_sub_resource(DtwResource *self, const char *key){
 
 
 
+
 bool DtwResource_error(DtwResource *self){
     if(self==NULL){
         return true;
@@ -6879,7 +7406,7 @@ void DtwResource_unlock(DtwResource *self){
         return ;
     }
     DtwLocker_unlock(self->root_props->locker, self->path);
-    
+
 }
 
 
@@ -7007,6 +7534,7 @@ void DtwResource_represent(DtwResource *self){
 
 
 }
+
 
 
 
@@ -7236,6 +7764,9 @@ bool DtwResource_get_bool_from_sub_resource(DtwResource *self,const char *format
 
 
 
+
+
+
 void DtwResource_unload(DtwResource *self){
     if(DtwResource_error(self)){
         return ;
@@ -7270,6 +7801,7 @@ void DtwResource_load_if_not_loaded(DtwResource *self){
         DtwResource_load(self);
     }
 }
+
 
 
 
@@ -7506,9 +8038,10 @@ DtwDatabaseSchema * DtwResource_newDatabaseSchema(DtwResource *self){
 }
 
 
-//
-// Created by mateusmoutinho on 05/08/23.
-//
+
+
+
+
 void private_dtw_resource_set_primary_key(DtwResource *self, unsigned  char *element, long size){
 
     self->root_props->is_writing_schema = true;
@@ -7670,6 +8203,8 @@ void DtwResource_set_bool( DtwResource *self,bool element){
 
 
 
+
+
 void DtwResource_set_any_in_sub_resource(DtwResource *self,const char *key, unsigned char *element, long size,bool is_binary) {
     if(DtwResource_error(self)){
         return ;
@@ -7745,6 +8280,216 @@ void DtwResource_set_bool_in_sub_resource(DtwResource *self,const char *key, boo
 
 
 
+
+
+void DtwResource_foreach(DtwResource *self, bool(*filtrage_callback)(DtwResource *item, void *args_filter), void(*callback)(DtwResource *item, void *args), void *args, int start, int qtd){
+
+    DtwResourceArray *itens = DtwResource_sub_resources(self);
+
+    int total = 0;
+
+    int total_skipded = 0;
+
+    for(int i = 0; i < itens->size; i++){
+        DtwResource *current = itens->resources[i];
+
+
+
+        if(filtrage_callback){
+            bool result = filtrage_callback(current, args);
+
+            if(!result){
+                continue;
+            }
+        }
+
+        total_skipded++;
+
+        if(total_skipded <= start){
+            continue;
+        }
+
+        total++;
+
+        if(total > qtd && qtd != -1){
+            break;
+        }
+
+        callback(current, args);
+    }
+}
+
+
+
+
+
+int  private_dtwResource_compare(const void *item1,const void*item2){
+    privateDtwResource_map_element *item1_converted = (privateDtwResource_map_element*)item1;
+    privateDtwResource_map_element *item2_converted = (privateDtwResource_map_element*)item2;
+    printf("nterno %p\n",item1);
+    return  0;
+    return item1_converted->ordenation_callback(item1_converted->current,item2_converted->current,item1_converted->args);
+}
+
+void DtwResource_map(
+DtwResource *self,
+void *main_array,
+void(*append)(void *main_array_arg, void *item),
+bool(*filtrage_callback)(DtwResource *item, void *args),
+int (*ordenation_callback)(DtwResource *item1, DtwResource *item2, void *args),
+void *(*callback)(DtwResource *item, void *args),
+void *args,
+int start,
+int qtd
+){
+    //printf("%p\n",ordenation_callback);
+    DtwResourceArray *itens = DtwResource_sub_resources(self);
+    privateDtwResource_map_element **mapped_elements= NULL;
+
+    if(ordenation_callback) {
+        mapped_elements = (privateDtwResource_map_element**)malloc(
+            (itens->size+1) * sizeof(privateDtwResource_map_element**)
+            );
+    }
+
+
+    int total_mapped_elements = 0;
+    int total = 0;
+    int total_skipded = 0;
+
+    for(int i = 0; i < itens->size; i++){
+        DtwResource *current = itens->resources[i];
+
+        if(filtrage_callback){
+
+            bool result = filtrage_callback(current, args);
+
+            if(!result){
+                continue;
+            }
+        }
+
+        total_skipded++;
+
+        if(total_skipded <= start){
+            continue;
+        }
+
+        total+=1;
+        if(total > qtd && qtd != -1){
+            break;
+        }
+
+        void* result = callback(current, args);
+
+        if(result && ordenation_callback == NULL) {
+
+            append(main_array,result);
+        }
+
+        if(result && ordenation_callback){
+            privateDtwResource_map_element *created  = (privateDtwResource_map_element*)malloc(sizeof(privateDtwResource_map_element));
+            *created = (privateDtwResource_map_element){0};
+            created->result = result;
+            created->current = current;
+            created->ordenation_callback = ordenation_callback;
+            created->args =args;
+          //  printf("criado %p\n",created);
+            mapped_elements[total_mapped_elements] = created;
+            total_mapped_elements+=1;
+        }
+
+    }
+
+    if(ordenation_callback) {
+
+        qsort(
+            *mapped_elements,
+            total_mapped_elements,
+            1,
+            private_dtwResource_compare
+            );
+
+        for(int i = 0; i< total_mapped_elements; i++) {
+            privateDtwResource_map_element *current = mapped_elements[i];
+          printf("item-externo %d %p\n",i,current);
+
+            append(main_array,current->result);
+            free(current);
+        }
+        free(mapped_elements);
+    }
+
+
+}
+
+
+
+
+
+void  *private_dtw_cJSON_callback(DtwResource *item,void *args) {
+    private_DtwResource_cJSON_args *formmate_args = (private_DtwResource_cJSON_args*)args;
+    return (void*)formmate_args->callback(item,formmate_args->args);
+}
+
+bool private_dtw_cJSON_filtrage(DtwResource *item,void *args) {
+    private_DtwResource_cJSON_args *formmate_args = (private_DtwResource_cJSON_args*)args;
+    return formmate_args->filtrage(item,formmate_args->args);
+}
+
+int private_dtw_cJSON_ordenation(DtwResource *item1,DtwResource *item2,void *args) {
+    private_DtwResource_cJSON_args *formmate_args = (private_DtwResource_cJSON_args*)args;
+    return formmate_args->ordenation(item1,item2,formmate_args->args);
+}
+
+void privateDtwResource_add_to_item_to_array(void* array, void *item){
+    cJSON_AddItemToArray((cJSON *)array, (cJSON *)item);
+}
+
+cJSON *DtwResource_map_cJSON(DtwResource *self,
+bool(*filtrage_callback)(DtwResource *item, void *args_filter),
+int (*ordenation_callback)(DtwResource *item1, DtwResource *item2, void *args),
+cJSON *(*callback)(DtwResource *item, void *args),
+void *args,
+int start,
+int qtd){
+
+    cJSON *itens = cJSON_CreateArray();
+    private_DtwResource_cJSON_args formated_args = {0};
+    formated_args.callback = callback;
+    formated_args.filtrage = filtrage_callback;
+    formated_args.ordenation = ordenation_callback;
+    formated_args.args = args;
+
+    bool (*filtrage)(DtwResource *,void *) = NULL;
+    if(filtrage_callback) {
+        filtrage = private_dtw_cJSON_filtrage;
+    }
+    int (*ordenation)(DtwResource *,DtwResource *,void *) = NULL;
+    if(ordenation_callback) {
+        ordenation = private_dtw_cJSON_ordenation;
+    }
+
+    DtwResource_map(self,
+        itens,
+        privateDtwResource_add_to_item_to_array,
+        filtrage,
+        ordenation,
+        private_dtw_cJSON_callback,
+        &formated_args,
+        start,
+        qtd
+        );
+
+    return itens;
+}
+
+
+
+
+
+
+
 DtwResourceArray * DtwResource_get_schema_values(DtwResource *self){
     if(DtwResource_error(self)){
         return NULL;
@@ -7794,6 +8539,8 @@ DtwResourceArray * DtwResource_sub_resources(DtwResource *self){
     return target_array;
 
 }
+
+
 
 
 
@@ -7850,6 +8597,8 @@ void DtwResourceArray_free(DtwResourceArray *self){
 
 
 
+
+
 DtwJsonTransactionError * private_new_DtwJsonTransactionError( int code,const char *mensage,const  char *path){
     DtwJsonTransactionError *self = (DtwJsonTransactionError*) malloc(sizeof(DtwJsonTransactionError));
     self->code  = code;
@@ -7893,6 +8642,7 @@ void DtwJsonTransactionError_free(struct DtwJsonTransactionError *self){
     free(self);
 
 }
+
 
 
 
@@ -8013,6 +8763,8 @@ void DtwActionTransaction_free(DtwActionTransaction* self){
     }
     free(self);
 }
+
+
 
 
 
@@ -8262,6 +9014,7 @@ void DtwActionTransaction_represent(DtwActionTransaction* self){
 
 
 
+
 DtwTransaction * newDtwTransaction(){
     DtwTransaction *self = (DtwTransaction*) malloc(sizeof(DtwTransaction));
     self->actions = (DtwActionTransaction **) malloc(sizeof (DtwActionTransaction**));
@@ -8391,6 +9144,8 @@ void DtwTransaction_free(struct DtwTransaction *self){
     free(self->actions);
     free(self);
 }
+
+
 
 
 
@@ -8532,6 +9287,9 @@ void DtwTransaction_represent(struct DtwTransaction *self){
     }
 
 }
+
+
+
 
 
 
@@ -8716,6 +9474,9 @@ void  DtwHash_free(DtwHash *self){
 
 
 
+
+
+
 DtwRandonizerModule newDtwRandonizerModule(){
     DtwRandonizerModule self = {0};
     self.newRandonizer = newDtwRandonizer;
@@ -8724,6 +9485,9 @@ DtwRandonizerModule newDtwRandonizerModule(){
     self.free = DtwRandonizer_free;
     return self;
 }
+
+
+
 
 
 DtwPathModule newDtwPathModule(){
@@ -8759,6 +9523,9 @@ DtwPathModule newDtwPathModule(){
 }
 
 
+
+
+
 DtwStringArrayModule newDtwStringArrayModule(){
     DtwStringArrayModule self = {0};
     self.newStringArray = newDtwStringArray;
@@ -8772,6 +9539,9 @@ DtwStringArrayModule newDtwStringArrayModule(){
     self.free =DtwStringArray_free;
     return self;
 }
+
+
+
 
 
 
@@ -8803,6 +9573,8 @@ DtwTreePartModule newDtwTreePartModule(){
 
 
 
+
+
 DtwJsonTreeErrorModule newDtwJsonTreeErrorModule(){
     DtwJsonTreeErrorModule self = {0};
     self.validate_json_tree_by_cJSON= DtwJsonTreeError_validate_json_tree_by_cJSON;
@@ -8813,12 +9585,18 @@ DtwJsonTreeErrorModule newDtwJsonTreeErrorModule(){
 }
 
 
+
+
+
 DtwTreeTransactionReportModule newDtwTreeTransactionReportModule(){
     DtwTreeTransactionReportModule self = {0};
     self.represent = DtwTreeTransactionReport_represent;
     self.free = DtwTreeTransactionReport_free;
     return self;
 }
+
+
+
 
 
 DtwTreeModule newDtwTreeModule(){
@@ -8866,6 +9644,9 @@ DtwTreeModule newDtwTreeModule(){
 
 
 
+
+
+
 DtwLockerModule newDtwLockerModule(){
     DtwLockerModule  self = {0};
     self.newLocker = newDtwLocker;
@@ -8875,6 +9656,9 @@ DtwLockerModule newDtwLockerModule(){
     self.free = DtwLocker_free;
     return self;
 }
+
+
+
 
 
 DtwActionTransactionModule newDtwActionTransactionModule(){
@@ -8895,12 +9679,18 @@ DtwActionTransactionModule newDtwActionTransactionModule(){
 }
 
 
+
+
+
 DtwJsonTransactionErrorModule newDtwJsonTransactionErrorModule(){
     DtwJsonTransactionErrorModule self = {0};
     self.represent = DtwJsonTransactionError_represent;
     self.free = DtwJsonTransactionError_free;
     return self;
 }
+
+
+
 
 
 
@@ -8942,6 +9732,9 @@ DtwTransactionModule newDtwTransactionModule(){
 
 
 
+
+
+
 DtwResourceArrayModule newDtwResourceArrayModule(){
     DtwResourceArrayModule self = {0};
     self.append = DtwResourceArray_append;
@@ -8950,6 +9743,8 @@ DtwResourceArrayModule newDtwResourceArrayModule(){
     self.free = DtwResourceArray_free;
     return self;
 }
+
+
 
 
 
@@ -9034,6 +9829,9 @@ DtwResourceModule newDtwResourceModule(){
 
 
 
+
+
+
 DtwHashModule newDtwHashModule(){
     DtwHashModule self = {0};
     self.newHash =newDtwHash;
@@ -9057,6 +9855,9 @@ DtwHashModule newDtwHashModule(){
 
 
 
+
+
+
 DtwSchemaModule newDtwSchemaModule(){
     DtwSchemaModule  self = {0};
     self.sub_schema = DtwSchema_new_subSchema;
@@ -9067,11 +9868,17 @@ DtwSchemaModule newDtwSchemaModule(){
 
 
 
+
+
+
 DtwDatabaseSchemaModule newDtwDatabaseSchemaModule(){
     DtwDatabaseSchemaModule  self = {0};
     self.sub_schema = DtwDtatabaseSchema_new_subSchema;
     return  self;
 }
+
+
+
 
 
 DtwNamespace newDtwNamespace(){
@@ -9123,7 +9930,7 @@ DtwNamespace newDtwNamespace(){
     self.string_array = newDtwStringArrayModule();
     self.path = newDtwPathModule();
     self.locker = newDtwLockerModule();
-    
+
     self.schema = newDtwSchemaModule();
     self.database_schema = newDtwDatabaseSchemaModule();
     self.tree = newDtwTreeModule();
@@ -9134,6 +9941,7 @@ DtwNamespace newDtwNamespace(){
 
     return self;
 }
+
 
 
 
