@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 #define DTW_DEBUG_TIME
-#include "src/declaration.h"
+#include "src/one.c"
 DtwNamespace dtw;
 DtwRandonizer *randonizer;
 
