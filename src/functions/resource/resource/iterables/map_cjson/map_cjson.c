@@ -1,5 +1,6 @@
-
+#include "../unique.definition.h"
 void  *private_dtw_cJSON_callback(DtwResource *item,void *args) {
+    
     private_DtwResource_cJSON_args *formmate_args = (private_DtwResource_cJSON_args*)args;
     return (void*)formmate_args->callback(item,formmate_args->args);
 }
@@ -55,7 +56,3 @@ int qtd){
 
     return itens;
 }
-
-
-
-

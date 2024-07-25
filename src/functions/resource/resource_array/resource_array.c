@@ -1,5 +1,6 @@
 
 
+#include "../unique.definition.h"
 
 DtwResourceArray * newDtwResourceArray(){
     DtwResourceArray *self = (DtwResourceArray*) malloc(sizeof (DtwResourceArray));

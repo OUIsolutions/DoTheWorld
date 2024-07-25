@@ -4,7 +4,7 @@ extern "C" {
 #endif
 
 #ifndef DO_THE_WORLD_H
-
+#define DTW_NOT_UNIQUE
 #include  "imports.h"
 #include "constants/all.h"
 #include  "macros/all.h"
