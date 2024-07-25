@@ -1,4 +1,4 @@
-
+#include "../unique.definition.h"
 void private_dtw_remove_double_bars_from_string_array(struct DtwStringArray*path){
     for(int i =0;i< path->size;i++){
         char *buffer = private_dtw_format_path(path->strings[i]);
@@ -127,7 +127,7 @@ char *private_dtw_replace_string_once(const char *target, const char *old_elemen
 
     return result;
 
-    
+
 
 }
 

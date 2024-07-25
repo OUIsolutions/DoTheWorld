@@ -1,4 +1,5 @@
 
+#include "../unique.declaration.h"
 
 
 DtwFlockLocker * newFlockLocker();

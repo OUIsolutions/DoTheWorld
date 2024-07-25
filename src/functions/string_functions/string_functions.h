@@ -1,3 +1,4 @@
+#include "../unique.declaration.h"
 
 
 char *dtw_concat_path(const char *path1, const char *path2);
