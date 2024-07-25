@@ -1,3 +1,4 @@
+#include "../unique.all_types_less_dependencies.h"
 
 #ifndef PRIVATE_DTW_JSON_TREE_ERROR_MODULE_TYPE_H
 #define PRIVATE_DTW_JSON_TREE_ERROR_MODULE_TYPE_H

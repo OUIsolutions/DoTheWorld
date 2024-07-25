@@ -1,3 +1,8 @@
+#include "../unique.all_types_less_dependencies.h"
+#include "TreePartModule.h"
+#include "JsonErrorModule.h"
+#include "TransactionReportModule.h"
+
 #ifndef PRIVATE_DTW_TREE_MODULE_TYPE_H
 #define PRIVATE_DTW_TREE_MODULE_TYPE_H
 typedef struct DtwTreeModule{

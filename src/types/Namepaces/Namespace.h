@@ -1,4 +1,13 @@
 #include "unique.all_types_less_dependencies.h"
+#include "StringArrayModule.h"
+#include "PathModule.h"
+#include "RandonizerModule.h"
+#include "Tree/all.h"
+#include "Schema/all.h"
+#include "LockerModule.h"
+#include "HashModule.h"
+#include "Transaction/all.h"
+#include "Resource/all.h"
 
 #ifndef PRIVATE_DTW_NAMESPACE_MODULE_TYPE_H
 #define PRIVATE_DTW_NAMESPACE_MODULE_TYPE_H

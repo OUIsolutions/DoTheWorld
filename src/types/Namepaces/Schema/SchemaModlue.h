@@ -1,3 +1,4 @@
+#include "DatabaseSchemaModule.h"
 #ifndef PRIVATE_DTW_SCHEMA_MODULE_TYPE_H
 #define PRIVATE_DTW_SCHEMA_MODULE_TYPE_H
 typedef struct {

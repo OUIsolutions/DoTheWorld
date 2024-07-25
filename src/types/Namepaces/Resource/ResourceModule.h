@@ -1,3 +1,5 @@
+#include "../unique.all_types_less_dependencies.h"
+#include "ResourceArrayModule.h"
 
 #ifndef PRIVATE_DTW_RESOURCE_MODULE_TYPE_H
 #define PRIVATE_DTW_RESOURCE_MODULE_TYPE_H
