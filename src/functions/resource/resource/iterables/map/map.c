@@ -1,4 +1,11 @@
 
+int  private_dtwResource_compare(const void *item1,const void*item2){
+    privateDtwResource_map_element *item1_converted = (privateDtwResource_map_element*)item1;
+    privateDtwResource_map_element *item2_converted = (privateDtwResource_map_element*)item2;
+    printf("nterno %p\n",item1);
+    return  0;
+    return item1_converted->ordenation_callback(item1_converted->current,item2_converted->current,item1_converted->args);
+}
 
 void DtwResource_map(
 DtwResource *self,
@@ -11,11 +18,16 @@ void *args,
 int start,
 int qtd
 ){
-
+    //printf("%p\n",ordenation_callback);
     DtwResourceArray *itens = DtwResource_sub_resources(self);
-    privateDtwResource_map_element **mapped_elements = (privateDtwResource_map_element**)malloc(
+    privateDtwResource_map_element **mapped_elements= NULL;
+
+    if(ordenation_callback) {
+        mapped_elements = (privateDtwResource_map_element**)malloc(
             (itens->size+1) * sizeof(privateDtwResource_map_element**)
             );
+    }
+
 
     int total_mapped_elements = 0;
     int total = 0;
@@ -45,21 +57,44 @@ int qtd
         }
 
         void* result = callback(current, args);
-        if(result){
+
+        if(result && ordenation_callback == NULL) {
+
+            append(main_array,result);
+        }
+
+        if(result && ordenation_callback){
             privateDtwResource_map_element *created  = (privateDtwResource_map_element*)malloc(sizeof(privateDtwResource_map_element));
+            *created = (privateDtwResource_map_element){0};
             created->result = result;
+            created->current = current;
             created->ordenation_callback = ordenation_callback;
             created->args =args;
+          //  printf("criado %p\n",created);
             mapped_elements[total_mapped_elements] = created;
             total_mapped_elements+=1;
         }
 
     }
-    for(int i = 0; i< total_mapped_elements; i++) {
-        privateDtwResource_map_element *current = mapped_elements[i];
-        append(main_array,current->result);
-        free(current);
+
+    if(ordenation_callback) {
+
+        qsort(
+            *mapped_elements,
+            total_mapped_elements,
+            1,
+            private_dtwResource_compare
+            );
+
+        for(int i = 0; i< total_mapped_elements; i++) {
+            privateDtwResource_map_element *current = mapped_elements[i];
+          printf("item-externo %d %p\n",i,current);
+
+            append(main_array,current->result);
+            free(current);
+        }
+        free(mapped_elements);
     }
-    free(mapped_elements);
+
 
 }

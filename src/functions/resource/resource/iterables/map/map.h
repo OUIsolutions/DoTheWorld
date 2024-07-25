@@ -1,4 +1,5 @@
 
+int  private_dtwResource_compare(const void *item1,const void*item2);
 
 
 void DtwResource_map(
