@@ -1,3 +1,4 @@
+#include "../unique.declaration.h"
 
 //listages
  DtwStringArray *DtwTree_list_files( DtwTree *self, const char *path,bool concat_path){
@@ -225,4 +226,3 @@ struct DtwStringArray *DtwTree_list_all( DtwTree *self, const char *path,bool co
 
     return formated_elements;
 }
-

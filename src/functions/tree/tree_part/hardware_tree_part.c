@@ -1,4 +1,5 @@
 
+#include "../unique.declaration.h"
 
 
 
@@ -39,7 +40,7 @@ bool DtwTreePart_hardware_remove(struct DtwTreePart *self, int transaction){
     char *path =DtwPath_get_path(self->path);
 
     remove(path);
-    
+
     self->content_exist_in_hardware = false;
     return true;
 }
@@ -51,18 +52,18 @@ bool DtwTreePart_hardware_write(struct DtwTreePart *self, int transaction){
     if(transaction == DTW_SET_AS_ACTION){
         self->pending_action = DTW_WRITE;
         return false;
-    }   
+    }
     //means that the content not exist in memory
     if(self->content == NULL){
         char *path = DtwPath_get_path(self->path);
         char *dir = DtwPath_get_dir(self->path);
         int entity_type = dtw_entity_type(path);
-       
+
         if(entity_type== DTW_NOT_FOUND && dir!= NULL){
             dtw_create_dir_recursively(dir);
-        
+
         }
- 
+
 
         return true;
     }
@@ -74,7 +75,7 @@ bool DtwTreePart_hardware_write(struct DtwTreePart *self, int transaction){
     self->content_exist_in_hardware = true;
     private_DtwTreePart_set_last_modification(self,dtw_get_time());
     return true;
-  
+
 }
 
 bool DtwTreePart_hardware_modify(struct DtwTreePart *self, int transaction){
@@ -87,7 +88,7 @@ bool DtwTreePart_hardware_modify(struct DtwTreePart *self, int transaction){
     }
     bool changed_path =DtwPath_changed(self->path);
 
-    
+
     if(changed_path == true && self->content == NULL){
         char *old_path = self->path->original_path_string;
         char *new_path = DtwPath_get_path(self->path);
