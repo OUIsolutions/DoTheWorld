@@ -1,4 +1,4 @@
-#include "../unique.declaration.h"
+#include "../unique.definition_requirements.h"
 
 DtwStringArrayModule newDtwStringArrayModule(){
     DtwStringArrayModule self = {0};

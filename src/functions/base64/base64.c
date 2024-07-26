@@ -1,5 +1,5 @@
 
-#include "../unique.declaration.h"
+#include "../unique.definition_requirements.h"
 
 char *dtw_base64_encode(unsigned char *data, long input_length){
     if (data == NULL) return NULL;

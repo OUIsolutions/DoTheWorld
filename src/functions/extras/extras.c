@@ -1,4 +1,4 @@
-#include "../unique.declaration.h"
+#include "../unique.definition_requirements.h"
 
 char * dtw_generate_sha_from_file(const char *path){
     return calc_sha_256_from_file_returning_string(path);

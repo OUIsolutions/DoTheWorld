@@ -1,4 +1,4 @@
-#include "../unique.declaration.h"
+#include "../unique.definition_requirements.h"
 
 void private_DtwResurce_destroy_primary_key(DtwResource *self) {
 

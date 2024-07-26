@@ -1,5 +1,5 @@
 
-#include "../unique.declaration.h"
+#include "../unique.definition_requirements.h"
 
 DtwRandonizerModule newDtwRandonizerModule(){
     DtwRandonizerModule self = {0};

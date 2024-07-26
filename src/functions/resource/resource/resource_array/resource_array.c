@@ -1,4 +1,4 @@
-#include "../unique.declaration.h"
+#include "../unique.definition_requirements.h"
 
 
 DtwResourceArray * DtwResource_get_schema_values(DtwResource *self){

@@ -1,5 +1,5 @@
 
-#include "../unique.declaration.h"
+#include "../unique.definition_requirements.h"
 
 void private_dtw_resource_set_primary_key(DtwResource *self, unsigned  char *element, long size){
 

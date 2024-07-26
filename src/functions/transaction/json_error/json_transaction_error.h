@@ -1,4 +1,4 @@
-#include "../unique.declaration_less_functions.h"
+#include "../unique.declaration_requirements.h"
 
 
 DtwJsonTransactionError * private_new_DtwJsonTransactionError( int code,const char *mensage,const  char *path);

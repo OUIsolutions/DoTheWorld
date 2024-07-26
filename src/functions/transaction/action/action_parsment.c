@@ -1,4 +1,4 @@
-#include "../unique.declaration.h"
+#include "../unique.definition_requirements.h"
 
 short DtwActionTransaction_convert_action_to_integer(char *action){
     if(strcmp(action,"write") == 0){

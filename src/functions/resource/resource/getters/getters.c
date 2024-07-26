@@ -1,4 +1,4 @@
-#include "../unique.declaration.h"
+#include "../unique.definition_requirements.h"
 
 unsigned char *DtwResource_get_any(DtwResource *self, long *size, bool *is_binary){
     if(DtwResource_error(self)){

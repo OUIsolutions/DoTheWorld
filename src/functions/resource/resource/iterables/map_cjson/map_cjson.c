@@ -1,4 +1,4 @@
-#include "../unique.declaration.h"
+#include "../unique.definition_requirements.h"
 
 void  *private_dtw_cJSON_callback(DtwResource *item,void *args) {
     private_DtwResource_cJSON_args *formmate_args = (private_DtwResource_cJSON_args*)args;

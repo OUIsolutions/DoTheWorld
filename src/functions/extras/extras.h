@@ -1,4 +1,4 @@
-#include "../unique.declaration_less_functions.h"
+#include "../unique.declaration_requirements.h"
 
 char * dtw_generate_sha_from_file(const char *path);
 char * dtw_generate_sha_from_string(const char *string);

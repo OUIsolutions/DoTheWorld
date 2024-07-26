@@ -1,5 +1,5 @@
 
-#include "../unique.declaration_less_functions.h"
+#include "../unique.declaration_requirements.h"
 
 DtwResource *new_DtwResource(const char *path);
 

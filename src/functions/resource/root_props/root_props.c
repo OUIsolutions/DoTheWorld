@@ -1,4 +1,4 @@
-#include "../unique.declaration.h"
+#include "../unique.definition_requirements.h"
 
 
 privateDtwResourceRootProps *private_newDtwResourceRootProps(){

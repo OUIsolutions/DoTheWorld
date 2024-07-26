@@ -1,5 +1,5 @@
 
-#include "../unique.declaration_less_functions.h"
+#include "../unique.declaration_requirements.h"
 
 privateDtwFlockLockedElement * private_new_privateDtwFlockLockedElement(const char *filename, int file_descriptor);
 

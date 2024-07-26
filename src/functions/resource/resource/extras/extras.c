@@ -1,6 +1,6 @@
 
 
-#include "../unique.declaration.h"
+#include "../unique.definition_requirements.h"
 
 bool DtwResource_error(DtwResource *self){
     if(self==NULL){

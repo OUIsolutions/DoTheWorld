@@ -1,4 +1,4 @@
-#include "../unique.declaration.h"
+#include "../unique.definition_requirements.h"
 
 struct DtwTreePart *DtwTree_find_tree_part_by_function(
         struct DtwTree *self,

@@ -1,5 +1,5 @@
 
-#include "../unique.declaration_less_functions.h"
+#include "../unique.declaration_requirements.h"
 
 void private_DtwTreePart_set_last_modification(DtwTreePart *self,long last_modification);
 

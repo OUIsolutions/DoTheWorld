@@ -1,4 +1,4 @@
-#include "../unique.dependencies.h"
+#include "../unique.types_requrements.h"
 #include "Resource.h"
 
 #ifndef PRIVATE_DTW_RESOURCE_CJSON_ARGS_TYPE_H

@@ -1,4 +1,4 @@
-#include "../unique.declaration_less_functions.h"
+#include "../unique.declaration_requirements.h"
 
 
 DtwResource * DtwResource_sub_resource_next(DtwResource *self, const char *end_path);

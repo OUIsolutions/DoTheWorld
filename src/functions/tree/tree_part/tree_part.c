@@ -1,5 +1,5 @@
 
-#include "../unique.declaration.h"
+#include "../unique.definition_requirements.h"
 
 void private_DtwTreePart_set_last_modification(DtwTreePart *self,long last_modification) {
     self->last_modification_time = last_modification;

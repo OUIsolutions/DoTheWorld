@@ -1,6 +1,6 @@
 
 
-#include "../unique.declaration_less_functions.h"
+#include "../unique.declaration_requirements.h"
 
 cJSON *DtwResource_map_cJSON(
 DtwResource *self,

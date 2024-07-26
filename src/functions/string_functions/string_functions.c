@@ -1,4 +1,4 @@
-#include "../unique.declaration.h"
+#include "../unique.definition_requirements.h"
 
 void private_dtw_remove_double_bars_from_string_array(struct DtwStringArray*path){
     for(int i =0;i< path->size;i++){

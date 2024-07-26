@@ -1,4 +1,4 @@
-#include "../unique.declaration.h"
+#include "../unique.definition_requirements.h"
 
 int  private_dtwResource_compare(const void *item1,const void*item2){
     privateDtwResource_map_element *item1_converted = (privateDtwResource_map_element*)item1;

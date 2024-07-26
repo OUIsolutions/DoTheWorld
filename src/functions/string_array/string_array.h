@@ -1,4 +1,4 @@
-#include "../unique.declaration_less_functions.h"
+#include "../unique.declaration_requirements.h"
 
 // End the structure with a semicolon
 int  DtwStringArray_find_position( DtwStringArray *self, const char *string);

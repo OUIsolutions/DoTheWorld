@@ -1,5 +1,5 @@
 
-#include "../unique.declaration.h"
+#include "../unique.definition_requirements.h"
 
 DtwActionTransaction * newDtwActionTransaction(){
     DtwActionTransaction *self = (DtwActionTransaction*) malloc(sizeof (DtwActionTransaction));

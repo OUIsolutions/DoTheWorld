@@ -1,4 +1,4 @@
-#include "../unique.declaration.h"
+#include "../unique.definition_requirements.h"
 
 DtwLockerModule newDtwLockerModule(){
     DtwLockerModule  self = {0};
