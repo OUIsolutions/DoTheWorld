@@ -18,7 +18,6 @@ cJSON * Retorna_json_formatado(DtwResource *user, void *filtragem){
 }
 
 int ordena_por_idade(DtwResource *user1,DtwResource *user2,void *args) {
-    printf("aaaaa\n");
     long idade1 = dtw.resource.get_long_from_sub_resource(user1, "idade");
     long idade2 = dtw.resource.get_long_from_sub_resource(user2, "idade");
     return  idade1 - idade2;

@@ -1,10 +1,9 @@
 #include "../unique.definition_requirements.h"
 
 int  private_dtwResource_compare(const void *item1,const void*item2){
-    privateDtwResource_map_element *item1_converted = (privateDtwResource_map_element*)item1;
-    privateDtwResource_map_element *item2_converted = (privateDtwResource_map_element*)item2;
-    printf("nterno %p\n",item1);
-    return  0;
+    privateDtwResource_map_element *item1_converted = *(privateDtwResource_map_element**)item1;
+    privateDtwResource_map_element *item2_converted = *(privateDtwResource_map_element**)item2;
+
     return item1_converted->ordenation_callback(item1_converted->current,item2_converted->current,item1_converted->args);
 }
 
@@ -22,7 +21,7 @@ int qtd
     //printf("%p\n",ordenation_callback);
     DtwResourceArray *itens = DtwResource_sub_resources(self);
     privateDtwResource_map_element **mapped_elements= NULL;
-
+    int total_mapped_elements = 0;
     if(ordenation_callback) {
         mapped_elements = (privateDtwResource_map_element**)malloc(
             (itens->size+1) * sizeof(privateDtwResource_map_element**)
@@ -30,7 +29,7 @@ int qtd
     }
 
 
-    int total_mapped_elements = 0;
+
     int total = 0;
     int total_skipded = 0;
 
@@ -81,16 +80,14 @@ int qtd
     if(ordenation_callback) {
 
         qsort(
-            *mapped_elements,
+            mapped_elements,
             total_mapped_elements,
-            1,
+            sizeof(privateDtwResource_map_element*),
             private_dtwResource_compare
             );
 
         for(int i = 0; i< total_mapped_elements; i++) {
             privateDtwResource_map_element *current = mapped_elements[i];
-          printf("item-externo %d %p\n",i,current);
-
             append(main_array,current->result);
             free(current);
         }

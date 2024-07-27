@@ -8,6 +8,7 @@
 DtwHash * newDtwHash(){
     DtwHash *self = (DtwHash*) malloc(sizeof(DtwHash));
     self->hash = dtw_generate_sha_from_string("");
+
     return self;
 }
 

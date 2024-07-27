@@ -8,6 +8,8 @@ exemple
 *.pyc
 bin
 a/
+usuarios
+usuarios2
 temp_compilation
 luaDoTheWorld
 teste.lua
