@@ -8,6 +8,9 @@ exemple
 *.pyc
 bin
 a/
+.vscode
+.idea
+
 usuarios
 usuarios2
 temp_compilation
