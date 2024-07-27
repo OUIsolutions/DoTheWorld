@@ -1,8 +1,10 @@
+#include "extras/CHashManipulator.h"
 
-#define DTW_DEBUG_TIME
+
 #include "src/one.c"
 DtwNamespace dtw;
 DtwRandonizer *randonizer;
+
 typedef struct Filtragem{
     int idade;
 } Filtragem;
@@ -14,9 +16,6 @@ cJSON * Retorna_json_formatado(DtwResource *user, void *filtragem){
     cJSON_AddStringToObject(obj_criado, "nome", dtw.resource.get_string_from_sub_resource(user, "nome"));
     cJSON_AddNumberToObject(obj_criado, "idade", dtw.resource.get_long_from_sub_resource(user, "idade"));
     return obj_criado;
-}
-char *Retorna_chave(DtwResource *user,void *filtragem){
-    return strdup( dtw.resource.get_string_from_sub_resource(user, "nome"));
 }
 
 int ordena_por_idade(DtwResource *user1,DtwResource *user2,void *args) {
@@ -44,9 +43,8 @@ int main(){
     Filtragem f;
     f.idade = 18;
 
-    cJSON *itens = dtw.resource.map_cJSONObject(
+    cJSON *itens = dtw.resource.map_cJSON(
         usuarios,
-        Retorna_chave,
         verifica_se_e_adiciona,
         ordena_por_idade,
         Retorna_json_formatado,

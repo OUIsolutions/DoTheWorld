@@ -1,4 +1,5 @@
 
 #include "forEach/foreach.h"
 #include "map/map.h"
-#include "map_cjson/map_cjson.h"
+#include "map_cjson_array/map_cjson_array.h"
+#include "map_cjson_object/map_cjson_object.h"

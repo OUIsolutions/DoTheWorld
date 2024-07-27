@@ -9,6 +9,46 @@ typedef struct DtwResourceModule{
     int (*get_error_code)(DtwResource *self);
     bool (*error)(DtwResource *self);
 
+    void (*each)(
+        DtwResource *self,
+        bool(*filtrage_callback)(DtwResource *item, void *args_filter),
+        void(*callback)(DtwResource *item, void *args),
+        void *args,
+        int start,
+        int qtd
+    );
+
+    void (*map)(
+    DtwResource *self,
+    void *main_array,
+    void(*append)(void *main_array_arg, void *item),
+    bool(*filtrage_callback)(DtwResource *item, void *args),
+    int (*ordenation_callback)(DtwResource *item1, DtwResource *item2, void *args),
+    void *(*callback)(DtwResource *item, void *args),
+    void *args,
+    int start,
+    int qtd
+    );
+
+    cJSON *(*map_cJSONArray)(DtwResource *self,
+    bool(*filtrage_callback)(DtwResource *item, void *args_filter),
+    int (*ordenation_callback)(DtwResource *item1, DtwResource *item2, void *args),
+    cJSON *(*callback)(DtwResource *item, void *args),
+    void *args,
+    int start,
+    int qtd);
+
+    cJSON *(*map_cJSONObject)(
+    DtwResource *self,
+    char *(*key_provider_callback)(DtwResource *item,void *args),
+    bool(*filtrage_callback)(DtwResource *item, void *args_filter),
+    int (*ordenation_callback)(DtwResource *item1, DtwResource *item2, void *args),
+    cJSON *(*callback)(DtwResource *item, void *args),
+    void *args,
+    int start,
+    int qtd
+    );
+
     char * (*get_error_message)(DtwResource *self);
     bool (*is_file)(DtwResource *self);
     void (*destroy_sub_resource)(DtwResource *self, const char *key);
