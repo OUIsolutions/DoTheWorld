@@ -1,22 +1,16 @@
-{
-	"usuario3":	{
+[{
 		"nome":	"usuario3",
 		"idade":	1
-	},
-	"usuario22":	{
+	}, {
 		"nome":	"usuario22",
 		"idade":	2
-	},
-	"usuario19":	{
+	}, {
 		"nome":	"usuario19",
 		"idade":	11
-	},
-	"usuario8":	{
+	}, {
 		"nome":	"usuario8",
 		"idade":	15
-	},
-	"usuario26":	{
+	}, {
 		"nome":	"usuario26",
 		"idade":	17
-	}
-}
+	}]

@@ -28,6 +28,8 @@ int ordena_por_idade(DtwResource *user1,DtwResource *user2,void *args) {
 bool verifica_se_e_adiciona(DtwResource *user, void *filtragem){
     Filtragem *f = (Filtragem*)filtragem;
     long idade = dtw.resource.get_long_from_sub_resource(user, "idade");
+
+    printf("aa%d\n",f->idade);
     if(idade < f->idade){
         return true;
     }
@@ -44,9 +46,8 @@ int main(){
     Filtragem f;
     f.idade = 18;
 
-    cJSON *itens = dtw.resource.map_cJSONObject(
+    cJSON *itens = dtw.resource.map_cJSONArray(
         usuarios,
-        Retorna_chave,
         verifica_se_e_adiciona,
         ordena_por_idade,
         Retorna_json_formatado,
