@@ -1,5 +1,5 @@
 #include "../unique.types_requrements.h"
-#include "Resource.h"
+#include "../../Resource.h"
 
 #ifndef PRIVATE_DTW_RESOURCE_CJSON_ARRAY_ARGS_TYPE_H
 #define PRIVATE_DTW_RESOURCE_CJSON_ARRAY_ARGS_TYPE_H

@@ -3,7 +3,4 @@
 #include "RootResourceProps.h"
 #include "Resource.h"
 #include "ResourceArray.h"
-#include "cJSONArray_map.h"
-#include "cJSONObject_map.h"
-#include "cJSON_element_and_key.h"
-#include "map_ordenation.h"
+#include "map/all.h"

@@ -1,4 +1,4 @@
-#include "Resource.h"
+#include "../Resource.h"
 
 #ifndef PRIVATE_DTW_RESOURCE_MAP_ELEMENT_TYPE_H
 #define PRIVATE_DTW_RESOURCE_MAP_ELEMENT_TYPE_H
