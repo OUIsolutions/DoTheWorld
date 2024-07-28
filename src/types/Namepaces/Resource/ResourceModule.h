@@ -49,6 +49,32 @@ typedef struct DtwResourceModule{
     int qtd
     );
 
+    #ifdef DTW_ALLOW_CHASH
+
+        CHashArray *(*map_CHashArray)(
+        DtwResource *self,
+        bool(*filtrage_callback)(DtwResource *item, void *args_filter),
+        int (*ordenation_callback)(DtwResource *item1, DtwResource *item2, void *args),
+        CHash *(*callback)(DtwResource *item, void *args),
+        void *args,
+        int start,
+        int qtd
+        );
+
+        CHash *(*map_CHashObject)(
+        DtwResource *self,
+        char *(*key_provider_callback)(DtwResource *item,void *args),
+        bool(*filtrage_callback)(DtwResource *item, void *args_filter),
+        int (*ordenation_callback)(DtwResource *item1, DtwResource *item2, void *args),
+        CHash *(*callback)(DtwResource *item, void *args),
+        void *args,
+        int start,
+        int qtd
+        );
+
+
+    #endif
+
     char * (*get_error_message)(DtwResource *self);
     bool (*is_file)(DtwResource *self);
     void (*destroy_sub_resource)(DtwResource *self, const char *key);

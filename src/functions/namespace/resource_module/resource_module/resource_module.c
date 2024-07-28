@@ -14,6 +14,10 @@ DtwResourceModule newDtwResourceModule(){
     self.map = DtwResource_map;
     self.map_cJSONArray = DtwResource_map_cJSONArray;
     self.map_cJSONObject = DtwResource_map_cJSONObject;
+    #ifdef DTW_ALLOW_CHASH
+    self.map_CHashArray = DtwResource_map_CHashArray;
+    self.map_CHashObject =DtwResource_map_CHashObject;
+    #endif
     self.get_any_from_sub_resource = DtwResource_get_any_from_sub_resource;
     self.get_binary_from_sub_resource = DtwResource_get_binary_from_sub_resource;
     self.get_string_from_sub_resource = DtwResource_get_string_from_sub_resource;

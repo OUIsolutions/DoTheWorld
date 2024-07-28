@@ -10,7 +10,6 @@ typedef struct Filtragem{
 
 cJSON * Retorna_json_formatado(DtwResource *user, void *filtragem){
     cJSON *obj_criado = cJSON_CreateObject();
-
     cJSON_AddStringToObject(obj_criado, "nome", dtw.resource.get_string_from_sub_resource(user, "nome"));
     cJSON_AddNumberToObject(obj_criado, "idade", dtw.resource.get_long_from_sub_resource(user, "idade"));
     return obj_criado;

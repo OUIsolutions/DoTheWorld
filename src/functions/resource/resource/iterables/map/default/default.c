@@ -32,7 +32,6 @@ int qtd
 
     int total = 0;
     int total_skipded = 0;
-
     for(int i = 0; i < itens->size; i++){
         DtwResource *current = itens->resources[i];
 
