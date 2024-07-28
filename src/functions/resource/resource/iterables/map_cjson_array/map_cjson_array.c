@@ -1,9 +1,6 @@
 #include "../unique.definition_requirements.h"
 
 
-void privateDtwResource_add_to_item_to_cJSONArray_array(void* array, void *item){
-    cJSON_AddItemToArray((cJSON *)array, (cJSON *)item);
-}
 
 cJSON *DtwResource_map_cJSONArray(DtwResource *self,
 bool(*filtrage_callback)(DtwResource *item, void *args_filter),
@@ -17,7 +14,7 @@ int qtd){
 
     DtwResource_map(self,
         itens,
-        privateDtwResource_add_to_item_to_cJSONArray_array,
+        (void (*)(void *, void *))cJSON_AddItemToArray,
         filtrage_callback,
         ordenation_callback,
        (void *(*)(DtwResource *, void *))callback,
