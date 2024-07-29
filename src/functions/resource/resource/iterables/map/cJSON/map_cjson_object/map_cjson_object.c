@@ -1,5 +1,16 @@
 #include "../unique.definition_requirements.h"
 
+DtwResourcecJSONObjectMapProps DtwResource_create_cJSONObjectProps(
+    cJSON *(*callback)(DtwResource *item, void *args),
+    char *(*key_provider_callback)(DtwResource *item,void *args)
+){
+    DtwResourcecJSONObjectMapProps props = {0};
+    props.callback  = callback;
+    props.key_provider_callback = key_provider_callback;
+    props.qtd = DTW_RESOURCE_ALL;
+    return  props;
+}
+
 void  *private_dtw_cJSONObject_callback(DtwResource *item,void *args) {
     DtwResourcecJSONObjectMapProps *formmate_args = (DtwResourcecJSONObjectMapProps*)args;
     privateDtw_cJSON_element_and_key *created = (privateDtw_cJSON_element_and_key*)malloc(sizeof(privateDtw_cJSON_element_and_key));

@@ -19,11 +19,23 @@ DtwResourceModule newDtwResourceModule(){
     self.map = DtwResource_map;
     self.schema_map = DtwResource_schema_map;
 
+    self.create_cJSONArrayMapProps = DtwResource_create_cJSONArrayMapProps;
     self.map_cJSONArray = DtwResource_map_cJSONArray;
-    self.map_cJSONObject = DtwResource_map_cJSONObject;
+    self.schema_map_cJSONArray = DtwResource_schema_map_cJSONArray;
+
+    self.create_cJSONObjectProps = DtwResource_create_cJSONObjectProps;
+    self.map_cJSONObject =DtwResource_map_cJSONObject;
+    self.schema_map_cJSONObject = DtwResource_schema_map_cJSONObject;
+
     #ifdef DTW_ALLOW_CHASH
-    self.map_CHashArray = DtwResource_map_CHashArray;
-    self.map_CHashObject =DtwResource_map_CHashObject;
+        self.create_CHashrrayMapProps = DtwResource_create_CHashrrayMapProps;
+        self.map_CHashArray = DtwResource_map_CHashArray;
+        self.schema_map_CHashArray  = DtwResource_schema_map_CHashArray;
+
+        self.createCHashObjectMapProps = DtwResource_createCHashObjectMapProps;
+        self.map_CHashObject = DtwResource_schema_map_CHashObject;
+        self.schema_map_CHashObject = DtwResource_schema_map_CHashObject;
+
     #endif
     self.get_any_from_sub_resource = DtwResource_get_any_from_sub_resource;
     self.get_binary_from_sub_resource = DtwResource_get_binary_from_sub_resource;

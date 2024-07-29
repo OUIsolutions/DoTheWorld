@@ -1,5 +1,15 @@
 #define DTW_ALLOW_CHASH
 #include "../unique.definition_requirements.h"
+DtwResourceCHashObjectMapProps DtwResource_createCHashObjectMapProps(
+    CHash *(*callback)(DtwResource *item, void *args),
+    bool(*filtrage_callback)(DtwResource *item, void *args_filter)
+){
+    DtwResourceCHashObjectMapProps props = {0};
+    props.qtd = DTW_RESOURCE_ALL;
+    props.callback = callback;
+    props.filtrage_callback = filtrage_callback;
+    return props;
+}
 
 void  *private_dtw_CHashObject_callback(DtwResource *item,void *args) {
     DtwResourceCHashObjectMapProps *formmate_args = (DtwResourceCHashObjectMapProps*)args;
@@ -48,6 +58,7 @@ CHash *DtwResource_map_CHashObject(DtwResource *self,DtwResourceCHashObjectMapPr
 
     return itens;
 }
+
 CHash *DtwResource_schema_map_CHashObject(DtwResource *self,DtwResourceCHashObjectMapProps props){
     if(self->schema_type != PRIVATE_DTW_SCHEMA_ROOT){
             private_DtwResource_raise_error(

@@ -1,5 +1,11 @@
 #define DTW_ALLOW_CHASH
 #include "../unique.definition_requirements.h"
+DtwResourceCHashrrayMapProps  DtwResource_create_CHashrrayMapProps(    CHash *(*callback)(DtwResource *item, void *args)){
+    DtwResourceCHashrrayMapProps props = {0};
+    props.callback = callback;
+    props.qtd = DTW_RESOURCE_ALL;
+    return  props;
+}
 
 void  *private_dtw_CHashArray_callback(DtwResource *item,void *args) {
     DtwResourceCHashrrayMapProps *formmate_args = (DtwResourceCHashrrayMapProps*)args;

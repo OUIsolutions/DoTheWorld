@@ -2,6 +2,10 @@
 #define DTW_ALLOW_CHASH
 #include "../unique.declaration_requirements.h"
 
+DtwResourceCHashObjectMapProps DtwResource_createCHashObjectMapProps(
+    CHash *(*callback)(DtwResource *item, void *args),
+    bool(*filtrage_callback)(DtwResource *item, void *args_filter)
+);
 
 CHash *DtwResource_map_CHashObject(DtwResource *self,DtwResourceCHashObjectMapProps props);
 

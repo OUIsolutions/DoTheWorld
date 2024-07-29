@@ -1,6 +1,7 @@
 
 
 #include "../unique.declaration_requirements.h"
+DtwResourcecJSONArrayMapProps DtwResource_create_cJSONArrayMapProps(cJSON *(*callback)(DtwResource *item, void *args));
 
 cJSON *DtwResource_map_cJSONArray(DtwResource *self,DtwResourcecJSONArrayMapProps props);
 

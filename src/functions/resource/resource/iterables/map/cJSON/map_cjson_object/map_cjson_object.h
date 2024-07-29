@@ -2,6 +2,11 @@
 
 #include "../unique.declaration_requirements.h"
 
+DtwResourcecJSONObjectMapProps DtwResource_create_cJSONObjectProps(
+    cJSON *(*callback)(DtwResource *item, void *args),
+    char *(*key_provider_callback)(DtwResource *item,void *args)
+);
+
 cJSON *DtwResource_map_cJSONObject(DtwResource *self,DtwResourcecJSONObjectMapProps props);
 
 cJSON *DtwResource_schema_map_cJSONObject(DtwResource *self,DtwResourcecJSONObjectMapProps props);

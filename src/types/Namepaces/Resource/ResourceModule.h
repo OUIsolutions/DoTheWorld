@@ -22,47 +22,33 @@ typedef struct DtwResourceModule{
     void (*map)(DtwResource *self,DtwResourceMapProps props);
     void (*schema_map)(DtwResource *self,DtwResourceMapProps props);
 
-    cJSON *(*map_cJSONArray)(DtwResource *self,
-    bool(*filtrage_callback)(DtwResource *item, void *args_filter),
-    int (*ordenation_callback)(DtwResource *item1, DtwResource *item2, void *args),
-    cJSON *(*callback)(DtwResource *item, void *args),
-    void *args,
-    int start,
-    int qtd);
+    DtwResourcecJSONArrayMapProps (*create_cJSONArrayMapProps)(cJSON *(*callback)(DtwResource *item, void *args));
+    cJSON *(*map_cJSONArray)(DtwResource *self,DtwResourcecJSONArrayMapProps props);
+    cJSON *(*schema_map_cJSONArray)(DtwResource *self,DtwResourcecJSONArrayMapProps props);
 
-    cJSON *(*map_cJSONObject)(
-    DtwResource *self,
-    char *(*key_provider_callback)(DtwResource *item,void *args),
-    bool(*filtrage_callback)(DtwResource *item, void *args_filter),
-    int (*ordenation_callback)(DtwResource *item1, DtwResource *item2, void *args),
-    cJSON *(*callback)(DtwResource *item, void *args),
-    void *args,
-    int start,
-    int qtd
+    DtwResourcecJSONObjectMapProps (*create_cJSONObjectProps)(
+        cJSON *(*callback)(DtwResource *item, void *args),
+        char *(*key_provider_callback)(DtwResource *item,void *args)
     );
 
+    cJSON *(*map_cJSONObject)(DtwResource *self,DtwResourcecJSONObjectMapProps props);
+    cJSON *(*schema_map_cJSONObject)(DtwResource *self,DtwResourcecJSONObjectMapProps props);
+
+
     #ifdef DTW_ALLOW_CHASH
+    DtwResourceCHashrrayMapProps  (*create_CHashrrayMapProps)(    CHash *(*callback)(DtwResource *item, void *args));
 
-        CHashArray *(*map_CHashArray)(
-        DtwResource *self,
-        bool(*filtrage_callback)(DtwResource *item, void *args_filter),
-        int (*ordenation_callback)(DtwResource *item1, DtwResource *item2, void *args),
-        CHash *(*callback)(DtwResource *item, void *args),
-        void *args,
-        int start,
-        int qtd
-        );
 
-        CHash *(*map_CHashObject)(
-        DtwResource *self,
-        char *(*key_provider_callback)(DtwResource *item,void *args),
-        bool(*filtrage_callback)(DtwResource *item, void *args_filter),
-        int (*ordenation_callback)(DtwResource *item1, DtwResource *item2, void *args),
+    CHashArray *(*map_CHashArray)(DtwResource *self,DtwResourceCHashrrayMapProps props);
+    CHashArray *(*schema_map_CHashArray)(DtwResource *self,DtwResourceCHashrrayMapProps props);
+
+    DtwResourceCHashObjectMapProps (*createCHashObjectMapProps)(
         CHash *(*callback)(DtwResource *item, void *args),
-        void *args,
-        int start,
-        int qtd
-        );
+        bool(*filtrage_callback)(DtwResource *item, void *args_filter)
+    );
+
+    CHashObject *(*map_CHashObject)(DtwResource *self,DtwResourcecJSONObjectMapProps props);
+    CHashObject *(*schema_map_CHashObject)(DtwResource *self,DtwResourcecJSONObjectMapProps props);
 
 
     #endif

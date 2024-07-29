@@ -1,4 +1,10 @@
 #include "../unique.definition_requirements.h"
+DtwResourcecJSONArrayMapProps DtwResource_create_cJSONArrayMapProps(cJSON *(*callback)(DtwResource *item, void *args)){
+    DtwResourcecJSONArrayMapProps props = {0};
+    props.callback= callback;
+    props.qtd =DTW_RESOURCE_ALL;
+    return  props;
+}
 
 void  *private_dtw_cJSONArray_callback(DtwResource *item,void *args) {
     DtwResourcecJSONArrayMapProps *formmate_args = (DtwResourcecJSONArrayMapProps*)args;
