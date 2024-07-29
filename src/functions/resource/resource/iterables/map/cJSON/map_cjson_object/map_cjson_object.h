@@ -4,6 +4,8 @@
 
 cJSON *DtwResource_map_cJSONObject(DtwResource *self,DtwResourcecJSONObjectMapProps props);
 
+cJSON *DtwResource_schema_map_cJSONObject(DtwResource *self,DtwResourcecJSONObjectMapProps props);
+
 void  *private_dtw_cJSONArray_callback(DtwResource *item,void *args);
 
 bool private_dtw_cJSONArray_filtrage(DtwResource *item,void *args);

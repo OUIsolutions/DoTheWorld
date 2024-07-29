@@ -48,3 +48,15 @@ cJSON *DtwResource_map_cJSONObject(DtwResource *self,DtwResourcecJSONObjectMapPr
 
     return itens;
 }
+
+cJSON *DtwResource_schema_map_cJSONObject(DtwResource *self,DtwResourcecJSONObjectMapProps props){
+    if(self->schema_type != PRIVATE_DTW_SCHEMA_ROOT){
+            private_DtwResource_raise_error(
+                    self,
+                    DTW_RESOURCE_ONLY_ROOT_SCHEMA_HAVE_SCHEMA_VALUES,
+                    "only root schema have schema values"
+            );
+            return NULL;
+    }
+    return  DtwResource_map_cJSONObject(self->values_resource,props);
+}
