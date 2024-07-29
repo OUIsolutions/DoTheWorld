@@ -26,25 +26,20 @@ void privateDtwResource_add_to_item_to_cJSONObject(void* object, void *item){
 }
 
 
-cJSON *DtwResource_map_cJSONObject(DtwResource *self,
-char *(*key_provider_callback)(DtwResource *item,void *args),
-bool(*filtrage_callback)(DtwResource *item, void *args_filter),
-int (*ordenation_callback)(DtwResource *item1, DtwResource *item2, void *args),
-cJSON *(*callback)(DtwResource *item, void *args),
-void *args,
-int start,
-int qtd){
+cJSON *DtwResource_map_cJSONObject(DtwResource *self,DtwResourcecJSONObjectMapProps props){
 
     cJSON *itens = cJSON_CreateObject();
+
     private_DtwResource_cJSONObject_args formated_args = {0};
-    formated_args.callback = callback;
-    formated_args.filtrage = filtrage_callback;
-    formated_args.key_provider = key_provider_callback;
-    formated_args.ordenation = ordenation_callback;
-    formated_args.args = args;
+    formated_args.callback = props.callback;
+    formated_args.filtrage = props.filtrage_callback;
+    formated_args.key_provider = props.key_provider_callback;
+    formated_args.ordenation = props.ordenation_callback;
+    formated_args.args = props.args;
+
 
     bool (*filtrage)(DtwResource *,void *) = NULL;
-    if(filtrage_callback) {
+    if(props.filtrage_callback) {
         filtrage = private_dtw_cJSONObject_filtrage;
     }
     int (*ordenation)(DtwResource *,DtwResource *,void *) = NULL;

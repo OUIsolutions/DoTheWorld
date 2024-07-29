@@ -10,11 +10,15 @@ DtwResourceModule newDtwResourceModule(){
     self.clear_errors = DtwResource_clear_errors;
     self.unload = DtwResource_unload;
     self.sub_resource = DtwResource_sub_resource;
+
     self.create_foreach_props = DtwResource_create_foreach_props;
     self.each = DtwResource_foreach;
     self.schema_each  =DtwResource_schema_foreach;
 
+    self.create_map_props = DtwResource_create_map_props;
     self.map = DtwResource_map;
+    self.schema_map = DtwResource_schema_map;
+
     self.map_cJSONArray = DtwResource_map_cJSONArray;
     self.map_cJSONObject = DtwResource_map_cJSONObject;
     #ifdef DTW_ALLOW_CHASH

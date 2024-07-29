@@ -14,18 +14,13 @@ typedef struct DtwResourceModule{
     void (*each)(DtwResource *self,DtwResourceForeachProps props);
     void (*schema_each)(DtwResource *self,DtwResourceForeachProps props);
 
-
-    void (*map)(
-    DtwResource *self,
-    void *main_array,
-    void(*append)(void *main_array_arg, void *item),
-    bool(*filtrage_callback)(DtwResource *item, void *args),
-    int (*ordenation_callback)(DtwResource *item1, DtwResource *item2, void *args),
-    void *(*callback)(DtwResource *item, void *args),
-    void *args,
-    int start,
-    int qtd
+    DtwResourceMapProps (*create_map_props)(
+        void *main_array,
+        void(*append)(void *main_array_arg, void *item),
+        void *(*callback)(DtwResource *item, void *args)
     );
+    void (*map)(DtwResource *self,DtwResourceMapProps props);
+    void (*schema_map)(DtwResource *self,DtwResourceMapProps props);
 
     cJSON *(*map_cJSONArray)(DtwResource *self,
     bool(*filtrage_callback)(DtwResource *item, void *args_filter),
