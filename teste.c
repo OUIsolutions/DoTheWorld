@@ -1,6 +1,8 @@
 
 
 #include "src/one.c"
+#include "src/types/Resource/DataBaseSchema.h"
+#include "src/types/Resource/Schema.h"
 #include "src/types/all.h"
 DtwNamespace dtw;
 DtwRandonizer *randonizer;
@@ -29,7 +31,7 @@ bool verify_if_print_user(DtwResource *user, void *filtragem){
 
 void create_x_users(DtwResource *users,long quantity){
     for(int i =0; i < quantity; i++){
-        DtwResource *current = dtw.resource.sub_resource_random(users,NULL);
+        DtwResource *current = dtw.resource.new_schema_insertion(users);
 
         char formatted_name[20] = {0};
         sprintf(formatted_name,"user%d", i);
@@ -40,12 +42,22 @@ void create_x_users(DtwResource *users,long quantity){
     }
 
 }
+void create_schemas(DtwResource *database){
+    DtwDatabaseSchema *schema = dtw.resource.newDatabaseSchema(database);
+    DtwSchema *users = dtw.database_schema.sub_schema(schema,"users");
+    dtw.schema.add_primary_key(users,"name");
+}
+
 
 int main(){
     dtw = newDtwNamespace();
     randonizer = dtw.randonizer.newRandonizer();
 
-    DtwResource *users = dtw.resource.newResource("users");
+    DtwResource *database = dtw.resource.newResource("database");
+    create_schemas(database);
+
+    DtwResource *users = dtw.resource.sub_resource(database,"users");
+
     create_x_users(users,100);
     Filtrage f;
     f.age = 18;
@@ -55,7 +67,7 @@ int main(){
     props.filtrage_callback = verify_if_print_user;
     props.args = &f;
 
-    dtw.resource.each(users,props);
+    dtw.resource.schema_each(users,props);
     dtw.resource.free(users);
     dtw.randonizer.free(randonizer);
     return 0;
