@@ -1,15 +1,7 @@
 #define DTW_ALLOW_CHASH
 #include "../unique.declaration_requirements.h"
 
-CHashArray *DtwResource_map_CHashArray(
-DtwResource *self,
-bool(*filtrage_callback)(DtwResource *item, void *args_filter),
-int (*ordenation_callback)(DtwResource *item1, DtwResource *item2, void *args),
-CHash *(*callback)(DtwResource *item, void *args),
-void *args,
-int start,
-int qtd
-);
+CHashArray *DtwResource_map_CHashArray(DtwResource *self,DtwResourceCHashrrayMapProps props);
 
 void  *private_dtw_CHashArray_callback(DtwResource *item,void *args);
 

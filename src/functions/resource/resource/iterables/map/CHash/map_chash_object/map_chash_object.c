@@ -34,7 +34,7 @@ CHash *DtwResource_map_CHashObject(DtwResource *self,DtwResourceCHashObjectMapPr
     DtwResourceMapProps map_props = DtwResource_create_map_props(
         itens,
         privateDtwResource_add_to_item_to_cJSONObject,
-        private_dtw_CHashArray_callback
+        private_dtw_CHashObject_callback
     );
     map_props.args = (void*)&props;
     if(props.filtrage_callback) {
