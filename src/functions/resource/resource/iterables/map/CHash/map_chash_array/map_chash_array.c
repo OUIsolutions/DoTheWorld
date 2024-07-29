@@ -43,3 +43,14 @@ CHashArray *DtwResource_map_CHashArray(DtwResource *self,DtwResourceCHashrrayMap
 
     return itens;
 }
+CHashArray *DtwResource_schema_map_CHashArray(DtwResource *self,DtwResourceCHashrrayMapProps props){
+    if(self->schema_type != PRIVATE_DTW_SCHEMA_ROOT){
+            private_DtwResource_raise_error(
+                    self,
+                    DTW_RESOURCE_ONLY_ROOT_SCHEMA_HAVE_SCHEMA_VALUES,
+                    "only root schema have schema values"
+            );
+            return NULL;
+    }
+    return DtwResource_map_CHashArray(self->values_resource,props);
+}

@@ -3,6 +3,8 @@
 
 CHashArray *DtwResource_map_CHashArray(DtwResource *self,DtwResourceCHashrrayMapProps props);
 
+CHashArray *DtwResource_schema_map_CHashArray(DtwResource *self,DtwResourceCHashrrayMapProps props);
+
 void  *private_dtw_CHashArray_callback(DtwResource *item,void *args);
 
 bool private_dtw_CHashArray_filtrage(DtwResource *item,void *args);
