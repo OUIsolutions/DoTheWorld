@@ -11,6 +11,7 @@ DtwResourceCHashObjectMapProps DtwResource_createCHashObjectMapProps(
     return props;
 }
 
+
 void  *private_dtw_CHashObject_callback(DtwResource *item,void *args) {
     DtwResourceCHashObjectMapProps *formmate_args = (DtwResourceCHashObjectMapProps*)args;
     privateDtw_CHash_element_and_key *created = (privateDtw_CHash_element_and_key*)malloc(sizeof(privateDtw_CHash_element_and_key));

@@ -1,9 +1,7 @@
-
-
+#include "extras/CHashManipulator.h"
+#define DTW_ALLOW_CHASH
 #include "src/one.c"
-#include "src/types/Resource/DataBaseSchema.h"
-#include "src/types/Resource/Schema.h"
-#include "src/types/all.h"
+
 DtwNamespace dtw;
 DtwRandonizer *randonizer;
 typedef struct {

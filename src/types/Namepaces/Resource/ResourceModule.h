@@ -47,8 +47,8 @@ typedef struct DtwResourceModule{
         bool(*filtrage_callback)(DtwResource *item, void *args_filter)
     );
 
-    CHashObject *(*map_CHashObject)(DtwResource *self,DtwResourcecJSONObjectMapProps props);
-    CHashObject *(*schema_map_CHashObject)(DtwResource *self,DtwResourcecJSONObjectMapProps props);
+    CHashObject *(*map_CHashObject)(DtwResource *self,DtwResourceCHashObjectMapProps props);
+    CHashObject *(*schema_map_CHashObject)(DtwResource *self,DtwResourceCHashObjectMapProps props);
 
 
     #endif

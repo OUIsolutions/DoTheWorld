@@ -1,4 +1,4 @@
-#include "../../extras/CHashManipulator.h"
+//# include "../../extras/CHashManipulator.h"
 
 #include  "../imports.h"
 #include "../constants/all.h"
