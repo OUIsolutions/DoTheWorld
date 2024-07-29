@@ -1,5 +1,5 @@
+#include "../../../doTheWorld_test.h"
 
-#include "src/one.c"
 DtwNamespace dtw;
 DtwRandonizer *randonizer;
 typedef struct {

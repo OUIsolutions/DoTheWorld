@@ -20,8 +20,12 @@ DtwResource * DtwResource_sub_resource_next(DtwResource *self, const char *end_p
             path = private_dtw_realoc_formatting(path,"%ld",size);
         }
 
-        DtwResource *new_element = DtwResource_sub_resource_ensuring_not_exist(self,"%s",path);
+        DtwResource *new_element = DtwResource_sub_resource_ensuring_not_exist(
+            self,"%s",
+            path
+        );
         free(path);
+
         if(DtwResource_error(self)){
             return NULL;
         }

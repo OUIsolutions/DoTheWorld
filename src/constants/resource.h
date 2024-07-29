@@ -27,3 +27,5 @@
 
 #define DTW_SCHEMA_DEFAULT_VALUES_NAME "value"
 #define DTW_SCHEMA_DEFAULT_INDEX_NAME "index"
+
+#define DTW_RESOURCE_ALL -1

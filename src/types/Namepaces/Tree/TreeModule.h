@@ -47,7 +47,8 @@ typedef struct DtwTreeModule{
 
     DtwTreePart *(*find_tree_part_by_function)(
             struct DtwTree *self,
-            bool (*caller)(struct  DtwTreePart *part)
+            bool (*caller)(struct  DtwTreePart *part,void *args),
+            void *args
     );
 
     DtwTree *(*filter)(

@@ -2,11 +2,12 @@
 
 struct DtwTreePart *DtwTree_find_tree_part_by_function(
         struct DtwTree *self,
-        bool (*caller)(struct  DtwTreePart *part)
+        bool (*caller)(struct  DtwTreePart *part,void *args),
+        void *args
 ){
     for(int i = 0;i < self->size; i++){
         struct DtwTreePart *current = self->tree_parts[i];
-        bool result = caller(current);
+        bool result = caller(current,args);
         if(result){
             return current;
         }

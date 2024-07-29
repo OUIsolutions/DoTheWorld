@@ -9,7 +9,11 @@
     bool copy_content
 );
 
- DtwTreePart *DtwTree_find_tree_part_by_function(DtwTree *self,bool (*caller)(  DtwTreePart *part));
+ DtwTreePart *DtwTree_find_tree_part_by_function(
+     DtwTree *self,
+     bool (*caller)(  DtwTreePart *part,void *args),
+     void *args
+ );
 
 
  DtwTree *DtwTree_map(DtwTree *self, DtwTreePart* (*caller)( DtwTreePart *part));

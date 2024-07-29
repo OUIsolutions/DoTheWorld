@@ -130,6 +130,7 @@ DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,cons
             name
     );
     if(possible_emptiy){
+        free(name);
         return NULL;
     }
 
