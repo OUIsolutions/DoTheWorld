@@ -9,14 +9,11 @@ typedef struct DtwResourceModule{
     int (*get_error_code)(DtwResource *self);
     bool (*error)(DtwResource *self);
 
-    void (*each)(
-        DtwResource *self,
-        bool(*filtrage_callback)(DtwResource *item, void *args_filter),
-        void(*callback)(DtwResource *item, void *args),
-        void *args,
-        int start,
-        int qtd
-    );
+
+    DtwResourceForeachProps (*create_foreach_props)( void(*callback)(DtwResource *item, void *args));
+    void (*each)(DtwResource *self,DtwResourceForeachProps props);
+    void (*schema_each)(DtwResource *self,DtwResourceForeachProps props);
+
 
     void (*map)(
     DtwResource *self,

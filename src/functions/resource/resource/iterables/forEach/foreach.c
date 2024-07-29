@@ -1,7 +1,14 @@
 
 #include "../unique.definition_requirements.h"
 
-void DtwResource_foreach(DtwResource *self, bool(*filtrage_callback)(DtwResource *item, void *args_filter), void(*callback)(DtwResource *item, void *args), void *args, int start, int qtd){
+DtwResourceForeachProps DtwResource_create_foreach_props( void(*callback)(DtwResource *item, void *args)){
+    DtwResourceForeachProps props = {0};
+    props.callback = callback;
+    props.qtd = DTW_RESOURCE_ALL;
+    return props;
+}
+
+void DtwResource_foreach(DtwResource *self,DtwResourceForeachProps props){
 
     DtwResourceArray *itens = DtwResource_sub_resources(self);
 
@@ -12,10 +19,8 @@ void DtwResource_foreach(DtwResource *self, bool(*filtrage_callback)(DtwResource
     for(int i = 0; i < itens->size; i++){
         DtwResource *current = itens->resources[i];
 
-
-
-        if(filtrage_callback){
-            bool result = filtrage_callback(current, args);
+        if(props.filtrage_callback){
+            bool result = props.filtrage_callback(current, props.args);
 
             if(!result){
                 continue;
@@ -24,16 +29,29 @@ void DtwResource_foreach(DtwResource *self, bool(*filtrage_callback)(DtwResource
 
         total_skipded++;
 
-        if(total_skipded <= start){
+        if(total_skipded <= props.start){
             continue;
         }
 
         total++;
 
-        if(total > qtd && qtd != -1){
+        if(total > props.qtd && props.qtd != -1){
             break;
         }
 
-        callback(current, args);
+        props.callback(current, props.args);
     }
+}
+
+void DtwResource_schema_foreach(DtwResource *self,DtwResourceForeachProps props){
+
+    if(self->schema_type != PRIVATE_DTW_SCHEMA_ROOT){
+        private_DtwResource_raise_error(
+                self,
+                DTW_RESOURCE_ONLY_ROOT_SCHEMA_HAVE_SCHEMA_VALUES,
+                "only root schema have schema values"
+        );
+        return ;
+    }
+    DtwResource_foreach(self->values_resource,props);
 }

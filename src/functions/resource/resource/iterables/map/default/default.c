@@ -95,3 +95,35 @@ int qtd
 
 
 }
+void DtwResource_schema_map(
+DtwResource *self,
+void *main_array,
+void(*append)(void *main_array_arg, void *item),
+bool(*filtrage_callback)(DtwResource *item, void *args),
+int (*ordenation_callback)(DtwResource *item1, DtwResource *item2, void *args),
+void *(*callback)(DtwResource *item, void *args),
+void *args,
+int start,
+int qtd
+){
+
+    if(self->schema_type != PRIVATE_DTW_SCHEMA_ROOT){
+            private_DtwResource_raise_error(
+                    self,
+                    DTW_RESOURCE_ONLY_ROOT_SCHEMA_HAVE_SCHEMA_VALUES,
+                    "only root schema have schema values"
+            );
+            return ;
+        }
+
+    return DtwResource_map(
+        self->values_resource,
+        main_array,
+        append,
+        filtrage_callback,
+        ordenation_callback,
+        callback,
+        args,
+        start,
+        qtd);
+}

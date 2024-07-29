@@ -1,5 +1,7 @@
 
+
 #include "src/one.c"
+#include "src/types/all.h"
 DtwNamespace dtw;
 DtwRandonizer *randonizer;
 typedef struct {
@@ -13,12 +15,11 @@ void print_user(DtwResource *user, void *filtragem){
 }
 
 bool verify_if_print_user(DtwResource *user, void *filtragem){
-
      Filtrage *f = (Filtrage *)filtragem;
 
-    long idade = dtw.resource.get_long_from_sub_resource(user, "age");
+    long age = dtw.resource.get_long_from_sub_resource(user, "age");
 
-    if(idade < f->age){
+    if(age < f->age){
 
         return true;
     }
@@ -49,7 +50,12 @@ int main(){
     Filtrage f;
     f.age = 18;
     int start  = 0;
-    dtw.resource.each(users, verify_if_print_user, print_user, &f, start, DTW_RESOURCE_ALL);
+
+    DtwResourceForeachProps props = dtw.resource.create_foreach_props(print_user);
+    props.filtrage_callback = verify_if_print_user;
+    props.args = &f;
+
+    dtw.resource.each(users,props);
     dtw.resource.free(users);
     dtw.randonizer.free(randonizer);
     return 0;

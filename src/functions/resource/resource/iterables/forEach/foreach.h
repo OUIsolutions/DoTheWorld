@@ -1,4 +1,7 @@
 #include "../unique.declaration_requirements.h"
 
+DtwResourceForeachProps DtwResource_create_foreach_props( void(*callback)(DtwResource *item, void *args));
 
-void DtwResource_foreach(DtwResource *self, bool(*filtrage_callback)(DtwResource *item, void *args_filter), void(*callback)(DtwResource *item, void *args), void *args, int start, int qtd);
+void DtwResource_foreach(DtwResource *self,DtwResourceForeachProps props);
+
+void DtwResource_schema_foreach(DtwResource *self,DtwResourceForeachProps props);

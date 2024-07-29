@@ -10,7 +10,10 @@ DtwResourceModule newDtwResourceModule(){
     self.clear_errors = DtwResource_clear_errors;
     self.unload = DtwResource_unload;
     self.sub_resource = DtwResource_sub_resource;
+    self.create_foreach_props = DtwResource_create_foreach_props;
     self.each = DtwResource_foreach;
+    self.schema_each  =DtwResource_schema_foreach;
+
     self.map = DtwResource_map;
     self.map_cJSONArray = DtwResource_map_cJSONArray;
     self.map_cJSONObject = DtwResource_map_cJSONObject;
