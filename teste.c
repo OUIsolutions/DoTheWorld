@@ -1,6 +1,6 @@
-#include "extras/CHashManipulator.h"
-#define DTW_ALLOW_CHASH
+
 #include "src/one.c"
+
 
 DtwNamespace dtw;
 DtwRandonizer *randonizer;
@@ -59,14 +59,13 @@ int main(){
     create_x_users(users,100);
     Filtrage f;
     f.age = 18;
-    int start  = 0;
 
     DtwResourceForeachProps props = dtw.resource.create_foreach_props(print_user);
     props.filtrage_callback = verify_if_print_user;
     props.args = &f;
 
     dtw.resource.schema_each(users,props);
-    dtw.resource.free(users);
+    dtw.resource.free(database);
     dtw.randonizer.free(randonizer);
     return 0;
 }
