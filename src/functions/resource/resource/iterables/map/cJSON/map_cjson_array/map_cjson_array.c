@@ -7,11 +7,13 @@ DtwResourcecJSONArrayMapProps DtwResource_create_cJSONArrayMapProps(cJSON *(*cal
 }
 
 void  *private_dtw_cJSONArray_callback(DtwResource *item,void *args) {
+
     DtwResourcecJSONArrayMapProps *formmate_args = (DtwResourcecJSONArrayMapProps*)args;
     return (void*)formmate_args->callback(item,formmate_args->args);
 }
 
 bool private_dtw_cJSONArray_filtrage(DtwResource *item,void *args) {
+
     DtwResourcecJSONArrayMapProps *formmate_args = (DtwResourcecJSONArrayMapProps*)args;
     return formmate_args->filtrage_callback(item,formmate_args->args);
 }
@@ -28,12 +30,15 @@ void privateDtwResource_add_to_item_to_cJSONArray_array(void* array, void *item)
 cJSON *DtwResource_map_cJSONArray(DtwResource *self,DtwResourcecJSONArrayMapProps props){
 
     cJSON *itens = cJSON_CreateArray();
+
     DtwResourceMapProps mapped_props = DtwResource_create_map_props(
         itens,
         privateDtwResource_add_to_item_to_cJSONArray_array,
         private_dtw_cJSONArray_callback
     );
-    mapped_props.args = (void*)&props.args;
+
+    mapped_props.args = (void*)&props;
+
     if(props.filtrage_callback) {
         mapped_props.filtrage_callback = private_dtw_cJSONArray_filtrage;
     }

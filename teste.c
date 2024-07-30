@@ -1,5 +1,6 @@
 
 #include "src/one.c"
+#include "tests/doTheWorld_test.h"
 
 
 
@@ -27,7 +28,6 @@ cJSON * return_user(DtwResource *user, void *filtragem){
 
 bool verify_if_print_user(DtwResource *user, void *filtragem){
      Filtrage *f = (Filtrage *)filtragem;
-
     long age = dtw.resource.get_long_from_sub_resource(user, "age");
 
     if(age < f->age){
@@ -39,7 +39,7 @@ bool verify_if_print_user(DtwResource *user, void *filtragem){
 }
 void create_x_users(DtwResource *users,long quantity){
     for(int i =0; i < quantity; i++){
-        DtwResource *current = dtw.resource.new_schema_insertion(users);
+        DtwResource *current = dtw.resource.sub_resource_random(users,NULL);
 
         char formatted_name[20] = {0};
         sprintf(formatted_name,"user%d", i);
@@ -50,11 +50,7 @@ void create_x_users(DtwResource *users,long quantity){
     }
 
 }
-void create_schemas(DtwResource *database){
-    DtwDatabaseSchema *schema = dtw.resource.newDatabaseSchema(database);
-    DtwSchema *users = dtw.database_schema.sub_schema(schema,"users");
-    dtw.schema.add_primary_key(users,"name");
-}
+
 
 
 
@@ -64,24 +60,19 @@ int main(){
     randonizer = dtw.randonizer.newRandonizer();
 
     DtwResource *database = dtw.resource.newResource("database");
-    create_schemas(database);
     DtwResource *users = dtw.resource.sub_resource(database,"users");
 
     create_x_users(users,100);
 
     Filtrage f;
     f.age = 18;
-    cJSON *itens = cJSON_CreateArray();
-    DtwResourceMapProps props = dtw.resource.create_map_props(
-        itens,
-        (void (*)(void*,void*))cJSON_AddItemToArray,
-        (void* (*)(DtwResource *,void*))return_user
-    );
 
+    DtwResourcecJSONArrayMapProps props = dtw.resource.create_cJSONArrayMapProps(return_user);
     props.filtrage_callback = verify_if_print_user;
     props.args = &f;
 
-   dtw.resource.schema_map(users,props);
+    cJSON *itens = dtw.resource.map_cJSONArray(users,props);
+
 
     char *content = cJSON_Print(itens);
     printf("%s",content);
