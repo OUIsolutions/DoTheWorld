@@ -1,8 +1,5 @@
-
-#include "src/one.c"
-#include "src/types/all.h"
-#include "tests/doTheWorld_test.h"
-
+#include "../../../doTheWorld_test.h"
+#include <cstring>
 
 
 DtwNamespace dtw;
@@ -27,7 +24,7 @@ cJSON * return_user(DtwResource *user, void *filtragem){
     return created_object;
 }
 char * get_key(DtwResource *user, void *filtrage){
-    return  dtw.resource.get_string_from_sub_resource(user, "name");
+    return strdup(dtw.resource.get_string_from_sub_resource(user, "name"));
 }
 
 
@@ -76,6 +73,7 @@ int main(){
 
     props.filtrage_callback = verify_if_print_user;
     props.args = &f;
+    props.free_key = true;
 
     cJSON *itens = dtw.resource.map_cJSONObject(users,props);
 

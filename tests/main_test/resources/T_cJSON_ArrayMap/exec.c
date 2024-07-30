@@ -1,8 +1,4 @@
-
-#include "src/one.c"
-#include "src/types/all.h"
-#include "tests/doTheWorld_test.h"
-
+#include "../../../doTheWorld_test.h"
 
 
 DtwNamespace dtw;
@@ -26,10 +22,6 @@ cJSON * return_user(DtwResource *user, void *filtragem){
     );
     return created_object;
 }
-char * get_key(DtwResource *user, void *filtrage){
-    return  dtw.resource.get_string_from_sub_resource(user, "name");
-}
-
 
 bool verify_if_print_user(DtwResource *user, void *filtragem){
      Filtrage *f = (Filtrage *)filtragem;
@@ -72,12 +64,11 @@ int main(){
     Filtrage f;
     f.age = 18;
 
-    DtwResourcecJSONObjectMapProps props = dtw.resource.create_cJSONObjectProps(return_user,get_key);
-
+    DtwResourcecJSONArrayMapProps props = dtw.resource.create_cJSONArrayMapProps(return_user);
     props.filtrage_callback = verify_if_print_user;
     props.args = &f;
 
-    cJSON *itens = dtw.resource.map_cJSONObject(users,props);
+    cJSON *itens = dtw.resource.map_cJSONArray(users,props);
 
 
     char *content = cJSON_Print(itens);

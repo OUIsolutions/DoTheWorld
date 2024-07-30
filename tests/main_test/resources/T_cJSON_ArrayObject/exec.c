@@ -1,8 +1,4 @@
-
-#include "src/one.c"
-#include "src/types/all.h"
-#include "tests/doTheWorld_test.h"
-
+#include "../../../doTheWorld_test.h"
 
 
 DtwNamespace dtw;

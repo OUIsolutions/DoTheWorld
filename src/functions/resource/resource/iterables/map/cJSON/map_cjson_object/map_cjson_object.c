@@ -15,6 +15,7 @@ void  *private_dtw_cJSONObject_callback(DtwResource *item,void *args) {
     DtwResourcecJSONObjectMapProps *formmate_args = (DtwResourcecJSONObjectMapProps*)args;
     privateDtw_cJSON_element_and_key *created = (privateDtw_cJSON_element_and_key*)malloc(sizeof(privateDtw_cJSON_element_and_key));
     created->key = formmate_args->key_provider_callback(item,args);
+    created->free_key = formmate_args->free_key;
     created->element =formmate_args->callback(item,formmate_args->args);
     return (void*)created;
 }
@@ -32,7 +33,9 @@ int private_dtw_cJSONObject_ordenation(DtwResource *item1,DtwResource *item2,voi
 void privateDtwResource_add_to_item_to_cJSONObject(void* object, void *item){
     privateDtw_cJSON_element_and_key *casted = (privateDtw_cJSON_element_and_key*)item;
     cJSON_AddItemToObject((cJSON*)object,casted->key,casted->element);
-    free(casted->key);
+    if(casted->free_key){
+        free(casted->key);
+    }
     free(casted);
 }
 
