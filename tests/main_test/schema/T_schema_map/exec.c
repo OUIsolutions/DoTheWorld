@@ -1,7 +1,5 @@
 
-#include "src/one.c"
-
-
+#include "../../../doTheWorld_test.h"
 
 DtwNamespace dtw;
 DtwRandonizer *randonizer;
