@@ -34,7 +34,7 @@ int private_dtw_CHashObject_ordenation(DtwResource *item1,DtwResource *item2,voi
 
 void privateDtwResource_add_to_item_to_CHashObject(void* object, void *item){
     privateDtw_CHash_element_and_key *casted = (privateDtw_CHash_element_and_key*)item;
-    CHashObject_set_many((CHash*)object,casted->key,casted->element);
+    CHashObject_set_any((CHash*)object,casted->key,casted->element);
     if(casted->free_key){
         free(casted->key);
     }
@@ -49,7 +49,7 @@ CHash *DtwResource_map_CHashObject(DtwResource *self,DtwResourceCHashObjectMapPr
 
     DtwResourceMapProps map_props = DtwResource_create_map_props(
         itens,
-        privateDtwResource_add_to_item_to_cJSONObject,
+        privateDtwResource_add_to_item_to_CHashObject,
         private_dtw_CHashObject_callback
     );
     map_props.args = (void*)&props;

@@ -13,6 +13,7 @@ typedef struct {
 
 
 CHashObject * return_user(DtwResource *user, void *filtragem){
+    printf("chamu\n");
     return newCHashObject(
         "name",hash.newString(dtw.resource.get_string_from_sub_resource(user, "name")),
         "age", hash.newNumber(dtw.resource.get_long_from_sub_resource(user,"age"))
