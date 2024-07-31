@@ -1,13 +1,14 @@
 #define DTW_ALLOW_CHASH
 #include "../unique.definition_requirements.h"
+
 DtwResourceCHashObjectMapProps DtwResource_createCHashObjectMapProps(
     CHash *(*callback)(DtwResource *item, void *args),
-    bool(*filtrage_callback)(DtwResource *item, void *args_filter)
+    char* (*key_provider)(DtwResource *item, void *args_filter)
 ){
     DtwResourceCHashObjectMapProps props = {0};
     props.qtd = DTW_RESOURCE_ALL;
     props.callback = callback;
-    props.filtrage_callback = filtrage_callback;
+    props.key_provider_callback = key_provider;
     return props;
 }
 

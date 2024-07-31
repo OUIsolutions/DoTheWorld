@@ -1,5 +1,4 @@
 #include "../../../doTheWorld_test.h"
-#include <cstring>
 
 
 DtwNamespace dtw;

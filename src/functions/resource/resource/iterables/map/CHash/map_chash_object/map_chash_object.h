@@ -4,7 +4,7 @@
 
 DtwResourceCHashObjectMapProps DtwResource_createCHashObjectMapProps(
     CHash *(*callback)(DtwResource *item, void *args),
-    bool(*filtrage_callback)(DtwResource *item, void *args_filter)
+    char *(*filtrage_callback)(DtwResource *item, void *args_filter)
 );
 
 CHash *DtwResource_map_CHashObject(DtwResource *self,DtwResourceCHashObjectMapProps props);

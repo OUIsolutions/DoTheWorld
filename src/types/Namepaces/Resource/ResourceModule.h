@@ -44,7 +44,7 @@ typedef struct DtwResourceModule{
 
     DtwResourceCHashObjectMapProps (*createCHashObjectMapProps)(
         CHash *(*callback)(DtwResource *item, void *args),
-        bool(*filtrage_callback)(DtwResource *item, void *args_filter)
+        char*(*key_provider)(DtwResource *item, void *args_filter)
     );
 
     CHashObject *(*map_CHashObject)(DtwResource *self,DtwResourceCHashObjectMapProps props);

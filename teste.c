@@ -1,10 +1,10 @@
-
+#include "extras/CHashManipulator.h"
+#define DTW_ALLOW_CHASH
 #include "src/one.c"
-#include "src/types/all.h"
-#include "tests/doTheWorld_test.h"
 
 
 
+CHashNamespace hash;
 DtwNamespace dtw;
 DtwRandonizer *randonizer;
 typedef struct {
@@ -12,19 +12,11 @@ typedef struct {
 }Filtrage;
 
 
-cJSON * return_user(DtwResource *user, void *filtragem){
-    cJSON *created_object =cJSON_CreateObject();
-    cJSON_AddStringToObject(
-        created_object,
-        "name", dtw.resource.get_string_from_sub_resource(user, "name")
+CHashObject * return_user(DtwResource *user, void *filtragem){
+    return newCHashObject(
+        "name",hash.newString(dtw.resource.get_string_from_sub_resource(user, "name")),
+        "age", hash.newNumber(dtw.resource.get_long_from_sub_resource(user,"age"))
     );
-
-    cJSON_AddNumberToObject(
-        created_object,
-        "age",
-        dtw.resource.get_long_from_sub_resource(user,"age")
-    );
-    return created_object;
 }
 char * get_key(DtwResource *user, void *filtrage){
     return  dtw.resource.get_string_from_sub_resource(user, "name");
@@ -62,6 +54,7 @@ void create_x_users(DtwResource *users,long quantity){
 
 int main(){
     dtw = newDtwNamespace();
+    hash = newCHashNamespace();
     randonizer = dtw.randonizer.newRandonizer();
 
     DtwResource *database = dtw.resource.newResource("database");
@@ -72,17 +65,19 @@ int main(){
     Filtrage f;
     f.age = 18;
 
-    DtwResourcecJSONObjectMapProps props = dtw.resource.create_cJSONObjectProps(return_user,get_key);
+    DtwResourceCHashObjectMapProps props = dtw.resource.createCHashObjectMapProps(
+        return_user,get_key
+    );
 
     props.filtrage_callback = verify_if_print_user;
     props.args = &f;
 
-    cJSON *itens = dtw.resource.map_cJSONObject(users,props);
+    CHashArray *itens = dtw.resource.map_CHashObject(users,props);
 
 
-    char *content = cJSON_Print(itens);
+    char *content = hash.dump_to_json_string(itens);
     printf("%s",content);
-    cJSON_Delete(itens);
+    hash.free(itens);
     free(content);
 
     dtw.resource.free(database);
