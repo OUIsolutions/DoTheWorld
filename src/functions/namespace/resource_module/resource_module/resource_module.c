@@ -33,7 +33,7 @@ DtwResourceModule newDtwResourceModule(){
         self.schema_map_CHashArray  = DtwResource_schema_map_CHashArray;
 
         self.createCHashObjectMapProps = DtwResource_createCHashObjectMapProps;
-        self.map_CHashObject = DtwResource_schema_map_CHashObject;
+        self.map_CHashObject = DtwResource_map_CHashObject;
         self.schema_map_CHashObject = DtwResource_schema_map_CHashObject;
 
     #endif

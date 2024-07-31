@@ -16,6 +16,7 @@ DtwResourceCHashObjectMapProps DtwResource_createCHashObjectMapProps(
 void  *private_dtw_CHashObject_callback(DtwResource *item,void *args) {
     DtwResourceCHashObjectMapProps *formmate_args = (DtwResourceCHashObjectMapProps*)args;
     privateDtw_CHash_element_and_key *created = (privateDtw_CHash_element_and_key*)malloc(sizeof(privateDtw_CHash_element_and_key));
+    created->free_key = formmate_args->free_key;
     created->key = formmate_args->key_provider_callback(item,args);
     created->element =formmate_args->callback(item,formmate_args->args);
     return (void*)created;
@@ -34,7 +35,10 @@ int private_dtw_CHashObject_ordenation(DtwResource *item1,DtwResource *item2,voi
 void privateDtwResource_add_to_item_to_CHashObject(void* object, void *item){
     privateDtw_CHash_element_and_key *casted = (privateDtw_CHash_element_and_key*)item;
     CHashObject_set_many((CHash*)object,casted->key,casted->element);
-    free(casted->key);
+    if(casted->free_key){
+        free(casted->key);
+    }
+
     free(casted);
 }
 

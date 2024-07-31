@@ -9,6 +9,7 @@ typedef  struct{
     int (*ordenation_callback)(DtwResource *item1, DtwResource *item2, void *args);
     CHash *(*callback)(DtwResource *item, void *args);
     void *args;
+    bool free_key;
     int start;
     int qtd;
 } DtwResourceCHashObjectMapProps;

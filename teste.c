@@ -74,7 +74,6 @@ int main(){
 
     CHashArray *itens = dtw.resource.map_CHashObject(users,props);
 
-
     char *content = hash.dump_to_json_string(itens);
     printf("%s",content);
     hash.free(itens);
