@@ -1323,8 +1323,9 @@ int main(){
 // Created by jurandi on 20-06-2023.
 //
 #include "doTheWorld.h"
+#include <time.h>
 
-bool test_if_blob(struct DtwTreePart*part){
+bool test_if_blob(struct DtwTreePart*part,void *args){
     DtwNamespace dtw = newDtwNamespace();
 
     char *name = dtw.path.get_full_name(part->path);
@@ -1356,14 +1357,16 @@ int main(){
 
     struct DtwTreePart *blob = dtw.tree.find_tree_part_by_function(
             tree,
-            test_if_blob
+            test_if_blob,
+            NULL
     );
 
     dtw.tree.part.represent(blob);
-    
+
     dtw.tree.free(tree);
 
 }
+
 ~~~
 
 Trees suports even Maps or filters, it returns an new tree of the of the current lambda procediment 

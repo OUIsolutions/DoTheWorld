@@ -1025,6 +1025,7 @@ typedef struct DtwResourceArray{
 #define PRIVATE_DTW_CJSON_ELEMENT_AND_KEY_TYPE
 typedef  struct{
     char *key;
+    bool free_key;
     cJSON *element;
 }privateDtw_cJSON_element_and_key;
 
@@ -1058,6 +1059,7 @@ typedef  struct{
 #define PRIVATE_DTW_RESOURCE_CJSON_OBJECT_MAP_PROPS
 typedef  struct{
     char *(*key_provider_callback)(DtwResource *item,void *args);
+    bool free_key;
     bool(*filtrage_callback)(DtwResource *item, void *args_filter);
     int (*ordenation_callback)(DtwResource *item1, DtwResource *item2, void *args);
     cJSON *(*callback)(DtwResource *item, void *args);
@@ -1112,6 +1114,7 @@ typedef struct {
 typedef  struct{
     char *key;
     CHash *element;
+    bool free_key;
 }privateDtw_CHash_element_and_key;
 
 #endif
@@ -1148,6 +1151,7 @@ typedef  struct{
     int (*ordenation_callback)(DtwResource *item1, DtwResource *item2, void *args);
     CHash *(*callback)(DtwResource *item, void *args);
     void *args;
+    bool free_key;
     int start;
     int qtd;
 } DtwResourceCHashObjectMapProps;
@@ -1262,7 +1266,7 @@ typedef struct DtwResourceModule{
 
     DtwResourceCHashObjectMapProps (*createCHashObjectMapProps)(
         CHash *(*callback)(DtwResource *item, void *args),
-        bool(*filtrage_callback)(DtwResource *item, void *args_filter)
+        char*(*key_provider)(DtwResource *item, void *args_filter)
     );
 
     CHashObject *(*map_CHashObject)(DtwResource *self,DtwResourceCHashObjectMapProps props);
@@ -2962,7 +2966,7 @@ void privateDtwResource_add_to_item_to_CHashArray_array(void* array, void *item)
 
 DtwResourceCHashObjectMapProps DtwResource_createCHashObjectMapProps(
     CHash *(*callback)(DtwResource *item, void *args),
-    bool(*filtrage_callback)(DtwResource *item, void *args_filter)
+    char *(*filtrage_callback)(DtwResource *item, void *args_filter)
 );
 
 CHash *DtwResource_map_CHashObject(DtwResource *self,DtwResourceCHashObjectMapProps props);
@@ -8737,11 +8741,13 @@ DtwResourcecJSONArrayMapProps DtwResource_create_cJSONArrayMapProps(cJSON *(*cal
 }
 
 void  *private_dtw_cJSONArray_callback(DtwResource *item,void *args) {
+
     DtwResourcecJSONArrayMapProps *formmate_args = (DtwResourcecJSONArrayMapProps*)args;
     return (void*)formmate_args->callback(item,formmate_args->args);
 }
 
 bool private_dtw_cJSONArray_filtrage(DtwResource *item,void *args) {
+
     DtwResourcecJSONArrayMapProps *formmate_args = (DtwResourcecJSONArrayMapProps*)args;
     return formmate_args->filtrage_callback(item,formmate_args->args);
 }
@@ -8758,12 +8764,15 @@ void privateDtwResource_add_to_item_to_cJSONArray_array(void* array, void *item)
 cJSON *DtwResource_map_cJSONArray(DtwResource *self,DtwResourcecJSONArrayMapProps props){
 
     cJSON *itens = cJSON_CreateArray();
+
     DtwResourceMapProps mapped_props = DtwResource_create_map_props(
         itens,
         privateDtwResource_add_to_item_to_cJSONArray_array,
         private_dtw_cJSONArray_callback
     );
-    mapped_props.args = (void*)&props.args;
+
+    mapped_props.args = (void*)&props;
+
     if(props.filtrage_callback) {
         mapped_props.filtrage_callback = private_dtw_cJSONArray_filtrage;
     }
@@ -8809,6 +8818,7 @@ void  *private_dtw_cJSONObject_callback(DtwResource *item,void *args) {
     DtwResourcecJSONObjectMapProps *formmate_args = (DtwResourcecJSONObjectMapProps*)args;
     privateDtw_cJSON_element_and_key *created = (privateDtw_cJSON_element_and_key*)malloc(sizeof(privateDtw_cJSON_element_and_key));
     created->key = formmate_args->key_provider_callback(item,args);
+    created->free_key = formmate_args->free_key;
     created->element =formmate_args->callback(item,formmate_args->args);
     return (void*)created;
 }
@@ -8826,7 +8836,9 @@ int private_dtw_cJSONObject_ordenation(DtwResource *item1,DtwResource *item2,voi
 void privateDtwResource_add_to_item_to_cJSONObject(void* object, void *item){
     privateDtw_cJSON_element_and_key *casted = (privateDtw_cJSON_element_and_key*)item;
     cJSON_AddItemToObject((cJSON*)object,casted->key,casted->element);
-    free(casted->key);
+    if(casted->free_key){
+        free(casted->key);
+    }
     free(casted);
 }
 
@@ -8905,7 +8917,7 @@ CHashArray *DtwResource_map_CHashArray(DtwResource *self,DtwResourceCHashrrayMap
 
     DtwResourceMapProps map_props = DtwResource_create_map_props(
         itens,
-        privateDtwResource_add_to_item_to_cJSONObject,
+        privateDtwResource_add_to_item_to_CHashArray_array,
         private_dtw_CHashArray_callback
     );
 
@@ -8938,14 +8950,15 @@ CHashArray *DtwResource_schema_map_CHashArray(DtwResource *self,DtwResourceCHash
 #define DTW_ALLOW_CHASH
 
 
+
 DtwResourceCHashObjectMapProps DtwResource_createCHashObjectMapProps(
     CHash *(*callback)(DtwResource *item, void *args),
-    bool(*filtrage_callback)(DtwResource *item, void *args_filter)
+    char* (*key_provider)(DtwResource *item, void *args_filter)
 ){
     DtwResourceCHashObjectMapProps props = {0};
     props.qtd = DTW_RESOURCE_ALL;
     props.callback = callback;
-    props.filtrage_callback = filtrage_callback;
+    props.key_provider_callback = key_provider;
     return props;
 }
 
@@ -8953,6 +8966,7 @@ DtwResourceCHashObjectMapProps DtwResource_createCHashObjectMapProps(
 void  *private_dtw_CHashObject_callback(DtwResource *item,void *args) {
     DtwResourceCHashObjectMapProps *formmate_args = (DtwResourceCHashObjectMapProps*)args;
     privateDtw_CHash_element_and_key *created = (privateDtw_CHash_element_and_key*)malloc(sizeof(privateDtw_CHash_element_and_key));
+    created->free_key = formmate_args->free_key;
     created->key = formmate_args->key_provider_callback(item,args);
     created->element =formmate_args->callback(item,formmate_args->args);
     return (void*)created;
@@ -8970,8 +8984,11 @@ int private_dtw_CHashObject_ordenation(DtwResource *item1,DtwResource *item2,voi
 
 void privateDtwResource_add_to_item_to_CHashObject(void* object, void *item){
     privateDtw_CHash_element_and_key *casted = (privateDtw_CHash_element_and_key*)item;
-    CHashObject_set_many((CHash*)object,casted->key,casted->element);
-    free(casted->key);
+    CHashObject_set_any((CHash*)object,casted->key,casted->element);
+    if(casted->free_key){
+        free(casted->key);
+    }
+
     free(casted);
 }
 
@@ -8982,7 +8999,7 @@ CHash *DtwResource_map_CHashObject(DtwResource *self,DtwResourceCHashObjectMapPr
 
     DtwResourceMapProps map_props = DtwResource_create_map_props(
         itens,
-        privateDtwResource_add_to_item_to_cJSONObject,
+        privateDtwResource_add_to_item_to_CHashObject,
         private_dtw_CHashObject_callback
     );
     map_props.args = (void*)&props;
@@ -10314,7 +10331,7 @@ DtwResourceModule newDtwResourceModule(){
         self.schema_map_CHashArray  = DtwResource_schema_map_CHashArray;
 
         self.createCHashObjectMapProps = DtwResource_createCHashObjectMapProps;
-        self.map_CHashObject = DtwResource_schema_map_CHashObject;
+        self.map_CHashObject = DtwResource_map_CHashObject;
         self.schema_map_CHashObject = DtwResource_schema_map_CHashObject;
 
     #endif
