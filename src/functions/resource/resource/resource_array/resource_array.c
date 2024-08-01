@@ -6,20 +6,23 @@ DtwResourceArray * DtwResource_get_schema_values(DtwResource *self){
     if(DtwResource_error(self)){
         return NULL;
     }
-    self->root_props->is_writing_schema = true;
+    DtwSchemaUnsafe({
+        if(self->schema_type != PRIVATE_DTW_SCHEMA_ROOT){
+            private_DtwResource_raise_error(
+                    self,
+                    DTW_RESOURCE_ONLY_ROOT_SCHEMA_HAVE_SCHEMA_VALUES,
+                    "only root schema have schema values"
+            );
+            DtwSchemaRebase
+            return NULL;
+        }
 
-    if(self->schema_type != PRIVATE_DTW_SCHEMA_ROOT){
-        private_DtwResource_raise_error(
-                self,
-                DTW_RESOURCE_ONLY_ROOT_SCHEMA_HAVE_SCHEMA_VALUES,
-                "only root schema have schema values"
-        );
-        return NULL;
-    }
+        DtwResourceArray *elements =  DtwResource_sub_resources(self->values_resource);
+        DtwSchemaRebase
+        return elements;
+    })
 
-    DtwResourceArray *elements =  DtwResource_sub_resources(self->values_resource);
-    self->root_props->is_writing_schema = false;
-    return elements;
+
 }
 
 

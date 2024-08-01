@@ -62,7 +62,7 @@ cJSON *DtwResource_schema_map_cJSONArray(DtwResource *self,DtwResourcecJSONArray
             );
             return NULL;
     }
-    DtwResourceSchemaUnsafe({
+    DtwSchemaUnsafe({
         return  DtwResource_map_cJSONArray(self->values_resource, props);
     })
 }

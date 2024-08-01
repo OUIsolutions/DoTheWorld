@@ -62,7 +62,7 @@ void DtwResource_schema_foreach(DtwResource *self,DtwResourceForeachProps props)
         );
         return ;
     }
-    DtwResourceSchemaUnsafe({
+    DtwSchemaUnsafe({
         DtwResource_foreach(self->values_resource,props);
     })
 }

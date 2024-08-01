@@ -49,23 +49,23 @@ void DtwResource_destroy(DtwResource *self){
 
 
     if(self->schema_type == PRIVATE_DTW_SCHEMA_ELEMENT){
-        self->root_props->is_writing_schema = true;
-        private_DtwResource_destroy_all_primary_keys(self);
-        self->root_props->is_writing_schema =false;
+        DtwSchemaUnsafe({
+            private_DtwResource_destroy_all_primary_keys(self);
+
+        })
     }
 
     if(private_DtwResource_its_a_pk(self)){
-        self->root_props->is_writing_schema = true;
-        private_DtwResurce_destroy_primary_key(self);
-        self->root_props->is_writing_schema =false;
-
+        DtwSchemaUnsafe({
+            private_DtwResurce_destroy_primary_key(self);
+        })
     }
 
     if(DtwResource_error(self)){
         return;
     }
 
-    if(self->root_props->is_writing_schema == false){
+    if(self->root_props->schema_unsafe == false){
         if(
                 self->schema_type == PRIVATE_DTW_SCHEMA_VALUE
                 || self->schema_type == PRIVATE_DTW_SCHEMA_INDEX

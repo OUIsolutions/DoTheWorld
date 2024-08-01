@@ -84,7 +84,7 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
     new_element->cache_sub_resources = self->cache_sub_resources;
     new_element->sub_resources = newDtwResourceArray();
 
-    if(self->datatabase_schema && self->root_props->is_writing_schema == false){
+    if(self->datatabase_schema && self->root_props->schema_unsafe == false){
         new_element->attached_schema = privateDtwDtatabaseSchema_get_sub_schema(self->datatabase_schema, name);
     }
 
@@ -96,12 +96,14 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
 
 
     if(new_element->attached_schema){
-        self->root_props->is_writing_schema = true;
-        new_element->schema_type = PRIVATE_DTW_SCHEMA_ROOT;
-        new_element->values_resource = DtwResource_sub_resource(new_element,DTW_SCHEMA_DEFAULT_VALUES_NAME);
-        new_element->values_resource->schema_type = PRIVATE_DTW_SCHEMA_VALUE;
-        new_element->index_resource = DtwResource_sub_resource(new_element,DTW_SCHEMA_DEFAULT_INDEX_NAME);
-        new_element->index_resource->schema_type = PRIVATE_DTW_SCHEMA_INDEX;
+        DtwSchemaUnsafe({
+            new_element->schema_type = PRIVATE_DTW_SCHEMA_ROOT;
+            new_element->values_resource = DtwResource_sub_resource(new_element,DTW_SCHEMA_DEFAULT_VALUES_NAME);
+            new_element->values_resource->schema_type = PRIVATE_DTW_SCHEMA_VALUE;
+            new_element->index_resource = DtwResource_sub_resource(new_element,DTW_SCHEMA_DEFAULT_INDEX_NAME);
+            new_element->index_resource->schema_type = PRIVATE_DTW_SCHEMA_INDEX;
+        })
+
     }
 
 
