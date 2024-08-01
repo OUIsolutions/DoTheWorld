@@ -1,10 +1,8 @@
-#include "extras/CHashManipulator.h"
-#define DTW_ALLOW_CHASH
+
 #include "src/one.c"
 
 
 
-CHashNamespace hash;
 DtwNamespace dtw;
 DtwRandonizer *randonizer;
 typedef struct {
@@ -12,13 +10,20 @@ typedef struct {
 }Filtrage;
 
 
-CHashObject * return_user(DtwResource *user, void *filtragem){
-    return newCHashObject(
-        "name",hash.newString(dtw.resource.get_string_from_sub_resource(user, "name")),
-        "age", hash.newNumber(dtw.resource.get_long_from_sub_resource(user,"age"))
+cJSON * return_user(DtwResource *user, void *filtragem){
+    cJSON *created_object =cJSON_CreateObject();
+    cJSON_AddStringToObject(
+        created_object,
+        "name", dtw.resource.get_string_from_sub_resource(user, "name")
     );
-}
 
+    cJSON_AddNumberToObject(
+        created_object,
+        "age",
+        dtw.resource.get_long_from_sub_resource(user,"age")
+    );
+    return created_object;
+}
 
 bool verify_if_print_user(DtwResource *user, void *filtragem){
      Filtrage *f = (Filtrage *)filtragem;
@@ -51,7 +56,6 @@ void create_x_users(DtwResource *users,long quantity){
 
 int main(){
     dtw = newDtwNamespace();
-    hash = newCHashNamespace();
     randonizer = dtw.randonizer.newRandonizer();
 
     DtwResource *database = dtw.resource.newResource("database");
@@ -62,16 +66,16 @@ int main(){
     Filtrage f;
     f.age = 18;
 
-    DtwResourceCHashrrayMapProps props = dtw.resource.create_CHashrrayMapProps(return_user);
-
+    DtwResourcecJSONArrayMapProps props = dtw.resource.create_cJSONArrayMapProps(return_user);
     props.filtrage_callback = verify_if_print_user;
     props.args = &f;
 
-    CHashArray *itens = dtw.resource.map_CHashArray(users,props);
+    cJSON *itens = dtw.resource.map_cJSONArray(users,props);
 
-    char *content = hash.dump_to_json_string(itens);
+
+    char *content = cJSON_Print(itens);
     printf("%s",content);
-    hash.free(itens);
+    cJSON_Delete(itens);
     free(content);
 
     dtw.resource.free(database);

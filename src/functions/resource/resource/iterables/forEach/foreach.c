@@ -9,9 +9,13 @@ DtwResourceForeachProps DtwResource_create_foreach_props( void(*callback)(DtwRes
 }
 
 void DtwResource_foreach(DtwResource *self,DtwResourceForeachProps props){
-
+    if(DtwResource_error(self)){
+        return;;
+    }
     DtwResourceArray *itens = DtwResource_sub_resources(self);
-
+    if(DtwResource_error(self)){
+        return;;
+    }
     int total = 0;
 
     int total_skipded = 0;
@@ -21,7 +25,9 @@ void DtwResource_foreach(DtwResource *self,DtwResourceForeachProps props){
 
         if(props.filtrage_callback){
             bool result = props.filtrage_callback(current, props.args);
-
+            if(DtwResource_error(self)){
+                return;;
+            }
             if(!result){
                 continue;
             }
@@ -40,6 +46,9 @@ void DtwResource_foreach(DtwResource *self,DtwResourceForeachProps props){
         }
 
         props.callback(current, props.args);
+        if(DtwResource_error(self)){
+            return;;
+        }
     }
 }
 
@@ -53,5 +62,8 @@ void DtwResource_schema_foreach(DtwResource *self,DtwResourceForeachProps props)
         );
         return ;
     }
+    self->root_props->is_writing_schema = true;
     DtwResource_foreach(self->values_resource,props);
+    self->root_props->is_writing_schema = false;
+
 }

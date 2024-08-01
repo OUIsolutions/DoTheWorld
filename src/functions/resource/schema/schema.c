@@ -42,6 +42,7 @@ void DtwSchema_add_primary_key(DtwSchema *self,const char *name){
 
 void private_newDtwSchema_free(DtwSchema *self){
 
+
     for (int i = 0; i < self->size; i++) {
         private_newDtwSchema_free((DtwSchema *) self->sub_schemas[i]);
     }

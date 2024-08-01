@@ -119,6 +119,7 @@ void DtwResource_rename_sub_resource(DtwResource *self,const char *old_name,cons
     if(DtwResource_error(self)){
         return;
     }
+
     DtwResource *created = DtwResource_sub_resource(self,"name");
     DtwResource_rename(created,new_name);
 }

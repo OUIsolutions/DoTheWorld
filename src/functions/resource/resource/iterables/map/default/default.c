@@ -22,7 +22,13 @@ int  private_dtwResource_compare(const void *item1,const void*item2){
 
 void DtwResource_map(DtwResource *self,DtwResourceMapProps props){
     //printf("%p\n",ordenation_callback);
+    if(DtwResource_error(self)){
+        return;;
+    }
     DtwResourceArray *itens = DtwResource_sub_resources(self);
+    if(DtwResource_error(self)){
+        return;;
+    }
     privateDtwResource_map_element **mapped_elements= NULL;
     int total_mapped_elements = 0;
     if(props.ordenation_callback) {
@@ -34,10 +40,14 @@ void DtwResource_map(DtwResource *self,DtwResourceMapProps props){
     int total = 0;
     int total_skipded = 0;
     for(int i = 0; i < itens->size; i++){
+
         DtwResource *current = itens->resources[i];
 
         if(props.filtrage_callback){
             bool result = props.filtrage_callback(current, props.args);
+            if(DtwResource_error(self)){
+                return;;
+            }
             if(!result){
                 continue;
             }
@@ -54,15 +64,19 @@ void DtwResource_map(DtwResource *self,DtwResourceMapProps props){
         }
 
         void* result = props.callback(current, props.args);
-
+        if(DtwResource_error(self)){
+            return;;
+        }
         if(result == NULL){
             continue;
         }
         total+=1;
 
         if(props.ordenation_callback == NULL) {
-
             props.append(props.main_array,result);
+            if(DtwResource_error(self)){
+                return;;
+            }
         }
 
         if(props.ordenation_callback){
@@ -87,7 +101,9 @@ void DtwResource_map(DtwResource *self,DtwResourceMapProps props){
             sizeof(privateDtwResource_map_element*),
             private_dtwResource_compare
             );
-
+        if(DtwResource_error(self)){
+            return;;
+        }
         for(int i = 0; i< total_mapped_elements; i++) {
             privateDtwResource_map_element *current = mapped_elements[i];
             props.append(props.main_array,current->result);
@@ -108,6 +124,8 @@ void DtwResource_schema_map(DtwResource *self,DtwResourceMapProps props){
             );
             return ;
         }
+    self->root_props->is_writing_schema = true;
 
      DtwResource_map(self->values_resource, props);
+     self->root_props->is_writing_schema = false;
 }
