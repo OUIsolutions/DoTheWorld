@@ -8622,6 +8622,7 @@ void DtwResource_schema_foreach(DtwResource *self,DtwResourceForeachProps props)
 
 
 
+#include <time.h>
 DtwResourceMapProps DtwResource_create_map_props(
     void *main_array,
     void(*append)(void *main_array_arg, void *item),
@@ -8671,19 +8672,23 @@ void DtwResource_map(DtwResource *self,DtwResourceMapProps props){
             continue;
         }
 
-        total+=1;
-        if(total > props.qtd && props.qtd != -1){
+        if(total + 1 > props.qtd && props.qtd != -1){
             break;
         }
 
         void* result = props.callback(current, props.args);
 
-        if(result && props.ordenation_callback == NULL) {
+        if(result == NULL){
+            continue;
+        }
+        total+=1;
+
+        if(props.ordenation_callback == NULL) {
 
             props.append(props.main_array,result);
         }
 
-        if(result && props.ordenation_callback){
+        if(props.ordenation_callback){
             privateDtwResource_map_element *created  = (privateDtwResource_map_element*)malloc(sizeof(privateDtwResource_map_element));
             *created = (privateDtwResource_map_element){0};
             created->result = result;

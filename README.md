@@ -4,13 +4,13 @@ DoTheWorld is a Windows/Linux single file library designed to handle files in C/
 
 
 ## Learning
-In These Current Markdown you will see some basic exemples of usage of these library 
+In These Current Markdown you will see some basic exemples of usage of these library
 but if you want to get an deep knolege see at **exemples** folder, you will find an lot of exemplos of how you can use DoTheWorld
 
 # Installation
 The installation of DoTheWorld is made to be as dumb as possible, just  download the file  **doTheWorld.h** :
 
-[Download link](https://github.com/OUIsolutions/DoTheWorld/releases/download/v6.002/doTheWorld.h)
+[Download link](https://github.com/OUIsolutions/DoTheWorld/releases/download/v7.000/doTheWorld.h)
 
  And include in your project.
 if this compiles then the library will work:
@@ -18,8 +18,8 @@ if this compiles then the library will work:
 #include "doTheWorld.h"
 
 int main(int argc, char *argv[]){
-    
-    
+
+
     return 0;
 }
 ~~~
@@ -39,26 +39,26 @@ int main(int argc, char *argv[]){
 ~~~
 ## Pre Compiled version
 You also can download the pre compiled versions
-[Pre Compiled Linux](https://github.com/OUIsolutions/DoTheWorld/releases/download/v6.001/pre_compiled_linux.zip) or
-[Pre Compiled Windows](https://github.com/OUIsolutions/DoTheWorld/releases/download/v6.001/pre_compiled_windows.zip) to
+[Pre Compiled Linux](https://github.com/OUIsolutions/DoTheWorld/releases/download/v7.000/pre_compiled_linux.zip) or
+[Pre Compiled Windows](https://github.com/OUIsolutions/DoTheWorld/releases/download/v7.000/pre_compiled_windows.zip) to
 optimize compilation time, extract the zip , than you can run with:
-~~~c 
+~~~c
 #include "doTheWorldDeclaration.h"
 
 int main(){
   return 0;
 }
 ~~~
-compile with: 
+compile with:
 
-~~~shel 
+~~~shel
 gcc main.c cJSON.o doTheWorld.o sha256.o
 ~~~
 
 
 # Bulding the Project
-if you want to exec all tests, or generate your own amalgamation, 
-just run the **./build.out** or **build.exe** located into the root dir of the repo 
+if you want to exec all tests, or generate your own amalgamation,
+just run the **./build.out** or **build.exe** located into the root dir of the repo
 
 ~~~shel
 ./build.out
@@ -117,7 +117,7 @@ int main(int argc, char *argv[]){
 ~~~
 
 ### Reading Double bools and Integers
-you also can direclty load all types from an file  with numerical ios 
+you also can direclty load all types from an file  with numerical ios
 
 
 ~~~c
@@ -217,7 +217,7 @@ free(content);
 ~~~
 
 ### Writing Double , bool and Integers
-You also can write any type direclty to an file 
+You also can write any type direclty to an file
 
 
 ~~~c
@@ -242,7 +242,7 @@ int main (){
 ~~~
 
 If you want to create dirs you can call the function **dtw_create_dir_recursively**
-passing the folder you want to create,dont wory about if the previews path dont exist 
+passing the folder you want to create,dont wory about if the previews path dont exist
 it will create till reachs the target folder
 
 
@@ -259,7 +259,7 @@ int main(int argc, char *argv[]){
 ~~~
 
 ### Copying Anything
-With the function **dtw_copy_any** you can copy either files or folders to one position to anoter position 
+With the function **dtw_copy_any** you can copy either files or folders to one position to anoter position
 
 
 ~~~c
@@ -293,7 +293,7 @@ int main(int argc, char *argv[]){
 ~~~
 
 
-With the listage functions you can extract all Strings Arrays of elements in an folder 
+With the listage functions you can extract all Strings Arrays of elements in an folder
 
 ## Listing files
 
@@ -356,7 +356,7 @@ int main(int argc, char *argv[]){
 }
 ~~~
 
-The By Using multi dimension listage functions , you can see all itens listed in all sub folders of the "main" folder 
+The By Using multi dimension listage functions , you can see all itens listed in all sub folders of the "main" folder
 
 ## Listing Files Recursively
 
@@ -412,7 +412,7 @@ int main(int argc, char *argv[]){
 }
 ~~~
 
-## Dealing with base64 
+## Dealing with base64
 You can easly transform an binary file to an base64 string like these
 
 
@@ -459,7 +459,7 @@ int main(int argc, char *argv[]){
 
 
 ## Sha256
-Generating Sha from file 
+Generating Sha from file
 
 
 ~~~c
@@ -507,7 +507,7 @@ int main(int argc, char *argv[]){
 ~~~
 
 
-## Locker 
+## Locker
 With the locker you can Lock files and ensure that even with multprocessment, they will
 be executed in an order
 
@@ -576,9 +576,9 @@ int main(int argc, char *argv[]){
 
 ~~~
 
-## Resources 
-With Resources you can iterate over all types of values ,and modifie than into an single transaction or one by one 
-### Setting Values 
+## Resources
+With Resources you can iterate over all types of values ,and modifie than into an single transaction or one by one
+### Setting Values
 
 
 ~~~c
@@ -720,7 +720,7 @@ int main(){
 ~~~
 
 
-You also can dump the transaction to an json file to store it 
+You also can dump the transaction to an json file to store it
 
 
 ~~~c
@@ -769,7 +769,7 @@ int main(){
 Schema its a way to handle resources into a serializible way, providing foreing key and primary key concepts
 
 ### Creating a insertion
-in these example we are creating a user using schema concept  
+in these example we are creating a user using schema concept
 
 
 ~~~c
@@ -869,7 +869,7 @@ int main(){
 
 
 ### Finding a insertion
-With  primary keys you can find values without loop iteration increasing readability and speed, 
+With  primary keys you can find values without loop iteration increasing readability and speed,
 
 
 ~~~c
@@ -934,7 +934,7 @@ int main(){
 
 
 ### Iterating over insertions
-you also can iterate over insertions 
+you also can iterate over insertions
 
 
 ~~~c
@@ -1000,11 +1000,641 @@ int main(){
 
 ~~~
 
+### Iterable Resources
 
-### Trees and TreeParts 
+with iterable functional system , you can iterate into Resources easly
+
+
+
+#### Each
+with each, you can pass  also a filtrage callback, a start point (defaults its 0),
+and the total elements (defaults its all)
+
+~~~c
+#include "doTheWorld.h"
+
+DtwNamespace dtw;
+DtwRandonizer *randonizer;
+typedef struct {
+    int age;
+}Filtrage;
+
+
+void print_user(DtwResource *user, void *filtragem){
+    printf("age %ld\n",dtw.resource.get_long_from_sub_resource(user,"age"));
+    printf("name: %s\n", dtw.resource.get_string_from_sub_resource(user, "name"));
+}
+
+bool verify_if_print_user(DtwResource *user, void *filtragem){
+
+     Filtrage *f = (Filtrage *)filtragem;
+
+    long idade = dtw.resource.get_long_from_sub_resource(user, "age");
+
+    if(idade < f->age){
+
+        return true;
+    }
+
+    return false;
+}
+
+void create_x_users(DtwResource *users,long quantity){
+    for(int i =0; i < quantity; i++){
+        DtwResource *current = dtw.resource.sub_resource_random(users,NULL);
+
+        char formatted_name[20] = {0};
+        sprintf(formatted_name,"user%d", i);
+        long age = dtw.randonizer.generate_num(randonizer,100);
+
+        dtw.resource.set_string_in_sub_resource(current,"name",formatted_name);
+        dtw.resource.set_long_in_sub_resource(current,"age",age);
+    }
+
+}
+
+int main(){
+    dtw = newDtwNamespace();
+    randonizer = dtw.randonizer.newRandonizer();
+
+    DtwResource *users = dtw.resource.newResource("users");
+    create_x_users(users,100);
+    DtwResourceForeachProps props = dtw.resource.create_foreach_props(print_user);
+    props.filtrage_callback = verify_if_print_user;
+
+    Filtrage f;
+    f.age = 18;
+    props.args = &f;
+
+    dtw.resource.each(users,props);
+    dtw.resource.free(users);
+    dtw.randonizer.free(randonizer);
+    return 0;
+}
+
+~~~
+
+#### Schema Each
+you also can iterate over schemas with schema each
+
+
+~~~c
+#include "doTheWorld.h"
+
+
+DtwNamespace dtw;
+DtwRandonizer *randonizer;
+typedef struct {
+    int age;
+}Filtrage;
+
+
+void print_user(DtwResource *user, void *filtragem){
+    printf("age %ld\n",dtw.resource.get_long_from_sub_resource(user,"age"));
+    printf("name: %s\n", dtw.resource.get_string_from_sub_resource(user, "name"));
+}
+
+bool verify_if_print_user(DtwResource *user, void *filtragem){
+     Filtrage *f = (Filtrage *)filtragem;
+
+    long age = dtw.resource.get_long_from_sub_resource(user, "age");
+
+    if(age < f->age){
+
+        return true;
+    }
+
+    return false;
+}
+
+void create_x_users(DtwResource *users,long quantity){
+    for(int i =0; i < quantity; i++){
+        DtwResource *current = dtw.resource.new_schema_insertion(users);
+
+        char formatted_name[20] = {0};
+        sprintf(formatted_name,"user%d", i);
+        long age = dtw.randonizer.generate_num(randonizer,100);
+
+        dtw.resource.set_string_in_sub_resource(current,"name",formatted_name);
+        dtw.resource.set_long_in_sub_resource(current,"age",age);
+    }
+
+}
+void create_schemas(DtwResource *database){
+    DtwDatabaseSchema *schema = dtw.resource.newDatabaseSchema(database);
+    DtwSchema *users = dtw.database_schema.sub_schema(schema,"users");
+    dtw.schema.add_primary_key(users,"name");
+}
+
+
+int main(){
+    dtw = newDtwNamespace();
+    randonizer = dtw.randonizer.newRandonizer();
+
+    DtwResource *database = dtw.resource.newResource("database");
+    create_schemas(database);
+
+    DtwResource *users = dtw.resource.sub_resource(database,"users");
+
+    create_x_users(users,100);
+    Filtrage f;
+    f.age = 18;
+    int start  = 0;
+
+    DtwResourceForeachProps props = dtw.resource.create_foreach_props(print_user);
+    props.filtrage_callback = verify_if_print_user;
+    props.args = &f;
+
+    dtw.resource.schema_each(users,props);
+    dtw.resource.free(database);
+    dtw.randonizer.free(randonizer);
+    return 0;
+}
+
+~~~
+
+#### Map
+with map you can construct, objects lists, with what ever you want
+you just need to pass the object, the retriver, and some append function
+to be called each generated object
+
+
+~~~c
+#include "doTheWorld.h"
+
+
+
+DtwNamespace dtw;
+DtwRandonizer *randonizer;
+typedef struct {
+    int age;
+}Filtrage;
+
+
+cJSON * return_user(DtwResource *user, void *filtragem){
+    cJSON *created_object =cJSON_CreateObject();
+    cJSON_AddStringToObject(
+        created_object,
+        "name", dtw.resource.get_string_from_sub_resource(user, "name")
+    );
+
+    cJSON_AddNumberToObject(
+        created_object,
+        "age",
+        dtw.resource.get_long_from_sub_resource(user,"age")
+    );
+    return created_object;
+}
+
+bool verify_if_print_user(DtwResource *user, void *filtragem){
+     Filtrage *f = (Filtrage *)filtragem;
+
+    long age = dtw.resource.get_long_from_sub_resource(user, "age");
+
+    if(age < f->age){
+
+        return true;
+    }
+
+    return false;
+}
+
+void create_x_users(DtwResource *users,long quantity){
+    for(int i =0; i < quantity; i++){
+        DtwResource *current = dtw.resource.sub_resource_random(users,NULL);
+
+        char formatted_name[20] = {0};
+        sprintf(formatted_name,"user%d", i);
+        long age = dtw.randonizer.generate_num(randonizer,100);
+
+        dtw.resource.set_string_in_sub_resource(current,"name",formatted_name);
+        dtw.resource.set_long_in_sub_resource(current,"age",age);
+    }
+
+}
+
+
+
+int main(){
+    dtw = newDtwNamespace();
+    randonizer = dtw.randonizer.newRandonizer();
+
+    DtwResource *database = dtw.resource.newResource("database");
+
+    DtwResource *users = dtw.resource.sub_resource(database,"users");
+
+    create_x_users(users,100);
+    Filtrage f;
+    f.age = 18;
+    cJSON *itens = cJSON_CreateArray();
+    DtwResourceMapProps props = dtw.resource.create_map_props(
+        itens,
+        (void (*)(void*,void*))cJSON_AddItemToArray,
+        (void* (*)(DtwResource *,void*))return_user
+    );
+
+    props.filtrage_callback = verify_if_print_user;
+    props.args = &f;
+
+   dtw.resource.map(users,props);
+
+    char *content = cJSON_Print(itens);
+    printf("%s",content);
+    cJSON_Delete(itens);
+    free(content);
+
+    dtw.resource.free(database);
+    dtw.randonizer.free(randonizer);
+
+    return 0;
+}
+
+~~~
+
+of course, it also works with schemas
+
+
+~~~c
+
+#include "doTheWorld.h"
+
+DtwNamespace dtw;
+DtwRandonizer *randonizer;
+typedef struct {
+    int age;
+}Filtrage;
+
+
+cJSON * return_user(DtwResource *user, void *filtragem){
+    cJSON *created_object =cJSON_CreateObject();
+    cJSON_AddStringToObject(
+        created_object,
+        "name", dtw.resource.get_string_from_sub_resource(user, "name")
+    );
+
+    cJSON_AddNumberToObject(
+        created_object,
+        "age",
+        dtw.resource.get_long_from_sub_resource(user,"age")
+    );
+    return created_object;
+}
+
+bool verify_if_print_user(DtwResource *user, void *filtragem){
+     Filtrage *f = (Filtrage *)filtragem;
+
+    long age = dtw.resource.get_long_from_sub_resource(user, "age");
+
+    if(age < f->age){
+
+        return true;
+    }
+
+    return false;
+}
+void create_x_users(DtwResource *users,long quantity){
+    for(int i =0; i < quantity; i++){
+        DtwResource *current = dtw.resource.new_schema_insertion(users);
+
+        char formatted_name[20] = {0};
+        sprintf(formatted_name,"user%d", i);
+        long age = dtw.randonizer.generate_num(randonizer,100);
+
+        dtw.resource.set_string_in_sub_resource(current,"name",formatted_name);
+        dtw.resource.set_long_in_sub_resource(current,"age",age);
+    }
+
+}
+void create_schemas(DtwResource *database){
+    DtwDatabaseSchema *schema = dtw.resource.newDatabaseSchema(database);
+    DtwSchema *users = dtw.database_schema.sub_schema(schema,"users");
+    dtw.schema.add_primary_key(users,"name");
+}
+
+
+
+
+int main(){
+    dtw = newDtwNamespace();
+    randonizer = dtw.randonizer.newRandonizer();
+
+    DtwResource *database = dtw.resource.newResource("database");
+    create_schemas(database);
+    DtwResource *users = dtw.resource.sub_resource(database,"users");
+
+    create_x_users(users,100);
+
+    Filtrage f;
+    f.age = 18;
+    cJSON *itens = cJSON_CreateArray();
+    DtwResourceMapProps props = dtw.resource.create_map_props(
+        itens,
+        (void (*)(void*,void*))cJSON_AddItemToArray,
+        (void* (*)(DtwResource *,void*))return_user
+    );
+
+    props.filtrage_callback = verify_if_print_user;
+    props.args = &f;
+
+   dtw.resource.schema_map(users,props);
+
+    char *content = cJSON_Print(itens);
+    printf("%s",content);
+    cJSON_Delete(itens);
+    free(content);
+
+    dtw.resource.free(database);
+    dtw.randonizer.free(randonizer);
+
+    return 0;
+}
+
+~~~
+
+#### CJson Array Map
+you also can directly map a cJSON Array
+
+
+~~~c
+#include "doTheWorld.h"
+
+
+DtwNamespace dtw;
+DtwRandonizer *randonizer;
+typedef struct {
+    int age;
+}Filtrage;
+
+
+cJSON * return_user(DtwResource *user, void *filtragem){
+    cJSON *created_object =cJSON_CreateObject();
+    cJSON_AddStringToObject(
+        created_object,
+        "name", dtw.resource.get_string_from_sub_resource(user, "name")
+    );
+
+    cJSON_AddNumberToObject(
+        created_object,
+        "age",
+        dtw.resource.get_long_from_sub_resource(user,"age")
+    );
+    return created_object;
+}
+
+bool verify_if_print_user(DtwResource *user, void *filtragem){
+     Filtrage *f = (Filtrage *)filtragem;
+    long age = dtw.resource.get_long_from_sub_resource(user, "age");
+
+    if(age < f->age){
+
+        return true;
+    }
+
+    return false;
+}
+void create_x_users(DtwResource *users,long quantity){
+    for(int i =0; i < quantity; i++){
+        DtwResource *current = dtw.resource.sub_resource_random(users,NULL);
+
+        char formatted_name[20] = {0};
+        sprintf(formatted_name,"user%d", i);
+        long age = dtw.randonizer.generate_num(randonizer,100);
+
+        dtw.resource.set_string_in_sub_resource(current,"name",formatted_name);
+        dtw.resource.set_long_in_sub_resource(current,"age",age);
+    }
+
+}
+
+
+
+
+
+int main(){
+    dtw = newDtwNamespace();
+    randonizer = dtw.randonizer.newRandonizer();
+
+    DtwResource *database = dtw.resource.newResource("database");
+    DtwResource *users = dtw.resource.sub_resource(database,"users");
+
+    create_x_users(users,100);
+
+    Filtrage f;
+    f.age = 18;
+
+    DtwResourcecJSONArrayMapProps props = dtw.resource.create_cJSONArrayMapProps(return_user);
+    props.filtrage_callback = verify_if_print_user;
+    props.args = &f;
+
+    cJSON *itens = dtw.resource.map_cJSONArray(users,props);
+
+
+    char *content = cJSON_Print(itens);
+    printf("%s",content);
+    cJSON_Delete(itens);
+    free(content);
+
+    dtw.resource.free(database);
+    dtw.randonizer.free(randonizer);
+
+    return 0;
+}
+
+~~~
+
+#### CJSON Object Map
+you also can generate a cJSON object, but you need to
+provide a "keey_provider" function ,to determine the key of each
+object generation (note that these key can bee released(free) after, you pass the),
+free_key prop into the props object
+
+
+~~~c
+#include "doTheWorld.h"
+
+
+DtwNamespace dtw;
+DtwRandonizer *randonizer;
+typedef struct {
+    int age;
+}Filtrage;
+
+
+cJSON * return_user(DtwResource *user, void *filtragem){
+    cJSON *created_object =cJSON_CreateObject();
+    cJSON_AddStringToObject(
+        created_object,
+        "name", dtw.resource.get_string_from_sub_resource(user, "name")
+    );
+
+    cJSON_AddNumberToObject(
+        created_object,
+        "age",
+        dtw.resource.get_long_from_sub_resource(user,"age")
+    );
+    return created_object;
+}
+char * get_key(DtwResource *user, void *filtrage){
+    return  dtw.resource.get_string_from_sub_resource(user, "name");
+}
+
+
+bool verify_if_print_user(DtwResource *user, void *filtragem){
+     Filtrage *f = (Filtrage *)filtragem;
+    long age = dtw.resource.get_long_from_sub_resource(user, "age");
+
+    if(age < f->age){
+
+        return true;
+    }
+
+    return false;
+}
+void create_x_users(DtwResource *users,long quantity){
+    for(int i =0; i < quantity; i++){
+        DtwResource *current = dtw.resource.sub_resource_random(users,NULL);
+
+        char formatted_name[20] = {0};
+        sprintf(formatted_name,"user%d", i);
+        long age = dtw.randonizer.generate_num(randonizer,100);
+
+        dtw.resource.set_string_in_sub_resource(current,"name",formatted_name);
+        dtw.resource.set_long_in_sub_resource(current,"age",age);
+    }
+
+}
+
+
+
+
+
+int main(){
+    dtw = newDtwNamespace();
+    randonizer = dtw.randonizer.newRandonizer();
+
+    DtwResource *database = dtw.resource.newResource("database");
+    DtwResource *users = dtw.resource.sub_resource(database,"users");
+
+    create_x_users(users,100);
+
+    Filtrage f;
+    f.age = 18;
+
+    DtwResourcecJSONObjectMapProps props = dtw.resource.create_cJSONObjectProps(return_user,get_key);
+
+    props.filtrage_callback = verify_if_print_user;
+    props.args = &f;
+
+    cJSON *itens = dtw.resource.map_cJSONObject(users,props);
+
+
+    char *content = cJSON_Print(itens);
+    printf("%s",content);
+    cJSON_Delete(itens);
+    free(content);
+
+    dtw.resource.free(database);
+    dtw.randonizer.free(randonizer);
+
+    return 0;
+}
+
+~~~
+
+#### CCHash
+you can use [CHash](https://github.com/OUIsolutions/CHashManipulator) objects too
+but in these case , you need to use define  DTW_ALLOW_CHASH , and include the lib
+into the project since CHashManipulator, its not included into the amalgamation
+
+~~~c
+
+#include "CHashManipulator.h"
+#define DTW_ALLOW_CHASH
+#include "doTheWorld.h"
+
+
+CHashNamespace hash;
+DtwNamespace dtw;
+DtwRandonizer *randonizer;
+typedef struct {
+    int age;
+}Filtrage;
+
+
+CHashObject * return_user(DtwResource *user, void *filtragem){
+    return newCHashObject(
+        "name",hash.newString(dtw.resource.get_string_from_sub_resource(user, "name")),
+        "age", hash.newNumber(dtw.resource.get_long_from_sub_resource(user,"age"))
+    );
+}
+
+
+bool verify_if_print_user(DtwResource *user, void *filtragem){
+     Filtrage *f = (Filtrage *)filtragem;
+    long age = dtw.resource.get_long_from_sub_resource(user, "age");
+
+    if(age < f->age){
+
+        return true;
+    }
+
+    return false;
+}
+void create_x_users(DtwResource *users,long quantity){
+    for(int i =0; i < quantity; i++){
+        DtwResource *current = dtw.resource.sub_resource_random(users,NULL);
+
+        char formatted_name[20] = {0};
+        sprintf(formatted_name,"user%d", i);
+        long age = dtw.randonizer.generate_num(randonizer,100);
+
+        dtw.resource.set_string_in_sub_resource(current,"name",formatted_name);
+        dtw.resource.set_long_in_sub_resource(current,"age",age);
+    }
+
+}
+
+
+
+
+
+int main(){
+    dtw = newDtwNamespace();
+    hash = newCHashNamespace();
+    randonizer = dtw.randonizer.newRandonizer();
+
+    DtwResource *database = dtw.resource.newResource("database");
+    DtwResource *users = dtw.resource.sub_resource(database,"users");
+
+    create_x_users(users,100);
+
+    Filtrage f;
+    f.age = 18;
+
+    DtwResourceCHashrrayMapProps props = dtw.resource.create_CHashrrayMapProps(return_user);
+
+    props.filtrage_callback = verify_if_print_user;
+    props.args = &f;
+
+    CHashArray *itens = dtw.resource.map_CHashArray(users,props);
+
+    char *content = hash.dump_to_json_string(itens);
+    printf("%s",content);
+    hash.free(itens);
+    free(content);
+
+    dtw.resource.free(database);
+    dtw.randonizer.free(randonizer);
+
+    return 0;
+}
+
+~~~
+
+### Trees and TreeParts
 with tree concepts, you can manipulate files as trees, and implement IO modifications with atomic concepts
 
-### Loading An TreePart 
+### Loading An TreePart
 
 
 ~~~c
@@ -1094,7 +1724,7 @@ int main(){
 }
 ~~~
 
-### Changing path Atributes at once 
+### Changing path Atributes at once
 
 
 
@@ -1116,13 +1746,13 @@ int main(){
 }
 ~~~
 
-With the **hardware_modify** , **hardware_write**, **hardware_remove** 
-Functions , you can generate modifications, without implement it, in these 
-way , you can create massive atomic transactions, and execute all at once 
+With the **hardware_modify** , **hardware_write**, **hardware_remove**
+Functions , you can generate modifications, without implement it, in these
+way , you can create massive atomic transactions, and execute all at once
 
 
 ### hardware_modify
-Will Modificate the original content, for exemple, if you change the extension of an file, it will modificate the original content 
+Will Modificate the original content, for exemple, if you change the extension of an file, it will modificate the original content
 
 
 
@@ -1144,8 +1774,8 @@ int main(){
 }
 ~~~
 
-Will write the file as an "new" file, ignoring the existence of the 
-old file 
+Will write the file as an "new" file, ignoring the existence of the
+old file
 
 
 ~~~c
@@ -1166,7 +1796,7 @@ int main(){
 ~~~
 
 
-Will Delete the current Content 
+Will Delete the current Content
 
 
 
@@ -1189,8 +1819,8 @@ int main(){
 }
 ~~~
 
-With Trees you can make massive folders and files modifications with 
-easy steps 
+With Trees you can make massive folders and files modifications with
+easy steps
 ### Loading Tree From Hardware
 
 
@@ -1369,8 +1999,8 @@ int main(){
 
 ~~~
 
-Trees suports even Maps or filters, it returns an new tree of the of the current lambda procediment 
-#### Filter 
+Trees suports even Maps or filters, it returns an new tree of the of the current lambda procediment
+#### Filter
 with filter you can filter the contents you want in an tree with an bool lambda
 
 
@@ -1417,7 +2047,7 @@ int main(){
 }
 ~~~
 
-### Map 
+### Map
 
 
 ~~~c
@@ -1466,7 +2096,7 @@ int main(){
 }
 ~~~
 
-With **hardware_commit_tree** you can commit all modifications at Once 
+With **hardware_commit_tree** you can commit all modifications at Once
 turning system ultra securty
 
 
@@ -1555,9 +2185,9 @@ int main(){
 }
 ~~~
 
-With Json Trees Operations you can save or load trees, from hardware or strings in an super easy mode 
+With Json Trees Operations you can save or load trees, from hardware or strings in an super easy mode
 
-#### Dumping Tree Json To File 
+#### Dumping Tree Json To File
 It will transform the tree in an json document
 
 
@@ -1635,7 +2265,7 @@ int main(){
 ~~~
 
 If you want to recuperate the file you saved in the json file
-you can load it 
+you can load it
 
 
 ~~~c
@@ -1825,7 +2455,7 @@ int main (){
 ### Randonizer
 Randonizer it's a way to generate random values,integers or strings
 
-#### Numerical Random 
+#### Numerical Random
 
 ~~~c
 

@@ -39,8 +39,8 @@ int main(int argc, char *argv[]){
 ~~~
 ## Pre Compiled version
 You also can download the pre compiled versions
-[Pre Compiled Linux](https://github.com/OUIsolutions/DoTheWorld/releases/download/v6.001/pre_compiled_linux.zip) or
-[Pre Compiled Windows](https://github.com/OUIsolutions/DoTheWorld/releases/download/v6.001/pre_compiled_windows.zip) to
+[Pre Compiled Linux](https://github.com/OUIsolutions/DoTheWorld/releases/download/v7.000/pre_compiled_linux.zip) or
+[Pre Compiled Windows](https://github.com/OUIsolutions/DoTheWorld/releases/download/v7.000/pre_compiled_windows.zip) to
 optimize compilation time, extract the zip , than you can run with:
 ~~~c
 #include "doTheWorldDeclaration.h"
@@ -239,7 +239,7 @@ codeof:exemples/resources/Foreach.c
 #### Schema Each
 you also can iterate over schemas with schema each
 
-codeof:exemples/schemas/schema_each.c
+codeof:exemples/schema/schema_each.c
 
 #### Map
 with map you can construct, objects lists, with what ever you want
@@ -250,7 +250,7 @@ codeof:exemples/resources/map.c
 
 of course, it also works with schemas
 
-codeof:exemples/schemas/schema_map.c
+codeof:exemples/schema/schema_map.c
 
 #### CJson Array Map
 you also can directly map a cJSON Array
