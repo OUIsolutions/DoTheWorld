@@ -32,7 +32,7 @@ CHashArray *DtwResource_map_CHashArray(DtwResource *self,DtwResourceCHashrrayMap
 
     DtwResourceMapProps map_props = DtwResource_create_map_props(
         itens,
-        privateDtwResource_add_to_item_to_cJSONObject,
+        privateDtwResource_add_to_item_to_CHashArray_array,
         private_dtw_CHashArray_callback
     );
 

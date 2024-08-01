@@ -1,7 +1,7 @@
-#include "extras/CHashManipulator.h"
-#define DTW_ALLOW_CHASH
-#include "src/one.c"
 
+#include "CHashManipulator.h"
+#define DTW_ALLOW_CHASH
+#include "../../../doTheWorld_test.h"
 
 
 CHashNamespace hash;

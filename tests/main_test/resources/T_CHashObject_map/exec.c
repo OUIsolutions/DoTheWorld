@@ -1,7 +1,7 @@
-#include "extras/CHashManipulator.h"
-#define DTW_ALLOW_CHASH
-#include "src/one.c"
 
+#include "CHashManipulator.h"
+#define DTW_ALLOW_CHASH
+#include "../../../doTheWorld_test.h"
 
 
 CHashNamespace hash;
@@ -17,6 +17,9 @@ CHashObject * return_user(DtwResource *user, void *filtragem){
         "name",hash.newString(dtw.resource.get_string_from_sub_resource(user, "name")),
         "age", hash.newNumber(dtw.resource.get_long_from_sub_resource(user,"age"))
     );
+}
+char * get_key(DtwResource *user, void *filtrage){
+    return  dtw.resource.get_string_from_sub_resource(user, "name");
 }
 
 
@@ -62,12 +65,14 @@ int main(){
     Filtrage f;
     f.age = 18;
 
-    DtwResourceCHashrrayMapProps props = dtw.resource.create_CHashrrayMapProps(return_user);
+    DtwResourceCHashObjectMapProps props = dtw.resource.createCHashObjectMapProps(
+        return_user,get_key
+    );
 
     props.filtrage_callback = verify_if_print_user;
     props.args = &f;
 
-    CHashArray *itens = dtw.resource.map_CHashArray(users,props);
+    CHashArray *itens = dtw.resource.map_CHashObject(users,props);
 
     char *content = hash.dump_to_json_string(itens);
     printf("%s",content);
