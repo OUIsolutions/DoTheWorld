@@ -109,5 +109,5 @@ void DtwResource_schema_map(DtwResource *self,DtwResourceMapProps props){
             return ;
         }
 
-    return DtwResource_map(self->values_resource, props);
+     DtwResource_map(self->values_resource, props);
 }
