@@ -72,5 +72,7 @@ cJSON *DtwResource_schema_map_cJSONObject(DtwResource *self,DtwResourcecJSONObje
             );
             return NULL;
     }
+    DtwResourceSchemaUnsafe({
     return  DtwResource_map_cJSONObject(self->values_resource,props);
+    })
 }

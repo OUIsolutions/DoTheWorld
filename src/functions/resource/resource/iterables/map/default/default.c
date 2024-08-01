@@ -124,8 +124,8 @@ void DtwResource_schema_map(DtwResource *self,DtwResourceMapProps props){
             );
             return ;
         }
-    self->root_props->is_writing_schema = true;
 
-     DtwResource_map(self->values_resource, props);
-     self->root_props->is_writing_schema = false;
+    DtwResourceSchemaUnsafe({
+        DtwResource_map(self->values_resource, props);
+    })
 }

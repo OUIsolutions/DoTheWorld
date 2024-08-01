@@ -62,8 +62,7 @@ void DtwResource_schema_foreach(DtwResource *self,DtwResourceForeachProps props)
         );
         return ;
     }
-    self->root_props->is_writing_schema = true;
-    DtwResource_foreach(self->values_resource,props);
-    self->root_props->is_writing_schema = false;
-
+    DtwResourceSchemaUnsafe({
+        DtwResource_foreach(self->values_resource,props);
+    })
 }

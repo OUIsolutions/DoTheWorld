@@ -74,5 +74,8 @@ CHash *DtwResource_schema_map_CHashObject(DtwResource *self,DtwResourceCHashObje
             );
             return NULL;
     }
+    DtwResourceSchemaUnsafe({
+
     return DtwResource_map_CHashObject(self->values_resource,props);
+    })
 }

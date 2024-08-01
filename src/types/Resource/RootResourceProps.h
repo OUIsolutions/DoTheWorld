@@ -8,7 +8,7 @@ typedef struct {
     DtwTransaction  *transaction;
     DtwRandonizer  *randonizer;
     DtwLocker *locker;
-    bool is_writing_schema;
+    bool schema_unsafe;
     int error_code;
     char *error_path;
     char *error_message;
