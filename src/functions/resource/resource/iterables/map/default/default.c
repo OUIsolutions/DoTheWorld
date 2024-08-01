@@ -65,7 +65,10 @@ void DtwResource_map(DtwResource *self,DtwResourceMapProps props){
 
         void* result = props.callback(current, props.args);
         if(DtwResource_error(self)){
-            return;;
+            if(result){
+                props.append(props.main_array,result);
+            }
+            return;
         }
         if(result == NULL){
             continue;

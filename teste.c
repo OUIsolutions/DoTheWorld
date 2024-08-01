@@ -71,7 +71,13 @@ int main(){
     props.args = &f;
 
     cJSON *itens = dtw.resource.map_cJSONArray(users,props);
-
+    if(dtw.resource.error(users)){
+        printf("menssage:%s\n",dtw.resource.get_error_message(users));
+        cJSON_Delete(itens);
+        dtw.resource.free(database);
+        dtw.randonizer.free(randonizer);
+        return 0;
+    }
 
     char *content = cJSON_Print(itens);
     printf("%s",content);
