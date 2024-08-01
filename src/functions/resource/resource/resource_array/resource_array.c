@@ -1,4 +1,5 @@
 #include "../unique.definition_requirements.h"
+#include <time.h>
 
 
 DtwResourceArray * DtwResource_get_schema_values(DtwResource *self){
@@ -34,15 +35,25 @@ DtwResourceArray * DtwResource_sub_resources(DtwResource *self){
     }
 
     for(int i = 0; i < names->size; i++){
+
         char *current_name = names->strings[i];
 
         if(self->cache_sub_resources){
             DtwResource_sub_resource(self,"%s", current_name);
+            if(DtwResource_error(self)){
+                DtwStringArray_free(names);
+                return NULL;
+            }
         }
 
         else{
             DtwResource *current_resource = DtwResource_sub_resource(self,"%s",current_name);
             DtwResourceArray_append(target_array,current_resource);
+            if(DtwResource_error(self)){
+                DtwStringArray_free(names);
+                return NULL;
+;
+            }
         }
     }
 
