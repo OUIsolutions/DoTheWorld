@@ -42,9 +42,7 @@ local function main()
             return Generate_amalgamation_recursive(DECLARATION_POINT)
         end).add_dependencie(src_sha).perform()
 
-        Create_pre_compiled_version(LINUX_COMPILER,declaration_amalgamation,PRECOMPILED_LINUX)
-        Create_pre_compiled_version(WINDOWS_COMPILER,declaration_amalgamation,PRECOMPILED_WINDOWS)
-
+      
 end
 
 main()

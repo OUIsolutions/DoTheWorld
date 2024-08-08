@@ -37,24 +37,6 @@ int main(int argc, char *argv[]){
 }
 
 ~~~
-## Pre Compiled version
-You also can download the pre compiled versions
-[Pre Compiled Linux](https://github.com/OUIsolutions/DoTheWorld/releases/download/v7.001/pre_compiled_linux.zip) or
-[Pre Compiled Windows](https://github.com/OUIsolutions/DoTheWorld/releases/download/v7.001/pre_compiled_windows.zip) to
-optimize compilation time, extract the zip , than you can run with:
-~~~c
-#include "doTheWorldDeclaration.h"
-
-int main(){
-  return 0;
-}
-~~~
-compile with:
-
-~~~shel
-gcc main.c cJSON.o doTheWorld.o sha256.o
-~~~
-
 
 # Bulding the Project
 if you want to exec all tests, or generate your own amalgamation,
