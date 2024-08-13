@@ -227,7 +227,7 @@ enum {
 
 
 #define DtwSchemaRebase self->root_props->schema_unsafe =old;
-#define DtwSchemaUnsafe(scope){\
+#define privateDtwSchemaUnsafe(scope){\
     bool old = self->root_props->schema_unsafe;\
     self->root_props->schema_unsafe = true;\
     scope;\
@@ -7208,7 +7208,7 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
 
 
     if(new_element->attached_schema){
-        DtwSchemaUnsafe({
+        privateDtwSchemaUnsafe({
             new_element->schema_type = PRIVATE_DTW_SCHEMA_ROOT;
             new_element->values_resource = DtwResource_sub_resource(new_element,DTW_SCHEMA_DEFAULT_VALUES_NAME);
             new_element->values_resource->schema_type = PRIVATE_DTW_SCHEMA_VALUE;
@@ -7509,14 +7509,14 @@ void DtwResource_destroy(DtwResource *self){
 
 
     if(self->schema_type == PRIVATE_DTW_SCHEMA_ELEMENT){
-        DtwSchemaUnsafe({
+        privateDtwSchemaUnsafe({
             private_DtwResource_destroy_all_primary_keys(self);
 
         })
     }
 
     if(private_DtwResource_its_a_pk(self)){
-        DtwSchemaUnsafe({
+        privateDtwSchemaUnsafe({
             private_DtwResurce_destroy_primary_key(self);
         })
     }
@@ -8158,7 +8158,7 @@ DtwResource * DtwResource_new_schema_insertion(DtwResource *self){
                 "only root schema can generate insertions");
         return NULL;
     }
-    DtwSchemaUnsafe({
+    privateDtwSchemaUnsafe({
         DtwResource  *created = DtwResource_sub_resource_random(self->values_resource,NULL);
         DtwSchemaRebase
         return created;
@@ -8180,7 +8180,7 @@ DtwResource  *DtwResource_find_by_name_id(DtwResource *self, const char *name){
                 );
         return NULL;
     }
-    DtwSchemaUnsafe({
+    privateDtwSchemaUnsafe({
         DtwResource *element = DtwResource_sub_resource(self->values_resource,name);
 
         if(DtwResource_type(element) == DTW_NOT_FOUND){
@@ -8204,7 +8204,7 @@ DtwResource * DtwResource_find_by_primary_key_with_binary(DtwResource *self, con
                 );
         return NULL;
     }
-    DtwSchemaUnsafe({
+    privateDtwSchemaUnsafe({
         DtwResource *primary_key_folder = DtwResource_sub_resource(self->index_resource, "%s", primary_key);
         char *sha = dtw_generate_sha_from_any(value,size);
         DtwResource *index_value = DtwResource_sub_resource(primary_key_folder,"%s",sha);
@@ -8253,7 +8253,7 @@ void DtwResource_dangerous_remove_schema_prop(DtwResource*self,const char *prop)
         );
         return;
     }
-    DtwSchemaUnsafe({
+    privateDtwSchemaUnsafe({
 
         bool allow_transaction = self->allow_transaction;
 
@@ -8293,7 +8293,7 @@ void DtwResource_dangerous_rename_schema_prop(DtwResource*self,const char *prop,
         );
         return;
     }
-    DtwSchemaUnsafe({
+    privateDtwSchemaUnsafe({
         bool allow_transaction = self->allow_transaction;
 
         DtwResourceArray * all_values = DtwResource_sub_resources(self->values_resource);
@@ -8351,7 +8351,7 @@ DtwDatabaseSchema * DtwResource_newDatabaseSchema(DtwResource *self){
 
 void private_dtw_resource_set_primary_key(DtwResource *self, unsigned  char *element, long size){
 
-DtwSchemaUnsafe({
+privateDtwSchemaUnsafe({
     DtwResource * ancestor = self->mother->mother->mother;
     DtwResource *index_resource =ancestor->index_resource;
     DtwResource *pk_folder = DtwResource_sub_resource(index_resource,"%s",self->name);
@@ -8601,7 +8601,11 @@ void DtwResource_foreach(DtwResource *self,DtwResourceForeachProps props){
     if(DtwResource_error(self)){
         return;;
     }
-    DtwResourceArray *itens = DtwResource_sub_resources(self);
+    DtwResourceArray *itens = NULL;
+    privateDtwSchemaUnsafe({
+        itens = DtwResource_sub_resources(self);
+    })
+
     if(DtwResource_error(self)){
         return;;
     }
@@ -8651,15 +8655,13 @@ void DtwResource_schema_foreach(DtwResource *self,DtwResourceForeachProps props)
         );
         return ;
     }
-    DtwSchemaUnsafe({
-        DtwResource_foreach(self->values_resource,props);
-    })
+    DtwResource_foreach(self->values_resource,props);
 }
 
 
 
 
-#include <time.h>
+
 DtwResourceMapProps DtwResource_create_map_props(
     void *main_array,
     void(*append)(void *main_array_arg, void *item),
@@ -8685,10 +8687,16 @@ void DtwResource_map(DtwResource *self,DtwResourceMapProps props){
     if(DtwResource_error(self)){
         return;;
     }
-    DtwResourceArray *itens = DtwResource_sub_resources(self);
+
+    DtwResourceArray *itens = NULL;
+    privateDtwSchemaUnsafe({
+        itens = DtwResource_sub_resources(self);
+    })
+
     if(DtwResource_error(self)){
-        return;;
+        return;
     }
+
     privateDtwResource_map_element **mapped_elements= NULL;
     int total_mapped_elements = 0;
     if(props.ordenation_callback) {
@@ -8788,9 +8796,8 @@ void DtwResource_schema_map(DtwResource *self,DtwResourceMapProps props){
             return ;
         }
 
-    DtwSchemaUnsafe({
         DtwResource_map(self->values_resource, props);
-    })
+
 }
 
 
@@ -8859,9 +8866,8 @@ cJSON *DtwResource_schema_map_cJSONArray(DtwResource *self,DtwResourcecJSONArray
             );
             return NULL;
     }
-    DtwSchemaUnsafe({
-        return  DtwResource_map_cJSONArray(self->values_resource, props);
-    })
+    return  DtwResource_map_cJSONArray(self->values_resource, props);
+
 }
 
 
@@ -8940,9 +8946,8 @@ cJSON *DtwResource_schema_map_cJSONObject(DtwResource *self,DtwResourcecJSONObje
             );
             return NULL;
     }
-    DtwSchemaUnsafe({
     return  DtwResource_map_cJSONObject(self->values_resource,props);
-    })
+
 }
 
 
@@ -9010,9 +9015,7 @@ CHashArray *DtwResource_schema_map_CHashArray(DtwResource *self,DtwResourceCHash
             );
             return NULL;
     }
-    DtwSchemaUnsafe({
     return DtwResource_map_CHashArray(self->values_resource,props);
-    })
 }
 
 
@@ -9093,10 +9096,9 @@ CHash *DtwResource_schema_map_CHashObject(DtwResource *self,DtwResourceCHashObje
             );
             return NULL;
     }
-    DtwSchemaUnsafe({
 
     return DtwResource_map_CHashObject(self->values_resource,props);
-    })
+
 }
 
 
@@ -9116,7 +9118,7 @@ DtwResourceArray * DtwResource_get_schema_values(DtwResource *self){
     if(DtwResource_error(self)){
         return NULL;
     }
-    DtwSchemaUnsafe({
+    privateDtwSchemaUnsafe({
         if(self->schema_type != PRIVATE_DTW_SCHEMA_ROOT){
             private_DtwResource_raise_error(
                     self,
