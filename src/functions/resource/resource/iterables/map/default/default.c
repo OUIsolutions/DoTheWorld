@@ -134,7 +134,6 @@ void DtwResource_schema_map(DtwResource *self,DtwResourceMapProps props){
             return ;
         }
 
-    DtwSchemaUnsafe({
         DtwResource_map(self->values_resource, props);
-    })
+
 }
