@@ -13,7 +13,7 @@ void DtwResource_foreach(DtwResource *self,DtwResourceForeachProps props){
         return;;
     }
     DtwResourceArray *itens = NULL;
-    DtwSchemaUnsafe({
+    privateDtwSchemaUnsafe({
         itens = DtwResource_sub_resources(self);
     })
 

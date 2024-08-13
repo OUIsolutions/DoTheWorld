@@ -96,7 +96,7 @@ DtwResource * DtwResource_sub_resource(DtwResource *self,const  char *format, ..
 
 
     if(new_element->attached_schema){
-        DtwSchemaUnsafe({
+        privateDtwSchemaUnsafe({
             new_element->schema_type = PRIVATE_DTW_SCHEMA_ROOT;
             new_element->values_resource = DtwResource_sub_resource(new_element,DTW_SCHEMA_DEFAULT_VALUES_NAME);
             new_element->values_resource->schema_type = PRIVATE_DTW_SCHEMA_VALUE;

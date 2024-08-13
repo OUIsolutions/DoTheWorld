@@ -27,7 +27,7 @@ void DtwResource_map(DtwResource *self,DtwResourceMapProps props){
     }
 
     DtwResourceArray *itens = NULL;
-    DtwSchemaUnsafe({
+    privateDtwSchemaUnsafe({
         itens = DtwResource_sub_resources(self);
     })
 

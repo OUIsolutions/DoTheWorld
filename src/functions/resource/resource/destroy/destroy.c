@@ -49,14 +49,14 @@ void DtwResource_destroy(DtwResource *self){
 
 
     if(self->schema_type == PRIVATE_DTW_SCHEMA_ELEMENT){
-        DtwSchemaUnsafe({
+        privateDtwSchemaUnsafe({
             private_DtwResource_destroy_all_primary_keys(self);
 
         })
     }
 
     if(private_DtwResource_its_a_pk(self)){
-        DtwSchemaUnsafe({
+        privateDtwSchemaUnsafe({
             private_DtwResurce_destroy_primary_key(self);
         })
     }

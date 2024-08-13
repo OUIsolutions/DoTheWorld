@@ -56,7 +56,7 @@ DtwResource * DtwResource_new_schema_insertion(DtwResource *self){
                 "only root schema can generate insertions");
         return NULL;
     }
-    DtwSchemaUnsafe({
+    privateDtwSchemaUnsafe({
         DtwResource  *created = DtwResource_sub_resource_random(self->values_resource,NULL);
         DtwSchemaRebase
         return created;
@@ -78,7 +78,7 @@ DtwResource  *DtwResource_find_by_name_id(DtwResource *self, const char *name){
                 );
         return NULL;
     }
-    DtwSchemaUnsafe({
+    privateDtwSchemaUnsafe({
         DtwResource *element = DtwResource_sub_resource(self->values_resource,name);
 
         if(DtwResource_type(element) == DTW_NOT_FOUND){
@@ -102,7 +102,7 @@ DtwResource * DtwResource_find_by_primary_key_with_binary(DtwResource *self, con
                 );
         return NULL;
     }
-    DtwSchemaUnsafe({
+    privateDtwSchemaUnsafe({
         DtwResource *primary_key_folder = DtwResource_sub_resource(self->index_resource, "%s", primary_key);
         char *sha = dtw_generate_sha_from_any(value,size);
         DtwResource *index_value = DtwResource_sub_resource(primary_key_folder,"%s",sha);
@@ -151,7 +151,7 @@ void DtwResource_dangerous_remove_schema_prop(DtwResource*self,const char *prop)
         );
         return;
     }
-    DtwSchemaUnsafe({
+    privateDtwSchemaUnsafe({
 
         bool allow_transaction = self->allow_transaction;
 
@@ -191,7 +191,7 @@ void DtwResource_dangerous_rename_schema_prop(DtwResource*self,const char *prop,
         );
         return;
     }
-    DtwSchemaUnsafe({
+    privateDtwSchemaUnsafe({
         bool allow_transaction = self->allow_transaction;
 
         DtwResourceArray * all_values = DtwResource_sub_resources(self->values_resource);

@@ -6,7 +6,7 @@ DtwResourceArray * DtwResource_get_schema_values(DtwResource *self){
     if(DtwResource_error(self)){
         return NULL;
     }
-    DtwSchemaUnsafe({
+    privateDtwSchemaUnsafe({
         if(self->schema_type != PRIVATE_DTW_SCHEMA_ROOT){
             private_DtwResource_raise_error(
                     self,
