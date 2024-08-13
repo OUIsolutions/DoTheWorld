@@ -1,5 +1,5 @@
 #include "../unique.definition_requirements.h"
-#include <time.h>
+
 DtwResourceMapProps DtwResource_create_map_props(
     void *main_array,
     void(*append)(void *main_array_arg, void *item),
@@ -25,10 +25,16 @@ void DtwResource_map(DtwResource *self,DtwResourceMapProps props){
     if(DtwResource_error(self)){
         return;;
     }
-    DtwResourceArray *itens = DtwResource_sub_resources(self);
+
+    DtwResourceArray *itens = NULL;
+    DtwSchemaUnsafe({
+        itens = DtwResource_sub_resources(self);
+    })
+
     if(DtwResource_error(self)){
-        return;;
+        return;
     }
+
     privateDtwResource_map_element **mapped_elements= NULL;
     int total_mapped_elements = 0;
     if(props.ordenation_callback) {

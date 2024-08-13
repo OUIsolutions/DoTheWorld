@@ -58,7 +58,5 @@ CHashArray *DtwResource_schema_map_CHashArray(DtwResource *self,DtwResourceCHash
             );
             return NULL;
     }
-    DtwSchemaUnsafe({
     return DtwResource_map_CHashArray(self->values_resource,props);
-    })
 }

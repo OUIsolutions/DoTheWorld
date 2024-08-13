@@ -12,7 +12,11 @@ void DtwResource_foreach(DtwResource *self,DtwResourceForeachProps props){
     if(DtwResource_error(self)){
         return;;
     }
-    DtwResourceArray *itens = DtwResource_sub_resources(self);
+    DtwResourceArray *itens = NULL;
+    DtwSchemaUnsafe({
+        itens = DtwResource_sub_resources(self);
+    })
+
     if(DtwResource_error(self)){
         return;;
     }
@@ -62,7 +66,5 @@ void DtwResource_schema_foreach(DtwResource *self,DtwResourceForeachProps props)
         );
         return ;
     }
-    DtwSchemaUnsafe({
-        DtwResource_foreach(self->values_resource,props);
-    })
+    DtwResource_foreach(self->values_resource,props);
 }
