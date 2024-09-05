@@ -1118,6 +1118,7 @@ typedef struct {
 #ifdef DTW_ALLOW_CHASH
 
 
+#define DTW_ALLOW_CHASH
 
 #ifndef PRIVATE_DTW_CHASH_ELEMENT_AND_KEY_TYPE
 #define PRIVATE_DTW_CHASH_ELEMENT_AND_KEY_TYPE
@@ -8980,7 +8981,7 @@ int private_dtw_CHashArray_ordenation(DtwResource *item1,DtwResource *item2,void
 }
 
 void privateDtwResource_add_to_item_to_CHashArray_array(void* array, void *item){
-    CHashArray_append_any(array, (CHash *)item);
+    CHashArray_append_any((CHashArray*)array, (CHash *)item);
 }
 
 CHashArray *DtwResource_map_CHashArray(DtwResource *self,DtwResourceCHashrrayMapProps props){
