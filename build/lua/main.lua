@@ -3,6 +3,9 @@ local function main()
     local cache = NewCache(CACHE_POINT)
 
 
+
+
+
     local amalgamation_cache = cache.new_element("one_amalgamation", function()
         return Generate_amalgamation_recursive(START_POINT)
     end).add_dependencie(src_sha)
@@ -47,8 +50,12 @@ local function main()
         return Generate_amalgamation_recursive(DEFINITION_POINT)
     end).add_dependencie(src_sha).perform()
 
+    local index = clib.indexof(implementation_amalgamation, "//doTheWorldDeclarationEnd");
 
-    dtw.write_file(RELEASE_FOLDER .. "/" .. OUTPUT_DEFINITION, implementation_amalgamation)
+
+    local formmated = string.sub(implementation_amalgamation, index, #implementation_amalgamation);
+    formmated = '#include  "doTheWorld_declaration.h"\n' .. formmated
+    dtw.write_file(RELEASE_FOLDER .. "/" .. OUTPUT_DEFINITION, formmated)
 end
 
 main()

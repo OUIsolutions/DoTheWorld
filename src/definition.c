@@ -1,9 +1,13 @@
 
 
-#include "globals.c"
+
 #include "declaration.h"
+
+//doTheWorldDeclarationEnd
+
+
+
+
+
+#include "globals.c"
 #include "functions/definition.c"
-
-
-
-

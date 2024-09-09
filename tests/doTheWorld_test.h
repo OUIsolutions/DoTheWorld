@@ -29,13 +29,9 @@ SOFTWARE.
 
 #ifndef DO_THE_WORLD_H
 
+#define DO_THE_WORLD_ONE
 
 
-
-#ifndef DTW_GLOBALS_H
-#define DTW_GLOBALS_H
-const char dtw_base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-#endif
 
 
 
@@ -3198,6 +3194,21 @@ DtwNamespace newDtwNamespace();
 
 #ifdef __cplusplus
 }
+#endif
+
+
+
+//doTheWorldDeclarationEnd
+
+
+
+
+
+
+
+#ifndef DTW_GLOBALS_H
+#define DTW_GLOBALS_H
+const char dtw_base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 #endif
 
 
@@ -10614,13 +10625,9 @@ DtwNamespace newDtwNamespace(){
 
 
 
-
-
-
-
-
-#ifdef PRIVATE_DTW_CJSON_DEFINED_IN_DO_THE_WORLD
-/*
+#ifndef DTW_NOT_IMPLEMENT_CJSON
+    #ifdef PRIVATE_DTW_CJSON_DEFINED_IN_DO_THE_WORLD
+        /*
   Copyright (c) 2009-2017 Dave Gamble and cJSON contributors
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -13765,14 +13772,16 @@ CJSON_PUBLIC(void) cJSON_free(void *object)
     object = NULL;
 }
 
-#undef true
-#define true 1
-#undef false
-#define false 0
+        #undef true
+        #define true 1
+        #undef false
+        #define false 0
+    #endif
 #endif
 
-#ifdef PRIVATE_DTW_SHA_DEFINED_IN_DO_THE_WORLD
-
+#ifndef DTW_NOT_IMPLEMENT_SHA256
+    #ifdef PRIVATE_DTW_SHA_DEFINED_IN_DO_THE_WORLD
+        
 
 
 #define TOTAL_LEN_LEN 8
@@ -14000,10 +14009,9 @@ void calc_sha_256(uint8_t hash[SIZE_OF_SHA_256_HASH], const void *input, size_t 
 	(void)sha_256_close(&sha_256);
 }
 
+    #endif
 #endif
 
 
+
 #endif //DO_THE_WORLD_H
-
-
-
