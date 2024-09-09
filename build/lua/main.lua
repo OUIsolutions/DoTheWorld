@@ -7,13 +7,15 @@ local function main()
         local cache = NewCache(CACHE_POINT)
 
 
+        
         local amalgamation_cache = cache.new_element("amalgamation",function ()
             return Generate_amalgamation_recursive(START_POINT)
-        end).add_dependencie(src_sha)
+        end)
 
-
+        amalgamation_cache.add_dependencie(src_sha)
         local amalgamation_result = amalgamation_cache.perform()
         dtw.write_file(END_TEST_POINT,amalgamation_result)
+
 
         Execute_full_test(cache,src_sha)
 
@@ -38,10 +40,24 @@ local function main()
         end
         dtw.write_file(RELEASE_FOLDER.."/"..OUTPUT_SINGLE_FILE,amalgamation_result)
 
+
+
         local declaration_amalgamation = cache.new_element("declaration_amalgamation",function ()
             return Generate_amalgamation_recursive(DECLARATION_POINT)
-        end).add_dependencie(src_sha).perform()
+        end)
+        declaration_amalgamation.add_dependencie(src_sha)
+        declaration_amalgamation.perform()
 
+
+
+
+
+
+
+
+
+
+        
       
 end
 
