@@ -1,4 +1,7 @@
-#include "dependencies/all.h"
+#include "../dependencies/CTextEngine.h"
+#include "../dependencies/LuaCEmbed.h"
+#include "../dependencies/luaDoTheWorld/one.c"
+
 #include "lua_code.h"
 
 LuaCEmbedNamespace lua;
@@ -30,8 +33,10 @@ int main(int argc,char *argv[]){
     dtw = newDtwNamespace();
     stack = newCTextStackModule();
     LuaCEmbed * main_obj = lua.newLuaEvaluation();
-    add_callbacks(main_obj);
     lua.load_lib_from_c(main_obj,load_luaDoTheWorld,"dtw");
+    lua.load_native_libs(main_obj);
+    add_callbacks(main_obj);
+
 
 
     lua.evaluate(main_obj,lua_code);
