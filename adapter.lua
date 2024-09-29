@@ -20,6 +20,7 @@ function remove_all_includes_of_dir(dir)
         local current = elements[i]
         local content = dtw.load_file(current)
         local content_formmatted = remove_all_includes(content)
+        print(content_formmatted)
         -- dtw.write_file(current, content_formmatted)
     end
 end
