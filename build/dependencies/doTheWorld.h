@@ -29,9 +29,13 @@ SOFTWARE.
 
 #ifndef DO_THE_WORLD_H
 
-#define DO_THE_WORLD_ONE
 
 
+
+#ifndef DTW_GLOBALS_H
+#define DTW_GLOBALS_H
+const char dtw_base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+#endif
 
 
 
@@ -1114,7 +1118,6 @@ typedef struct {
 #ifdef DTW_ALLOW_CHASH
 
 
-#define DTW_ALLOW_CHASH
 
 #ifndef PRIVATE_DTW_CHASH_ELEMENT_AND_KEY_TYPE
 #define PRIVATE_DTW_CHASH_ELEMENT_AND_KEY_TYPE
@@ -3195,21 +3198,6 @@ DtwNamespace newDtwNamespace();
 
 #ifdef __cplusplus
 }
-#endif
-
-
-
-//doTheWorldDeclarationEnd
-
-
-
-
-
-
-
-#ifndef DTW_GLOBALS_H
-#define DTW_GLOBALS_H
-const char dtw_base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 #endif
 
 
@@ -8862,13 +8850,7 @@ cJSON *DtwResource_map_cJSONArray(DtwResource *self,DtwResourcecJSONArrayMapProp
     if(props.ordenation_callback) {
         mapped_props.ordenation_callback = private_dtw_cJSONArray_ordenation;
     }
-    
-    if(props.qtd){
-        mapped_props.qtd = props.qtd;
-    }
-    if(props.start){
-        mapped_props.start = props.start;
-    }
+
 
     DtwResource_map(self,mapped_props);
 
@@ -8949,12 +8931,7 @@ cJSON *DtwResource_map_cJSONObject(DtwResource *self,DtwResourcecJSONObjectMapPr
     if(props.ordenation_callback) {
         map_props.ordenation_callback = private_dtw_cJSONObject_ordenation;
     }
-    if(props.qtd){
-        map_props.qtd = props.qtd;
-    }
-    if(props.start){
-        map_props.start = props.start;
-    }
+
     DtwResource_map(self,map_props);
 
     return itens;
@@ -9003,7 +8980,7 @@ int private_dtw_CHashArray_ordenation(DtwResource *item1,DtwResource *item2,void
 }
 
 void privateDtwResource_add_to_item_to_CHashArray_array(void* array, void *item){
-    CHashArray_append_any((CHashArray*)array, (CHash *)item);
+    CHashArray_append_any(array, (CHash *)item);
 }
 
 CHashArray *DtwResource_map_CHashArray(DtwResource *self,DtwResourceCHashrrayMapProps props){
@@ -9019,12 +8996,6 @@ CHashArray *DtwResource_map_CHashArray(DtwResource *self,DtwResourceCHashrrayMap
     map_props.args = (void*)&props;
     if(props.filtrage_callback) {
         map_props.filtrage_callback = private_dtw_CHashArray_filtrage;
-    }
-    if(props.qtd){
-        map_props.qtd = props.qtd;
-    }
-    if(props.start){
-        map_props.start = props.start;
     }
 
     if(props.ordenation_callback) {
@@ -9106,13 +9077,6 @@ CHash *DtwResource_map_CHashObject(DtwResource *self,DtwResourceCHashObjectMapPr
     map_props.args = (void*)&props;
     if(props.filtrage_callback) {
         map_props.filtrage_callback = private_dtw_CHashObject_filtrage;
-    }
-
-    if(props.qtd){
-        map_props.qtd = props.qtd;
-    }
-    if(props.start){
-        map_props.start = props.start;
     }
 
     if(props.ordenation_callback) {
@@ -10650,9 +10614,13 @@ DtwNamespace newDtwNamespace(){
 
 
 
-#ifndef DTW_NOT_IMPLEMENT_CJSON
-    #ifdef PRIVATE_DTW_CJSON_DEFINED_IN_DO_THE_WORLD
-        /*
+
+
+
+
+
+#ifdef PRIVATE_DTW_CJSON_DEFINED_IN_DO_THE_WORLD
+/*
   Copyright (c) 2009-2017 Dave Gamble and cJSON contributors
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -13797,16 +13765,14 @@ CJSON_PUBLIC(void) cJSON_free(void *object)
     object = NULL;
 }
 
-        #undef true
-        #define true 1
-        #undef false
-        #define false 0
-    #endif
+#undef true
+#define true 1
+#undef false
+#define false 0
 #endif
 
-#ifndef DTW_NOT_IMPLEMENT_SHA256
-    #ifdef PRIVATE_DTW_SHA_DEFINED_IN_DO_THE_WORLD
-        
+#ifdef PRIVATE_DTW_SHA_DEFINED_IN_DO_THE_WORLD
+
 
 
 #define TOTAL_LEN_LEN 8
@@ -14034,9 +14000,10 @@ void calc_sha_256(uint8_t hash[SIZE_OF_SHA_256_HASH], const void *input, size_t 
 	(void)sha_256_close(&sha_256);
 }
 
-    #endif
 #endif
 
 
-
 #endif //DO_THE_WORLD_H
+
+
+

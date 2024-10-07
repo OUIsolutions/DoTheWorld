@@ -28,10 +28,10 @@ SOFTWARE.
 */
 
 #ifndef DO_THE_WORLD_H
+
+#define DO_THE_WORLD_ONE
+
 #include "definition.c"
 #include "dependencies/definition.c"
 
 #endif //DO_THE_WORLD_H
-
-
-

@@ -1,6 +1,9 @@
 
 
-#include "dependencies/all.h"
+#include "../dependencies/CTextEngine.h"
+#include "../dependencies/doTheWorld.h"
+#include "../dependencies/UniversalGarbage.h"
+
 #include "conf.h"
 
 DtwNamespace dtw;
@@ -23,6 +26,9 @@ int  create_lua_code(){
 
     UniversalGarbage *garbage = newUniversalGarbage();
 
+
+    CTextStack *readble_lua = stack.newStack_string_empty();
+    UniversalGarbage_add(garbage, stack.free, readble_lua);
 
     CTextStack * final = stack.newStack_string_format("const char *%s= \"",LUA_VAR_NAME);
     UniversalGarbage_add(garbage,stack.free,final);
@@ -70,10 +76,14 @@ int  create_lua_code(){
             main_code = (char*)current_file->content;
             continue;
         }
+
+        stack.text(readble_lua,(char*)current_file->content);
+
         parse_code(final,(char*)current_file->content);
         parse_code(final,"\n");
     }
     if(main_code == NULL){
+        stack.text(readble_lua,main_code);
         printf("main code not provided\n");
         UniversalGarbage_free(garbage);
         return 1;
@@ -83,7 +93,7 @@ int  create_lua_code(){
     stack.format(final,"\";");
 
     dtw.write_string_file_content(OUTPUT,final->rendered_text);
-
+    dtw.write_string_file_content("visualize.lua",readble_lua->rendered_text);
 
     UniversalGarbage_free(garbage);
     return 0;
