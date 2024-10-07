@@ -57,7 +57,12 @@ cJSON *DtwResource_map_cJSONObject(DtwResource *self,DtwResourcecJSONObjectMapPr
     if(props.ordenation_callback) {
         map_props.ordenation_callback = private_dtw_cJSONObject_ordenation;
     }
-
+    if(props.qtd){
+        map_props.qtd = props.qtd;
+    }
+    if(props.start){
+        map_props.start = props.start;
+    }
     DtwResource_map(self,map_props);
 
     return itens;

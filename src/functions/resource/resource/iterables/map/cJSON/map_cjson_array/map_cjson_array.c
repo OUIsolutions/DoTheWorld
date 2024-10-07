@@ -46,7 +46,13 @@ cJSON *DtwResource_map_cJSONArray(DtwResource *self,DtwResourcecJSONArrayMapProp
     if(props.ordenation_callback) {
         mapped_props.ordenation_callback = private_dtw_cJSONArray_ordenation;
     }
-
+    
+    if(props.qtd){
+        mapped_props.qtd = props.qtd;
+    }
+    if(props.start){
+        mapped_props.start = props.start;
+    }
 
     DtwResource_map(self,mapped_props);
 

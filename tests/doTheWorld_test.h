@@ -8862,7 +8862,13 @@ cJSON *DtwResource_map_cJSONArray(DtwResource *self,DtwResourcecJSONArrayMapProp
     if(props.ordenation_callback) {
         mapped_props.ordenation_callback = private_dtw_cJSONArray_ordenation;
     }
-
+    
+    if(props.qtd){
+        mapped_props.qtd = props.qtd;
+    }
+    if(props.start){
+        mapped_props.start = props.start;
+    }
 
     DtwResource_map(self,mapped_props);
 
@@ -8943,7 +8949,12 @@ cJSON *DtwResource_map_cJSONObject(DtwResource *self,DtwResourcecJSONObjectMapPr
     if(props.ordenation_callback) {
         map_props.ordenation_callback = private_dtw_cJSONObject_ordenation;
     }
-
+    if(props.qtd){
+        map_props.qtd = props.qtd;
+    }
+    if(props.start){
+        map_props.start = props.start;
+    }
     DtwResource_map(self,map_props);
 
     return itens;
@@ -9008,6 +9019,12 @@ CHashArray *DtwResource_map_CHashArray(DtwResource *self,DtwResourceCHashrrayMap
     map_props.args = (void*)&props;
     if(props.filtrage_callback) {
         map_props.filtrage_callback = private_dtw_CHashArray_filtrage;
+    }
+    if(props.qtd){
+        map_props.qtd = props.qtd;
+    }
+    if(props.start){
+        map_props.start = props.start;
     }
 
     if(props.ordenation_callback) {
@@ -9089,6 +9106,13 @@ CHash *DtwResource_map_CHashObject(DtwResource *self,DtwResourceCHashObjectMapPr
     map_props.args = (void*)&props;
     if(props.filtrage_callback) {
         map_props.filtrage_callback = private_dtw_CHashObject_filtrage;
+    }
+
+    if(props.qtd){
+        map_props.qtd = props.qtd;
+    }
+    if(props.start){
+        map_props.start = props.start;
     }
 
     if(props.ordenation_callback) {

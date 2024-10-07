@@ -40,6 +40,12 @@ CHashArray *DtwResource_map_CHashArray(DtwResource *self,DtwResourceCHashrrayMap
     if(props.filtrage_callback) {
         map_props.filtrage_callback = private_dtw_CHashArray_filtrage;
     }
+    if(props.qtd){
+        map_props.qtd = props.qtd;
+    }
+    if(props.start){
+        map_props.start = props.start;
+    }
 
     if(props.ordenation_callback) {
         map_props.ordenation_callback = private_dtw_CHashArray_ordenation;
