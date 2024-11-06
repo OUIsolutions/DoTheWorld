@@ -21,6 +21,8 @@ typedef struct DtwNamespace{
 
     unsigned char *(*load_any_content)(const char * path,long *size,bool *is_binary);
 
+    char *(*get_absolute_path)(const char *path);
+
     char *(*load_string_file_content)(const char * path);
 
     unsigned char *(*load_binary_content)(const char * path,long *size);

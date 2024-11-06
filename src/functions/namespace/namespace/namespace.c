@@ -5,6 +5,7 @@ DtwNamespace newDtwNamespace(){
     //io
     self.create_dir_recursively = dtw_create_dir_recursively;
     self.remove_any = dtw_remove_any;
+    self.get_absolute_path = dtw_get_absolute_path;
     self.get_current_dir = dtw_get_current_dir;
     self.load_any_content = dtw_load_any_content;
     self.load_string_file_content = dtw_load_string_file_content;

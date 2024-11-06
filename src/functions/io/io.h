@@ -10,6 +10,8 @@ long dtw_get_total_itens_of_dir(const char *path);
 
 unsigned char *dtw_load_any_content(const char * path,long *size,bool *is_binary);
 
+char *dtw_get_absolute_path(const char *path);
+
 char *dtw_load_string_file_content(const char * path);
 
 unsigned char *dtw_load_binary_content(const char * path,long *size);

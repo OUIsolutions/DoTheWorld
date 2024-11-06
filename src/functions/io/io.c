@@ -35,7 +35,24 @@ void dtw_create_dir_recursively(const char *path){
 
     dtw_create_dir(path);
 }
+char *dtw_get_absolute_path(const char *path){
+    char absolute_path[PATH_MAX] ={0};
 
+    #ifdef __linux__
+     // Usa realpath para obter o caminho absoluto
+     if (realpath(path, absolute_path) != NULL) {
+         return strdup(absolute_path);
+     }
+     #endif
+     #ifdef _WIN32
+     if (_fullpath(absolute_path, relative_path, _MAX_PATH) != NULL) {
+            return strdup(absolute_path);
+    }
+     #endif
+
+     return NULL;
+
+}
 char *dtw_get_current_dir(){
     char *path = (char*)malloc(1024);
     getcwd(path,1024);
@@ -284,7 +301,8 @@ long dtw_get_total_itens_of_dir(const char *path){
         }
         closedir(dir);
         return i -2;
-    #else
+    #endif
+    #ifdef _WIN32
         WIN32_FIND_DATA findFileData;
             HANDLE hFind = FindFirstFile(path, &findFileData);
 

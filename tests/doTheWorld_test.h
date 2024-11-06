@@ -1850,6 +1850,8 @@ typedef struct DtwNamespace{
 
     unsigned char *(*load_any_content)(const char * path,long *size,bool *is_binary);
 
+    char *(*get_absolute_path)(const char *path);
+
     char *(*load_string_file_content)(const char * path);
 
     unsigned char *(*load_binary_content)(const char * path,long *size);
@@ -2104,6 +2106,8 @@ long dtw_get_total_itens_of_dir(const char *path);
 
 unsigned char *dtw_load_any_content(const char * path,long *size,bool *is_binary);
 
+char *dtw_get_absolute_path(const char *path);
+
 char *dtw_load_string_file_content(const char * path);
 
 unsigned char *dtw_load_binary_content(const char * path,long *size);
@@ -2128,6 +2132,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge);
 
 
 bool dtw_move_any(const char* src_path, const char* dest_path,bool merge);
+
 
 
 
@@ -3922,7 +3927,24 @@ void dtw_create_dir_recursively(const char *path){
 
     dtw_create_dir(path);
 }
+char *dtw_get_absolute_path(const char *path){
+    char absolute_path[PATH_MAX] ={0};
 
+    #ifdef __linux__
+     // Usa realpath para obter o caminho absoluto
+     if (realpath(path, absolute_path) != NULL) {
+         return strdup(absolute_path);
+     }
+     #endif
+     #ifdef _WIN32
+     if (_fullpath(absolute_path, relative_path, _MAX_PATH) != NULL) {
+            return strdup(absolute_path);
+    }
+     #endif
+
+     return NULL;
+
+}
 char *dtw_get_current_dir(){
     char *path = (char*)malloc(1024);
     getcwd(path,1024);
@@ -4171,7 +4193,8 @@ long dtw_get_total_itens_of_dir(const char *path){
         }
         closedir(dir);
         return i -2;
-    #else
+    #endif
+    #ifdef _WIN32
         WIN32_FIND_DATA findFileData;
             HANDLE hFind = FindFirstFile(path, &findFileData);
 
@@ -10587,6 +10610,7 @@ DtwNamespace newDtwNamespace(){
     //io
     self.create_dir_recursively = dtw_create_dir_recursively;
     self.remove_any = dtw_remove_any;
+    self.get_absolute_path = dtw_get_absolute_path;
     self.get_current_dir = dtw_get_current_dir;
     self.load_any_content = dtw_load_any_content;
     self.load_string_file_content = dtw_load_string_file_content;
