@@ -10,7 +10,7 @@ but if you want to get an deep knolege see at **exemples** folder, you will find
 # Installation
 The installation of DoTheWorld is made to be as dumb as possible, just  download the file  **doTheWorld.h** :
 
-[Download link](https://github.com/OUIsolutions/DoTheWorld/releases/download/v7.004/doTheWorld.h)
+[Download link](https://github.com/OUIsolutions/DoTheWorld/releases/download/v7.006/doTheWorld.h)
 
  And include in your project.
 if this compiles then the library will work:
@@ -67,7 +67,7 @@ int main(int argc, char *argv[]){
   printf("content: %s\n",content);
   free(content);
   return 0;
-  
+
 }
 ~~~
 
@@ -123,7 +123,7 @@ int main (){
     long integer_txt = dtw.load_long_file_content("tests/target/numerical/integer.txt");
     printf("integer.txt:%ld\n",integer_txt);
 
-    
+
     long integer_that_not_exist = dtw.load_long_file_content("nothing.txt");
     printf("integer that not exist:%ld\n",integer_that_not_exist);
 
@@ -138,7 +138,7 @@ int main (){
     //true_small.txt = "t"
     bool true_small = dtw.load_bool_file_content("tests/target/numerical/true_small.txt");
     printf("true_small.txt:%d\n",true_small);
-    
+
     //true normal.txt = "true"
     bool true_normal = dtw.load_bool_file_content("tests/target/numerical/true_normal.txt");
     printf("true_normal.txt:%d\n",true_normal);
@@ -526,7 +526,7 @@ int main(int argc, char *argv[]){
 
 
     DtwNamespace dtw = newDtwNamespace();
-    
+
 
     const char *file = "tests/target/append.txt";
     int total_process  = 10;
@@ -551,7 +551,7 @@ int main(int argc, char *argv[]){
         int status;
         wait(&status);
     }
-     
+
 
 
 }
@@ -738,7 +738,7 @@ int main(){
         dtw.transaction.json_error.free(error);
         return 0;
     }
-    
+
     dtw.transaction.represent(t);
     dtw.transaction.free(t);
 }
@@ -2428,7 +2428,7 @@ int main (){
 
     dtw.hash.digest_folder_by_last_modification(my_hash,"tests/target");
     printf("after a folder %s\n",my_hash->hash);
-    
+
     dtw.hash.free(my_hash);
 }
 ~~~

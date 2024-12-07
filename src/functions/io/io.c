@@ -39,13 +39,12 @@ char *dtw_get_absolute_path(const char *path){
     char absolute_path[PATH_MAX] ={0};
 
     #ifdef __linux__
-     // Usa realpath para obter o caminho absoluto
      if (realpath(path, absolute_path) != NULL) {
          return strdup(absolute_path);
      }
      #endif
      #ifdef _WIN32
-     if (_fullpath(absolute_path, relative_path, _MAX_PATH) != NULL) {
+     if (_fullpath(absolute_path, path, _MAX_PATH) != NULL) {
             return strdup(absolute_path);
     }
      #endif
