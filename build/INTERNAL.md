@@ -43,6 +43,7 @@ if you want to exec all tests, or generate your own amalgamation,
 just run the **./build.out** or **build.exe** located into the root dir of the repo
 
 ~~~shel
+sh pre_build.sh 
 ./build.out
 ~~~
 # IO Operations

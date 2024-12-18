@@ -63,8 +63,7 @@ output_test
 *.x86_64
 *.hex
 
-!build.exe
-!build.out
+
 # Debug files
 *.dSYM/
 *.su
