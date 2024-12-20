@@ -3,18 +3,18 @@ function main()
     local cache = NewCache(CACHE_POINT)
 
     local amalgamation_cache = cache.new_element("one_amalgamation", function()
-        return Generate_amalgamation_recursive(START_POINT)
+        return camalgamator.generate_amalgamation(START_POINT)
     end).add_dependencie(src_sha)
 
-    if true then
-        return
-    end
+
 
     local amalgamation_result = amalgamation_cache.perform()
     dtw.write_file(END_TEST_POINT, amalgamation_result)
 
     Execute_full_test(cache, src_sha)
-
+    if true then
+        return
+    end
     local locker_content = dtw.load_file("tests/locker_test/locker_test.c")
 
     cache.new_element("locker", function()
