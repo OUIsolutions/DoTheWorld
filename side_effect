@@ -1,9 +1,1 @@
-blob.png: binary
-a.txt: string
-sub_folder: folder
-double.txt:double
-integer.txt:long
-false_small.txt:bool
-false_normal.txt:bool
-true_small.txt:bool
-true_normal.txt:bool
+error oppening tests/target/aaaaa
