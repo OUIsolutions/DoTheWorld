@@ -1,7 +1,7 @@
 
 
 
-#include "../../../doTheWorld_test.h"
+#include "../../../../release/doTheWorld.h"
 
 int main(int argc, char *argv[]){
     DtwNamespace dtw = newDtwNamespace();

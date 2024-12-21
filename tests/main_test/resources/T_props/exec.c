@@ -1,4 +1,4 @@
-#include "../../../doTheWorld_test.h"
+#include "../../../../release/doTheWorld.h"
 
 int main (){
     DtwNamespace dtw = newDtwNamespace();
@@ -15,12 +15,12 @@ int main (){
     dtw.resource.free(string_r);
 
     values->cache_sub_resources = true;
-    
-    //when allowing transaction to false, it will execute now 
+
+    //when allowing transaction to false, it will execute now
     values->allow_transaction = false;
     DtwResource *string_r1 = dtw.resource.sub_resource(values, "b.txt");
     dtw.resource.set_string(string_r1,"menssage");
-    
+
 
 
 
@@ -29,8 +29,3 @@ int main (){
 
 
 }
-
-
-
-
-

@@ -1,5 +1,5 @@
 
-#include "../../../doTheWorld_test.h"
+#include "../../../../release/doTheWorld.h"
 
 
 
@@ -18,7 +18,7 @@ int main (){
     long integer_txt = dtw.load_long_file_content("tests/target/numerical/integer.txt");
     printf("integer.txt:%ld\n",integer_txt);
 
-    
+
     long integer_that_not_exist = dtw.load_long_file_content("nothing.txt");
     printf("integer that not exist:%ld\n",integer_that_not_exist);
 
@@ -33,7 +33,7 @@ int main (){
     //true_small.txt = "t"
     bool true_small = dtw.load_bool_file_content("tests/target/numerical/true_small.txt");
     printf("true_small.txt:%d\n",true_small);
-    
+
     //true normal.txt = "true"
     bool true_normal = dtw.load_bool_file_content("tests/target/numerical/true_normal.txt");
     printf("true_normal.txt:%d\n",true_normal);

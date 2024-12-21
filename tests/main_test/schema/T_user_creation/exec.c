@@ -1,5 +1,5 @@
 
-#include "../../../doTheWorld_test.h"
+#include "../../../../release/doTheWorld.h"
 
 
 int main(){
@@ -27,7 +27,3 @@ int main(){
     dtw.resource.commit(database);
     dtw.resource.free(database);
 }
-
-
-
-

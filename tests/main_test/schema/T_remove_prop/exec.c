@@ -1,5 +1,5 @@
 
-#include "../../../doTheWorld_test.h"
+#include "../../../../release/doTheWorld.h"
 DtwNamespace dtw;
 
 
@@ -42,5 +42,3 @@ int main(){
 
 
 }
-
-

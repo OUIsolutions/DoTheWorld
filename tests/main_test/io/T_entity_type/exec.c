@@ -1,6 +1,6 @@
 
 
-#include "../../../doTheWorld_test.h"
+#include "../../../../release/doTheWorld.h"
 
 
 void print_entity(const char *name , int type){
@@ -38,8 +38,8 @@ int main(int argc, char *argv[]){
     const char *file = "tests/target/a.txt";
     type = dtw.entity_type(file);
     print_entity(file,type);
-    
 
-    
+
+
   return 0;
 }

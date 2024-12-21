@@ -1,5 +1,5 @@
 
-#include "../../../doTheWorld_test.h"
+#include "../../../../release/doTheWorld.h"
 
 int main(){
     DtwNamespace dtw = newDtwNamespace();

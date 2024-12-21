@@ -1,7 +1,7 @@
 //
 // Created by jurandi on 20-06-2023.
 //
-#include "../../../doTheWorld_test.h"
+#include "../../../../release/doTheWorld.h"
 int main(){
     DtwNamespace dtw = newDtwNamespace();
 

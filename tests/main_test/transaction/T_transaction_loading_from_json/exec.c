@@ -1,5 +1,5 @@
 
-#include "../../../doTheWorld_test.h"
+#include "../../../../release/doTheWorld.h"
 
 int main(){
     DtwNamespace dtw = newDtwNamespace();
@@ -11,7 +11,7 @@ int main(){
         dtw.transaction.json_error.free(error);
         return 0;
     }
-    
+
     dtw.transaction.represent(t);
     dtw.transaction.free(t);
 }

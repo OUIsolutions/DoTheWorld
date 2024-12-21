@@ -1,5 +1,5 @@
 
-#include "../../../doTheWorld_test.h"
+#include "../../../../release/doTheWorld.h"
 
 int main(int argc, char *argv[]){
   //load a string file content
@@ -14,5 +14,5 @@ int main(int argc, char *argv[]){
   printf("content: %s\n",content);
   free(content);
   return 0;
-  
+
 }

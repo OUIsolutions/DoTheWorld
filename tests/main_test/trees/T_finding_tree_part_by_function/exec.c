@@ -1,8 +1,8 @@
 //
 // Created by jurandi on 20-06-2023.
 //
-#include "../../../doTheWorld_test.h"
-#include <time.h>
+#include "../../../../release/doTheWorld.h"
+
 
 bool test_if_blob(struct DtwTreePart*part,void *args){
     DtwNamespace dtw = newDtwNamespace();
