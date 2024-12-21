@@ -3,11 +3,7 @@
 //mannaged by silver chain
 #include "../../../../../../imports/imports.macros.h"
 //silver_chain_scope_end
-#include "../unique.types_requrements.h"
-#include "../../../Resource.h"
 
-#ifndef PRIVATE_DTW_RESOURCE_CJSON_OBJECT_MAP_PROPS
-#define PRIVATE_DTW_RESOURCE_CJSON_OBJECT_MAP_PROPS
 typedef  struct{
     char *(*key_provider_callback)(DtwResource *item,void *args);
     bool free_key;
@@ -18,4 +14,3 @@ typedef  struct{
     int start;
     int qtd;
 } DtwResourcecJSONObjectMapProps;
-#endif

@@ -6,8 +6,7 @@
 
 
 
-#ifndef PRIVATE_DTW_LOCKER_TYPE_H
-#define PRIVATE_DTW_LOCKER_TYPE_H
+
 typedef struct {
 #ifdef __linux__
     DtwFlockLocker *locker;
@@ -17,4 +16,3 @@ typedef struct {
 #endif
 
 } DtwLocker;
-#endif

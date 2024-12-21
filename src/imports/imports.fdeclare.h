@@ -67,8 +67,6 @@
 #include "../transaction/action/fdeclare.action.h"
 #include "../transaction/json_error/fdeclare.json_transaction_error.h"
 #include "../transaction/transaction/fdeclare.transaction.h"
-#include "../tree/fdeclare.declarations.h"
-#include "../tree/fdeclare.unique.definition_requirements.h"
 #include "../tree/json_error/fdeclare.json_error.h"
 #include "../tree/transaction_report/fdeclare.transaction_report.h"
 #include "../tree/tree/fdeclare.tree.h"
