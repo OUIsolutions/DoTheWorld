@@ -26,16 +26,16 @@ function Exec_valgrind_test(cache, original_side_effect_sha, artifact)
         end
 
         if error then
-            clib.print(ANSI_RED .. result)
+            print(ANSI_RED .. result)
             clib.exit(1)
         end
-        clib.print(ANSI_GREEN .. "\tmemory test:passed\n")
+        print(ANSI_GREEN .. "\tmemory test:passed\n")
     end).
         add_dependencie(artifact.executable_sha).
         add_dependencie(original_side_effect_sha).
         perform()
 
     if memory_tested == false then
-        clib.print(ANSI_YELLOW .. "\tmemory test:cached\n")
+        print(ANSI_YELLOW .. "\tmemory test:cached\n")
     end
 end
