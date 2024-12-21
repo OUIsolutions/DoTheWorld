@@ -15,19 +15,20 @@ function Exec_valgrind_test(cache, original_side_effect_sha, artifact)
             return
         end
 
-        local HEAP_CHECK = "All heap blocks were freed -- no leaks are possible"
+        local HEAP_CHECK = "All heap blocks were freed"
         local error      = false
-        if clib.indexof(result, HEAP_CHECK) == -1 then
+        if string.find(result, HEAP_CHECK) == nil then
+            print("subiu aqui\n")
             error = true
         end
-        local ERROR_CHECK = "ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)"
-        if clib.indexof(result, ERROR_CHECK) == -1 then
+        local ERROR_CHECK = "ERROR SUMMARY: 0 errors from 0 contexts"
+        if string.find(result, ERROR_CHECK) == nil then
             error = true
         end
 
         if error then
             print(ANSI_RED .. result)
-            clib.exit(1)
+            os.exit(1)
         end
         print(ANSI_GREEN .. "\tmemory test:passed\n")
     end).
@@ -36,6 +37,6 @@ function Exec_valgrind_test(cache, original_side_effect_sha, artifact)
         perform()
 
     if memory_tested == false then
-        print(ANSI_YELLOW .. "\tmemory test:cached\n")
+        print(ANSI_YELLOW .. "memory test:cached\n")
     end
 end

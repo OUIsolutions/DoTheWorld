@@ -7,7 +7,8 @@ function Execute_compilation(cache, src_sha, artifact)
         compiled = true
         local comand = "gcc " .. artifact.c_path .. " -DDTW_DEBUG_TIME -o " .. artifact.executable_path
         local result = os.execute(comand)
-        if result ~= 0 then
+
+        if not result then
             os.exit(1)
         end
         print(ANSI_GREEN .. "\tcompilation:passed")

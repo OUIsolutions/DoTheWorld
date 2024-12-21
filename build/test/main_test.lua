@@ -8,6 +8,7 @@ local function execute_test_artifact(cache, src_sha, original_side_effect_sha, a
     artifact.c_sha = dtw.generate_sha_from_file(artifact.c_path)
 
     Execute_compilation(cache, src_sha, artifact)
+
     artifact.executable_sha = dtw.generate_sha_from_file(artifact.executable_path)
 
 
