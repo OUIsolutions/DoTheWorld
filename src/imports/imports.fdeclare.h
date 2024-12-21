@@ -21,7 +21,6 @@
 #include "../namespace/namespace/fdeclare.namespace.h"
 #include "../namespace/path_module/fdeclare.path_module.h"
 #include "../namespace/randonizer_module/fdeclare.randonizer_module.h"
-#include "../namespace/resource_module/fdeclare.unique.definition_requirements.h"
 #include "../namespace/resource_module/resource_array_module/fdeclare.resource_array_module.h"
 #include "../namespace/resource_module/resource_module/fdeclare.resource_module.h"
 #include "../namespace/schema_module/fdeclare.schema_module.h"

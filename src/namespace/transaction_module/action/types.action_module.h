@@ -3,10 +3,7 @@
 //mannaged by silver chain
 #include "../../../imports/imports.macros.h"
 //silver_chain_scope_end
-#include "../unique.all_types_less_dependencies.h"
 
-#ifndef PRIVATE_DTW_ACTION_TRANSACTION_MODULE_TYPE_H
-#define PRIVATE_DTW_ACTION_TRANSACTION_MODULE_TYPE_H
 typedef struct DtwActionTransactionModule{
 
     DtwActionTransaction *(*newAction)();
@@ -32,4 +29,3 @@ typedef struct DtwActionTransactionModule{
     void (*free)(DtwActionTransaction* self);
 
 }DtwActionTransactionModule;
-#endif

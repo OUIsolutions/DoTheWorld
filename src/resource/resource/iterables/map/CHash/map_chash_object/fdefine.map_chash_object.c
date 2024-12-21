@@ -3,7 +3,7 @@
 //mannaged by silver chain
 #include "../../../../../../imports/imports.fdeclare.h"
 //silver_chain_scope_end
-#define DTW_ALLOW_CHASH
+#ifdef DTW_ALLOW_CHASH
 
 
 DtwResourceCHashObjectMapProps DtwResource_createCHashObjectMapProps(
@@ -90,3 +90,4 @@ CHash *DtwResource_schema_map_CHashObject(DtwResource *self,DtwResourceCHashObje
     return DtwResource_map_CHashObject(self->values_resource,props);
 
 }
+#endif
