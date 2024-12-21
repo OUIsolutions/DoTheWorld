@@ -1,13 +1,12 @@
-# DoTheWorld
+{HASHTAG} DoTheWorld
 DoTheWorld is a Windows/Linux single file library designed to handle files in C/C++ in a number of ways, providing everything from simple functions for reading/writing files and folders, to complex functions like taking sha256 from files, checking modification dates. And functionalities of atomic writing of folders/files through transaction systems.
 
-{%print("This is a raw Lua command executed in the template.")}
 
-## Learning
+{HASHTAG}{HASHTAG} Learning
 In These Current Markdown you will see some basic exemples of usage of these library
 but if you want to get an deep knolege see at **exemples** folder, you will find an lot of exemplos of how you can use DoTheWorld
 
-# Installation
+{HASHTAG} Installation
 The installation of DoTheWorld is made to be as dumb as possible, just  download the file  **doTheWorld.h** :
 
 [Download link](https://github.com/OUIsolutions/DoTheWorld/releases/download/v7.004/doTheWorld.h)
@@ -15,7 +14,7 @@ The installation of DoTheWorld is made to be as dumb as possible, just  download
  And include in your project.
 if this compiles then the library will work:
 ~~~c
-#include "doTheWorld.h"
+{HASHTAG}include "doTheWorld.h"
 
 int main(int argc, char *argv[])#{
 
@@ -24,12 +23,12 @@ int main(int argc, char *argv[])#{
 }#/
 ~~~
 
-## Full Folder
+{HASHTAG}{HASHTAG} Full Folder
 Alternatively you can download the entire **src** folder and include the **src/one.c** file
 
 ~~~c
 
-#include "src/one.c"
+{HASHTAG}include "src/one.c"
 
 int main(int argc, char *argv[])#{
 
@@ -38,7 +37,7 @@ int main(int argc, char *argv[])#{
 
 ~~~
 
-# Bulding the Project
+{HASHTAG} Bulding the Project
 if you want to exec all tests, or generate your own amalgamation,
 just run the **./build.out** or **build.exe** located into the root dir of the repo
 
@@ -46,17 +45,17 @@ just run the **./build.out** or **build.exe** located into the root dir of the r
 sh pre_build.sh
 ./build.out
 ~~~
-# IO Operations
+{HASHTAG} IO Operations
 
-## Reading strings
+{HASHTAG}{HASHTAG}Reading strings
 if you are sure that the content you are going to read is not binary you can call the function **dtw_load_string_file_content**
 codeof: exemples/io/loading_string.c
 
-### Reading Any Content
+{HASHTAG}{HASHTAG}{HASHTAG} Reading Any Content
 
 {create_c_example("exemples/io/loading_any.c")}
 
-### Reading Double bools and Integers
+{HASHTAG}{HASHTAG}{HASHTAG}# Reading Double bools and Integers
 you also can direclty load all types from an file  with numerical ios
 
 codeof: exemples/numerical_io/loading_data.c
@@ -67,13 +66,13 @@ to write strings in text files is very simple, just call the function **dtw_writ
 codeof: exemples/io/writing_strings.c
 
 
-### Writing Any
+{HASHTAG}{HASHTAG}{HASHTAG} Writing Any
 if you want to write anything to a file, it's also very simple, use the **dtw_write_any_content** function, but note that it will be necessary to pass the writing size
 
 
 codeof: exemples/io/write_any.c
 
-### Writing Double , bool and Integers
+{HASHTAG}{HASHTAG}{HASHTAG} Writing Double , bool and Integers
 You also can write any type direclty to an file
 
 codeof: exemples/numerical_io/writing_data.c
@@ -84,12 +83,12 @@ it will create till reachs the target folder
 
 codeof: exemples/io/create_dirs.c
 
-### Copying Anything
+{HASHTAG}{HASHTAG}{HASHTAG} Copying Anything
 With the function **dtw_copy_any** you can copy either files or folders to one position to anoter position
 
 codeof: exemples/io/copying_files.c
 
-### Moving Any
+{HASHTAG}{HASHTAG}{HASHTAG} Moving Any
 You can move either folders or files with **dtw_move_any** function
 
 codeof:exemples/io/move_any.c
@@ -97,33 +96,33 @@ codeof:exemples/io/move_any.c
 
 With the listage functions you can extract all Strings Arrays of elements in an folder
 
-## Listing files
+{HASHTAG}{HASHTAG} Listing files
 
 codeof: exemples/monodimension_listage/list_files.c
 
-### Listing Dirs
+{HASHTAG}{HASHTAG}{HASHTAG} Listing Dirs
 
 codeof:exemples/monodimension_listage/list_dirs.c
 
-### Listing All
+{HASHTAG}{HASHTAG}{HASHTAG} Listing All
 
 codeof:exemples/monodimension_listage/list_all.c
 
 The By Using multi dimension listage functions , you can see all itens listed in all sub folders of the "main" folder
 
-## Listing Files Recursively
+{HASHTAG}{HASHTAG}{HASHTAG} Listing Files Recursively
 
 codeof:exemples/multidimension_listage/list_files_recursively.c
 
-## Listing Dirs Recursively
+{HASHTAG}{HASHTAG}{HASHTAG} Listing Dirs Recursively
 
 codeof:exemples/multidimension_listage/list_dirs_recursively.c
 
-## Listing All Recursively
+{HASHTAG}{HASHTAG}{HASHTAG} Listing All Recursively
 
 codeof:exemples/multidimension_listage/list_all_recursively.c
 
-## Dealing with base64
+{HASHTAG}{HASHTAG} Dealing with base64
 You can easly transform an binary file to an base64 string like these
 
 codeof:exemples/extras/converting_file_to_base64.c
@@ -133,12 +132,12 @@ You also can reconvert an base64 string to binary
 codeof:exemples/extras/converting_b64_to_binary.c
 
 
-## Sha256
+{HASHTAG}{HASHTAG} Sha256
 Generating Sha from file
 
 codeof:exemples/extras/generating_sha_from_file.c
 
-### Unix
+{HASHTAG}{HASHTAG}{HASHTAG} Unix
 
 codeof: exemples/extras/get_entity_last_modification_in_unix.c
 
@@ -146,26 +145,26 @@ codeof: exemples/extras/get_entity_last_modification_in_unix.c
 codeof: exemples/extras/get_entity_last_modification.c
 
 
-## Locker
+{HASHTAG}{HASHTAG}{HASHTAG} Locker
 With the locker you can Lock files and ensure that even with multprocessment, they will
 be executed in an order
 
 codeof:exemples/locker/locker_test.c
 
-## Resources
+{HASHTAG}{HASHTAG} Resources
 With Resources you can iterate over all types of values ,and modifie than into an single transaction or one by one
-### Setting Values
+{HASHTAG}{HASHTAG}{HASHTAG} Setting Values
 
 codeof:exemples/resources/setters.c
 
 
 
 
-### Getting values of Resource
+{HASHTAG}{HASHTAG}{HASHTAG} Getting values of Resource
 codeof:exemples/resources/getters.c
 
 
-### Generating transaction
+{HASHTAG}{HASHTAG}{HASHTAG} Generating transaction
 with transactions you can make all modifications and executed or denny it one time,avoid nod
 wanted side effects
 
@@ -180,51 +179,50 @@ codeof:exemples/transaction/transaction_loading_from_json.c
 
 
 
-### Schemas
+{HASHTAG}{HASHTAG}{HASHTAG} Schemas
 
 Schema its a way to handle resources into a serializible way, providing foreing key and primary key concepts
 
-### Creating a insertion
+{HASHTAG}{HASHTAG}{HASHTAG} Creating a insertion
 in these example we are creating a user using schema concept
 
 codeof:exemples/schema/user_creation.c
 
 
 
-### Removing a insertion
+{HASHTAG}{HASHTAG}{HASHTAG} Removing a insertion
 In these example we also can destroy the user , automaticly destroying the index
 
 codeof:exemples/schema/user_remove.c
 
 
-### Finding a insertion
+{HASHTAG}{HASHTAG}{HASHTAG} Finding a insertion
 With  primary keys you can find values without loop iteration increasing readability and speed,
 
 codeof:exemples/schema/user_find.c
 
-
-### Iterating over insertions
+{HASHTAG}{HASHTAG}{HASHTAG} Iterating over insertions
 you also can iterate over insertions
 
 codeof:exemples/schema/user_iteration.c
 
-### Iterable Resources
+{HASHTAG}{HASHTAG}{HASHTAG} Iterable Resources
 
 with iterable functional system , you can iterate into Resources easly
 
 
 
-#### Each
+{HASHTAG}{HASHTAG}{HASHTAG}{HASHTAG} Each
 with each, you can pass  also a filtrage callback, a start point (defaults its 0),
 and the total elements (defaults its all)
 codeof:exemples/resources/Foreach.c
 
-#### Schema Each
+{HASHTAG}{HASHTAG}{HASHTAG}{HASHTAG} Schema Each
 you also can iterate over schemas with schema each
 
 codeof:exemples/schema/schema_each.c
 
-#### Map
+{HASHTAG}{HASHTAG}{HASHTAG}{HASHTAG} Map
 with map you can construct, objects lists, with what ever you want
 you just need to pass the object, the retriver, and some append function
 to be called each generated object
@@ -235,12 +233,12 @@ of course, it also works with schemas
 
 codeof:exemples/schema/schema_map.c
 
-#### CJson Array Map
+{HASHTAG}{HASHTAG}{HASHTAG}{HASHTAG} CJson Array Map
 you also can directly map a cJSON Array
 
 codeof:exemples/resources/cJSON_ArrayMap.c
 
-#### CJSON Object Map
+{HASHTAG}{HASHTAG}{HASHTAG} CJSON Object Map
 you also can generate a cJSON object, but you need to
 provide a "keey_provider" function ,to determine the key of each
 object generation (note that these key can bee released(free) after, you pass the),
@@ -248,34 +246,34 @@ free_key prop into the props object
 
 codeof:exemples/resources/cJSON_ArrayObject.c
 
-#### CCHash
+{HASHTAG}{HASHTAG}{HASHTAG} CCHash
 you can use [CHash](https://github.com/OUIsolutions/CHashManipulator) objects too
 but in these case , you need to use define  DTW_ALLOW_CHASH , and include the lib
 into the project since CHashManipulator, its not included into the amalgamation
 codeof:exemples/resources/CHashArray_map.c
 
-### Trees and TreeParts
+{HASHTAG}{HASHTAG}{HASHTAG} Trees and TreeParts
 with tree concepts, you can manipulate files as trees, and implement IO modifications with atomic concepts
 
-### Loading An TreePart
+{HASHTAG}{HASHTAG}{HASHTAG} Loading An TreePart
 
 codeof:exemples/tree_parts/loading_tree_part.c
 
 
-### Creating an empty tree Part
+{HASHTAG}{HASHTAG}{HASHTAG} Creating an empty tree Part
 
 codeof:exemples/trees/creating_tree_part.c
 
-### Modifying an tree part
+{HASHTAG}{HASHTAG}{HASHTAG} Modifying an tree part
 
 codeof:exemples/tree_parts/tree_part_content_modification.c
 
 
-### Retriing Paths Paramns
+{HASHTAG}{HASHTAG}{HASHTAG} Retriing Paths Paramns
 
 codeof:exemples/path/getting_path_paramns.c
 
-### Changing path Atributes at once
+{HASHTAG}{HASHTAG}{HASHTAG} Changing path Atributes at once
 
 
 codeof:exemples/path/change_path_attributes.c
@@ -285,7 +283,7 @@ Functions , you can generate modifications, without implement it, in these
 way , you can create massive atomic transactions, and execute all at once
 
 
-### hardware_modify
+{HASHTAG}{HASHTAG}{HASHTAG} hardware_modify
 Will Modificate the original content, for exemple, if you change the extension of an file, it will modificate the original content
 
 
@@ -304,34 +302,34 @@ codeof:exemples/tree_parts/hardware_remove.c
 
 With Trees you can make massive folders and files modifications with
 easy steps
-### Loading Tree From Hardware
+{HASHTAG}{HASHTAG}{HASHTAG} Loading Tree From Hardware
 
 codeof:exemples/trees/add_tree_from_hardware.c
 
-### Iterating over An Tree
+{HASHTAG}{HASHTAG}{HASHTAG} Iterating over An Tree
 
 codeof:exemples/trees/tree_iteration.c
 
-### Finding An Tree by name
+{HASHTAG}{HASHTAG}{HASHTAG} Finding An Tree by name
 
 codeof:exemples/trees/find_tree_part_by_name.c
 
 
-### Finding An Tree by Path
+{HASHTAG}{HASHTAG}{HASHTAG} Finding An Tree by Path
 
 codeof:exemples/trees/find_tree_part_by_full_path.c
 
-### Finding An Tree by Function
+{HASHTAG}{HASHTAG}{HASHTAG} Finding An Tree by Function
 
 codeof:exemples/trees/finding_tree_part_by_function.c
 
 Trees suports even Maps or filters, it returns an new tree of the of the current lambda procediment
-#### Filter
+{HASHTAG}{HASHTAG}{HASHTAG} Filter
 with filter you can filter the contents you want in an tree with an bool lambda
 
 codeof:exemples/trees/tree_filter.c
 
-### Map
+{HASHTAG}{HASHTAG}{HASHTAG} Map
 
 codeof:exemples/trees/tree_map.c
 
@@ -348,7 +346,7 @@ codeof:exemples/trees/transaction_report.c
 
 With Json Trees Operations you can save or load trees, from hardware or strings in an super easy mode
 
-#### Dumping Tree Json To File
+{HASHTAG}{HASHTAG}{HASHTAG} Dumping Tree Json To File
 It will transform the tree in an json document
 
 codeof:exemples/trees/dumps_json_tree_to_file.c
@@ -365,12 +363,12 @@ codeof:exemples/trees/loads_json_tree_from_file.c
 codeof:exemples/trees/loads_json_tree_from_string.c
 
 
-## Hash
+{HASHTAG}{HASHTAG}{HASHTAG} Hash
 
 By using hash Object you can digest values,( its very usefull in dynamic programing)
 or to avoid recomputation in compilers or bundlers
 
-### Simple Hashing
+{HASHTAG}{HASHTAG}{HASHTAG} Simple Hashing
 
 codeof:exemples/hash/simple_digest.c
 
@@ -379,17 +377,17 @@ codeof:exemples/hash/file_hashing.c
 codeof:exemples/hash/file_hashing_by_last_modification.c
 
 
-### Randonizer
+{HASHTAG}{HASHTAG}{HASHTAG} Randonizer
 Randonizer it's a way to generate random values,integers or strings
 
-#### Numerical Random
+{HASHTAG}{HASHTAG}{HASHTAG} Numerical Random
 codeof:exemples/randonizer/num_randonizer.c
 
-#### Token  Random
+{HASHTAG}{HASHTAG}{HASHTAG} Token  Random
 codeof:exemples/randonizer/token_randonizer.c
 
 
-## CJson<br><br>
+{HASHTAG}{HASHTAG} CJson<br><br>
 **CJson**: from https://github.com/DaveGamble/cJSON <br>
 Copyright (c) 2009-2017 Dave Gamble and cJSON contributors
 
@@ -399,7 +397,7 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-## sha-256 <br>
+{HASHTAG}{HASHTAG} sha-256 <br>
 **sha-256**: from https://github.com/amosnier/sha-2 <br>
 
 Zero Clause BSD License
