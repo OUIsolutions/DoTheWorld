@@ -1,4 +1,3 @@
-#include "Resource.h"
 
 #ifndef PRIVATE_DTW_RESORCE_ARRAY_TYPE_H
 #define PRIVATE_DTW_RESORCE_ARRAY_TYPE_H
