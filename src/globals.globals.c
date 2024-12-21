@@ -1,7 +1,7 @@
 
 //silver_chain_scope_start
 //mannaged by silver chain
-#include "imports/imports.typesd.h"
+#include "imports/imports.typesm.h"
 //silver_chain_scope_end
 
 
