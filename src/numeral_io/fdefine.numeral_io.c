@@ -1,4 +1,9 @@
 
+//silver_chain_scope_start
+//mannaged by silver chain
+#include "../imports/imports.fdeclare.h"
+//silver_chain_scope_end
+
 
 long dtw_load_long_file_content_setting_error(const char *path,int *error){
     char *data = dtw_load_string_file_content(path);

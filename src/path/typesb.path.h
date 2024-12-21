@@ -1,5 +1,9 @@
-#ifndef PRIVATE_DTW_PATH_TYPE_H
-#define PRIVATE_DTW_PATH_TYPE_H
+
+//silver_chain_scope_start
+//mannaged by silver chain
+#include "../imports/imports.types.h"
+//silver_chain_scope_end
+
 typedef struct DtwPath {
     char *original_path_string;
     char *path;
@@ -7,4 +11,3 @@ typedef struct DtwPath {
 
 
 }DtwPath;
-#endif

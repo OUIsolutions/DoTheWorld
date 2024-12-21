@@ -1,7 +1,9 @@
-#include "../unique.all_types_less_dependencies.h"
 
-#ifndef PRIVATE_DTW_JSON_TREE_ERROR_MODULE_TYPE_H
-#define PRIVATE_DTW_JSON_TREE_ERROR_MODULE_TYPE_H
+//silver_chain_scope_start
+//mannaged by silver chain
+#include "../../../imports/imports.macros.h"
+//silver_chain_scope_end
+
 typedef struct DtwJsonTreeErrorModule{
 
     DtwJsonTreeError * (*validate_json_tree_by_cJSON)(cJSON *json_tree);
@@ -10,4 +12,3 @@ typedef struct DtwJsonTreeErrorModule{
     void (*represent)(struct DtwJsonTreeError *self);
 
 }DtwJsonTreeErrorModule;
-#endif

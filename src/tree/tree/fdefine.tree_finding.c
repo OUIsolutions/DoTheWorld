@@ -1,4 +1,9 @@
 
+//silver_chain_scope_start
+//mannaged by silver chain
+#include "../../imports/imports.fdeclare.h"
+//silver_chain_scope_end
+
 
 struct DtwTreePart *DtwTree_find_tree_part_by_function(
         struct DtwTree *self,

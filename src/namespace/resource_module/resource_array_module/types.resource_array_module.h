@@ -1,6 +1,10 @@
-#include "../unique.all_types_less_dependencies.h"
-#ifndef PRIVATE_DTW_RESOURCE_ARRAY_MODULE_TYPE_H
-#define PRIVATE_DTW_RESOURCE_ARRAY_MODULE_TYPE_H
+
+//silver_chain_scope_start
+//mannaged by silver chain
+#include "../../../imports/imports.macros.h"
+//silver_chain_scope_end
+
+
 typedef struct DtwResourceArrayModule{
 
     void (*append)(DtwResourceArray *self, DtwResource *element);
@@ -9,4 +13,3 @@ typedef struct DtwResourceArrayModule{
     void (*free)(DtwResourceArray *self);
 
 }DtwResourceArrayModule;
-#endif

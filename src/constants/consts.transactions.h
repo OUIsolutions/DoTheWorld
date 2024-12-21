@@ -1,3 +1,8 @@
+
+//silver_chain_scope_start
+//mannaged by silver chain
+#include "../imports/imports.dependency.h"
+//silver_chain_scope_end
 enum {
 
     JSON_TRANSACTION_WRONG_TYPE,

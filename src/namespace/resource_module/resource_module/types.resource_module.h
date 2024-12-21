@@ -1,8 +1,10 @@
-#include "../unique.all_types_less_dependencies.h"
-#include "ResourceArrayModule.h"
 
-#ifndef PRIVATE_DTW_RESOURCE_MODULE_TYPE_H
-#define PRIVATE_DTW_RESOURCE_MODULE_TYPE_H
+//silver_chain_scope_start
+//mannaged by silver chain
+#include "../../../imports/imports.macros.h"
+//silver_chain_scope_end
+
+
 typedef struct DtwResourceModule{
 
     DtwResource *(*newResource)(const char *path);
@@ -148,5 +150,3 @@ typedef struct DtwResourceModule{
 
 
 }DtwResourceModule;
-
-#endif

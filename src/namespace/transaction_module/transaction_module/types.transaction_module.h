@@ -1,8 +1,9 @@
-#include "../unique.all_types_less_dependencies.h"
-#include "ActionModule.h"
-#include "JsonErrorModule.h"
-#ifndef PRIVATE_DTW_TRANSACTION_MODULE_TYPE_H
-#define PRIVATE_DTW_TRANSACTION_MODULE_TYPE_H
+
+//silver_chain_scope_start
+//mannaged by silver chain
+#include "../../../imports/imports.macros.h"
+//silver_chain_scope_end
+
 typedef struct DtwTransactionModule{
     DtwTransaction *(*newTransaction)();
     DtwTransaction * (*newTransaction_from_json)(cJSON *json_entry);
@@ -41,4 +42,3 @@ typedef struct DtwTransactionModule{
 
 
 }DtwTransactionModule;
-#endif

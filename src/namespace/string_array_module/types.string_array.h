@@ -1,6 +1,9 @@
-#include "unique.all_types_less_dependencies.h"
-#ifndef PRIVATE_DTW_STRING_ARRAY_MODULE_TYPE_H
-#define PRIVATE_DTW_STRING_ARRAY_MODULE_TYPE_H
+
+//silver_chain_scope_start
+//mannaged by silver chain
+#include "../../imports/imports.macros.h"
+//silver_chain_scope_end
+
 typedef struct DtwStringArrayModule{
     DtwStringArray *(*newStringArray)();
 
@@ -22,4 +25,3 @@ typedef struct DtwStringArrayModule{
 
 
 }DtwStringArrayModule;
-#endif

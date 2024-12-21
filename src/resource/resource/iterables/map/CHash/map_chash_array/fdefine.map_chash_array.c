@@ -1,3 +1,8 @@
+
+//silver_chain_scope_start
+//mannaged by silver chain
+#include "../../../../../../imports/imports.fdeclare.h"
+//silver_chain_scope_end
 #define DTW_ALLOW_CHASH
 
 DtwResourceCHashrrayMapProps  DtwResource_create_CHashrrayMapProps(    CHash *(*callback)(DtwResource *item, void *args)){

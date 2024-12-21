@@ -1,10 +1,9 @@
-#include "../unique.all_types_less_dependencies.h"
-#include "TreePartModule.h"
-#include "JsonErrorModule.h"
-#include "TransactionReportModule.h"
 
-#ifndef PRIVATE_DTW_TREE_MODULE_TYPE_H
-#define PRIVATE_DTW_TREE_MODULE_TYPE_H
+//silver_chain_scope_start
+//mannaged by silver chain
+#include "../../../imports/imports.macros.h"
+//silver_chain_scope_end
+
 typedef struct DtwTreeModule{
 
     DtwTree  *(*newTree)();
@@ -111,4 +110,3 @@ typedef struct DtwTreeModule{
     DtwJsonTreeErrorModule json_error;
 
 }DtwTreeModule;
-#endif

@@ -1,4 +1,9 @@
 
+//silver_chain_scope_start
+//mannaged by silver chain
+#include "../imports/imports.fdeclare.h"
+//silver_chain_scope_end
+
 
 char * dtw_generate_sha_from_file(const char *path){
     return calc_sha_256_from_file_returning_string(path);

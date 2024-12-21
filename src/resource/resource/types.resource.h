@@ -1,6 +1,10 @@
 
-#ifndef PRIVATE_DTW_RESOURCE_TYPE_H
-#define PRIVATE_DTW_RESOURCE_TYPE_H
+//silver_chain_scope_start
+//mannaged by silver chain
+#include "../../imports/imports.macros.h"
+//silver_chain_scope_end
+
+
 
 typedef struct DtwResource{
 
@@ -39,7 +43,3 @@ typedef struct DtwResource{
     void *sub_resources;
 
 }DtwResource;
-
-
-
-#endif

@@ -1,3 +1,8 @@
+
+//silver_chain_scope_start
+//mannaged by silver chain
+#include "../imports/imports.dependency.h"
+//silver_chain_scope_end
 #define DTW_RESOURCE_ELEMENT_IS_NULL -1
 #define DTW_RESOURCE_OK 0
 #define DTW_RESOURCE_ELEMENT_NOT_EXIST 1

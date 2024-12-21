@@ -1,7 +1,9 @@
-#include "../unique.all_types_less_dependencies.h"
 
-#ifndef PRIVATE_DTW_TREE_PART_MODULE_TYPE_H
-#define PRIVATE_DTW_TREE_PART_MODULE_TYPE_H
+//silver_chain_scope_start
+//mannaged by silver chain
+#include "../../../imports/imports.macros.h"
+//silver_chain_scope_end
+
 
 typedef struct DtwTreePartModule{
 
@@ -28,4 +30,3 @@ typedef struct DtwTreePartModule{
     void (*free)(struct DtwTreePart *self);
     struct DtwTreePart *(*self_copy)(struct DtwTreePart *self);
 }DtwTreePartModule;
-#endif

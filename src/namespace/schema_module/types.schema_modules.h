@@ -1,8 +1,10 @@
-#include "DatabaseSchemaModule.h"
-#ifndef PRIVATE_DTW_SCHEMA_MODULE_TYPE_H
-#define PRIVATE_DTW_SCHEMA_MODULE_TYPE_H
+
+//silver_chain_scope_start
+//mannaged by silver chain
+#include "../../imports/imports.macros.h"
+//silver_chain_scope_end
+
 typedef struct {
     void (*add_primary_key)(DtwSchema *self, const char *primary_key);
     DtwSchema * (*sub_schema)(DtwSchema *self,const char *name);
 }DtwSchemaModule;
-#endif

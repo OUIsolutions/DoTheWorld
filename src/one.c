@@ -31,7 +31,6 @@ SOFTWARE.
 
 #define DO_THE_WORLD_ONE
 
-#include "definition.c"
-#include "dependencies/definition.c"
+#include "imports/imports.fdefine.h"
 
 #endif //DO_THE_WORLD_H

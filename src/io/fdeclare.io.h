@@ -1,4 +1,9 @@
 
+//silver_chain_scope_start
+//mannaged by silver chain
+#include "../../src/imports/imports.globals.h"
+//silver_chain_scope_end
+
 
 void dtw_create_dir_recursively(const char *path);
 

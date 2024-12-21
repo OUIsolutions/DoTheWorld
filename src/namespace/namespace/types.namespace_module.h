@@ -1,16 +1,11 @@
-#include "unique.all_types_less_dependencies.h"
-#include "StringArrayModule.h"
-#include "PathModule.h"
-#include "RandonizerModule.h"
-#include "Tree/all.h"
-#include "Schema/all.h"
-#include "LockerModule.h"
-#include "HashModule.h"
-#include "Transaction/all.h"
-#include "Resource/all.h"
 
-#ifndef PRIVATE_DTW_NAMESPACE_MODULE_TYPE_H
-#define PRIVATE_DTW_NAMESPACE_MODULE_TYPE_H
+//silver_chain_scope_start
+//mannaged by silver chain
+#include "../../imports/imports.macros.h"
+//silver_chain_scope_end
+
+
+
 typedef struct DtwNamespace{
     //IO
     void (*create_dir_recursively)(const char *path);
@@ -112,4 +107,3 @@ typedef struct DtwNamespace{
     DtwRandonizerModule randonizer;
 
 }DtwNamespace;
-#endif

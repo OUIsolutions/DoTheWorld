@@ -1,4 +1,9 @@
 
+//silver_chain_scope_start
+//mannaged by silver chain
+#include "../../../imports/imports.globals.h"
+//silver_chain_scope_end
+
 
 
 DtwResource * DtwResource_sub_resource_next(DtwResource *self, const char *end_path);

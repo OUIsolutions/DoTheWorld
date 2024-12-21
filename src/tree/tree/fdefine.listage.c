@@ -1,4 +1,9 @@
 
+//silver_chain_scope_start
+//mannaged by silver chain
+#include "../../imports/imports.fdeclare.h"
+//silver_chain_scope_end
+
 
 //listages
  DtwStringArray *DtwTree_list_files( DtwTree *self, const char *path,bool concat_path){

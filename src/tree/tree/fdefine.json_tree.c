@@ -1,4 +1,9 @@
 
+//silver_chain_scope_start
+//mannaged by silver chain
+#include "../../imports/imports.fdeclare.h"
+//silver_chain_scope_end
+
 
 
 bool DtwTree_loads_json_tree(struct DtwTree *self, const char *all_tree){
