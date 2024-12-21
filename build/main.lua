@@ -37,8 +37,6 @@ function main()
 
     if argv.flags_exist({ "create_readme" }) then
         local readme = Create_readme()
-        dtw.write_file("README.md", readme)
-
-        clib.print(ANSI_RESET)
     end
+    clib.print(ANSI_RESET)
 end
