@@ -18,8 +18,9 @@ end
 
 
 
-function Execute_full_test(cache, src_sha)
-    local cache =
+function Execute_full_test()
+    local cache = NewCache(CACHE_POINT)
+    local src_sha = Generate_sha_from_folder_not_considering_empty_folders(LIB_FOLDER)
     local original_side_effect_sha = Generate_sha_from_folder_not_considering_empty_folders(SIDE_EFFECT)
     dtw.copy_any_overwriting(SIDE_EFFECT, SIDE_EFFECT_COPY)
 
