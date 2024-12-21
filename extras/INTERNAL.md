@@ -45,24 +45,26 @@ int main(int argc, char *argv[])#{
 
 {HASHTAG} Bulding the Project
 
-# Bulding the Project
+{HASHTAG}  Bulding the Project
 if you want to build the project from scracth, you will need  to have [OuiPacker](https://github.com/OUIsolutions/OuiPacker)
 on version **0.005** dowloaded,then you can call:
 
-```shel
+~~~shel
 ./OuiPacker.out --folder_mode   build/ --install_dependencies  --amalgamate --zip  --silverchain_organize
-```
+~~~
 
 These will create all the outputs into the release folder.
 If you want to make all the tests and recreate the examples and readme , call:
 
-```shell
+~~~shell
 ./OuiPacker.out --folder_mode   build/ --install_dependencies  --amalgamate --zip  --silverchain_organize --test --create_examples --create_readme
-```
+
+~~~
+
 
 {HASHTAG} IO Operations
 
-{HASHTAG}{HASHTAG}Reading strings
+{HASHTAG}{HASHTAG} Reading strings
 if you are sure that the content you are going to read is not binary you can call the function **dtw_load_string_file_content**
 {create_c_example("exemples/io/loading_string.c")}
 
@@ -164,7 +166,7 @@ Generating Sha from file
 With the locker you can Lock files and ensure that even with multprocessment, they will
 be executed in an order
 
-#{create_c_example("exemples/locker/locker_test.c")}#/
+{create_c_example("exemples/locker/locker_test.c")}
 
 
 {HASHTAG}{HASHTAG} Resources

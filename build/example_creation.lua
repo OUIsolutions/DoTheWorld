@@ -23,4 +23,9 @@ function Create_examples()
         print(ANSI_GREEN .. "created example" .. path.get_full_path())
     end)
     test_tree.commit()
+
+
+    local locker = dtw.load_file("tests/locker_test/locker_test.c")
+    locker = string.gsub(locker,"../../release/doTheWorld.h","doTheWorld.h")
+    dtw.write_file("exemples/locker/locker_test.c",locker)
 end

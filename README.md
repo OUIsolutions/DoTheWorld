@@ -45,126 +45,534 @@ int main(int argc, char *argv[]){
 
 # Bulding the Project
 
- Bulding the Project
+#  Bulding the Project
 if you want to build the project from scracth, you will need  to have [OuiPacker](https://github.com/OUIsolutions/OuiPacker)
 on version **0.005** dowloaded,then you can call:
 
-```shel
+~~~shel
 ./OuiPacker.out --folder_mode   build/ --install_dependencies  --amalgamate --zip  --silverchain_organize
-```
+~~~
 
 These will create all the outputs into the release folder.
 If you want to make all the tests and recreate the examples and readme , call:
 
-```shell
+~~~shell
 ./OuiPacker.out --folder_mode   build/ --install_dependencies  --amalgamate --zip  --silverchain_organize --test --create_examples --create_readme
+
+~~~
+
+
+# IO Operations
+
+## Reading strings
+if you are sure that the content you are going to read is not binary you can call the function **dtw_load_string_file_content**
+```c
+
+#include "doTheWorld.h"
+
+int main(int argc, char *argv[]){
+  //load a string file content
+    DtwNamespace dtw = newDtwNamespace();
+
+    const char *path = "tests/target/a.txt";
+  char *content = dtw.load_string_file_content(path);
+  if(content == NULL){
+    printf("error oppening %s\n",path);
+    return 1;
+  }
+  printf("content: %s\n",content);
+  free(content);
+  return 0;
+
+}
+
 ```
 
-{HASHTAG} IO Operations
+### Reading Any Content
 
-{HASHTAG}{HASHTAG}Reading strings
-if you are sure that the content you are going to read is not binary you can call the function **dtw_load_string_file_content**
-{create_c_example("exemples/io/loading_string.c")}
+```c
+#include "doTheWorld.h"
 
-{HASHTAG}{HASHTAG}{HASHTAG} Reading Any Content
+int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
 
-{create_c_example("exemples/io/loading_any.c")}
+    const char *path = "tests/target/blob.png";
+  long size;
+  bool is_binary;
+  //load any file, is useful if you don't know if the file is binary or not
+  unsigned char *content = dtw.load_any_content(path,&size,&is_binary);
+  if(content == NULL){
+    printf("error oppening %s\n",path);
+    return 1;
+  }
+  printf("size: %ld\n",size);
+  printf("is_binary: %s\n",is_binary ? "true" : "false");
 
-{HASHTAG}{HASHTAG}{HASHTAG} Reading Double bools and Integers
+  dtw.write_any_content("tests/target/blob2.png",content,size);
+  free(content);
+  return 0;
+}
+
+```
+
+### Reading Double bools and Integers
 you also can direclty load all types from an file  with numerical ios
 
-{create_c_example("exemples/numerical_io/loading_data.c")}
+```c
+
+#include "doTheWorld.h"
+
+
+
+
+int main (){
+
+    DtwNamespace dtw = newDtwNamespace();
+
+    double double_txt = dtw.load_double_file_content("tests/target/numerical/double.txt");
+    printf("double.txt:%lf\n",double_txt);
+
+    double double_that_not_exist = dtw.load_double_file_content("nothing.txt");
+    printf("double that not exist:%lf\n",double_that_not_exist);
+
+
+    long integer_txt = dtw.load_long_file_content("tests/target/numerical/integer.txt");
+    printf("integer.txt:%ld\n",integer_txt);
+
+
+    long integer_that_not_exist = dtw.load_long_file_content("nothing.txt");
+    printf("integer that not exist:%ld\n",integer_that_not_exist);
+
+    //false_small.txt = "f"
+    bool false_small = dtw.load_bool_file_content("tests/target/numerical/false_small.txt");
+    printf("false_small.txt:%d\n",false_small);
+
+    //false_normal.txt = "false"
+    bool false_normal = dtw.load_bool_file_content("tests/target/numerical/false_normal.txt");
+    printf("false_normal.txt:%d\n",false_normal);
+
+    //true_small.txt = "t"
+    bool true_small = dtw.load_bool_file_content("tests/target/numerical/true_small.txt");
+    printf("true_small.txt:%d\n",true_small);
+
+    //true normal.txt = "true"
+    bool true_normal = dtw.load_bool_file_content("tests/target/numerical/true_normal.txt");
+    printf("true_normal.txt:%d\n",true_normal);
+
+    bool bool_that_not_exist = dtw.load_bool_file_content("nothing.txt");
+    printf("false that not exist:%d\n",bool_that_not_exist);
+
+    return 0;
+
+}
+
+```
 
 to write strings in text files is very simple, just call the function **dtw_write_string_file_content**
 (Note that the target directory does not need to exist, if it does not exist it will be created automatically)
 
-{create_c_example("exemples/io/writing_strings.c")}
+```c
+#include "doTheWorld.h"
+
+int main(int argc, char *argv[]){
+  // Write a string to a file the path is auto created
+    DtwNamespace dtw = newDtwNamespace();
+
+    bool result = dtw.write_string_file_content("tests/target/a.txt","Hello World!");
+  printf("result: %s\n",result ? "true" : "false");
+  return 0;
+}
+
+```
 
 
-{HASHTAG}{HASHTAG}{HASHTAG} Writing Any
+### Writing Any
 if you want to write anything to a file, it's also very simple, use the **dtw_write_any_content** function, but note that it will be necessary to pass the writing size
 
 
-{create_c_example("exemples/io/write_any.c")}
+```c
+#include "doTheWorld.h"
 
-{HASHTAG}{HASHTAG}{HASHTAG} Writing Double , bool and Integers
+int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
+
+    //load the beer image
+  const char *blob_path = "tests/target/blob.png";
+  long blob_size;
+  unsigned char *content = dtw.load_binary_content(blob_path,&blob_size);
+  //use these functions for binary files
+  if(content == NULL){
+    printf("error oppening %s\n",blob_path);
+    return 1;
+  }
+  printf("size: %ld\n",blob_size);
+
+  bool result = dtw.write_any_content("tests/target/blob2.png",content,blob_size);
+  printf("result: %s\n",result ? "true" : "false");
+free(content);
+  return 0;
+}
+
+```
+
+### Writing Double , bool and Integers
 You also can write any type direclty to an file
 
-{create_c_example("exemples/numerical_io/writing_data.c")}
+```c
+
+#include "doTheWorld.h"
+
+
+
+
+int main (){
+
+    DtwNamespace dtw = newDtwNamespace();
+
+    dtw.write_double_file_content("tests/target/numerical2/double.txt",25.4);
+    dtw.write_long_file_content("tests/target/numerical2/long.txt",12);
+    dtw.write_bool_file_content("tests/target/numerical2/bool.txt",true);
+
+
+    return 0;
+
+}
+
+```
 
 If you want to create dirs you can call the function **dtw_create_dir_recursively**
 passing the folder you want to create,dont wory about if the previews path dont exist
 it will create till reachs the target folder
 
-{create_c_example("exemples/io/create_dirs.c")}
+```c
+#include "doTheWorld.h"
 
-{HASHTAG}{HASHTAG}{HASHTAG} Copying Anything
+int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
+
+    dtw.create_dir_recursively("tests/target/sub_folder/a/b/c");
+
+  return 0;
+}
+
+```
+
+### Copying Anything
 With the function **dtw_copy_any** you can copy either files or folders to one position to anoter position
 
-{create_c_example("exemples/io/copying_files.c")}
+```c
 
-{HASHTAG}{HASHTAG}{HASHTAG} Moving Any
+
+#include "doTheWorld.h"
+
+int main(int argc, char *argv[]){
+  DtwNamespace dtw = newDtwNamespace();
+  dtw.copy_any("tests/target/blob.png","tests/target/blob3.png",DTW_NOT_MERGE);
+  return 0;
+}
+
+```
+
+### Moving Any
 You can move either folders or files with **dtw_move_any** function
 
-{create_c_example("exemples/io/move_any.c")}
+```c
+
+#include "doTheWorld.h"
+
+int main(int argc, char *argv[]){
+
+    DtwNamespace dtw = newDtwNamespace();
+
+    dtw.move_any("tests/target/sub_folder","tests/target/sub_folder2",DTW_NOT_MERGE);
+
+    return 0;
+}
+
+```
 
 
 With the listage functions you can extract all Strings Arrays of elements in an folder
 
-{HASHTAG}{HASHTAG} Listing files
+## Listing files
 
-{create_c_example("exemples/monodimension_listage/list_files.c")}
+```c
 
-{HASHTAG}{HASHTAG}{HASHTAG} Listing Dirs
+#include "doTheWorld.h"
 
-{create_c_example("exemples/monodimension_listage/list_dirs.c")}
+int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
 
-{HASHTAG}{HASHTAG}{HASHTAG} Listing All
+  DtwStringArray *files = dtw.list_files("tests/target", DTW_CONCAT_PATH);
+  dtw.string_array.sort(files);
 
-{create_c_example("exemples/monodimension_listage/list_all.c")}
+  for(int i = 0; i < files->size; i++){
+    printf("%s\n", files->strings[i]);
+  }
+  dtw.string_array.free(files);
+  return 0;
+}
+
+```
+
+### Listing Dirs
+
+```c
+
+
+#include "doTheWorld.h"
+
+int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
+
+  DtwStringArray *dirs = dtw.list_dirs("tests/target", DTW_NOT_CONCAT_PATH);
+  //the represent methold will print the dirs in the console
+  dtw.string_array.sort(dirs);
+  dtw.string_array.represent(dirs);
+  dtw.string_array.free(dirs);
+  return 0;
+}
+
+```
+
+### Listing All
+
+```c
+
+
+
+#include "doTheWorld.h"
+
+int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
+
+  DtwStringArray *all = dtw.list_all("tests/target/",DTW_CONCAT_PATH);
+  dtw.string_array.sort(all);
+  dtw.string_array.represent(all);
+  dtw.string_array.free(all);
+  return 0;
+}
+
+```
 
 The By Using multi dimension listage functions , you can see all itens listed in all sub folders of the "main" folder
 
-{HASHTAG}{HASHTAG}{HASHTAG} Listing Files Recursively
+### Listing Files Recursively
 
-{create_c_example("exemples/multidimension_listage/list_files_recursively.c")}
+```c
 
-{HASHTAG}{HASHTAG}{HASHTAG} Listing Dirs Recursively
+#include "doTheWorld.h"
 
-{create_c_example("exemples/multidimension_listage/list_dirs_recursively.c")}
+int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
 
-{HASHTAG}{HASHTAG}{HASHTAG} Listing All Recursively
+  DtwStringArray *files = dtw.list_files_recursively("tests/target/",DTW_CONCAT_PATH);
+  dtw.string_array.sort(files);
+  dtw.string_array.represent(files);
+  dtw.string_array.free(files);
+  return 0;
+}
 
-{create_c_example("exemples/multidimension_listage/list_all_recursively.c")}
+```
 
-{HASHTAG}{HASHTAG} Dealing with base64
+### Listing Dirs Recursively
+
+```c
+
+#include "doTheWorld.h"
+
+int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
+
+  DtwStringArray *files = dtw.list_dirs_recursively("tests/target/",DTW_CONCAT_PATH);
+  dtw.string_array.sort(files);
+  dtw.string_array.represent(files);
+  dtw.string_array.free(files);
+  return 0;
+}
+
+```
+
+### Listing All Recursively
+
+```c
+
+#include "doTheWorld.h"
+
+int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
+
+  DtwStringArray *files = dtw.list_all_recursively("tests/target/",DTW_CONCAT_PATH);
+  dtw.string_array.sort(files);
+  dtw.string_array.represent(files);
+  dtw.string_array.free(files);
+  return 0;
+}
+
+```
+
+## Dealing with base64
 You can easly transform an binary file to an base64 string like these
 
-{create_c_example("exemples/extras/converting_file_to_base64.c")}
+```c
+
+#include "doTheWorld.h"
+
+int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
+
+    const char *deer_path = "tests/target/blob.png";
+   char *deerb64  = dtw.convert_binary_file_to_base64(deer_path);
+   printf("blob: %s", deerb64);
+    free(deerb64);
+}
+
+```
 
 You also can reconvert an base64 string to binary
 
-{create_c_example("exemples/extras/converting_b64_to_binary.c")}
+```c
+
+#include "doTheWorld.h"
+
+int main(int argc, char *argv[]){
 
 
-{HASHTAG}{HASHTAG} Sha256
+    DtwNamespace dtw = newDtwNamespace();
+
+    //creating the b64 file
+    const char *blob_path = "tests/target/blob.png";
+    char *blob  = dtw.convert_binary_file_to_base64(blob_path);
+     long output;
+    unsigned char  *result = dtw.base64_decode(blob,&output);
+
+    dtw.write_any_content("tests/target/blob2.png",result,output);
+
+    free(result);
+    free(blob);
+
+    return 0;
+}
+
+```
+
+
+## Sha256
 Generating Sha from file
 
-{create_c_example("exemples/extras/generating_sha_from_file.c")}
+```c
 
-{HASHTAG}{HASHTAG}{HASHTAG} Unix
+#include "doTheWorld.h"
 
-{create_c_example("exemples/extras/get_entity_last_modification_in_unix.c")}
+int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
+
+   char *hash = dtw.generate_sha_from_file("tests/target/blob.png");
+   printf("SHA: %s", hash);
+   free(hash);
+}
+
+```
+
+### Unix
+
+```c
+
+#include "doTheWorld.h"
+
+int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
+
+    int last_modification_in_unix = dtw.get_entity_last_motification_in_unix("tests/target/a.txt");
+    printf("Last modification: %d\n", last_modification_in_unix);
+}
+
+```
 
 
-{create_c_example("exemples/extras/get_entity_last_modification.c")}
+```c
+#include "doTheWorld.h"
+
+int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
 
 
-{HASHTAG}{HASHTAG}{HASHTAG} Locker
+
+    char *last_modification = dtw.get_entity_last_motification_in_string("tests/target/a.txt");
+    printf("Last modification: %s", last_modification);
+    free(last_modification);
+}
+
+```
+
+
+### Locker
 With the locker you can Lock files and ensure that even with multprocessment, they will
 be executed in an order
 
-{create_c_example("exemples/locker/locker_test.c")}
+```c
+
+#include "doTheWorld.h"
+
+
+
+
+void append_text(const char *file,char *text){
+    DtwNamespace dtw = newDtwNamespace();
+
+
+    DtwLocker *locker = newDtwLocker();
+    while(dtw.locker.lock(locker,file));
+    //printf("process %d get the ownership\n",locker->process);
+
+    char *content = dtw.load_string_file_content(file);
+
+    content = realloc(content,strlen(content) + strlen(text) + 2);
+    strcat(content,text);
+
+    dtw.write_string_file_content(file,content);
+    free(content);
+
+
+    dtw.locker.free(locker);
+
+}
+
+int main(int argc, char *argv[]){
+
+
+    DtwNamespace dtw = newDtwNamespace();
+
+
+    const char *file = "tests/target/append.txt";
+    int total_process  = 10;
+    // this will reset the file
+    dtw.remove_any(file);
+    dtw.write_string_file_content(file,"");
+
+    for(int i = 0; i < total_process; i ++){
+
+        if(fork() == 0){
+            char formated_content[1000] = {0};
+            sprintf(formated_content,"text of: %d process %d \n",i,getpid());
+            append_text(file,formated_content);
+
+            exit(0);
+        }
+
+    }
+
+    // Hold the end of other process
+    for (int i = 0; i < total_process; i++) {
+        int status;
+        wait(&status);
+    }
+
+
+
+}
+
+```
 
 
 ## Resources
