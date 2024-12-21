@@ -11,6 +11,7 @@ The installation of DoTheWorld is made to be as dumb as possible, just  download
 
 [Download link](https://github.com/OUIsolutions/DoTheWorld/releases/download/v7.004/doTheWorld.h)
 
+
  And include in your project.
 if this compiles then the library will work:
 ~~~c
@@ -38,13 +39,19 @@ int main(int argc, char *argv[]){
 ~~~
 
 # Bulding the Project
-if you want to exec all tests, or generate your own amalgamation,
-just run the **./build.out** or **build.exe** located into the root dir of the repo
+if you want to build the project from scracth, you will need  to have [OuiPacker](https://github.com/OUIsolutions/OuiPacker)
+on version **0.005** dowloaded,then you can call:
 
-~~~shel
-sh pre_build.sh
-./build.out
-~~~
+```shel
+./OuiPacker.out --folder_mode   build/ --install_dependencies  --amalgamate --zip  --silverchain_organize
+```
+
+These will create all the outputs into the release folder.
+If you want to make all the tests and recreate the examples and readme , call:
+
+```shell
+./OuiPacker.out --folder_mode   build/ --install_dependencies  --amalgamate --zip  --silverchain_organize --test --create_examples --create_readme
+```
 # IO Operations
 
 ##Reading strings
@@ -66,7 +73,7 @@ int main(int argc, char *argv[]){
   printf("content: %s\n",content);
   free(content);
   return 0;
-  
+
 }
 ```
 
@@ -121,7 +128,7 @@ int main (){
     long integer_txt = dtw.load_long_file_content("testargnumericinteger.txt");
     printf("integer.txt:%ld\n",integer_txt);
 
-    
+
     long integer_that_not_exist = dtw.load_long_file_content("nothing.txt");
     printf("integer that not exist:%ld\n",integer_that_not_exist);
 
@@ -136,7 +143,7 @@ int main (){
   /true_small.txt = "t"
     bool true_small = dtw.load_bool_file_content("testargnumerictrue_small.txt");
     printf("true_small.txt:%d\n",true_small);
-    
+
   /true normal.txt = "true"
     bool true_normal = dtw.load_bool_file_content("testargnumerictrue_normal.txt");
     printf("true_normal.txt:%d\n",true_normal);
@@ -654,7 +661,7 @@ int main(){
         dtw.transaction.json_error.free(error);
         return 0;
     }
-    
+
     dtw.transaction.represent(t);
     dtw.transaction.free(t);
 }
@@ -2284,7 +2291,7 @@ int main (){
 
     dtw.hash.digest_folder_by_last_modification(my_hash,"testarget");
     printf("after a folder %s\n",my_hash->hash);
-    
+
     dtw.hash.free(my_hash);
 }
 ```

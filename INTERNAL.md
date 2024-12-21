@@ -38,13 +38,22 @@ int main(int argc, char *argv[])#{
 ~~~
 
 {HASHTAG} Bulding the Project
-if you want to exec all tests, or generate your own amalgamation,
-just run the **./build.out** or **build.exe** located into the root dir of the repo
 
-~~~shel
-sh pre_build.sh
-./build.out
-~~~
+# Bulding the Project
+if you want to build the project from scracth, you will need  to have [OuiPacker](https://github.com/OUIsolutions/OuiPacker)
+on version **0.005** dowloaded,then you can call:
+
+```shel
+./OuiPacker.out --folder_mode   build/ --install_dependencies  --amalgamate --zip  --silverchain_organize
+```
+
+These will create all the outputs into the release folder.
+If you want to make all the tests and recreate the examples and readme , call:
+
+```shell
+./OuiPacker.out --folder_mode   build/ --install_dependencies  --amalgamate --zip  --silverchain_organize --test --create_examples --create_readme
+```
+
 {HASHTAG} IO Operations
 
 {HASHTAG}{HASHTAG}Reading strings

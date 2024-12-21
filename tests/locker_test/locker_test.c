@@ -1,5 +1,5 @@
 
-#include "../doTheWorld_test.h"
+#include "../../release/doTheWorld.h"
 
 
 
@@ -29,7 +29,7 @@ int main(int argc, char *argv[]){
 
 
     DtwNamespace dtw = newDtwNamespace();
-    
+
 
     const char *file = "tests/target/append.txt";
     int total_process  = 10;
@@ -54,7 +54,7 @@ int main(int argc, char *argv[]){
         int status;
         wait(&status);
     }
-     
+
 
 
 }

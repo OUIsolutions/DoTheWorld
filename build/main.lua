@@ -19,6 +19,10 @@ function main()
         dtw.write_file(RELEASE_FOLDER .. "/" .. OUTPUT_SINGLE_FILE, amalgamation_result)
     end
 
+    if argv.flags_exist({ "zip" }) then
+        os.execute("zip  release/doTheWorld.zip -r src dependencies")
+    end
+
 
     if argv.flags_exist({ "test" }) then
         local cache = NewCache(CACHE_POINT)
@@ -40,5 +44,6 @@ function main()
     if argv.flags_exist({ "create_readme" }) then
         local readme = Create_readme()
     end
+
     print(ANSI_RESET)
 end
