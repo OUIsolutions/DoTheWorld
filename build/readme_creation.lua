@@ -1,5 +1,6 @@
 function create_c_example(src)
     local content = dtw.load_file(src)
+
     return "```c\n" .. content .. "\n```"
 end
 

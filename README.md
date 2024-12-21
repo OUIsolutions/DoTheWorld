@@ -81,7 +81,7 @@ int main(int argc, char *argv[]){
     const char *path = "testargblob.png";
   long size;
   bool is_binary;
-/load any file, is useful if you don't know if the file is binary or not
+//oad any file, is useful if you don't know if the file is binary or not
   unsigned char *content = dtw.load_any_content(path,&size,&is_binary);
   if(content == NULL){
     printf("error oppening %s\n",path);
@@ -94,341 +94,2248 @@ int main(int argc, char *argv[]){
   free(content);
   return 0;
 }
+
 ```
 
 ### Reading Double bools and Integers
 you also can direclty load all types from an file  with numerical ios
 
-{create_c_example("exemples/numerical_io/loading_data.c")}
+```c
+
+#include "doTheWorld.h"
+
+
+
+
+int main (){
+
+    DtwNamespace dtw = newDtwNamespace();
+
+    double double_txt = dtw.load_double_file_content("testargnumericdouble.txt");
+    printf("double.txt:%lf\n",double_txt);
+
+    double double_that_not_exist = dtw.load_double_file_content("nothing.txt");
+    printf("double that not exist:%lf\n",double_that_not_exist);
+
+
+    long integer_txt = dtw.load_long_file_content("testargnumericinteger.txt");
+    printf("integer.txt:%ld\n",integer_txt);
+
+    
+    long integer_that_not_exist = dtw.load_long_file_content("nothing.txt");
+    printf("integer that not exist:%ld\n",integer_that_not_exist);
+
+  /false_small.txt = "f"
+    bool false_small = dtw.load_bool_file_content("testargnumericfalse_small.txt");
+    printf("false_small.txt:%d\n",false_small);
+
+  /false_normal.txt = "false"
+    bool false_normal = dtw.load_bool_file_content("testargnumericfalse_normal.txt");
+    printf("false_normal.txt:%d\n",false_normal);
+
+  /true_small.txt = "t"
+    bool true_small = dtw.load_bool_file_content("testargnumerictrue_small.txt");
+    printf("true_small.txt:%d\n",true_small);
+    
+  /true normal.txt = "true"
+    bool true_normal = dtw.load_bool_file_content("testargnumerictrue_normal.txt");
+    printf("true_normal.txt:%d\n",true_normal);
+
+    bool bool_that_not_exist = dtw.load_bool_file_content("nothing.txt");
+    printf("false that not exist:%d\n",bool_that_not_exist);
+
+    return 0;
+
+}
+```
 
 to write strings in text files is very simple, just call the function **dtw_write_string_file_content**
 (Note that the target directory does not need to exist, if it does not exist it will be created automatically)
 
-{create_c_example("exemples/io/writing_strings.c")}
+```c
+#include "doTheWorld.h"
+
+int main(int argc, char *argv[]){
+/ Write a string to a file the path is auto created
+    DtwNamespace dtw = newDtwNamespace();
+
+    bool result = dtw.write_string_file_content("testarga.txt","Hello World!");
+  printf("result: %s\n",result ? "true" : "false");
+  return 0;
+}
+```
 
 
-{HASHTAG}{HASHTAG}{HASHTAG} Writing Any
+### Writing Any
 if you want to write anything to a file, it's also very simple, use the **dtw_write_any_content** function, but note that it will be necessary to pass the writing size
 
 
-{create_c_example("exemples/io/write_any.c")}
+```c
+#include "doTheWorld.h"
 
-{HASHTAG}{HASHTAG}{HASHTAG} Writing Double , bool and Integers
+int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
+
+  /load the beer image
+  const char *blob_path = "testargblob.png";
+  long blob_size;
+  unsigned char *content = dtw.load_binary_content(blob_path,&blob_size);
+/use these functions for binary files
+  if(content == NULL){
+    printf("error oppening %s\n",blob_path);
+    return 1;
+  }
+  printf("size: %ld\n",blob_size);
+
+  bool result = dtw.write_any_content("testargblob2.png",content,blob_size);
+  printf("result: %s\n",result ? "true" : "false");
+free(content);
+  return 0;
+}
+```
+
+### Writing Double , bool and Integers
 You also can write any type direclty to an file
 
-{create_c_example("exemples/numerical_io/writing_data.c")}
+```c
+
+#include "doTheWorld.h"
+
+
+
+
+int main (){
+
+    DtwNamespace dtw = newDtwNamespace();
+
+    dtw.write_double_file_content("testargnumericadouble.txt",25.4);
+    dtw.write_long_file_content("testargnumericalong.txt",12);
+    dtw.write_bool_file_content("testargnumericabool.txt",true);
+
+
+    return 0;
+
+}
+```
 
 If you want to create dirs you can call the function **dtw_create_dir_recursively**
 passing the folder you want to create,dont wory about if the previews path dont exist
 it will create till reachs the target folder
 
-{create_c_example("exemples/io/create_dirs.c")}
+```c
+#include "doTheWorld.h"
 
-{HASHTAG}{HASHTAG}{HASHTAG} Copying Anything
+int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
+
+    dtw.create_dir_recursively("testargsub_foldac");
+
+  return 0;
+}
+```
+
+### Copying Anything
 With the function **dtw_copy_any** you can copy either files or folders to one position to anoter position
 
-{create_c_example("exemples/io/copying_files.c")}
+```c
 
-{HASHTAG}{HASHTAG}{HASHTAG} Moving Any
+
+#include "doTheWorld.h"
+
+int main(int argc, char *argv[]){
+  DtwNamespace dtw = newDtwNamespace();
+  dtw.copy_any("testargblob.png","testargblob3.png",DTW_NOT_MERGE);
+  return 0;
+}
+```
+
+### Moving Any
 You can move either folders or files with **dtw_move_any** function
 
-{create_c_example("exemples/io/move_any.c")}
+```c
+
+#include "doTheWorld.h"
+
+int main(int argc, char *argv[]){
+
+    DtwNamespace dtw = newDtwNamespace();
+
+    dtw.move_any("testargsub_folder","testargsub_folder2",DTW_NOT_MERGE);
+
+    return 0;
+}
+```
 
 
 With the listage functions you can extract all Strings Arrays of elements in an folder
 
-{HASHTAG}{HASHTAG} Listing files
+## Listing files
 
-{create_c_example("exemples/monodimension_listage/list_files.c
+```c
 
-{HASHTAG}{HASHTAG}{HASHTAG} Listing Dirs
+#include "doTheWorld.h"
 
-{create_c_example("exemples/monodimension_listage/list_dirs.c")}
+int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
 
-{HASHTAG}{HASHTAG}{HASHTAG} Listing All
+  DtwStringArray *files = dtw.list_files("testarget", DTW_CONCAT_PATH);
+  dtw.string_array.sort(files);
 
-{create_c_example("exemples/monodimension_listage/list_all.c")}
+  for(int i = 0; i < files->size; i++){
+    printf("%s\n", files->strings[i]);
+  }
+  dtw.string_array.free(files);
+  return 0;
+}
+```
+
+### Listing Dirs
+
+```c
+
+
+#include "doTheWorld.h"
+
+int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
+
+  DtwStringArray *dirs = dtw.list_dirs("testarget", DTW_NOT_CONCAT_PATH);
+/the represent methold will print the dirs in the console
+  dtw.string_array.sort(dirs);
+  dtw.string_array.represent(dirs);
+  dtw.string_array.free(dirs);
+  return 0;
+}
+```
+
+### Listing All
+
+```c
+
+
+
+#include "doTheWorld.h"
+
+int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
+
+  DtwStringArray *all = dtw.list_all("testarg",DTW_CONCAT_PATH);
+  dtw.string_array.sort(all);
+  dtw.string_array.represent(all);
+  dtw.string_array.free(all);
+  return 0;
+}
+```
 
 The By Using multi dimension listage functions , you can see all itens listed in all sub folders of the "main" folder
 
-{HASHTAG}{HASHTAG}{HASHTAG} Listing Files Recursively
+### Listing Files Recursively
 
-{create_c_example("exemples/multidimension_listage/list_files_recursively.c")}
+```c
 
-{HASHTAG}{HASHTAG}{HASHTAG} Listing Dirs Recursively
+#include "doTheWorld.h"
 
-{create_c_example("exemples/multidimension_listage/list_dirs_recursively.c")}
+int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
 
-{HASHTAG}{HASHTAG}{HASHTAG} Listing All Recursively
+  DtwStringArray *files = dtw.list_files_recursively("testarg",DTW_CONCAT_PATH);
+  dtw.string_array.sort(files);
+  dtw.string_array.represent(files);
+  dtw.string_array.free(files);
+  return 0;
+}
+```
 
-{create_c_example("exemples/multidimension_listage/list_all_recursively.c")}
+### Listing Dirs Recursively
 
-{HASHTAG}{HASHTAG} Dealing with base64
+```c
+
+#include "doTheWorld.h"
+
+int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
+
+  DtwStringArray *files = dtw.list_dirs_recursively("testarg",DTW_CONCAT_PATH);
+  dtw.string_array.sort(files);
+  dtw.string_array.represent(files);
+  dtw.string_array.free(files);
+  return 0;
+}
+```
+
+### Listing All Recursively
+
+```c
+
+
+#include "doTheWorld.h"
+
+int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
+
+  DtwStringArray *files = dtw.list_all_recursively("testarg",DTW_CONCAT_PATH);
+  dtw.string_array.sort(files);
+  dtw.string_array.represent(files);
+  dtw.string_array.free(files);
+  return 0;
+}
+
+```
+
+## Dealing with base64
 You can easly transform an binary file to an base64 string like these
 
-{create_c_example("exemples/extras/converting_file_to_base64.c")}
+```c
+
+#include "doTheWorld.h"
+
+int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
+
+    const char *deer_path = "testargblob.png";
+   char *deerb64  = dtw.convert_binary_file_to_base64(deer_path);
+   printf("blob: %s", deerb64);
+    free(deerb64);
+}
+```
 
 You also can reconvert an base64 string to binary
 
-{create_c_example("exemples/extras/converting_b64_to_binary.c")}
+```c
+
+#include "doTheWorld.h"
+
+int main(int argc, char *argv[]){
 
 
-{HASHTAG}{HASHTAG} Sha256
+    DtwNamespace dtw = newDtwNamespace();
+
+  /creating the b64 file
+    const char *blob_path = "testargblob.png";
+    char *blob  = dtw.convert_binary_file_to_base64(blob_path);
+     long output;
+    unsigned char  *result = dtw.base64_decode(blob,&output);
+
+    dtw.write_any_content("testargblob2.png",result,output);
+
+    free(result);
+    free(blob);
+
+    return 0;
+}
+```
+
+
+## Sha256
 Generating Sha from file
 
-{create_c_example("exemples/extras/generating_sha_from_file.c")}
+```c
 
-{HASHTAG}{HASHTAG}{HASHTAG} Unix
+#include "doTheWorld.h"
 
-{create_c_example("exemples/extras/get_entity_last_modification_in_unix.c
+int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
+
+   char *hash = dtw.generate_sha_from_file("testargblob.png");
+   printf("SHA: %s", hash);
+   free(hash);
+}
+```
+
+### Unix
+
+```c
+
+#include "doTheWorld.h"
+
+int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
+
+    int last_modification_in_unix = dtw.get_entity_last_motification_in_unix("testarga.txt");
+    printf("Last modification: %d\n", last_modification_in_unix);
+}
+```
 
 
-{create_c_example("exemples/extras/get_entity_last_modification.c")}
+```c
+#include "doTheWorld.h"
+
+int main(int argc, char *argv[]){
+    DtwNamespace dtw = newDtwNamespace();
 
 
-{HASHTAG}{HASHTAG}{HASHTAG} Locker
+
+    char *last_modification = dtw.get_entity_last_motification_in_string("testarga.txt");
+    printf("Last modification: %s", last_modification);
+    free(last_modification);
+}
+```
+
+
+### Locker
 With the locker you can Lock files and ensure that even with multprocessment, they will
 be executed in an order
 
 {create_c_example("exemples/locker/locker_test.c")}
 
-{HASHTAG}{HASHTAG} Resources
+
+## Resources
 With Resources you can iterate over all types of values ,and modifie than into an single transaction or one by one
-{HASHTAG}{HASHTAG}{HASHTAG} Setting Values
+### Setting Values
 
-{create_c_example("exemples/resources/setters.c")}
+```c
+
+#include "doTheWorld.h"
+
+int main (){
+    DtwNamespace dtw = newDtwNamespace();
+
+    DtwResource *values = dtw.resource.newResource("testargnew_folder");
+
+    DtwResource *string_element = dtw.resource.sub_resource(values,"text.txt");
+    dtw.resource.set_string(string_element,"nothing");
+    long size;
+    unsigned char *blob = dtw_load_binary_content("testargblob.png",&size);
+
+    DtwResource *blob_element = dtw.resource.sub_resource(values,"blob.png");
+    dtw.resource.set_binary(blob_element,blob,size);
+
+    free(blob);
+    DtwResource *bInt = dtw.resource.sub_resource(values,"b.txt");
+    dtw.resource.set_long(bInt,25);
+
+    DtwResource *cDouble = dtw.resource.sub_resource(values,"c.txt");
+    dtw.resource.set_double(cDouble,10.5);
+
+    DtwResource *dBool = dtw.resource.sub_resource(values,"b.txt");
+    dtw.resource.set_bool(dBool,true);
+
+    DtwResource  *sub_foder = dtw.resource.sub_resource(values,"sub_foder");
+    DtwResource *string_element2 = dtw.resource.sub_resource(sub_foder,"a.txt");
+    dtw.resource.set_string(string_element2,"nothing");
+
+
+    dtw.resource.commit(values);
+    dtw.resource.free(values);
 
 
 
 
-{HASHTAG}{HASHTAG}{HASHTAG} Getting values of Resource
-{create_c_example("exemples/resources/getters.c")}
+
+}
 
 
-{HASHTAG}{HASHTAG}{HASHTAG} Generating transaction
+
+
+
+
+```
+
+
+
+
+### Getting values of Resource
+```c
+#include "doTheWorld.h"
+
+int main (){
+    DtwNamespace dtw = newDtwNamespace();
+
+    DtwResource *values = dtw.resource.newResource("testarget");
+
+    printf("elements:---------------------------------\n");
+    DtwStringArray  *sub_elements = dtw.resource.list_names(values);
+    DtwStringArray_sort(sub_elements);
+    if(!dtw.resource.error(values)){
+        dtw.string_array.represent(sub_elements);
+        dtw.string_array.free(sub_elements);
+    }
+
+    printf("types:--------------------------------------\n");
+
+    DtwResource *string_r = dtw.resource.sub_resource(values, "a.txt");
+    char *string_r_value = dtw.resource.get_string(string_r);
+    DtwResource  *blob_r = dtw.resource.sub_resource(values,"blob.png");
+    long blob_size;
+    unsigned  char *blob_r_value = dtw.resource.get_binary(blob_r,&blob_size);
+
+    DtwResource *numerical = dtw.resource.sub_resource(values,"numerical");
+    DtwResource  *double_r = dtw.resource.sub_resource(numerical,"double.txt");
+    double double_r_value = dtw.resource.get_double(double_r);
+
+    DtwResource  *long_r = dtw.resource.sub_resource(numerical,"integer.txt");
+    long long_r_value =dtw.resource.get_long(long_r);
+    DtwResource  *bool_r = dtw.resource.sub_resource(numerical,"true_normal.txt");
+    bool bool_r_value = dtw.resource.get_bool(bool_r);
+
+    if(!dtw.resource.error(values)){
+        printf("value string :%s\n",string_r_value);
+        printf("blob size: %ld\n",blob_r->value_size);
+        printf("double value %lf\n",double_r_value);
+        printf("long value %ld\n",long_r_value);
+        printf("bool value %d\n",bool_r_value);
+    }
+
+    if(dtw.resource.error(values)){
+        char *message = DtwResource_get_error_message(values);
+        printf("%s",message);
+    }
+
+
+
+    dtw.resource.free(values);
+
+
+
+}
+
+
+
+
+
+
+```
+
+
+### Generating transaction
 with transactions you can make all modifications and executed or denny it one time,avoid nod
 wanted side effects
 
-{create_c_example("exemples/transaction/transaction_executiong.c")}
+```c
+
+#include "doTheWorld.h"
+
+int main(){
+    DtwNamespace dtw = newDtwNamespace();
+
+    DtwTransaction *t = newDtwTransaction();
+    dtw.transaction.write_string(t,"b.txt","aaaaa");
+    dtw.transaction.move_any(t,"a.txt","c.txt");
+    dtw.transaction.delete_any(t,"blob.png");
+    dtw.transaction.copy_any(t,"sub_folder","sub_folder2");
+    dtw.transaction.commit(t,"testarget");
+    dtw.transaction.free(t);
+
+}
+```
 
 
 You also can dump the transaction to an json file to store it
 
-{create_c_example("exemples/transaction/transaction_dumping_to_json.c")}
+```c
 
-{create_c_example("exemples/transaction/transaction_loading_from_json.c")}
+#include "doTheWorld.h"
+
+int main(){
+    DtwNamespace dtw = newDtwNamespace();
+
+    DtwTransaction *t = newDtwTransaction();
+    dtw.transaction.write_string(t,"b.txt","aaaaa");
+    dtw.transaction.move_any(t,"a.txt","c.txt");
+    dtw.transaction.delete_any(t,"blob.png");
+    dtw.transaction.copy_any(t,"sub_folder","sub_folder2");
+    dtw.transaction.represent(t);
+    dtw.transaction.dumps_transaction_to_json_file(t,"testargtransaction.json");
+    dtw.transaction.free(t);
+}
+```
+
+```c
+
+#include "doTheWorld.h"
+
+int main(){
+    DtwNamespace dtw = newDtwNamespace();
+
+    DtwTransaction *t = dtw.transaction.newTransaction_from_json_file("testargtransaction.json");
+    if(!t){
+        DtwJsonTransactionError *error = dtw_validate_json_transaction_file("testargtransaction.json");
+        dtw.transaction.json_error.represent(error);
+        dtw.transaction.json_error.free(error);
+        return 0;
+    }
+    
+    dtw.transaction.represent(t);
+    dtw.transaction.free(t);
+}
+```
 
 
 
-{HASHTAG}{HASHTAG}{HASHTAG} Schemas
+### Schemas
 
 Schema its a way to handle resources into a serializible way, providing foreing key and primary key concepts
 
-{HASHTAG}{HASHTAG}{HASHTAG} Creating a insertion
+### Creating a insertion
 in these example we are creating a user using schema concept
 
-{create_c_example("exemples/schema/user_creation.c")}
+```c
+
+#include "doTheWorld.h"
+
+
+int main(){
+    DtwNamespace  dtw = newDtwNamespace();
+
+    DtwResource *database = dtw.resource.newResource("testargschema_database");
+
+    DtwDatabaseSchema *root_schema  = dtw.resource.newDatabaseSchema(database);
+    DtwSchema *users_schema = dtw.database_schema.sub_schema(root_schema,"users");
+    dtw.schema.add_primary_key(users_schema,"name");
+    dtw.schema.add_primary_key(users_schema,"email");
+
+    DtwResource  *users =dtw.resource.sub_resource(database,"users");
+
+    DtwResource *user = dtw.resource.new_schema_insertion(users);
+    dtw.resource.set_string_in_sub_resource(user,"name","mateus");
+    dtw.resource.set_string_in_sub_resource(user,"email","mateusmoutinho01@gmail.com");
+    dtw.resource.set_string_sha_in_sub_resource(user,"password","12345");
+    dtw.resource.set_long_in_sub_resource(user,"age",27);
+
+    if(dtw.resource.error(database)){
+        printf("error:%s",dtw.resource.get_error_message(database));
+    }
+
+    dtw.resource.commit(database);
+    dtw.resource.free(database);
+}
 
 
 
-{HASHTAG}{HASHTAG}{HASHTAG} Removing a insertion
+
+
+```
+
+
+
+### Removing a insertion
 In these example we also can destroy the user , automaticly destroying the index
 
-{create_c_example("exemples/schema/user_remove.c")}
+```c
+
+#include "doTheWorld.h"
+DtwNamespace dtw;
 
 
-{HASHTAG}{HASHTAG}{HASHTAG} Finding a insertion
+
+
+void create_users(DtwResource *database,const char *name,const char *email,const char *password, int age){
+
+    DtwResource  *users =dtw.resource.sub_resource(database,"users");
+    DtwResource *user = dtw.resource.new_schema_insertion(users);
+    dtw.resource.set_string_in_sub_resource(user,"name",name);
+    dtw.resource.set_string_in_sub_resource(user,"email",email);
+    dtw.resource.set_string_sha_in_sub_resource(user,"password",password);
+    dtw.resource.set_long_in_sub_resource(user,"age",age);
+}
+
+int main(){
+
+    dtw = newDtwNamespace();
+    DtwResource *database = dtw.resource.newResource("testargschema_database");
+    DtwDatabaseSchema *root_schema  = dtw.resource.newDatabaseSchema(database);
+    DtwSchema *users_schema = dtw.database_schema.sub_schema(root_schema,"users");
+    dtw.schema.add_primary_key(users_schema,"name");
+    dtw.schema.add_primary_key(users_schema,"email");
+
+
+    create_users(database,"mateus","mateusmoutinho01@gmail.com","1234",27);
+    create_users(database,"user1","user1@gmail.com","1234",27);
+    create_users(database,"user2","user2@gmail.com","1234",27);
+
+    DtwResource  *users =dtw.resource.sub_resource(database,"users");
+    DtwResource * mateus = dtw.resource.find_by_primary_key_with_string(users,"name","mateus");
+    dtw.resource.destroy(mateus);
+
+    if(dtw.resource.error(database)){
+        printf("error:%s\n",dtw.resource.get_error_message(database));
+        dtw.resource.free(database);
+        return 0;
+    }
+
+    dtw.resource.commit(database);
+    dtw.resource.free(database);
+
+
+}
+
+
+
+```
+
+
+### Finding a insertion
 With  primary keys you can find values without loop iteration increasing readability and speed,
 
-{create_c_example("exemples/schema/user_find.c")}
+```c
 
-{HASHTAG}{HASHTAG}{HASHTAG} Iterating over insertions
+#include "doTheWorld.h"
+DtwNamespace dtw;
+
+
+
+
+void create_users(DtwResource *database,const char *name,const char *email,const char *password, int age){
+    DtwResource  *users =dtw.resource.sub_resource(database,"users");
+    DtwResource *user = dtw.resource.new_schema_insertion(users);
+    dtw.resource.set_string_in_sub_resource(user,"name",name);
+    dtw.resource.set_string_in_sub_resource(user,"email",email);
+    dtw.resource.set_string_sha_in_sub_resource(user,"password",password);
+    dtw.resource.set_long_in_sub_resource(user,"age",age);
+}
+
+int main(){
+
+    dtw = newDtwNamespace();
+    DtwResource *database = dtw.resource.newResource("testargschema_database");
+    DtwDatabaseSchema *root_schema  = dtw.resource.newDatabaseSchema(database);
+    DtwSchema *users_schema = dtw.database_schema.sub_schema(root_schema,"users");
+    dtw.schema.add_primary_key(users_schema,"name");
+    dtw.schema.add_primary_key(users_schema,"email");
+
+    create_users(database,"mateus","mateusmoutinho01@gmail.com","1234",27);
+    create_users(database,"user1","user1@gmail.com","1234",27);
+    create_users(database,"user2","user2@gmail.com","1234",27);
+    DtwResource  *users =dtw.resource.sub_resource(database,"users");
+    DtwResource * mateus = dtw.resource.find_by_primary_key_with_string(users,"name","mateus");
+    char *name = dtw.resource.get_string_from_sub_resource(mateus,"name");
+    char *email  = dtw.resource.get_string_from_sub_resource(mateus,"email");
+    long age = dtw.resource.get_long_from_sub_resource(mateus,"age");
+
+
+
+    if(!dtw.resource.error(database)){
+        printf("name: %s\n",name);
+        printf("email: %s\n",email);
+        printf("age: %ld\n",age);
+    }
+
+
+    if(dtw.resource.error(database)){
+        printf("error:%s\n",dtw.resource.get_error_message(database));
+        dtw.resource.free(database);
+        return 0;
+    }
+
+    dtw.resource.commit(database);
+    dtw.resource.free(database);
+
+
+}
+
+
+
+```
+
+### Iterating over insertions
 you also can iterate over insertions
 
-{create_c_example("exemples/schema/user_iteration.c")}
+```c
 
-{HASHTAG}{HASHTAG}{HASHTAG} Iterable Resources
+#include "doTheWorld.h"
+DtwNamespace dtw;
+
+
+
+
+void create_users(DtwResource *database,const char *name,const char *email,const char *password, int age){
+    DtwResource  *users =dtw.resource.sub_resource(database,"users");
+    DtwResource *user = dtw.resource.new_schema_insertion(users);
+    dtw.resource.set_string_in_sub_resource(user,"name",name);
+    dtw.resource.set_string_in_sub_resource(user,"email",email);
+    dtw.resource.set_string_sha_in_sub_resource(user,"password",password);
+    dtw.resource.set_long_in_sub_resource(user,"age",age);
+}
+
+int main(){
+
+    dtw = newDtwNamespace();
+    DtwResource *database = dtw.resource.newResource("testargschema_database");
+    DtwDatabaseSchema *root_schema  = dtw.resource.newDatabaseSchema(database);
+    DtwSchema *users_schema = dtw.database_schema.sub_schema(root_schema,"users");
+    dtw.schema.add_primary_key(users_schema,"name");
+    dtw.schema.add_primary_key(users_schema,"email");
+
+    create_users(database,"mateus","mateusmoutinho01@gmail.com","1234",27);
+    create_users(database,"user1","user1@gmail.com","1234",27);
+    create_users(database,"user2","user2@gmail.com","1234",27);
+
+    DtwResource  *users =dtw.resource.sub_resource(database,"users");
+    DtwResourceArray *all_users = dtw.resource.get_schema_values(users);
+    for(int i = 0; i < all_users->size;i++){
+
+        DtwResource * current = all_users->resources[i];
+        char *name = dtw.resource.get_string_from_sub_resource(current,"name");
+        char *email  = dtw.resource.get_string_from_sub_resource(current,"email");
+        long age = dtw.resource.get_long_from_sub_resource(current,"age");
+
+        if(!dtw.resource.error(database)){
+            printf("name: %s\n",name);
+            printf("email: %s\n",email);
+            printf("age: %ld\n",age);
+        }
+
+    }
+
+
+    if(dtw.resource.error(database)){
+        printf("error:%s\n",dtw.resource.get_error_message(database));
+        dtw.resource.free(database);
+        return 0;
+    }
+
+    dtw.resource.commit(database);
+    dtw.resource.free(database);
+
+
+}
+
+
+```
+
+### Iterable Resources
 
 with iterable functional system , you can iterate into Resources easly
 
 
 
-{HASHTAG}{HASHTAG}{HASHTAG}{HASHTAG} Each
+#### Each
 with each, you can pass  also a filtrage callback, a start point (defaults its 0),
 and the total elements (defaults its all)
-{create_c_example("exemples/resources/Foreach.c")}
+```c
+#include "doTheWorld.h"
 
-{HASHTAG}{HASHTAG}{HASHTAG}{HASHTAG} Schema Each
+DtwNamespace dtw;
+DtwRandonizer *randonizer;
+typedef struct {
+    int age;
+}Filtrage;
+
+
+void print_user(DtwResource *user, void *filtragem){
+    printf("age %ld\n",dtw.resource.get_long_from_sub_resource(user,"age"));
+    printf("name: %s\n", dtw.resource.get_string_from_sub_resource(user, "name"));
+}
+
+bool verify_if_print_user(DtwResource *user, void *filtragem){
+
+     Filtrage *f = (Filtrage *)filtragem;
+
+    long idade = dtw.resource.get_long_from_sub_resource(user, "age");
+
+    if(idade < f->age){
+
+        return true;
+    }
+
+    return false;
+}
+
+void create_x_users(DtwResource *users,long quantity){
+    for(int i =0; i < quantity; i++){
+        DtwResource *current = dtw.resource.sub_resource_random(users,NULL);
+
+        char formatted_name[20] = {0};
+        sprintf(formatted_name,"user%d", i);
+        long age = dtw.randonizer.generate_num(randonizer,100);
+
+        dtw.resource.set_string_in_sub_resource(current,"name",formatted_name);
+        dtw.resource.set_long_in_sub_resource(current,"age",age);
+    }
+
+}
+
+int main(){
+    dtw = newDtwNamespace();
+    randonizer = dtw.randonizer.newRandonizer();
+
+    DtwResource *users = dtw.resource.newResource("users");
+    create_x_users(users,100);
+    DtwResourceForeachProps props = dtw.resource.create_foreach_props(print_user);
+    props.filtrage_callback = verify_if_print_user;
+
+    Filtrage f;
+    f.age = 18;
+    props.args = &f;
+
+    dtw.resource.each(users,props);
+    dtw.resource.free(users);
+    dtw.randonizer.free(randonizer);
+    return 0;
+}
+
+```
+
+#### Schema Each
 you also can iterate over schemas with schema each
 
-{create_c_example("exemples/schema/schema_each.c")}
+```c
+#include "doTheWorld.h"
 
-{HASHTAG}{HASHTAG}{HASHTAG}{HASHTAG} Map
+
+DtwNamespace dtw;
+DtwRandonizer *randonizer;
+typedef struct {
+    int age;
+}Filtrage;
+
+
+void print_user(DtwResource *user, void *filtragem){
+    printf("age %ld\n",dtw.resource.get_long_from_sub_resource(user,"age"));
+    printf("name: %s\n", dtw.resource.get_string_from_sub_resource(user, "name"));
+}
+
+bool verify_if_print_user(DtwResource *user, void *filtragem){
+     Filtrage *f = (Filtrage *)filtragem;
+
+    long age = dtw.resource.get_long_from_sub_resource(user, "age");
+
+    if(age < f->age){
+
+        return true;
+    }
+
+    return false;
+}
+
+void create_x_users(DtwResource *users,long quantity){
+    for(int i =0; i < quantity; i++){
+        DtwResource *current = dtw.resource.new_schema_insertion(users);
+
+        char formatted_name[20] = {0};
+        sprintf(formatted_name,"user%d", i);
+        long age = dtw.randonizer.generate_num(randonizer,100);
+
+        dtw.resource.set_string_in_sub_resource(current,"name",formatted_name);
+        dtw.resource.set_long_in_sub_resource(current,"age",age);
+    }
+
+}
+void create_schemas(DtwResource *database){
+    DtwDatabaseSchema *schema = dtw.resource.newDatabaseSchema(database);
+    DtwSchema *users = dtw.database_schema.sub_schema(schema,"users");
+    dtw.schema.add_primary_key(users,"name");
+}
+
+
+int main(){
+    dtw = newDtwNamespace();
+    randonizer = dtw.randonizer.newRandonizer();
+
+    DtwResource *database = dtw.resource.newResource("database");
+    create_schemas(database);
+
+    DtwResource *users = dtw.resource.sub_resource(database,"users");
+
+    create_x_users(users,100);
+    Filtrage f;
+    f.age = 18;
+    int start  = 0;
+
+    DtwResourceForeachProps props = dtw.resource.create_foreach_props(print_user);
+    props.filtrage_callback = verify_if_print_user;
+    props.args = &f;
+
+    dtw.resource.schema_each(users,props);
+    dtw.resource.free(database);
+    dtw.randonizer.free(randonizer);
+    return 0;
+}
+
+```
+
+#### Map
 with map you can construct, objects lists, with what ever you want
 you just need to pass the object, the retriver, and some append function
 to be called each generated object
 
-{create_c_example("exemples/resources/map.c")}
+```c
+#include "doTheWorld.h"
+
+
+
+DtwNamespace dtw;
+DtwRandonizer *randonizer;
+typedef struct {
+    int age;
+}Filtrage;
+
+
+cJSON * return_user(DtwResource *user, void *filtragem){
+    cJSON *created_object =cJSON_CreateObject();
+    cJSON_AddStringToObject(
+        created_object,
+        "name", dtw.resource.get_string_from_sub_resource(user, "name")
+    );
+
+    cJSON_AddNumberToObject(
+        created_object,
+        "age",
+        dtw.resource.get_long_from_sub_resource(user,"age")
+    );
+    return created_object;
+}
+
+bool verify_if_print_user(DtwResource *user, void *filtragem){
+     Filtrage *f = (Filtrage *)filtragem;
+
+    long age = dtw.resource.get_long_from_sub_resource(user, "age");
+
+    if(age < f->age){
+
+        return true;
+    }
+
+    return false;
+}
+
+void create_x_users(DtwResource *users,long quantity){
+    for(int i =0; i < quantity; i++){
+        DtwResource *current = dtw.resource.sub_resource_random(users,NULL);
+
+        char formatted_name[20] = {0};
+        sprintf(formatted_name,"user%d", i);
+        long age = dtw.randonizer.generate_num(randonizer,100);
+
+        dtw.resource.set_string_in_sub_resource(current,"name",formatted_name);
+        dtw.resource.set_long_in_sub_resource(current,"age",age);
+    }
+
+}
+
+
+
+int main(){
+    dtw = newDtwNamespace();
+    randonizer = dtw.randonizer.newRandonizer();
+
+    DtwResource *database = dtw.resource.newResource("database");
+
+    DtwResource *users = dtw.resource.sub_resource(database,"users");
+
+    create_x_users(users,100);
+    Filtrage f;
+    f.age = 18;
+    cJSON *itens = cJSON_CreateArray();
+    DtwResourceMapProps props = dtw.resource.create_map_props(
+        itens,
+        (void (*)(void*,void*))cJSON_AddItemToArray,
+        (void* (*)(DtwResource *,void*))return_user
+    );
+
+    props.filtrage_callback = verify_if_print_user;
+    props.args = &f;
+
+   dtw.resource.map(users,props);
+
+    char *content = cJSON_Print(itens);
+    printf("%s",content);
+    cJSON_Delete(itens);
+    free(content);
+
+    dtw.resource.free(database);
+    dtw.randonizer.free(randonizer);
+
+    return 0;
+}
+
+```
 
 of course, it also works with schemas
 
-{create_c_example("exemples/schema/schema_map.c")}
+```c
 
-{HASHTAG}{HASHTAG}{HASHTAG}{HASHTAG} CJson Array Map
+#include "doTheWorld.h"
+
+DtwNamespace dtw;
+DtwRandonizer *randonizer;
+typedef struct {
+    int age;
+}Filtrage;
+
+
+cJSON * return_user(DtwResource *user, void *filtragem){
+    cJSON *created_object =cJSON_CreateObject();
+    cJSON_AddStringToObject(
+        created_object,
+        "name", dtw.resource.get_string_from_sub_resource(user, "name")
+    );
+
+    cJSON_AddNumberToObject(
+        created_object,
+        "age",
+        dtw.resource.get_long_from_sub_resource(user,"age")
+    );
+    return created_object;
+}
+
+bool verify_if_print_user(DtwResource *user, void *filtragem){
+     Filtrage *f = (Filtrage *)filtragem;
+
+    long age = dtw.resource.get_long_from_sub_resource(user, "age");
+
+    if(age < f->age){
+
+        return true;
+    }
+
+    return false;
+}
+void create_x_users(DtwResource *users,long quantity){
+    for(int i =0; i < quantity; i++){
+        DtwResource *current = dtw.resource.new_schema_insertion(users);
+
+        char formatted_name[20] = {0};
+        sprintf(formatted_name,"user%d", i);
+        long age = dtw.randonizer.generate_num(randonizer,100);
+
+        dtw.resource.set_string_in_sub_resource(current,"name",formatted_name);
+        dtw.resource.set_long_in_sub_resource(current,"age",age);
+    }
+
+}
+void create_schemas(DtwResource *database){
+    DtwDatabaseSchema *schema = dtw.resource.newDatabaseSchema(database);
+    DtwSchema *users = dtw.database_schema.sub_schema(schema,"users");
+    dtw.schema.add_primary_key(users,"name");
+}
+
+
+
+
+int main(){
+    dtw = newDtwNamespace();
+    randonizer = dtw.randonizer.newRandonizer();
+
+    DtwResource *database = dtw.resource.newResource("database");
+    create_schemas(database);
+    DtwResource *users = dtw.resource.sub_resource(database,"users");
+
+    create_x_users(users,100);
+
+    Filtrage f;
+    f.age = 18;
+    cJSON *itens = cJSON_CreateArray();
+    DtwResourceMapProps props = dtw.resource.create_map_props(
+        itens,
+        (void (*)(void*,void*))cJSON_AddItemToArray,
+        (void* (*)(DtwResource *,void*))return_user
+    );
+
+    props.filtrage_callback = verify_if_print_user;
+    props.args = &f;
+
+   dtw.resource.schema_map(users,props);
+
+    char *content = cJSON_Print(itens);
+    printf("%s",content);
+    cJSON_Delete(itens);
+    free(content);
+
+    dtw.resource.free(database);
+    dtw.randonizer.free(randonizer);
+
+    return 0;
+}
+
+```
+
+#### CJson Array Map
 you also can directly map a cJSON Array
 
-{create_c_example("exemples/resources/cJSON_ArrayMap.c")}
+```c
+#include "doTheWorld.h"
 
-{HASHTAG}{HASHTAG}{HASHTAG} CJSON Object Map
+
+DtwNamespace dtw;
+DtwRandonizer *randonizer;
+typedef struct {
+    int age;
+}Filtrage;
+
+
+cJSON * return_user(DtwResource *user, void *filtragem){
+    cJSON *created_object =cJSON_CreateObject();
+    cJSON_AddStringToObject(
+        created_object,
+        "name", dtw.resource.get_string_from_sub_resource(user, "name")
+    );
+
+    cJSON_AddNumberToObject(
+        created_object,
+        "age",
+        dtw.resource.get_long_from_sub_resource(user,"age")
+    );
+    return created_object;
+}
+
+bool verify_if_print_user(DtwResource *user, void *filtragem){
+     Filtrage *f = (Filtrage *)filtragem;
+    long age = dtw.resource.get_long_from_sub_resource(user, "age");
+
+    if(age < f->age){
+
+        return true;
+    }
+
+    return false;
+}
+void create_x_users(DtwResource *users,long quantity){
+    for(int i =0; i < quantity; i++){
+        DtwResource *current = dtw.resource.sub_resource_random(users,NULL);
+
+        char formatted_name[20] = {0};
+        sprintf(formatted_name,"user%d", i);
+        long age = dtw.randonizer.generate_num(randonizer,100);
+
+        dtw.resource.set_string_in_sub_resource(current,"name",formatted_name);
+        dtw.resource.set_long_in_sub_resource(current,"age",age);
+    }
+
+}
+
+
+
+
+
+int main(){
+    dtw = newDtwNamespace();
+    randonizer = dtw.randonizer.newRandonizer();
+
+    DtwResource *database = dtw.resource.newResource("database");
+    DtwResource *users = dtw.resource.sub_resource(database,"users");
+
+    create_x_users(users,100);
+
+    Filtrage f;
+    f.age = 18;
+
+    DtwResourcecJSONArrayMapProps props = dtw.resource.create_cJSONArrayMapProps(return_user);
+    props.filtrage_callback = verify_if_print_user;
+    props.args = &f;
+
+    cJSON *itens = dtw.resource.map_cJSONArray(users,props);
+
+
+    char *content = cJSON_Print(itens);
+    printf("%s",content);
+    cJSON_Delete(itens);
+    free(content);
+
+    dtw.resource.free(database);
+    dtw.randonizer.free(randonizer);
+
+    return 0;
+}
+
+```
+
+### CJSON Object Map
 you also can generate a cJSON object, but you need to
 provide a "keey_provider" function ,to determine the key of each
 object generation (note that these key can bee released(free) after, you pass the),
 free_key prop into the props object
 
-{create_c_example("exemples/resources/cJSON_ArrayObject.c")}
+```c
+#include "doTheWorld.h"
 
-{HASHTAG}{HASHTAG}{HASHTAG} CCHash
+
+DtwNamespace dtw;
+DtwRandonizer *randonizer;
+typedef struct {
+    int age;
+}Filtrage;
+
+
+cJSON * return_user(DtwResource *user, void *filtragem){
+    cJSON *created_object =cJSON_CreateObject();
+    cJSON_AddStringToObject(
+        created_object,
+        "name", dtw.resource.get_string_from_sub_resource(user, "name")
+    );
+
+    cJSON_AddNumberToObject(
+        created_object,
+        "age",
+        dtw.resource.get_long_from_sub_resource(user,"age")
+    );
+    return created_object;
+}
+char * get_key(DtwResource *user, void *filtrage){
+    return  dtw.resource.get_string_from_sub_resource(user, "name");
+}
+
+
+bool verify_if_print_user(DtwResource *user, void *filtragem){
+     Filtrage *f = (Filtrage *)filtragem;
+    long age = dtw.resource.get_long_from_sub_resource(user, "age");
+
+    if(age < f->age){
+
+        return true;
+    }
+
+    return false;
+}
+void create_x_users(DtwResource *users,long quantity){
+    for(int i =0; i < quantity; i++){
+        DtwResource *current = dtw.resource.sub_resource_random(users,NULL);
+
+        char formatted_name[20] = {0};
+        sprintf(formatted_name,"user%d", i);
+        long age = dtw.randonizer.generate_num(randonizer,100);
+
+        dtw.resource.set_string_in_sub_resource(current,"name",formatted_name);
+        dtw.resource.set_long_in_sub_resource(current,"age",age);
+    }
+
+}
+
+
+
+
+
+int main(){
+    dtw = newDtwNamespace();
+    randonizer = dtw.randonizer.newRandonizer();
+
+    DtwResource *database = dtw.resource.newResource("database");
+    DtwResource *users = dtw.resource.sub_resource(database,"users");
+
+    create_x_users(users,100);
+
+    Filtrage f;
+    f.age = 18;
+
+    DtwResourcecJSONObjectMapProps props = dtw.resource.create_cJSONObjectProps(return_user,get_key);
+
+    props.filtrage_callback = verify_if_print_user;
+    props.args = &f;
+
+    cJSON *itens = dtw.resource.map_cJSONObject(users,props);
+
+
+    char *content = cJSON_Print(itens);
+    printf("%s",content);
+    cJSON_Delete(itens);
+    free(content);
+
+    dtw.resource.free(database);
+    dtw.randonizer.free(randonizer);
+
+    return 0;
+}
+
+```
+
+### CCHash
 you can use [CHash](https://github.com/OUIsolutions/CHashManipulator) objects too
 but in these case , you need to use define  DTW_ALLOW_CHASH , and include the lib
 into the project since CHashManipulator, its not included into the amalgamation
-{create_c_example("exemples/resources/CHashArray_map.c")}
+```c
 
-{HASHTAG}{HASHTAG}{HASHTAG} Trees and TreeParts
+#include "CHashManipulator.h"
+#define DTW_ALLOW_CHASH
+#include "doTheWorld.h"
+
+
+CHashNamespace hash;
+DtwNamespace dtw;
+DtwRandonizer *randonizer;
+typedef struct {
+    int age;
+}Filtrage;
+
+
+CHashObject * return_user(DtwResource *user, void *filtragem){
+    return newCHashObject(
+        "name",hash.newString(dtw.resource.get_string_from_sub_resource(user, "name")),
+        "age", hash.newNumber(dtw.resource.get_long_from_sub_resource(user,"age"))
+    );
+}
+
+
+bool verify_if_print_user(DtwResource *user, void *filtragem){
+     Filtrage *f = (Filtrage *)filtragem;
+    long age = dtw.resource.get_long_from_sub_resource(user, "age");
+
+    if(age < f->age){
+
+        return true;
+    }
+
+    return false;
+}
+void create_x_users(DtwResource *users,long quantity){
+    for(int i =0; i < quantity; i++){
+        DtwResource *current = dtw.resource.sub_resource_random(users,NULL);
+
+        char formatted_name[20] = {0};
+        sprintf(formatted_name,"user%d", i);
+        long age = dtw.randonizer.generate_num(randonizer,100);
+
+        dtw.resource.set_string_in_sub_resource(current,"name",formatted_name);
+        dtw.resource.set_long_in_sub_resource(current,"age",age);
+    }
+
+}
+
+
+
+
+
+int main(){
+    dtw = newDtwNamespace();
+    hash = newCHashNamespace();
+    randonizer = dtw.randonizer.newRandonizer();
+
+    DtwResource *database = dtw.resource.newResource("database");
+    DtwResource *users = dtw.resource.sub_resource(database,"users");
+
+    create_x_users(users,100);
+
+    Filtrage f;
+    f.age = 18;
+
+    DtwResourceCHashrrayMapProps props = dtw.resource.create_CHashrrayMapProps(return_user);
+
+    props.filtrage_callback = verify_if_print_user;
+    props.args = &f;
+
+    CHashArray *itens = dtw.resource.map_CHashArray(users,props);
+
+    char *content = hash.dump_to_json_string(itens);
+    printf("%s",content);
+    hash.free(itens);
+    free(content);
+
+    dtw.resource.free(database);
+    dtw.randonizer.free(randonizer);
+
+    return 0;
+}
+
+```
+
+### Trees and TreeParts
 with tree concepts, you can manipulate files as trees, and implement IO modifications with atomic concepts
 
-{HASHTAG}{HASHTAG}{HASHTAG} Loading An TreePart
+### Loading An TreePart
 
-{create_c_example("exemples/tree_parts/loading_tree_part.c")}
-
-
-{HASHTAG}{HASHTAG}{HASHTAG} Creating an empty tree Part
-
-{create_c_example("exemples/trees/creating_tree_part.c")}
-
-{HASHTAG}{HASHTAG}{HASHTAG} Modifying an tree part
-
-{create_c_example("exemples/tree_parts/tree_part_content_modification.c
+```c
 
 
-{HASHTAG}{HASHTAG}{HASHTAG} Retriing Paths Paramns
+#include "doTheWorld.h"
 
-{create_c_example("exemples/path/getting_path_paramns.c")}
+int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-{HASHTAG}{HASHTAG}{HASHTAG} Changing path Atributes at once
+    DtwTreePart *part = dtw.tree.part.newPartLoading("testarga.txt");
+    dtw.tree.part.represent(part);
+    dtw.tree.part.free(part);
+}
+```
 
 
-{create_c_example("exemples/path/change_path_attributes.c")}
+### Creating an empty tree Part
+
+```c
+// Created by jurandi on 20-06-2023/
+#include "doTheWorld.h"
+
+
+int main(){
+    DtwNamespace dtw = newDtwNamespace();
+
+    DtwTreePart *part = dtw.tree.part.newPartEmpty("testargb.txt");
+    dtw.tree.part.set_string_content(part,"my mensage");
+    dtw.tree.part.hardware_write(part,DTW_SET_AS_ACTION);
+    dtw.tree.part.hardware_commit(part);
+    dtw.tree.part.free(part);
+}
+```
+
+### Modifying an tree part
+
+```c
+#include "doTheWorld.h"
+
+
+int main(){
+    DtwNamespace dtw = newDtwNamespace();
+
+     DtwTreePart *part = dtw.tree.part.newPartLoading("testarga.txt");
+
+  /getting the content
+    char *content = dtw.tree.part.get_content_string_by_reference(part);
+    char new_content[100] ={0};
+    strcat(new_content,content);
+    strcat(new_content," New Mensage");
+    dtw.tree.part.set_string_content(part,new_content);
+
+    dtw.tree.part.hardware_write(part,DTW_SET_AS_ACTION);
+    dtw.tree.part.hardware_commit(part);
+    dtw.tree.part.free(part);
+}
+```
+
+
+### Retriing Paths Paramns
+
+```c
+
+#include "doTheWorld.h"
+
+
+int main(){
+    DtwNamespace dtw = newDtwNamespace();
+    DtwPath *path = dtw.path.newPath(bd.txt");
+    char *name = dtw.path.get_full_name(path);
+    char *extension = dtw.path.get_extension(path);
+    char *dir = dtw.path.get_dir(path);
+    char *full_path = dtw.path.get_path(path);
+    printf("name : %s\n",name);
+    printf("extension : %s\n",extension);
+    printf("dir : %s\n",dir);
+    printf("full_path : %s\n",full_path);
+    dtw.path.free(path);
+
+
+}
+```
+
+### Changing path Atributes at once
+
+
+```c
+
+#include "doTheWorld.h"
+
+
+int main(){
+    DtwNamespace dtw = newDtwNamespace();
+
+    DtwPath * path = dtw.path.newPath(bd.txt");
+    dtw.path.set_name(path,"test");
+    dtw.path.set_extension(path,"md");
+    dtw.path.represent(path);
+    dtw.path.free(path);
+
+
+}
+```
 
 With the **hardware_modify** , **hardware_write**, **hardware_remove**
 Functions , you can generate modifications, without implement it, in these
 way , you can create massive atomic transactions, and execute all at once
 
 
-{HASHTAG}{HASHTAG}{HASHTAG} hardware_modify
+### hardware_modify
 Will Modificate the original content, for exemple, if you change the extension of an file, it will modificate the original content
 
 
-{create_c_example("exemples/tree_parts/hardware_modify.c")}
+```c
+#include "doTheWorld.h"
+
+
+int main(){
+    DtwNamespace dtw = newDtwNamespace();
+
+    DtwTreePart *part = dtw.tree.part.newPartLoading("testarga.txt");
+
+    dtw.path.set_extension(part->path,"md");
+
+    dtw.tree.part.hardware_modify(part,DTW_EXECUTE_NOW);
+    dtw.tree.part.hardware_commit(part);
+    dtw.tree.part.free(part);
+
+}
+```
 
 Will write the file as an "new" file, ignoring the existence of the
 old file
 
-{create_c_example("exemples/tree_parts/hardware_write.c")}
+```c
+
+#include "doTheWorld.h"
+
+
+int main(){
+    DtwNamespace dtw = newDtwNamespace();
+
+    DtwTreePart *part = dtw.tree.part.newPartLoading("testarga.txt");
+    dtw.path.set_extension(part->path,"md");
+    dtw.tree.part.hardware_write(part,DTW_EXECUTE_NOW);
+    dtw.tree.part.hardware_commit(part);
+    dtw.tree.part.free(part);
+
+}
+```
 
 
 Will Delete the current Content
 
 
-{create_c_example("exemples/tree_parts/hardware_remove.c")}
+```c
+
+
+#include "doTheWorld.h"
+
+
+
+int main(){
+    DtwNamespace dtw = newDtwNamespace();
+
+    DtwTreePart *part = dtw.tree.part.newPartLoading("testarga.txt");
+
+    dtw.tree.part.hardware_remove(part,DTW_EXECUTE_NOW);
+    dtw.tree.part.hardware_commit(part);
+    dtw.tree.part.free(part);
+
+}
+```
 
 With Trees you can make massive folders and files modifications with
 easy steps
-{HASHTAG}{HASHTAG}{HASHTAG} Loading Tree From Hardware
+### Loading Tree From Hardware
 
-{create_c_example("exemples/trees/add_tree_from_hardware.c")}
-
-{HASHTAG}{HASHTAG}{HASHTAG} Iterating over An Tree
-
-{create_c_example("exemples/trees/tree_iteration.c")}
-
-{HASHTAG}{HASHTAG}{HASHTAG} Finding An Tree by name
-
-{create_c_example("exemples/trees/find_tree_part_by_name.c")}
+```c
+#include "doTheWorld.h"
 
 
-{HASHTAG}{HASHTAG}{HASHTAG} Finding An Tree by Path
+int main(){
+    DtwNamespace dtw = newDtwNamespace();
 
-{create_c_example("exemples/trees/find_tree_part_by_full_path.c")}
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
+            tree,
+            "testarg",
+            (DtwTreeProps){
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
+                    .path_atributes=DTW_INCLUDE
+            }
+    );
+    dtw.tree.represent(tree);
+    dtw.tree.free(tree);
+}
+```
 
-{HASHTAG}{HASHTAG}{HASHTAG} Finding An Tree by Function
+### Iterating over An Tree
 
-{create_c_example("exemples/trees/finding_tree_part_by_function.c")}
+```c
+// Created by jurandi on 20-06-2023/
+#include "doTheWorld.h"
+int main(){
+    DtwNamespace dtw = newDtwNamespace();
+
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
+            tree,
+            "testarget",
+            (DtwTreeProps){
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
+                    .path_atributes=DTW_INCLUDE
+            }
+    );
+    for(int i = 0; i<tree->size;i++){
+        DtwTreePart *current_part = tree->tree_parts[i];
+        dtw.tree.part.represent(current_part);
+    }
+    dtw.tree.free(tree);
+}
+```
+
+### Finding An Tree by name
+
+```c
+// Created by jurandi on 20-06-2023/
+
+
+#include "doTheWorld.h"
+
+int main(){
+    DtwNamespace dtw = newDtwNamespace();
+
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
+            tree,
+            "testarget",
+            (DtwTreeProps){
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
+                    .path_atributes=DTW_INCLUDE
+            }
+    );
+
+    DtwTreePart *blob = dtw.tree.find_tree_part_by_name(tree,"blob.png");
+    if(blob){
+        dtw.tree.part.represent(blob);
+    }
+    dtw.tree.free(tree);
+
+}
+```
+
+
+### Finding An Tree by Path
+
+```c
+// Created by jurandi on 20-06-2023/
+#include "doTheWorld.h"
+
+int main(){
+    DtwNamespace dtw = newDtwNamespace();
+
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
+            tree,
+            "testarg",
+            (DtwTreeProps){
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
+                    .path_atributes=DTW_INCLUDE
+            }
+    );
+
+    DtwTreePart *element = dtw.tree.find_tree_part_by_path(
+            tree,
+            "testargsub_foldsub_element.txt"
+    );
+    if(element){
+        dtw.tree.part.represent(element);
+    }
+    dtw.tree.free(tree);
+}
+
+```
+
+### Finding An Tree by Function
+
+```c
+// Created by jurandi on 20-06-2023/
+#include "doTheWorld.h"
+#include <time.h>
+
+bool test_if_blob(struct DtwTreePart*part,void *args){
+    DtwNamespace dtw = newDtwNamespace();
+
+    char *name = dtw.path.get_full_name(part->path);
+    if(!name){
+        return false;
+    }
+
+    if(strcmp(name,"blob.png") == 0){
+        return true;
+    }
+    return false;
+};
+
+
+int main(){
+    DtwNamespace dtw = newDtwNamespace();
+
+    struct DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
+            tree,
+            "testarget",
+            (DtwTreeProps){
+                .content = DTW_INCLUDE,
+                .hadware_data=DTW_HIDE,
+                .path_atributes=DTW_INCLUDE
+            }
+    );
+
+
+    struct DtwTreePart *blob = dtw.tree.find_tree_part_by_function(
+            tree,
+            test_if_blob,
+            NULL
+    );
+
+    dtw.tree.part.represent(blob);
+
+    dtw.tree.free(tree);
+
+}
+
+```
 
 Trees suports even Maps or filters, it returns an new tree of the of the current lambda procediment
-{HASHTAG}{HASHTAG}{HASHTAG} Filter
+### Filter
 with filter you can filter the contents you want in an tree with an bool lambda
 
-{create_c_example("exemples/trees/tree_filter.c")}
+```c
+// Created by jurandi on 20-06-2023/
+#include "doTheWorld.h"
 
-{HASHTAG}{HASHTAG}{HASHTAG} Map
+bool filter_txt(struct DtwTreePart *part){
+    DtwNamespace dtw = newDtwNamespace();
 
-{create_c_example("exemples/trees/tree_map.c")}
+    char *extension = dtw.path.get_extension(part->path);
+    if(!extension){
+        return false;
+    }
+    if(strcmp(extension,"txt") == 0){
+        return true;
+    }
+    return false;
+}
+
+int main(){
+    DtwNamespace dtw = newDtwNamespace();
+
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
+            tree,
+            "testarget",
+            (DtwTreeProps){
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
+                    .path_atributes=DTW_INCLUDE
+            }
+    );
+    DtwTree *filtered = dtw.tree.filter(
+            tree,
+            filter_txt
+    );
+
+    dtw.tree.represent(filtered);
+    dtw.tree.free(filtered);
+    dtw.tree.free(tree);
+}
+```
+
+### Map
+
+```c
+// Created by jurandi on 20-06-2023/
+#include "doTheWorld.h"
+
+DtwTreePart * concat_test(struct DtwTreePart *part){
+    DtwNamespace dtw = newDtwNamespace();
+
+    if(part->content && part->is_binary == false){
+        char *content = dtw.tree.part.get_content_string_by_reference(part);
+        const char *mensage = " test";
+        char *new_content = (char*)malloc(strlen(content) + strlen(mensage)+ 2);
+        strcpy(new_content,content);
+        strcat(new_content,mensage);
+        dtw.tree.part.set_string_content(part,new_content);
+        free(new_content);
+    }
+    return part;
+}
+
+int main(){
+    DtwNamespace dtw = newDtwNamespace();
+
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
+            tree,
+            "testarget",
+            (DtwTreeProps){
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
+                    .path_atributes=DTW_INCLUDE
+            }
+    );
+
+    DtwTree *concated = dtw.tree.map(
+            tree,
+            concat_test
+    );
+
+    dtw.tree.represent(concated);
+    dtw.tree.free(concated);
+    dtw.tree.free(tree);
+}
+```
 
 With **hardware_commit_tree** you can commit all modifications at Once
 turning system ultra securty
 
 
-{create_c_example("exemples/trees/tree_commit.c")}
+```c
+// Created by jurandi on 20-06-2023/
+
+#include "doTheWorld.h"
+
+int main(){
+    DtwNamespace dtw = newDtwNamespace();
+
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
+            tree,
+            "testarget",
+            (DtwTreeProps){
+                .content = DTW_INCLUDE,
+                .hadware_data=DTW_HIDE,
+                .path_atributes=DTW_INCLUDE
+            }
+    );
+
+    for(int i=0; i < tree->size;i++){
+        struct DtwTreePart *part = tree->tree_parts[i];
+
+        char *extension = dtw.path.get_extension( part->path);
+        if(!extension){
+            continue;
+        }
+        if(strcmp(extension,"txt") == 0){
+            dtw.path.set_extension( part->path,"md");
+            dtw.tree.part.hardware_modify(part,DTW_SET_AS_ACTION);
+
+        }
+    }
+
+    dtw.tree.hardware_commit_tree(tree);
+    dtw.tree.free(tree);
+}
+```
 
 
 With transactin Reports , you can see what will be modified
 
-{create_c_example("exemples/trees/transaction_report.c")}
+```c
+// Created by jurandi on 20-06-2023/
+#include "doTheWorld.h"
+
+int main(){
+    DtwNamespace dtw = newDtwNamespace();
+
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
+            tree,
+            "testarget",
+            (DtwTreeProps){
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_INCLUDE,
+                    .path_atributes=DTW_INCLUDE
+            }
+    );
+    for(int i=0; i < tree->size;i++){
+        DtwTreePart *part = tree->tree_parts[i];
+
+        char *extension = dtw.path.get_extension(part->path);
+        if(!extension){
+            continue;
+        }
+        printf("%s\n",extension);
+        if(strcmp(extension,"txt") == 0){
+            dtw.path.set_extension(part->path,"md");
+            dtw.tree.part.hardware_modify(part,DTW_SET_AS_ACTION);
+
+        }
+    }
+    DtwTreeTransactionReport *report = dtw.tree.create_report(tree);
+    dtw.tree.transaction_report.represent(report);
+    dtw.tree.transaction_report.free(report);
+    dtw.tree.free(tree);
+}
+```
 
 With Json Trees Operations you can save or load trees, from hardware or strings in an super easy mode
 
-{HASHTAG}{HASHTAG}{HASHTAG} Dumping Tree Json To File
+### Dumping Tree Json To File
 It will transform the tree in an json document
 
-{create_c_example("exemples/trees/dumps_json_tree_to_file.c")}
+```c
+// Created by jurandi on 20-06-2023/
+#include "doTheWorld.h"
 
 
-{create_c_example("exemples/trees/dumps_json_tree_to_string.c")}
+int main(){
+    DtwNamespace dtw = newDtwNamespace();
+
+    struct DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
+            tree,
+            "testarg",
+            (DtwTreeProps){
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
+                    .path_atributes=DTW_INCLUDE
+            }
+    );
+
+    dtw.tree.dumps_json_tree_to_file(
+            tree,
+            "testargout.json",
+            (DtwTreeProps){
+                    .minification = DTW_NOT_MIMIFY,
+                    .ignored_elements=DTW_HIDE,
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
+                    .path_atributes=DTW_INCLUDE
+            }
+    );
+
+    dtw.tree.free(tree);
+}
+```
+
+
+```c
+
+#include "doTheWorld.h"
+
+int main(){
+    DtwNamespace dtw = newDtwNamespace();
+
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
+            tree,
+            "testarg",
+            (DtwTreeProps){
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
+                    .path_atributes=DTW_INCLUDE
+            }
+    );
+
+    char *content = dtw.tree.dumps_json_tree(
+            tree,
+            (DtwTreeProps){
+                    .minification = DTW_NOT_MIMIFY,
+                    .ignored_elements=DTW_HIDE,
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
+                    .path_atributes=DTW_INCLUDE
+            }
+    );
+    printf("%s",content);
+    free(content);
+    dtw.tree.free(tree);
+}
+```
 
 If you want to recuperate the file you saved in the json file
 you can load it
 
-{create_c_example("exemples/trees/loads_json_tree_from_file.c")}
+```c
+// Created by jurandi on 20-06-2023/
+#include "doTheWorld.h"
+
+void dumps_tree(){
+    DtwNamespace dtw = newDtwNamespace();
+
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
+            tree,
+            "testarget",
+            (DtwTreeProps){
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
+                    .path_atributes=DTW_INCLUDE
+            }
+    );
+
+    dtw.tree.dumps_json_tree_to_file(
+            tree,
+            "testargout.json",
+            (DtwTreeProps){
+                    .minification = DTW_MIMIFY,
+                    .ignored_elements=DTW_HIDE,
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
+                    .path_atributes=DTW_INCLUDE
+            }
+    );
+
+    dtw.tree.free(tree);
+}
+int main(){
+    DtwNamespace dtw = newDtwNamespace();
+    dumps_tree();
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.loads_json_tree_from_file(tree,"testargout.json");
+    dtw.tree.represent(tree);
+    dtw.tree.free(tree);
+}
+```
 
 
-{create_c_example("exemples/trees/loads_json_tree_from_string.c")}
+```c
+// Created by jurandi on 20-06-2023/
+#include "doTheWorld.h"
+
+char *dumps_tree(){
+    DtwNamespace dtw = newDtwNamespace();
+
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.add_tree_from_hardware(
+            tree,
+            "testarget",
+            (DtwTreeProps){
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_INCLUDE,
+                    .path_atributes=DTW_INCLUDE
+            }
+    );
+    char *content = dtw.tree.dumps_json_tree(
+            tree,
+            (DtwTreeProps){
+                    .minification = DTW_MIMIFY,
+                    .ignored_elements=DTW_HIDE,
+                    .content = DTW_INCLUDE,
+                    .hadware_data=DTW_HIDE,
+                    .path_atributes=DTW_INCLUDE
+            }
+    );
+    dtw.tree.free(tree);
+    return content;
+}
+int main(){
+    DtwNamespace dtw = newDtwNamespace();
+
+    char * content = dumps_tree();
+    DtwTree *tree = dtw.tree.newTree();
+    dtw.tree.loads_json_tree(tree,content);
+    dtw.tree.represent(tree);
+    dtw.tree.free(tree);
+    free(content);
+}
+```
 
 
-{HASHTAG}{HASHTAG}{HASHTAG} Hash
+### Hash
 
 By using hash Object you can digest values,( its very usefull in dynamic programing)
 or to avoid recomputation in compilers or bundlers
 
-{HASHTAG}{HASHTAG}{HASHTAG} Simple Hashing
+### Simple Hashing
 
-{create_c_example("exemples/hash/simple_digest.c")}
-
-{create_c_example("exemples/hash/file_hashing.c
-
-{create_c_example("exemples/hash/file_hashing_by_last_modification.c")}
+```c
+#include "doTheWorld.h"
 
 
-{HASHTAG}{HASHTAG}{HASHTAG} Randonizer
+
+
+
+int main (){
+    DtwNamespace dtw = newDtwNamespace();
+
+    DtwHash *my_hash = dtw.hash.newHash();
+
+    dtw.hash.digest_string(my_hash,"my string");
+    printf("value after digest string %s\n",my_hash->hash);
+
+    dtw.hash.digest_long(my_hash,10);
+    printf("value after long: %s\n",my_hash->hash);
+
+    dtw.hash.digest_double(my_hash,15.6);
+    printf("value after double: %s\n",my_hash->hash);
+
+    dtw.hash.digest_bool(my_hash,true);
+    printf("value after digest bool %s\n",my_hash->hash);
+
+    DtwStringArray *test = dtw.string_array.newStringArray();
+    dtw.string_array.append(test,"b");
+    dtw.string_array.append(test,"a");
+
+    dtw.hash.digest_string_array(my_hash,test);
+    printf("value after string array %s\n",my_hash->hash);
+    dtw.string_array.free(test);
+
+    dtw.hash.free(my_hash);
+}
+```
+
+```c
+#include "doTheWorld.h"
+
+
+
+
+
+int main (){
+    DtwNamespace dtw = newDtwNamespace();
+
+    DtwHash *my_hash = dtw.hash.newHash();
+
+    dtw.hash.digest_file(my_hash,"testarga.txt");
+
+    printf("after a file :%s\n",my_hash->hash);
+
+    dtw.hash.digest_folder_by_content(my_hash,"testarget");
+    printf("after a folder %s\n",my_hash->hash);
+
+    dtw.hash.free(my_hash);
+}
+```
+
+```c
+#include "doTheWorld.h"
+
+
+
+
+
+int main (){
+    DtwNamespace dtw = newDtwNamespace();
+
+    DtwHash *my_hash = dtw.hash.newHash();
+
+    dtw.hash.digest_entity_last_modification(my_hash,"testarga.txt");
+
+    printf("after a file :%s\n",my_hash->hash);
+
+    dtw.hash.digest_folder_by_last_modification(my_hash,"testarget");
+    printf("after a folder %s\n",my_hash->hash);
+    
+    dtw.hash.free(my_hash);
+}
+```
+
+
+### Randonizer
 Randonizer it's a way to generate random values,integers or strings
 
-{HASHTAG}{HASHTAG}{HASHTAG} Numerical Random
-{create_c_example("exemples/randonizer/num_randonizer.c")}
+### Numerical Random
+```c
 
-{HASHTAG}{HASHTAG}{HASHTAG} Token  Random
-{create_c_example("exemples/randonizer/token_randonizer.c")}
+#include "doTheWorld.h"
 
 
-{HASHTAG}{HASHTAG} CJson<br><br>
+int main() {
+    DtwNamespace dtw = newDtwNamespace();
+    DtwRandonizer *random = dtw.randonizer.newRandonizer();
+    int value = dtw.randonizer.generate_num(random,40);
+    int value2 = dtw.randonizer.generate_num(random,40);
+
+    printf("value%d\n",value);
+
+    printf("value2 %d\n",value2);
+
+    dtw.randonizer.free(random);
+}
+```
+
+### Token  Random
+```c
+
+#include "doTheWorld.h"
+
+
+int main() {
+    DtwNamespace dtw = newDtwNamespace();
+    DtwRandonizer *random = dtw.randonizer.newRandonizer();
+    char *value1 = dtw.randonizer.generate_token(random,30);
+    char *value2 = dtw.randonizer.generate_token(random,30);
+
+    printf("value1 %s\n",value1);
+
+    printf("value2 %s\n",value2);
+    free(value1);
+    free(value2);
+    dtw.randonizer.free(random);
+}
+```
+
+
+## CJson<br><br>
 **CJson**: from https://github.com/DaveGamble/cJSON <br>
 Copyright (c) 2009-2017 Dave Gamble and cJSON contributors
 
@@ -438,7 +2345,7 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-{HASHTAG}{HASHTAG} sha-256 <br>
+## sha-256 <br>
 **sha-256**: from https://github.com/amosnier/sha-2 <br>
 
 Zero Clause BSD License

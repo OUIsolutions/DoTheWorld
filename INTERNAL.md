@@ -98,7 +98,7 @@ With the listage functions you can extract all Strings Arrays of elements in an 
 
 {HASHTAG}{HASHTAG} Listing files
 
-{create_c_example("exemples/monodimension_listage/list_files.c
+{create_c_example("exemples/monodimension_listage/list_files.c")}
 
 {HASHTAG}{HASHTAG}{HASHTAG} Listing Dirs
 
@@ -139,7 +139,7 @@ Generating Sha from file
 
 {HASHTAG}{HASHTAG}{HASHTAG} Unix
 
-{create_c_example("exemples/extras/get_entity_last_modification_in_unix.c
+{create_c_example("exemples/extras/get_entity_last_modification_in_unix.c")}
 
 
 {create_c_example("exemples/extras/get_entity_last_modification.c")}
@@ -149,7 +149,8 @@ Generating Sha from file
 With the locker you can Lock files and ensure that even with multprocessment, they will
 be executed in an order
 
-{create_c_example("exemples/locker/locker_test.c")}
+#{create_c_example("exemples/locker/locker_test.c")}#/
+
 
 {HASHTAG}{HASHTAG} Resources
 With Resources you can iterate over all types of values ,and modifie than into an single transaction or one by one
@@ -266,7 +267,7 @@ with tree concepts, you can manipulate files as trees, and implement IO modifica
 
 {HASHTAG}{HASHTAG}{HASHTAG} Modifying an tree part
 
-{create_c_example("exemples/tree_parts/tree_part_content_modification.c
+{create_c_example("exemples/tree_parts/tree_part_content_modification.c")}
 
 
 {HASHTAG}{HASHTAG}{HASHTAG} Retriing Paths Paramns
@@ -372,7 +373,7 @@ or to avoid recomputation in compilers or bundlers
 
 {create_c_example("exemples/hash/simple_digest.c")}
 
-{create_c_example("exemples/hash/file_hashing.c
+{create_c_example("exemples/hash/file_hashing.c")}
 
 {create_c_example("exemples/hash/file_hashing_by_last_modification.c")}
 
