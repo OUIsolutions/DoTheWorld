@@ -31,16 +31,14 @@ function main()
             add_dependencie(src_sha).
             perform()
     end
-    if argv.flags_exist("create_examples") then
+    if argv.flags_exist({ "create_examples" }) then
         Create_examples()
     end
 
-    if argv.flags_exist("create_readme") then
-        dtw.write_file("exemples/locker/locker_test.c", locker_content)
-        clib.print(ANSI_RESET)
+    if argv.flags_exist({ "create_readme" }) then
         local readme = Create_readme()
-        if readme ~= nil then
-            dtw.write_file("README.md", readme)
-        end
+        dtw.write_file("README.md", readme)
+
+        clib.print(ANSI_RESET)
     end
 end
