@@ -30,7 +30,7 @@ for i = 1, #functions do
     end
 
     if extension == "h" then
-        local new_name = "fdeclare" .. path_obj.get_name()
+        local new_name = "fdeclare." .. path_obj.get_name()
         path_obj.set_name(new_name)
     end
 
