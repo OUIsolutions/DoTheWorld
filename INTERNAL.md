@@ -17,11 +17,11 @@ if this compiles then the library will work:
 ~~~c
 #include "doTheWorld.h"
 
-int main(int argc, char *argv[]){
+int main(int argc, char *argv[])#{
 
 
     return 0;
-}
+}#/
 ~~~
 
 ## Full Folder
@@ -31,10 +31,10 @@ Alternatively you can download the entire **src** folder and include the **src/o
 
 #include "src/one.c"
 
-int main(int argc, char *argv[]){
+int main(int argc, char *argv[])#{
 
     return 0;
-}
+}#/
 
 ~~~
 
@@ -43,7 +43,7 @@ if you want to exec all tests, or generate your own amalgamation,
 just run the **./build.out** or **build.exe** located into the root dir of the repo
 
 ~~~shel
-sh pre_build.sh 
+sh pre_build.sh
 ./build.out
 ~~~
 # IO Operations
@@ -54,7 +54,7 @@ codeof: exemples/io/loading_string.c
 
 ### Reading Any Content
 
-codeof: exemples/io/loading_any.c
+{create_c_example("exemples/io/loading_any.c")}
 
 ### Reading Double bools and Integers
 you also can direclty load all types from an file  with numerical ios

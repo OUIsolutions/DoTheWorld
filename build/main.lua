@@ -38,5 +38,5 @@ function main()
     if argv.flags_exist({ "create_readme" }) then
         local readme = Create_readme()
     end
-    clib.print(ANSI_RESET)
+    print(ANSI_RESET)
 end

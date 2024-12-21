@@ -1,7 +1,16 @@
+function create_c_example(src)
+    local content = dtw.load_file(src)
+    return string.format("``c\n%s\n```", content)
+end
+
 ---@return string |nil
 function Create_readme()
     local result = candango.Render_text(
         dtw.load_file("INTERNAL.md")
     )
+    if result.exist_error then
+        print(result.error_message)
+        os.exit(1)
+    end
     dtw.write_file("README.md", result.render_text)
 end
