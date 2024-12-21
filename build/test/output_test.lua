@@ -42,28 +42,28 @@ local function handle_side_effect_folder(original_side_effect_sha, artifact)
 
     if artifact.side_effect_sha == nil then
         dtw.move_any_overwriting(SIDE_EFFECT, artifact.side_effect_folder_path)
-        print(ANSI_CYAN .. "\tside effect folder: created\n")
+        print(ANSI_CYAN .. "\tside effect folder: created")
         return
     end
 
     if artifact.test_type == IMPREDITIBLE then
-        print(ANSI_YELLOW .. "\tside effect folder: impredictible\n")
+        print(ANSI_YELLOW .. "\tside effect folder: impredictible")
         return
     end
 
     if RECONSTRUCT then
         dtw.move_any_overwriting(SIDE_EFFECT, artifact.side_effect_folder_path)
-        print(ANSI_MAGENTA .. "\tside effect folder: recreated\n")
+        print(ANSI_MAGENTA .. "\tside effect folder: recreated")
         return
     end
 
     if artifact.side_effect_sha ~= current_sidde_effect then
-        print(ANSI_RED .. "\tside effect folder: diffeent\n")
+        print(ANSI_RED .. "\tside effect folder: diffeent")
         Rebase_side_effect()
         os.exit(1)
     end
 
-    print(ANSI_GREEN .. "\tside effect folder: passed\n")
+    print(ANSI_GREEN .. "\tside effect folder: passed")
 end
 
 ---@param cache Cache
@@ -75,7 +75,8 @@ function Test_out_put(cache, original_side_effect_sha, artifact)
 
     local out_cache = cache.new_element("output", function()
         output_tested = true
-        local output_test = io.popen("./" .. artifact.executable_path):read("a")
+        local ok = os.execute("./" .. artifact.executable_path .. "> side_effect")
+        local output_test = dtw.load_file("side_effect")
         handle_expected_file(expected_content, artifact, output_test)
         handle_side_effect_folder(original_side_effect_sha, artifact)
         Rebase_side_effect()
@@ -99,6 +100,6 @@ function Test_out_put(cache, original_side_effect_sha, artifact)
 
 
     if output_tested == false then
-        print(ANSI_YELLOW .. "\toutput test: cached\n")
+        print(ANSI_YELLOW .. "\toutput test: cached")
     end
 end

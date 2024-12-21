@@ -1,5 +1,5 @@
 
-#include "../../../doTheWorld_test.h"
+#include "../../../../release/doTheWorld.h"
 
 int main(int argc, char *argv[]){
     DtwNamespace dtw = newDtwNamespace();
@@ -8,5 +8,5 @@ int main(int argc, char *argv[]){
    char *hash = dtw.generate_sha_from_string(test);
    printf("SHA: %s", hash);
    free(hash);
-   
+
 }

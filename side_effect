@@ -1,0 +1,249 @@
+------------------------------------------------------------
+First Path: tests/target/
+Path: tests/target/
+Path Changed: false
+Dir: tests/target/
+Full Name: NULL
+Name: NULL
+Extension: NULL
+Content Exist in Memory: false
+Ignore: false
+Content Exist In Hardware: false
+Is Binary: false
+Content Size: 0
+------------------------------------------------------------
+First Path: tests/target/a.txt
+Path: tests/target/a.txt
+Path Changed: false
+Dir: tests/target/
+Full Name: a.txt
+Name: a
+Extension: txt
+Content Exist in Memory: true
+Ignore: false
+Content Exist In Hardware: true
+Is Binary: false
+Content Size: 17
+Content SHA:  09cb9fca53631cd76f791a5149ce39dbc630527d317104fc4add67daec60b928
+Content: Hello World! test
+------------------------------------------------------------
+First Path: tests/target/blob.png
+Path: tests/target/blob.png
+Path Changed: false
+Dir: tests/target/
+Full Name: blob.png
+Name: blob
+Extension: png
+Content Exist in Memory: true
+Ignore: false
+Content Exist In Hardware: true
+Is Binary: true
+Content Size: 36577
+Content SHA:  71a0075cd41734fa8ee282498fed5425314de5e4b73dc320cd7ed0a1102a255f
+Content: Binary
+------------------------------------------------------------
+First Path: tests/target/numerical/
+Path: tests/target/numerical/
+Path Changed: false
+Dir: tests/target/numerical/
+Full Name: NULL
+Name: NULL
+Extension: NULL
+Content Exist in Memory: false
+Ignore: false
+Content Exist In Hardware: false
+Is Binary: false
+Content Size: 0
+------------------------------------------------------------
+First Path: tests/target/numerical/double.txt
+Path: tests/target/numerical/double.txt
+Path Changed: false
+Dir: tests/target/numerical/
+Full Name: double.txt
+Name: double
+Extension: txt
+Content Exist in Memory: true
+Ignore: false
+Content Exist In Hardware: true
+Is Binary: false
+Content Size: 8
+Content SHA:  52a7547770733556552831abbfc1510328080cc8b053169457d6d1f9fa04d5a2
+Content: 1.3 test
+------------------------------------------------------------
+First Path: tests/target/numerical/false_normal.txt
+Path: tests/target/numerical/false_normal.txt
+Path Changed: false
+Dir: tests/target/numerical/
+Full Name: false_normal.txt
+Name: false_normal
+Extension: txt
+Content Exist in Memory: true
+Ignore: false
+Content Exist In Hardware: true
+Is Binary: false
+Content Size: 10
+Content SHA:  f946e16232485f2c33c25466ead29626c31dba4cc353aa56453727ba0e3b9e3e
+Content: false test
+------------------------------------------------------------
+First Path: tests/target/numerical/false_small.txt
+Path: tests/target/numerical/false_small.txt
+Path Changed: false
+Dir: tests/target/numerical/
+Full Name: false_small.txt
+Name: false_small
+Extension: txt
+Content Exist in Memory: true
+Ignore: false
+Content Exist In Hardware: true
+Is Binary: false
+Content Size: 6
+Content SHA:  959888125b3640160aa36a36704d660a48c2852c04b7bfd0b560b2eaaf9eb29a
+Content: f test
+------------------------------------------------------------
+First Path: tests/target/numerical/integer.txt
+Path: tests/target/numerical/integer.txt
+Path Changed: false
+Dir: tests/target/numerical/
+Full Name: integer.txt
+Name: integer
+Extension: txt
+Content Exist in Memory: true
+Ignore: false
+Content Exist In Hardware: true
+Is Binary: false
+Content Size: 7
+Content SHA:  484d62092edd100414aae50ddba20e19f8e648e5f7788bc7105370ebc171f577
+Content: 10 test
+------------------------------------------------------------
+First Path: tests/target/numerical/true_normal.txt
+Path: tests/target/numerical/true_normal.txt
+Path Changed: false
+Dir: tests/target/numerical/
+Full Name: true_normal.txt
+Name: true_normal
+Extension: txt
+Content Exist in Memory: true
+Ignore: false
+Content Exist In Hardware: true
+Is Binary: false
+Content Size: 9
+Content SHA:  ff021809e06b413b150addf39cb9f9f5436d19f0b71bfe8836e8cc9b9558644a
+Content: true test
+------------------------------------------------------------
+First Path: tests/target/numerical/true_small.txt
+Path: tests/target/numerical/true_small.txt
+Path Changed: false
+Dir: tests/target/numerical/
+Full Name: true_small.txt
+Name: true_small
+Extension: txt
+Content Exist in Memory: true
+Ignore: false
+Content Exist In Hardware: true
+Is Binary: false
+Content Size: 6
+Content SHA:  91040348952816d12312438502d7cd0ffa065cc3c2416848e5b8921d4246bb47
+Content: t test
+------------------------------------------------------------
+First Path: tests/target/sub_folder/
+Path: tests/target/sub_folder/
+Path Changed: false
+Dir: tests/target/sub_folder/
+Full Name: NULL
+Name: NULL
+Extension: NULL
+Content Exist in Memory: false
+Ignore: false
+Content Exist In Hardware: false
+Is Binary: false
+Content Size: 0
+------------------------------------------------------------
+First Path: tests/target/sub_folder/sub_element.txt
+Path: tests/target/sub_folder/sub_element.txt
+Path Changed: false
+Dir: tests/target/sub_folder/
+Full Name: sub_element.txt
+Name: sub_element
+Extension: txt
+Content Exist in Memory: true
+Ignore: false
+Content Exist In Hardware: true
+Is Binary: false
+Content Size: 5
+Content SHA:  eeb282539220fa206a1f16e69bfa9811c9dc8944bf0f04f9bcfb770366681712
+Content:  test
+------------------------------------------------------------
+First Path: tests/target/sub_folder/sub_element2.txt
+Path: tests/target/sub_folder/sub_element2.txt
+Path Changed: false
+Dir: tests/target/sub_folder/
+Full Name: sub_element2.txt
+Name: sub_element2
+Extension: txt
+Content Exist in Memory: true
+Ignore: false
+Content Exist In Hardware: true
+Is Binary: false
+Content Size: 8
+Content SHA:  d44ec4260fc523585f8425ffb3566a3da2224cfa7b2e439e69fe3b3f0c8c34a3
+Content: aaa test
+------------------------------------------------------------
+First Path: tests/target/transaction.json
+Path: tests/target/transaction.json
+Path Changed: false
+Dir: tests/target/
+Full Name: transaction.json
+Name: transaction
+Extension: json
+Content Exist in Memory: true
+Ignore: false
+Content Exist In Hardware: true
+Is Binary: false
+Content Size: 266
+Content SHA:  eb1641f91f3b21a674441af9cc2003e34408620b6a8a088120f43684cc0bcdc1
+Content: [{
+		"action":	"write",
+		"source":	"b.txt",
+		"content":	"aaaaa"
+	}, {
+		"action":	"move",
+		"source":	"a.txt",
+		"dest":	"c.txt"
+	}, {
+		"action":	"delete",
+		"source":	"blob.png"
+	}, {
+		"action":	"copy",
+		"source":	"sub_folder",
+		"dest":	"sub_folder2"
+	}] test
+------------------------------------------------------------
+First Path: tests/target/wrong_transaction.json
+Path: tests/target/wrong_transaction.json
+Path Changed: false
+Dir: tests/target/
+Full Name: wrong_transaction.json
+Name: wrong_transaction
+Extension: json
+Content Exist in Memory: true
+Ignore: false
+Content Exist In Hardware: true
+Is Binary: false
+Content Size: 277
+Content SHA:  55551a2020f0fcdbc89c53457988ae883911fb0c6ef379ca45aace1cd9b128a7
+Content: [{
+		"action":	"not valid action",
+		"source":	"b.txt",
+		"content":	"aaaaa"
+	}, {
+		"action":	"move",
+		"source":	"a.txt",
+		"dest":	"c.txt"
+	}, {
+		"action":	"delete",
+		"source":	"blob.png"
+	}, {
+		"action":	"copy",
+		"source":	"sub_folder",
+		"dest":	"sub_folder2"
+	}] test

@@ -37,7 +37,7 @@ function Get_test_spec(content)
 
     test.test_dir = path.get_dir()
     test.expected_file_path = dtw.concat_path(test.test_dir, EXPECTED_NAME)
-    test.executable_path = dtw.concat_path(test.test_dir, "exec")
+    test.executable_path = dtw.concat_path(test.test_dir, "exec.out")
     test.c_path = path.get_full_path()
     test.side_effect_folder_path = dtw.concat_path(test.test_dir, SIDE_EFFECT_COMPARATION)
     return test
