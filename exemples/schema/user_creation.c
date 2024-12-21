@@ -5,7 +5,7 @@
 int main(){
     DtwNamespace  dtw = newDtwNamespace();
 
-    DtwResource *database = dtw.resource.newResource("testargschema_database");
+    DtwResource *database = dtw.resource.newResource("tests/target/schema_database");
 
     DtwDatabaseSchema *root_schema  = dtw.resource.newDatabaseSchema(database);
     DtwSchema *users_schema = dtw.database_schema.sub_schema(root_schema,"users");
@@ -27,7 +27,3 @@ int main(){
     dtw.resource.commit(database);
     dtw.resource.free(database);
 }
-
-
-
-

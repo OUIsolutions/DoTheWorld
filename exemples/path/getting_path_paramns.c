@@ -4,7 +4,7 @@
 
 int main(){
     DtwNamespace dtw = newDtwNamespace();
-    DtwPath *path = dtw.path.newPath(bd.txt");
+    DtwPath *path = dtw.path.newPath("a/b/c/d.txt");
     char *name = dtw.path.get_full_name(path);
     char *extension = dtw.path.get_extension(path);
     char *dir = dtw.path.get_dir(path);

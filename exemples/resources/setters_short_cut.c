@@ -4,11 +4,11 @@
 int main (){
     DtwNamespace dtw = newDtwNamespace();
 
-    DtwResource *values = dtw.resource.newResource("testargnew_folder");
+    DtwResource *values = dtw.resource.newResource("tests/target/new_folder");
     dtw.resource.set_string_in_sub_resource(values,"text.txt","nothing");
 
     long size;
-    unsigned char *blob = dtw_load_binary_content("testargblob.png",&size);
+    unsigned char *blob = dtw_load_binary_content("tests/target/blob.png",&size);
     dtw.resource.set_binary_in_sub_resource(values,"blob.png",blob,size);
     free(blob);
 
@@ -25,8 +25,3 @@ int main (){
 
 
 }
-
-
-
-
-

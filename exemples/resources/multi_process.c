@@ -6,7 +6,7 @@ int main (){
     DtwNamespace dtw = newDtwNamespace();
 
     for(int i =0 ; i<10; i++){if(fork()==0){
-            DtwResource *test = dtw.resource.newResource("testarget");
+            DtwResource *test = dtw.resource.newResource("tests/target");
             DtwResource *a = dtw.resource.sub_resource(test,"numerical.txt");
             dtw.resource.lock(a);
             char *content = NULL;
@@ -30,8 +30,3 @@ int main (){
     }}
 
 }
-
-
-
-
-

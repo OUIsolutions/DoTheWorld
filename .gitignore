@@ -6,6 +6,7 @@ release
 temp_lib
 temp_lib.zip
 exemple
+side_effect
 *.pyc
 bin
 src/imports

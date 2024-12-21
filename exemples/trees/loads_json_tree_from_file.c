@@ -1,4 +1,6 @@
-// Created by jurandi on 20-06-2023/
+//
+// Created by jurandi on 20-06-2023.
+//
 #include "doTheWorld.h"
 
 void dumps_tree(){
@@ -7,7 +9,7 @@ void dumps_tree(){
     DtwTree *tree = dtw.tree.newTree();
     dtw.tree.add_tree_from_hardware(
             tree,
-            "testarget",
+            "tests/target",
             (DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_HIDE,
@@ -17,7 +19,7 @@ void dumps_tree(){
 
     dtw.tree.dumps_json_tree_to_file(
             tree,
-            "testargout.json",
+            "tests/target/out.json",
             (DtwTreeProps){
                     .minification = DTW_MIMIFY,
                     .ignored_elements=DTW_HIDE,
@@ -33,7 +35,7 @@ int main(){
     DtwNamespace dtw = newDtwNamespace();
     dumps_tree();
     DtwTree *tree = dtw.tree.newTree();
-    dtw.tree.loads_json_tree_from_file(tree,"testargout.json");
+    dtw.tree.loads_json_tree_from_file(tree,"tests/target/out.json");
     dtw.tree.represent(tree);
     dtw.tree.free(tree);
 }

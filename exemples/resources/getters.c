@@ -3,7 +3,7 @@
 int main (){
     DtwNamespace dtw = newDtwNamespace();
 
-    DtwResource *values = dtw.resource.newResource("testarget");
+    DtwResource *values = dtw.resource.newResource("tests/target");
 
     printf("elements:---------------------------------\n");
     DtwStringArray  *sub_elements = dtw.resource.list_names(values);
@@ -50,8 +50,3 @@ int main (){
 
 
 }
-
-
-
-
-

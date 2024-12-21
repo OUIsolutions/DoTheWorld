@@ -1,6 +1,8 @@
-// Created by jurandi on 20-06-2023/
+//
+// Created by jurandi on 20-06-2023.
+//
 #include "doTheWorld.h"
-#include <time.h>
+
 
 bool test_if_blob(struct DtwTreePart*part,void *args){
     DtwNamespace dtw = newDtwNamespace();
@@ -23,7 +25,7 @@ int main(){
     struct DtwTree *tree = dtw.tree.newTree();
     dtw.tree.add_tree_from_hardware(
             tree,
-            "testarget",
+            "tests/target",
             (DtwTreeProps){
                 .content = DTW_INCLUDE,
                 .hadware_data=DTW_HIDE,

@@ -1,4 +1,6 @@
-// Created by jurandi on 20-06-2023/
+//
+// Created by jurandi on 20-06-2023.
+//
 #include "doTheWorld.h"
 
 int main(){
@@ -7,7 +9,7 @@ int main(){
     DtwTree *tree = dtw.tree.newTree();
     dtw.tree.add_tree_from_hardware(
             tree,
-            "testarg",
+            "tests/target/",
             (DtwTreeProps){
                     .content = DTW_INCLUDE,
                     .hadware_data=DTW_HIDE,
@@ -17,7 +19,7 @@ int main(){
 
     DtwTreePart *element = dtw.tree.find_tree_part_by_path(
             tree,
-            "testargsub_foldsub_element.txt"
+            "tests/target/sub_folder/sub_element.txt"
     );
     if(element){
         dtw.tree.part.represent(element);

@@ -4,7 +4,7 @@
 int main (){
     DtwNamespace dtw = newDtwNamespace();
 
-    DtwResource *values = dtw.resource.newResource("testarg");
+    DtwResource *values = dtw.resource.newResource("tests/target/");
     DtwResource *password = dtw.resource.sub_resource(values,"password");
     dtw.resource.set_string_sha(password,"1234");
 
@@ -16,8 +16,3 @@ int main (){
 
 
 }
-
-
-
-
-

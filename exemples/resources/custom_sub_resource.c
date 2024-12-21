@@ -3,7 +3,7 @@
 
 int main (){
     DtwNamespace dtw = newDtwNamespace();
-    DtwResource *test = dtw.resource.newResource("testarget");
+    DtwResource *test = dtw.resource.newResource("tests/target");
 
     DtwResource *next = dtw.resource.sub_resource_next(test,".txt");
     dtw.resource.set_string(next,"next-value");
@@ -29,9 +29,3 @@ int main (){
     dtw.resource.free(test);
 
 }
-
-
-
-
-
-

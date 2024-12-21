@@ -4,6 +4,6 @@
 
 int main(int argc, char *argv[]){
     DtwNamespace dtw = newDtwNamespace();
-    dtw.copy_any("testargsub_folder","testargsub_folder2",DTW_NOT_MERGE);
+    dtw.copy_any("tests/target/sub_folder","tests/target/sub_folder2",DTW_NOT_MERGE);
   return 0;
 }

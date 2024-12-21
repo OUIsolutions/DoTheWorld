@@ -3,7 +3,7 @@
 int main (){
     DtwNamespace dtw = newDtwNamespace();
 
-    DtwResource *values = dtw.resource.newResource("testarget");
+    DtwResource *values = dtw.resource.newResource("tests/target");
 
     DtwResourceArray *listage = dtw.resource.sub_resources(values);
 
@@ -18,8 +18,3 @@ int main (){
 
 
 }
-
-
-
-
-

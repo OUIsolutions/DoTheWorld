@@ -7,14 +7,14 @@ int main(int argc, char *argv[]){
     DtwTree *tree = dtw.tree.newTree();
     dtw.tree.add_tree_from_hardware(
             tree,
-            "testarg",
+            "tests/target/",
             (DtwTreeProps){
                     .content = DTW_HIDE,
                     .hadware_data=DTW_HIDE,
                     .path_atributes=DTW_INCLUDE
             }
     );
-  DtwStringArray *files = dtw.tree.list_files_recursively(tree,"testarg",DTW_NOT_CONCAT_PATH);
+  DtwStringArray *files = dtw.tree.list_files_recursively(tree,"tests/target/",DTW_NOT_CONCAT_PATH);
   dtw.string_array.sort(files);
   dtw.string_array.represent(files);
   dtw.string_array.free(files);

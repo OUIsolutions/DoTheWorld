@@ -3,9 +3,9 @@
 int main (){
     DtwNamespace dtw = newDtwNamespace();
 
-    DtwResource *values = dtw.resource.newResource("testarget");
+    DtwResource *values = dtw.resource.newResource("tests/target");
 
-  /when you set caches to false, it will not store sub resources
+    //when you set caches to false, it will not store sub resources
     values->cache_sub_resources = false;
 
     DtwResource *string_r = dtw.resource.sub_resource(values, "a.txt");
@@ -15,12 +15,12 @@ int main (){
     dtw.resource.free(string_r);
 
     values->cache_sub_resources = true;
-    
-  /when allowing transaction to false, it will execute now 
+
+    //when allowing transaction to false, it will execute now
     values->allow_transaction = false;
     DtwResource *string_r1 = dtw.resource.sub_resource(values, "b.txt");
     dtw.resource.set_string(string_r1,"menssage");
-    
+
 
 
 
@@ -29,8 +29,3 @@ int main (){
 
 
 }
-
-
-
-
-

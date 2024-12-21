@@ -7,12 +7,15 @@ In These Current Markdown you will see some basic exemples of usage of these lib
 but if you want to get an deep knolege see at **exemples** folder, you will find an lot of exemplos of how you can use DoTheWorld
 
 {HASHTAG} Installation
-The installation of DoTheWorld is made to be as dumb as possible, just  download the file  **doTheWorld.h** :
+The installation of DoTheWorld is made to be as dumb as possible, just  download the
+[Amalgamation](https://github.com/OUIsolutions/DoTheWorld/releases/download/v7.004/doTheWorld.h)
+file and include into your project.
+if you prefer you can download by typing:
+```shell
+curl -L https://github.com/OUIsolutions/DoTheWorld/releases/download/v7.004/doTheWorld.h -o doTheWorld.h
+```
 
-[Download link](https://github.com/OUIsolutions/DoTheWorld/releases/download/v7.004/doTheWorld.h)
 
- And include in your project.
-if this compiles then the library will work:
 ~~~c
 {HASHTAG}include "doTheWorld.h"
 
@@ -24,7 +27,10 @@ int main(int argc, char *argv[])#{
 ~~~
 
 {HASHTAG}{HASHTAG} Full Folder
-Alternatively you can download the entire **src** folder and include the **src/one.c** file
+Alternatively you can download the  [Full Folder]() by typing:
+```shell
+curl -L <> -o doTheWorld.zip && unzip doTheWorld.zip
+```
 
 ~~~c
 

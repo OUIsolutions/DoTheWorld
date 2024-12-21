@@ -18,7 +18,7 @@ void create_users(DtwResource *database,const char *name,const char *email,const
 int main(){
 
     dtw = newDtwNamespace();
-    DtwResource *database = dtw.resource.newResource("testargschema_database");
+    DtwResource *database = dtw.resource.newResource("tests/target/schema_database");
     DtwDatabaseSchema *root_schema  = dtw.resource.newDatabaseSchema(database);
     DtwSchema *users_schema = dtw.database_schema.sub_schema(root_schema,"users");
     dtw.schema.add_primary_key(users_schema,"name");
@@ -43,5 +43,3 @@ int main(){
 
 
 }
-
-

@@ -20,26 +20,26 @@ void print_entity(const char *name , int type){
 int main(int argc, char *argv[]){
     DtwNamespace dtw = newDtwNamespace();
 
-  /| entity_type return the type of the entity
-  /| it can be:
-  /| dtw.FILE = 1
-  /| dtw.FOLDER = 2
-  /| dtw.NOT_FOUND = -1
+    //| entity_type return the type of the entity
+    //| it can be:
+    //| dtw.FILE = 1
+    //| dtw.FOLDER = 2
+    //| dtw.NOT_FOUND = -1
     short type;
     const char *not_exist = "asasasas";
     type = dtw.entity_type(not_exist);
     print_entity(not_exist,type);
 
-    const char *folder = "testarg";
+    const char *folder = "tests/target/";
     type = dtw.entity_type(folder);
     print_entity(folder,type);
 
 
-    const char *file = "testarga.txt";
+    const char *file = "tests/target/a.txt";
     type = dtw.entity_type(file);
     print_entity(file,type);
-    
 
-    
+
+
   return 0;
 }
