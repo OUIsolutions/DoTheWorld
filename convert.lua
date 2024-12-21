@@ -8,12 +8,13 @@ for i = 1, #src do
         dtw.remove_any(current)
     end
 end
+src = dtw.list_files_recursively("src", true)
 
 for i = 1, #src do
     local current = src[i]
     local content = dtw.load_file(current)
     local new_content = string.gsub(content, '#include "../unique.definition_requirements.h"', "")
-    local new_content = string.gsub(new_content, '#include "../unique.declaration_requirements.h"', "")
+    new_content = string.gsub(new_content, '#include "../unique.declaration_requirements.h"', "")
     dtw.write_file(current, new_content)
 end
 
