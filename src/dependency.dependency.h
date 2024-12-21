@@ -4,7 +4,7 @@
 #include "imports/imports.native_imports.h"
 //silver_chain_scope_end
 #ifndef cJSON__h
-#include "../dependencies/cJSON/cJSON.c"
+#include "../dependencies/cJSON.c"
 #undef true
 #define true 1
 #undef false
@@ -12,5 +12,5 @@
 #endif
 
 #ifndef SHA_256_H
-#include "../dependencies/sha256/sha-256.c"
+#include "../dependencies/sha-256.c"
 #endif

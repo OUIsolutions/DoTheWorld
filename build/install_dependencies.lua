@@ -8,7 +8,7 @@ function Install_dependencies()
         "curl -L https://raw.githubusercontent.com/amosnier/sha-2/565f65009bdd98267361b17d50cddd7c9beb3e6c/sha-256.c -o dependencies/sha-256.c  "
     )
     os.execute(
-        "curl -L https://raw.githubusercontent.com/amosnier/sha-2/565f65009bdd98267361b17d50cddd7c9beb3e6c/sha-256.h -o dependencies/sha-256.c  "
+        "curl -L https://raw.githubusercontent.com/amosnier/sha-2/565f65009bdd98267361b17d50cddd7c9beb3e6c/sha-256.h -o dependencies/sha-256.h  "
     )
 
     os.execute(

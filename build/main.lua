@@ -5,6 +5,7 @@ function main()
     if argv.flags_exist({ "install_dependencies" }) then
         Install_dependencies()
     end
+
     if argv.flags_exist({ "silverchain_organize" }) then
         silverchain.generate({
             src = "src",

@@ -1,0 +1,221 @@
+[34mtesting: tests/main_test/extras/S_get_entity_last_modification/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/extras/S_get_entity_last_modification_in_unix/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/extras/T_converting_b64_to_binary/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/extras/T_converting_char_to_b64/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/extras/T_converting_file_to_base64/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/extras/T_generating_sha_from_file/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/extras/T_generating_sha_from_string/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/hash/S_file_hashing_by_last_modification/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/hash/T_file_hashing/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/hash/T_simple_digest/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/io/S_create_dirs/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/io/T_complex_entity/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/io/T_copying_files/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/io/T_copying_folders/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/io/T_entity_type/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/io/T_loading_any/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/io/T_loading_binary/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/io/T_loading_not_exist/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/io/T_loading_string/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/io/T_move_any/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/io/T_write_any/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/io/T_writing_strings/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/monodimension_listage/T_list_all/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/monodimension_listage/T_list_dirs/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/monodimension_listage/T_list_files/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/multidimension_listage/T_list_all_recursively/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/multidimension_listage/T_list_dirs_recursively/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/multidimension_listage/T_list_files_recursively/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/numerical_io/T_loading_data/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/numerical_io/T_writing_data/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/path/T_adding_dir_at_point/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/path/T_change_dir/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/path/T_change_path_attributes/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/path/T_change_path_attributes_in_part/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/path/T_full_name/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/path/T_geting_sub_dirs_mul/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/path/T_geting_sub_dirs_unique/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/path/T_getting_path_paramns/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/path/T_removing_dirs/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/path/T_removing_first_dir/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/path/T_replacing_dir/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/randonizer/T_num_randonizer/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/randonizer/T_token_randonizer/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/resources/S_multi_process/exec.c
+[33m	compilation:cached
+[33mmemory test:cached
+
+[33m	output test: cached
+[34mtesting: tests/main_test/resources/T_CHashArray_map/exec.c

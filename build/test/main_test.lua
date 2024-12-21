@@ -12,9 +12,9 @@ local function execute_test_artifact(cache, src_sha, original_side_effect_sha, a
     artifact.executable_sha = dtw.generate_sha_from_file(artifact.executable_path)
 
 
-    Exec_valgrind_test(cache, original_side_effect_sha, artifact)
+    Exec_valgrind_test(cache, src_sha, original_side_effect_sha, artifact)
 
-    Test_out_put(cache, original_side_effect_sha, artifact)
+    Test_out_put(cache, src_sha, original_side_effect_sha, artifact)
 end
 
 

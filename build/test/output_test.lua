@@ -69,7 +69,7 @@ end
 ---@param cache Cache
 ---@param original_side_effect_sha string
 ---@param artifact TestArtifact
-function Test_out_put(cache, original_side_effect_sha, artifact)
+function Test_out_put(cache, src_sha, original_side_effect_sha, artifact)
     local output_tested = false
     local expected_content = dtw.load_file(artifact.expected_file_path)
 
@@ -82,6 +82,7 @@ function Test_out_put(cache, original_side_effect_sha, artifact)
         Rebase_side_effect()
     end).
     add_dependencie(artifact.executable_sha).
+    add_dependencie(src_sha).
     add_dependencie(original_side_effect_sha)
 
 

@@ -1,7 +1,8 @@
 ---@param cache Cache
+---@param src_sha string
 ---@param original_side_effect_sha string
 ---@param artifact TestArtifact
-function Exec_valgrind_test(cache, original_side_effect_sha, artifact)
+function Exec_valgrind_test(cache, src_sha, original_side_effect_sha, artifact)
     local memory_tested = false
     cache.new_element("valgrind", function()
         memory_tested = true
@@ -34,6 +35,7 @@ function Exec_valgrind_test(cache, original_side_effect_sha, artifact)
     end).
         add_dependencie(artifact.executable_sha).
         add_dependencie(original_side_effect_sha).
+        add_dependencie(src_sha).
         perform()
 
     if memory_tested == false then
