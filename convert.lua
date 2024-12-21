@@ -13,7 +13,7 @@ for i = 1, #src do
     local current = src[i]
     local content = dtw.load_file(current)
     local new_content = string.gsub(content, '#include "../unique.definition_requirements.h"', "")
-    local new_content = string.gsub(content, '#include "../unique.declaration_requirements.h"', "")
+    local new_content = string.gsub(new_content, '#include "../unique.declaration_requirements.h"', "")
     dtw.write_file(current, new_content)
 end
 
