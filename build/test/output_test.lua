@@ -20,7 +20,7 @@ local function handle_expected_file(expected_content, artifact, output_test)
     if artifact.test_type == PREDICTIBLE then
         print(ANSI_RED .. "\texpected file: different\n")
         Rebase_side_effect()
-        clib.exit(1)
+        os.exit(1)
     end
     if artifact.test_type == IMPREDITIBLE then
         print(ANSI_YELLOW .. "\texpected file: impredictible\n")
@@ -60,7 +60,7 @@ local function handle_side_effect_folder(original_side_effect_sha, artifact)
     if artifact.side_effect_sha ~= current_sidde_effect then
         print(ANSI_RED .. "\tside effect folder: diffeent\n")
         Rebase_side_effect()
-        clib.exit(1)
+        os.exit(1)
     end
 
     print(ANSI_GREEN .. "\tside effect folder: passed\n")
@@ -75,7 +75,7 @@ function Test_out_put(cache, original_side_effect_sha, artifact)
 
     local out_cache = cache.new_element("output", function()
         output_tested = true
-        local output_test = clib.system_with_string("./" .. artifact.executable_path)
+        local output_test = io.popen("./" .. artifact.executable_path):read("a")
         handle_expected_file(expected_content, artifact, output_test)
         handle_side_effect_folder(original_side_effect_sha, artifact)
         Rebase_side_effect()
