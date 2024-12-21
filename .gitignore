@@ -8,6 +8,7 @@ temp_lib.zip
 exemple
 *.pyc
 bin
+src/imports
 luaDoTheWorld
 a/
 .vscode

@@ -2,7 +2,7 @@ function main()
     silverchain.generate({
         src = "src",
         project_short_cut = "doTHeWorld",
-        tags = { "dependency", "consts", "macros", "types", "globals", "fdeclare", "fdefine" }
+        tags = { "native_imports", "dependency", "consts", "macros", "types", "globals", "fdeclare", "fdefine" }
     })
     if true then
         return
