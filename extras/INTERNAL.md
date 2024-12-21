@@ -27,7 +27,7 @@ int main(int argc, char *argv[])#{
 ~~~
 
 {HASHTAG}{HASHTAG} Full Folder
-Alternatively you can download the  [Full Folder](https://github.com/OUIsolutions/DoTheWorld/releases/download/v8.001/doTheWorld.zip) by typing:
+Alternatively you can download the  [FullFolder](https://github.com/OUIsolutions/DoTheWorld/releases/download/v8.001/doTheWorld.zip) by typing:
 ```shell
 curl -L https://github.com/OUIsolutions/DoTheWorld/releases/download/v8.001/doTheWorld.zip -o doTheWorld.zip && unzip doTheWorld.zip
 ```
