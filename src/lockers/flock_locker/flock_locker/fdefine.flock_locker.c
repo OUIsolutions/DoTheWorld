@@ -4,6 +4,7 @@
 #include "../../../imports/imports.fdeclare.h"
 //silver_chain_scope_end
 
+#ifdef __linux__
 
 DtwFlockLocker * newFlockLocker(){
 
@@ -65,3 +66,4 @@ void  DtwFlockLocker_free(DtwFlockLocker *self){
     privateDtwFlockArray_free(self->locked_files);
     free(self);
 }
+#endif

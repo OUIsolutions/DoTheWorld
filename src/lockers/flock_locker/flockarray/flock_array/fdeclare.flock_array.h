@@ -6,6 +6,7 @@
 
 
 
+#ifdef __linux__
 
 
 
@@ -20,3 +21,4 @@ void privateDtwFlockArray_destroy_by_index(privateDtwFlockArray *self, int posit
 void privateDtwFlockArray_represent(privateDtwFlockArray *self);
 
 void privateDtwFlockArray_free(privateDtwFlockArray *self);
+#endif

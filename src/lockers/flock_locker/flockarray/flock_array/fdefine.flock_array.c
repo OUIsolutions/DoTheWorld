@@ -3,6 +3,7 @@
 //mannaged by silver chain
 #include "../../../../imports/imports.fdeclare.h"
 //silver_chain_scope_end
+#ifdef __linux__
 
 
 privateDtwFlockArray * private_new_privateFlockArray(){
@@ -63,3 +64,4 @@ void privateDtwFlockArray_free(privateDtwFlockArray *self){
     free(self->elements);
     free(self);
 }
+#endif

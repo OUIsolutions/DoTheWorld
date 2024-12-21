@@ -8,11 +8,11 @@ but if you want to get an deep knolege see at **exemples** folder, you will find
 
 # Installation
 The installation of DoTheWorld is made to be as dumb as possible, just  download the
-[Amalgamation](https://github.com/OUIsolutions/DoTheWorld/releases/download/v8.000/doTheWorld.h)
+[Amalgamation](https://github.com/OUIsolutions/DoTheWorld/releases/download/v8.001/doTheWorld.h)
 file and include into your project.
 if you prefer you can download by typing:
 ```shell
-curl -L https://github.com/OUIsolutions/DoTheWorld/releases/download/v8.000/doTheWorld.h -o doTheWorld.h
+curl -L https://github.com/OUIsolutions/DoTheWorld/releases/download/v8.001/doTheWorld.h -o doTheWorld.h
 ```
 
 
@@ -29,7 +29,7 @@ int main(int argc, char *argv[]){
 ## Full Folder
 Alternatively you can download the  [Full Folder]() by typing:
 ```shell
-curl -L https://github.com/OUIsolutions/DoTheWorld/releases/download/v8.000/doTheWorld.zip -o doTheWorld.zip && unzip doTheWorld.zip
+curl -L https://github.com/OUIsolutions/DoTheWorld/releases/download/v8.001/doTheWorld.zip -o doTheWorld.zip && unzip doTheWorld.zip
 ```
 
 ~~~c

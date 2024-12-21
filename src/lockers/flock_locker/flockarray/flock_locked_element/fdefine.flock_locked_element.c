@@ -3,6 +3,7 @@
 //mannaged by silver chain
 #include "../../../../imports/imports.fdeclare.h"
 //silver_chain_scope_end
+#ifdef __linux__
 
 
 
@@ -23,3 +24,4 @@ void privateDtwFlockLockedElement_free(privateDtwFlockLockedElement *self){
     free(self);
 
 }
+#endif

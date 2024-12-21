@@ -5,6 +5,7 @@
 //silver_chain_scope_end
 
 
+#ifdef __linux__
 
 
 DtwFlockLocker * newFlockLocker();
@@ -18,3 +19,4 @@ int DtwFlockLocker_lock(DtwFlockLocker *self, const char *filename);
 void  DtwFlockLocker_represent(DtwFlockLocker *self);
 
 void  DtwFlockLocker_free(DtwFlockLocker *self);
+#endif

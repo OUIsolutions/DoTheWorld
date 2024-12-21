@@ -3,6 +3,7 @@
 //mannaged by silver chain
 #include "../../../../imports/imports.macros.h"
 //silver_chain_scope_end
+#ifdef __linux__
 
 typedef struct {
 
@@ -11,3 +12,4 @@ typedef struct {
 
 
 }privateDtwFlockLockedElement;
+#endif
