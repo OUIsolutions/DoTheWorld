@@ -1,4 +1,13 @@
 function main()
+    silverchain.generate({
+        src = "src",
+        project_short_cut = "my_project_name",
+        tags = { "dependencies", "consts", "macros", "types", "globals", "fdeclare", "fdef" }
+        implement_main = true,
+        main_name = "main.c"
+    })
+
+
     local src_sha = Generate_sha_from_folder_not_considering_empty_folders(LIB_FOLDER)
     local cache = NewCache(CACHE_POINT)
 
