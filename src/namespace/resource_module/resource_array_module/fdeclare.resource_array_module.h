@@ -1,0 +1,4 @@
+
+
+
+DtwResourceArrayModule newDtwResourceArrayModule();
