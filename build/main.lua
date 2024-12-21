@@ -15,7 +15,7 @@ function main()
 
 
     if argv.flags_exist({ "test" }) then
-        Execute_full_test(cache, src_sha)
+        Execute_full_test()
 
         local locker_content = dtw.load_file("tests/locker_test/locker_test.c")
 

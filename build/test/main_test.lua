@@ -17,9 +17,9 @@ local function execute_test_artifact(cache, src_sha, original_side_effect_sha, a
 end
 
 
----@param cache Cache
----@param src_sha string
+
 function Execute_full_test(cache, src_sha)
+    local cache =
     local original_side_effect_sha = Generate_sha_from_folder_not_considering_empty_folders(SIDE_EFFECT)
     dtw.copy_any_overwriting(SIDE_EFFECT, SIDE_EFFECT_COPY)
 
