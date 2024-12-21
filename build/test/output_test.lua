@@ -51,7 +51,7 @@ local function handle_side_effect_folder(original_side_effect_sha, artifact)
         return
     end
 
-    if argv.flags_exist({ "reconstruct" }) then
+    if RECONSTRUCT then
         dtw.move_any_overwriting(SIDE_EFFECT, artifact.side_effect_folder_path)
         print(ANSI_MAGENTA .. "\tside effect folder: recreated\n")
         return

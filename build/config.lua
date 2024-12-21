@@ -29,3 +29,4 @@ SIDE_EFFECT_COMPARATION  = "side_effect"
 LOCKER_FILE_PATH         = "tests/locker_test/locker_test.c"
 LOCKER_OUTPUT_PATH       = "tests/locker_test/locker_test.out"
 LOCKER_WRITE_FILE        = "append.txt"
+RECONSTRUCT              = false
