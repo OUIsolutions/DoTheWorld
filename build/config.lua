@@ -13,11 +13,8 @@ LIB_NAME                 = "doTheWorld.o"
 PRECOMPILED_LINUX        = "pre_compiled_linux.zip"
 PRECOMPILED_WINDOWS      = "pre_compiled_windows.zip"
 
-OUTPUT_DECLARATION       = "doTheWorldDeclaration.h"
 OUTPUT_SINGLE_FILE       = "doTheWorld.h"
-OUTPUT_DECLARATION       = "doTheWorld_declaration.h"
-OUTPUT_DEFINITION        = "doTheWorld_definition.c"
-END_TEST_POINT           = "tests/doTheWorld_test.h"
+
 SIDE_EFFECT              = "tests/target"
 TEST_POINT               = "tests/main_test"
 LIB_FOLDER               = "src"
