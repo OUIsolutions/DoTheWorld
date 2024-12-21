@@ -7,17 +7,12 @@ function main()
             tags = { "native_imports", "dependency", "consts", "macros", "types", "globals", "fdeclare", "fdefine" }
         })
     end
+
     if argv.flags_exist({ "amalgamate" }) then
-        local src_sha = Generate_sha_from_folder_not_considering_empty_folders(LIB_FOLDER)
-        local cache = NewCache(CACHE_POINT)
-
-        local amalgamation_cache = cache.new_element("one_amalgamation", function()
-            return camalgamator.generate_amalgamation(START_POINT)
-        end).add_dependencie(src_sha)
-
-        local amalgamation_result = amalgamation_cache.perform()
+        local amalgamation_result = camalgamator.generate_amalgamation(START_POINT)
         dtw.write_file(RELEASE_FOLDER .. "/" .. OUTPUT_SINGLE_FILE, amalgamation_result)
     end
+
 
     if argv.flags_exist({ "test" }) then
         Execute_full_test(cache, src_sha)

@@ -1,6 +1,6 @@
 function create_c_example(src)
     local content = dtw.load_file(src)
-    return string.format("``c\n%s\n```", content)
+    return "```c\n" .. content .. "\n```"
 end
 
 ---@return string |nil
