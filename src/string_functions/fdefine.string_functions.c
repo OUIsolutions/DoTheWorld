@@ -15,25 +15,69 @@ void private_dtw_remove_double_bars_from_string_array(struct DtwStringArray*path
 
 char *dtw_concat_path(const char *path1, const char *path2){
 
-    if(!path1){
+    if(path1 == NULL){
         return strdup(path2);
     }
 
-    if(!path2){
+    if(path2 == NULL){
         return strdup(path1);
     }
+    int path1_size = strlen(path1);
+    int path2_size = strlen(path2);
 
-    char *path = (char *)malloc(strlen(path1) + strlen(path2) + 3);
+    char *final = (char*)malloc(path1_size+ path2_size + 2);
+    int final_size = 0;
 
-    if(dtw_ends_with(path1, "/") || dtw_ends_with(path1, "\\")){
-        sprintf(path,"%s%s",path1,path2);
+
+    bool start_path1_found = false;
+
+    for(int i = path1_size-1; i >= 0; i--){
+        char current = path1[i];
+
+        if(current != '/' && current != '\\' && !start_path1_found){
+            start_path1_found = true;
+            final_size = i+1;
+        }
+        if(start_path1_found){
+            final[i] = current;
+        }
+
 
     }
-    else{
-        sprintf(path,"%s/%s",path1,path2);
+
+
+
+    //concating
+    #if  defined (__linux__)
+        final[final_size] = '/';
+        final_size+=1;
+    #endif
+
+    #if  defined (_WIN32)
+        final[final_size] = '\\';
+        final_size+=1;
+    #endif
+    bool path2_found = false;
+    for(int i=0; i < path2_size;i++){
+        char current = path2[i];
+        if(current != '/' && current != '\\' && !path2_found){
+            path2_found = true;
+        }
+        if(path2_found){
+            final[final_size] = current;
+            final_size+=1;
+
+        }
 
     }
-    return path;
+
+    final[final_size] = '\0';
+
+    return final;
+
+
+
+
 }
 
 char * private_dtw_format_vaarg(const char *expresion, va_list args){
