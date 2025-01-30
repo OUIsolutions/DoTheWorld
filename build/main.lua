@@ -17,6 +17,7 @@ function main()
     if argv.flags_exist({ "amalgamate" }) then
         local amalgamation_result = camalgamator.generate_amalgamation(START_POINT)
         dtw.write_file(RELEASE_FOLDER .. "/" .. OUTPUT_SINGLE_FILE, amalgamation_result)
+        dtw.write_file(OUTPUT_SINGLE_FILE, amalgamation_result)
     end
 
     if argv.flags_exist({ "zip" }) then
