@@ -1,10 +1,15 @@
 function main()
+    dtw = darwin.dtw
+    argv = darwin.argv
+    silverchain = darwin.silverchain
+    camalgamator = darwin.camalgamator
+    candango = darwin.candango
     dtw.remove_any("release")
     os.execute("mkdir -p dependencies")
 
-    if argv.flags_exist({ "install_dependencies" }) then
-        Install_dependencies()
-    end
+
+    Install_dependencies()
+
 
     if argv.flags_exist({ "silverchain_organize" }) then
         silverchain.generate({
