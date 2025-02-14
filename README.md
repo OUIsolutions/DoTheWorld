@@ -50,14 +50,14 @@ if you want to build the project from scracth, you will need  to have [Darwin](h
 on version **0.018** dowloaded,then you can call:
 
 ~~~shel
-./OuiPacker.out --folder_mode   build/ --install_dependencies  --amalgamate --zip  --silverchain_organize
+darwin run_blueprint build/ --mode folder --amalgamate --zip  --silverchain_organize
 ~~~
 
 These will create all the outputs into the release folder.
 If you want to make all the tests and recreate the examples and readme , call:
 
 ~~~shell
-./OuiPacker.out --folder_mode   build/ --install_dependencies  --amalgamate --zip  --silverchain_organize --test --create_examples --create_readme
+darwin run_blueprint build/ --mode folder a --amalgamate --zip  --silverchain_organize --test --create_examples --create_readme
 
 ~~~
 
