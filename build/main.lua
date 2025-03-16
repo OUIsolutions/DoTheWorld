@@ -8,7 +8,11 @@ function main()
     })
 
     if darwin.argv.one_of_args_exist("only_silverchain") then
-        return 
+        darwin.silverchain.generate({
+            src = "src",
+            project_short_cut = "doTHeWorld",
+            tags = { "native_imports", "dependency", "consts", "macros", "types", "globals", "fdeclare", "fdefine" }
+        })
     end 
 
     local MAX_CONNTENT = darwin.camalgamator.ONE_MB * 20
@@ -19,12 +23,12 @@ function main()
     local onefile = darwin.camalgamator.generate_amalgamation("src/one.c", MAX_CONNTENT, MAX_RECURSION)
     onefile = lincense .. onefile
 
-    darwin.dtw.write_file("release/BearHttpsClientOne.c", onefile)
+    darwin.dtw.write_file("release/doTheWorldOne.c", onefile)
 
     local only_declare = darwin.camalgamator.generate_amalgamation("src/imports/imports.fdeclare.h", MAX_CONNTENT,
     MAX_RECURSION)
     only_declare = lincense .. only_declare
-    darwin.dtw.write_file("release/BearHttpsClient.h", only_declare)
+    darwin.dtw.write_file("release/doTheWorld.h", only_declare)
 
 
 
@@ -38,12 +42,12 @@ function main()
         MAX_CONNTENT,
         MAX_RECURSION
     )
-    only_definition = '#include "BearHttpsClient.h"\n' .. only_definition
+    only_definition = '#include "doTheWorld.h"\n' .. only_definition
 
     only_definition = lincense .. only_definition
 
-    darwin.dtw.write_file("release/BearHttpsClient.c", only_definition)
+    darwin.dtw.write_file("release/doTheWorld.c", only_definition)
 
-    os.execute("zip -r release/BearHttpsClient.zip dependencies src build")
+    os.execute("zip -r release/doTheWorld.zip dependencies src build")
 
 end
