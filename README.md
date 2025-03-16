@@ -42,6 +42,7 @@ DoTheWorld is a Windows/Linux single file library designed to handle files in C/
 | [sha256.md](/docs/sha256.md)|Sha56 implementations |
 | [unix.md](/docs/unix.md)|unix timestamp from files and folders|
 | [locker.md](/docs/locker.md)|Locker Implementations |
+| [resource.md](/docs/resource.md)|Resource System implementation |
 
 
 # Build Toolchain
