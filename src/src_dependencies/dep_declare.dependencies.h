@@ -31,12 +31,12 @@
   #include <direct.h>
 #endif
 
-#if !defined(DTW_MOCK_CJSON)
+#if !defined(cJSON__h)
 #include "../../dependencies/cJSON.h"
 #define DTW_CJSON_IMPLEMENTED
 #endif
 
-#if !defined(DTW_MOCK_SHA256)
+#if !defined(SHA_256_H)
 #include "../../dependencies/sha-256.h"
 #define DTW_SHA256_IMPLEMENTED
 #endif
