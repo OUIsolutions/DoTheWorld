@@ -1,11 +1,5 @@
 function main()
     Install_dependencies()
-    if true then return end 
-    darwin.silverchain.generate({
-        src = "src",
-        tags = { "dep_declare", "macros", "types","globals", "fdeclare", "fdefine" },
-        implement_main = false
-    })
 
     if darwin.argv.one_of_args_exist("only_silverchain") then
         darwin.silverchain.generate({
@@ -14,7 +8,8 @@ function main()
             tags = { "native_imports", "dep_declare", "consts", "macros", "types", "globals", "fdeclare", "fdefine" }
         })
     end 
-
+    if true then return end 
+    
     local MAX_CONNTENT = darwin.camalgamator.ONE_MB * 20
     local MAX_RECURSION = 100
 
