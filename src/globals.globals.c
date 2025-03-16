@@ -1,8 +1,4 @@
 
-//silver_chain_scope_start
-//mannaged by silver chain
-#include "imports/imports.typesm.h"
-//silver_chain_scope_end
 
 
 #ifndef DTW_GLOBALS_H

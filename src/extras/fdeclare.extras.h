@@ -1,8 +1,4 @@
 
-//silver_chain_scope_start
-//mannaged by silver chain
-#include "../imports/imports.globals.h"
-//silver_chain_scope_end
 
 
 char * dtw_generate_sha_from_file(const char *path);

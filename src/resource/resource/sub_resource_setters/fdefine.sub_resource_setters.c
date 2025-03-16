@@ -1,8 +1,4 @@
 
-//silver_chain_scope_start
-//mannaged by silver chain
-#include "../../../imports/imports.fdeclare.h"
-//silver_chain_scope_end
 
 
 void DtwResource_set_any_in_sub_resource(DtwResource *self,const char *key, unsigned char *element, long size,bool is_binary) {

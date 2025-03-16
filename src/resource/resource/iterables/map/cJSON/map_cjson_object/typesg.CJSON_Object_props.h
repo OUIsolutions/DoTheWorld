@@ -1,8 +1,4 @@
 
-//silver_chain_scope_start
-//mannaged by silver chain
-#include "../../../../../../imports/imports.typesf.h"
-//silver_chain_scope_end
 
 typedef  struct{
     char *(*key_provider_callback)(DtwResource *item,void *args);

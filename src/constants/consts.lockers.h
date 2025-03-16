@@ -1,8 +1,4 @@
 
-//silver_chain_scope_start
-//mannaged by silver chain
-#include "../imports/imports.dependency.h"
-//silver_chain_scope_end
 #define DTW_MULTIFILE_LOCKER_TOTAL_CHECK 500
 #define DTW_MULTIFILE_LOCKER_MAX_TIMEOUT 10
 #define DTW_MULFILE_LOCKER_MAX_WAIT 10

@@ -1,8 +1,4 @@
 
-//silver_chain_scope_start
-//mannaged by silver chain
-#include "../../imports/imports.typesg.h"
-//silver_chain_scope_end
 
 #ifndef PRIVATE_DTW_DATABASE_SCHEMA_MODULE_TYPE_H
 #define PRIVATE_DTW_DATABASE_SCHEMA_MODULE_TYPE_H
