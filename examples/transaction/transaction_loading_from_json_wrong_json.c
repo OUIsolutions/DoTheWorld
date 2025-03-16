@@ -1,7 +1,7 @@
 //
 // Created by mateusmoutinho on 24/07/23.
 //
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 int main(){
     DtwNamespace dtw = newDtwNamespace();

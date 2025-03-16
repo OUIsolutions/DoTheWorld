@@ -1,4 +1,4 @@
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 int main (){
     DtwNamespace dtw = newDtwNamespace();

@@ -1,4 +1,4 @@
-#include "src/one.c"
+#include "release/doTheWorldOne.c"
 
 int main(){
     char *converted = dtw_base64_encode("Hello World", 11);
