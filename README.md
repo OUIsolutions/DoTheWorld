@@ -29,3 +29,15 @@ DoTheWorld is a Windows/Linux single file library designed to handle files in C/
 
 
 
+# Documentation
+
+| Item          | What It Is |
+|-------        |-----------|
+| [Build](/docs/build_and_install.md)|Build and Install |
+| [Dependencies](/docs/dependencies.md)|Dependencies |
+
+# Build Toolchain
+
+* [Darwin](https://github.com/OUIsolutions/Darwin)
+* [Silver Chain](https://github.com/OUIsolutions/SilverChain)
+* [CAmalgamator](https://github.com/OUIsolutions/CAmalgamator)
