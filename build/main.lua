@@ -1,5 +1,5 @@
 function main()
-    install_dependencies()
+    Install_dependencies()
     if true then return end 
     darwin.silverchain.generate({
         src = "src",

@@ -1,6 +1,6 @@
 
 function Install_dependencies()
-    local hasher = dtw.newHasher()
+    local hasher = darwin.dtw.newHasher()
     hasher.digest_folder_by_content("dependencies")
     local TARGET_HASH = "bf1f7e84f00fbcee177987c0f8247286ae45de2c04e64cbc1cc997fbeb6a12f6"
     if hasher.get_value() == TARGET_HASH then
@@ -17,7 +17,7 @@ function Install_dependencies()
     for _, command in ipairs(comands) do
         os.execute(command)
     end
-    local new_hasher = dtw.newHasher()
+    local new_hasher = darwin.dtw.newHasher()
     new_hasher.digest_folder_by_content("dependencies")
     print("new hasher is: ", new_hasher.get_value())
 end
