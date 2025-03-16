@@ -11,7 +11,7 @@ function main()
         darwin.silverchain.generate({
             src = "src",
             project_short_cut = "doTHeWorld",
-            tags = { "native_imports", "dependency", "consts", "macros", "types", "globals", "fdeclare", "fdefine" }
+            tags = { "native_imports", "dep_declare", "consts", "macros", "types", "globals", "fdeclare", "fdefine" }
         })
     end 
 
