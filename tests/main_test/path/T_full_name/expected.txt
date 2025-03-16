@@ -1,7 +1,0 @@
-First Path: a/b/c/d.txt
-Path: a/b/c/test.py
-Path Changed: true
-Dir: a/b/c/
-Full Name: test.py
-Name: test
-Extension: py

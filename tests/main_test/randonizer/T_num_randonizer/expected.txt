@@ -1,2 +1,0 @@
-value23
-value2 10

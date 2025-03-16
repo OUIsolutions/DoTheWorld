@@ -1,7 +1,0 @@
-First Path: a/b/c/d.txt
-Path: test/a/b/c/d.txt
-Path Changed: true
-Dir: test/a/b/c/
-Full Name: d.txt
-Name: d
-Extension: txt

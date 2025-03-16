@@ -1,8 +1,0 @@
-<<<<<<< HEAD
- 
-after a file :d4392e9f95dc43e251ba2eb74447912764a3df57d943dee5db520af50c67e283
-after a folder 67a8111b81ca0ca5a910f5de7b3db9acf647b89dbabb886c3c9f73907b4a18ad
-=======
-after a file :318dc59f5614ba9262a4bc95e4d54309d178127c4fd478ab31f4c7d6fb966ec5
-after a folder cedf5734987cd9c485b6e68c03d25642be4bcd2ac8a830e0145e2a13497396e3
->>>>>>> adding_lua_do_the_world

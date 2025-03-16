@@ -1,6 +1,0 @@
-<<<<<<< HEAD
- 
-Last modification: 2024-06-02 16:19:37
-=======
-Last modification: 2024-06-07 02:27:24
->>>>>>> adding_lua_do_the_world

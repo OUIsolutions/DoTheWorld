@@ -1,1 +1,0 @@
-error oppening tests/target/aaaaa

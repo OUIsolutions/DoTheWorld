@@ -1,2 +1,0 @@
-size: 36577
-is_binary: true
