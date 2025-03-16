@@ -6,7 +6,6 @@ function main()
         project_short_cut = "doTHeWorld",
         tags = {  "dep_declare", "consts", "macros", "types", "globals", "fdeclare", "fdefine" }
     })
-    if true then return end 
 
     local MAX_CONNTENT = darwin.camalgamator.ONE_MB * 20
     local MAX_RECURSION = 100
