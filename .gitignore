@@ -1,7 +1,7 @@
 # Prerequisites
 *.d
 CWebStudio.h
-dependencies/
+dependencies
 release
 temp_lib
 temp_lib.zip
