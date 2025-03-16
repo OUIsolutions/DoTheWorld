@@ -1,8 +1,9 @@
 
 
 
-
 char *dtw_base64_encode(unsigned char *data, long input_length){
+    const char dtw_base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
     if (data == NULL) return NULL;
 
     size_t output_length = 4 * ((input_length + 2) / 3);
@@ -37,6 +38,7 @@ char *dtw_base64_encode(unsigned char *data, long input_length){
 
 
 unsigned char *dtw_base64_decode(const char *data, long *output_length){
+    const char dtw_base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
     long input_length = (long)strlen(data);
     if (input_length % 4 != 0) return NULL;
 
