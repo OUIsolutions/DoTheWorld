@@ -5,11 +5,11 @@ function main()
         darwin.silverchain.generate({
             src = "src",
             project_short_cut = "doTHeWorld",
-            tags = { "native_imports", "dep_declare", "consts", "macros", "types", "globals", "fdeclare", "fdefine" }
+            tags = {  "dep_declare", "consts", "macros", "types", "globals", "fdeclare", "fdefine" }
         })
     end 
     if true then return end 
-    
+
     local MAX_CONNTENT = darwin.camalgamator.ONE_MB * 20
     local MAX_RECURSION = 100
 
