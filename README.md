@@ -22,10 +22,10 @@ DoTheWorld is a Windows/Linux single file library designed to handle files in C/
 
 | item          | What Is |
 |-------        |-----------|
-| [doTheWorld.zip](https://github.com/OUIsolutions/DoTheWorld/releases/download/9.0.001/doTheWorld.zip)| Full Folder Mode  |
-| [doTheWorldOne.c](https://github.com/OUIsolutions/DoTheWorld/releases/download/9.0.001/doTheWorldOne.c)| Single File Version|
-| [doTheWorld.h](https://github.com/OUIsolutions/DoTheWorld/releases/download/9.0.001/doTheWorld.h)|Declaration |
-| [doTheWorld.c](https://github.com/OUIsolutions/DoTheWorld/releases/download/9.0.001/doTheWorld.c)|Definition |
+| [doTheWorld.zip](https://github.com/OUIsolutions/DoTheWorld/releases/download/9.0.002/doTheWorld.zip)| Full Folder Mode  |
+| [doTheWorldOne.c](https://github.com/OUIsolutions/DoTheWorld/releases/download/9.0.002/doTheWorldOne.c)| Single File Version|
+| [doTheWorld.h](https://github.com/OUIsolutions/DoTheWorld/releases/download/9.0.002/doTheWorld.h)|Declaration |
+| [doTheWorld.c](https://github.com/OUIsolutions/DoTheWorld/releases/download/9.0.002/doTheWorld.c)|Definition |
 
 
 
