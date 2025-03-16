@@ -3,6 +3,7 @@ DoTheWorld is a Windows/Linux single file library designed to handle files in C/
 
 # Features
  - read files
+ - write files
  - base64 encode
  - base64 decode
  - sha256 generation
