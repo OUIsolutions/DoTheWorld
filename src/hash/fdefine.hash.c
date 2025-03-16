@@ -17,6 +17,7 @@ bool  DtwHash_digest_any(DtwHash *self,unsigned char *content,long size){
     if(content == NULL){
         return false;
     }
+    
     char *generated = dtw_generate_sha_from_any(content,size);
     char result[300] ={0};
     sprintf(result,"%s%s",self->hash,generated);
