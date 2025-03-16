@@ -37,15 +37,15 @@ DoTheWorld is a Windows/Linux single file library designed to handle files in C/
 | [Dependencies](/docs/dependencies.md)|Dependencies |
 | [Io](/docs/io.md)|Basic Io Operations |
 | [Copy and Move](/docs/copy_and_move.md)|Copy and Move Operations |
-| [listage.md](/docs/listage.md)|Listage files and dirs |
-| [base64.md](/docs/base64.md)|Base64 encoding and decoding |
-| [hashers.md](/docs/hashers.md)|Hashers Implementation |
-| [unix.md](/docs/unix.md)|unix timestamp from files and folders|
-| [locker.md](/docs/locker.md)|Locker Implementations |
-| [resource.md](/docs/resource.md)|Resource System implementation |
-| [tree.md](/docs/tree.md)|Tree System implementation |
-| [randonizers.md](/docs/tree.md)|Randonizers Implementations |
-| [transactions.md](/docs/transactions.md)|Transaction system implementation |
+| [listage](/docs/listage.md)|Listage files and dirs |
+| [base64](/docs/base64.md)|Base64 encoding and decoding |
+| [hashers](/docs/hashers.md)|Hashers Implementation |
+| [unix](/docs/unix.md)|unix timestamp from files and folders|
+| [locker](/docs/locker.md)|Locker Implementations |
+| [resource](/docs/resource.md)|Resource System implementation |
+| [tree](/docs/tree.md)|Tree System implementation |
+| [randonizers](/docs/tree.md)|Randonizers Implementations |
+| [transactions](/docs/transactions.md)|Transaction system implementation |
 
 
 # Build Toolchain
