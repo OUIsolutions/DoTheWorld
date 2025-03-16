@@ -35,6 +35,7 @@ DoTheWorld is a Windows/Linux single file library designed to handle files in C/
 |-------        |-----------|
 | [Build](/docs/build_and_install.md)|Build and Install |
 | [Dependencies](/docs/dependencies.md)|Dependencies |
+| [Io](/docs/io.md)|Basic Io Operations |
 
 # Build Toolchain
 
