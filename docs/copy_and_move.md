@@ -5,7 +5,7 @@ passing the folder you want to create,dont wory about if the previews path dont 
 it will create till reachs the target folder
 
 ```c
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 int main(int argc, char *argv[]){
     DtwNamespace dtw = newDtwNamespace();
@@ -23,7 +23,7 @@ With the function **dtw_copy_any** you can copy either files or folders to one p
 ```c
 
 
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 int main(int argc, char *argv[]){
   DtwNamespace dtw = newDtwNamespace();
@@ -38,7 +38,7 @@ You can move either folders or files with **dtw_move_any** function
 
 ```c
 
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 int main(int argc, char *argv[]){
 

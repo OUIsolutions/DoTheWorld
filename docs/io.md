@@ -5,7 +5,7 @@
 if you are sure that the content you are going to read is not binary you can call the function **dtw_load_string_file_content**
 ```c
 
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 int main(int argc, char *argv[]){
   //load a string file content
@@ -28,7 +28,7 @@ int main(int argc, char *argv[]){
 ### Reading Any Content
 
 ```c
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 int main(int argc, char *argv[]){
     DtwNamespace dtw = newDtwNamespace();
@@ -61,7 +61,7 @@ you also can direclty load all types from an file  with numerical ios
 
 ```c
 
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 
 
@@ -113,7 +113,7 @@ to write strings in text files is very simple, just call the function **dtw_writ
 (Note that the target directory does not need to exist, if it does not exist it will be created automatically)
 
 ```c
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 int main(int argc, char *argv[]){
   // Write a string to a file the path is auto created
@@ -132,7 +132,7 @@ if you want to write anything to a file, it's also very simple, use the **dtw_wr
 
 
 ```c
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 int main(int argc, char *argv[]){
     DtwNamespace dtw = newDtwNamespace();
@@ -161,7 +161,7 @@ You also can write any type direclty to an file
 
 ```c
 
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 
 

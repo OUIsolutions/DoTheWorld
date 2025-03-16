@@ -5,7 +5,7 @@ Randonizer it's a way to generate random values,integers or strings
 ### Numerical Random
 ```c
 
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 
 int main() {
@@ -26,7 +26,7 @@ int main() {
 ### Token  Random
 ```c
 
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 
 int main() {

@@ -4,7 +4,7 @@ You can easly transform an binary file to an base64 string like these
 
 ```c
 
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 int main(int argc, char *argv[]){
     DtwNamespace dtw = newDtwNamespace();
@@ -21,7 +21,7 @@ You also can reconvert an base64 string to binary
 
 ```c
 
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 int main(int argc, char *argv[]){
 

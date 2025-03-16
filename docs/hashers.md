@@ -4,7 +4,7 @@ Generating Sha from file
 
 ```c
 
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 int main(int argc, char *argv[]){
     DtwNamespace dtw = newDtwNamespace();
@@ -27,7 +27,7 @@ or to avoid recomputation in compilers or bundlers
 ### Simple Hashing
 
 ```c
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 
 
@@ -64,7 +64,7 @@ int main (){
 ```
 
 ```c
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 
 
@@ -88,7 +88,7 @@ int main (){
 ```
 
 ```c
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 
 

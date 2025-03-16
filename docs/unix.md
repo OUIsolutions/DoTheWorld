@@ -4,7 +4,7 @@
 get the last modification of a file in unix timestamp or string format.
 ```c
 
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 int main(int argc, char *argv[]){
     DtwNamespace dtw = newDtwNamespace();
@@ -17,7 +17,7 @@ int main(int argc, char *argv[]){
 
 get the last modification of a file in string format.
 ```c
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 int main(int argc, char *argv[]){
     DtwNamespace dtw = newDtwNamespace();

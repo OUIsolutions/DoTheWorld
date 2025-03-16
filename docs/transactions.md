@@ -4,7 +4,7 @@ wanted side effects
 
 ```c
 
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 int main(){
     DtwNamespace dtw = newDtwNamespace();
@@ -26,7 +26,7 @@ You also can dump the transaction to an json file to store it
 
 ```c
 
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 int main(){
     DtwNamespace dtw = newDtwNamespace();
@@ -45,7 +45,7 @@ int main(){
 
 ```c
 
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 int main(){
     DtwNamespace dtw = newDtwNamespace();

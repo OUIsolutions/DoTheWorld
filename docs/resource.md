@@ -6,7 +6,7 @@ With Resources you can iterate over all types of values ,and modifie than into a
 
 ```c
 
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 int main (){
     DtwNamespace dtw = newDtwNamespace();
@@ -52,7 +52,7 @@ int main (){
 
 ### Getting values of Resource
 ```c
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 int main (){
     DtwNamespace dtw = newDtwNamespace();
@@ -120,7 +120,7 @@ in these example we are creating a user using schema concept
 
 ```c
 
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 
 int main(){
@@ -158,7 +158,7 @@ In these example we also can destroy the user , automaticly destroying the index
 
 ```c
 
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 DtwNamespace dtw;
 
 
@@ -212,7 +212,7 @@ With  primary keys you can find values without loop iteration increasing readabi
 
 ```c
 
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 DtwNamespace dtw;
 
 
@@ -273,7 +273,7 @@ you also can iterate over insertions
 
 ```c
 
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 DtwNamespace dtw;
 
 
@@ -343,7 +343,7 @@ with iterable functional system , you can iterate into Resources easly
 with each, you can pass  also a filtrage callback, a start point (defaults its 0),
 and the total elements (defaults its all)
 ```c
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 DtwNamespace dtw;
 DtwRandonizer *randonizer;
@@ -410,7 +410,7 @@ int main(){
 you also can iterate over schemas with schema each
 
 ```c
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 
 DtwNamespace dtw;
@@ -490,7 +490,7 @@ you just need to pass the object, the retriver, and some append function
 to be called each generated object
 
 ```c
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 
 
@@ -585,7 +585,7 @@ of course, it also works with schemas
 
 ```c
 
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 DtwNamespace dtw;
 DtwRandonizer *randonizer;
@@ -684,7 +684,7 @@ int main(){
 you also can directly map a cJSON Array
 
 ```c
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 
 DtwNamespace dtw;
@@ -777,7 +777,7 @@ object generation (note that these key can bee released(free) after, you pass th
 free_key prop into the props object
 
 ```c
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 
 DtwNamespace dtw;
@@ -876,7 +876,7 @@ into the project since CHashManipulator, its not included into the amalgamation
 
 #include "../../../../dependencies/CHashManipulator.h"
 #define DTW_ALLOW_CHASH
-#include "doTheWorld.h"
+#include "doTheWorldOne.c"
 
 
 CHashNamespace hash;
