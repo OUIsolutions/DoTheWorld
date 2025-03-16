@@ -1,3 +1,30 @@
 # DoTheWorld
 DoTheWorld is a Windows/Linux single file library designed to handle files in C/C++ in a number of ways, providing everything from simple functions for reading/writing files and folders, to complex functions like taking sha256 from files, checking modification dates. And functionalities of atomic writing of folders/files through transaction systems.
 
+# Features
+ - read files
+ - base64 encode
+ - base64 decode
+ - sha256 generation
+ - list files 
+ - list files recursively 
+ - lockers 
+ - transaction system
+ - atomic writing
+ - check file modification date
+ - check file existence
+ - Non Relation Database
+ - Path manipulation
+
+
+# Releases
+
+| item          | What Is |
+|-------        |-----------|
+| [doTheWorld.zip](https://github.com/OUIsolutions/DoTheWorld/releases/download/9.0.001/doTheWorld.zip)| Full Folder Mode  |
+| [doTheWorldOne.c](https://github.com/OUIsolutions/DoTheWorld/releases/download/9.0.001/doTheWorldOne.c)| Single File Version|
+| [doTheWorld.h](https://github.com/OUIsolutions/DoTheWorld/releases/download/9.0.001/doTheWorld.h)|Declaration |
+| [doTheWorld.c](https://github.com/OUIsolutions/DoTheWorld/releases/download/9.0.001/doTheWorld.c)|Definition |
+
+
+
