@@ -34,7 +34,6 @@ DoTheWorld is a Windows/Linux single file library designed to handle files in C/
 | Item          | What It Is |
 |-------        |-----------|
 | [Build](/docs/build_and_install.md)|Build and Install |
-| [Dependencies](/docs/dependencies.md)|Dependencies |
 | [Io](/docs/io.md)|Basic Io Operations |
 | [Copy and Move](/docs/copy_and_move.md)|Copy and Move Operations |
 | [listage](/docs/listage.md)|Listage files and dirs |
@@ -46,6 +45,7 @@ DoTheWorld is a Windows/Linux single file library designed to handle files in C/
 | [tree](/docs/tree.md)|Tree System implementation |
 | [randonizers](/docs/tree.md)|Randonizers Implementations |
 | [transactions](/docs/transactions.md)|Transaction system implementation |
+| [Dependencies](/docs/dependencies.md)|Dependencies |
 
 
 # Build Toolchain
