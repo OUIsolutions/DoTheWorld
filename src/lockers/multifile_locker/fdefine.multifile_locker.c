@@ -2,10 +2,18 @@
 
 
 
+
 DtwMultiFileLocker *newDtwMultiFileLocker(){
     DtwMultiFileLocker *self = (DtwMultiFileLocker*) malloc(sizeof (DtwMultiFileLocker));
+    #ifdef __linux__
 
-    self->process = getpid();
+        self->process = getpid();
+    #endif 
+    
+    #ifdef _WIN32
+        self->process = GetCurrentProcessId();
+    #endif
+
     self->total_checks = DTW_MULTIFILE_LOCKER_TOTAL_CHECK;
     self->max_lock_time = DTW_MULTIFILE_LOCKER_MAX_TIMEOUT;
     self->max_wait = DTW_MULFILE_LOCKER_MAX_WAIT;

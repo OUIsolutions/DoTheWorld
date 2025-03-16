@@ -1,7 +1,6 @@
 
 
 
-#include <unistd.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,12 +13,14 @@
 #include <stdarg.h>
 
 #include <errno.h>
-#include <sys/file.h>
-#include <sys/time.h>
 
 
 
 #ifdef __linux__
+#include <unistd.h>
+#include <sys/time.h>
+#include <sys/file.h>
+
 #include <sys/wait.h>
   #include <dirent.h>
   #include <unistd.h>

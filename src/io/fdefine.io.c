@@ -3,6 +3,7 @@
 
 
 
+
 void dtw_create_dir_recursively(const char *path){
 
     int entity =dtw_entity_type(path);
@@ -37,14 +38,15 @@ void dtw_create_dir_recursively(const char *path){
     dtw_create_dir(path);
 }
 char *dtw_get_absolute_path(const char *path){
-    char absolute_path[PATH_MAX] ={0};
 
     #ifdef __linux__
+    char absolute_path[PATH_MAX] ={0};
      if (realpath(path, absolute_path) != NULL) {
          return strdup(absolute_path);
      }
      #endif
      #ifdef _WIN32
+     char absolute_path[_MAX_PATH] ={0};
      if (_fullpath(absolute_path, path, _MAX_PATH) != NULL) {
             return strdup(absolute_path);
     }
@@ -233,7 +235,7 @@ bool dtw_write_string_file_content(const char *path,const char *content){
 int dtw_entity_type(const char *path){
     //returns 1 for file, 2 for directory, -1 for not found
     struct stat path_stat;
-
+    #ifdef __linux__
     if(stat(path,&path_stat) == 0){
         if(S_ISREG(path_stat.st_mode)){
             return DTW_FILE_TYPE;
@@ -241,6 +243,16 @@ int dtw_entity_type(const char *path){
             return DTW_FOLDER_TYPE;
         }
     }
+    #endif
+    #ifdef _WIN32
+    if(stat(path,&path_stat) == 0){
+        if(path_stat.st_mode & S_IFREG){
+            return DTW_FILE_TYPE;
+        }else if(path_stat.st_mode & S_IFDIR){
+            return DTW_FOLDER_TYPE;
+        }
+    }
+    #endif
     return DTW_NOT_FOUND;
 
 }
