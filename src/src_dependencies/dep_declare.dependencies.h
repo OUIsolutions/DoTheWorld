@@ -30,3 +30,11 @@
   #include <locale.h>
   #include <direct.h>
 #endif
+
+#if defined(DTW_MOCK_CJSON)
+#include "../../dependencies/cJSON.h"
+#endif
+
+#if defined(DTW_MOCK_SHA256)
+#include "../../dependencies/sha-256.h"
+#endif
