@@ -38,6 +38,7 @@ DoTheWorld is a Windows/Linux single file library designed to handle files in C/
 | [Io](/docs/io.md)|Basic Io Operations |
 | [Copy and Move](/docs/copy_and_move.md)|Copy and Move Operations |
 | [listage.md](/docs/listage.md)|Listage files and dirs |
+| [base64.md](/docs/base64.md)|Base64 encoding and decoding |
 
 
 # Build Toolchain
