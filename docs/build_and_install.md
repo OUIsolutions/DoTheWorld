@@ -4,7 +4,7 @@
 
 To install the lib just copy the [Amalgamation](https://github.com/OUIsolutions/DoTheWorld/releases/download/9.0.003/doTheWorldOne.c) into your project and include it in your code:
 ```c
-#include "BearHttpsClientOne.c"
+#include "doTheWorldOne.c"
 ```
 
 
