@@ -3,7 +3,7 @@
 
 
 void save_cryto_file(DtwEncriptionInterface *interface){
-    const char *message = "essa mensagem foi completamente encripta12345678";
+    const char *message = "essa mensagem foi completamente encripit4412345678";
     printf("mensagem original %ld\n",strlen(message));
     long size = 0;
     bool is_binary = false;

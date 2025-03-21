@@ -11,24 +11,24 @@ unsigned char * privateDtwAESECBEncryptionInterface_encrypt_buffer(void *obj, un
     privateDtwAESECBEncryptionInterface *self = (privateDtwAESECBEncryptionInterface *)obj;
     long size = entry_size;
 
-    long content_out_size =  size + (16 - size % 16);
-    unsigned char *result = malloc(content_out_size + 2);
+    *out_size  =  size + (16 - size % 16);
+    unsigned char *result = malloc( *out_size   + 2);
     memcpy(result,value,size);
+    bool is16multiple = size % 16 == 0;
 
         //means the block its complete and we need to add a full extra block filled with 16 bytes
-    if(size == content_out_size){
-        *out_size = size + 16;
+    if(is16multiple){
+        printf("$out_size %ld\n",*out_size);        
         memset(result+size,16,16);
     }
     //means the last block is not complete and we need to add the missing bytes
     //the total of empty bytes that we dont sent 
-    if(size < content_out_size){
-        *out_size = content_out_size;
-        int missing_send_bytes_to_last_block = content_out_size - size;
+    if(!is16multiple){
+        int missing_send_bytes_to_last_block =  *out_size   - size;
         memset(result+size,missing_send_bytes_to_last_block,missing_send_bytes_to_last_block);
     }
 
-    for(int i = 0; i < size; i+=16){
+    for(int i = 0; i < *out_size; i+=16){
         AES_ECB_encrypt(&self->ctx, ( uint8_t*)result+i);
     }
 
@@ -38,8 +38,10 @@ unsigned char * privateDtwAESECBEncryptionInterface_encrypt_buffer(void *obj, un
 }
 
 unsigned char *privateDtwAESECBEncryptionInterface_decrypt_buffer(void *obj, unsigned char *encrypted_value,long entry_size,long *out_size){
+    privateDtwAESECBEncryptionInterface *self = (privateDtwAESECBEncryptionInterface *)obj;
+    long size = entry_size;
     
-    bool is16multiple = entry_size % 16 == 0;
+    bool is16multiple = size % 16 == 0;
     if(!is16multiple){
         *out_size = 0;
         
@@ -47,8 +49,6 @@ unsigned char *privateDtwAESECBEncryptionInterface_decrypt_buffer(void *obj, uns
     }
 
 
-    privateDtwAESECBEncryptionInterface *self = (privateDtwAESECBEncryptionInterface *)obj;
-    long size = entry_size;
     
     unsigned char *result = calloc(size + 2,sizeof(unsigned char));
     memcpy(result,encrypted_value,size);
