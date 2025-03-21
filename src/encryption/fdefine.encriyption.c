@@ -3,7 +3,7 @@
 
 
 unsigned char *dtw_encrypt_any_content(unsigned char *value,long size,const char* key){
-
+    printf("encrypt size  %ld\n",size);
 
     struct AES_ctx ctx ={0};
     
@@ -22,12 +22,12 @@ unsigned char *dtw_encrypt_any_content(unsigned char *value,long size,const char
     memcpy(aes_encrypted,value,size);
     AES_CBC_encrypt_buffer(&ctx, aes_encrypted, reajusted_size);
     aes_encrypted[size] = '\0';
+
     free(sha_of_key);
     return aes_encrypted;
 }
 
 unsigned char *dtw_decript_any_content(unsigned char *encriypted,long size,const char* key){
-    
     
     char *sha_of_key = dtw_generate_sha_from_string(key);
     sha_of_key[16] = '\0';
@@ -45,6 +45,9 @@ unsigned char *dtw_decript_any_content(unsigned char *encriypted,long size,const
 
     memcpy(decrypted,encriypted,size);    
     AES_CBC_decrypt_buffer(&ctx, decrypted, reajusted_size);
+    printf("decrypt size  %ld\n",size);
+    
+    decrypted[size] = '\0';
     free(sha_of_key);
     return decrypted;
 }
@@ -80,6 +83,8 @@ bool dtw_write_string_file_content_encrypting(const char *path,const char *conte
 unsigned char *dtw_load_any_content_decrypting(const char * path,const char* key,long *size,bool *is_binary){
     unsigned char *content = dtw_load_any_content(path,size,is_binary);
     if(content == NULL){
+        *size = 0;
+        *is_binary = false;
         return NULL;
     }
     unsigned char *decrypted = dtw_decript_any_content(content,*size,key);
@@ -90,7 +95,7 @@ unsigned char *dtw_load_any_content_decrypting(const char * path,const char* key
             break;
         }
     }
-
+    decrypted[*size] = '\0';
     return decrypted;
 }
 
@@ -102,8 +107,8 @@ char *dtw_load_string_file_content_decrypting(const char * path,const char* key)
         return NULL;
     }
     if(is_binary){
-        free(element);
-        return NULL;
+       // free(element);
+       // return NULL;
     }
     element[size] = '\0';
     return (char*)element;
