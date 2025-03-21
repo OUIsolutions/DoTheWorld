@@ -2,7 +2,7 @@
 #define SIZE 64
 int main(){
     const char *key  = "4uncionou essse treco dos inferno4s";
-    const char *message = "essa mensagem foi completamente     descriptograf dsdsddsd carai";
+    const char *message = "essa mensagem foi completamente     descriptografada";
     printf("Original: %d\n",strlen(message));
 
     dtw_write_string_file_content_encrypting("teste.txt",message,key);
