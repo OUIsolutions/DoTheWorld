@@ -7,7 +7,7 @@
 
 
 
-typedef struct privateDtwAESECBEncryptionInterface{
+typedef struct privateDtwAES_ECB_EncryptionInterface{
      uint8_t key[16];
      struct AES_ctx  ctx;
-}privateDtwAESECBEncryptionInterface;
+}privateDtwAES_ECB_EncryptionInterface;

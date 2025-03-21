@@ -6,10 +6,10 @@
 //silver_chain_scope_end
 
 
-unsigned char * privateDtwAESECBEncryptionInterface_encrypt_buffer(void *obj, unsigned char *value,long size,long *out_size);
+unsigned char * privateDtwAES_ECB_EncryptionInterface_encrypt_buffer(void *obj, unsigned char *value,long size,long *out_size);
 
-unsigned char *privateDtwAESECBEncryptionInterface_decrypt_buffer(void *obj, unsigned char *encrypted_value,long size,long *out_size);
+unsigned char *privateDtwAES_ECB_EncryptionInterface_decrypt_buffer(void *obj, unsigned char *encrypted_value,long size,long *out_size);
 
-void  privateDtwAESECBEncryptionInterface_free_obj(void *obj);
+void  privateDtwAES_ECB_EncryptionInterface_free_obj(void *obj);
 
-DtwEncriptionInterface *newDtwAESECBEncryptionInterface(const uint8_t* key,int key_size);
+DtwEncriptionInterface *newDtwAES_ECB_EncryptionInterface(const uint8_t* key,int key_size);

@@ -10,12 +10,11 @@ void save_cryto_file(DtwEncriptionInterface *interface){
 char *load_cryto_file(DtwEncriptionInterface *interface){
     return DtwEncriptionInterface_load_string_file_content(interface,"teste.txt");
 }
+
 int main(){
+ 
     const char *key  = "teste ";
-
-    
-    DtwEncriptionInterface *interface = newDtwAESECBEncryptionInterface(key,strlen(key));
-
+    DtwEncriptionInterface *interface = newDtwAES_ECB_EncryptionInterface(key,strlen(key));
     save_cryto_file(interface);
     char *decrypted = load_cryto_file(interface);
     printf("Decrypted: %s\n",decrypted);

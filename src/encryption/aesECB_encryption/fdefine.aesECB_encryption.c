@@ -6,9 +6,9 @@
 //silver_chain_scope_end
 
 
-unsigned char * privateDtwAESECBEncryptionInterface_encrypt_buffer(void *obj, unsigned char *value,long entry_size,long *out_size){
+unsigned char * privateDtwAES_ECB_EncryptionInterface_encrypt_buffer(void *obj, unsigned char *value,long entry_size,long *out_size){
 
-    privateDtwAESECBEncryptionInterface *self = (privateDtwAESECBEncryptionInterface *)obj;
+    privateDtwAES_ECB_EncryptionInterface *self = (privateDtwAES_ECB_EncryptionInterface *)obj;
     long size = entry_size;
 
     *out_size  =  size + (16 - size % 16);
@@ -37,8 +37,8 @@ unsigned char * privateDtwAESECBEncryptionInterface_encrypt_buffer(void *obj, un
     return result;
 }
 
-unsigned char *privateDtwAESECBEncryptionInterface_decrypt_buffer(void *obj, unsigned char *encrypted_value,long entry_size,long *out_size){
-    privateDtwAESECBEncryptionInterface *self = (privateDtwAESECBEncryptionInterface *)obj;
+unsigned char *privateDtwAES_ECB_EncryptionInterface_decrypt_buffer(void *obj, unsigned char *encrypted_value,long entry_size,long *out_size){
+    privateDtwAES_ECB_EncryptionInterface *self = (privateDtwAES_ECB_EncryptionInterface *)obj;
     long size = entry_size;
     
     bool is16multiple = size % 16 == 0;
@@ -60,16 +60,16 @@ unsigned char *privateDtwAESECBEncryptionInterface_decrypt_buffer(void *obj, uns
     return result;
 }
 
-void  privateDtwAESECBEncryptionInterface_free_obj(void *obj){
-    privateDtwAESECBEncryptionInterface *self = (privateDtwAESECBEncryptionInterface *)obj;
+void  privateDtwAES_ECB_EncryptionInterface_free_obj(void *obj){
+    privateDtwAES_ECB_EncryptionInterface *self = (privateDtwAES_ECB_EncryptionInterface *)obj;
     free(self);
 }
 
-DtwEncriptionInterface *newDtwAESECBEncryptionInterface(const uint8_t* key,int key_size){
-    privateDtwAESECBEncryptionInterface *self = malloc(sizeof(privateDtwAESECBEncryptionInterface));
-    *self = (privateDtwAESECBEncryptionInterface){0};
+DtwEncriptionInterface *newDtwAES_ECB_EncryptionInterface(const uint8_t* key,int key_size){
+    privateDtwAES_ECB_EncryptionInterface *self = malloc(sizeof(privateDtwAES_ECB_EncryptionInterface));
+    *self = (privateDtwAES_ECB_EncryptionInterface){0};
     memcpy(self->key,key,key_size);
     AES_init_ctx(&self->ctx, key);
-    return newDtwEncriptionInterface_raw(self,privateDtwAESECBEncryptionInterface_encrypt_buffer,privateDtwAESECBEncryptionInterface_decrypt_buffer,privateDtwAESECBEncryptionInterface_free_obj);
+    return newDtwEncriptionInterface_raw(self,privateDtwAES_ECB_EncryptionInterface_encrypt_buffer,privateDtwAES_ECB_EncryptionInterface_decrypt_buffer,privateDtwAES_ECB_EncryptionInterface_free_obj);
 
 }
