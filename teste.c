@@ -31,13 +31,11 @@ int main(){
 
     
     DtwEncriptionInterface *interface = newDtwAESECBEncryptionInterface(key,strlen(key));
-    DtwEncriptionInterface *interface2 = newDtwAESECBEncryptionInterface(key,strlen(key));
 
     save_cryto_file(interface);
-    char *decrypted = load_cryto_file(interface2);
+    char *decrypted = load_cryto_file(interface);
     printf("Decrypted: %s\n",decrypted);
     free(decrypted);
-    DtwEncriptionInterface_free(interface2);
     DtwEncriptionInterface_free(interface);
     return 0;
 
