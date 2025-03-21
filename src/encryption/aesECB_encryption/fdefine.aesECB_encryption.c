@@ -6,10 +6,10 @@
 //silver_chain_scope_end
 
 
-unsigned char * privateDtwAESECBEncryptionInterface_encrypt_buffer(void *obj, unsigned char *value,long size,long *out_size){
+unsigned char * privateDtwAESECBEncryptionInterface_encrypt_buffer(void *obj, unsigned char *value,long entry_size,long *out_size){
 
     privateDtwAESECBEncryptionInterface *self = (privateDtwAESECBEncryptionInterface *)obj;
-
+    long size = entry_size;
 
     long content_out_size =  size + (16 - size % 16);
     unsigned char *result = malloc(content_out_size + 2);
@@ -32,15 +32,26 @@ unsigned char * privateDtwAESECBEncryptionInterface_encrypt_buffer(void *obj, un
         AES_ECB_encrypt(&self->ctx, ( uint8_t*)result+i);
     }
 
-  
 
 
     return result;
 }
 
-unsigned char *privateDtwAESECBEncryptionInterface_decrypt_buffer(void *obj, unsigned char *encrypted_value,long size,long *out_size){
+unsigned char *privateDtwAESECBEncryptionInterface_decrypt_buffer(void *obj, unsigned char *encrypted_value,long entry_size,long *out_size){
+    
+    bool is16multiple = entry_size % 16 == 0;
+    if(!is16multiple){
+        *out_size = 0;
+        
+        return NULL;
+    }
+
+
     privateDtwAESECBEncryptionInterface *self = (privateDtwAESECBEncryptionInterface *)obj;
-    unsigned char *result = malloc(size + 2);
+    long size = entry_size;
+    
+    unsigned char *result = calloc(size + 2,sizeof(unsigned char));
+    memcpy(result,encrypted_value,size);
     for(int i = 0; i < size; i+=16){
         AES_ECB_decrypt(&self->ctx, ( uint8_t*)result+i);
     }
