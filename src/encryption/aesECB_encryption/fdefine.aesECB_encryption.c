@@ -5,12 +5,11 @@
 #include "../../imports/imports.fdeclare.h"
 //silver_chain_scope_end
 
-unsigned char * privateDtwAESECBEncryptionInterface_encrypt_or_decrypt(void *obj,void (*AES_ECB_callback)(struct AES_ctx *ctx, uint8_t* buf), unsigned char *value,long size,long  out_size){
+unsigned char * privateDtwAESECBEncryptionInterface_encrypt_or_decrypt(void *obj,void (*AES_ECB_callback)(struct AES_ctx *ctx, uint8_t* buf), unsigned char *value,long size){
     privateDtwAESECBEncryptionInterface *self = (privateDtwAESECBEncryptionInterface *)obj;
-    unsigned char *result = malloc(out_size+2);
+
+    unsigned char *result = malloc(size + 20);
     memcpy(result,value,size);
-    long remaining = out_size - size;
-    memset(result+size,'b',remaining);
 
     for(int i = 0; i < size; i+=16){
         AES_ECB_callback(&self->ctx, ( uint8_t*)result+i);
@@ -20,13 +19,23 @@ unsigned char * privateDtwAESECBEncryptionInterface_encrypt_or_decrypt(void *obj
 }
 
 unsigned char * privateDtwAESECBEncryptionInterface_encrypt_buffer(void *obj, unsigned char *value,long size,long *out_size){
-    *out_size =  size + (16 - size % 16);
-    return privateDtwAESECBEncryptionInterface_encrypt_or_decrypt(obj,AES_ECB_encrypt,value,size,*out_size);
+    
+    unsigned char *content = privateDtwAESECBEncryptionInterface_encrypt_or_decrypt(obj,AES_ECB_encrypt,value,size);
+    //these its the padding control
+    long content_out_size =  size + (16 - size % 16);
+    int remaining = content_out_size - size;
+    content[content_out_size] = remaining;
+    *out_size = content_out_size+1;
+    return content;
 }
 
 unsigned char *privateDtwAESECBEncryptionInterface_decrypt_buffer(void *obj, unsigned char *encrypted_value,long size,long *out_size){
-    *out_size = size;
-    return privateDtwAESECBEncryptionInterface_encrypt_or_decrypt(obj,AES_ECB_decrypt,encrypted_value,size,*out_size);
+    
+    //get the remaining
+    int remaining = encrypted_value[size-1];
+    long encrypted_size = size -1;
+    *out_size = encrypted_size - remaining;
+    return privateDtwAESECBEncryptionInterface_encrypt_or_decrypt(obj,AES_ECB_decrypt,encrypted_value,encrypted_size);
 }
 
 void  privateDtwAESECBEncryptionInterface_free_obj(void *obj){
