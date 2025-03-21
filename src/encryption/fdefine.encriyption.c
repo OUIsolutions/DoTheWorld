@@ -8,7 +8,12 @@ unsigned char *dtw_encrypt_any_content(unsigned char *value,long size,const char
     
     char *sha_of_key = dtw_generate_sha_from_string(key);
     sha_of_key[16] = '\0';
-    AES_init_ctx(&ctx, (const uint8_t *)sha_of_key);
+
+
+    char *iv  = dtw_generate_sha_from_string(sha_of_key);   
+    iv[16] = '\0';
+
+    AES_init_ctx_iv(&ctx, (const uint8_t *)sha_of_key,iv);
    // printf("size %ld\n",size);
     //make size multiple of 16
     long reajusted_size = size + (16 - size % 16);
@@ -16,6 +21,7 @@ unsigned char *dtw_encrypt_any_content(unsigned char *value,long size,const char
     unsigned char *aes_encrypted = (unsigned char *)calloc(reajusted_size+1,sizeof(unsigned char));
     if(aes_encrypted == NULL){
         free(sha_of_key);
+        free(iv);
         return NULL;
     }
     memcpy(aes_encrypted,value,size);
@@ -23,6 +29,7 @@ unsigned char *dtw_encrypt_any_content(unsigned char *value,long size,const char
     aes_encrypted[size] = '\0';
 
     free(sha_of_key);
+    free(iv);
     return aes_encrypted;
 }
 
@@ -31,14 +38,20 @@ unsigned char *dtw_decript_any_content(unsigned char *encriypted,long size,const
     char *sha_of_key = dtw_generate_sha_from_string(key);
     sha_of_key[16] = '\0';
 
+
+
+    char *iv  = dtw_generate_sha_from_string(sha_of_key);   
+    iv[16] = '\0';
+
     struct AES_ctx ctx ={0};
-    AES_init_ctx(&ctx, (const uint8_t *)sha_of_key);
+    AES_init_ctx_iv(&ctx, (const uint8_t *)sha_of_key,iv);
 
 
     long reajusted_size = size + (16 - size % 16);
     unsigned char *decrypted = (unsigned char *)calloc(reajusted_size+1,sizeof(unsigned char));
     if(decrypted == NULL){
         free(sha_of_key);
+        free(iv);
         return NULL;
     }
 
@@ -48,6 +61,7 @@ unsigned char *dtw_decript_any_content(unsigned char *encriypted,long size,const
     
     decrypted[size] = '\0';
     free(sha_of_key);
+    free(iv);
     return decrypted;
 }
 
