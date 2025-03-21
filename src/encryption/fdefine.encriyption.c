@@ -2,7 +2,7 @@
 
 
 
-unsigned char *dtw_aes_encrypt_any_content(unsigned char *value,long size,const char* key){
+unsigned char *dtw_encrypt_any_content(unsigned char *value,long size,const char* key){
     struct AES_ctx ctx ={0};
     AES_init_ctx(&ctx, (const uint8_t *)key);
 
@@ -19,7 +19,7 @@ unsigned char *dtw_aes_encrypt_any_content(unsigned char *value,long size,const 
     return aes_encrypted;
 }
 
-unsigned char *dtw_aes_decript_any_content(unsigned char *value,long size,const char* key){
+unsigned char *dtw_decript_any_content(unsigned char *value,long size,const char* key){
     struct AES_ctx ctx ={0};
     AES_init_ctx(&ctx, (const uint8_t *)key);
     size = size + (16 - size % 16);
@@ -32,12 +32,12 @@ unsigned char *dtw_aes_decript_any_content(unsigned char *value,long size,const 
     return decrypted;
 }
 
-unsigned char *dtw_aes_encrypt_string(const char *value,const char* key){
-    return dtw_aes_encrypt_any_content((unsigned char*)value,strlen(value),key);
+unsigned char *dtw_encrypt_string(const char *value,const char* key){
+    return dtw_encrypt_any_content((unsigned char*)value,strlen(value),key);
 }
 
-char *dtw_aes_decript_string(const char *value,const char* key){
-    unsigned char *decrypted = dtw_aes_decript_any_content((unsigned char*)value,strlen(value),key);
+char *dtw_decript_string(const char *value,const char* key){
+    unsigned char *decrypted = dtw_decript_any_content((unsigned char*)value,strlen(value),key);
     if(decrypted == NULL){
         return NULL;
     }
@@ -45,9 +45,9 @@ char *dtw_aes_decript_string(const char *value,const char* key){
 }
 
 
-bool dtw_write_aes_encrypted_any_content(const char *path,unsigned char *content,long size,const char* key){
+bool dtw_write_encrypted_any_content(const char *path,unsigned char *content,long size,const char* key){
 
-    unsigned char *aes_encrypted = dtw_aes_encrypt_any_content(content,size,key);
+    unsigned char *aes_encrypted = dtw_encrypt_any_content(content,size,key);
     if(aes_encrypted == NULL){
         return false;
     }
@@ -55,17 +55,17 @@ bool dtw_write_aes_encrypted_any_content(const char *path,unsigned char *content
     free(aes_encrypted);
     return result;
 }
-bool dtw_write_aes_encrypted_string(const char *path,const char *content,const char* key){
-    return dtw_write_aes_encrypted_any_content(path,(unsigned char*)content,strlen(content),key);
+bool dtw_write_encrypted_string(const char *path,const char *content,const char* key){
+    return dtw_write_encrypted_any_content(path,(unsigned char*)content,strlen(content),key);
 }
 
 
-unsigned char *dtw_load_aes_encrypted_content(const char * path,const char* key,long *size,bool *is_binary){
+unsigned char *dtw_load_encrypted_content(const char * path,const char* key,long *size,bool *is_binary){
     unsigned char *content = dtw_load_any_content(path,size,is_binary);
     if(content == NULL){
         return NULL;
     }
-    unsigned char *decrypted = dtw_aes_decript_any_content(content,*size,key);
+    unsigned char *decrypted = dtw_decript_any_content(content,*size,key);
     free(content);
     for(int i = 0;i < *size;i++){
         if(decrypted[i] == 0){
@@ -77,10 +77,10 @@ unsigned char *dtw_load_aes_encrypted_content(const char * path,const char* key,
     return decrypted;
 }
 
-char *dtw_load_aes_encrypted_string(const char * path,const char* key){
+char *dtw_load_encrypted_string(const char * path,const char* key){
     long size;
     bool is_binary;
-    unsigned char *element = dtw_load_aes_encrypted_content(path,key,&size,&is_binary);
+    unsigned char *element = dtw_load_encrypted_content(path,key,&size,&is_binary);
     if(element == NULL){
         return NULL;
     }

@@ -1,7 +1,7 @@
 #include  "src/one.c"
 #define SIZE 64
 int main(){
-    const char *key  = "4uncionou essse treco dos inferno4s";
+     char key[16]  = "essachave123456";
     const char *message = "essa mensagem foi completamente encriptada";
     
     struct AES_ctx ctx = {0};
