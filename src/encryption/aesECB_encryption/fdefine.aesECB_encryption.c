@@ -11,48 +11,43 @@ unsigned char * privateDtwAESECBEncryptionInterface_encrypt_buffer(void *obj, un
     privateDtwAESECBEncryptionInterface *self = (privateDtwAESECBEncryptionInterface *)obj;
 
     long content_out_size =  size + (16 - size % 16);
-    int extra_bytes = content_out_size - size;
-
-    printf("size %ld\n",size);
-    printf("content_out_size %ld\n",content_out_size);
-    printf("extra_bytes %d\n",extra_bytes);
-
     unsigned char *result = malloc(content_out_size + 2);
-
-    if(extra_bytes == 0){
-        //since block size is 16, we need to add a block with padding
-        *out_size = content_out_size+1;
-        result[content_out_size] = 16;      
-    }
-
-    if(extra_bytes > 0){
-        *out_size = content_out_size;
-        memset(result+size,extra_bytes,extra_bytes);
-    }
-  
     memcpy(result,value,size);
     for(int i = 0; i < size; i+=16){
         AES_ECB_encrypt(&self->ctx, ( uint8_t*)result+i);
     }
 
+    printf("size %ld\n",size);
+    printf("content_out_size %ld\n",content_out_size);
+
+
+    //means the block its complete and we need to add a full extra block filled with 16 bytes
+    if(size == content_out_size){
+        *out_size = size + 16;
+        memset(result+size,16,16);
+    }
+    //means the last block is not complete and we need to add the missing bytes
+    //the total of empty bytes that we dont sent 
+    if(size < content_out_size){
+        *out_size = size;
+        int missing_send_bytes_to_last_block = content_out_size - size;
+        memset(result+size,missing_send_bytes_to_last_block,missing_send_bytes_to_last_block);
+    }
+
+  
+
+
     return result;
 }
 
 unsigned char *privateDtwAESECBEncryptionInterface_decrypt_buffer(void *obj, unsigned char *encrypted_value,long size,long *out_size){
-  
-  bool is_16_multiple = size % 16 == 0;
-  if(!is_16_multiple){
-    //if multiple of16 means not all bytes were sent into the last block
-     *out_size = size-1;
-  }
-
-  if(is_16_multiple){
-    //if multiple of16 means not all bytes were sent into the last block
-    int extra_bytes = encrypted_value[size-1];
-    *out_size = size - extra_bytes;
-  }
-
-    return NULL;
+    privateDtwAESECBEncryptionInterface *self = (privateDtwAESECBEncryptionInterface *)obj;
+    unsigned char *result = malloc(size + 2);
+    for(int i = 0; i < size; i+=16){
+        AES_ECB_decrypt(&self->ctx, ( uint8_t*)result+i);
+    }
+    *out_size = size;
+    return result;
 }
 
 void  privateDtwAESECBEncryptionInterface_free_obj(void *obj){
