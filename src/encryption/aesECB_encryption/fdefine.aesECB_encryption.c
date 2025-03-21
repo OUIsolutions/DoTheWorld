@@ -44,7 +44,8 @@ unsigned char *privateDtwAESECBEncryptionInterface_decrypt_buffer(void *obj, uns
     for(int i = 0; i < size; i+=16){
         AES_ECB_decrypt(&self->ctx, ( uint8_t*)result+i);
     }
-    *out_size = size;
+    int remaning_bytes = result[size-1];
+    *out_size = size - remaning_bytes;
     return result;
 }
 
