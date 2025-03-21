@@ -3,7 +3,6 @@
 
 
 unsigned char *dtw_encrypt_any_content(unsigned char *value,long size,const char* key){
-    printf("encrypt size  %ld\n",size);
 
     struct AES_ctx ctx ={0};
     
@@ -71,6 +70,7 @@ bool dtw_write_any_content_encrypting(const char *path,unsigned char *content,lo
     if(aes_encrypted == NULL){
         return false;
     }
+    printf("write size %ld\n",size);
     bool result = dtw_write_any_content(path,aes_encrypted,size);
     free(aes_encrypted);
     return result;
