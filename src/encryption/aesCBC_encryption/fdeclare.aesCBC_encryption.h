@@ -12,4 +12,4 @@ unsigned char *privateDtwAES_CBC_EncryptionInterface_decrypt_buffer(void *obj, u
 
 void  privateDtwAES_CBC_EncryptionInterface_free_obj(void *obj);
 
-DtwEncriptionInterface *newDtwAES_CBC_EncryptionInterface(const uint8_t* key,int key_size);
+DtwEncriptionInterface *newDtwAES_CBC_EncryptionInterface(const uint8_t* key,int key_size,const uint8_t *iv, int iv_size);

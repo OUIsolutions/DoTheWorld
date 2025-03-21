@@ -10,4 +10,6 @@
 typedef struct privateDtwAES_CBC_EncryptionInterface{
      uint8_t key[16];
      struct AES_ctx  ctx;
+     uint8_t iv[16];
+     
 }privateDtwAES_CBC_EncryptionInterface;

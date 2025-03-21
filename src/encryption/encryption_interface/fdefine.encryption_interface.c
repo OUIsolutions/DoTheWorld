@@ -48,6 +48,7 @@ bool DtwEncriptionInterface_write_any_content(DtwEncriptionInterface *self, char
     if(encrypted == NULL){
         return false;
     }
+    printf("encrypted_size %ld\n",encrypted_size);
     bool result = dtw_write_any_content(file_name,(unsigned char *)encrypted,encrypted_size);
     free(encrypted);
     return result;
@@ -73,6 +74,7 @@ char *DtwEncriptionInterface_load_string_file_content(DtwEncriptionInterface *se
     bool is_binary;
     long out_size;
     unsigned char *loaded = DtwEncriptionInterface_load_any_content(self,file_name,&out_size,&is_binary);
+    printf("out_size %ld\n",out_size);
     if(loaded == NULL){
         return NULL;
     }
@@ -80,6 +82,7 @@ char *DtwEncriptionInterface_load_string_file_content(DtwEncriptionInterface *se
         free(loaded);
         return NULL;
     }
+    
     return (char *)loaded;
 }
 

@@ -14,7 +14,8 @@ char *load_cryto_file(DtwEncriptionInterface *interface){
 int main(){
  
     const char *key  = "teste ";
-    DtwEncriptionInterface *interface = newDtwAES_ECB_EncryptionInterface(key,strlen(key));
+    const char *iv = "1234567890123456";
+    DtwEncriptionInterface *interface = newDtwAES_CBC_EncryptionInterface(key,strlen(key),iv,strlen(iv));
     save_cryto_file(interface);
     char *decrypted = load_cryto_file(interface);
     printf("Decrypted: %s\n",decrypted);
