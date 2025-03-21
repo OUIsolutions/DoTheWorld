@@ -3,10 +3,13 @@
 
 
 void save_cryto_file(DtwEncriptionInterface *interface){
-    const char *message = "essa mensagem foi completamente encriptada";
+    const char *message = "essa mensagem foi completamente encriptada123456";
+    printf("mensagem original %ld\n",strlen(message));
     long size = 0;
     bool is_binary = false;
     unsigned char *encrypted = DtwEncriptionInterface_encrypt_buffer(interface,(unsigned char *)message,strlen(message),&size);
+    
+    printf("size de escrita %ld\n",size);
     dtw_write_any_content("teste.txt",encrypted,size);
     free(encrypted);  
 }
@@ -15,6 +18,7 @@ char *load_cryto_file(DtwEncriptionInterface *interface){
     bool is_binary = false;
     unsigned char *encrypted = dtw_load_binary_content("teste.txt",&size);
     char *decrypted = DtwEncriptionInterface_decrypt_buffer(interface,encrypted,size,&size,&is_binary);
+    printf("size de leitura %ld\n",size);
     free(encrypted);
     return decrypted;
 }

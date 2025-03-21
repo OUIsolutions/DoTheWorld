@@ -7,18 +7,31 @@
 
 unsigned char * privateDtwAESECBEncryptionInterface_encrypt_or_decrypt(void *obj,void (*AES_ECB_callback)(struct AES_ctx *ctx, uint8_t* buf), unsigned char *value,long size,long *out_size){
     privateDtwAESECBEncryptionInterface *self = (privateDtwAESECBEncryptionInterface *)obj;
-    unsigned char *result = malloc(size+1);
-    char buffer[16] = {0};
+    unsigned char *result = malloc(size+50);
+    unsigned char  buffer[16] = {0};
     for(int i = 0; i < size; i+=16){
         short size_to_copy = 16;
         if(i+16 > size){
             size_to_copy = size - i;
         }
         memcpy(buffer,value+i,size_to_copy);
+        printf("\tbuffer:");
+        for(int j = 0; j < 16; j++){
+            if(buffer[j] > 0&& buffer[j] < 128){
+                printf("%c",buffer[j]);
+            }
+            else{
+                printf(" d(%d)",buffer[j]);
+            }
+            
+        }
+        printf("\n");
         AES_ECB_callback(&self->ctx, ( uint8_t*)buffer);
-        memcpy(result+i,buffer,size_to_copy);
-        memcpy(buffer,"\0",16);
+        memcpy(result+i,buffer,size);
+      
+        memset(buffer,'a',16);
     }
+
     *out_size = size;
     return result;
 }

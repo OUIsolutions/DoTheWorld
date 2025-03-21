@@ -17,7 +17,9 @@ DtwEncriptionInterface *newDtwEncriptionInterface_raw(void *obj,    unsigned cha
 
 unsigned char *DtwEncriptionInterface_encrypt_buffer(DtwEncriptionInterface *self, unsigned char *value,long size,long *out_size){
     *out_size = 0;
-    return self->encrypt_buffer(self->obj,value,size,out_size);
+    unsigned char *encrypted = self->encrypt_buffer(self->obj,value,size,out_size);
+    encrypted[*out_size] = '\0';
+    return encrypted;
 }
 
 
@@ -42,7 +44,7 @@ unsigned char *DtwEncriptionInterface_decrypt_buffer(DtwEncriptionInterface *sel
 
 bool DtwEncriptionInterface_write_any_content(DtwEncriptionInterface *self, char *file_name,void *value,long size){
     long encrypted_size = 0;
-    unsigned char * encrypted = self->encrypt_buffer(self->obj,(unsigned char *)value,size,&encrypted_size);
+    unsigned char * encrypted = DtwEncriptionInterface_encrypt_buffer(self,(unsigned char *)value,size,&encrypted_size);
     if(encrypted == NULL){
         return false;
     }
