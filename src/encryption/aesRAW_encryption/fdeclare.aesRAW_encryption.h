@@ -12,4 +12,4 @@ unsigned char *privateDtwAES_RAW_EncryptionInterface_decrypt_buffer(void *obj, u
 
 void  privateDtwAES_RAW_EncryptionInterface_free_obj(void *obj);
 
-DtwEncriptionInterface *newDtwAES_RAW_EncryptionInterface(const uint8_t* key,int key_size,const uint8_t *iv, int iv_size);
+DtwEncriptionInterface *newDtwAES_RAW_EncryptionInterface(const uint8_t* key,int key_size);

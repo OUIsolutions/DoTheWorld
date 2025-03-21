@@ -56,12 +56,19 @@ void  privateDtwAES_RAW_EncryptionInterface_free_obj(void *obj){
     free(self);
 }
 
-DtwEncriptionInterface *newDtwAES_RAW_EncryptionInterface(const uint8_t* key,int key_size,const uint8_t *iv, int iv_size){
+
+DtwEncriptionInterface *newDtwAES_RAW_EncryptionInterface(const uint8_t* key,int key_size){
+   
+    if(key_size == 0){
+        return NULL;
+    }
+    if(key_size > 16){
+        return NULL;
+    }
     privateDtwAES_RAW_EncryptionInterface *self = malloc(sizeof(privateDtwAES_RAW_EncryptionInterface));
     *self = (privateDtwAES_RAW_EncryptionInterface){0};
     memcpy(self->key,key,key_size);
-    memcpy(self->iv,iv,iv_size);
-    AES_init_ctx_iv(&self->ctx, key,self->iv);
-    return newDtwEncriptionInterface_raw(self,privateDtwAES_RAW_EncryptionInterface_encrypt_buffer,privateDtwAES_RAW_EncryptionInterface_decrypt_buffer,privateDtwAES_RAW_EncryptionInterface_free_obj);
+    AES_init_ctx(&self->ctx, key);
 
+    return newDtwEncriptionInterface_raw(self,privateDtwAES_RAW_EncryptionInterface_encrypt_buffer,privateDtwAES_RAW_EncryptionInterface_decrypt_buffer,privateDtwAES_RAW_EncryptionInterface_free_obj);
 }
