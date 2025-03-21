@@ -33,6 +33,7 @@ int main(){
     DtwEncriptionInterface *interface2 = newDtwAESECBEncryptionInterface(key,strlen(key));
 
     save_cryto_file(interface);
+    return 0;
     char *decrypted = load_cryto_file(interface2);
     printf("Decrypted: %s\n",decrypted);
     free(decrypted);
