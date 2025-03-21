@@ -16,17 +16,19 @@ DtwEncriptionInterface *newDtwEncriptionInterface_raw(void *obj,    unsigned cha
 }
 
 unsigned char *DtwEncriptionInterface_encrypt_buffer(DtwEncriptionInterface *self, unsigned char *value,long size,long *out_size){
+    *out_size = 0;
     return self->encrypt_buffer(self->obj,value,size,out_size);
 }
 
 
 
 unsigned char *DtwEncriptionInterface_decrypt_buffer(DtwEncriptionInterface *self, unsigned char *encrypted_value,long size,long *out_size,bool *is_binary){
+    *is_binary = false;
+    *out_size = 0;
     unsigned char *content =  self->decrypt_buffer(self->obj,encrypted_value,size,out_size);
     if(content == NULL){
         return NULL;
     }
-    *is_binary = false;
     content[*out_size] = '\0';
     for(int i= 0; i < *out_size; i++){
         if(content[i] == '\0'){
