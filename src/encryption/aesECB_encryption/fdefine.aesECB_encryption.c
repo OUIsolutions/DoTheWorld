@@ -10,18 +10,12 @@ unsigned char * privateDtwAESECBEncryptionInterface_encrypt_buffer(void *obj, un
 
     privateDtwAESECBEncryptionInterface *self = (privateDtwAESECBEncryptionInterface *)obj;
 
+
     long content_out_size =  size + (16 - size % 16);
     unsigned char *result = malloc(content_out_size + 2);
     memcpy(result,value,size);
-    for(int i = 0; i < size; i+=16){
-        AES_ECB_encrypt(&self->ctx, ( uint8_t*)result+i);
-    }
 
-    printf("size %ld\n",size);
-    printf("content_out_size %ld\n",content_out_size);
-
-
-    //means the block its complete and we need to add a full extra block filled with 16 bytes
+        //means the block its complete and we need to add a full extra block filled with 16 bytes
     if(size == content_out_size){
         *out_size = size + 16;
         memset(result+size,16,16);
@@ -29,9 +23,13 @@ unsigned char * privateDtwAESECBEncryptionInterface_encrypt_buffer(void *obj, un
     //means the last block is not complete and we need to add the missing bytes
     //the total of empty bytes that we dont sent 
     if(size < content_out_size){
-        *out_size = size;
+        *out_size = content_out_size;
         int missing_send_bytes_to_last_block = content_out_size - size;
         memset(result+size,missing_send_bytes_to_last_block,missing_send_bytes_to_last_block);
+    }
+
+    for(int i = 0; i < size; i+=16){
+        AES_ECB_encrypt(&self->ctx, ( uint8_t*)result+i);
     }
 
   
