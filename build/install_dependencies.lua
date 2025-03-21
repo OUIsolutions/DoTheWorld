@@ -12,7 +12,9 @@ function Install_dependencies()
         "curl -L https://raw.githubusercontent.com/DaveGamble/cJSON/refs/tags/v1.7.18/cJSON.h -o dependencies/cJSON.h",
         "curl -L https://raw.githubusercontent.com/amosnier/sha-2/565f65009bdd98267361b17d50cddd7c9beb3e6c/sha-256.c -o dependencies/sha-256.c  ",
         "curl -L https://raw.githubusercontent.com/amosnier/sha-2/565f65009bdd98267361b17d50cddd7c9beb3e6c/sha-256.h -o dependencies/sha-256.h  ",
-        "curl -L https://github.com/OUIsolutions/CHashManipulator/releases/download/0.001/CHashManipulator.h -o dependencies/CHashManipulator.h "
+        "curl -L https://github.com/OUIsolutions/CHashManipulator/releases/download/0.001/CHashManipulator.h -o dependencies/CHashManipulator.h ",
+        "curl -L https://raw.githubusercontent.com/kokke/tiny-AES-c/refs/tags/v1.0.0/aes.c -o dependencies/aes.c",
+        "curl -L https://raw.githubusercontent.com/kokke/tiny-AES-c/refs/tags/v1.0.0/aes.h -o dependencies/aes.h"
     }
     for _, command in ipairs(comands) do
         os.execute(command)

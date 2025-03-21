@@ -41,3 +41,8 @@
 #include "../../dependencies/sha-256.h"
 #define DTW_SHA256_IMPLEMENTED
 #endif
+
+#if !defined(_AES_H_)
+#include "../../dependencies/aes.h"
+#define DTW_AES_IMPLEMENTED
+#endif
