@@ -49,7 +49,7 @@ unsigned char * privateDtwAESECBEncryptionInterface_encrypt_or_decrypt(void *obj
             
         }
         printf("\n");
-        memcpy(result+i,buffer,size_to_copy);
+        memcpy(result+i,buffer,16);
         memset(buffer,'b',16);
     }
 
