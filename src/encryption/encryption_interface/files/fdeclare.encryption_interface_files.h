@@ -10,8 +10,6 @@ bool DtwEncriptionInterface_write_any_content(DtwEncriptionInterface *self,const
 
 
 
-
-
 bool DtwEncriptionInterface_write_string_file_content(DtwEncriptionInterface *self,const char *file_name,const char *value);
 
 
