@@ -12,9 +12,8 @@ char *load_cryto_file(DtwEncriptionInterface *test_interface){
 
 int main(){
  
-    const char *key  = "teste ";
-    const char *iv = "12345678901";
-    DtwEncriptionInterface *test_interface = newDtwAES_CBC_EncryptionInterface_str(key,iv);
+    const char *key  = "eai parsa agora as chaves são infinitas";
+    DtwEncriptionInterface *test_interface = newDtwAES_Custom_CBC_v1_interface(key);
 
     save_cryto_file(test_interface);
     char *decrypted = load_cryto_file(test_interface);
