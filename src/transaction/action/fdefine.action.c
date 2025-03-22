@@ -57,6 +57,7 @@ DtwActionTransaction * DtwActionTransaction_copy_any_merging(const char *source,
 
 DtwActionTransaction * DtwActionTransaction_delete_any(const char *source){
     DtwActionTransaction *self = newDtwActionTransaction();
+    *self = (DtwActionTransaction){0};
     self->action_type = DTW_ACTION_DELETE;
     self->source = strdup(source);
     return self;
@@ -70,6 +71,17 @@ void DtwActionTransaction_commit(DtwActionTransaction* self,const char *path){
 
 
     if(self->action_type == DTW_ACTION_WRITE){
+        if(self->encryption){
+            private_DtwEncriptionInterface_write_any_content_custom_mode(
+                self->encryption,
+                formated_source,
+                self->content,
+                self->size,
+                self->encryption_mode
+            );
+            free(formated_source);
+            return;
+        }
         dtw_write_any_content(formated_source,self->content,self->size);
         free(formated_source);
         return;

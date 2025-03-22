@@ -6,6 +6,8 @@ typedef struct DtwActionTransaction{
     unsigned  char *content;
     long size;
     bool is_binary;
+    DtwEncriptionInterface *encryption;
+    short encryption_mode;
 
     char *dest;
     char *source;

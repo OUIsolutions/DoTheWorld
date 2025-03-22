@@ -4,10 +4,15 @@
 
 DtwTransaction * newDtwTransaction(){
     DtwTransaction *self = (DtwTransaction*) malloc(sizeof(DtwTransaction));
+    *self = (DtwTransaction){0};
     self->actions = (DtwActionTransaction **) malloc(sizeof (DtwActionTransaction**));
     self->size = 0;
 
     return self;
+}
+void DtwTransaction_set_encryption(DtwTransaction *self,DtwEncriptionInterface *encryption,short encryiption_mode){
+    self->encryption = encryption;
+    self->encryption_mode = encryiption_mode;
 }
 
 void DtwTransaction_append_action(struct DtwTransaction *self,struct DtwActionTransaction  *action){
@@ -118,7 +123,10 @@ void DtwTransaction_delete_any(struct DtwTransaction *self,const char *source){
 
 void DtwTransaction_commit(struct DtwTransaction *self,const char *path){
     for(int i = 0; i < self->size; i++){
-        DtwActionTransaction_commit(self->actions[i],path);
+        DtwActionTransaction *action = self->actions[i];
+        action->encryption  = self->encryption;
+        action->encryption_mode = self->encryption_mode;
+        DtwActionTransaction_commit(action,path);
     }
 }
 

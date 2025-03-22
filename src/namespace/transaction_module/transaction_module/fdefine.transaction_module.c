@@ -5,6 +5,7 @@
 DtwTransactionModule newDtwTransactionModule(){
     DtwTransactionModule self = {0};
     self.newTransaction = newDtwTransaction;
+    self.set_encryption = DtwTransaction_set_encryption;
     self.newTransaction_from_json = newDtwTransaction_from_json;
     self.newTransaction_from_json_file = newDtwTransaction_from_json_file;
     self.validate_json_transaction_file = dtw_validate_json_transaction_file;

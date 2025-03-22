@@ -5,7 +5,7 @@
 
 typedef struct DtwTransaction{
     DtwEncriptionInterface *encryption;
-    short save_mode;
+    short encryption_mode;
     DtwActionTransaction  **actions;
     long size;
 

@@ -29,6 +29,7 @@ DtwJsonTransactionError * dtw_validate_json_transaction(cJSON *json_entry){
     return NULL;
 }
 
+
 DtwJsonTransactionError * dtw_validate_json_transaction_file(const char *filename){
     char *content = dtw_load_string_file_content(filename);
     if(!content){

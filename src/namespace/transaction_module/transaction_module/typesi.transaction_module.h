@@ -5,6 +5,7 @@ typedef struct DtwTransactionModule{
     DtwTransaction * (*newTransaction_from_json)(cJSON *json_entry);
     DtwTransaction * (*newTransaction_from_json_file)(const char *filename);
     DtwJsonTransactionError * (*validate_json_transaction_file)(const char *filename);
+    void (*set_encryption)(DtwTransaction *self,DtwEncriptionInterface *encryption,short encryption_mode);
 
     void (*remove_from_index)(DtwTransaction *self,long index);
     void (*remove_from_source)(DtwTransaction *self,const char *source);

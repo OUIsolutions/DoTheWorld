@@ -12,6 +12,8 @@ DtwJsonTransactionError * dtw_validate_json_transaction_file(const char *filenam
 
 DtwTransaction * newDtwTransaction_from_json_file(const char *filename);
 
+void DtwTransaction_set_encryption(DtwTransaction *self,DtwEncriptionInterface *encryption,short encryption_mode);
+
 void DtwTransaction_remove_from_index(DtwTransaction *self,long index);
 
 void DtwTransaction_remove_from_source(DtwTransaction *self,const char *source);
