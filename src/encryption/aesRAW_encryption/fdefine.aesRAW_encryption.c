@@ -28,7 +28,7 @@ unsigned char * privateDtwAES_RAW_EncryptionInterface_encrypt_buffer(void *obj, 
         memset(result+size,missing_send_bytes_to_last_block,missing_send_bytes_to_last_block);
     }
 
-    AES_CBC_encrypt_buffer(&self->ctx, ( uint8_t*)result, *out_size);
+    self->encrypt_buffer(&self->ctx, ( uint8_t*)result, *out_size);
     return result;
 }
 
@@ -44,8 +44,7 @@ unsigned char *privateDtwAES_RAW_EncryptionInterface_decrypt_buffer(void *obj, u
     
     unsigned char *result = calloc(size + 2,sizeof(unsigned char));
     memcpy(result,encrypted_value,size);
-
-    AES_CBC_decrypt_buffer(&self->ctx, ( uint8_t*)result,size);
+    self->decrypt_buffer(&self->ctx, ( uint8_t*)result,size);
     int remaning_bytes = result[size-1];
     *out_size = size - remaning_bytes;
     return result;
