@@ -11,6 +11,11 @@ DtwEncryptionNamespace newDtwEncryptionNamespace(){
     self.encrypt_buffer = DtwEncriptionInterface_encrypt_buffer;
     self.decrypt_buffer = DtwEncriptionInterface_decrypt_buffer;
 
+    self.write_any_content = DtwEncriptionInterface_write_any_content;
+    self.write_string_file_content = DtwEncriptionInterface_write_string_file_content;
+    self.load_any_content = DtwEncriptionInterface_load_any_content;
+    self.load_string_file_content = DtwEncriptionInterface_load_string_file_content;
+
     self.encrypt_buffer_hex = DtwEncriptionInterface_encrypt_buffer_hex;
     self.decrypt_buffer_hex = DtwEncriptionInterface_decrypt_buffer_hex;
     self.write_any_content_hex = DtwEncriptionInterface_write_any_content_hex;

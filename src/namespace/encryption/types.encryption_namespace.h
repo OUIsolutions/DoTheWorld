@@ -15,6 +15,13 @@ unsigned char *(*encrypt_buffer)(DtwEncriptionInterface *self, unsigned char *va
 unsigned char *(*decrypt_buffer)(DtwEncriptionInterface *self, unsigned char *encrypted_value,long size,long *out_size,bool *is_binary);
 void (*free)(DtwEncriptionInterface *self);
 
+//basic io
+bool (*write_any_content)(DtwEncriptionInterface *self,const char *file_name,unsigned char  *value,long size);
+bool (*write_string_file_content)(DtwEncriptionInterface *self,const char *file_name,const char *value);
+unsigned char *(*load_any_content)(DtwEncriptionInterface *self,const  char *file_name,long *out_size,bool *is_binary);
+char *(*load_string_file_content)(DtwEncriptionInterface *self,const char *file_name);
+
+
 
 //hex
 char *(*encrypt_buffer_hex)(DtwEncriptionInterface *self, unsigned char *value,long size);
