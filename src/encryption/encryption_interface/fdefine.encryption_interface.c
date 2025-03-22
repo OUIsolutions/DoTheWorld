@@ -120,7 +120,6 @@ char *DtwEncriptionInterface_load_string_file_content(DtwEncriptionInterface *se
     bool is_binary;
     long out_size;
     unsigned char *loaded = DtwEncriptionInterface_load_any_content(self,file_name,&out_size,&is_binary);
-    printf("out_size %ld\n",out_size);
     if(loaded == NULL){
         return NULL;
     }
