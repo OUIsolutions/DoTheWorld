@@ -73,7 +73,6 @@ bool DtwEncriptionInterface_write_any_content(DtwEncriptionInterface *self,const
     if(encrypted == NULL){
         return false;
     }
-    printf("encrypted_size %ld\n",encrypted_size);
     bool result = dtw_write_any_content(file_name,(unsigned char *)encrypted,encrypted_size);
     free(encrypted);
     return result;
