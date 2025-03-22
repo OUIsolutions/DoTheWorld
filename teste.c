@@ -2,7 +2,7 @@
 
 
 void save_cryto_file(DtwEncriptionInterface *test_interface){
-    const char *message = "essa mensagem foi completamente criptogrvvafada chupa cara!!!";
+    const char *message = "mensagem de teste";
     printf("mensagem original %ld\n",strlen(message));
     DtwEncriptionInterface_write_string_file_content(test_interface,"teste.txt",message);
 }
@@ -12,8 +12,8 @@ char *load_cryto_file(DtwEncriptionInterface *test_interface){
 
 int main(){
  
-    const char *key  = "eai parsa agora as chaves são infinitas4";
-    DtwEncriptionInterface *test_interface = newDtwAES_Custom_CBC_v1_interface(key);
+    const char *key  = "0123456789012345";
+    DtwEncriptionInterface *test_interface = newDtwAES_CBC_EncryptionInterface_str(key,NULL);
 
     save_cryto_file(test_interface);
     char *decrypted = load_cryto_file(test_interface);
