@@ -5,24 +5,25 @@
 #include "../../imports/imports.fdeclare.h"
 //silver_chain_scope_end
 
-void privteDtwAES_ECB_EncryptionInterface_encrypt_buffer(struct AES_ctx *ctx,uint8_t* buf, uint32_t length){
+void privteDtwAES_ECB_EncryptionInterface_encrypt_buffer(privateDtwAES_RAW_EncryptionInterface *self,uint8_t* buf, uint32_t length){
     
     for(int i = 0; i < length; i+=16){
-        AES_ECB_encrypt(ctx, buf+i);
+        AES_ECB_encrypt(&self->ctx, buf+i);
     }
 }
 
-void privteDtwAES_ECB_EncryptionInterface_decrypt_buffer(struct AES_ctx *ctx,uint8_t* buf, uint32_t length){
+void privteDtwAES_ECB_EncryptionInterface_decrypt_buffer(privateDtwAES_RAW_EncryptionInterface *self,uint8_t* buf, uint32_t length){
     for(int i = 0; i < length; i+=16){
-        AES_ECB_decrypt(ctx, buf+i);
+        AES_ECB_decrypt(&self->ctx, buf+i);
     }
 }
 
 DtwEncriptionInterface *newDtwAES_ECB_EncryptionInterface(const uint8_t* key,int key_size){
-    DtwEncriptionInterface *self = newDtwAES_RAW_EncryptionInterface(key,key_size);
-    if(self == NULL){
+    DtwEncriptionInterface *obj = newDtwAES_RAW_EncryptionInterface(key,key_size);
+    if(obj == NULL){
         return NULL;
     }
+   privateDtwAES_RAW_EncryptionInterface *self = (privateDtwAES_RAW_EncryptionInterface *)obj->obj;
    self->encrypt_buffer = privteDtwAES_ECB_EncryptionInterface_encrypt_buffer;
    self->decrypt_buffer = privteDtwAES_ECB_EncryptionInterface_decrypt_buffer;
    return self;
