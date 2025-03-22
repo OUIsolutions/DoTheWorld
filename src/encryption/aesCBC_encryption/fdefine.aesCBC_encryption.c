@@ -27,10 +27,12 @@ DtwEncriptionInterface *newDtwAES_CBC_EncryptionInterface(const uint8_t* key,int
     }
 
 
-    DtwEncriptionInterface *self = newDtwAES_RAW_EncryptionInterface(key,key_size);
-    if(self == NULL){
+    DtwEncriptionInterface *obj = newDtwAES_RAW_EncryptionInterface(key,key_size);
+    if(obj == NULL){
         return NULL;
     }
+
+    privateDtwAES_RAW_EncryptionInterface *self = (privateDtwAES_RAW_EncryptionInterface *)obj->obj;
     memcpy(self->iv,iv,iv_size);
 
     self->encrypt_buffer = privteDtwAES_CBC_EncryptionInterface_encrypt_buffer;
