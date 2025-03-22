@@ -2,7 +2,7 @@
 
 
 void save_cryto_file(DtwEncriptionInterface *test_interface){
-    const char *message = "ta funcionando parsa";
+    const char *message = "eai parsa suave";
     printf("mensagem original %ld\n",strlen(message));
     DtwEncriptionInterface_write_string_file_content_hex(test_interface,"teste.txt",message);
 }
