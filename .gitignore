@@ -9,6 +9,7 @@ temp_lib.zip
 exemple
 side_effect
 *.pyc
+doTheWorldOne.c
 bin
 src/imports
 luaDoTheWorld

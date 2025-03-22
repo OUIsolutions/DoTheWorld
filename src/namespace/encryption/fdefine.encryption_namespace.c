@@ -5,7 +5,7 @@ DtwEncryptionNamespace newDtwEncryptionNamespace(){
     self.newAES_CBC_EncryptionInterface = newDtwAES_CBC_EncryptionInterface;
     self.newAES_CBC_EncryptionInterface_str = newDtwAES_CBC_EncryptionInterface_str;    
     self.newAES_ECB_EncryptionInterface = newDtwAES_ECB_EncryptionInterface;
-    self.newDES_ECB_EncryptionInterface_str = newDtwAES_ECB_EncryptionInterface_str;
+    self.newAES_ECB_EncryptionInterface_str = newDtwAES_ECB_EncryptionInterface_str;
     self.newAES_Custom_CBC_v1_interface = newDtwAES_Custom_CBC_v1_interface;
 
     self.encrypt_buffer = DtwEncriptionInterface_encrypt_buffer;
@@ -24,5 +24,6 @@ DtwEncryptionNamespace newDtwEncryptionNamespace(){
     self.write_string_file_content_b64 = DtwEncriptionInterface_write_string_file_content_b64;
     self.load_any_content_b64 = DtwEncriptionInterface_load_any_content_b64;
     self.load_string_file_content_b64 = DtwEncriptionInterface_load_string_file_content_b64;
+    self.free = DtwEncriptionInterface_free;
     return self;
 }

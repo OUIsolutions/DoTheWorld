@@ -4,7 +4,7 @@ typedef struct DtwEncryptionNamespace{
 //initializer
 DtwEncriptionInterface *(*newInterface_raw)(void *obj, unsigned char *(*encrypt_buffer)(void *obj, unsigned char *value,long size,long *out_size), unsigned char *(*decrypt_buffer)(void *obj, unsigned char *encrypted_value,long size,long *out_size), void (*free_obj)(void *obj));
 DtwEncriptionInterface *(*newAES_ECB_EncryptionInterface)(const uint8_t* key,int key_size);
-DtwEncriptionInterface *(*newDES_ECB_EncryptionInterface_str)(const char* key);
+DtwEncriptionInterface *(*newAES_ECB_EncryptionInterface_str)(const char* key);
 DtwEncriptionInterface *(*newAES_Custom_CBC_v1_interface)(const char *key);
 DtwEncriptionInterface *(*newAES_CBC_EncryptionInterface)(const uint8_t* key,int key_size,const uint8_t *iv, int iv_size);
 DtwEncriptionInterface *(*newAES_CBC_EncryptionInterface_str)(const char* key,const char *iv);
