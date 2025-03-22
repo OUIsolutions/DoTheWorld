@@ -83,7 +83,7 @@ bool DtwEncriptionInterface_write_any_content_b64(DtwEncriptionInterface *self,c
     if(b64 == NULL){
         return false;
     }
-    bool result = dtw_write_any_content(file_name,(unsigned char *)b64,strlen(b64));
+    bool result = dtw_write_string_file_content(file_name,b64);
     free(b64);
     return result;
 }

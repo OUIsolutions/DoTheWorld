@@ -12,7 +12,7 @@ char *load_cryto_file(DtwEncriptionInterface *test_interface){
 
 int main(){
  
-    const char *key  = "eai parsa agora as chaves são infinitas";
+    const char *key  = "eai parsa agora as chaves são infinitas4";
     DtwEncriptionInterface *test_interface = newDtwAES_Custom_CBC_v1_interface(key);
 
     save_cryto_file(test_interface);
