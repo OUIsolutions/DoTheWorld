@@ -42,7 +42,7 @@ unsigned char *DtwEncriptionInterface_decrypt_buffer(DtwEncriptionInterface *sel
 
 }
 
-bool DtwEncriptionInterface_write_any_content(DtwEncriptionInterface *self, char *file_name,void *value,long size){
+bool DtwEncriptionInterface_write_any_content(DtwEncriptionInterface *self,const char *file_name,void *value,long size){
     long encrypted_size = 0;
     unsigned char * encrypted = DtwEncriptionInterface_encrypt_buffer(self,(unsigned char *)value,size,&encrypted_size);
     if(encrypted == NULL){
@@ -54,11 +54,11 @@ bool DtwEncriptionInterface_write_any_content(DtwEncriptionInterface *self, char
     return result;
 }
 
-bool DtwEncriptionInterface_write_string_file_content(DtwEncriptionInterface *self, char *file_name,const char *value){
+bool DtwEncriptionInterface_write_string_file_content(DtwEncriptionInterface *self,const char *file_name,const char *value){
     return DtwEncriptionInterface_write_any_content(self,file_name,(void *)value,strlen(value));
 }
 
-unsigned char *DtwEncriptionInterface_load_any_content(DtwEncriptionInterface *self, char *file_name,long *out_size,bool *is_binary){
+unsigned char *DtwEncriptionInterface_load_any_content(DtwEncriptionInterface *self,const char *file_name,long *out_size,bool *is_binary){
     
     long raw_size;
     unsigned char *loaded = dtw_load_binary_content(file_name,&raw_size);
@@ -70,7 +70,7 @@ unsigned char *DtwEncriptionInterface_load_any_content(DtwEncriptionInterface *s
     return decrypted;
 }
 
-char *DtwEncriptionInterface_load_string_file_content(DtwEncriptionInterface *self, char *file_name){
+char *DtwEncriptionInterface_load_string_file_content(DtwEncriptionInterface *self,const char *file_name){
     bool is_binary;
     long out_size;
     unsigned char *loaded = DtwEncriptionInterface_load_any_content(self,file_name,&out_size,&is_binary);
