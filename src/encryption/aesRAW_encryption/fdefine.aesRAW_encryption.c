@@ -6,10 +6,10 @@ unsigned char * privateDtwAES_RAW_EncryptionInterface_encrypt_buffer(void *obj, 
     long size = entry_size;
 
     *out_size  =  size + (16 - size % 16);
+  
     unsigned char *result = (unsigned char*)malloc( *out_size   + 2);
     memcpy(result,value,size);
     bool is16multiple = size % 16 == 0;
-
         //means the block its complete and we need to add a full extra block filled with 16 bytes
     if(is16multiple){
         printf("$out_size %ld\n",*out_size);        
@@ -18,6 +18,7 @@ unsigned char * privateDtwAES_RAW_EncryptionInterface_encrypt_buffer(void *obj, 
     //means the last block is not complete and we need to add the missing bytes
     //the total of empty bytes that we dont sent 
     if(!is16multiple){
+
         int missing_send_bytes_to_last_block =  *out_size   - size;
         memset(result+size,missing_send_bytes_to_last_block,missing_send_bytes_to_last_block);
     }
