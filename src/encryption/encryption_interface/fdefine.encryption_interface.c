@@ -138,6 +138,7 @@ char *DtwEncriptionInterface_load_string_file_content_b64(DtwEncriptionInterface
     long size;
     bool is_binary;
     unsigned char *content = DtwEncriptionInterface_load_any_content_b64(self,file_name,&size,&is_binary);
+
     if(content == NULL){
         return NULL;
     }

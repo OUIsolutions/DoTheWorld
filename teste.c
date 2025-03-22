@@ -2,7 +2,7 @@
 
 
 void save_cryto_file(DtwEncriptionInterface *test_interface){
-    const char *message = "essa mensagem foi completamente criptografada chupa caraio!!!";
+    const char *message = "essa mensagem foi completamente criptogrvvafada chupa cara!!!";
     printf("mensagem original %ld\n",strlen(message));
     DtwEncriptionInterface_write_string_file_content_b64(test_interface,"teste.txt",message);
 }
