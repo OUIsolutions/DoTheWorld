@@ -19,9 +19,21 @@ unsigned char *DtwEncriptionInterface_encrypt_buffer(DtwEncriptionInterface *sel
     *out_size = 0;
     unsigned char *encrypted = self->encrypt_buffer(self->obj,value,size,out_size);
     encrypted[*out_size] = '\0';
+
+
     return encrypted;
 }
 
+char *DtwEncriptionInterface_encrypt_buffer_b64(DtwEncriptionInterface *self, unsigned char *value,long size){
+    long encrypted_size = 0;
+    unsigned char * encrypted = DtwEncriptionInterface_encrypt_buffer(self,value,size,&encrypted_size);
+    if(encrypted == NULL){
+        return NULL;
+    }
+    char *b64 = dtw_base64_encode(encrypted,encrypted_size);
+    free(encrypted);
+    return b64;
+}
 
 
 unsigned char *DtwEncriptionInterface_decrypt_buffer(DtwEncriptionInterface *self, unsigned char *encrypted_value,long size,long *out_size,bool *is_binary){
@@ -41,6 +53,19 @@ unsigned char *DtwEncriptionInterface_decrypt_buffer(DtwEncriptionInterface *sel
     return content;
 
 }
+
+unsigned char *DtwEncriptionInterface_decrypt_buffer_b64(DtwEncriptionInterface *self, const   char *encrypted_value,long *out_size,bool *is_binary){
+    
+    long b64_out_size;
+    unsigned char *decoded = dtw_base64_decode(encrypted_value,&b64_out_size);
+    if(decoded == NULL){
+        return NULL;
+    }
+    unsigned char * decrypted =  DtwEncriptionInterface_decrypt_buffer(self,decoded,b64_out_size,out_size,is_binary);
+    free(decoded);
+    return decrypted;
+}
+
 
 bool DtwEncriptionInterface_write_any_content(DtwEncriptionInterface *self,const char *file_name,void *value,long size){
     long encrypted_size = 0;
