@@ -78,9 +78,23 @@ bool DtwEncriptionInterface_write_any_content(DtwEncriptionInterface *self,const
     free(encrypted);
     return result;
 }
+bool DtwEncriptionInterface_write_any_content_b64(DtwEncriptionInterface *self,const char *file_name,void *value,long size){
+    char *b64 = DtwEncriptionInterface_encrypt_buffer_b64(self,(unsigned char *)value,size);
+    if(b64 == NULL){
+        return false;
+    }
+    bool result = dtw_write_any_content(file_name,(unsigned char *)b64,strlen(b64));
+    free(b64);
+    return result;
+}
+
 
 bool DtwEncriptionInterface_write_string_file_content(DtwEncriptionInterface *self,const char *file_name,const char *value){
-    return DtwEncriptionInterface_write_any_content(self,file_name,(void *)value,strlen(value));
+    return DtwEncriptionInterface_write_any_content(self,file_name,(unsigned char *)value,strlen(value));
+}
+
+bool DtwEncriptionInterface_write_string_file_content_b64(DtwEncriptionInterface *self,const char *file_name,const char *value){
+    return DtwEncriptionInterface_write_any_content_b64(self,file_name,(unsigned char *)value,strlen(value));
 }
 
 unsigned char *DtwEncriptionInterface_load_any_content(DtwEncriptionInterface *self,const char *file_name,long *out_size,bool *is_binary){
@@ -94,6 +108,14 @@ unsigned char *DtwEncriptionInterface_load_any_content(DtwEncriptionInterface *s
     free(loaded);
     return decrypted;
 }
+
+unsigned char *DtwEncriptionInterface_load_any_content_b64(DtwEncriptionInterface *self,const  char *file_name,long *out_size,bool *is_binary){
+    char *loaded = dtw_load_string_file_content(file_name);
+    unsigned char *decrypted = DtwEncriptionInterface_decrypt_buffer_b64(self,(const char *)loaded,out_size,is_binary);
+    free(loaded);
+    return decrypted;
+}
+
 
 char *DtwEncriptionInterface_load_string_file_content(DtwEncriptionInterface *self,const char *file_name){
     bool is_binary;
@@ -111,6 +133,20 @@ char *DtwEncriptionInterface_load_string_file_content(DtwEncriptionInterface *se
     return (char *)loaded;
 }
 
+
+char *DtwEncriptionInterface_load_string_file_content_b64(DtwEncriptionInterface *self,const char *file_name){
+    long size;
+    bool is_binary;
+    unsigned char *content = DtwEncriptionInterface_load_any_content_b64(self,file_name,&size,&is_binary);
+    if(content == NULL){
+        return NULL;
+    }
+    if(is_binary){
+        free(content);
+        return NULL;
+    }
+    return (char*)content;
+}
 
 void DtwEncriptionInterface_free(DtwEncriptionInterface *self){
     self->free_obj(self->obj);

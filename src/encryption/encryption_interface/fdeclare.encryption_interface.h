@@ -19,11 +19,21 @@ unsigned char *DtwEncriptionInterface_decrypt_buffer_b64(DtwEncriptionInterface 
 
 bool DtwEncriptionInterface_write_any_content(DtwEncriptionInterface *self,const char *file_name,void *value,long size);
 
+
+bool DtwEncriptionInterface_write_any_content_b64(DtwEncriptionInterface *self,const char *file_name,void *value,long size);
+
+
 bool DtwEncriptionInterface_write_string_file_content(DtwEncriptionInterface *self,const char *file_name,const char *value);
+
+bool DtwEncriptionInterface_write_string_file_content_b64(DtwEncriptionInterface *self,const char *file_name,const char *value);
 
 unsigned char *DtwEncriptionInterface_load_any_content(DtwEncriptionInterface *self,const  char *file_name,long *out_size,bool *is_binary);
 
+unsigned char *DtwEncriptionInterface_load_any_content_b64(DtwEncriptionInterface *self,const  char *file_name,long *out_size,bool *is_binary);
+
 char *DtwEncriptionInterface_load_string_file_content(DtwEncriptionInterface *self,const char *file_name);
+
+char *DtwEncriptionInterface_load_string_file_content_b64(DtwEncriptionInterface *self,const char *file_name);
 
 
 void DtwEncriptionInterface_free(DtwEncriptionInterface *self);
