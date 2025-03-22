@@ -110,6 +110,8 @@ unsigned char *DtwEncriptionInterface_load_any_content(DtwEncriptionInterface *s
 
 unsigned char *DtwEncriptionInterface_load_any_content_b64(DtwEncriptionInterface *self,const  char *file_name,long *out_size,bool *is_binary){
     char *loaded = dtw_load_string_file_content(file_name);
+    printf("b64carregou %s\n",loaded);
+    printf("b64tamanho %ld\n",strlen(loaded));
     unsigned char *decrypted = DtwEncriptionInterface_decrypt_buffer_b64(self,(const char *)loaded,out_size,is_binary);
     free(loaded);
     return decrypted;
