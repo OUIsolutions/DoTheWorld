@@ -11,7 +11,7 @@ char *load_cryto_file(DtwEncriptionInterface *test_interface){
 }
 
 int main(){
- 
+
     const char *key  = "teste";
     DtwEncriptionInterface *test_interface = newDtwAES_ECB_EncryptionInterface_str(key);
 

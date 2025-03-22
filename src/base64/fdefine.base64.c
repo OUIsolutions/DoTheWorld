@@ -1,77 +1,145 @@
 
-
-
+/**
+ * Encodes binary data to Base64
+ * @param data Pointer to the data to be encoded
+ * @param input_length Size of input data in bytes
+ * @return String with Base64 encoded data (must be freed by caller)
+ */
 char *dtw_base64_encode(unsigned char *data, long input_length){
-    const char dtw_base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-
-    if (data == NULL) return NULL;
-
-    size_t output_length = 4 * ((input_length + 2) / 3);
-
-    char *encoded_data = (char *)malloc(output_length + 1);
-
-
-    long i, j;
-    for (i = 0, j = 0; i < input_length; ) {
-        unsigned char b0 = i < input_length ? data[i++] : 0;
-        unsigned char b1 = i < input_length ? data[i++] : 0;
-        unsigned char b2 = i < input_length ? data[i++] : 0;
-
-        unsigned char b = b0 >> 2;
-        encoded_data[j++] = dtw_base64_table[b];
-
-        b = (b0 << 4) & 0x3F;
-        b |= b1 >> 4;
-        encoded_data[j++] = dtw_base64_table[b];
-
-        b = (b1 << 2) & 0x3F;
-        b |= b2 >> 6;
-        encoded_data[j++] = i <= input_length + 1 ? dtw_base64_table[b] : '=';
-
-        b = b2 & 0x3F;
-        encoded_data[j++] = i <= input_length ? dtw_base64_table[b] : '=';
+    // Base64 character table
+    static const char base64_chars[] = 
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    
+    // Parameter validation
+    if (data == NULL || input_length < 0) {
+        return NULL;
     }
-
+    
+    // Calculate required output size
+    size_t output_length = 4 * ((input_length + 2) / 3);
+    
+    // Allocate memory for output string (including space for null terminator)
+    char *encoded_data = (char *)malloc(output_length + 1);
+    if (encoded_data == NULL) {
+        return NULL; // Memory allocation failure
+    }
+    
+    // Encoding process
+    size_t i = 0;
+    size_t j = 0;
+    
+    while (i < input_length) {
+        // Get 3-byte blocks (24 bits)
+        unsigned char octet_a = i < input_length ? data[i++] : 0;
+        unsigned char octet_b = i < input_length ? data[i++] : 0;
+        unsigned char octet_c = i < input_length ? data[i++] : 0;
+        
+        // Split the 3 bytes into 4 groups of 6 bits
+        unsigned int triple = (octet_a << 16) | (octet_b << 8) | octet_c;
+        
+        // Map each 6-bit group to a Base64 character
+        encoded_data[j++] = base64_chars[(triple >> 18) & 0x3F];
+        encoded_data[j++] = base64_chars[(triple >> 12) & 0x3F];
+        
+        // Add padding '=' if necessary
+        if (i > input_length) {
+            encoded_data[j++] = '=';
+            encoded_data[j++] = '=';
+        } else if (i > input_length - 1) {
+            encoded_data[j++] = base64_chars[(triple >> 6) & 0x3F];
+            encoded_data[j++] = '=';
+        } else {
+            encoded_data[j++] = base64_chars[(triple >> 6) & 0x3F];
+            encoded_data[j++] = base64_chars[triple & 0x3F];
+        }
+    }
+    
+    // Add null terminator
     encoded_data[j] = '\0';
+    
     return encoded_data;
 }
 
-
-unsigned char *dtw_base64_decode(const char *data, long *output_length){
-    const char dtw_base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-    long input_length = (long)strlen(data);
-    if (input_length % 4 != 0) return NULL;
-
-    *output_length = input_length / 4 * 3;
-    if (data[input_length - 1] == '=') (*output_length)--;
-    if (data[input_length - 2] == '=') (*output_length)--;
-
-    unsigned char *decoded_data = (unsigned char*) malloc(*output_length +2);
-
-
-    long i, j;
-    for (i = 0, j = 0; i < input_length; ) {
-        unsigned char b0 = data[i] == '=' ? 0 & i++ : strchr(dtw_base64_table, data[i++]) - dtw_base64_table;
-        unsigned char b1 = data[i] == '=' ? 0 & i++ : strchr(dtw_base64_table, data[i++]) - dtw_base64_table;
-        unsigned char b2 = data[i] == '=' ? 0 & i++ : strchr(dtw_base64_table, data[i++]) - dtw_base64_table;
-        unsigned char b3 = data[i] == '=' ? 0 & i++ : strchr(dtw_base64_table, data[i++]) - dtw_base64_table;
-
-        unsigned char b = (b0 << 2) | (b1 >> 4);
-        decoded_data[j++] = b;
-
-        if (j < *output_length) {
-            b = (b1 << 4) | (b2 >> 2);
-            decoded_data[j++] = b;
-        }
-        if (j < *output_length) {
-            b = (b2 << 6) | b3;
-            decoded_data[j++] = b;
-        }
+/**
+ * Decodes a Base64 string to binary data
+ * @param data Base64 encoded string
+ * @param output_length Pointer to store the size of decoded data
+ * @return Pointer to decoded data (must be freed by caller)
+ */
+unsigned char *dtw_base64_decode(const char *data, long *output_length) {
+    // Base64 decoding table (value for each character)
+    static const unsigned char decoding_table[256] = {
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 0, 0, 0, 63,
+        52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 0, 0, 0, 0, 0, 0,
+        0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
+        15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 0, 0, 0, 0, 0,
+        0, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+        41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    };
+    
+    // Parameter validation
+    if (data == NULL || output_length == NULL) {
+        return NULL;
     }
+    
+    long input_length = strlen(data);
+    
+    // Check if length is a multiple of 4
+    if (input_length % 4 != 0) {
+        return NULL;
+    }
+    
+    // Calculate output size
+    *output_length = input_length / 4 * 3;
+    
+    // Adjust size if padding is present
+    if (input_length > 0) {
+        if (data[input_length - 1] == '=') (*output_length)--;
+        if (input_length >= 2 && data[input_length - 2] == '=') (*output_length)--;
+    }
+    
+    // Allocate memory for decoded data
+    unsigned char *decoded_data = (unsigned char*)malloc(*output_length + 1);
+    if (decoded_data == NULL) {
+        return NULL; // Memory allocation failure
+    }
+    
+    // Decoding process
+    size_t i = 0;
+    size_t j = 0;
+    
+    while (i < input_length) {
+        // Get 4 characters from Base64 string
+        unsigned char a = data[i] == '=' ? 0 : decoding_table[(unsigned char)data[i]]; i++;
+        unsigned char b = data[i] == '=' ? 0 : decoding_table[(unsigned char)data[i]]; i++;
+        unsigned char c = data[i] == '=' ? 0 : decoding_table[(unsigned char)data[i]]; i++;
+        unsigned char d = data[i] == '=' ? 0 : decoding_table[(unsigned char)data[i]]; i++;
+        
+        // Combine 4 groups of 6 bits into 3 bytes
+        unsigned int triple = (a << 18) | (b << 12) | (c << 6) | d;
+        
+        if (j < *output_length) decoded_data[j++] = (triple >> 16) & 0xFF;
+        if (j < *output_length) decoded_data[j++] = (triple >> 8) & 0xFF;
+        if (j < *output_length) decoded_data[j++] = triple & 0xFF;
+    }
+    
+    // Add null terminator
     decoded_data[*output_length] = '\0';
-
+    
     return decoded_data;
 }
+
+
 
 char *dtw_convert_binary_file_to_base64(const char *path){
      long size;

@@ -2,6 +2,7 @@
 *.d
 CWebStudio.h
 dependencies
+teste*
 release
 temp_lib
 temp_lib.zip
