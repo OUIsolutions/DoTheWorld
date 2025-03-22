@@ -31,7 +31,7 @@ DtwNamespace newDtwNamespace(){
     self.list_files = dtw_list_files;
     self.list_dirs = dtw_list_dirs;
     self.list_all = dtw_list_all;
-
+    self.convert_unix_time_to_string = dtw_convert_unix_time_to_string;
     self.list_files_recursively = dtw_list_files_recursively;
     self.list_dirs_recursively = dtw_list_dirs_recursively;
     self.list_all_recursively = dtw_list_all_recursively;
