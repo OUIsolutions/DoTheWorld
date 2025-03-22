@@ -1,11 +1,5 @@
 
-/**
- * Encodes binary data to Base64
- * @param data Pointer to the data to be encoded
- * @param input_length Size of input data in bytes
- * @return String with Base64 encoded data (must be freed by caller)
- */
-char *dtw_base64_encode(unsigned char *data, long input_length){
+char *dtw_base64_encode(unsigned char *data, long input_length) {
     // Base64 character table
     static const char base64_chars[] = 
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
@@ -27,30 +21,37 @@ char *dtw_base64_encode(unsigned char *data, long input_length){
     // Encoding process
     size_t i = 0;
     size_t j = 0;
+    unsigned int triple;
     
-    while (i < input_length) {
-        // Get 3-byte blocks (24 bits)
-        unsigned char octet_a = i < input_length ? data[i++] : 0;
-        unsigned char octet_b = i < input_length ? data[i++] : 0;
-        unsigned char octet_c = i < input_length ? data[i++] : 0;
+    // Process full triplets of bytes (3 bytes at a time)
+    for (i = 0, j = 0; i + 2 < input_length; i += 3) {
+        triple = (data[i] << 16) | (data[i + 1] << 8) | data[i + 2];
         
-        // Split the 3 bytes into 4 groups of 6 bits
-        unsigned int triple = (octet_a << 16) | (octet_b << 8) | octet_c;
-        
-        // Map each 6-bit group to a Base64 character
         encoded_data[j++] = base64_chars[(triple >> 18) & 0x3F];
         encoded_data[j++] = base64_chars[(triple >> 12) & 0x3F];
-        
-        // Add padding '=' if necessary
-        if (i > input_length) {
-            encoded_data[j++] = '=';
-            encoded_data[j++] = '=';
-        } else if (i > input_length - 1) {
+        encoded_data[j++] = base64_chars[(triple >> 6) & 0x3F];
+        encoded_data[j++] = base64_chars[triple & 0x3F];
+    }
+    
+    // Handle remaining bytes with padding
+    if (i < input_length) {
+        // One or two bytes remain
+        if (i + 1 < input_length) {
+            // Two bytes remain
+            triple = (data[i] << 16) | (data[i + 1] << 8);
+            
+            encoded_data[j++] = base64_chars[(triple >> 18) & 0x3F];
+            encoded_data[j++] = base64_chars[(triple >> 12) & 0x3F];
             encoded_data[j++] = base64_chars[(triple >> 6) & 0x3F];
             encoded_data[j++] = '=';
         } else {
-            encoded_data[j++] = base64_chars[(triple >> 6) & 0x3F];
-            encoded_data[j++] = base64_chars[triple & 0x3F];
+            // One byte remains
+            triple = data[i] << 16;
+            
+            encoded_data[j++] = base64_chars[(triple >> 18) & 0x3F];
+            encoded_data[j++] = base64_chars[(triple >> 12) & 0x3F];
+            encoded_data[j++] = '=';
+            encoded_data[j++] = '=';
         }
     }
     
@@ -60,12 +61,7 @@ char *dtw_base64_encode(unsigned char *data, long input_length){
     return encoded_data;
 }
 
-/**
- * Decodes a Base64 string to binary data
- * @param data Base64 encoded string
- * @param output_length Pointer to store the size of decoded data
- * @return Pointer to decoded data (must be freed by caller)
- */
+
 unsigned char *dtw_base64_decode(const char *data, long *output_length) {
     // Base64 decoding table (value for each character)
     static const unsigned char decoding_table[256] = {
