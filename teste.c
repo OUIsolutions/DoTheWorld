@@ -15,8 +15,8 @@ int main(){
  
     const char *key  = "teste ";
     const char *iv = "12345678901";
-    DtwEncriptionInterface *interface = newDtwAES_CBC_EncryptionInterface(key,strlen(key),iv,strlen(iv));
-    DtwEncriptionInterface *interface2 = newDtwAES_CBC_EncryptionInterface(key,strlen(key),iv,strlen(iv));
+    DtwEncriptionInterface *interface = newDtwAES_CBC_EncryptionInterface_str(key,iv);
+    DtwEncriptionInterface *interface2 = newDtwAES_CBC_EncryptionInterface_str(key,iv);
 
     save_cryto_file(interface);
     char *decrypted = load_cryto_file(interface2);

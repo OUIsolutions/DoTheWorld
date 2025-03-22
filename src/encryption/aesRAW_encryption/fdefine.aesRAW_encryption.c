@@ -12,7 +12,7 @@ unsigned char * privateDtwAES_RAW_EncryptionInterface_encrypt_buffer(void *obj, 
     long size = entry_size;
 
     *out_size  =  size + (16 - size % 16);
-    unsigned char *result = malloc( *out_size   + 2);
+    unsigned char *result = (unsigned char*)malloc( *out_size   + 2);
     memcpy(result,value,size);
     bool is16multiple = size % 16 == 0;
 
@@ -42,7 +42,7 @@ unsigned char *privateDtwAES_RAW_EncryptionInterface_decrypt_buffer(void *obj, u
         return NULL;
     }
     
-    unsigned char *result = calloc(size + 2,sizeof(unsigned char));
+    unsigned char *result = (unsigned char *)calloc(size + 2,sizeof(unsigned char));
     memcpy(result,encrypted_value,size);
     self->decrypt_buffer(self, ( uint8_t*)result,size);
     int remaning_bytes = result[size-1];
@@ -64,7 +64,7 @@ DtwEncriptionInterface *newDtwAES_RAW_EncryptionInterface(const uint8_t* key,int
     if(key_size > 16){
         return NULL;
     }
-    privateDtwAES_RAW_EncryptionInterface *self = malloc(sizeof(privateDtwAES_RAW_EncryptionInterface));
+    privateDtwAES_RAW_EncryptionInterface *self = (privateDtwAES_RAW_EncryptionInterface *)malloc(sizeof(privateDtwAES_RAW_EncryptionInterface));
     *self = (privateDtwAES_RAW_EncryptionInterface){0};
     memcpy(self->key,key,key_size);
     AES_init_ctx(&self->ctx, key);

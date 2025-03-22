@@ -26,5 +26,9 @@ DtwEncriptionInterface *newDtwAES_ECB_EncryptionInterface(const uint8_t* key,int
    privateDtwAES_RAW_EncryptionInterface *self = (privateDtwAES_RAW_EncryptionInterface *)obj->obj;
    self->encrypt_buffer = privteDtwAES_ECB_EncryptionInterface_encrypt_buffer;
    self->decrypt_buffer = privteDtwAES_ECB_EncryptionInterface_decrypt_buffer;
-   return self;
+   return obj;
+}
+
+DtwEncriptionInterface *newDtwAES_ECB_EncryptionInterface_str(const char* key){
+    return newDtwAES_ECB_EncryptionInterface((uint8_t*)key,strlen(key));
 }
