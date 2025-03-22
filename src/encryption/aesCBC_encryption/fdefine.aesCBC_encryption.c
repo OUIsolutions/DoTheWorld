@@ -6,62 +6,20 @@
 //silver_chain_scope_end
 
 
-unsigned char * privateDtwAES_CBC_EncryptionInterface_encrypt_buffer(void *obj, unsigned char *value,long entry_size,long *out_size){
 
-    privateDtwAES_CBC_EncryptionInterface *self = (privateDtwAES_CBC_EncryptionInterface *)obj;
-    long size = entry_size;
+void privteDtwAES_CBC_EncryptionInterface_encrypt_buffer(struct AES_ctx *ctx,uint8_t* buf, uint32_t length);
 
-    *out_size  =  size + (16 - size % 16);
-    unsigned char *result = malloc( *out_size   + 2);
-    memcpy(result,value,size);
-    bool is16multiple = size % 16 == 0;
+void privteDtwAES_CBC_EncryptionInterface_decrypt_buffer(struct AES_ctx *ctx,uint8_t* buf, uint32_t length);
 
-        //means the block its complete and we need to add a full extra block filled with 16 bytes
-    if(is16multiple){
-        printf("$out_size %ld\n",*out_size);        
-        memset(result+size,16,16);
-    }
-    //means the last block is not complete and we need to add the missing bytes
-    //the total of empty bytes that we dont sent 
-    if(!is16multiple){
-        int missing_send_bytes_to_last_block =  *out_size   - size;
-        memset(result+size,missing_send_bytes_to_last_block,missing_send_bytes_to_last_block);
-    }
-
-    AES_CBC_encrypt_buffer(&self->ctx, ( uint8_t*)result, *out_size);
-    return result;
-}
-
-unsigned char *privateDtwAES_CBC_EncryptionInterface_decrypt_buffer(void *obj, unsigned char *encrypted_value,long entry_size,long *out_size){
-    privateDtwAES_CBC_EncryptionInterface *self = (privateDtwAES_CBC_EncryptionInterface *)obj;
-    long size = entry_size;
+DtwEncriptionInterface *newDtwAES_CBC_EncryptionInterface(const uint8_t* key,int key_size,const uint8_t *iv, int iv_size){
     
-    bool is16multiple = size % 16 == 0;
-    if(!is16multiple){
-        *out_size = 0;        
+    
+    DtwEncriptionInterface *self = newDtwAES_RAW_EncryptionInterface(key,key_size);
+    if(self == NULL){
         return NULL;
     }
     
-    unsigned char *result = calloc(size + 2,sizeof(unsigned char));
-    memcpy(result,encrypted_value,size);
-
-    AES_CBC_decrypt_buffer(&self->ctx, ( uint8_t*)result,size);
-    int remaning_bytes = result[size-1];
-    *out_size = size - remaning_bytes;
-    return result;
-}
-
-void  privateDtwAES_CBC_EncryptionInterface_free_obj(void *obj){
-    privateDtwAES_CBC_EncryptionInterface *self = (privateDtwAES_CBC_EncryptionInterface *)obj;
-    free(self);
-}
-
-DtwEncriptionInterface *newDtwAES_CBC_EncryptionInterface(const uint8_t* key,int key_size,const uint8_t *iv, int iv_size){
-    privateDtwAES_CBC_EncryptionInterface *self = malloc(sizeof(privateDtwAES_CBC_EncryptionInterface));
-    *self = (privateDtwAES_CBC_EncryptionInterface){0};
-    memcpy(self->key,key,key_size);
-    memcpy(self->iv,iv,iv_size);
-    AES_init_ctx_iv(&self->ctx, key,self->iv);
-    return newDtwEncriptionInterface_raw(self,privateDtwAES_CBC_EncryptionInterface_encrypt_buffer,privateDtwAES_CBC_EncryptionInterface_decrypt_buffer,privateDtwAES_CBC_EncryptionInterface_free_obj);
-
+    self->encrypt_buffer = privteDtwAES_CBC_EncryptionInterface_encrypt_buffer;
+    self->decrypt_buffer = privteDtwAES_CBC_EncryptionInterface_decrypt_buffer;
+    return self;
 }

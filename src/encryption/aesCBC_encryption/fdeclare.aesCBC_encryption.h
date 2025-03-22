@@ -6,10 +6,6 @@
 //silver_chain_scope_end
 
 
-unsigned char * privateDtwAES_CBC_EncryptionInterface_encrypt_buffer(void *obj, unsigned char *value,long size,long *out_size);
 
-unsigned char *privateDtwAES_CBC_EncryptionInterface_decrypt_buffer(void *obj, unsigned char *encrypted_value,long size,long *out_size);
-
-void  privateDtwAES_CBC_EncryptionInterface_free_obj(void *obj);
 
 DtwEncriptionInterface *newDtwAES_CBC_EncryptionInterface(const uint8_t* key,int key_size,const uint8_t *iv, int iv_size);
