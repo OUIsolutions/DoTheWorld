@@ -67,7 +67,6 @@ DtwEncriptionInterface *newDtwAES_RAW_EncryptionInterface(const uint8_t* key,int
     privateDtwAES_RAW_EncryptionInterface *self = (privateDtwAES_RAW_EncryptionInterface *)malloc(sizeof(privateDtwAES_RAW_EncryptionInterface));
     *self = (privateDtwAES_RAW_EncryptionInterface){0};
     memcpy(self->key,key,key_size);
-    AES_init_ctx(&self->ctx, key);
 
     return newDtwEncriptionInterface_raw(self,privateDtwAES_RAW_EncryptionInterface_encrypt_buffer,privateDtwAES_RAW_EncryptionInterface_decrypt_buffer,privateDtwAES_RAW_EncryptionInterface_free_obj);
 }

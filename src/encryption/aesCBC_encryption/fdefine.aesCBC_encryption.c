@@ -35,6 +35,9 @@ DtwEncriptionInterface *newDtwAES_CBC_EncryptionInterface(const uint8_t* key,int
 
     privateDtwAES_RAW_EncryptionInterface *self = (privateDtwAES_RAW_EncryptionInterface *)obj->obj;
     memcpy(self->iv,iv,iv_size);
+    AES_init_ctx_iv(&self->ctx,self->key,self->iv); 
+
+   // memcpy(self->temp_iv,iv,iv_size);
 
     self->encrypt_buffer = privteDtwAES_CBC_EncryptionInterface_encrypt_buffer;
     self->decrypt_buffer = privteDtwAES_CBC_EncryptionInterface_decrypt_buffer;
