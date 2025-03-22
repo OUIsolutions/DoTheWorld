@@ -67,7 +67,7 @@ unsigned char *DtwEncriptionInterface_decrypt_buffer_b64(DtwEncriptionInterface 
 }
 
 
-bool DtwEncriptionInterface_write_any_content(DtwEncriptionInterface *self,const char *file_name,void *value,long size){
+bool DtwEncriptionInterface_write_any_content(DtwEncriptionInterface *self,const char *file_name,unsigned char  *value,long size){
     long encrypted_size = 0;
     unsigned char * encrypted = DtwEncriptionInterface_encrypt_buffer(self,(unsigned char *)value,size,&encrypted_size);
     if(encrypted == NULL){
@@ -78,7 +78,7 @@ bool DtwEncriptionInterface_write_any_content(DtwEncriptionInterface *self,const
     free(encrypted);
     return result;
 }
-bool DtwEncriptionInterface_write_any_content_b64(DtwEncriptionInterface *self,const char *file_name,void *value,long size){
+bool DtwEncriptionInterface_write_any_content_b64(DtwEncriptionInterface *self,const char *file_name,unsigned char *value,long size){
     char *b64 = DtwEncriptionInterface_encrypt_buffer_b64(self,(unsigned char *)value,size);
     if(b64 == NULL){
         return false;
