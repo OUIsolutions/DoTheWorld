@@ -16,3 +16,6 @@ long private_dtw_convert_index(long index,long size);
 
 
 long dtw_get_time();
+
+char *dtw_convert_binary_to_hex(unsigned char *value,long size);
+unsigned char *dtw_convert_hex_to_binary(const char *value,long *out_size);

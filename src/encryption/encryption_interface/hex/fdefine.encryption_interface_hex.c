@@ -1,4 +1,10 @@
+
+
+
+
+
 char *DtwEncriptionInterface_encrypt_buffer_hex(DtwEncriptionInterface *self, unsigned char *value,long size);
+
 
 
 unsigned char *DtwEncriptionInterface_decrypt_buffer_hex(DtwEncriptionInterface *self, const   char *encrypted_value,long *out_size,bool *is_binary);

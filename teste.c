@@ -12,8 +12,16 @@ char *load_cryto_file(DtwEncriptionInterface *test_interface){
 
 int main(){
 
+    char *result = dtw_convert_binary_to_hex((unsigned char *)"eai parsa suave",strlen("eai parsa suave"));
+    printf("Hex: %s\n",result);
 
+    long size;
+    unsigned char *binary = dtw_convert_hex_to_binary(result, &size);
+    printf("Binary: %s\n",binary);
+    free(binary);
+    free(result);
 
+    return 0;
     const char *key  = "0123456789012345";
     DtwEncriptionInterface *test_interface = newDtwAES_CBC_EncryptionInterface_str(key,key);
 

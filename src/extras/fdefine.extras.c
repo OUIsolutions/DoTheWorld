@@ -157,3 +157,26 @@ long private_dtw_convert_index(long index,long size){
 
     return converted_index;
 }
+
+char *dtw_convert_binary_to_hex(unsigned char *value,long size){
+    char *hex = (char *)malloc(size * 2 + 1);
+    for(int i = 0; i < size; i++){
+        sprintf(hex + i * 2, "%02x", value[i]);
+    }
+    hex[size * 2] = 0;
+    return hex;
+}
+
+
+unsigned char *dtw_convert_hex_to_binary(const char *value,long *out_size){
+    int len = strlen(value);
+    if(len % 2 != 0){
+        return NULL;
+    }
+    *out_size = len / 2;
+    unsigned char *binary = (unsigned char *)malloc(*out_size);
+    for(int i = 0; i < *out_size; i++){
+        sscanf(value + i * 2, "%2hhx", &binary[i]);
+    }
+    return binary;
+}
