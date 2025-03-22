@@ -59,6 +59,6 @@ DtwNamespace newDtwNamespace(){
     self.transaction = newDtwTransactionModule();
     self.resource = newDtwResourceModule();
     self.randonizer = newDtwRandonizerModule();
-
+    self.encryption  = newDtwEncryptionNamespace();
     return self;
 }

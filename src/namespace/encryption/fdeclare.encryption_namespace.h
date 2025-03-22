@@ -1,0 +1,3 @@
+
+
+DtwEncryptionNamespace newDtwEncryptionNamespace();

@@ -88,7 +88,7 @@ typedef struct DtwNamespace{
     //string array
 
     DtwStringArrayModule string_array;
-
+    DtwEncryptionNamespace encryption;
     DtwPathModule path;
 
     DtwLockerModule locker;
