@@ -7,6 +7,8 @@ typedef struct DtwResourceModule{
     int (*get_error_code)(DtwResource *self);
     bool (*error)(DtwResource *self);
 
+    void (*set_encryption)(DtwResource *self,DtwEncriptionInterface *encryption_interface,short mode);
+    
 
     DtwResourceForeachProps (*create_foreach_props)( void(*callback)(DtwResource *item, void *args));
     void (*each)(DtwResource *self,DtwResourceForeachProps props);

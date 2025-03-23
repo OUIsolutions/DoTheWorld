@@ -8,5 +8,8 @@ typedef struct {
     int error_code;
     char *error_path;
     char *error_message;
+    DtwEncriptionInterface *encryption_interface;
+    short encryption_mode;
+
 
 }privateDtwResourceRootProps;

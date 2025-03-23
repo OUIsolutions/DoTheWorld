@@ -23,8 +23,13 @@ void DtwResource_load(DtwResource *self){
         return ;
     }
     DtwResource_unload(self);
-    self->value_any = dtw_load_any_content(self->path,&self->value_size,&self->is_binary);
 
+    if(self->root_props->encryption_interface){
+        self->value_any = private_DtwEncriptionInterface_load_any_content_custom_mode(self->root_props->encryption_interface,self->path,&self->value_size,&self->is_binary,self->root_props->encryption_mode);
+    }
+    else{
+        self->value_any = dtw_load_any_content(self->path,&self->value_size,&self->is_binary);
+    }
     self->loaded = true;
 
 }

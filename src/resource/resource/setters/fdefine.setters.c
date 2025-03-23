@@ -60,7 +60,12 @@ void DtwResource_set_any(DtwResource *self, unsigned char *element, long size,bo
         DtwTransaction_write_any(self->root_props->transaction,self->path,element,size,is_binary);
     }
     else{
-        dtw_write_any_content(self->path,element,size);
+        if(self->root_props->encryption_interface){
+            DtwEncriptionInterface_write_any_content(self->root_props->encryption_interface,self->path,element,size);
+        }
+        else{
+            dtw_write_any_content(self->path,element,size);
+        }
     }
 
     self->loaded = true;

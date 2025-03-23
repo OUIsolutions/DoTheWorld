@@ -13,7 +13,7 @@ typedef struct DtwResource{
     char *name;
     char *path;
 
-
+    
     //in the schema struct there is:
     //|/root
     //|/root/values
