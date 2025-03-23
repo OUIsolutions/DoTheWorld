@@ -46,7 +46,7 @@ DoTheWorld is a Windows/Linux single file library designed to handle files in C/
 | [randonizers](/docs/tree.md)|Randonizers Implementations |
 | [transactions](/docs/transactions.md)|Transaction system implementation |
 | [Dependencies](/docs/dependencies.md)|Dependencies |
-
+| [Encryption](/docs/encryption.md)|Encryption system |
 
 # Build Toolchain
 
