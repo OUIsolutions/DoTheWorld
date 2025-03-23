@@ -34,7 +34,7 @@ CBC mode requires both a key and an initialization vector (IV).
    ```
 
 3. **Using custom CBC implementation (v1)**:
-[Full Example](/examples/encryption/cbc_encryption_initializer_custom.c)
+[Full Example](/examples/encryption/cbc_encryption_custom_v1_inicializer.c)
    ```c
    const char *key = "what ever key you want to put with what ever size"; // No size limit
    
@@ -46,7 +46,7 @@ CBC mode requires both a key and an initialization vector (IV).
 ECB mode requires only a key (no IV).
 
 #### Initialization Methods:
-[Full Example](/examples/encryption/ecb_encryption_initializer.c)
+[Full Example](/examples/encryption/ecb_encryption_initializer_key.c)
 1. **Using raw key bytes**:
    ```c
    uint8_t key[] = {56, 31, 4, 56, 7, 1, 31, 6, 7, 8}; // Max 16 bytes
