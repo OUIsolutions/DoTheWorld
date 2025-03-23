@@ -13,7 +13,7 @@ The primary encryption interface that encapsulates encryption/decryption functio
 CBC mode requires both a key and an initialization vector (IV).
 
 #### Initialization Methods:
-
+[Full Example](/examples/encryption/cbc_encryption_initializer_key.c)
 1. **Using raw key and IV bytes**:
    ```c
    uint8_t key[] = {56, 31, 4, 56, 7, 1, 31, 6, 7, 8}; // Max 16 bytes
@@ -25,6 +25,7 @@ CBC mode requires both a key and an initialization vector (IV).
    ```
 
 2. **Using string key and IV**:
+[Full Example](/examples/encryption/cbc_encryption_initializer_str.c)
    ```c
    const char *key = "my custom key"; // Max 16 chars
    const char *iv = "my custom iv";   // Max 16 chars
@@ -33,6 +34,7 @@ CBC mode requires both a key and an initialization vector (IV).
    ```
 
 3. **Using custom CBC implementation (v1)**:
+[Full Example](/examples/encryption/cbc_encryption_initializer_custom.c)
    ```c
    const char *key = "what ever key you want to put with what ever size"; // No size limit
    
@@ -44,7 +46,7 @@ CBC mode requires both a key and an initialization vector (IV).
 ECB mode requires only a key (no IV).
 
 #### Initialization Methods:
-
+[Full Example](/examples/encryption/ecb_encryption_initializer.c)
 1. **Using raw key bytes**:
    ```c
    uint8_t key[] = {56, 31, 4, 56, 7, 1, 31, 6, 7, 8}; // Max 16 bytes
@@ -54,6 +56,7 @@ ECB mode requires only a key (no IV).
    ```
 
 2. **Using string key**:
+[Full Example](/examples/encryption/ecb_encryption_initializer_str.c)
    ```c
    const char *key = "my custom key"; // Max 16 chars
    
@@ -73,20 +76,20 @@ The library supports three output formats for encrypted data:
 ### Buffer Encryption
 
 #### Raw Buffer
-
+[Full Example](/examples/encryption/raw_buffer_example.c)
 ```c
 long encrypted_size = 0;
 unsigned char *encrypted = dtw.encryption.encrypt_buffer(enc, data, data_size, &encrypted_size);
 ```
 
 #### Hexadecimal Format
-
+[Full Example](/examples/encryption/hex_buffer_example.c)
 ```c
 const char *hex_encrypted = dtw.encryption.encrypt_buffer_hex(enc, data, data_size);
 ```
 
 #### Base64 Format
-
+[Full Example](/examples/encryption/b64_buffer.c)
 ```c
 const char *b64_encrypted = dtw.encryption.encrypt_buffer_b64(enc, data, data_size);
 ```
@@ -94,6 +97,7 @@ const char *b64_encrypted = dtw.encryption.encrypt_buffer_b64(enc, data, data_si
 ### Buffer Decryption
 
 #### Raw Buffer
+[Full Example](/examples/encryption/b64_buffer.c)
 
 ```c
 long decrypted_size = 0;
@@ -102,7 +106,7 @@ unsigned char *decrypted = dtw.encryption.decrypt_buffer(enc, encrypted, encrypt
 ```
 
 #### Hexadecimal Format
-
+[Full Example](/examples/encryption/hex_buffer_example.c)
 ```c
 long decrypted_size = 0;
 bool is_binary = false;
@@ -110,7 +114,7 @@ unsigned char *decrypted = dtw.encryption.decrypt_buffer_hex(enc, hex_encrypted,
 ```
 
 #### Base64 Format
-
+[Full Example](/examples/encryption/b64_buffer.c)
 ```c
 long decrypted_size = 0;
 bool is_binary = false;
@@ -120,13 +124,13 @@ unsigned char *decrypted = dtw.encryption.decrypt_buffer_b64(enc, b64_encrypted,
 ## File Operations
 
 ### Writing Encrypted Content to Files
-
+[Full Example](/examples/encryption/saving_and_reading_to_file.c)
 ```c
 dtw.encryption.write_any_content(enc, "filename.txt", data, data_size);
 ```
 
 ### Reading Encrypted Content from Files
-
+[Full Example](/examples/encryption/saving_and_reading_to_file.c)
 ```c
 long size;
 bool is_binary;
@@ -136,7 +140,7 @@ unsigned char *decrypted = dtw.encryption.load_any_content(enc, "filename.txt", 
 ## Integration with Other DTW Components
 
 ### DtwTransaction
-
+[Full Example](/examples/encryption/encrypted_transaction.c)
 Transactions can be encrypted:
 
 ```c
@@ -152,7 +156,7 @@ dtw.transaction.commit(t, "directory/");
 ### DtwResource
 
 Resources can also be encrypted:
-
+[Full Example](/examples/encryption/resource.c)
 ```c
 DtwResource *resource = dtw.resource.newResource("resource_name");
 DtwEncriptionInterface *enc = dtw.encryption.newAES_Custom_CBC_v1_interface("my key");
