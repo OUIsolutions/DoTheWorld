@@ -1,0 +1,196 @@
+# DoTheWorld Encryption System Documentation
+
+
+
+### DtwEncriptionInterface
+
+The primary encryption interface that encapsulates encryption/decryption functionality. Created through the namespace's encryption methods.
+
+## Encryption Modes
+
+### AES-CBC (Cipher Block Chaining)
+
+CBC mode requires both a key and an initialization vector (IV).
+
+#### Initialization Methods:
+
+1. **Using raw key and IV bytes**:
+   ```c
+   uint8_t key[] = {56, 31, 4, 56, 7, 1, 31, 6, 7, 8}; // Max 16 bytes
+   uint8_t iv[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+   int key_size = sizeof(key) - 1;
+   int iv_size = sizeof(iv) - 1;
+   
+   DtwEncriptionInterface *enc = dtw.encryption.newAES_CBC_EncryptionInterface(key, key_size, iv, iv_size);
+   ```
+
+2. **Using string key and IV**:
+   ```c
+   const char *key = "my custom key"; // Max 16 chars
+   const char *iv = "my custom iv";   // Max 16 chars
+   
+   DtwEncriptionInterface *enc = dtw.encryption.newAES_CBC_EncryptionInterface_str(key, iv);
+   ```
+
+3. **Using custom CBC implementation (v1)**:
+   ```c
+   const char *key = "what ever key you want to put with what ever size"; // No size limit
+   
+   DtwEncriptionInterface *enc = dtw.encryption.newAES_Custom_CBC_v1_interface(key);
+   ```
+
+### AES-ECB (Electronic Codebook)
+
+ECB mode requires only a key (no IV).
+
+#### Initialization Methods:
+
+1. **Using raw key bytes**:
+   ```c
+   uint8_t key[] = {56, 31, 4, 56, 7, 1, 31, 6, 7, 8}; // Max 16 bytes
+   int key_size = sizeof(key) - 1;
+   
+   DtwEncriptionInterface *enc = dtw.encryption.newAES_ECB_EncryptionInterface(key, key_size);
+   ```
+
+2. **Using string key**:
+   ```c
+   const char *key = "my custom key"; // Max 16 chars
+   
+   DtwEncriptionInterface *enc = dtw.encryption.newAES_ECB_EncryptionInterface_str(key);
+   ```
+
+## Encryption/Decryption Methods
+
+### Output Formats
+
+The library supports three output formats for encrypted data:
+
+1. **Raw buffer**: Binary output
+2. **Hexadecimal string**: Text representation using hexadecimal characters
+3. **Base64 string**: Text representation using base64 encoding
+
+### Buffer Encryption
+
+#### Raw Buffer
+
+```c
+long encrypted_size = 0;
+unsigned char *encrypted = dtw.encryption.encrypt_buffer(enc, data, data_size, &encrypted_size);
+```
+
+#### Hexadecimal Format
+
+```c
+const char *hex_encrypted = dtw.encryption.encrypt_buffer_hex(enc, data, data_size);
+```
+
+#### Base64 Format
+
+```c
+const char *b64_encrypted = dtw.encryption.encrypt_buffer_b64(enc, data, data_size);
+```
+
+### Buffer Decryption
+
+#### Raw Buffer
+
+```c
+long decrypted_size = 0;
+bool is_binary = false;
+unsigned char *decrypted = dtw.encryption.decrypt_buffer(enc, encrypted, encrypted_size, &decrypted_size, &is_binary);
+```
+
+#### Hexadecimal Format
+
+```c
+long decrypted_size = 0;
+bool is_binary = false;
+unsigned char *decrypted = dtw.encryption.decrypt_buffer_hex(enc, hex_encrypted, &decrypted_size, &is_binary);
+```
+
+#### Base64 Format
+
+```c
+long decrypted_size = 0;
+bool is_binary = false;
+unsigned char *decrypted = dtw.encryption.decrypt_buffer_b64(enc, b64_encrypted, &decrypted_size, &is_binary);
+```
+
+## File Operations
+
+### Writing Encrypted Content to Files
+
+```c
+dtw.encryption.write_any_content(enc, "filename.txt", data, data_size);
+```
+
+### Reading Encrypted Content from Files
+
+```c
+long size;
+bool is_binary;
+unsigned char *decrypted = dtw.encryption.load_any_content(enc, "filename.txt", &size, &is_binary);
+```
+
+## Integration with Other DTW Components
+
+### DtwTransaction
+
+Transactions can be encrypted:
+
+```c
+DtwTransaction *t = newDtwTransaction();
+DtwEncriptionInterface *enc = dtw.encryption.newAES_Custom_CBC_v1_interface("my encryption key");
+dtw.transaction.set_encryption(t, enc, DTW_HEX_MODE);
+
+// Use transaction as normal
+dtw.transaction.write_string(t, "file.txt", "content");
+dtw.transaction.commit(t, "directory/");
+```
+
+### DtwResource
+
+Resources can also be encrypted:
+
+```c
+DtwResource *resource = dtw.resource.newResource("resource_name");
+DtwEncriptionInterface *enc = dtw.encryption.newAES_Custom_CBC_v1_interface("my key");
+dtw.resource.set_encryption(resource, enc, DTW_HEX_MODE);
+
+// Use resource as normal
+dtw.resource.set_string_in_sub_resource(resource, "key", "value");
+dtw.resource.commit(resource);
+```
+
+
+## Encryption Modes
+
+### Available Output Modes
+
+When setting encryption for resources or transactions:
+
+```c
+// Constants for setting the output format
+DTW_RAW_MODE  // For raw buffer output
+DTW_HEX_MODE  // For hexadecimal output
+DTW_B64_MODE  // For base64 output
+```
+
+## Error Handling
+
+Always check for NULL returns on encryption/decryption operations:
+
+```c
+if (encrypted == NULL) {
+    printf("Error encrypting\n");
+    return 1;
+}
+```
+
+
+## Key Size Limitations
+
+- For standard AES-CBC and AES-ECB interfaces, the key and IV size must be under 16 bytes.
+- For the custom CBC v1 interface, the key can be any size.
+
