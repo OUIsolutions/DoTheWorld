@@ -16,6 +16,8 @@ unsigned char *DtwEncriptionInterface_decrypt_buffer_b64(DtwEncriptionInterface 
     long b64_out_size;
     unsigned char *decoded = dtw_base64_decode(encrypted_value,&b64_out_size);
     if(decoded == NULL){
+        *is_binary = false;
+        *out_size = 0;
         return NULL;
     }
     unsigned char * decrypted =  DtwEncriptionInterface_decrypt_buffer(self,decoded,b64_out_size,out_size,is_binary);
@@ -44,7 +46,11 @@ bool DtwEncriptionInterface_write_string_file_content_b64(DtwEncriptionInterface
 
 unsigned char *DtwEncriptionInterface_load_any_content_b64(DtwEncriptionInterface *self,const  char *file_name,long *out_size,bool *is_binary){
     char *loaded = dtw_load_string_file_content(file_name);
-
+    if(loaded == NULL){
+        *is_binary = false;
+        *out_size = 0;
+        return NULL;
+    }
     unsigned char *decrypted = DtwEncriptionInterface_decrypt_buffer_b64(self,(const char *)loaded,out_size,is_binary);
     free(loaded);
     return decrypted;

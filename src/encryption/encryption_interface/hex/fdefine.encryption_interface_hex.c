@@ -30,6 +30,9 @@ unsigned char *DtwEncriptionInterface_decrypt_buffer_hex(DtwEncriptionInterface 
 bool DtwEncriptionInterface_write_any_content_hex(DtwEncriptionInterface *self,const char *file_name,unsigned char  *value,long size){
 
     char *data = DtwEncriptionInterface_encrypt_buffer_hex(self,value,size);
+    if(data == NULL){
+        return false;
+    }
     bool result = dtw_write_string_file_content(file_name,data);
     free(data);
     return result;
@@ -41,6 +44,12 @@ bool DtwEncriptionInterface_write_string_file_content_hex(DtwEncriptionInterface
 
 unsigned char *DtwEncriptionInterface_load_any_content_hex(DtwEncriptionInterface *self,const  char *file_name,long *out_size,bool *is_binary){
     char *data = dtw_load_string_file_content(file_name);
+    if(data == NULL){
+        *is_binary = false;
+        *out_size = 0;
+        return NULL;
+    }
+
     unsigned char *decrypted = DtwEncriptionInterface_decrypt_buffer_hex(self,data,out_size,is_binary);
     free(data);
     return decrypted;

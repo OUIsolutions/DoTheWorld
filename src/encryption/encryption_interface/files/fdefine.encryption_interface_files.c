@@ -23,6 +23,8 @@ unsigned char *DtwEncriptionInterface_load_any_content(DtwEncriptionInterface *s
     long raw_size;
     unsigned char *loaded = dtw_load_binary_content(file_name,&raw_size);
     if(loaded == NULL){
+        *is_binary = false;
+        *out_size = 0;
         return NULL;
     }
     unsigned char *decrypted = DtwEncriptionInterface_decrypt_buffer(self,loaded,raw_size,out_size,is_binary);
