@@ -31,7 +31,7 @@
   #include <locale.h>
   #include <direct.h>
 #endif
-#if defined(DTW_ALLOW_CHASH)
+#if defined(DTW_ALLOW_CHASH) && !defined(CHashManipulator_dep_declare)
   #include DTW_CHASH_PATH
 #endif 
 

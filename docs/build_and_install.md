@@ -2,7 +2,7 @@
 
 ## Install
 
-To install the lib just copy the [Amalgamation](https://github.com/OUIsolutions/DoTheWorld/releases/download/10.0.2/doTheWorldOne.c) into your project and include it in your code:
+To install the lib just copy the [Amalgamation](https://github.com/OUIsolutions/DoTheWorld/releases/download/10.0.3/doTheWorldOne.c) into your project and include it in your code:
 ```c
 #include "doTheWorldOne.c"
 ```
@@ -10,7 +10,7 @@ To install the lib just copy the [Amalgamation](https://github.com/OUIsolutions/
 
 If  you are on Linux, you can download the lib with:
 ```bash
-curl -L https://github.com/OUIsolutions/DoTheWorld/releases/download/10.0.2/doTheWorldOne.c -o doTheWorldOne.c
+curl -L https://github.com/OUIsolutions/DoTheWorld/releases/download/10.0.3/doTheWorldOne.c -o doTheWorldOne.c
 ```
 
 ## Compile on Linux
