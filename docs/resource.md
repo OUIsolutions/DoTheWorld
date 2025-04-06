@@ -874,7 +874,7 @@ but in these case , you need to use define  DTW_ALLOW_CHASH , and include the li
 into the project since CHashManipulator, its not included into the amalgamation
 ```c
 
-#include "../../../../dependencies/CHashManipulator.h"
+#define DTW_CHASH_PATH  "CHashManipulator.h"
 #define DTW_ALLOW_CHASH
 #include "doTheWorldOne.c"
 
