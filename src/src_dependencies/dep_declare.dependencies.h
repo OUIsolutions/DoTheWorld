@@ -31,6 +31,9 @@
   #include <locale.h>
   #include <direct.h>
 #endif
+#if defined(DTW_ALLOW_CHASH)
+  #include DTW_CHASH_PATH
+#endif 
 
 #if !defined(cJSON__h)
 #include "../../dependencies/cJSON.h"
