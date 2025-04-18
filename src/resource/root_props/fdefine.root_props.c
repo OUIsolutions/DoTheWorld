@@ -21,6 +21,9 @@ void privateDtwResourceRootProps_free(privateDtwResourceRootProps *self){
     if(self->error_path){
         free(self->error_path);
     }
+    if(self->encryption_owner){
+        DtwEncriptionInterface_free(self->encryption_interface);
+    }
 
     if(self->error_message){
         free(self->error_message);

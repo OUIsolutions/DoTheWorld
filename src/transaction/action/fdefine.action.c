@@ -27,7 +27,7 @@ DtwActionTransaction * DtwActionTransaction_write_any(DtwEncriptionInterface *en
             );
         }
         if(self->encryption_mode == DTW_B64_MODE){
-            self->content= DtwEncriptionInterface_encrypt_buffer_b64(
+            self->content= (unsigned char*)DtwEncriptionInterface_encrypt_buffer_b64(
                 self->encryption,
                 content,
                 size
@@ -35,7 +35,7 @@ DtwActionTransaction * DtwActionTransaction_write_any(DtwEncriptionInterface *en
             self->size = strlen((char*)self->content);
         }
         if(self->encryption_mode == DTW_HEX_MODE){
-            self->content= DtwEncriptionInterface_encrypt_buffer_hex(
+            self->content= (unsigned char*)DtwEncriptionInterface_encrypt_buffer_hex(
                 self->encryption,
                 content,
                 size
