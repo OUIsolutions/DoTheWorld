@@ -10,6 +10,11 @@ DtwTransaction * newDtwTransaction(){
 
     return self;
 }
+
+void DtwTransaction_set_transaction_as_encryption_object_owner(DtwTransaction *self){
+    self->encryption_owner = true;
+}
+
 void DtwTransaction_set_encryption(DtwTransaction *self,DtwEncriptionInterface *encryption,short encryiption_mode){
     self->encryption = encryption;
     self->encryption_mode = encryiption_mode;
@@ -134,6 +139,10 @@ void DtwTransaction_free(struct DtwTransaction *self){
     for(int i =0; i < self->size; i++){
         DtwActionTransaction_free(self->actions[i]);
     }
+    if(self->encryption_owner){
+        DtwEncriptionInterface_free(self->encryption);
+    }
+    
     free(self->actions);
     free(self);
 }

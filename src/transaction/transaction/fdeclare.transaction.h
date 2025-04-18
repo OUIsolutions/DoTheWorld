@@ -3,6 +3,8 @@
 
 DtwTransaction * newDtwTransaction();
 
+void DtwTransaction_set_transaction_as_encryption_object_owner(DtwTransaction *self);
+
 DtwTransaction * newDtwTransaction_from_json(cJSON *json_entry);
 
 DtwJsonTransactionError * dtw_validate_json_transaction(cJSON *json_entry);
