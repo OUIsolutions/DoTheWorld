@@ -9,6 +9,7 @@ typedef struct DtwResourceModule{
 
     void (*set_encryption)(DtwResource *self,DtwEncriptionInterface *encryption_interface,short mode);
     
+    void (*set_Resource_as_encryption_object_owner)(DtwResource *self);
 
     DtwResourceForeachProps (*create_foreach_props)( void(*callback)(DtwResource *item, void *args));
     void (*each)(DtwResource *self,DtwResourceForeachProps props);

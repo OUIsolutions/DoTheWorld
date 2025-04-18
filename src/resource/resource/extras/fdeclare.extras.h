@@ -5,6 +5,8 @@
 
 bool DtwResource_error(DtwResource *self);
 
+void DtwResource_set_Resource_as_encryption_object_owner(DtwResource *self);
+
 int DtwResource_get_error_code(DtwResource *self);
 
 void DtwResource_set_encryption(DtwResource *self,DtwEncriptionInterface *encryption_interface,short mode);

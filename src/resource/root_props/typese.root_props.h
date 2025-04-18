@@ -10,6 +10,6 @@ typedef struct {
     char *error_message;
     DtwEncriptionInterface *encryption_interface;
     short encryption_mode;
-
+    bool encryption_owner;
 
 }privateDtwResourceRootProps;

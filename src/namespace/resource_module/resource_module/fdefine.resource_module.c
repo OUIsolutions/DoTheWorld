@@ -7,6 +7,7 @@ DtwResourceModule newDtwResourceModule(){
     self.get_error_code = DtwResource_get_error_code;
     self.get_error_message = DtwResource_get_error_message;
     self.error = DtwResource_error;
+    self.set_Resource_as_encryption_object_owner = DtwResource_set_Resource_as_encryption_object_owner;
     self.load = DtwResource_load;
     self.clear_errors = DtwResource_clear_errors;
     self.unload = DtwResource_unload;

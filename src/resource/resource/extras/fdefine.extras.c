@@ -147,7 +147,9 @@ void DtwResource_unlock(DtwResource *self){
 }
 
 
-
+void DtwResource_set_Resource_as_encryption_object_owner(DtwResource *self){
+    self->root_props->encryption_owner = true;
+}
 void DtwResource_commit(DtwResource *self){
     if(DtwResource_error(self)){
         return ;
