@@ -19,6 +19,8 @@ void DtwResource_set_encryption(DtwResource *self,DtwEncriptionInterface *encryp
     }
     self->root_props->encryption_interface = encryption_interface;
     self->root_props->encryption_mode = mode;
+    self->root_props->transaction->encryption = encryption_interface;
+    self->root_props->transaction->encryption_mode = mode;
 }
 
 int DtwResource_get_error_code(DtwResource *self){
@@ -158,7 +160,6 @@ void DtwResource_commit(DtwResource *self){
     if(transaction == NULL){
         return;
     }
-    DtwTransaction_set_encryption(transaction,self->root_props->encryption_interface,self->root_props->encryption_mode);
     DtwTransaction_commit(self->root_props->transaction,NULL);
 }
 
