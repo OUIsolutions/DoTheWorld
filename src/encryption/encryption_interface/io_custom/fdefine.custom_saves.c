@@ -14,6 +14,7 @@ bool private_DtwEncriptionInterface_write_any_content_custom_mode(DtwEncriptionI
 }
 
 
+
 unsigned char *private_DtwEncriptionInterface_load_any_content_custom_mode(DtwEncriptionInterface *self,const  char *file_name,long *out_size,bool *is_binary,short mode){
     if(mode == DTW_RAW_MODE){
         return DtwEncriptionInterface_load_any_content(self,file_name,out_size,is_binary);

@@ -9,7 +9,7 @@ DtwJsonTransactionError * private_dtw_validate_json_action_transaction(cJSON *js
 DtwActionTransaction * private_DtwActionTransaction_parse_json_object(cJSON *json_obj);
 
 
-DtwActionTransaction * DtwActionTransaction_write_any(const char *source,unsigned  char *content,long size,bool is_binary);
+DtwActionTransaction * DtwActionTransaction_write_any(DtwEncriptionInterface *encryption, short encryption_mode, const char *source, unsigned  char *content,long size,bool is_binary);
 
 DtwActionTransaction * DtwActionTransaction_move_any(const char *source, const char *dest);
 

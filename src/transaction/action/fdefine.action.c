@@ -9,13 +9,47 @@ DtwActionTransaction * newDtwActionTransaction(){
 }
 
 
-DtwActionTransaction * DtwActionTransaction_write_any(const char *source, unsigned  char *content,long size,bool is_binary){
+DtwActionTransaction * DtwActionTransaction_write_any(DtwEncriptionInterface *encryption, short encryption_mode, const char *source, unsigned  char *content,long size,bool is_binary){
     DtwActionTransaction *self = newDtwActionTransaction();
     self->action_type = DTW_ACTION_WRITE;
-    self->content = (unsigned char*)malloc(size +2);
-    memcpy(self->content,content,size);
-    self->content[size] = '\0';
-    self->size = size;
+    self->encryption = encryption;
+    self->encryption_mode = encryption_mode;
+
+    if(self->encryption){
+
+        
+        if(self->encryption_mode == DTW_RAW_MODE){
+            self->content= DtwEncriptionInterface_encrypt_buffer(
+                self->encryption,
+                content,
+                size,
+                &self->size
+            );
+        }
+        if(self->encryption_mode == DTW_B64_MODE){
+            self->content= DtwEncriptionInterface_encrypt_buffer_b64(
+                self->encryption,
+                content,
+                size
+            );
+            self->size = strlen((char*)self->content);
+        }
+        if(self->encryption_mode == DTW_HEX_MODE){
+            self->content= DtwEncriptionInterface_encrypt_buffer_hex(
+                self->encryption,
+                content,
+                size
+            );
+            self->size = strlen((char*)self->content);
+        }
+    }       
+    if(!self->encryption){
+        self->content = (unsigned char*)malloc(size +2);
+        memcpy(self->content,content,size);
+        self->content[size] = '\0';
+        self->size = size;
+    }
+    
     self->source = strdup(source);
     self->is_binary = is_binary;
     return self;
@@ -71,17 +105,7 @@ void DtwActionTransaction_commit(DtwActionTransaction* self,const char *path){
 
 
     if(self->action_type == DTW_ACTION_WRITE){
-        if(self->encryption){
-            private_DtwEncriptionInterface_write_any_content_custom_mode(
-                self->encryption,
-                formated_source,
-                self->content,
-                self->size,
-                self->encryption_mode
-            );
-            free(formated_source);
-            return;
-        }
+  
         dtw_write_any_content(formated_source,self->content,self->size);
         free(formated_source);
         return;

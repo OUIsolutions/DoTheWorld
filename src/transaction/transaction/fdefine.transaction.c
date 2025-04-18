@@ -60,12 +60,12 @@ void DtwTransaction_remove_from_source(DtwTransaction *self,const char *source){
 
 
 void DtwTransaction_write_any(struct DtwTransaction *self,const char *path,unsigned char *content, long size,bool is_binary){
-    DtwActionTransaction * action = DtwActionTransaction_write_any(path,content,size,is_binary);
+    DtwActionTransaction * action = DtwActionTransaction_write_any(self->encryption,self->encryption_mode, path,content,size,is_binary);
     DtwTransaction_append_action(self,action);
 }
 
 void DtwTransaction_write_string(struct DtwTransaction *self,const char *path,const char *content){
-    DtwActionTransaction * action = DtwActionTransaction_write_any(path,(unsigned char*)content, strlen(content),false);
+    DtwActionTransaction * action = DtwActionTransaction_write_any(self->encryption,self->encryption_mode,path,(unsigned char*)content, strlen(content),false);
     DtwTransaction_append_action(self,action);
 }
 
@@ -124,8 +124,6 @@ void DtwTransaction_delete_any(struct DtwTransaction *self,const char *source){
 void DtwTransaction_commit(struct DtwTransaction *self,const char *path){
     for(int i = 0; i < self->size; i++){
         DtwActionTransaction *action = self->actions[i];
-        action->encryption  = self->encryption;
-        action->encryption_mode = self->encryption_mode;
         DtwActionTransaction_commit(action,path);
     }
 }

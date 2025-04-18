@@ -4,7 +4,7 @@ typedef struct DtwActionTransactionModule{
 
     DtwActionTransaction *(*newAction)();
 
-    DtwActionTransaction * (*write_any)(const char *source,unsigned  char *content,long size,bool is_binary);
+    DtwActionTransaction * (*write_any)(DtwEncriptionInterface *encryption, short encryption_mode,const char *source,unsigned  char *content,long size,bool is_binary);
 
     DtwActionTransaction * (*move_any)(const char *source, const char *dest);
     DtwActionTransaction * (*move_any_merging)(const char *source, const char *dest);
