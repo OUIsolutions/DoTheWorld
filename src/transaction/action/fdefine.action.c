@@ -52,6 +52,10 @@ DtwActionTransaction * DtwActionTransaction_write_any(DtwEncriptionInterface *en
     
     self->source = strdup(source);
     self->is_binary = is_binary;
+    if(encryption && encryption_mode == DTW_RAW_MODE){
+        self->is_binary = true;
+    }   
+    
     return self;
 }
 
