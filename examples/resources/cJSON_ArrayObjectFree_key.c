@@ -36,17 +36,18 @@ bool verify_if_print_user(DtwResource *user, void *filtragem){
     return false;
 }
 void create_x_users(DtwResource *users,long quantity){
+    DtwRandonizer *randonizer = newDtwRandonizer();
     for(int i =0; i < quantity; i++){
         DtwResource *current = DtwResource_sub_resource_random(users,NULL);
 
         char formatted_name[20] = {0};
         sprintf(formatted_name,"user%d", i);
-        long age = newDtwRandonizer()->generate_num(100);  // Adjusted for pure C function
+        long age = DtwRandonizer_generate_num(randonizer,100);  // Use the local randonizer instance
 
         DtwResource_set_string_in_sub_resource(current,"name",formatted_name);
         DtwResource_set_long_in_sub_resource(current,"age",age);
     }
-
+    DtwRandonizer_free(randonizer);
 }
 
 
@@ -77,7 +78,7 @@ int main(){
     free(content);
 
     DtwResource_free(database);
-    newDtwRandonizer_free(randonizer);  // Assuming free function exists
+    DtwRandonizer_free(randonizer);  // Assuming free function exists
 
     return 0;
 }

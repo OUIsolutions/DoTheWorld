@@ -31,14 +31,14 @@ void create_x_users(DtwResource *users, long quantity, DtwRandonizer *randonizer
 
 int main() {
     DtwRandonizer *randonizer = newDtwRandonizer();
-    DtwResource *users = newDtwResource("users");
+    DtwResource *users = new_DtwResource("users");
     create_x_users(users, 100, randonizer);
     DtwResourceForeachProps props = DtwResource_create_foreach_props(print_user);
     props.filtrage_callback = verify_if_print_user;
     Filtrage f;
     f.age = 18;
     props.args = &f;
-    DtwResource_each(users, props);
+    DtwResource_foreach(users, props);
     DtwResource_free(users);
     DtwRandonizer_free(randonizer);
     return 0;

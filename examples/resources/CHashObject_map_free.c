@@ -63,9 +63,9 @@ int main(){
 
     CHashArray *itens = DtwResource_map_CHashObject(users,props);
 
-    char *content = newCHashStringDumpToJson(itens);
+    char *content = CHash_dump_to_json_string(itens);
     printf("%s",content);
-    newCHashFree(itens);
+    CHash_free(itens);
     free(content);
 
     DtwResource_free(database);
