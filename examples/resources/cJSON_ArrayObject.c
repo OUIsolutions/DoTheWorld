@@ -45,7 +45,7 @@ void create_x_users(DtwResource *users,long quantity){
 
 int main(){
     randonizer = newDtwRandonizer();
-    DtwResource *database = DtwResource_newResource("database");
+    DtwResource *database = new_DtwResource("database");
     DtwResource *users = DtwResource_sub_resource(database,"users");
     create_x_users(users,100);
     Filtrage f;

@@ -9,8 +9,8 @@ typedef struct {
 
 CHashObject * return_user(DtwResource *user, void *filtragem){
     return newCHashObject(
-        "name", newString(DtwResource_get_string_from_sub_resource(user, "name")),
-        "age", newNumber(DtwResource_get_long_from_sub_resource(user,"age"))
+        "name", newCHashString(DtwResource_get_string_from_sub_resource(user, "name")),
+        "age", newCHashNumber(DtwResource_get_long_from_sub_resource(user,"age"))
     );
 }
 char * get_key(DtwResource *user, void *filtrage){
@@ -27,6 +27,7 @@ bool verify_if_print_user(DtwResource *user, void *filtragem){
     return false;
 }
 void create_x_users(DtwResource *users,long quantity){
+    DtwRandonizer *randonizer = newDtwRandonizer();
     for(int i =0; i < quantity; i++){
         DtwResource *current = DtwResource_sub_resource_random(users,NULL);
 
@@ -37,6 +38,7 @@ void create_x_users(DtwResource *users,long quantity){
         DtwResource_set_string_in_sub_resource(current,"name",formatted_name);
         DtwResource_set_long_in_sub_resource(current,"age",age);
     }
+    DtwRandonizer_free(randonizer);
 }
 
 int main(){
@@ -44,7 +46,7 @@ int main(){
     CHashNamespace hash = newCHashNamespace();
     DtwRandonizer *randonizer = dtw.randonizer.newRandonizer();
 
-    DtwResource *database = DtwResource_newResource("database");
+    DtwResource *database = new_DtwResource("database");
     DtwResource *users = DtwResource_sub_resource(database,"users");
 
     create_x_users(users,100);

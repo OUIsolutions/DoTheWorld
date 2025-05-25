@@ -29,7 +29,7 @@ void create_x_users(DtwResource *users, long quantity) {
 
         char formatted_name[20] = {0};
         sprintf(formatted_name, "user%d", i);
-        long age = DtwRandonizer_generate_num(DtwRandonizer_newRandonizer(), 100);
+        long age = DtwRandonizer_generate_num(newDtwRandonizer(), 100);
 
         DtwResource_set_string_in_sub_resource(current, "name", formatted_name);
         DtwResource_set_long_in_sub_resource(current, "age", age);
@@ -37,7 +37,7 @@ void create_x_users(DtwResource *users, long quantity) {
 }
 
 int main() {
-    DtwResource *database = DtwResource_newResource("database");
+    DtwResource *database = new_DtwResource("database");
     DtwResource *users = DtwResource_sub_resource(database, "users");
 
     create_x_users(users, 100);

@@ -4,9 +4,12 @@ CWebStudio.h
 dependencies
 teste*
 release
+CHashManipulator.h
 prompt.md
 temp_lib
 temp_lib.zip
+test
+test.c
 example_test.lua
 exemple
 side_effect
