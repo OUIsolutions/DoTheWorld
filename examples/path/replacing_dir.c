@@ -1,13 +1,8 @@
-
 #include "doTheWorldOne.c"
 
-
 int main(){
-    DtwNamespace dtw = newDtwNamespace();
-
-    DtwPath * path = dtw.path.newPath("a/b/c/d.txt");
-    dtw.path.replace_dirs(path,"b/c","test");
-    dtw.path.represent(path);
-    dtw.path.free(path);
-
+    DtwPath * path = newDtwPath("a/b/c/d.txt");
+    DtwPath_replace_dirs(path, "b/c", "test");
+    DtwPath_represent(path);
+    DtwPath_free(path);
 }

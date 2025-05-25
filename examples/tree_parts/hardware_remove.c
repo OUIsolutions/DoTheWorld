@@ -1,16 +1,11 @@
-
-
 #include "doTheWorldOne.c"
 
-
-
 int main(){
-    DtwNamespace dtw = newDtwNamespace();
+    DtwTreePart *part = newDtwTreePartLoading("tests/target/a.txt");
 
-    DtwTreePart *part = dtw.tree.part.newPartLoading("tests/target/a.txt");
+    DtwTreePart_hardware_remove(part, DTW_EXECUTE_NOW);
+    DtwTreePart_hardware_commit(part);
+    DtwTreePart_free(part);
 
-    dtw.tree.part.hardware_remove(part,DTW_EXECUTE_NOW);
-    dtw.tree.part.hardware_commit(part);
-    dtw.tree.part.free(part);
-
+    return 0;
 }

@@ -1,24 +1,22 @@
+ #include "doTheWorldOne.c"
 
-#include "doTheWorldOne.c"
 
-DtwNamespace dtw;
-DtwRandonizer *randonizer;
 typedef struct {
     int age;
-}Filtrage;
+} Filtrage;
 
 
 cJSON * return_user(DtwResource *user, void *filtragem){
-    cJSON *created_object =cJSON_CreateObject();
+    cJSON *created_object = cJSON_CreateObject();
     cJSON_AddStringToObject(
         created_object,
-        "name", dtw.resource.get_string_from_sub_resource(user, "name")
+        "name", DtwResource_get_string_from_sub_resource(user, "name")
     );
 
     cJSON_AddNumberToObject(
         created_object,
         "age",
-        dtw.resource.get_long_from_sub_resource(user,"age")
+        DtwResource_get_long_from_sub_resource(user,"age")
     );
     return created_object;
 }
@@ -26,7 +24,7 @@ cJSON * return_user(DtwResource *user, void *filtragem){
 bool verify_if_print_user(DtwResource *user, void *filtragem){
      Filtrage *f = (Filtrage *)filtragem;
 
-    long age = dtw.resource.get_long_from_sub_resource(user, "age");
+    long age = DtwResource_get_long_from_sub_resource(user, "age");
 
     if(age < f->age){
 
@@ -37,40 +35,39 @@ bool verify_if_print_user(DtwResource *user, void *filtragem){
 }
 void create_x_users(DtwResource *users,long quantity){
     for(int i =0; i < quantity; i++){
-        DtwResource *current = dtw.resource.new_schema_insertion(users);
+        DtwResource *current = DtwResource_new_schema_insertion(users);
 
         char formatted_name[20] = {0};
         sprintf(formatted_name,"user%d", i);
-        long age = dtw.randonizer.generate_num(randonizer,100);
+        long age = DtwRandonizer_generate_num(randonizer,100);
 
-        dtw.resource.set_string_in_sub_resource(current,"name",formatted_name);
-        dtw.resource.set_long_in_sub_resource(current,"age",age);
+        DtwResource_set_string_in_sub_resource(current,"name",formatted_name);
+        DtwResource_set_long_in_sub_resource(current,"age",age);
     }
 
 }
 void create_schemas(DtwResource *database){
-    DtwDatabaseSchema *schema = dtw.resource.newDatabaseSchema(database);
-    DtwSchema *users = dtw.database_schema.sub_schema(schema,"users");
-    dtw.schema.add_primary_key(users,"name");
+    DtwDatabaseSchema *schema = DtwResource_newDatabaseSchema(database);
+    DtwSchema *users = DtwDatabaseSchema_sub_schema(schema,"users");
+    DtwSchema_add_primary_key(users,"name");
 }
 
 
 
-
 int main(){
-    dtw = newDtwNamespace();
-    randonizer = dtw.randonizer.newRandonizer();
+    
+    randonizer = newDtwRandonizer();
 
-    DtwResource *database = dtw.resource.newResource("database");
+    DtwResource *database = DtwResource_newResource("database");
     create_schemas(database);
-    DtwResource *users = dtw.resource.sub_resource(database,"users");
+    DtwResource *users = DtwResource_sub_resource(database,"users");
 
     create_x_users(users,100);
 
     Filtrage f;
     f.age = 18;
     cJSON *itens = cJSON_CreateArray();
-    DtwResourceMapProps props = dtw.resource.create_map_props(
+    DtwResourceMapProps props = DtwResource_create_map_props(
         itens,
         (void (*)(void*,void*))cJSON_AddItemToArray,
         (void* (*)(DtwResource *,void*))return_user
@@ -79,15 +76,16 @@ int main(){
     props.filtrage_callback = verify_if_print_user;
     props.args = &f;
 
-   dtw.resource.schema_map(users,props);
+   DtwResource_schema_map(users,props);
 
     char *content = cJSON_Print(itens);
     printf("%s",content);
     cJSON_Delete(itens);
     free(content);
 
-    dtw.resource.free(database);
-    dtw.randonizer.free(randonizer);
+    DtwResource_free(database);
+    DtwRandonizer_free(randonizer);
 
     return 0;
 }
+ 

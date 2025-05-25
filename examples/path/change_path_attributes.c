@@ -1,15 +1,10 @@
-
 #include "doTheWorldOne.c"
 
-
 int main(){
-    DtwNamespace dtw = newDtwNamespace();
-
-    DtwPath * path = dtw.path.newPath("a/b/c/d.txt");
-    dtw.path.set_name(path,"test");
-    dtw.path.set_extension(path,"md");
-    dtw.path.represent(path);
-    dtw.path.free(path);
-
-
+    DtwPath * path = newDtwPath("a/b/c/d.txt");
+    DtwPath_set_name(path, "test");
+    DtwPath_set_extension(path, "md");
+    DtwPath_represent(path);
+    DtwPath_free(path);
+    return 0;
 }

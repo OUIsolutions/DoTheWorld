@@ -1,60 +1,45 @@
-
 #include "doTheWorldOne.c"
 
 
 
-
-void append_text(const char *file,char *text){
-    DtwNamespace dtw = newDtwNamespace();
-
+void append_text(const char *file, char *text){
+    DtwNamespace dtw = newDtwNamespace();  // Keeping this as it's the entry point, but replacing its members with pure C functions.
 
     DtwLocker *locker = newDtwLocker();
-    while(dtw.locker.lock(locker,file));
-    //printf("process %d get the ownership\n",locker->process);
+    while(DtwLocker_lock(locker, file));  // Replaced dtw.locker.lock with DtwLocker_lock
 
-    char *content = dtw.load_string_file_content(file);
+    char *content = dtw_load_string_file_content(file);  // Replaced dtw.load_string_file_content with dtw_load_string_file_content
 
-    content = realloc(content,strlen(content) + strlen(text) + 2);
-    strcat(content,text);
+    content = realloc(content, strlen(content) + strlen(text) + 2);
+    strcat(content, text);
 
-    dtw.write_string_file_content(file,content);
+    dtw_write_string_file_content(file, content);  // Replaced dtw.write_string_file_content with dtw_write_string_file_content
     free(content);
 
-
-    dtw.locker.free(locker);
-
+    DtwLocker_free(locker);  // Replaced dtw.locker.free with DtwLocker_free
 }
 
 int main(int argc, char *argv[]){
-
-
-    DtwNamespace dtw = newDtwNamespace();
-
+    DtwNamespace dtw = newDtwNamespace();  // Keeping this, but replacing its members.
 
     const char *file = "tests/target/append.txt";
-    int total_process  = 10;
-    // this will reset the file
-    dtw.remove_any(file);
-    dtw.write_string_file_content(file,"");
+    int total_process = 10;
+    // This will reset the file
+    dtw_remove_any(file);  // Replaced dtw.remove_any with dtw_remove_any
+    dtw_write_string_file_content(file, "");
 
-    for(int i = 0; i < total_process; i ++){
-
+    for(int i = 0; i < total_process; i++){
         if(fork() == 0){
             char formated_content[1000] = {0};
-            sprintf(formated_content,"text of: %d process %d \n",i,getpid());
-            append_text(file,formated_content);
-
+            sprintf(formated_content, "text of: %d process %d \n", i, getpid());
+            append_text(file, formated_content);
             exit(0);
         }
-
     }
 
-    // Hold the end of other process
-    for (int i = 0; i < total_process; i++) {
+    // Hold the end of other processes
+    for(int i = 0; i < total_process; i++){
         int status;
         wait(&status);
     }
-
-
-
 }

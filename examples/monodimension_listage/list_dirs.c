@@ -1,14 +1,10 @@
-
-
 #include "doTheWorldOne.c"
 
 int main(int argc, char *argv[]){
-    DtwNamespace dtw = newDtwNamespace();
-
-  DtwStringArray *dirs = dtw.list_dirs("tests/target", DTW_NOT_CONCAT_PATH);
-  //the represent methold will print the dirs in the console
-  dtw.string_array.sort(dirs);
-  dtw.string_array.represent(dirs);
-  dtw.string_array.free(dirs);
-  return 0;
+    DtwStringArray *dirs = dtw_list_dirs("tests/target", DTW_NOT_CONCAT_PATH);
+    //the represent method will print the dirs in the console
+    DtwStringArray_sort(dirs);
+    DtwStringArray_represent(dirs);
+    DtwStringArray_free(dirs);
+    return 0;
 }

@@ -1,27 +1,22 @@
-
 #include "doTheWorldOne.c"
 
 int main (){
-    DtwNamespace dtw = newDtwNamespace();
-
-    DtwResource *values = dtw.resource.newResource("tests/target/new_folder");
-    dtw.resource.set_string_in_sub_resource(values,"text.txt","nothing");
+    DtwResource *values = new_DtwResource("tests/target/new_folder");
+    DtwResource_set_string_in_sub_resource(values,"text.txt","nothing");
 
     long size;
     unsigned char *blob = dtw_load_binary_content("tests/target/blob.png",&size);
-    dtw.resource.set_binary_in_sub_resource(values,"blob.png",blob,size);
+    DtwResource_set_binary_in_sub_resource(values,"blob.png",blob,size);
     free(blob);
 
-    dtw.resource.set_long_in_sub_resource(values,"b.txt",25);
-    dtw.resource.set_double_in_sub_resource(values,"c.txt",10.5);
-    dtw.resource.set_bool_in_sub_resource(values,"b.txt",true);
+    DtwResource_set_long_in_sub_resource(values,"b.txt",25);
+    DtwResource_set_double_in_sub_resource(values,"c.txt",10.5);
+    DtwResource_set_bool_in_sub_resource(values,"b.txt",true);
 
-    DtwResource  *sub_foder = dtw.resource.sub_resource(values,"sub_foder");
-    dtw.resource.set_string_in_sub_resource(sub_foder,"a.txt","nothing");
+    DtwResource *sub_foder = DtwResource_sub_resource(values,"sub_foder");
+    DtwResource_set_string_in_sub_resource(sub_foder,"a.txt","nothing");
 
-    dtw.resource.commit(values);
-    dtw.resource.free(values);
-
-
-
+    DtwResource_commit(values);
+    DtwResource_free(values);
+    DtwResource_free(sub_foder);
 }

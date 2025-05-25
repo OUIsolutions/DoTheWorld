@@ -1,13 +1,9 @@
-//
-// Created by jurandi on 20-06-2023.
-//
+// Created by jurandi on 20-06-2023.//
 #include "doTheWorldOne.c"
 
 void dumps_tree(){
-    DtwNamespace dtw = newDtwNamespace();
-
-    DtwTree *tree = dtw.tree.newTree();
-    dtw.tree.add_tree_from_hardware(
+    DtwTree *tree = newDtwTree();
+    DtwTree_add_tree_from_hardware(
             tree,
             "tests/target",
             (DtwTreeProps){
@@ -17,7 +13,7 @@ void dumps_tree(){
             }
     );
 
-    dtw.tree.dumps_json_tree_to_file(
+    DtwTree_dumps_tree_json_to_file(
             tree,
             "tests/target/out.json",
             (DtwTreeProps){
@@ -29,13 +25,12 @@ void dumps_tree(){
             }
     );
 
-    dtw.tree.free(tree);
+    DtwTree_free(tree);
 }
 int main(){
-    DtwNamespace dtw = newDtwNamespace();
     dumps_tree();
-    DtwTree *tree = dtw.tree.newTree();
-    dtw.tree.loads_json_tree_from_file(tree,"tests/target/out.json");
-    dtw.tree.represent(tree);
-    dtw.tree.free(tree);
+    DtwTree *tree = newDtwTree();
+    DtwTree_loads_json_tree_from_file(tree,"tests/target/out.json");
+    DtwTree_represent(tree);
+    DtwTree_free(tree);
 }

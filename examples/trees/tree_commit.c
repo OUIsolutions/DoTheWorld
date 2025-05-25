@@ -1,14 +1,10 @@
-//
-// Created by jurandi on 20-06-2023.
-//
-
 #include "doTheWorldOne.c"
 
 int main(){
-    DtwNamespace dtw = newDtwNamespace();
+    DtwNamespace dtw = newDtwNamespace();  // Retain as it's the initializer
 
-    DtwTree *tree = dtw.tree.newTree();
-    dtw.tree.add_tree_from_hardware(
+    DtwTree *tree = newDtwTree();  // Replace dtw.tree.newTree() with global function
+    DtwTree_add_tree_from_hardware(  // Replace dtw.tree.add_tree_from_hardware
             tree,
             "tests/target",
             (DtwTreeProps){
@@ -21,17 +17,16 @@ int main(){
     for(int i=0; i < tree->size;i++){
         struct DtwTreePart *part = tree->tree_parts[i];
 
-        char *extension = dtw.path.get_extension( part->path);
+        char *extension = DtwPath_get_extension(part->path);  // Replace dtw.path.get_extension
         if(!extension){
             continue;
         }
         if(strcmp(extension,"txt") == 0){
-            dtw.path.set_extension( part->path,"md");
-            dtw.tree.part.hardware_modify(part,DTW_SET_AS_ACTION);
-
+            DtwPath_set_extension(part->path,"md");  // Replace dtw.path.set_extension
+            DtwTreePart_hardware_modify(part,DTW_SET_AS_ACTION);  // Replace dtw.tree.part.hardware_modify
         }
     }
 
-    dtw.tree.hardware_commit_tree(tree);
-    dtw.tree.free(tree);
+    DtwTree_hardware_commit_tree(tree);  // Replace dtw.tree.hardware_commit_tree
+    DtwTree_free(tree);  // Replace dtw.tree.free
 }

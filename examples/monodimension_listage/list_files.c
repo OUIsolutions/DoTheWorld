@@ -1,15 +1,12 @@
-
 #include "doTheWorldOne.c"
 
 int main(int argc, char *argv[]){
-    DtwNamespace dtw = newDtwNamespace();
+    DtwStringArray *files = dtw_list_files("tests/target", DTW_CONCAT_PATH);
+    DtwStringArray_sort(files);
 
-  DtwStringArray *files = dtw.list_files("tests/target", DTW_CONCAT_PATH);
-  dtw.string_array.sort(files);
-
-  for(int i = 0; i < files->size; i++){
-    printf("%s\n", files->strings[i]);
-  }
-  dtw.string_array.free(files);
-  return 0;
+    for(int i = 0; i < files->size; i++){
+        printf("%s\n", files->strings[i]);
+    }
+    DtwStringArray_free(files);
+    return 0;
 }

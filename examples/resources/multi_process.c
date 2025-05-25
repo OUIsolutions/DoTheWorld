@@ -1,18 +1,17 @@
 #include "doTheWorldOne.c"
 
 
-
 int main (){
     DtwNamespace dtw = newDtwNamespace();
 
     for(int i =0 ; i<10; i++){if(fork()==0){
-            DtwResource *test = dtw.resource.newResource("tests/target");
-            DtwResource *a = dtw.resource.sub_resource(test,"numerical.txt");
-            dtw.resource.lock(a);
+            DtwResource *test = new_DtwResource("tests/target");
+            DtwResource *a = DtwResource_sub_resource(test,"numerical.txt");
+            DtwResource_lock(a);
             char *content = NULL;
 
-            if(dtw.resource.type(a) != DTW_NOT_FOUND){
-                content = dtw.resource.get_string(a);
+            if(DtwResource_type(a) != DTW_NOT_FOUND){
+                content = DtwResource_get_string(a);
             }
 
             char formated[2000] ={0};
@@ -23,9 +22,9 @@ int main (){
                 sprintf(formated,"%d",i);
             }
 
-            dtw.resource.set_string(a,formated);
-            dtw.resource.commit(test);
-            dtw.resource.free(test);
+            DtwResource_set_string(a,formated);
+            DtwResource_commit(test);
+            DtwResource_free(test);
             exit(0);
     }}
 

@@ -1,28 +1,22 @@
-
 #include "CHashManipulator.h"
 #define DTW_ALLOW_CHASH
 #include "doTheWorldOne.c"
 
-
-CHashNamespace hash;
-DtwNamespace dtw;
-DtwRandonizer *randonizer;
 typedef struct {
     int age;
 }Filtrage;
 
-
 CHashObject * return_user(DtwResource *user, void *filtragem){
     return newCHashObject(
-        "name",hash.newString(dtw.resource.get_string_from_sub_resource(user, "name")),
-        "age", hash.newNumber(dtw.resource.get_long_from_sub_resource(user,"age"))
+        "name",newString(DtwResource_get_string_from_sub_resource(user, "name")),
+        "age", newNumber(DtwResource_get_long_from_sub_resource(user,"age"))
     );
 }
 
 
 bool verify_if_print_user(DtwResource *user, void *filtragem){
      Filtrage *f = (Filtrage *)filtragem;
-    long age = dtw.resource.get_long_from_sub_resource(user, "age");
+    long age = DtwResource_get_long_from_sub_resource(user, "age");
 
     if(age < f->age){
 
@@ -33,54 +27,53 @@ bool verify_if_print_user(DtwResource *user, void *filtragem){
 }
 void create_x_users(DtwResource *users,long quantity){
     for(int i =0; i < quantity; i++){
-        DtwResource *current = dtw.resource.new_schema_insertion(users);
+        DtwResource *current = new_schema_insertion(users);
 
         char formatted_name[20] = {0};
         sprintf(formatted_name,"user%d", i);
-        long age = dtw.randonizer.generate_num(randonizer,100);
+        long age = DtwRandonizer_generate_num(randonizer,100);
 
-        dtw.resource.set_string_in_sub_resource(current,"name",formatted_name);
-        dtw.resource.set_long_in_sub_resource(current,"age",age);
+        DtwResource_set_string_in_sub_resource(current,"name",formatted_name);
+        DtwResource_set_long_in_sub_resource(current,"age",age);
     }
 
 }
 void create_schemas(DtwResource *database){
-    DtwDatabaseSchema *schema = dtw.resource.newDatabaseSchema(database);
-    DtwSchema *users = dtw.database_schema.sub_schema(schema,"users");
-    dtw.schema.add_primary_key(users,"name");
+    DtwDatabaseSchema *schema = newDatabaseSchema(database);
+    DtwSchema *users = DtwDatabaseSchema_sub_schema(schema,"users");
+    DtwSchema_add_primary_key(users,"name");
 }
 
 
-
 int main(){
-    dtw = newDtwNamespace();
-    hash = newCHashNamespace();
-    randonizer = dtw.randonizer.newRandonizer();
+    // dtw = newDtwNamespace();  // Removed global, so this line is commented out or removed
+    // hash = newCHashNamespace();  // Removed
+    // randonizer = DtwRandonizer_newRandonizer();  // Removed global, replaced with direct call if possible
 
-    DtwResource *database = dtw.resource.newResource("database");
+    DtwResource *database = newResource("database");
     create_schemas(database);
 
-    DtwResource *users = dtw.resource.sub_resource(database,"users");
+    DtwResource *users = DtwResource_sub_resource(database,"users");
 
     create_x_users(users,100);
 
     Filtrage f;
     f.age = 18;
 
-    DtwResourceCHashrrayMapProps props = dtw.resource.create_CHashrrayMapProps(return_user);
+    DtwResourceCHashrrayMapProps props = create_CHashrrayMapProps(return_user);
 
     props.filtrage_callback = verify_if_print_user;
     props.args = &f;
 
-    CHashArray *itens = dtw.resource.schema_map_CHashArray(users,props);
+    CHashArray *itens = DtwResource_schema_map_CHashArray(users,props);
 
-    char *content = hash.dump_to_json_string(itens);
+    char *content = dump_to_json_string(itens);
     printf("%s",content);
-    hash.free(itens);
+    free(itens);
     free(content);
 
-    dtw.resource.free(database);
-    dtw.randonizer.free(randonizer);
+    DtwResource_free(database);
+    // dtw.randonizer.free(randonizer);  // Removed
 
     return 0;
 }

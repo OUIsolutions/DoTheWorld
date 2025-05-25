@@ -1,16 +1,10 @@
-
 #include "CHashManipulator.h"
 #define DTW_ALLOW_CHASH
 #include "doTheWorldOne.c"
 
-
-CHashNamespace hash;
-DtwNamespace dtw;
-DtwRandonizer *randonizer;
 typedef struct {
     int age;
 }Filtrage;
-
 
 CHashObject * return_user(DtwResource *user, void *filtragem){
     return newCHashObject(
@@ -56,13 +50,7 @@ void create_schemas(DtwResource *database){
 
 
 
-
-
 int main(){
-    dtw = newDtwNamespace();
-    hash = newCHashNamespace();
-    randonizer = dtw.randonizer.newRandonizer();
-
     DtwResource *database = dtw.resource.newResource("database");
     create_schemas(database);
 
@@ -88,7 +76,6 @@ int main(){
     free(content);
 
     dtw.resource.free(database);
-    dtw.randonizer.free(randonizer);
 
     return 0;
 }

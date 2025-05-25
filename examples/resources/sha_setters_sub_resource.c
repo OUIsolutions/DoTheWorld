@@ -1,16 +1,9 @@
-
 #include "doTheWorldOne.c"
 
 int main (){
-    DtwNamespace dtw = newDtwNamespace();
-
-    DtwResource *values = dtw.resource.newResource("tests/target/");
-    dtw.resource.set_string_sha_in_sub_resource(values,"password","1234");
-    dtw.resource.commit(values);
-    dtw.resource.free(values);
-
-
-
-
+    DtwResource *values = new_DtwResource("tests/target/");
+    DtwResource_set_string_sha_in_sub_resource(values,"password","1234");
+    DtwResource_commit(values);
+    DtwResource_free(values);
 
 }

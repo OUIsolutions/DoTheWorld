@@ -1,11 +1,8 @@
-
 #include "doTheWorldOne.c"
 
 int main(int argc, char *argv[]){
-    DtwNamespace dtw = newDtwNamespace();
-
-    DtwTree *tree = dtw.tree.newTree();
-    dtw.tree.add_tree_from_hardware(
+    DtwTree *tree = newDtwTree();
+    DtwTree_add_tree_from_hardware(
             tree,
             "tests/target/",
             (DtwTreeProps){
@@ -14,10 +11,10 @@ int main(int argc, char *argv[]){
                     .path_atributes=DTW_INCLUDE
             }
     );
-  DtwStringArray *files = dtw.tree.list_all(tree,"tests/target/sub_folder",DTW_NOT_CONCAT_PATH);
-  dtw.string_array.sort(files);
-  dtw.string_array.represent(files);
-  dtw.string_array.free(files);
-  dtw.tree.free(tree);
-  return 0;
+    DtwStringArray *files = DtwTree_list_all(tree, "tests/target/sub_folder", DTW_NOT_CONCAT_PATH);
+    DtwStringArray_sort(files);
+    DtwStringArray_represent(files);
+    DtwStringArray_free(files);
+    DtwTree_free(tree);
+    return 0;
 }

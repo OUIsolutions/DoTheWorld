@@ -1,11 +1,8 @@
 #include "doTheWorldOne.c"
 
-
 int main(){
-    DtwNamespace dtw = newDtwNamespace();
-
-    DtwTree *tree = dtw.tree.newTree();
-    dtw.tree.add_tree_from_hardware(
+    DtwTree *tree = newDtwTree();
+    DtwTree_add_tree_from_hardware(
             tree,
             "tests/target/",
             (DtwTreeProps){
@@ -14,6 +11,6 @@ int main(){
                     .path_atributes=DTW_INCLUDE
             }
     );
-    dtw.tree.represent(tree);
-    dtw.tree.free(tree);
+    DtwTree_represent(tree);
+    DtwTree_free(tree);
 }

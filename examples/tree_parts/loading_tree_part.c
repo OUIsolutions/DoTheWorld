@@ -1,11 +1,7 @@
-
-
 #include "doTheWorldOne.c"
 
 int main(){
-    DtwNamespace dtw = newDtwNamespace();
-
-    DtwTreePart *part = dtw.tree.part.newPartLoading("tests/target/a.txt");
-    dtw.tree.part.represent(part);
-    dtw.tree.part.free(part);
+    DtwTreePart *part = newDtwTreePartLoading("tests/target/a.txt");
+    DtwTreePart_represent(part);
+    DtwTreePart_free(part);
 }

@@ -1,35 +1,32 @@
 #include "doTheWorldOne.c"
 
-
-DtwNamespace dtw;
 DtwRandonizer *randonizer;
 typedef struct {
     int age;
 }Filtrage;
 
-
 cJSON * return_user(DtwResource *user, void *filtragem){
     cJSON *created_object =cJSON_CreateObject();
     cJSON_AddStringToObject(
         created_object,
-        "name", dtw.resource.get_string_from_sub_resource(user, "name")
+        "name", DtwResource_get_string_from_sub_resource(user, "name")
     );
 
     cJSON_AddNumberToObject(
         created_object,
         "age",
-        dtw.resource.get_long_from_sub_resource(user,"age")
+        DtwResource_get_long_from_sub_resource(user,"age")
     );
     return created_object;
 }
 char * get_key(DtwResource *user, void *filtrage){
-    return strdup(dtw.resource.get_string_from_sub_resource(user, "name"));
+    return strdup(DtwResource_get_string_from_sub_resource(user, "name"));
 }
 
 
 bool verify_if_print_user(DtwResource *user, void *filtragem){
      Filtrage *f = (Filtrage *)filtragem;
-    long age = dtw.resource.get_long_from_sub_resource(user, "age");
+    long age = DtwResource_get_long_from_sub_resource(user, "age");
 
     if(age < f->age){
 
@@ -40,41 +37,38 @@ bool verify_if_print_user(DtwResource *user, void *filtragem){
 }
 void create_x_users(DtwResource *users,long quantity){
     for(int i =0; i < quantity; i++){
-        DtwResource *current = dtw.resource.sub_resource_random(users,NULL);
+        DtwResource *current = DtwResource_sub_resource_random(users,NULL);
 
         char formatted_name[20] = {0};
         sprintf(formatted_name,"user%d", i);
-        long age = dtw.randonizer.generate_num(randonizer,100);
+        long age = newDtwRandonizer()->generate_num(100);  // Adjusted for pure C function
 
-        dtw.resource.set_string_in_sub_resource(current,"name",formatted_name);
-        dtw.resource.set_long_in_sub_resource(current,"age",age);
+        DtwResource_set_string_in_sub_resource(current,"name",formatted_name);
+        DtwResource_set_long_in_sub_resource(current,"age",age);
     }
 
 }
 
 
 
-
-
 int main(){
-    dtw = newDtwNamespace();
-    randonizer = dtw.randonizer.newRandonizer();
+    randonizer = newDtwRandonizer();  // Direct call
 
-    DtwResource *database = dtw.resource.newResource("database");
-    DtwResource *users = dtw.resource.sub_resource(database,"users");
+    DtwResource *database = new_DtwResource("database");  // From resource_module
+    DtwResource *users = DtwResource_sub_resource(database,"users");
 
     create_x_users(users,100);
 
     Filtrage f;
     f.age = 18;
 
-    DtwResourcecJSONObjectMapProps props = dtw.resource.create_cJSONObjectProps(return_user,get_key);
+    DtwResourcecJSONObjectMapProps props = DtwResource_create_cJSONObjectProps(return_user,get_key);
 
     props.filtrage_callback = verify_if_print_user;
     props.args = &f;
     props.free_key = true;
 
-    cJSON *itens = dtw.resource.map_cJSONObject(users,props);
+    cJSON *itens = DtwResource_map_cJSONObject(users,props);
 
 
     char *content = cJSON_Print(itens);
@@ -82,8 +76,8 @@ int main(){
     cJSON_Delete(itens);
     free(content);
 
-    dtw.resource.free(database);
-    dtw.randonizer.free(randonizer);
+    DtwResource_free(database);
+    newDtwRandonizer_free(randonizer);  // Assuming free function exists
 
     return 0;
 }

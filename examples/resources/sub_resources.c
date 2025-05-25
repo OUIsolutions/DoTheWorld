@@ -1,20 +1,14 @@
 #include "doTheWorldOne.c"
 
-int main (){
-    DtwNamespace dtw = newDtwNamespace();
+int main() {
+    DtwResource *values = new_DtwResource("tests/target");
+    DtwResourceArray *listage = DtwResource_sub_resources(values);
 
-    DtwResource *values = dtw.resource.newResource("tests/target");
-
-    DtwResourceArray *listage = dtw.resource.sub_resources(values);
-
-    for(int i = 0; i < listage->size;i++){
-        DtwResource * current = listage->resources[i];
+    for(int i = 0; i < listage->size; i++) {
+        DtwResource *current = listage->resources[i];
         printf("----------------------------------------\n");
-        dtw.resource.represent(current);
+        DtwResource_represent(current);
     }
 
-    dtw.resource.free(values);
-
-
-
+    DtwResource_free(values);
 }

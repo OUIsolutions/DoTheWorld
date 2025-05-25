@@ -1,16 +1,13 @@
-
 #include "doTheWorldOne.c"
 
-
 int main() {
-    DtwNamespace dtw = newDtwNamespace();
-    DtwRandonizer *random = dtw.randonizer.newRandonizer();
-    int value = dtw.randonizer.generate_num(random,40);
-    int value2 = dtw.randonizer.generate_num(random,40);
-
-    printf("value%d\n",value);
-
-    printf("value2 %d\n",value2);
-
-    dtw.randonizer.free(random);
+    DtwRandonizer *random = newDtwRandonizer();
+    int value = DtwRandonizer_generate_num(random, 40);
+    int value2 = DtwRandonizer_generate_num(random, 40);
+    
+    printf("value %d\n", value);  // Fixed typo in format string
+    printf("value2 %d\n", value2);
+    
+    DtwRandonizer_free(random);
+    return 0;  // Added for good practice, though not in original
 }

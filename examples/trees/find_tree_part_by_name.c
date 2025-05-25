@@ -1,15 +1,9 @@
-//
-// Created by jurandi on 20-06-2023.
-//
-
-
 #include "doTheWorldOne.c"
 
 int main(){
-    DtwNamespace dtw = newDtwNamespace();
-
-    DtwTree *tree = dtw.tree.newTree();
-    dtw.tree.add_tree_from_hardware(
+    DtwTree *tree = newDtwTree();
+    
+    DtwTree_add_tree_from_hardware(
             tree,
             "tests/target",
             (DtwTreeProps){
@@ -19,10 +13,13 @@ int main(){
             }
     );
 
-    DtwTreePart *blob = dtw.tree.find_tree_part_by_name(tree,"blob.png");
+    DtwTreePart *blob = DtwTree_find_tree_part_by_name(tree, "blob.png");
+    
     if(blob){
-        dtw.tree.part.represent(blob);
+        DtwTreePart_represent(blob);
     }
-    dtw.tree.free(tree);
-
+    
+    DtwTree_free(tree);
+    
+    return 0;
 }

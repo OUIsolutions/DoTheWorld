@@ -1,22 +1,20 @@
 #include "doTheWorldOne.c"
 
 
-DtwNamespace dtw;
-DtwRandonizer *randonizer;
 typedef struct {
     int age;
-}Filtrage;
+} Filtrage;
 
 
 void print_user(DtwResource *user, void *filtragem){
-    printf("age %ld\n",dtw.resource.get_long_from_sub_resource(user,"age"));
-    printf("name: %s\n", dtw.resource.get_string_from_sub_resource(user, "name"));
+    printf("age %ld\n",DtwResource_get_long_from_sub_resource(user,"age"));
+    printf("name: %s\n", DtwResource_get_string_from_sub_resource(user, "name"));
 }
 
 bool verify_if_print_user(DtwResource *user, void *filtragem){
      Filtrage *f = (Filtrage *)filtragem;
 
-    long age = dtw.resource.get_long_from_sub_resource(user, "age");
+    long age = DtwResource_get_long_from_sub_resource(user, "age");
 
     if(age < f->age){
 
@@ -28,44 +26,42 @@ bool verify_if_print_user(DtwResource *user, void *filtragem){
 
 void create_x_users(DtwResource *users,long quantity){
     for(int i =0; i < quantity; i++){
-        DtwResource *current = dtw.resource.new_schema_insertion(users);
+        DtwResource *current = DtwResource_new_schema_insertion(users);
 
         char formatted_name[20] = {0};
         sprintf(formatted_name,"user%d", i);
-        long age = dtw.randonizer.generate_num(randonizer,100);
+        long age = DtwRandonizer_generate_num(newDtwRandonizer(),100);
 
-        dtw.resource.set_string_in_sub_resource(current,"name",formatted_name);
-        dtw.resource.set_long_in_sub_resource(current,"age",age);
+        DtwResource_set_string_in_sub_resource(current,"name",formatted_name);
+        DtwResource_set_long_in_sub_resource(current,"age",age);
     }
 
 }
 void create_schemas(DtwResource *database){
-    DtwDatabaseSchema *schema = dtw.resource.newDatabaseSchema(database);
-    DtwSchema *users = dtw.database_schema.sub_schema(schema,"users");
-    dtw.schema.add_primary_key(users,"name");
+    DtwDatabaseSchema *schema = DtwResource_newDatabaseSchema(database);
+    DtwSchema *users = DtwDatabaseSchema_sub_schema(schema,"users");
+    DtwSchema_add_primary_key(users,"name");
 }
 
 
 int main(){
-    dtw = newDtwNamespace();
-    randonizer = dtw.randonizer.newRandonizer();
-
-    DtwResource *database = dtw.resource.newResource("database");
+    DtwRandonizer *randonizer = newDtwRandonizer();
+    DtwResource *database = DtwResource_newResource("database");
     create_schemas(database);
 
-    DtwResource *users = dtw.resource.sub_resource(database,"users");
+    DtwResource *users = DtwResource_sub_resource(database,"users");
 
     create_x_users(users,100);
     Filtrage f;
     f.age = 18;
     int start  = 0;
 
-    DtwResourceForeachProps props = dtw.resource.create_foreach_props(print_user);
+    DtwResourceForeachProps props = DtwResource_create_foreach_props(print_user);
     props.filtrage_callback = verify_if_print_user;
     props.args = &f;
 
-    dtw.resource.schema_each(users,props);
-    dtw.resource.free(database);
-    dtw.randonizer.free(randonizer);
+    DtwResource_schema_each(users,props);
+    DtwResource_free(database);
+    DtwRandonizer_free(randonizer);
     return 0;
 }

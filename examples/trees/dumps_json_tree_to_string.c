@@ -1,11 +1,8 @@
-
 #include "doTheWorldOne.c"
 
 int main(){
-    DtwNamespace dtw = newDtwNamespace();
-
-    DtwTree *tree = dtw.tree.newTree();
-    dtw.tree.add_tree_from_hardware(
+    DtwTree *tree = newDtwTree();
+    DtwTree_add_tree_from_hardware(
             tree,
             "tests/target/",
             (DtwTreeProps){
@@ -15,7 +12,7 @@ int main(){
             }
     );
 
-    char *content = dtw.tree.dumps_json_tree(
+    char *content = DtwTree_dumps_json_tree(
             tree,
             (DtwTreeProps){
                     .minification = DTW_NOT_MIMIFY,
@@ -27,5 +24,5 @@ int main(){
     );
     printf("%s",content);
     free(content);
-    dtw.tree.free(tree);
+    DtwTree_free(tree);
 }

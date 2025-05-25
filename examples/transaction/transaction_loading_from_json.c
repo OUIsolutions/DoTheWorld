@@ -1,17 +1,14 @@
-
 #include "doTheWorldOne.c"
 
 int main(){
-    DtwNamespace dtw = newDtwNamespace();
-
-    DtwTransaction *t = dtw.transaction.newTransaction_from_json_file("tests/target/transaction.json");
+    DtwTransaction *t = newDtwTransaction_from_json_file("tests/target/transaction.json");
     if(!t){
         DtwJsonTransactionError *error = dtw_validate_json_transaction_file("tests/target/transaction.json");
-        dtw.transaction.json_error.represent(error);
-        dtw.transaction.json_error.free(error);
+        DtwJsonTransactionError_represent(error);
+        DtwJsonTransactionError_free(error);
         return 0;
     }
 
-    dtw.transaction.represent(t);
-    dtw.transaction.free(t);
+    DtwTransaction_represent(t);
+    DtwTransaction_free(t);
 }

@@ -1,44 +1,34 @@
-
 #include "doTheWorldOne.c"
-DtwNamespace dtw;
 
-
-
-
-void create_users(DtwResource *database,const char *name,const char *email,const char *password, int age){
-
-    DtwResource  *users =dtw.resource.sub_resource(database,"users");
-    DtwResource *user = dtw.resource.new_schema_insertion(users);
-    dtw.resource.set_string_in_sub_resource(user,"name",name);
-    dtw.resource.set_string_in_sub_resource(user,"email",email);
-    dtw.resource.set_string_sha_in_sub_resource(user,"password",password);
-    dtw.resource.set_long_in_sub_resource(user,"age",age);
+void create_users(DtwResource *database, const char *name, const char *email, const char *password, int age) {
+    DtwResource *users = DtwResource_sub_resource(database, "users");
+    DtwResource *user = DtwResource_new_schema_insertion(users);
+    DtwResource_set_string_in_sub_resource(user, "name", name);
+    DtwResource_set_string_in_sub_resource(user, "email", email);
+    DtwResource_set_string_sha_in_sub_resource(user, "password", password);
+    DtwResource_set_long_in_sub_resource(user, "age", age);
 }
 
-int main(){
+int main() {
+    DtwResource *database = new_DtwResource("tests/target/schema_database");
+    DtwDatabaseSchema *root_schema = DtwResource_newDatabaseSchema(database);
+    DtwSchema *users_schema = DtwDatabaseSchema_sub_schema(root_schema, "users");
+    DtwSchema_add_primary_key(users_schema, "name");
+    DtwSchema_add_primary_key(users_schema, "email");
 
-    dtw = newDtwNamespace();
-    DtwResource *database = dtw.resource.newResource("tests/target/schema_database");
-    DtwDatabaseSchema *root_schema  = dtw.resource.newDatabaseSchema(database);
-    DtwSchema *users_schema = dtw.database_schema.sub_schema(root_schema,"users");
-    dtw.schema.add_primary_key(users_schema,"name");
-    dtw.schema.add_primary_key(users_schema,"email");
+    create_users(database, "mateus", "mateusmoutinho01@gmail.com", "1234", 27);
+    create_users(database, "user1", "user1@gmail.com", "1234", 27);
+    create_users(database, "user2", "user2@gmail.com", "1234", 27);
 
-    create_users(database,"mateus","mateusmoutinho01@gmail.com","1234",27);
-    create_users(database,"user1","user1@gmail.com","1234",27);
-    create_users(database,"user2","user2@gmail.com","1234",27);
+    DtwResource *users = DtwResource_sub_resource(database, "users");
+    DtwResource_dangerous_remove_schema_prop(users, "name");
 
-    DtwResource  *users =dtw.resource.sub_resource(database,"users");
-    dtw.resource.dangerous_remove_schema_prop(users,"name");
-
-    if(dtw.resource.error(database)){
-        printf("error:%s\n",dtw.resource.get_error_message(database));
-        dtw.resource.free(database);
+    if (DtwResource_error(database)) {
+        printf("error:%s\n", DtwResource_get_error_message(database));
+        DtwResource_free(database);
         return 0;
     }
 
-    dtw.resource.commit(database);
-    dtw.resource.free(database);
-
-
+    DtwResource_commit(database);
+    DtwResource_free(database);
 }

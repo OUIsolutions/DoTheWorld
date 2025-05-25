@@ -1,31 +1,25 @@
-
 #define DTW_CHASH_PATH  "CHashManipulator.h"
 #define DTW_ALLOW_CHASH
 #include "doTheWorldOne.c"
 
-
-CHashNamespace hash;
-DtwNamespace dtw;
-DtwRandonizer *randonizer;
 typedef struct {
     int age;
-}Filtrage;
-
+} Filtrage;
 
 CHashObject * return_user(DtwResource *user, void *filtragem){
     return newCHashObject(
-        "name",hash.newString(dtw.resource.get_string_from_sub_resource(user, "name")),
-        "age", hash.newNumber(dtw.resource.get_long_from_sub_resource(user,"age"))
+        "name", newCHashString(DtwResource_get_string_from_sub_resource(user, "name")),
+        "age", newCHashNumber(DtwResource_get_long_from_sub_resource(user, "age"))
     );
 }
+
 char * get_key(DtwResource *user, void *filtrage){
-    return strdup(dtw.resource.get_string_from_sub_resource(user, "name"));
+    return strdup(DtwResource_get_string_from_sub_resource(user, "name"));
 }
 
-
 bool verify_if_print_user(DtwResource *user, void *filtragem){
-     Filtrage *f = (Filtrage *)filtragem;
-    long age = dtw.resource.get_long_from_sub_resource(user, "age");
+    Filtrage *f = (Filtrage *)filtragem;
+    long age = DtwResource_get_long_from_sub_resource(user, "age");
 
     if(age < f->age){
 
@@ -36,51 +30,46 @@ bool verify_if_print_user(DtwResource *user, void *filtragem){
 }
 void create_x_users(DtwResource *users,long quantity){
     for(int i =0; i < quantity; i++){
-        DtwResource *current = dtw.resource.sub_resource_random(users,NULL);
+        DtwResource *current = DtwResource_sub_resource_random(users,NULL);
 
         char formatted_name[20] = {0};
         sprintf(formatted_name,"user%d", i);
-        long age = dtw.randonizer.generate_num(randonizer,100);
+        long age = DtwRandonizer_generate_num(newDtwRandonizer(),100);
 
-        dtw.resource.set_string_in_sub_resource(current,"name",formatted_name);
-        dtw.resource.set_long_in_sub_resource(current,"age",age);
+        DtwResource_set_string_in_sub_resource(current,"name",formatted_name);
+        DtwResource_set_long_in_sub_resource(current,"age",age);
     }
 
 }
 
 
 
-
-
 int main(){
-    dtw = newDtwNamespace();
-    hash = newCHashNamespace();
-    randonizer = dtw.randonizer.newRandonizer();
-
-    DtwResource *database = dtw.resource.newResource("database");
-    DtwResource *users = dtw.resource.sub_resource(database,"users");
+    DtwRandonizer *randonizer = newDtwRandonizer();
+    DtwResource *database = newDtwResource("database");
+    DtwResource *users = DtwResource_sub_resource(database,"users");
 
     create_x_users(users,100);
 
     Filtrage f;
     f.age = 18;
 
-    DtwResourceCHashObjectMapProps props = dtw.resource.createCHashObjectMapProps(
+    DtwResourceCHashObjectMapProps props = DtwResource_createCHashObjectMapProps(
         return_user,get_key
     );
     props.free_key = true;
     props.filtrage_callback = verify_if_print_user;
     props.args = &f;
 
-    CHashArray *itens = dtw.resource.map_CHashObject(users,props);
+    CHashArray *itens = DtwResource_map_CHashObject(users,props);
 
-    char *content = hash.dump_to_json_string(itens);
+    char *content = newCHashStringDumpToJson(itens);
     printf("%s",content);
-    hash.free(itens);
+    newCHashFree(itens);
     free(content);
 
-    dtw.resource.free(database);
-    dtw.randonizer.free(randonizer);
+    DtwResource_free(database);
+    DtwRandonizer_free(randonizer);
 
     return 0;
 }

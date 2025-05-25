@@ -1,12 +1,8 @@
-//
-// Created by jurandi on 20-06-2023.
-//
+// Created by jurandi on 20-06-2023.//
 #include "doTheWorldOne.c"
 int main(){
-    DtwNamespace dtw = newDtwNamespace();
-
-    DtwTree *tree = dtw.tree.newTree();
-    dtw.tree.add_tree_from_hardware(
+    DtwTree *tree = newDtwTree();  // Direct call to newDtwTree
+    DtwTree_add_tree_from_hardware(  // Direct call to DtwTree_add_tree_from_hardware
             tree,
             "tests/target",
             (DtwTreeProps){
@@ -17,7 +13,8 @@ int main(){
     );
     for(int i = 0; i<tree->size;i++){
         DtwTreePart *current_part = tree->tree_parts[i];
-        dtw.tree.part.represent(current_part);
+        DtwTreePart_represent(current_part);  // Direct call to DtwTreePart_represent
     }
-    dtw.tree.free(tree);
+    DtwTree_free(tree);  // Direct call to DtwTree_free
+    return 0;  // Added for completeness, as main should return an int
 }

@@ -1,21 +1,13 @@
-
 #include "doTheWorldOne.c"
 
-int main (){
-    DtwNamespace dtw = newDtwNamespace();
-
-    DtwResource *values = dtw.resource.newResource("tests/target/");
-    DtwResource *password = dtw.resource.sub_resource(values,"password");
+int main() {
+    DtwResource *values = new_DtwResource("tests/target/");
+    DtwResource *password = DtwResource_sub_resource(values, "password");
     long size;
-    unsigned   char *content = dtw_load_binary_content("tests/target/blob.png",&size);
+    unsigned char *content = dtw_load_binary_content("tests/target/blob.png", &size);
 
-    dtw.resource.set_binary_sha(password,content,size);
+    DtwResource_set_binary_sha(password, content, size);
     free(content);
-    dtw.resource.commit(values);
-    dtw.resource.free(values);
-
-
-
-
-
+    DtwResource_commit(values);
+    DtwResource_free(values);
 }

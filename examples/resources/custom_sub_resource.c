@@ -1,31 +1,22 @@
 #include "doTheWorldOne.c"
+#include "src/namespace/resource_module/resource_module/fdeclare.resource_module.h"  // Include the necessary header for DtwResourceModule
 
+int main() {
+    DtwResourceModule resource = newDtwResourceModule();  // Initialize the resource module directly
+    DtwResource *test = resource.newResource("tests/target");
 
-int main (){
-    DtwNamespace dtw = newDtwNamespace();
-    DtwResource *test = dtw.resource.newResource("tests/target");
+    DtwResource *next = resource.sub_resource_next(test, ".txt");
+    resource.set_string(next, "next-value");
 
-    DtwResource *next = dtw.resource.sub_resource_next(test,".txt");
-    dtw.resource.set_string(next,"next-value");
+    DtwResource *random = resource.sub_resource_random(test, ".txt");
+    resource.set_string(random, "random-value");
 
+    DtwResource *now = resource.sub_resource_now(test, ".txt");
+    resource.set_string(now, "now value");
 
+    DtwResource *now_in_unix = resource.sub_resource_now_in_unix(test, ".txt");
+    resource.set_string(now_in_unix, "now in unix");
 
-
-
-
-    DtwResource *random = dtw.resource.sub_resource_random(test,".txt");
-    dtw.resource.set_string(random,"random-value");
-
-
-    DtwResource *now = dtw.resource.sub_resource_now(test,".txt");
-    dtw.resource.set_string(now,"now value");
-
-
-    DtwResource *now_in_unix = dtw.resource.sub_resource_now_in_unix(test,".txt");
-    dtw.resource.set_string(now_in_unix,"now in unix");
-
-
-    dtw.resource.commit(test);
-    dtw.resource.free(test);
-
+    resource.commit(test);
+    resource.free(test);
 }
