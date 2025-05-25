@@ -1,7 +1,6 @@
 #include "doTheWorldOne.c"
 
 int main() {
-    DtwNamespace dtw = newDtwNamespace();  // Keep this as it's the entry point for the namespace
 
     DtwResource *values = new_DtwResource("tests/target/new_folder");
 
