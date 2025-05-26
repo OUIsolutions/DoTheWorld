@@ -55,6 +55,16 @@ DoTheWorld is a powerful Windows/Linux cross-platform library designed for compr
   </tr>
 </table>
 
+
+## 📦 Releases
+
+| Package | Description |
+|---------|-------------|
+| [doTheWorld.zip](https://github.com/OUIsolutions/DoTheWorld/releases/download/10.1.1/doTheWorld.zip) | Full package with all components |
+| [doTheWorldOne.c](https://github.com/OUIsolutions/DoTheWorld/releases/download/10.1.1/doTheWorldOne.c) | Single-file amalgamated version |
+| [doTheWorld.h](https://github.com/OUIsolutions/DoTheWorld/releases/download/10.1.1/doTheWorld.h) | Header declarations |
+| [doTheWorld.c](https://github.com/OUIsolutions/DoTheWorld/releases/download/10.1.1/doTheWorld.c) | Source definitions |
+a
 ## 📦 Installation
 
 ### Option 1: Single File Include (Recommended)
@@ -134,14 +144,7 @@ int main() {
 }
 ```
 
-## 📦 Releases
 
-| Package | Description |
-|---------|-------------|
-| [doTheWorld.zip](https://github.com/OUIsolutions/DoTheWorld/releases/download/10.1.1/doTheWorld.zip) | Full package with all components |
-| [doTheWorldOne.c](https://github.com/OUIsolutions/DoTheWorld/releases/download/10.1.1/doTheWorldOne.c) | Single-file amalgamated version |
-| [doTheWorld.h](https://github.com/OUIsolutions/DoTheWorld/releases/download/10.1.1/doTheWorld.h) | Header declarations |
-| [doTheWorld.c](https://github.com/OUIsolutions/DoTheWorld/releases/download/10.1.1/doTheWorld.c) | Source definitions |
 
 ## 🛠️ Build Toolchain
 
