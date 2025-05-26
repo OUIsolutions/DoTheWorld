@@ -1,580 +1,654 @@
-### Trees and TreeParts
-with tree concepts, you can manipulate files as trees, and implement IO modifications with atomic concepts
+# Trees and TreeParts
 
-### Loading An TreePart
+This document provides an overview of the `DtwTree` and `DtwTreePart` concepts in the **doTheWorld** library. These abstractions allow you to manipulate files and directories as tree structures, enabling atomic input/output (IO) operations and massive file modifications with ease. This guide focuses on practical usage with detailed examples.
+
+**Note:** This is a fragment of the larger documentation. For installation, setup, or high-level library details, refer to the main `README.md`.
+
+## Overview of Trees and TreeParts
+
+- **DtwTreePart**: Represents a single file or directory within a tree structure. It provides methods to load, modify, write, or remove content on the hardware (filesystem) with atomic operations.
+- **DtwTree**: A collection of `DtwTreePart` objects representing a directory structure. It supports operations like loading from hardware, filtering, mapping, and committing changes atomically.
+
+These concepts are designed to simplify complex file operations by treating the filesystem as a manipulable tree, ensuring safety with transactional commits.
+
+## Working with DtwTreePart
+
+### Loading a TreePart from Hardware
+
+You can load an existing file as a `DtwTreePart` to interact with its content or metadata.
 
 ```c
 #include "doTheWorldOne.c"
 
-int main(){
+int main() {
     DtwTreePart *part = newDtwTreePartLoading("tests/target/a.txt");
-    DtwTreePart_represent(part);
-    DtwTreePart_free(part);
+    DtwTreePart_represent(part); // Display the TreePart details
+    DtwTreePart_free(part); // Free the allocated memory
+    return 0;
 }
 ```
 
-### Creating an empty tree Part
+**Explanation**: 
+- `newDtwTreePartLoading` loads the file content and metadata from the specified path.
+- `DtwTreePart_represent` prints the current state of the `TreePart` (path, content, etc.) for debugging or logging.
+
+### Creating an Empty TreePart
+
+To create a new file as a `DtwTreePart`, use `newDtwTreePartEmpty`. You can then set its content and write it to hardware.
 
 ```c
 #include "doTheWorldOne.c"
 
-int main(){
+int main() {
     DtwTreePart *part = newDtwTreePartEmpty("tests/target/b.txt");
-    DtwTreePart_set_string_content(part, "my mensage");
-    DtwTreePart_hardware_write(part, DTW_SET_AS_ACTION);
-    DtwTreePart_hardware_commit(part);
+    DtwTreePart_set_string_content(part, "my message"); // Set content
+    DtwTreePart_hardware_write(part, DTW_SET_AS_ACTION); // Mark for writing
+    DtwTreePart_hardware_commit(part); // Commit changes to hardware
     DtwTreePart_free(part);
+    return 0;
 }
 ```
-### Modifying an tree part
+
+**Explanation**:
+- `DTW_SET_AS_ACTION` marks the operation (write, modify, or remove) to be executed later.
+- `DtwTreePart_hardware_commit` applies the marked operation to the filesystem.
+
+### Modifying a TreePart
+
+You can load an existing `TreePart`, modify its content, and commit the changes.
+
 ```c
 #include "doTheWorldOne.c"
 
-int main(){
+int main() {
     DtwTreePart *part = newDtwTreePartLoading("tests/target/a.txt");
-
-    //getting the content
+    
+    // Retrieve current content
     char *content = DtwTreePart_get_content_string_by_reference(part);
     char new_content[100] = {0};
     strcat(new_content, content);
-    strcat(new_content, " New Mensage");
-    DtwTreePart_set_string_content(part, new_content);
-
-    DtwTreePart_hardware_write(part, DTW_SET_AS_ACTION);
-    DtwTreePart_hardware_commit(part);
+    strcat(new_content, " New Message");
+    DtwTreePart_set_string_content(part, new_content); // Update content
+    
+    DtwTreePart_hardware_write(part, DTW_SET_AS_ACTION); // Mark for writing
+    DtwTreePart_hardware_commit(part); // Commit changes
     DtwTreePart_free(part);
+    return 0;
 }
 ```
-### Removing an tree part
+
+**Explanation**: 
+- `DtwTreePart_get_content_string_by_reference` retrieves the content as a string (non-binary files only).
+- The updated content is written to hardware only after committing.
+
+### Removing a TreePart
+
+To delete a file represented by a `TreePart`, use the remove operation.
 
 ```c
 #include "doTheWorldOne.c"
 
-int main(){
+int main() {
     DtwTreePart *part = newDtwTreePartLoading("tests/target/a.txt");
-    DtwTreePart_hardware_remove(part, DTW_EXECUTE_NOW);
-    DtwTreePart_hardware_commit(part);
+    DtwTreePart_hardware_remove(part, DTW_EXECUTE_NOW); // Remove immediately
+    DtwTreePart_hardware_commit(part); // Commit the removal
     DtwTreePart_free(part);
+    return 0;
 }
 ```
 
-### Retrieving Paths Params
+**Explanation**:
+- `DTW_EXECUTE_NOW` executes the operation immediately rather than marking it for later commit. Use `DTW_SET_AS_ACTION` for delayed execution in transactions.
+
+## Managing Paths with DtwPath
+
+`DtwPath` is a utility structure for handling file paths and extracting or modifying their components.
+
+### Retrieving Path Components
+
+Extract various components (name, extension, directory, full path) from a path.
 
 ```c
 #include "doTheWorldOne.c"
 
-int main(){
+int main() {
     DtwPath *path = newDtwPath("a/b/c/d.txt");
-    char *name = DtwPath_get_full_name(path);
-    char *extension = DtwPath_get_extension(path);
-    char *dir = DtwPath_get_dir(path);
-    char *full_path = DtwPath_get_path(path);
-    printf("name : %s\n", name);
-    printf("extension : %s\n", extension);
-    printf("dir : %s\n", dir);
-    printf("full_path : %s\n", full_path);
+    char *name = DtwPath_get_full_name(path); // Returns "d.txt"
+    char *extension = DtwPath_get_extension(path); // Returns "txt"
+    char *dir = DtwPath_get_dir(path); // Returns "a/b/c"
+    char *full_path = DtwPath_get_path(path); // Returns "a/b/c/d.txt"
+    
+    printf("name: %s\n", name);
+    printf("extension: %s\n", extension);
+    printf("dir: %s\n", dir);
+    printf("full_path: %s\n", full_path);
+    
     DtwPath_free(path);
+    return 0;
 }
 ```
-### Changing path Attributes at once
+
+### Modifying Path Attributes
+
+Update path components like name or extension dynamically.
 
 ```c
 #include "doTheWorldOne.c"
 
-int main(){
+int main() {
     DtwPath *path = newDtwPath("a/b/c/d.txt");
-    DtwPath_set_name(path, "test");
-    DtwPath_set_extension(path, "md");
-    DtwPath_represent(path);
+    DtwPath_set_name(path, "test"); // Changes name to "test"
+    DtwPath_set_extension(path, "md"); // Changes extension to "md"
+    DtwPath_represent(path); // Display updated path
     DtwPath_free(path);
+    return 0;
 }
 ```
 
-With the **hardware_modify**, **hardware_write**, **hardware_remove**
-Functions, you can generate modifications without implementing them, in this
-way, you can create massive atomic transactions, and execute all at once
+## Hardware Operations on TreeParts
 
-### hardware_modify
-Will modify the original content, for example, if you change the extension of a file, it will modify the original content
+The library supports atomic operations using `hardware_modify`, `hardware_write`, and `hardware_remove`. These functions allow you to stage changes and commit them later for safety.
+
+### Hardware Modify
+
+Modifies the original file (e.g., renaming by changing extension).
 
 ```c
 #include "doTheWorldOne.c"
 
-int main(){
+int main() {
     DtwTreePart *part = newDtwTreePartLoading("tests/target/a.txt");
+    DtwPath_set_extension(part->path, "md"); // Change extension
+    DtwTreePart_hardware_modify(part, DTW_EXECUTE_NOW); // Modify immediately
+    DtwTreePart_hardware_commit(part);
+    DtwTreePart_free(part);
+    return 0;
+}
+```
 
+### Hardware Write
+
+Writes the content as a new file, ignoring the existence of the old file.
+
+```c
+#include "doTheWorldOne.c"
+
+int main() {
+    DtwTreePart *part = newDtwTreePartLoading("tests/target/a.txt");
     DtwPath_set_extension(part->path, "md");
-
-    DtwTreePart_hardware_modify(part, DTW_EXECUTE_NOW);
+    DtwTreePart_hardware_write(part, DTW_EXECUTE_NOW); // Write as new file
     DtwTreePart_hardware_commit(part);
     DtwTreePart_free(part);
+    return 0;
 }
 ```
 
-Will write the file as a "new" file, ignoring the existence of the
-old file
+### Hardware Remove
+
+Deletes the file from hardware.
 
 ```c
 #include "doTheWorldOne.c"
 
-int main(){
+int main() {
     DtwTreePart *part = newDtwTreePartLoading("tests/target/a.txt");
-    DtwPath_set_extension(part->path, "md");
-    DtwTreePart_hardware_write(part, DTW_EXECUTE_NOW);
+    DtwTreePart_hardware_remove(part, DTW_EXECUTE_NOW); // Remove file
     DtwTreePart_hardware_commit(part);
     DtwTreePart_free(part);
+    return 0;
 }
 ```
 
-Will delete the current content
+**Note**: Use `DTW_SET_AS_ACTION` instead of `DTW_EXECUTE_NOW` to stage operations for atomic commits.
+
+## Working with DtwTree
+
+`DtwTree` allows you to handle entire directory structures, perform bulk operations, and manage transactions.
+
+### Loading a Tree from Hardware
+
+Load a directory structure into a `DtwTree` for manipulation.
 
 ```c
 #include "doTheWorldOne.c"
 
-int main(){
-    DtwTreePart *part = newDtwTreePartLoading("tests/target/a.txt");
-
-    DtwTreePart_hardware_remove(part, DTW_EXECUTE_NOW);
-    DtwTreePart_hardware_commit(part);
-    DtwTreePart_free(part);
-}
-```
-
-With Trees you can make massive folder and file modifications with
-easy steps
-### Loading Tree From Hardware
-
-```c
-#include "doTheWorldOne.c"
-
-int main(){
+int main() {
     DtwTree *tree = newDtwTree();
     DtwTree_add_tree_from_hardware(
-            tree,
-            "tests/target/",
-            (DtwTreeProps){
-                    .content = DTW_INCLUDE,
-                    .hadware_data=DTW_HIDE,
-                    .path_atributes=DTW_INCLUDE
-            }
+        tree,
+        "tests/target/",
+        (DtwTreeProps){
+            .content = DTW_INCLUDE,       // Include file contents
+            .hadware_data = DTW_HIDE,     // Hide hardware metadata
+            .path_atributes = DTW_INCLUDE // Include path attributes
+        }
     );
-    DtwTree_represent(tree);
+    DtwTree_represent(tree); // Display tree structure
     DtwTree_free(tree);
+    return 0;
 }
 ```
 
-### Iterating over An Tree
+### Iterating Over a Tree
+
+Loop through all `TreeParts` in a `Tree` to perform operations on each.
 
 ```c
 #include "doTheWorldOne.c"
-int main(){
+
+int main() {
     DtwTree *tree = newDtwTree();
     DtwTree_add_tree_from_hardware(
-            tree,
-            "tests/target",
-            (DtwTreeProps){
-                    .content = DTW_INCLUDE,
-                    .hadware_data=DTW_HIDE,
-                    .path_atributes=DTW_INCLUDE
-            }
+        tree,
+        "tests/target",
+        (DtwTreeProps){
+            .content = DTW_INCLUDE,
+            .hadware_data = DTW_HIDE,
+            .path_atributes = DTW_INCLUDE
+        }
     );
-    for(int i = 0; i < tree->size; i++){
+    for (int i = 0; i < tree->size; i++) {
         DtwTreePart *current_part = tree->tree_parts[i];
-        DtwTreePart_represent(current_part);
+        DtwTreePart_represent(current_part); // Display each part
     }
     DtwTree_free(tree);
+    return 0;
 }
 ```
 
-### Finding An Tree by name
+### Finding TreeParts
+
+#### By Name
+
+Search for a `TreePart` by its file name.
 
 ```c
 #include "doTheWorldOne.c"
 
-int main(){
+int main() {
     DtwTree *tree = newDtwTree();
     DtwTree_add_tree_from_hardware(
-            tree,
-            "tests/target",
-            (DtwTreeProps){
-                    .content = DTW_INCLUDE,
-                    .hadware_data=DTW_HIDE,
-                    .path_atributes=DTW_INCLUDE
-            }
+        tree,
+        "tests/target",
+        (DtwTreeProps){
+            .content = DTW_INCLUDE,
+            .hadware_data = DTW_HIDE,
+            .path_atributes = DTW_INCLUDE
+        }
     );
-
     DtwTreePart *blob = DtwTree_find_tree_part_by_name(tree, "blob.png");
-    if(blob){
+    if (blob) {
         DtwTreePart_represent(blob);
     }
     DtwTree_free(tree);
+    return 0;
 }
 ```
 
-### Finding An Tree by Path
+#### By Path
+
+Search for a `TreePart` by its full path.
 
 ```c
 #include "doTheWorldOne.c"
 
-int main(){
+int main() {
     DtwTree *tree = newDtwTree();
     DtwTree_add_tree_from_hardware(
-            tree,
-            "tests/target/",
-            (DtwTreeProps){
-                    .content = DTW_INCLUDE,
-                    .hadware_data=DTW_HIDE,
-                    .path_atributes=DTW_INCLUDE
-            }
+        tree,
+        "tests/target/",
+        (DtwTreeProps){
+            .content = DTW_INCLUDE,
+            .hadware_data = DTW_HIDE,
+            .path_atributes = DTW_INCLUDE
+        }
     );
-
     DtwTreePart *element = DtwTree_find_tree_part_by_path(
-            tree,
-            "tests/target/sub_folder/sub_element.txt"
+        tree,
+        "tests/target/sub_folder/sub_element.txt"
     );
-    if(element){
+    if (element) {
         DtwTreePart_represent(element);
     }
     DtwTree_free(tree);
+    return 0;
 }
 ```
 
-### Finding An Tree by Function
+#### By Custom Function
+
+Search using a custom predicate function.
 
 ```c
 #include "doTheWorldOne.c"
 
-bool test_if_blob(struct DtwTreePart* part, void *args){
+bool test_if_blob(struct DtwTreePart* part, void *args) {
     char *name = DtwPath_get_full_name(part->path);
-    if(!name){
-        return false;
-    }
+    if (!name) return false;
+    return strcmp(name, "blob.png") == 0;
+}
 
-    if(strcmp(name, "blob.png") == 0){
-        return true;
-    }
-    return false;
-};
-
-int main(){
+int main() {
     DtwTree *tree = newDtwTree();
     DtwTree_add_tree_from_hardware(
-            tree,
-            "tests/target",
-            (DtwTreeProps){
-                .content = DTW_INCLUDE,
-                .hadware_data=DTW_HIDE,
-                .path_atributes=DTW_INCLUDE
-            }
+        tree,
+        "tests/target",
+        (DtwTreeProps){
+            .content = DTW_INCLUDE,
+            .hadware_data = DTW_HIDE,
+            .path_atributes = DTW_INCLUDE
+        }
     );
-
-    DtwTreePart *blob = DtwTree_find_tree_part_by_function(
-            tree,
-            test_if_blob,
-            NULL
-    );
-
-    DtwTreePart_represent(blob);
-
+    DtwTreePart *blob = DtwTree_find_tree_part_by_function(tree, test_if_blob, NULL);
+    if (blob) {
+        DtwTreePart_represent(blob);
+    }
     DtwTree_free(tree);
+    return 0;
 }
 ```
 
-Trees support even Maps or filters, it returns a new tree of the current lambda procedure
-### Filter
-with filter you can filter the contents you want in a tree with a bool lambda
+### Tree Transformations
+
+#### Filtering a Tree
+
+Create a new tree containing only `TreeParts` that match a filter condition.
 
 ```c
 #include "doTheWorldOne.c"
 
-bool filter_txt(struct DtwTreePart *part){
+bool filter_txt(struct DtwTreePart *part) {
     char *extension = DtwPath_get_extension(part->path);
-    if(!extension){
-        return false;
-    }
-    if(strcmp(extension, "txt") == 0){
-        return true;
-    }
-    return false;
+    if (!extension) return false;
+    return strcmp(extension, "txt") == 0;
 }
 
-int main(){
+int main() {
     DtwTree *tree = newDtwTree();
     DtwTree_add_tree_from_hardware(
-            tree,
-            "tests/target",
-            (DtwTreeProps){
-                    .content = DTW_INCLUDE,
-                    .hadware_data=DTW_HIDE,
-                    .path_atributes=DTW_INCLUDE
-            }
+        tree,
+        "tests/target",
+        (DtwTreeProps){
+            .content = DTW_INCLUDE,
+            .hadware_data = DTW_HIDE,
+            .path_atributes = DTW_INCLUDE
+        }
     );
-    DtwTree *filtered = DtwTree_filter(
-            tree,
-            filter_txt
-    );
-
+    DtwTree *filtered = DtwTree_filter(tree, filter_txt);
     DtwTree_represent(filtered);
     DtwTree_free(filtered);
     DtwTree_free(tree);
+    return 0;
 }
 ```
 
-### Map
+#### Mapping a Tree
+
+Transform each `TreePart` in a tree using a mapping function, returning a new tree.
 
 ```c
 #include "doTheWorldOne.c"
 
-DtwTreePart * concat_test(struct DtwTreePart *part){
-    if(part->content && part->is_binary == false){
+DtwTreePart *concat_test(struct DtwTreePart *part) {
+    if (part->content && !part->is_binary) {
         char *content = DtwTreePart_get_content_string_by_reference(part);
-        const char *mensage = " test";
-        char *new_content = (char*)malloc(strlen(content) + strlen(mensage) + 2);
+        const char *message = " test";
+        char *new_content = (char*)malloc(strlen(content) + strlen(message) + 1);
         strcpy(new_content, content);
-        strcat(new_content, mensage);
+        strcat(new_content, message);
         DtwTreePart_set_string_content(part, new_content);
         free(new_content);
     }
     return part;
 }
 
-int main(){
+int main() {
     DtwTree *tree = newDtwTree();
     DtwTree_add_tree_from_hardware(
-            tree,
-            "tests/target",
-            (DtwTreeProps){
-                    .content = DTW_INCLUDE,
-                    .hadware_data=DTW_HIDE,
-                    .path_atributes=DTW_INCLUDE
-            }
+        tree,
+        "tests/target",
+        (DtwTreeProps){
+            .content = DTW_INCLUDE,
+            .hadware_data = DTW_HIDE,
+            .path_atributes = DTW_INCLUDE
+        }
     );
-
-    DtwTree *concated = DtwTree_map(
-            tree,
-            concat_test
-    );
-
-    DtwTree_represent(concated);
-    DtwTree_free(concated);
+    DtwTree *mapped = DtwTree_map(tree, concat_test);
+    DtwTree_represent(mapped);
+    DtwTree_free(mapped);
     DtwTree_free(tree);
+    return 0;
 }
 ```
 
-With **hardware_commit_tree** you can commit all modifications at once
-turning system ultra secure
+### Committing Tree Changes
+
+Commit all staged changes in a `Tree` atomically to ensure consistency.
 
 ```c
 #include "doTheWorldOne.c"
 
-int main(){
+int main() {
     DtwTree *tree = newDtwTree();
     DtwTree_add_tree_from_hardware(
-            tree,
-            "tests/target",
-            (DtwTreeProps){
-                .content = DTW_INCLUDE,
-                .hadware_data=DTW_HIDE,
-                .path_atributes=DTW_INCLUDE
-            }
-    );
-
-    for(int i=0; i < tree->size; i++){
-        struct DtwTreePart *part = tree->tree_parts[i];
-
-        char *extension = DtwPath_get_extension(part->path);
-        if(!extension){
-            continue;
+        tree,
+        "tests/target",
+        (DtwTreeProps){
+            .content = DTW_INCLUDE,
+            .hadware_data = DTW_HIDE,
+            .path_atributes = DTW_INCLUDE
         }
-        if(strcmp(extension, "txt") == 0){
+    );
+    for (int i = 0; i < tree->size; i++) {
+        DtwTreePart *part = tree->tree_parts[i];
+        char *extension = DtwPath_get_extension(part->path);
+        if (extension && strcmp(extension, "txt") == 0) {
             DtwPath_set_extension(part->path, "md");
             DtwTreePart_hardware_modify(part, DTW_SET_AS_ACTION);
         }
     }
-
-    DtwTree_hardware_commit_tree(tree);
+    DtwTree_hardware_commit_tree(tree); // Commit all changes
     DtwTree_free(tree);
+    return 0;
 }
 ```
 
-With transaction Reports, you can see what will be modified
+### Transaction Reports
+
+Generate a report of pending changes before committing.
 
 ```c
 #include "doTheWorldOne.c"
 
-int main(){
+int main() {
     DtwTree *tree = newDtwTree();
     DtwTree_add_tree_from_hardware(
-            tree,
-            "tests/target",
-            (DtwTreeProps){
-                    .content = DTW_INCLUDE,
-                    .hadware_data=DTW_INCLUDE,
-                    .path_atributes=DTW_INCLUDE
-            }
-    );
-    for(int i=0; i < tree->size; i++){
-        DtwTreePart *part = tree->tree_parts[i];
-
-        char *extension = DtwPath_get_extension(part->path);
-        if(!extension){
-            continue;
+        tree,
+        "tests/target",
+        (DtwTreeProps){
+            .content = DTW_INCLUDE,
+            .hadware_data = DTW_INCLUDE,
+            .path_atributes = DTW_INCLUDE
         }
-        printf("%s\n", extension);
-        if(strcmp(extension, "txt") == 0){
+    );
+    for (int i = 0; i < tree->size; i++) {
+        DtwTreePart *part = tree->tree_parts[i];
+        char *extension = DtwPath_get_extension(part->path);
+        if (extension && strcmp(extension, "txt") == 0) {
             DtwPath_set_extension(part->path, "md");
             DtwTreePart_hardware_modify(part, DTW_SET_AS_ACTION);
         }
     }
     DtwTreeTransactionReport *report = DtwTree_create_report(tree);
-    DtwTreeTransactionReport_represent(report);
+    DtwTreeTransactionReport_represent(report); // Display pending changes
     DtwTreeTransactionReport_free(report);
     DtwTree_free(tree);
+    return 0;
 }
 ```
 
-With Json Trees Operations you can save or load trees, from hardware or strings in a super easy mode
+## JSON Serialization of Trees
 
-### Dumping Tree Json To File
-It will transform the tree into a json document
+The library supports saving and loading tree structures as JSON for persistence or transfer.
+
+### Dumping a Tree to a JSON File
+
+Convert a `Tree` to JSON and save it to a file.
 
 ```c
 #include "doTheWorldOne.c"
 
-int main(){
-    struct DtwTree *tree = newDtwTree();
-    DtwTree_add_tree_from_hardware(
-            tree,
-            "tests/target/",
-            (DtwTreeProps){
-                    .content = DTW_INCLUDE,
-                    .hadware_data=DTW_HIDE,
-                    .path_atributes=DTW_INCLUDE
-            }
-    );
-
-    DtwTree_dumps_tree_json_to_file(
-            tree,
-            "tests/target/out.json",
-            (DtwTreeProps){
-                    .minification = DTW_NOT_MIMIFY,
-                    .ignored_elements=DTW_HIDE,
-                    .content = DTW_INCLUDE,
-                    .hadware_data=DTW_HIDE,
-                    .path_atributes=DTW_INCLUDE
-            }
-    );
-
-    DtwTree_free(tree);
-}
-```
-
-```c
-#include "doTheWorldOne.c"
-
-int main(){
+int main() {
     DtwTree *tree = newDtwTree();
     DtwTree_add_tree_from_hardware(
-            tree,
-            "tests/target/",
-            (DtwTreeProps){
-                    .content = DTW_INCLUDE,
-                    .hadware_data=DTW_HIDE,
-                    .path_atributes=DTW_INCLUDE
-            }
+        tree,
+        "tests/target/",
+        (DtwTreeProps){
+            .content = DTW_INCLUDE,
+            .hadware_data = DTW_HIDE,
+            .path_atributes = DTW_INCLUDE
+        }
     );
+    DtwTree_dumps_tree_json_to_file(
+        tree,
+        "tests/target/out.json",
+        (DtwTreeProps){
+            .minification = DTW_NOT_MIMIFY, // Do not minify JSON
+            .ignored_elements = DTW_HIDE,
+            .content = DTW_INCLUDE,
+            .hadware_data = DTW_HIDE,
+            .path_atributes = DTW_INCLUDE
+        }
+    );
+    DtwTree_free(tree);
+    return 0;
+}
+```
 
+### Dumping a Tree to a JSON String
+
+Convert a `Tree` to a JSON string for in-memory use.
+
+```c
+#include "doTheWorldOne.c"
+
+int main() {
+    DtwTree *tree = newDtwTree();
+    DtwTree_add_tree_from_hardware(
+        tree,
+        "tests/target/",
+        (DtwTreeProps){
+            .content = DTW_INCLUDE,
+            .hadware_data = DTW_HIDE,
+            .path_atributes = DTW_INCLUDE
+        }
+    );
     char *content = DtwTree_dumps_tree_json(
-            tree,
-            (DtwTreeProps){
-                    .minification = DTW_NOT_MIMIFY,
-                    .ignored_elements=DTW_HIDE,
-                    .content = DTW_INCLUDE,
-                    .hadware_data=DTW_HIDE,
-                    .path_atributes=DTW_INCLUDE
-            }
+        tree,
+        (DtwTreeProps){
+            .minification = DTW_NOT_MIMIFY,
+            .ignored_elements = DTW_HIDE,
+            .content = DTW_INCLUDE,
+            .hadware_data = DTW_HIDE,
+            .path_atributes = DTW_INCLUDE
+        }
     );
     printf("%s", content);
     free(content);
     DtwTree_free(tree);
+    return 0;
 }
 ```
 
-If you want to recuperate the file you saved in the json file
-you can load it
+### Loading a Tree from a JSON File
+
+Reconstruct a `Tree` from a saved JSON file.
 
 ```c
 #include "doTheWorldOne.c"
 
-void dumps_tree(){
+void dumps_tree() {
     DtwTree *tree = newDtwTree();
     DtwTree_add_tree_from_hardware(
-            tree,
-            "tests/target",
-            (DtwTreeProps){
-                    .content = DTW_INCLUDE,
-                    .hadware_data=DTW_HIDE,
-                    .path_atributes=DTW_INCLUDE
-            }
+        tree,
+        "tests/target",
+        (DtwTreeProps){
+            .content = DTW_INCLUDE,
+            .hadware_data = DTW_HIDE,
+            .path_atributes = DTW_INCLUDE
+        }
     );
-
     DtwTree_dumps_tree_json_to_file(
-            tree,
-            "tests/target/out.json",
-            (DtwTreeProps){
-                    .minification = DTW_MIMIFY,
-                    .ignored_elements=DTW_HIDE,
-                    .content = DTW_INCLUDE,
-                    .hadware_data=DTW_HIDE,
-                    .path_atributes=DTW_INCLUDE
-            }
+        tree,
+        "tests/target/out.json",
+        (DtwTreeProps){
+            .minification = DTW_MIMIFY, // Minify JSON
+            .ignored_elements = DTW_HIDE,
+            .content = DTW_INCLUDE,
+            .hadware_data = DTW_HIDE,
+            .path_atributes = DTW_INCLUDE
+        }
     );
-
     DtwTree_free(tree);
 }
-int main(){
+
+int main() {
     dumps_tree();
     DtwTree *tree = newDtwTree();
     DtwTree_loads_json_tree_from_file(tree, "tests/target/out.json");
     DtwTree_represent(tree);
     DtwTree_free(tree);
+    return 0;
 }
 ```
+
+### Loading a Tree from a JSON String
+
+Reconstruct a `Tree` from a JSON string.
 
 ```c
 #include "doTheWorldOne.c"
 
-char *dumps_tree(){
+char *dumps_tree() {
     DtwTree *tree = newDtwTree();
     DtwTree_add_tree_from_hardware(
-            tree,
-            "tests/target",
-            (DtwTreeProps){
-                    .content = DTW_INCLUDE,
-                    .hadware_data=DTW_INCLUDE,
-                    .path_atributes=DTW_INCLUDE
-            }
+        tree,
+        "tests/target",
+        (DtwTreeProps){
+            .content = DTW_INCLUDE,
+            .hadware_data = DTW_INCLUDE,
+            .path_atributes = DTW_INCLUDE
+        }
     );
     char *content = DtwTree_dumps_tree_json(
-            tree,
-            (DtwTreeProps){
-                    .minification = DTW_MIMIFY,
-                    .ignored_elements=DTW_HIDE,
-                    .content = DTW_INCLUDE,
-                    .hadware_data=DTW_HIDE,
-                    .path_atributes=DTW_INCLUDE
-            }
+        tree,
+        (DtwTreeProps){
+            .minification = DTW_MIMIFY,
+            .ignored_elements = DTW_HIDE,
+            .content = DTW_INCLUDE,
+            .hadware_data = DTW_HIDE,
+            .path_atributes = DTW_INCLUDE
+        }
     );
     DtwTree_free(tree);
     return content;
 }
-int main(){
+
+int main() {
     char *content = dumps_tree();
     DtwTree *tree = newDtwTree();
     DtwTree_loads_json_tree(tree, content);
     DtwTree_represent(tree);
     DtwTree_free(tree);
     free(content);
+    return 0;
 }
 ```
 
+## Key Concepts for Atomic Operations
+
+- **DTW_SET_AS_ACTION**: Stages an operation (write, modify, remove) for later commit, enabling atomic transactions.
+- **DTW_EXECUTE_NOW**: Executes the operation immediately, bypassing the transactional system.
+- **hardware_commit**: Applies all staged changes to the filesystem, ensuring consistency and safety.
+
+By using these mechanisms, the library ensures that file operations can be performed securely, with the ability to preview changes via transaction reports before finalizing them.
