@@ -28,7 +28,6 @@ DoTheWorld is a Windows/Linux single file library designed to handle files in C/
 | [doTheWorld.c](https://github.com/OUIsolutions/DoTheWorld/releases/download/10.1.1/doTheWorld.c)|Definition |
 
 
-
 # Documentation
 
 | Item          | What It Is |
@@ -36,15 +35,19 @@ DoTheWorld is a Windows/Linux single file library designed to handle files in C/
 | [Build](/docs/build_and_install.md)|Build and Install |
 | [Io](/docs/io.md)|Basic Io Operations |
 | [Copy and Move](/docs/copy_and_move.md)|Copy and Move Operations |
-| [listage](/docs/listage.md)|Listage files and dirs |
-| [base64](/docs/base64.md)|Base64 encoding and decoding |
-| [hashers](/docs/hashers.md)|Hashers Implementation |
-| [unix](/docs/unix.md)|unix timestamp from files and folders|
-| [locker](/docs/locker.md)|Locker Implementations |
-| [resource](/docs/resource.md)|Resource System implementation |
-| [tree](/docs/tree.md)|Tree System implementation |
-| [randonizers](/docs/tree.md)|Randonizers Implementations |
-| [transactions](/docs/transactions.md)|Transaction system implementation |
+| [Listage](/docs/listage.md)|Listage files and dirs |
+| [Base64](/docs/base64.md)|Base64 encoding and decoding |
+| [Hashers](/docs/hashers.md)|Hashers Implementation |
+| [Unix](/docs/unix.md)|Unix timestamp from files and folders|
+| [Locker](/docs/locker.md)|Locker Implementations |
+| [Resource](/docs/resource.md)|Resource System implementation |
+| [Resource - Setting Values](/docs/resource_setting_values.md)|Setting Values in Resources |
+| [Resource - Getting Values](/docs/resource_getting_values.md)|Getting Values from Resources |
+| [Resource - Schemas](/docs/resource_schemas.md)|Schemas in Resources |
+| [Resource - Iterable Resources](/docs/resource_iterable.md)|Iterable Resources |
+| [Tree](/docs/tree.md)|Tree System implementation |
+| [Randonizers](/docs/randonizers.md)|Randonizers Implementations |
+| [Transactions](/docs/transactions.md)|Transaction system implementation |
 | [Dependencies](/docs/dependencies.md)|Dependencies |
 | [Encryption](/docs/encryption.md)|Encryption system |
 
