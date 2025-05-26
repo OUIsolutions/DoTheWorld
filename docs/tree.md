@@ -48,8 +48,19 @@ int main(){
 ### Removing an tree part
 
 ```c
+#include "doTheWorldOne.c"
+
+int main(){
+    DtwTreePart *part = newDtwTreePartLoading("tests/target/a.txt");
+    DtwTreePart_hardware_remove(part, DTW_EXECUTE_NOW);
+    DtwTreePart_hardware_commit(part);
+    DtwTreePart_free(part);
+}
+```
+
 ### Retrieving Paths Params
 
+```c
 #include "doTheWorldOne.c"
 
 int main(){
@@ -98,10 +109,12 @@ int main(){
     DtwTreePart_hardware_commit(part);
     DtwTreePart_free(part);
 }
+```
 
 Will write the file as a "new" file, ignoring the existence of the
 old file
 
+```c
 #include "doTheWorldOne.c"
 
 int main(){
@@ -111,8 +124,8 @@ int main(){
     DtwTreePart_hardware_commit(part);
     DtwTreePart_free(part);
 }
-
 ```
+
 Will delete the current content
 
 ```c
@@ -125,8 +138,8 @@ int main(){
     DtwTreePart_hardware_commit(part);
     DtwTreePart_free(part);
 }
-
 ```
+
 With Trees you can make massive folder and file modifications with
 easy steps
 ### Loading Tree From Hardware
@@ -148,10 +161,11 @@ int main(){
     DtwTree_represent(tree);
     DtwTree_free(tree);
 }
-
 ```
+
 ### Iterating over An Tree
 
+```c
 #include "doTheWorldOne.c"
 int main(){
     DtwTree *tree = newDtwTree();
@@ -170,9 +184,11 @@ int main(){
     }
     DtwTree_free(tree);
 }
+```
 
 ### Finding An Tree by name
 
+```c
 #include "doTheWorldOne.c"
 
 int main(){
@@ -193,9 +209,11 @@ int main(){
     }
     DtwTree_free(tree);
 }
+```
 
 ### Finding An Tree by Path
 
+```c
 #include "doTheWorldOne.c"
 
 int main(){
@@ -219,9 +237,11 @@ int main(){
     }
     DtwTree_free(tree);
 }
+```
 
 ### Finding An Tree by Function
 
+```c
 #include "doTheWorldOne.c"
 
 bool test_if_blob(struct DtwTreePart* part, void *args){
@@ -258,11 +278,13 @@ int main(){
 
     DtwTree_free(tree);
 }
+```
 
 Trees support even Maps or filters, it returns a new tree of the current lambda procedure
 ### Filter
 with filter you can filter the contents you want in a tree with a bool lambda
 
+```c
 #include "doTheWorldOne.c"
 
 bool filter_txt(struct DtwTreePart *part){
@@ -296,9 +318,11 @@ int main(){
     DtwTree_free(filtered);
     DtwTree_free(tree);
 }
+```
 
 ### Map
 
+```c
 #include "doTheWorldOne.c"
 
 DtwTreePart * concat_test(struct DtwTreePart *part){
@@ -335,10 +359,12 @@ int main(){
     DtwTree_free(concated);
     DtwTree_free(tree);
 }
+```
 
 With **hardware_commit_tree** you can commit all modifications at once
 turning system ultra secure
 
+```c
 #include "doTheWorldOne.c"
 
 int main(){
@@ -369,9 +395,11 @@ int main(){
     DtwTree_hardware_commit_tree(tree);
     DtwTree_free(tree);
 }
+```
 
 With transaction Reports, you can see what will be modified
 
+```c
 #include "doTheWorldOne.c"
 
 int main(){
@@ -403,12 +431,14 @@ int main(){
     DtwTreeTransactionReport_free(report);
     DtwTree_free(tree);
 }
+```
 
 With Json Trees Operations you can save or load trees, from hardware or strings in a super easy mode
 
 ### Dumping Tree Json To File
 It will transform the tree into a json document
 
+```c
 #include "doTheWorldOne.c"
 
 int main(){
@@ -437,7 +467,9 @@ int main(){
 
     DtwTree_free(tree);
 }
+```
 
+```c
 #include "doTheWorldOne.c"
 
 int main(){
@@ -466,10 +498,12 @@ int main(){
     free(content);
     DtwTree_free(tree);
 }
+```
 
 If you want to recuperate the file you saved in the json file
 you can load it
 
+```c
 #include "doTheWorldOne.c"
 
 void dumps_tree(){
@@ -505,7 +539,9 @@ int main(){
     DtwTree_represent(tree);
     DtwTree_free(tree);
 }
+```
 
+```c
 #include "doTheWorldOne.c"
 
 char *dumps_tree(){
@@ -540,3 +576,6 @@ int main(){
     DtwTree_free(tree);
     free(content);
 }
+```
+
+-----------------
