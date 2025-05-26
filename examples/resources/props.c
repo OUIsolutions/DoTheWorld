@@ -1,28 +1,27 @@
 #include "doTheWorldOne.c"
 
 int main (){
-    Namespace dtw = newNamespace();
 
-    Resource *values = dtw.resource.newResource("tests/target");
+    DtwResource *values = new_DtwResource("tests/target");
 
     //when you set caches to false, it will not store sub resources
     values->cache_sub_resources = false;
 
-    Resource *string_r = dtw.resource.sub_resource(values, "a.txt");
-    if(dtw.resource.type(string_r) == COMPLEX_STRING_TYPE){
-        printf("value string :%s\n",dtw.resource.get_string(string_r));
+    DtwResource *string_r = DtwResource_sub_resource(values,"a.txt");
+    if(DtwResource_type(string_r) == DTW_COMPLEX_STRING_TYPE){
+        printf("value string :%s\n",DtwResource_get_string(string_r));
     }
-    dtw.resource.free(string_r);
+    DtwResource_free(string_r);
 
     values->cache_sub_resources = true;
 
     //when allowing transaction to false, it will execute now
     values->allow_transaction = false;
-    Resource *string_r1 = dtw.resource.sub_resource(values, "b.txt");
-    dtw.resource.set_string(string_r1,"menssage");
+    DtwResource *string_r1 = DtwResource_sub_resource(values,"b.txt");
+    DtwResource_set_string(string_r1,"message"); // corrected spelling of "menssage"
 
 
-    dtw.resource.free(values);
 
+    DtwResource_free(values);
 
 }
