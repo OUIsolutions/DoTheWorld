@@ -2,7 +2,7 @@
 
 int main(int argc, char *argv[]){
     DtwTree *tree = newDtwTree();
-    add_tree_from_hardware(
+    DtwTree_add_tree_from_hardware(
             tree,
             "tests/target/",
             (DtwTreeProps){
@@ -11,7 +11,7 @@ int main(int argc, char *argv[]){
                     .path_atributes=DTW_INCLUDE
             }
     );
-  DtwStringArray *files = list_all_recursively(tree,"tests/target/",DTW_NOT_CONCAT_PATH);
+  DtwStringArray *files = DtwTree_list_all_recursively(tree,"tests/target/",DTW_NOT_CONCAT_PATH);
   DtwStringArray_sort(files);
   DtwStringArray_represent(files);
   DtwStringArray_free(files);
