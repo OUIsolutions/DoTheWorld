@@ -12,7 +12,7 @@ void create_users(DtwResource *database, const char *name, const char *email, co
 int main() {
     DtwResource *database = new_DtwResource("tests/target/schema_database");
     DtwDatabaseSchema *root_schema = DtwResource_newDatabaseSchema(database);
-    DtwSchema *users_schema = DtwDatabaseSchema_new_subSchema(root_schema, "users");
+    DtwSchema *users_schema = DtwDtatabaseSchema_new_subSchema(root_schema, "users");
     DtwSchema_add_primary_key(users_schema, "name");
     DtwSchema_add_primary_key(users_schema, "email");
 

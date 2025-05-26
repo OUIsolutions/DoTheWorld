@@ -16,7 +16,7 @@ int main() {
     
     DtwResource *database = new_DtwResource("tests/target/schema_database");  // Replaced dtw.resource.newResource
     DtwDatabaseSchema *root_schema = DtwResource_newDatabaseSchema(database);  // Replaced dtw.resource.newDatabaseSchema
-    DtwSchema *users_schema = DtwDatabaseSchema_new_subSchema(root_schema, "users");  // Replaced dtw.database_schema.sub_schema
+    DtwSchema *users_schema = DtwDtatabaseSchema_new_subSchema(root_schema, "users");  // Replaced dtw.database_schema.sub_schema
     DtwSchema_add_primary_key(users_schema, "name");  // Replaced dtw.schema.add_primary_key
     DtwSchema_add_primary_key(users_schema, "email");  // Replaced dtw.schema.add_primary_key
     

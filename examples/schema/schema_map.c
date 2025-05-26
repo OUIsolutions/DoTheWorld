@@ -50,7 +50,7 @@ void create_x_users(DtwResource *users,long quantity){
 }
 void create_schemas(DtwResource *database){
     DtwDatabaseSchema *schema = DtwResource_newDatabaseSchema(database);
-    DtwSchema *users = DtwDatabaseSchema_new_subSchema(schema,"users");
+    DtwSchema *users = DtwDtatabaseSchema_new_subSchema(schema,"users");
     DtwSchema_add_primary_key(users,"name");
 }
 

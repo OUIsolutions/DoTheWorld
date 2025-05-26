@@ -41,7 +41,7 @@ void create_x_users(DtwResource *users,long quantity){
 }
 void create_schemas(DtwResource *database){
     DtwDatabaseSchema *schema = DtwResource_newDatabaseSchema(database);
-    DtwSchema *users = DtwDatabaseSchema_new_subSchema(schema,"users");
+    DtwSchema *users = DtwDtatabaseSchema_new_subSchema(schema,"users");
     DtwSchema_add_primary_key(users,"name");
 }
 
@@ -61,7 +61,7 @@ int main(){
     props.filtrage_callback = verify_if_print_user;
     props.args = &f;
 
-    DtwResource_schema_each(users,props);
+    DtwResource_schema_foreach(users,props);
     DtwResource_free(database);
     DtwRandonizer_free(randonizer);
     return 0;
