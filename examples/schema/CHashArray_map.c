@@ -8,8 +8,8 @@ typedef struct {
 
 CHashObject * return_user(DtwResource *user, void *filtragem){
     return newCHashObject(
-        "name",newString(DtwResource_get_string_from_sub_resource(user, "name")),
-        "age", newNumber(DtwResource_get_long_from_sub_resource(user,"age"))
+        "name",newCHashString(DtwResource_get_string_from_sub_resource(user, "name")),
+        "age", newCHashNumber(DtwResource_get_long_from_sub_resource(user,"age"))
     );
 }
 
@@ -26,8 +26,9 @@ bool verify_if_print_user(DtwResource *user, void *filtragem){
     return false;
 }
 void create_x_users(DtwResource *users,long quantity){
+    DtwRandonizer *randonizer = newDtwRandonizer();
     for(int i =0; i < quantity; i++){
-        DtwResource *current = new_schema_insertion(users);
+        DtwResource *current = DtwResource_new_schema_insertion(users);
 
         char formatted_name[20] = {0};
         sprintf(formatted_name,"user%d", i);
@@ -37,10 +38,11 @@ void create_x_users(DtwResource *users,long quantity){
         DtwResource_set_long_in_sub_resource(current,"age",age);
     }
 
+    DtwRandonizer_free(randonizer);
 }
 void create_schemas(DtwResource *database){
-    DtwDatabaseSchema *schema = newDatabaseSchema(database);
-    DtwSchema *users = DtwDatabaseSchema_sub_schema(schema,"users");
+    DtwDatabaseSchema *schema = DtwResource_newDatabaseSchema(database);
+    DtwSchema *users = DtwDtatabaseSchema_new_subSchema(schema,"users");
     DtwSchema_add_primary_key(users,"name");
 }
 
@@ -50,7 +52,7 @@ int main(){
     // hash = newCHashNamespace();  // Removed
     // randonizer = DtwRandonizer_newRandonizer();  // Removed global, replaced with direct call if possible
 
-    DtwResource *database = newResource("database");
+    DtwResource *database = new_DtwResource("database");
     create_schemas(database);
 
     DtwResource *users = DtwResource_sub_resource(database,"users");
@@ -60,14 +62,14 @@ int main(){
     Filtrage f;
     f.age = 18;
 
-    DtwResourceCHashrrayMapProps props = create_CHashrrayMapProps(return_user);
+    DtwResourceCHashrrayMapProps props = DtwResource_create_CHashrrayMapProps(return_user);
 
     props.filtrage_callback = verify_if_print_user;
     props.args = &f;
 
     CHashArray *itens = DtwResource_schema_map_CHashArray(users,props);
 
-    char *content = dump_to_json_string(itens);
+    char *content = CHash_dump_to_json_string(itens);
     printf("%s",content);
     free(itens);
     free(content);
