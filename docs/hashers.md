@@ -1,4 +1,3 @@
-
 ## Sha256
 Generating Sha from file
 
@@ -7,15 +6,12 @@ Generating Sha from file
 #include "doTheWorldOne.c"
 
 int main(int argc, char *argv[]){
-    DtwNamespace dtw = newDtwNamespace();
-
-   char *hash = dtw.generate_sha_from_file("tests/target/blob.png");
+   char *hash = dtw_generate_sha_from_file("tests/target/blob.png");
    printf("SHA: %s", hash);
    free(hash);
 }
 
 ```
-
 
 
 
@@ -32,33 +28,30 @@ or to avoid recomputation in compilers or bundlers
 
 
 
-
 int main (){
-    DtwNamespace dtw = newDtwNamespace();
+    DtwHash *my_hash = newDtwHash();
 
-    DtwHash *my_hash = dtw.hash.newHash();
-
-    dtw.hash.digest_string(my_hash,"my string");
+    DtwHash_digest_string(my_hash,"my string");
     printf("value after digest string %s\n",my_hash->hash);
 
-    dtw.hash.digest_long(my_hash,10);
+    DtwHash_digest_long(my_hash,10);
     printf("value after long: %s\n",my_hash->hash);
 
-    dtw.hash.digest_double(my_hash,15.6);
+    DtwHash_digest_double(my_hash,15.6);
     printf("value after double: %s\n",my_hash->hash);
 
-    dtw.hash.digest_bool(my_hash,true);
+    DtwHash_digest_bool(my_hash,true);
     printf("value after digest bool %s\n",my_hash->hash);
 
-    DtwStringArray *test = dtw.string_array.newStringArray();
-    dtw.string_array.append(test,"b");
-    dtw.string_array.append(test,"a");
+    DtwStringArray *test = newDtwStringArray();
+    DtwStringArray_append(test,"b");
+    DtwStringArray_append(test,"a");
 
-    dtw.hash.digest_string_array(my_hash,test);
+    DtwHash_digest_string_array(my_hash,test);
     printf("value after string array %s\n",my_hash->hash);
-    dtw.string_array.free(test);
+    DtwStringArray_free(test);
 
-    dtw.hash.free(my_hash);
+    DtwHash_free(my_hash);
 }
 
 ```
@@ -69,20 +62,17 @@ int main (){
 
 
 
-
 int main (){
-    DtwNamespace dtw = newDtwNamespace();
+    DtwHash *my_hash = newDtwHash();
 
-    DtwHash *my_hash = dtw.hash.newHash();
-
-    dtw.hash.digest_file(my_hash,"tests/target/a.txt");
+    DtwHash_digest_file(my_hash,"tests/target/a.txt");
 
     printf("after a file :%s\n",my_hash->hash);
 
-    dtw.hash.digest_folder_by_content(my_hash,"tests/target");
+    DtwHash_digest_folder_by_content(my_hash,"tests/target");
     printf("after a folder %s\n",my_hash->hash);
 
-    dtw.hash.free(my_hash);
+    DtwHash_free(my_hash);
 }
 
 ```
@@ -93,21 +83,17 @@ int main (){
 
 
 
-
 int main (){
-    DtwNamespace dtw = newDtwNamespace();
+    DtwHash *my_hash = newDtwHash();
 
-    DtwHash *my_hash = dtw.hash.newHash();
-
-    dtw.hash.digest_entity_last_modification(my_hash,"tests/target/a.txt");
+    DtwHash_digest_entity_last_modification(my_hash,"tests/target/a.txt");
 
     printf("after a file :%s\n",my_hash->hash);
 
-    dtw.hash.digest_folder_by_last_modification(my_hash,"tests/target");
+    DtwHash_digest_folder_by_last_modification(my_hash,"tests/target");
     printf("after a folder %s\n",my_hash->hash);
 
-    dtw.hash.free(my_hash);
+    DtwHash_free(my_hash);
 }
 
 ```
-

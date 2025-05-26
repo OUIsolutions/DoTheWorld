@@ -1,65 +1,50 @@
 ### Generating transaction
-with transactions you can make all modifications and executed or denny it one time,avoid nod
-wanted side effects
+with transactions you can make all modifications and execute or deny it one time, avoid unwanted side effects
 
 ```c
-
 #include "doTheWorldOne.c"
 
 int main(){
-    DtwNamespace dtw = newDtwNamespace();
-
     DtwTransaction *t = newDtwTransaction();
-    dtw.transaction.write_string(t,"b.txt","aaaaa");
-    dtw.transaction.move_any(t,"a.txt","c.txt");
-    dtw.transaction.delete_any(t,"blob.png");
-    dtw.transaction.copy_any(t,"sub_folder","sub_folder2");
-    dtw.transaction.commit(t,"tests/target");
-    dtw.transaction.free(t);
-
+    dtw_write_string_file_content("b.txt", "aaaaa");
+    dtw_move_any("a.txt", "c.txt", false);
+    dtw_remove_any("blob.png");
+    dtw_copy_any("sub_folder", "sub_folder2", false);
+    DtwTransaction_commit(t, "tests/target");
+    DtwTransaction_free(t);
 }
-
 ```
 
-
-You also can dump the transaction to an json file to store it
+You also can dump the transaction to a JSON file to store it
 
 ```c
-
 #include "doTheWorldOne.c"
 
 int main(){
-    DtwNamespace dtw = newDtwNamespace();
-
     DtwTransaction *t = newDtwTransaction();
-    dtw.transaction.write_string(t,"b.txt","aaaaa");
-    dtw.transaction.move_any(t,"a.txt","c.txt");
-    dtw.transaction.delete_any(t,"blob.png");
-    dtw.transaction.copy_any(t,"sub_folder","sub_folder2");
-    dtw.transaction.represent(t);
-    dtw.transaction.dumps_transaction_to_json_file(t,"tests/target/transaction.json");
-    dtw.transaction.free(t);
+    dtw_write_string_file_content("b.txt", "aaaaa");
+    dtw_move_any("a.txt", "c.txt", false);
+    dtw_remove_any("blob.png");
+    dtw_copy_any("sub_folder", "sub_folder2", false);
+    DtwTransaction_represent(t);
+    DtwTransaction_dumps_to_json_file(t, "tests/target/transaction.json");
+    DtwTransaction_free(t);
 }
-
 ```
 
 ```c
-
 #include "doTheWorldOne.c"
 
 int main(){
-    DtwNamespace dtw = newDtwNamespace();
-
-    DtwTransaction *t = dtw.transaction.newTransaction_from_json_file("tests/target/transaction.json");
+    DtwTransaction *t = newDtwTransaction_from_json_file("tests/target/transaction.json");
     if(!t){
         DtwJsonTransactionError *error = dtw_validate_json_transaction_file("tests/target/transaction.json");
-        dtw.transaction.json_error.represent(error);
-        dtw.transaction.json_error.free(error);
+        DtwJsonTransactionError_represent(error);
+        DtwJsonTransactionError_free(error);
         return 0;
     }
 
-    dtw.transaction.represent(t);
-    dtw.transaction.free(t);
+    DtwTransaction_represent(t);
+    DtwTransaction_free(t);
 }
-
 ```

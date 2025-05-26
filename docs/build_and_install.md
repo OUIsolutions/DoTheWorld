@@ -1,5 +1,3 @@
-
-
 ## Install
 
 To install the lib just copy the [Amalgamation](https://github.com/OUIsolutions/DoTheWorld/releases/download/10.1.1/doTheWorldOne.c) into your project and include it in your code:
@@ -7,8 +5,7 @@ To install the lib just copy the [Amalgamation](https://github.com/OUIsolutions/
 #include "doTheWorldOne.c"
 ```
 
-
-If  you are on Linux, you can download the lib with:
+If you are on Linux, you can download the lib with:
 ```bash
 curl -L https://github.com/OUIsolutions/DoTheWorld/releases/download/10.1.1/doTheWorldOne.c -o doTheWorldOne.c
 ```
@@ -36,24 +33,23 @@ i686-w64-mingw32-gcc examples\example_simple.c -o bin\example_simple.exe -lws2_3
 
 ## Build from scratch
 
-For buiding from scratch you need to have [darwin](https://github.com/OUIsolutions/Darwin/) installed on your machine. To install darwin:
+For building from scratch you need to have [darwin](https://github.com/OUIsolutions/Darwin/) installed on your machine. To install darwin:
 ```bash
-curl -L https://github.com/OUIsolutions/Darwin/releases/download/0.020/darwin.out -o darwin.out && chmod +x darwin.out &&  sudo  mv darwin.out /usr/bin/darwin
+curl -L https://github.com/OUIsolutions/Darwin/releases/download/0.020/darwin.out -o darwin.out && chmod +x darwin.out && sudo mv darwin.out /usr/bin/darwin
 ```
 
 Then you can build the project with in the root dir of the project:
 ```bash
-darwin run_blueprint build/  --mode folder
+darwin run_blueprint build/ --mode folder
 ```
 
 It will generate all the **releases** in the **/release** dir.
 
 
-
 ### Mocking dependencies or dependencies implementations
 
 The following defines toggle dependencies or just the definitions.
-It is useful for  working with dynamic compilation or mocking dependencies.
+It is useful for working with dynamic compilation or mocking dependencies.
 ```c
 // Mocks cjSON library
 #define DTW_MOCK_CJSON
@@ -66,6 +62,6 @@ It is useful for  working with dynamic compilation or mocking dependencies.
 
 // Mocks sha256 definitions
 #define DTW_MOCK_SHA256_DEFINE
-// all these flags must be seted before including the lib
+// all these flags must be set before including the lib
 #include "doTheWorldOne.c"
 ```
