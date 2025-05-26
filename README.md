@@ -57,14 +57,14 @@ DoTheWorld is a powerful Windows/Linux cross-platform library designed for compr
 
 ## 📦 Installation
 
-### Option 1: [Single File Include](https://github.com/OUIsolutions/DoTheWorld/releases/download/10.1.1/doTheWorld.c) (Recommended)
+### Option 1: Single File Include (Recommended)
 
 ```c
 // Just download and include
 #include "doTheWorldOne.c"
 ```
 
-### Option 2: Traditional [Header](https://github.com/OUIsolutions/DoTheWorld/releases/download/10.1.1/doTheWorld.h)/[Source](https://github.com/OUIsolutions/DoTheWorld/releases/download/10.1.1/doTheWorld.c)
+### Option 2: Traditional Header/Source
 
 ```c
 // Include the header in your code
