@@ -10,7 +10,7 @@ void create_users(DtwResource *database, const char *name, const char *email, co
 }
 
 int main() {
-    DtwResource *database = DtwResource_newResource("tests/target/schema_database");
+    DtwResource *database = new_DtwResource("tests/target/schema_database");
     DtwDatabaseSchema *root_schema = DtwResource_newDatabaseSchema(database);
     DtwSchema *users_schema = DtwDatabaseSchema_new_subSchema(root_schema, "users");
     DtwSchema_add_primary_key(users_schema, "name");
@@ -19,7 +19,7 @@ int main() {
     create_users(database, "mateus", "mateusmoutinho01@gmail.com", "1234", 27);
 
     DtwResource *users = DtwResource_sub_resource(database, "users");
-    DtwResource *mateus = DtwResource_find_by_primary_key_with_string(users, "email", "mateus");
+    DtwResource *mateus = DtwResource_find_by_primary_key_with_string(users, "name", "mateus");
     DtwResource *name = DtwResource_sub_resource(mateus, "name");
     DtwResource *impossible = DtwResource_sub_resource(name, "test");
 

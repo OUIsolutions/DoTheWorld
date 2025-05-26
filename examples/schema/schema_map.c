@@ -1,4 +1,4 @@
- #include "doTheWorldOne.c"
+#include "doTheWorldOne.c"
 
 
 typedef struct {
@@ -34,6 +34,7 @@ bool verify_if_print_user(DtwResource *user, void *filtragem){
     return false;
 }
 void create_x_users(DtwResource *users,long quantity){
+    DtwRandonizer *randonizer = newDtwRandonizer();
     for(int i =0; i < quantity; i++){
         DtwResource *current = DtwResource_new_schema_insertion(users);
 
@@ -44,21 +45,21 @@ void create_x_users(DtwResource *users,long quantity){
         DtwResource_set_string_in_sub_resource(current,"name",formatted_name);
         DtwResource_set_long_in_sub_resource(current,"age",age);
     }
+    DtwRandonizer_free(randonizer);
 
 }
 void create_schemas(DtwResource *database){
     DtwDatabaseSchema *schema = DtwResource_newDatabaseSchema(database);
-    DtwSchema *users = DtwDatabaseSchema_sub_schema(schema,"users");
+    DtwSchema *users = DtwDatabaseSchema_new_subSchema(schema,"users");
     DtwSchema_add_primary_key(users,"name");
 }
 
 
 
 int main(){
-    
-    randonizer = newDtwRandonizer();
+    DtwRandonizer *randonizer = newDtwRandonizer();
 
-    DtwResource *database = DtwResource_newResource("database");
+    DtwResource *database = new_DtwResource("database");
     create_schemas(database);
     DtwResource *users = DtwResource_sub_resource(database,"users");
 
@@ -88,4 +89,3 @@ int main(){
 
     return 0;
 }
- 
