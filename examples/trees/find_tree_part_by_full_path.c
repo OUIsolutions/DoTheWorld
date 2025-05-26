@@ -3,7 +3,7 @@
 
 int main(){
     DtwTree *tree = newDtwTree();
-    add_tree_from_hardware(
+    DtwTree_add_tree_from_hardware(
             tree,
             "tests/target/",
             (DtwTreeProps){
@@ -13,12 +13,12 @@ int main(){
             }
     );
 
-    DtwTreePart *element = find_tree_part_by_path(
+    DtwTreePart *element = DtwTree_find_tree_part_by_path(
             tree,
             "tests/target/sub_folder/sub_element.txt"
     );
     if(element){
-        represent(element);
+        DtwTreePart_represent(element);
     }
     DtwTree_free(tree);
 }

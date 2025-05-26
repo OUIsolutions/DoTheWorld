@@ -12,7 +12,7 @@ int main(){
             }
     );
 
-    char *content = DtwTree_dumps_json_tree(
+    char *content = DtwTree_dumps_tree_json(
             tree,
             (DtwTreeProps){
                     .minification = DTW_NOT_MIMIFY,
