@@ -4,33 +4,31 @@
 #include "doTheWorldOne.c"
 
 int main (){
-    DtwNamespace dtw = newDtwNamespace();
+    DtwResource *values = new_DtwResource("tests/target/new_folder");
 
-    DtwResource *values = dtw.resource.newResource("tests/target/new_folder");
-
-    DtwResource *string_element = dtw.resource.sub_resource(values,"text.txt");
-    dtw.resource.set_string(string_element,"nothing");
+    DtwResource *string_element = DtwResource_sub_resource(values, "text.txt");
+    DtwResource_set_string(string_element, "nothing");
     long size;
-    unsigned char *blob = dtw_load_binary_content("tests/target/blob.png",&size);
+    unsigned char *blob = dtw_load_binary_content("tests/target/blob.png", &size);
 
-    DtwResource *blob_element = dtw.resource.sub_resource(values,"blob.png");
-    dtw.resource.set_binary(blob_element,blob,size);
+    DtwResource *blob_element = DtwResource_sub_resource(values, "blob.png");
+    DtwResource_set_binary(blob_element, blob, size);
 
     free(blob);
-    DtwResource *bInt = dtw.resource.sub_resource(values,"b.txt");
-    dtw.resource.set_long(bInt,25);
+    DtwResource *bInt = DtwResource_sub_resource(values, "b.txt");
+    DtwResource_set_long(bInt, 25);
 
-    DtwResource *cDouble = dtw.resource.sub_resource(values,"c.txt");
-    dtw.resource.set_double(cDouble,10.5);
+    DtwResource *cDouble = DtwResource_sub_resource(values, "c.txt");
+    DtwResource_set_double(cDouble, 10.5);
 
-    DtwResource *dBool = dtw.resource.sub_resource(values,"b.txt");
-    dtw.resource.set_bool(dBool,true);
+    DtwResource *dBool = DtwResource_sub_resource(values, "b.txt");
+    DtwResource_set_bool(dBool, true);
 
-    DtwResource  *sub_foder = dtw.resource.sub_resource(values,"sub_foder");
-    DtwResource *string_element2 = dtw.resource.sub_resource(sub_foder,"a.txt");
-    dtw.resource.set_string(string_element2,"nothing");
+    DtwResource *sub_foder = DtwResource_sub_resource(values, "sub_foder");
+    DtwResource *string_element2 = DtwResource_sub_resource(sub_foder, "a.txt");
+    DtwResource_set_string(string_element2, "nothing");
 
-    dtw.resource.commit(values);
-    dtw.resource.free(values);
+    DtwResource_commit(values);
+    DtwResource_free(values);
 }
 ```

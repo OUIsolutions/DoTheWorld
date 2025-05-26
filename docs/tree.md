@@ -3,6 +3,7 @@ with tree concepts, you can manipulate files as trees, and implement IO modifica
 
 ### Loading An TreePart
 
+```c
 #include "doTheWorldOne.c"
 
 int main(){
@@ -10,10 +11,11 @@ int main(){
     DtwTreePart_represent(part);
     DtwTreePart_free(part);
 }
-
+```
 
 ### Creating an empty tree Part
 
+```c
 #include "doTheWorldOne.c"
 
 int main(){
@@ -23,9 +25,9 @@ int main(){
     DtwTreePart_hardware_commit(part);
     DtwTreePart_free(part);
 }
-
+```
 ### Modifying an tree part
-
+```c
 #include "doTheWorldOne.c"
 
 int main(){
@@ -42,7 +44,10 @@ int main(){
     DtwTreePart_hardware_commit(part);
     DtwTreePart_free(part);
 }
+```
+### Removing an tree part
 
+```c
 ### Retrieving Paths Params
 
 #include "doTheWorldOne.c"
@@ -59,9 +64,10 @@ int main(){
     printf("full_path : %s\n", full_path);
     DtwPath_free(path);
 }
-
+```
 ### Changing path Attributes at once
 
+```c
 #include "doTheWorldOne.c"
 
 int main(){
@@ -71,6 +77,7 @@ int main(){
     DtwPath_represent(path);
     DtwPath_free(path);
 }
+```
 
 With the **hardware_modify**, **hardware_write**, **hardware_remove**
 Functions, you can generate modifications without implementing them, in this
@@ -79,6 +86,7 @@ way, you can create massive atomic transactions, and execute all at once
 ### hardware_modify
 Will modify the original content, for example, if you change the extension of a file, it will modify the original content
 
+```c
 #include "doTheWorldOne.c"
 
 int main(){
@@ -104,8 +112,10 @@ int main(){
     DtwTreePart_free(part);
 }
 
+```
 Will delete the current content
 
+```c
 #include "doTheWorldOne.c"
 
 int main(){
@@ -116,10 +126,12 @@ int main(){
     DtwTreePart_free(part);
 }
 
+```
 With Trees you can make massive folder and file modifications with
 easy steps
 ### Loading Tree From Hardware
 
+```c
 #include "doTheWorldOne.c"
 
 int main(){
@@ -137,6 +149,7 @@ int main(){
     DtwTree_free(tree);
 }
 
+```
 ### Iterating over An Tree
 
 #include "doTheWorldOne.c"
