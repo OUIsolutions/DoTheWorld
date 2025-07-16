@@ -9,6 +9,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <time.h>
+#include <limits.h>
 
 #include <stdarg.h>
 
