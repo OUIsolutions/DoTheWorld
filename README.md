@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-10.1.1-blue.svg)
+![Version](https://img.shields.io/badge/version-11.0.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux-lightgrey.svg)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/OUIsolutions/DoTheWorld)
@@ -60,10 +60,10 @@ DoTheWorld is a powerful Windows/Linux cross-platform library designed for compr
 
 | Package | Description |
 |---------|-------------|
-| [doTheWorld.zip](https://github.com/OUIsolutions/DoTheWorld/releases/download/10.1.1/doTheWorld.zip) | Full package with all components |
-| [doTheWorldOne.c](https://github.com/OUIsolutions/DoTheWorld/releases/download/10.1.1/doTheWorldOne.c) | Single-file amalgamated version |
-| [doTheWorld.h](https://github.com/OUIsolutions/DoTheWorld/releases/download/10.1.1/doTheWorld.h) | Header declarations |
-| [doTheWorld.c](https://github.com/OUIsolutions/DoTheWorld/releases/download/10.1.1/doTheWorld.c) | Source definitions |
+| [doTheWorld.zip](https://github.com/OUIsolutions/DoTheWorld/releases/download/11.0.0/doTheWorld.zip) | Full package with all components |
+| [doTheWorldOne.c](https://github.com/OUIsolutions/DoTheWorld/releases/download/11.0.0/doTheWorldOne.c) | Single-file amalgamated version |
+| [doTheWorld.h](https://github.com/OUIsolutions/DoTheWorld/releases/download/11.0.0/doTheWorld.h) | Header declarations |
+| [doTheWorld.c](https://github.com/OUIsolutions/DoTheWorld/releases/download/11.0.0/doTheWorld.c) | Source definitions |
 ## 📦 Installation
 
 ### Option 1: Single File Include (Recommended)
