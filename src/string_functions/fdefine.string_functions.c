@@ -1,3 +1,7 @@
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../imports/imports.fdeclare.h"
+//silver_chain_scope_end
 
 
 
@@ -44,7 +48,7 @@ char *dtw_concat_path(const char *path1, const char *path2){
 
 
     //concating
-    #if  defined (__linux__)
+    #if  defined (__linux__) || defined(__APPLE__)
         final[final_size] = '/';
         final_size+=1;
     #endif
@@ -101,7 +105,7 @@ char *private_dtw_format_path(const char *path){
             continue;
         }
         if(is_a_divisor){
-#ifdef __linux
+#if defined(__linux__) || defined(__APPLE__)
             buffer[buffer_size] = '/';
 #else
             buffer[buffer_size] = '\\';

@@ -1,3 +1,7 @@
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.fdeclare.h"
+//silver_chain_scope_end
 
 
 
@@ -5,7 +9,7 @@
 
 DtwMultiFileLocker *newDtwMultiFileLocker(){
     DtwMultiFileLocker *self = (DtwMultiFileLocker*) malloc(sizeof (DtwMultiFileLocker));
-    #ifdef __linux__
+    #if defined(__linux__) || defined(__APPLE__)
 
         self->process = getpid();
     #endif 

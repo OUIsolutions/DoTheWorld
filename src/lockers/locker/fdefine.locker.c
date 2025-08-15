@@ -1,3 +1,7 @@
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.fdeclare.h"
+//silver_chain_scope_end
 
 
 
@@ -5,7 +9,7 @@
 DtwLocker *newDtwLocker(){
 
     DtwLocker *self = (DtwLocker*)malloc(sizeof(DtwLocker));
-#ifdef __linux__
+#if defined(____) || defined(__APPLE__)
     self->locker = newFlockLocker();
 #endif
 #ifdef _WIN32
@@ -16,7 +20,7 @@ DtwLocker *newDtwLocker(){
 
 int DtwLocker_lock(DtwLocker *self, const  char *element){
 
-#ifdef __linux__
+#if defined(__linux__) || defined(__APPLE__)
     return DtwFlockLocker_lock(self->locker,element);
 #endif
 #ifdef _WIN32
@@ -27,7 +31,7 @@ int DtwLocker_lock(DtwLocker *self, const  char *element){
 
 void DtwLocker_unlock(DtwLocker *self, const  char *element){
 
-#ifdef __linux__
+#if defined(__linux__) || defined(__APPLE__)
     DtwFlockLocker_unlock(self->locker,element);
 #endif
     #ifdef _WIN32
@@ -37,7 +41,7 @@ void DtwLocker_unlock(DtwLocker *self, const  char *element){
 
 void DtwLocker_represemt(DtwLocker *self){
 
-#ifdef __linux__
+#if defined (__linux__) || defined(__APPLE__)
     DtwFlockLocker_represent(self->locker);
 #endif
 #ifdef _WIN32
@@ -47,10 +51,10 @@ void DtwLocker_represemt(DtwLocker *self){
 
 void DtwLocker_free(DtwLocker *self){
 
-#ifdef __linux__
+#if defined(__linux__) || defined(__APPLE__)
     DtwFlockLocker_free(self->locker);
 #endif
-
+ 
 #ifdef _WIN32
      DtwMultiFileLocker_free(self->locker);
 #endif

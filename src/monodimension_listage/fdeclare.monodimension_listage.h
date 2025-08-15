@@ -1,7 +1,11 @@
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../imports/imports.typesm.h"
+//silver_chain_scope_end
 
 
 
-#ifdef __linux__
+#if defined(__linux__) || defined(__APPLE__)
 
 bool private_dtw_verify_if_add(const int expected_type, int d_type);
 bool private_dtw_verify_if_skip(struct dirent *entry);

@@ -1,3 +1,7 @@
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../imports/imports.dep_declare.h"
+//silver_chain_scope_end
 
 #define DTW_RESOURCE_ELEMENT_IS_NULL -1
 #define DTW_RESOURCE_OK 0

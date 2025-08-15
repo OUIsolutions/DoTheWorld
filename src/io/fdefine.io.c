@@ -1,3 +1,7 @@
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../src/imports/imports.fdeclare.h"
+//silver_chain_scope_end
 
 
 
@@ -39,7 +43,7 @@ void dtw_create_dir_recursively(const char *path){
 }
 char *dtw_get_absolute_path(const char *path){
 
-    #ifdef __linux__
+    #if defined (__linux__) || defined(__APPLE__)
     char absolute_path[PATH_MAX] ={0};
      if (realpath(path, absolute_path) != NULL) {
          return strdup(absolute_path);
@@ -235,7 +239,7 @@ bool dtw_write_string_file_content(const char *path,const char *content){
 int dtw_entity_type(const char *path){
     //returns 1 for file, 2 for directory, -1 for not found
     struct stat path_stat;
-    #ifdef __linux__
+    #if defined(__linux__) || defined(__APPLE__)
     if(stat(path,&path_stat) == 0){
         if(S_ISREG(path_stat.st_mode)){
             return DTW_FILE_TYPE;

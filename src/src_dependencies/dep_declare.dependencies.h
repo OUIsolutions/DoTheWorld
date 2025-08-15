@@ -17,7 +17,7 @@
 
 
 
-#ifdef __linux__
+#if defined(__linux__) || defined(__APPLE__)
 #include <unistd.h>
 #include <sys/time.h>
 #include <sys/file.h>

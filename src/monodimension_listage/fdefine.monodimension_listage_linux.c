@@ -1,8 +1,12 @@
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../imports/imports.fdeclare.h"
+//silver_chain_scope_end
 
 
 
 
-#ifdef __linux__
+#if defined(__linux__) || defined(__APPLE__)
 
 bool private_dtw_verify_if_add(const int expected_type, int d_type){
     if (expected_type == DTW_FILE_TYPE  && d_type == DT_REG) {
