@@ -305,7 +305,7 @@ int dtw_complex_entity_type(const char *path){
 
 long dtw_get_total_itens_of_dir(const char *path){
 
-    #ifdef __linux__
+    #if defined(__linux__) || defined(__APPLE__)
 
         DIR *dir = opendir(path);
         if (dir == NULL) {
