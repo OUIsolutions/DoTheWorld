@@ -9,7 +9,7 @@
 DtwLocker *newDtwLocker(){
 
     DtwLocker *self = (DtwLocker*)malloc(sizeof(DtwLocker));
-#if defined(____) || defined(__APPLE__)
+#if defined(__linux__) || defined(__APPLE__)
     self->locker = newFlockLocker();
 #endif
 #ifdef _WIN32
