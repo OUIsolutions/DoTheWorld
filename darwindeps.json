@@ -1,0 +1,37 @@
+[
+    {
+        "type": "url",
+        "url": "https://raw.githubusercontent.com/DaveGamble/cJSON/refs/tags/v1.7.18/cJSON.c",
+        "dest": "dependencies/cJSON.c"
+    },
+    {
+        "type": "url",
+        "url": "https://raw.githubusercontent.com/DaveGamble/cJSON/refs/tags/v1.7.18/cJSON.h",
+        "dest": "dependencies/cJSON.h"
+    },
+    {
+        "type": "url",
+        "url": "https://raw.githubusercontent.com/amosnier/sha-2/565f65009bdd98267361b17d50cddd7c9beb3e6c/sha-256.c",
+        "dest": "dependencies/sha-256.c"
+    },
+    {
+        "type": "url",
+        "url": "https://raw.githubusercontent.com/amosnier/sha-2/565f65009bdd98267361b17d50cddd7c9beb3e6c/sha-256.h",
+        "dest": "dependencies/sha-256.h"
+    },
+    {
+        "type": "url",
+        "url": "https://github.com/OUIsolutions/CHashManipulator/releases/download/0.001/CHashManipulator.h",
+        "dest": "dependencies/CHashManipulator.h"
+    },
+    {
+        "type": "url",
+        "url": "https://raw.githubusercontent.com/kokke/tiny-AES-c/refs/tags/v1.0.0/aes.c",
+        "dest": "dependencies/aes.c"
+    },
+    {
+        "type": "url",
+        "url": "https://raw.githubusercontent.com/kokke/tiny-AES-c/refs/tags/v1.0.0/aes.h",
+        "dest": "dependencies/aes.h"
+    }
+]
