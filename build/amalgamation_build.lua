@@ -1,5 +1,4 @@
-function main()
-    Install_dependencies()
+function amalgamation_build()
 
     local content = darwin.mdeclare.transform_dir({
         dir="src",
@@ -45,6 +44,8 @@ function main()
         MAX_CONNTENT,
         MAX_RECURSION
     )
+
+    
     only_definition = '#include "doTheWorld.h"\n' .. only_definition
 
     only_definition = lincense .. only_definition
@@ -52,5 +53,11 @@ function main()
     darwin.dtw.write_file("release/doTheWorld.c", only_definition)
 
     os.execute("zip -r release/doTheWorld.zip dependencies src build")
-
 end
+
+darwin.add_recipe({
+    name="amalgamation_build",
+    description="make a amalgamation files and a zip",
+    outs={"release/doTheWorld.c", "release/doTheWorld.h", "release/doTheWorldOne.c", "release/doTheWorld.zip"},
+    callback=amalgamation_build
+})
