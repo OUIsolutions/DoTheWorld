@@ -46,11 +46,8 @@ function amalgamation_build()
     )
 
     
-    only_definition = '#include "doTheWorld.h"\n' .. only_definition
 
-    only_definition = lincense .. only_definition
 
-    darwin.dtw.write_file("release/doTheWorld.c", only_definition)
 
     os.execute("zip -r release/doTheWorld.zip dependencies src build")
 end
@@ -58,6 +55,6 @@ end
 darwin.add_recipe({
     name="amalgamation_build",
     description="make a amalgamation files and a zip",
-    outs={"release/doTheWorld.c", "release/doTheWorld.h", "release/doTheWorldOne.c", "release/doTheWorld.zip"},
+    outs={"release/doTheWorld.h", "release/doTheWorldOne.c", "release/doTheWorld.zip"},
     callback=amalgamation_build
 })
