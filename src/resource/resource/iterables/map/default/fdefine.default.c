@@ -28,7 +28,7 @@ int  private_dtwResource_compare(const void *item1,const void*item2){
 void DtwResource_map(DtwResource *self,DtwResourceMapProps props){
     //printf("%p\n",ordenation_callback);
     if(DtwResource_error(self)){
-        return;;
+        return;
     }
 
     DtwResourceArray *itens = NULL;
@@ -42,91 +42,137 @@ void DtwResource_map(DtwResource *self,DtwResourceMapProps props){
 
     privateDtwResource_map_element **mapped_elements= NULL;
     int total_mapped_elements = 0;
+    
+    // Perform ordering before the main loop
     if(props.ordenation_callback) {
         mapped_elements = (privateDtwResource_map_element**)malloc(
             (itens->size+1) * sizeof(privateDtwResource_map_element**)
-            );
-    }
-
-    int total = 0;
-    int total_skipded = 0;
-    for(int i = 0; i < itens->size; i++){
-
-        DtwResource *current = itens->resources[i];
-
-        if(props.filtrage_callback){
-            bool result = props.filtrage_callback(current, props.args);
-            if(DtwResource_error(self)){
-                return;;
+        );
+        
+        // First, collect all elements for ordering
+        for(int i = 0; i < itens->size; i++){
+            DtwResource *current = itens->resources[i];
+            
+            if(props.filtrage_callback){
+                bool result = props.filtrage_callback(current, props.args);
+                if(DtwResource_error(self)){
+                    return;
+                }
+                if(!result){
+                    continue;
+                }
             }
-            if(!result){
-                continue;
-            }
-        }
-
-        total_skipded++;
-
-        if(total_skipded <= props.start){
-            continue;
-        }
-
-        if(total + 1 > props.qtd && props.qtd != -1){
-            break;
-        }
-
-        void* result = props.callback(current, props.args);
-        if(DtwResource_error(self)){
-            if(result){
-                props.append(props.main_array,result);
-            }
-            return;
-        }
-        if(result == NULL){
-            continue;
-        }
-        total+=1;
-
-        if(props.ordenation_callback == NULL) {
-            props.append(props.main_array,result);
-            if(DtwResource_error(self)){
-                return;;
-            }
-        }
-
-        if(props.ordenation_callback){
-            privateDtwResource_map_element *created  = (privateDtwResource_map_element*)malloc(sizeof(privateDtwResource_map_element));
+            
+            privateDtwResource_map_element *created = (privateDtwResource_map_element*)malloc(sizeof(privateDtwResource_map_element));
             *created = (privateDtwResource_map_element){0};
-            created->result = result;
             created->current = current;
             created->ordenation_callback = props.ordenation_callback;
-            created->args =props.args;
-          //  printf("criado %p\n",created);
+            created->args = props.args;
             mapped_elements[total_mapped_elements] = created;
-            total_mapped_elements+=1;
+            total_mapped_elements++;
         }
-
-    }
-
-    if(props.ordenation_callback) {
-
+        
+        // Sort the elements
         qsort(
             mapped_elements,
             total_mapped_elements,
             sizeof(privateDtwResource_map_element*),
             private_dtwResource_compare
-            );
-        if(DtwResource_error(self)){
-            return;;
+        );
+    }
+
+    int total = 0;
+    int total_skipded = 0;
+    
+    if(props.ordenation_callback) {
+        // Process sorted elements
+        for(int i = 0; i < total_mapped_elements; i++){
+            if(i < props.start){
+                continue;
+            }
+            
+            if(total >= props.qtd && props.qtd != -1){
+                break;
+            }
+            
+            privateDtwResource_map_element *element = mapped_elements[i];
+            void* result = props.callback(element->current, props.args);
+            
+            if(DtwResource_error(self)){
+                if(result){
+                    props.append(props.main_array, result);
+                }
+                // Clean up
+                for(int j = i; j < total_mapped_elements; j++){
+                    free(mapped_elements[j]);
+                }
+                free(mapped_elements);
+                return;
+            }
+            
+            if(result != NULL){
+                props.append(props.main_array, result);
+                if(DtwResource_error(self)){
+                    // Clean up
+                    for(int j = i; j < total_mapped_elements; j++){
+                        free(mapped_elements[j]);
+                    }
+                    free(mapped_elements);
+                    return;
+                }
+                total++;
+            }
         }
-        for(int i = 0; i< total_mapped_elements; i++) {
-            privateDtwResource_map_element *current = mapped_elements[i];
-            props.append(props.main_array,current->result);
-            free(current);
+        
+        // Clean up
+        for(int i = 0; i < total_mapped_elements; i++){
+            free(mapped_elements[i]);
         }
         free(mapped_elements);
     }
+    else {
+        // Original logic for non-sorted processing
+        for(int i = 0; i < itens->size; i++){
+            DtwResource *current = itens->resources[i];
 
+            if(props.filtrage_callback){
+                bool result = props.filtrage_callback(current, props.args);
+                if(DtwResource_error(self)){
+                    return;
+                }
+                if(!result){
+                    continue;
+                }
+            }
 
+            total_skipded++;
+
+            if(total_skipded <= props.start){
+                continue;
+            }
+
+            if(total + 1 > props.qtd && props.qtd != -1){
+                break;
+            }
+
+            void* result = props.callback(current, props.args);
+            if(DtwResource_error(self)){
+                if(result){
+                    props.append(props.main_array,result);
+                }
+                return;
+            }
+            if(result == NULL){
+                continue;
+            }
+            
+            props.append(props.main_array,result);
+            if(DtwResource_error(self)){
+                return;
+            }
+            total++;
+        }
+    }
 }
 void DtwResource_schema_map(DtwResource *self,DtwResourceMapProps props){
 
