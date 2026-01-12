@@ -49,13 +49,12 @@ function amalgamation_build()
 
 
 
-    os.execute("zip -r release/doTheWorld.zip dependencies src build")
 end
 
 darwin.add_recipe({
     name="amalgamation_build",
     description="make a amalgamation files and a zip",
     outs={"release/doTheWorld.h", "release/doTheWorldOne.c", "release/doTheWorld.zip"},
-    inputs={"src","dependencies"},
+    inputs={"src","dependencies","build"},
     callback=amalgamation_build
 })
