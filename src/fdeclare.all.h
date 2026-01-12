@@ -1,8 +1,8 @@
+//fdefine.base64.c
 //silver_chain_scope_start
 //mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
-#include "imports/imports.typesm.h"
+#include "imports/imports.dep_define.h"
 //silver_chain_scope_end
-//fdefine.base64.c
 
 char *dtw_base64_encode(unsigned char *data, long input_length) ;
 
@@ -13,6 +13,10 @@ unsigned char *dtw_base64_decode(const char *data, long *output_length) ;
 
 char *dtw_convert_binary_file_to_base64(const char *path);
 //fdefine.listage_wrappers.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -23,6 +27,10 @@ char *dtw_convert_binary_file_to_base64(const char *path);
 
  DtwStringArray *  dtw_list_all(const char *path,  bool concat_path);
 //fdefine.extras.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -57,6 +65,10 @@ char *dtw_convert_binary_to_hex(unsigned char *value,long size);
 
 
 unsigned char *dtw_convert_hex_to_binary(const char *value,long *out_size);//fdefine.string_functions.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -100,6 +112,10 @@ long  dtw_index_of_string(const char *str,const char *element);
 
 double private_dtw_convert_string_to_number(const char *num, bool *its_a_number);
 //fdefine.io.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -144,6 +160,10 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) ;
 
 bool dtw_move_any(const char* src_path, const char* dest_path,bool merge) ;
 //fdefine.multidimension_listage.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -156,6 +176,10 @@ bool dtw_move_any(const char* src_path, const char* dest_path,bool merge) ;
 
  DtwStringArray * dtw_list_all_recursively(const char *path,bool concat_path);
 //fdefine.sha256.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -176,6 +200,10 @@ char * calc_sha_256_from_file_returning_string(const char *filename)
 ;
 char * sha256_open_file(const char *filename, int *size);
 //fdefine.numeral_io.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -206,6 +234,10 @@ void dtw_write_double_file_content(const char *path,double value);
 
 void dtw_write_bool_file_content(const char *path, bool value);
 //string_array/fdefine.string_array.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -237,6 +269,10 @@ void DtwStringArray_sort(struct DtwStringArray *self) ;
 char * privateDtwStringArray_append_if_not_included(DtwStringArray *self,char *value);
 void DtwStringArray_free(struct DtwStringArray *self);
 //monodimension_listage/fdefine.monodimension_listage_win32.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -250,6 +286,10 @@ bool private_dtw_verify_if_skip(WIN32_FIND_DATAA *entry);
 struct DtwStringArray *  dtw_list_basic(const char *path,int expected_type,bool concat_path);
 #endif
 //monodimension_listage/fdefine.monodimension_listage_linux.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -263,6 +303,10 @@ struct DtwStringArray * dtw_list_basic(const char *path,int expected_type,bool c
 
 #endif
 //path/fdefine.getters.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -276,6 +320,10 @@ char * DtwPath_get_dir(struct DtwPath *self);
 
 char * DtwPath_get_path(struct DtwPath *self);
 //path/fdefine.index.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -293,6 +341,10 @@ void DtwPath_insert_dir_at_index(DtwPath *self, int index, const char *dir);
 
 void DtwPath_remove_sub_dirs_at_index(DtwPath *self, int start, int end);
 //path/fdefine.meta.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -302,6 +354,10 @@ void DtwPath_insert_dir_before(DtwPath *self,const char *str,const char *dir);
 
 void DtwPath_remove_sub_dirs_at(DtwPath *self,const char *str);
 //path/fdefine.setters.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -328,6 +384,10 @@ void DtwPath_add_end_dir(struct DtwPath *self, const char *end_dir);
 
 void DtwPath_replace_dirs(DtwPath *self,const char *str,const char *dir);
 //path/fdefine.basic.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -344,6 +404,10 @@ void DtwPath_represent(struct DtwPath *self);
 
 void DtwPath_free(struct DtwPath *self) ;
 //hash/fdefine.hash.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -387,6 +451,10 @@ bool DtwHash_digest_folder_by_content(DtwHash *self,const char *path);
 
 void  DtwHash_free(DtwHash *self);
 //encryption/fdefine.aesCBC_encryption.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -397,6 +465,10 @@ void privteDtwAES_CBC_EncryptionInterface_decrypt_buffer(privateDtwAES_RAW_Encry
 DtwEncriptionInterface *newDtwAES_CBC_EncryptionInterface(const uint8_t* key,int key_size,const uint8_t *iv, int iv_size);
 DtwEncriptionInterface *newDtwAES_CBC_EncryptionInterface_str(const char* key,const char *iv);
 //encryption/fdefine.aesECB_encryption.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 void privteDtwAES_ECB_EncryptionInterface_encrypt_buffer(privateDtwAES_RAW_EncryptionInterface *self,uint8_t* buf, uint32_t length);
 
@@ -405,6 +477,10 @@ void privteDtwAES_ECB_EncryptionInterface_decrypt_buffer(privateDtwAES_RAW_Encry
 DtwEncriptionInterface *newDtwAES_ECB_EncryptionInterface(const uint8_t* key,int key_size);
 
 DtwEncriptionInterface *newDtwAES_ECB_EncryptionInterface_str(const char* key);//randonizer/fdefine.randonizer.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -418,53 +494,93 @@ char * DtwRandonizer_generate_token(struct DtwRandonizer*self, int size);
 
 void DtwRandonizer_free(struct DtwRandonizer *self);
 //namespace/string_array_module/fdefine.string_array_module.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
 DtwStringArrayModule newDtwStringArrayModule();
 //namespace/database_schema_module/fdefine.database_schema_module.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
 
 DtwDatabaseSchemaModule newDtwDatabaseSchemaModule();
 //namespace/namespace/fdefine.namespace.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
 DtwNamespace newDtwNamespace();
 //namespace/randonizer_module/fdefine.randonizer_module.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
 
 DtwRandonizerModule newDtwRandonizerModule();
 //namespace/hash_module/fdefine.hash_module.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
 
 DtwHashModule newDtwHashModule();
 //namespace/path_module/fdefine.path_module.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
 DtwPathModule newDtwPathModule();
 //namespace/encryption/fdefine.encryption_namespace.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 DtwEncryptionNamespace newDtwEncryptionNamespace();//namespace/schema_module/fdefine.schema_module.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
 
 DtwSchemaModule newDtwSchemaModule();
 //namespace/locker/fdefine.locker.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
 DtwLockerModule newDtwLockerModule();
 //resource/resource/fdefine.custom_constructors.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -479,6 +595,10 @@ DtwResource * DtwResource_sub_resource_now_in_unix(DtwResource *self, const char
 
 DtwResource * DtwResource_sub_resource_random(DtwResource *self, const char *end_path);
 //resource/resource/fdefine.getters.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -512,6 +632,10 @@ bool DtwResource_get_bool(DtwResource *self);
 
 bool DtwResource_get_bool_from_sub_resource(DtwResource *self,const char *format,...);
 //resource/resource/fdefine.extras.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -556,6 +680,10 @@ const char * DtwResource_type_in_str(DtwResource *self);
 
 void DtwResource_represent(DtwResource *self);
 //resource/resource/fdefine.schema.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -583,6 +711,10 @@ void DtwResource_dangerous_rename_schema_prop(DtwResource*self,const char *prop,
 
 DtwDatabaseSchema * DtwResource_newDatabaseSchema(DtwResource *self);
 //resource/resource/fdefine.loaders_and_unloaders.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -592,6 +724,10 @@ void DtwResource_unload(DtwResource *self);
 void DtwResource_load(DtwResource *self);
 void DtwResource_load_if_not_loaded(DtwResource *self);
 //resource/resource/fdefine.constructors_and_destructors.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -603,6 +739,10 @@ DtwResource * DtwResource_sub_resource_ensuring_not_exist(DtwResource *self,cons
 
 void DtwResource_free(DtwResource *self);
 //resource/resource/fdefine.sub_resource_setters.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -623,6 +763,10 @@ void DtwResource_set_double_in_sub_resource(DtwResource *self, const char *key, 
 
 void DtwResource_set_bool_in_sub_resource(DtwResource *self,const char *key, bool element);
 //resource/resource/fdefine.destroy.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -632,6 +776,10 @@ void DtwResource_destroy(DtwResource *self);
 
 void DtwResource_destroy_sub_resource(DtwResource *self, const char *key);
 //resource/resource/fdefine.setters.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -659,6 +807,10 @@ void DtwResource_set_double(DtwResource *self,double element);
 
 void DtwResource_set_bool( DtwResource *self,bool element);
 //resource/resource/fdefine.resource_array.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 #include <time.h>
@@ -669,6 +821,10 @@ DtwResourceArray * DtwResource_get_schema_values(DtwResource *self);
 
 DtwResourceArray * DtwResource_sub_resources(DtwResource *self);
 //resource/resource_array/fdefine.resource_array.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -688,6 +844,10 @@ void DtwResourceArray_represent(DtwResourceArray *self);
 
 void DtwResourceArray_free(DtwResourceArray *self);
 //resource/database_schema/fdefine.database_schema.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -702,6 +862,10 @@ DtwSchema * DtwDtatabaseSchema_new_subSchema(DtwDatabaseSchema *self,const char 
 
 void private_new_DtwDtatabaseSchema_free(DtwDatabaseSchema *self);
 //resource/root_props/fdefine.root_props.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -711,6 +875,10 @@ privateDtwResourceRootProps *private_newDtwResourceRootProps();
 
 void privateDtwResourceRootProps_free(privateDtwResourceRootProps *self);
 //resource/schema/fdefine.schema.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -726,6 +894,10 @@ void DtwSchema_add_primary_key(DtwSchema *self,const char *name);
 
 void private_newDtwSchema_free(DtwSchema *self);
 //transaction/action/fdefine.action_parsment.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -744,6 +916,10 @@ cJSON *  private_DtwActionTransaction_create_json_object(DtwActionTransaction* s
 
 void DtwActionTransaction_represent(DtwActionTransaction* self);
 //transaction/action/fdefine.action.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -771,6 +947,10 @@ void DtwActionTransaction_commit(DtwActionTransaction* self,const char *path);
 
 void DtwActionTransaction_free(DtwActionTransaction* self);
 //transaction/transaction/fdefine.transaction_parsment.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -794,6 +974,10 @@ void DtwTransaction_dumps_to_json_file(struct DtwTransaction *self,const char *f
 
 void DtwTransaction_represent(struct DtwTransaction *self);
 //transaction/transaction/fdefine.transaction.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -845,6 +1029,10 @@ void DtwTransaction_commit(struct DtwTransaction *self,const char *path);
 
 void DtwTransaction_free(struct DtwTransaction *self);
 //transaction/json_error/fdefine.json_transaction_error.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -861,6 +1049,10 @@ void DtwJsonTransactionError_prepend_path(struct DtwJsonTransactionError *self,c
 
 void DtwJsonTransactionError_free(struct DtwJsonTransactionError *self);
 //tree/tree_part/fdefine.hardware_tree_part.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -881,6 +1073,10 @@ bool DtwTreePart_hardware_modify(struct DtwTreePart *self, int transaction);
 
 bool DtwTreePart_hardware_commit(struct DtwTreePart *self);
 //tree/tree_part/fdefine.tree_part.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -920,6 +1116,10 @@ void DtwTreePart_free(struct DtwTreePart *self);
 
  DtwTreePart * newDtwTreePartLoading(const char *path);
 //tree/tree/fdefine.tree_finding.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -942,6 +1142,10 @@ struct DtwTree *DtwTree_filter(
 
  DtwTreePart *DtwTree_find_tree_part_by_path( DtwTree *self, const char *path);
 //tree/tree/fdefine.tree.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -979,6 +1183,10 @@ void DtwTree_insecure_hardware_write_tree(struct DtwTree *self);
 
 void DtwTree_hardware_commit_tree(struct DtwTree *self);
 //tree/tree/fdefine.json_tree.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -992,6 +1200,10 @@ char * DtwTree_dumps_tree_json( DtwTree *self, DtwTreeProps  props);
 
 void  DtwTree_dumps_tree_json_to_file(struct DtwTree *self, const char *path, DtwTreeProps  props);
 //tree/tree/fdefine.listage.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -1009,6 +1221,10 @@ struct DtwStringArray *DtwTree_list_all( DtwTree *self, const char *path,bool co
 
  DtwStringArray *DtwTree_list_all_recursively( DtwTree *self, const char *path,bool concat_path);
 //tree/json_error/fdefine.json_error.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -1025,11 +1241,19 @@ void DtwJsonTreeError_represent( DtwJsonTreeError *self);
 
 void DtwJsonTreeError_free(struct DtwJsonTreeError *self);
 //tree/tree_props/fdefine.tree_props.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
 DtwTreeProps DtwTreeProps_format_props(DtwTreeProps props);
 //tree/transaction_report/fdefine.transaction_report.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -1040,6 +1264,10 @@ void  DtwTreeTransactionReport_represent(struct DtwTreeTransactionReport *report
 
 void  DtwTreeTransactionReport_free(struct DtwTreeTransactionReport *report);
 //encryption/encryption_interface/fdefine.custom_saves.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 bool private_DtwEncriptionInterface_write_any_content_custom_mode(DtwEncriptionInterface *self,const char *file_name,unsigned char  *value,long size,short mode);
@@ -1047,6 +1275,10 @@ bool private_DtwEncriptionInterface_write_any_content_custom_mode(DtwEncriptionI
 
 
 unsigned char *private_DtwEncriptionInterface_load_any_content_custom_mode(DtwEncriptionInterface *self,const  char *file_name,long *out_size,bool *is_binary,short mode);//encryption/encryption_interface/fdefine.encryption_interface_basic.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 DtwEncriptionInterface *newDtwEncriptionInterface_raw(void *obj,    unsigned char *(*encrypt_buffer)(void *obj, unsigned char *value,long size,long *out_size), unsigned char *(*decrypt_buffer)(void *obj, unsigned char *encrypted_value,long size,long *out_size), void (*free_obj)(void *obj));
@@ -1057,6 +1289,10 @@ unsigned char *DtwEncriptionInterface_encrypt_buffer(DtwEncriptionInterface *sel
 unsigned char *DtwEncriptionInterface_decrypt_buffer(DtwEncriptionInterface *self, unsigned char *encrypted_value,long size,long *out_size,bool *is_binary);
 
 void DtwEncriptionInterface_free(DtwEncriptionInterface *self);//encryption/encryption_interface/fdefine.encryption_interface_files.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -1074,6 +1310,10 @@ unsigned char *DtwEncriptionInterface_load_any_content(DtwEncriptionInterface *s
 char *DtwEncriptionInterface_load_string_file_content(DtwEncriptionInterface *self,const char *file_name);
 
 //encryption/encryption_interface/fdefine.encryption_interface_hex.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -1095,6 +1335,10 @@ unsigned char *DtwEncriptionInterface_load_any_content_hex(DtwEncriptionInterfac
 char *DtwEncriptionInterface_load_string_file_content_hex(DtwEncriptionInterface *self,const char *file_name);
 
 //encryption/encryption_interface/fdefine.encryption_interface_b64.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 char *DtwEncriptionInterface_encrypt_buffer_b64(DtwEncriptionInterface *self, unsigned char *value,long size);
@@ -1118,11 +1362,19 @@ unsigned char *DtwEncriptionInterface_load_any_content_b64(DtwEncriptionInterfac
 char *DtwEncriptionInterface_load_string_file_content_b64(DtwEncriptionInterface *self,const char *file_name);
 
 //encryption/aesCustomCBC_v1_encryption/fdefine.aesCustomCB_v1_enrcryption .c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
 DtwEncriptionInterface *newDtwAES_Custom_CBC_v1_interface(const char *key);
 //encryption/aesRAW_encryption/fdefine.aesRAW_encryption.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 unsigned char * privateDtwAES_RAW_EncryptionInterface_encrypt_buffer(void *obj, unsigned char *value,long entry_size,long *out_size);
@@ -1134,6 +1386,10 @@ void  privateDtwAES_RAW_EncryptionInterface_free_obj(void *obj);
 
 DtwEncriptionInterface *newDtwAES_RAW_EncryptionInterface(const uint8_t* key,int key_size);
 //lockers/multifile_locker/fdefine.multifile_locker.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -1153,6 +1409,10 @@ void DtwMultiFileLocker_represemt(DtwMultiFileLocker *self);
 
 void DtwMultiFileLocker_free(DtwMultiFileLocker *self);
 //lockers/locker/fdefine.locker.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -1167,53 +1427,93 @@ void DtwLocker_represemt(DtwLocker *self);
 
 void DtwLocker_free(DtwLocker *self);
 //namespace/tree_module/tree/fdefine.tree.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
 DtwTreeModule newDtwTreeModule();
 //namespace/tree_module/json_error/fdefine.json_error.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
 DtwJsonTreeErrorModule newDtwJsonTreeErrorModule();
 //namespace/tree_module/tree_part_module/fdefine.tree_part_module.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
 
 DtwTreePartModule newDtwTreePartModule();
 //namespace/tree_module/transaction_report/fdefine.transaction_report_module.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
 DtwTreeTransactionReportModule newDtwTreeTransactionReportModule();
 //namespace/transaction_module/json_error_module/fdefine.json_error_module.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
 DtwJsonTransactionErrorModule newDtwJsonTransactionErrorModule();
 //namespace/transaction_module/action/fdefine.action.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
 DtwActionTransactionModule newDtwActionTransactionModule();
 //namespace/transaction_module/transaction_module/fdefine.transaction_module.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
 
 DtwTransactionModule newDtwTransactionModule();
 //namespace/resource_module/resource_module/fdefine.resource_module.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
 DtwResourceModule newDtwResourceModule();
 //namespace/resource_module/resource_array_module/fdefine.resource_array_module.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
 DtwResourceArrayModule newDtwResourceArrayModule();
 //lockers/flock_locker/flock_locker/fdefine.flock_locker.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 #if defined(__linux__) || defined(__APPLE__)
@@ -1227,6 +1527,10 @@ void  DtwFlockLocker_represent(DtwFlockLocker *self);
 void  DtwFlockLocker_free(DtwFlockLocker *self);
 #endif
 //resource/resource/iterables/forEach/fdefine.foreach.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -1237,6 +1541,10 @@ void DtwResource_foreach(DtwResource *self,DtwResourceForeachProps props);
 
 void DtwResource_schema_foreach(DtwResource *self,DtwResourceForeachProps props);
 //lockers/flock_locker/flockarray/flock_locked_element/fdefine.flock_locked_element.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 #if defined(__linux__) || defined(__APPLE__)
 
@@ -1248,6 +1556,10 @@ void privateDtwFlockLockedElement_represent(privateDtwFlockLockedElement *self);
 void privateDtwFlockLockedElement_free(privateDtwFlockLockedElement *self);
 #endif
 //lockers/flock_locker/flockarray/flock_array/fdefine.flock_array.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 #if defined(__linux__) || defined(__APPLE__)
 
@@ -1265,6 +1577,10 @@ void privateDtwFlockArray_represent(privateDtwFlockArray *self);
 void privateDtwFlockArray_free(privateDtwFlockArray *self);
 #endif
 //resource/resource/iterables/map/default/fdefine.default.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../../../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -1279,6 +1595,10 @@ int  private_dtwResource_compare(const void *item1,const void*item2);
 void DtwResource_map(DtwResource *self,DtwResourceMapProps props);
 void DtwResource_schema_map(DtwResource *self,DtwResourceMapProps props);
 //resource/resource/iterables/map/CHash/map_chash_object/fdefine.map_chash_object.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../../../../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 #ifdef DTW_ALLOW_CHASH
 
@@ -1303,6 +1623,10 @@ CHash *DtwResource_map_CHashObject(DtwResource *self,DtwResourceCHashObjectMapPr
 CHash *DtwResource_schema_map_CHashObject(DtwResource *self,DtwResourceCHashObjectMapProps props);
 #endif
 //resource/resource/iterables/map/CHash/map_chash_array/fdefine.map_chash_array.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../../../../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 #ifdef DTW_ALLOW_CHASH
 
@@ -1320,6 +1644,10 @@ CHashArray *DtwResource_map_CHashArray(DtwResource *self,DtwResourceCHashrrayMap
 CHashArray *DtwResource_schema_map_CHashArray(DtwResource *self,DtwResourceCHashrrayMapProps props);
 #endif
 //resource/resource/iterables/map/cJSON/map_cjson_array/fdefine.map_cjson_array.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../../../../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 DtwResourcecJSONArrayMapProps DtwResource_create_cJSONArrayMapProps(cJSON *(*callback)(DtwResource *item, void *args));
@@ -1336,6 +1664,10 @@ cJSON *DtwResource_map_cJSONArray(DtwResource *self,DtwResourcecJSONArrayMapProp
 
 cJSON *DtwResource_schema_map_cJSONArray(DtwResource *self,DtwResourcecJSONArrayMapProps props);
 //resource/resource/iterables/map/cJSON/map_cjson_object/fdefine.map_cjson_object.c
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../../../../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 

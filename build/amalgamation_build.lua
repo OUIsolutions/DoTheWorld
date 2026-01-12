@@ -54,7 +54,7 @@ end
 darwin.add_recipe({
     name="amalgamation_build",
     description="make a amalgamation files and a zip",
-    outs={"release/doTheWorld.h", "release/doTheWorldOne.c", "release/doTheWorld.zip"},
+    outs={"release/doTheWorld.h", "release/doTheWorldOne.c"},
     inputs={"src","dependencies","build"},
     callback=amalgamation_build
 })
