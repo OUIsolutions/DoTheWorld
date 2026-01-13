@@ -6,7 +6,7 @@
 
 
  DtwStringArray * dtw_list_dirs_recursively(const char *path,bool concat_path){
-
+        
         struct  DtwStringArray *dirs  = newDtwStringArray();
         //verify if the path is a directory
 
